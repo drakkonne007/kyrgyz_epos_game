@@ -1,0 +1,13 @@
+import 'package:flame/game.dart';
+import 'package:flame/sprite.dart';
+import 'package:flame/components.dart';
+
+class Back extends SpriteComponent{
+
+  @override
+  Future<void> onLoad() async{
+    position = Vector2(0,0);
+    sprite = await Sprite.load('1624.jpg');
+    size = sprite!.originalSize;
+  }
+}
