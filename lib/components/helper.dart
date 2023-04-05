@@ -13,7 +13,7 @@ enum PlayerDirectionMove{
   Up,
 }
 
-class MoveArrow extends RectangleComponent with Tappable, HasGameRef<CustomGame>
+class MoveArrow extends RectangleComponent with Tappable, HasGameRef<KyrgyzGame>
 {
   PlayerDirectionMove _direction;
   MoveArrow(this._direction, Vector2 pos, Vector2 size){

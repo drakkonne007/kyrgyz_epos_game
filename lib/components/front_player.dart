@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flame/collisions.dart';
@@ -13,9 +12,9 @@ import 'package:flutter/services.dart';
 import 'package:game_flame/components/GroundComponent.dart';
 import 'package:game_flame/components/circlePositionComponent.dart';
 import 'package:game_flame/components/physicsVals.dart';
-import 'package:game_flame/components/helper.dart';
+import 'package:game_flame/main.dart';
 
-class PlayerSpriteSheetComponent extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, PhysicsVals{
+class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, PhysicsVals, HasGameRef<KyrgyzGame>{
   late double _spriteSheetWidth = 680, _spriteSheetHeight = 472;
   late SpriteAnimation _dinoDead, _dinoIdle, _dinoJump, _dinoRun, _dinoWalk;
   double _maxXSpeed = 7;
@@ -25,7 +24,6 @@ class PlayerSpriteSheetComponent extends SpriteAnimationComponent with KeyboardH
   bool _isOnGround = false;
   bool _isXMove = false;
   bool _isNeedColl = false;
-  late FlameGame _game;
 
   @override
   Future<void> onLoad() async{
@@ -41,7 +39,6 @@ class PlayerSpriteSheetComponent extends SpriteAnimationComponent with KeyboardH
     anchor = Anchor(0.3,0.5);
     position = Vector2(width*0.3 + 10,height/2);
     add(RectangleHitbox(position: Vector2.all(0),size: Vector2(width*0.6,height)));
-    _game = findGame() as FlameGame;
     // print("${_topHit.isColliding}, ${_botHit.isColliding},${_leftHit.isColliding},${_rightHit.isColliding}");
   }
 
@@ -93,7 +90,7 @@ class PlayerSpriteSheetComponent extends SpriteAnimationComponent with KeyboardH
         return;
       }
       if(_isNeedColl) {
-        _game.add(TimePoint(point));
+        gameRef.add(TimePoint(point));
       }
       if (point.y.round() >= other.y.round() && point.y.round() <= other.y.round() + 5) {
         if(point.x.round() > other.x.round() + 5 && point.x.round() < (other.x + other.width - 5).round()){
