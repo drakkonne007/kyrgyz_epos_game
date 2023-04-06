@@ -2,7 +2,7 @@
 
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:game_flame/components/GroundComponent.dart';
+import 'package:game_flame/components/ground_component.dart';
 
 class CustomTileMap extends PositionComponent
 {
@@ -10,7 +10,7 @@ class CustomTileMap extends PositionComponent
 
   @override
   Future<void> onLoad() async{
-    tiledMap = await TiledComponent.load('map.tmx', Vector2(32, 32));
+    tiledMap = await TiledComponent.load('map/firstMap.tmx', Vector2(32, 32));
     size = tiledMap.size;
     tiledMap.position = Vector2.all(0);
     add(tiledMap);

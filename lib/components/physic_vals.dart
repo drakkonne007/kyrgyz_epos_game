@@ -1,10 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
-mixin PhysicsVals
+class PhysicsVals
 {
-  double phGravity = 20;
-  double phRigidy = 0.5;
+  PhysicsVals(){}
+  static double gravity = 20;
+  static double rigidy = 0.5;
+  static double athmosphereResistance = 0.5;
 }
 
 class TimePoint extends CircleComponent

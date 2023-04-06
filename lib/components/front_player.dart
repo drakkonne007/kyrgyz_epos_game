@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/components/GroundComponent.dart';
-import 'package:game_flame/components/circlePositionComponent.dart';
-import 'package:game_flame/components/physicsVals.dart';
+import 'package:game_flame/components/ground_component.dart';
+import 'package:game_flame/components/circle_position_component.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
 
-class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, PhysicsVals, HasGameRef<KyrgyzGame>{
+class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>{
+  Vector2 _startPos;
+  OrthoPlayer(this._startPos);
   late double _spriteSheetWidth = 680, _spriteSheetHeight = 472;
   late SpriteAnimation _dinoDead, _dinoIdle, _dinoJump, _dinoRun, _dinoWalk;
   double _maxXSpeed = 7;
@@ -37,7 +39,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     animation = _dinoDead;
     size = Vector2(_spriteSheetWidth/7, _spriteSheetHeight/7);
     anchor = Anchor(0.3,0.5);
-    position = Vector2(width*0.3 + 10,height/2);
+    topLeftPosition = _startPos - Vector2(0,height);
     add(RectangleHitbox(position: Vector2.all(0),size: Vector2(width*0.6,height)));
     // print("${_topHit.isColliding}, ${_botHit.isColliding},${_leftHit.isColliding},${_rightHit.isColliding}");
   }
@@ -146,10 +148,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       position.y = other.y + other.height + height / 2;
     } else if (isLeft == points.length || (isLeft > isTop && isLeft > isBott)) {
-      _speedX *= -1 * phRigidy;
+      _speedX *= -1 * PhysicsVals.rigidy;
       position.x = other.x - width * 0.3;
     } else if (isRight == points.length || (isRight > isTop && isRight > isBott)) {
-      _speedX *= -1 * phRigidy;
+      _speedX *= -1 * PhysicsVals.rigidy;
       position.x = other.x + other.width + width * 0.3;
     }
   }
@@ -187,7 +189,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   @override
   void update(double dt) {
     if(!_isOnGround) {
-      _speedY += phGravity * dt;
+      _speedY += PhysicsVals.gravity * dt;
       position.y += min(_speedY,28);
     }
     if(_isXMove) {
