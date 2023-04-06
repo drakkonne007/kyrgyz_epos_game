@@ -11,12 +11,13 @@ class CustomTileMap extends PositionComponent
   @override
   Future<void> onLoad() async{
     tiledMap = await TiledComponent.load('tiles/map/firstMap.tmx', Vector2(32, 32));
-    size = tiledMap.size;
+    tiledMap.scale = Vector2.all(2);
+    size = tiledMap.absoluteScaledSize;
     tiledMap.position = Vector2.all(0);
     add(tiledMap);
     final objGroup = tiledMap.tileMap.getLayer<ObjectGroup>("ground");
     for(final obj in objGroup!.objects){
-      add(Ground(Vector2(obj.width, obj.height), Vector2(obj.x, obj.y)));
+      add(Ground(Vector2(obj.width * 2, obj.height * 2), Vector2(obj.x * 2, obj.y * 2)));
     }
   }
 }

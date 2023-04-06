@@ -15,7 +15,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   final double _spriteSheetWidth = 680, _spriteSheetHeight = 472;
   late SpriteAnimation _dinoDead, _dinoIdle, _dinoJump, _dinoRun, _dinoWalk;
   Vector2 _speed = Vector2.all(0);
-  double _maxSpeed = 2;
+  double _maxSpeed = 3;
   Vector2 _velocity = Vector2.all(0);
   bool _isMove = false;
 
@@ -91,6 +91,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // if(event.isKeyPressed(LogicalKeyboardKey.keyC)){
     //   _isNeedColl = !_isNeedColl;
     // }
+    if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
+      _maxSpeed = 5;
+    }else{
+      _maxSpeed = 3;
+    }
     if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
       moveUp(true);
     }else{

@@ -21,6 +21,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   late MoveArrow leftArr;
   late MoveArrow rightArr;
   late MoveArrow UpArr;
+  late MoveArrow DownArr;
 
   @override
   Color backgroundColor() {
@@ -86,10 +87,10 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     UpArr.setColor(BasicPalette.transparent.color);
     add(UpArr);
     bground.loaded.then((value) {
-      bground.anchor = Anchor.topLeft;
-      bground.scale = Vector2.all(2);
-      _player = OrthoPlayer(Vector2(0,bground.height*2));
-      camera.followComponent(_player,worldBounds: Rect.fromLTWH(0, 0, bground.width*2, bground.height*2));
+      // bground.anchor = Anchor.topLeft;
+      // bground.scale = Vector2.all(2);
+      _player = OrthoPlayer(Vector2(0,bground.height));
+      camera.followComponent(_player,worldBounds: Rect.fromLTWH(0, 0, bground.width, bground.height));
       for(double i=100; i < bground.height - 50; i+=200){
         add(CustomCircle(Vector2(2,i),bground.width));
       }
