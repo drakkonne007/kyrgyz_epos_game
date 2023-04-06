@@ -10,7 +10,7 @@ class CustomTileMap extends PositionComponent
 
   @override
   Future<void> onLoad() async{
-    tiledMap = await TiledComponent.load('map/firstMap.tmx', Vector2(32, 32));
+    tiledMap = await TiledComponent.load('tiles/map/firstMap.tmx', Vector2(32, 32));
     size = tiledMap.size;
     tiledMap.position = Vector2.all(0);
     add(tiledMap);

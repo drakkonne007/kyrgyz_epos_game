@@ -3,6 +3,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/services.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
 import 'dart:math';
@@ -14,13 +15,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   final double _spriteSheetWidth = 680, _spriteSheetHeight = 472;
   late SpriteAnimation _dinoDead, _dinoIdle, _dinoJump, _dinoRun, _dinoWalk;
   Vector2 _speed = Vector2.all(0);
-  double _maxSpeed = 7;
+  double _maxSpeed = 2;
   Vector2 _velocity = Vector2.all(0);
   bool _isMove = false;
 
   @override
   Future<void> onLoad() async{
-    final spriteImage = await Flame.images.load('dinoFull.png');
+    final spriteImage = await Flame.images.load('tiles/sprites/players/dinoFull.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _dinoDead = spriteSheet.createAnimation(row: 0, stepTime: 0.18, from: 0,to: 8);
     _dinoIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.18, from: 8,to: 19);
@@ -36,35 +37,38 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   void moveRight(bool isMove){
     if(!isMove){
-      _velocity.x = 0;
+      if(_velocity.x > 0) {
+        _velocity.x = 0;
+      }
     }else{
-      _isMove = true;
       if (isFlippedHorizontally) {
         flipHorizontally();
       }
+      _isMove = true;
       _velocity.x = 50;
       animation = _dinoRun;
     }
   }
   void moveLeft(bool isMove){
     if(!isMove){
-      _velocity.x = 0;
+      if(_velocity.x < 0) {
+        _velocity.x = 0;
+      }
     }else{
-      _isMove = true;
       if (!isFlippedHorizontally) {
         flipHorizontally();
       }
+      _isMove = true;
       _velocity.x = -50;
       animation = _dinoRun;
     }
   }
   void moveUp(bool isMove){
     if(!isMove){
-      _velocity.y = 0;
-    }else{
-      if (!isFlippedHorizontally) {
-        flipHorizontally();
+      if(_velocity.y < 0) {
+        _velocity.y = 0;
       }
+    }else{
       _velocity.y = -50;
       animation = _dinoRun;
       _isMove = true;
@@ -72,33 +76,69 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   }
   void moveDown(bool isMove){
     if(!isMove){
-      _velocity.y = 0;
+      if(_velocity.y > 0) {
+        _velocity.y = 0;
+      }
     }else{
       _isMove = true;
-      if (!isFlippedHorizontally) {
-        flipHorizontally();
-      }
       _velocity.y = 50;
       animation = _dinoRun;
     }
   }
 
   @override
-  void update(double dt) {
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    // if(event.isKeyPressed(LogicalKeyboardKey.keyC)){
+    //   _isNeedColl = !_isNeedColl;
+    // }
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
+      moveUp(true);
+    }else{
+      moveUp(false);
+    }
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
+      moveDown(true);
+    }else{
+      moveDown(false);
+    }
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+      moveLeft(true);
+    }else{
+      moveLeft(false);
+    }
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+      moveRight(true);
+    }else{
+      moveRight(false);
+    }
+    return true;
+  }
 
-    _speed += Vector2(min(dt * _velocity.x,_maxSpeed),min(dt * _velocity.y,_maxSpeed));
+  @override
+  void update(double dt) {
+    _speed.x = max(-_maxSpeed,min(_speed.x + dt * _velocity.x,_maxSpeed));
+    _speed.y = max(-_maxSpeed,min(_speed.y + dt * _velocity.y,_maxSpeed));
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;
     if(_speed.x > 0){
-      _speed.x -= PhysicsVals.athmosphereResistance;
+      _speed.x -= PhysicsVals.athmosphereResistance * dt;
+    }else if(_speed.x < 0){
+      _speed.x += PhysicsVals.athmosphereResistance * dt;
     }else{
-      _speed.x += PhysicsVals.athmosphereResistance;
+      countZero++;
     }
     if(_speed.y > 0){
-      _speed.y -= PhysicsVals.athmosphereResistance;
+      _speed.y -= PhysicsVals.athmosphereResistance * dt;
+    }else if(_speed.y < 0){
+      _speed.y += PhysicsVals.athmosphereResistance * dt;
     }else{
-      _speed.y += PhysicsVals.athmosphereResistance;
+      countZero++;
+    }
+    if(countZero == 2){
+      animation = _dinoIdle;
+      super.update(dt);
+      return;
     }
     if(_speed.y.isNegative != isYNan){
       _speed.y = 0;

@@ -3,6 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/components/circle_position_component.dart';
 import 'package:game_flame/components/front_player.dart';
@@ -11,6 +12,7 @@ import 'package:game_flame/components/tile_map_component.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/helper.dart';
 import 'dart:ui' as ui;
+import 'package:game_flame/components/ortho_player.dart';
 
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection
@@ -22,7 +24,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   @override
   Color backgroundColor() {
-    return Colors.purple;
+    return Colors.blue;
   }
   //
   // CustomGame(){
@@ -71,7 +73,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   @override
   Future<void> onLoad() async {
-    add(Back());
+    //add(Back());
     var bground = CustomTileMap();
     add(bground);
     leftArr = MoveArrow(PlayerDirectionMove.Left, Vector2(0,MediaQueryData.fromWindow(ui.window).size.height - 50),Vector2(65,50));
@@ -84,8 +86,10 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     UpArr.setColor(BasicPalette.transparent.color);
     add(UpArr);
     bground.loaded.then((value) {
-      _player = OrthoPlayer(Vector2(0,bground.height));
-      camera.followComponent(_player,worldBounds: Rect.fromLTWH(0, 0, bground.width, bground.height));
+      bground.anchor = Anchor.topLeft;
+      bground.scale = Vector2.all(2);
+      _player = OrthoPlayer(Vector2(0,bground.height*2));
+      camera.followComponent(_player,worldBounds: Rect.fromLTWH(0, 0, bground.width*2, bground.height*2));
       for(double i=100; i < bground.height - 50; i+=200){
         add(CustomCircle(Vector2(2,i),bground.width));
       }

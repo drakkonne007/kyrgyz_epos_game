@@ -59,8 +59,18 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
   assets:
     - assets/
+    - assets/images/
+    - assets/tiles/
+    - assets/tiles/buttons/
+    - assets/tiles/map/
+    - assets/tiles/map/ground/
+    - assets/tiles/map/loot/
+    - assets/tiles/sprites/
+    - assets/tiles/sprites/effects/
+    - assets/tiles/sprites/players/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

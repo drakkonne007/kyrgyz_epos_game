@@ -14,9 +14,9 @@ import 'package:game_flame/components/circle_position_component.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
 
-class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>{
+class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>{
   Vector2 _startPos;
-  OrthoPlayer(this._startPos);
+  FrontPlayer(this._startPos);
   late double _spriteSheetWidth = 680, _spriteSheetHeight = 472;
   late SpriteAnimation _dinoDead, _dinoIdle, _dinoJump, _dinoRun, _dinoWalk;
   double _maxXSpeed = 7;
@@ -29,7 +29,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   Future<void> onLoad() async{
-    final spriteImage = await Flame.images.load('dinoFull.png');
+    final spriteImage = await Flame.images.load('assets/tiles/sprites/players/dinoFull.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _dinoDead = spriteSheet.createAnimation(row: 0, stepTime: 0.18, from: 0,to: 8);
     _dinoIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.18, from: 8,to: 19);
