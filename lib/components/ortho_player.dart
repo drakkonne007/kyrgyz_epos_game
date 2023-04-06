@@ -12,7 +12,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 {
   final Vector2 _startPos;
   OrthoPlayer(this._startPos);
-  final double _spriteSheetWidth = 680, _spriteSheetHeight = 472;
+  final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
   late SpriteAnimation _dinoDead, _dinoIdle, _dinoJump, _dinoRun, _dinoWalk;
   Vector2 _speed = Vector2.all(0);
   double _maxSpeed = 3;
@@ -21,15 +21,15 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   Future<void> onLoad() async{
-    final spriteImage = await Flame.images.load('tiles/sprites/players/dinoFull.png');
+    final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
-    _dinoDead = spriteSheet.createAnimation(row: 0, stepTime: 0.18, from: 0,to: 8);
-    _dinoIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.18, from: 8,to: 19);
-    _dinoJump = spriteSheet.createAnimation(row: 3, stepTime: 0.18, from: 1,to: 12);
-    _dinoRun = spriteSheet.createAnimation (row: 5, stepTime: 0.18, from: 0,to: 7);
-    _dinoWalk = spriteSheet.createAnimation(row: 6, stepTime: 0.18, from: 2,to: 12);
+    _dinoDead = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0,to: 4);
+    _dinoIdle = spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 0,to: 4);
+    _dinoJump = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0,to: 4);
+    _dinoRun = spriteSheet.createAnimation (row: 3, stepTime: 0.3, from: 0,to: 4);
+    _dinoWalk = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0,to: 4);
     animation = _dinoIdle;
-    size = Vector2(_spriteSheetWidth/7, _spriteSheetHeight/7);
+    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = Anchor(0.3,0.5);
     topLeftPosition = _startPos - Vector2(0,height);
     add(RectangleHitbox(position: Vector2.all(0),size: Vector2(width*0.6,height)));

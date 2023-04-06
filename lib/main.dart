@@ -39,30 +39,31 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   @override
   void onGameResize(Vector2 canvasSize) {
     if(isLoaded) {
-      leftArr.position = Vector2(0, MediaQueryData
-          .fromWindow(ui.window)
-          .size
-          .height - 50);
-      rightArr.position = Vector2(85, MediaQueryData
-          .fromWindow(ui.window)
-          .size
-          .height - 50);
-      UpArr.size = Vector2(MediaQueryData
-          .fromWindow(ui.window)
-          .size
-          .width / 2, MediaQueryData
-          .fromWindow(ui.window)
-          .size
-          .height);
-      UpArr.position = Vector2(MediaQueryData
-          .fromWindow(ui.window)
-          .size
-          .width / 2, 0);
+      // leftArr.position = Vector2(0, MediaQueryData
+      //     .fromWindow(ui.window)
+      //     .size
+      //     .height - 50);
+      // rightArr.position = Vector2(85, MediaQueryData
+      //     .fromWindow(ui.window)
+      //     .size
+      //     .height - 50);
+      // UpArr.size = Vector2(MediaQueryData
+      //     .fromWindow(ui.window)
+      //     .size
+      //     .width / 2, MediaQueryData
+      //     .fromWindow(ui.window)
+      //     .size
+      //     .height);
+      // UpArr.position = Vector2(MediaQueryData
+      //     .fromWindow(ui.window)
+      //     .size
+      //     .width / 2, 0);
     }
     super.onGameResize(canvasSize);
   }
 
   void tappableEvent(PlayerDirectionMove direct, bool isMove){
+    print('sdsd');
     if(direct == PlayerDirectionMove.Left){
       _player.moveLeft(isMove);
     }else if(direct == PlayerDirectionMove.Right){
@@ -77,25 +78,26 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     //add(Back());
     var bground = CustomTileMap();
     add(bground);
-    leftArr = MoveArrow(PlayerDirectionMove.Left, Vector2(0,MediaQueryData.fromWindow(ui.window).size.height - 50),Vector2(65,50));
-    leftArr.setColor(BasicPalette.green.color.withAlpha(20));
-    add(leftArr);
-    rightArr = MoveArrow(PlayerDirectionMove.Right, Vector2(85,MediaQueryData.fromWindow(ui.window).size.height - 50),Vector2(65,50));
-    rightArr.setColor(BasicPalette.green.color.withAlpha(20));
-    add(rightArr);
-    UpArr = MoveArrow(PlayerDirectionMove.Up, Vector2(MediaQueryData.fromWindow(ui.window).size.width/2,0),Vector2(MediaQueryData.fromWindow(ui.window).size.width/2,MediaQueryData.fromWindow(ui.window).size.height));
-    UpArr.setColor(BasicPalette.transparent.color);
-    add(UpArr);
+    // leftArr = MoveArrow(PlayerDirectionMove.Left, Vector2(0,MediaQueryData.fromWindow(ui.window).size.height - 50),Vector2(65,50));
+    // leftArr.setColor(BasicPalette.green.color.withAlpha(20));
+    // add(leftArr);
+    // rightArr = MoveArrow(PlayerDirectionMove.Right, Vector2(85,MediaQueryData.fromWindow(ui.window).size.height - 50),Vector2(65,50));
+    // rightArr.setColor(BasicPalette.green.color.withAlpha(20));
+    // add(rightArr);
+    // UpArr = MoveArrow(PlayerDirectionMove.Up, Vector2(MediaQueryData.fromWindow(ui.window).size.width/2,0),Vector2(MediaQueryData.fromWindow(ui.window).size.width/2,MediaQueryData.fromWindow(ui.window).size.height));
+    // UpArr.setColor(BasicPalette.transparent.color);
+    // add(UpArr);
     bground.loaded.then((value) {
       // bground.anchor = Anchor.topLeft;
       // bground.scale = Vector2.all(2);
       _player = OrthoPlayer(Vector2(0,bground.height));
       camera.followComponent(_player,worldBounds: Rect.fromLTWH(0, 0, bground.width, bground.height));
-      for(double i=100; i < bground.height - 50; i+=200){
-        add(CustomCircle(Vector2(2,i),bground.width));
-      }
+      // for(double i=100; i < bground.height - 50; i+=200){
+      //   add(CustomCircle(Vector2(2,i),bground.width));
+      // }
       bground.position = Vector2(0, 0);
       add(_player);
+      // add(CustomJoystick(Vector2(0,MediaQueryData.fromWindow(ui.window).size.height - 60), Vector2(60,60)));
       add(ScreenHitbox());
     }
     );
@@ -112,7 +114,14 @@ main()
     MaterialApp(
       home: Scaffold(
         body: GameWidget(
-          game: KyrgyzGame()
+          game: KyrgyzGame(),
+          overlayBuilderMap:  {
+            'OrthoJoystick': (context, KyrgyzGame game) {
+              return OrthoJoystick(game,Vector2(80,80),Vector2.all(0)
+              );
+            },
+          },
+          initialActiveOverlays: const ['OrthoJoystick'],
         )
       ),
     )
