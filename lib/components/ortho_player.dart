@@ -4,85 +4,106 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/components/ground_component.dart';
+import 'package:game_flame/components/helper.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
-import 'dart:math';
+import 'dart:math' as math;
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>
 {
   final Vector2 _startPos;
   OrthoPlayer(this._startPos);
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
-  late SpriteAnimation _dinoDead, _dinoIdle, _dinoJump, _dinoRun, _dinoWalk;
+  late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove, _idleAnimation;
   Vector2 _speed = Vector2.all(0);
   double _maxSpeed = 3;
   Vector2 _velocity = Vector2.all(0);
-  bool _isMove = false;
+  double _moveSpeed = 50;
+  late RectangleHitbox _groundBox;
 
   @override
   Future<void> onLoad() async{
+    debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
-    _dinoDead = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0,to: 4);
-    _dinoIdle = spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 0,to: 4);
-    _dinoJump = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0,to: 4);
-    _dinoRun = spriteSheet.createAnimation (row: 3, stepTime: 0.3, from: 0,to: 4);
-    _dinoWalk = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0,to: 4);
-    animation = _dinoIdle;
+    _leftMove = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0,to: 4);
+    _rightMove = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0,to: 4);
+    _upMove = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0,to: 4);
+    _downMove = spriteSheet.createAnimation (row: 6, stepTime: 0.3, from: 0,to: 4);
+    _rightUpMove = spriteSheet.createAnimation(row: 3, stepTime: 0.3, from: 0,to: 4);
+    _rightDownMove = spriteSheet.createAnimation(row: 5, stepTime: 0.3, from: 0,to: 4);
+    _leftUpMove = spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 0,to: 4);
+    _leftDownMove = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 0,to: 4);
+    _idleAnimation = spriteSheet.createAnimation(row: 6, stepTime: 0.3, from: 6,to: 7);
+    animation = _idleAnimation;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    anchor = Anchor(0.3,0.5);
     topLeftPosition = _startPos - Vector2(0,height);
-    add(RectangleHitbox(position: Vector2.all(0),size: Vector2(width*0.6,height)));
+    _groundBox = RectangleHitbox(position: Vector2(width/4,15),size: Vector2(width/2,height*0.6));
+    anchor = Anchor(_groundBox.center.x / width, _groundBox.center.y / height);
+    //_groundBox.anchor = Anchor.center;
+    add(_groundBox);
   }
 
-  void moveRight(bool isMove){
-    if(!isMove){
-      if(_velocity.x > 0) {
-        _velocity.x = 0;
-      }
+  void movePlayer(PlayerDirectionMove direct, bool isRun){
+    if(isRun){
+      _maxSpeed = 5;
     }else{
-      if (isFlippedHorizontally) {
-        flipHorizontally();
-      }
-      _isMove = true;
-      _velocity.x = 50;
-      animation = _dinoRun;
+      _maxSpeed = 3;
     }
-  }
-  void moveLeft(bool isMove){
-    if(!isMove){
-      if(_velocity.x < 0) {
-        _velocity.x = 0;
-      }
-    }else{
-      if (!isFlippedHorizontally) {
-        flipHorizontally();
-      }
-      _isMove = true;
-      _velocity.x = -50;
-      animation = _dinoRun;
-    }
-  }
-  void moveUp(bool isMove){
-    if(!isMove){
-      if(_velocity.y < 0) {
+    switch(direct){
+      case PlayerDirectionMove.Right: {
+        _velocity.x = _moveSpeed;
         _velocity.y = 0;
+        animation = _rightMove;
       }
-    }else{
-      _velocity.y = -50;
-      animation = _dinoRun;
-      _isMove = true;
-    }
-  }
-  void moveDown(bool isMove){
-    if(!isMove){
-      if(_velocity.y > 0) {
+      break;
+      case PlayerDirectionMove.Up: {
+        _velocity.y = -_moveSpeed;
+        _velocity.x = 0;
+        animation = _upMove;
+      }
+      break;
+      case PlayerDirectionMove.Left: {
+        _velocity.x = -_moveSpeed;
         _velocity.y = 0;
+        animation = _leftMove;
       }
-    }else{
-      _isMove = true;
-      _velocity.y = 50;
-      animation = _dinoRun;
+      break;
+      case PlayerDirectionMove.Down:{
+        _velocity.y = _moveSpeed;
+        _velocity.x = 0;
+        animation = _downMove;
+      }
+      break;
+      case PlayerDirectionMove.RightUp:{
+        _velocity.y = -_moveSpeed;
+        _velocity.x = _moveSpeed;
+        animation = _rightUpMove;
+      }
+      break;
+      case PlayerDirectionMove.RightDown:{
+        _velocity.y = _moveSpeed;
+        _velocity.x = _moveSpeed;
+        animation = _rightDownMove;
+      }
+      break;
+      case PlayerDirectionMove.LeftUp:{
+        _velocity.y = -_moveSpeed;
+        _velocity.x = -_moveSpeed;
+        animation = _leftUpMove;
+      }
+      break;
+      case PlayerDirectionMove.LeftDown:{
+        _velocity.y = _moveSpeed;
+        _velocity.x = -_moveSpeed;
+        animation = _leftDownMove;
+      }
+      break;
+      case PlayerDirectionMove.NoMove:{
+        _velocity *= 0;
+      }
+      break;
     }
   }
 
@@ -91,38 +112,90 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // if(event.isKeyPressed(LogicalKeyboardKey.keyC)){
     //   _isNeedColl = !_isNeedColl;
     // }
+    bool isRun = false;
     if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
-      _maxSpeed = 5;
-    }else{
-      _maxSpeed = 3;
+      isRun = true;
     }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
-      moveUp(true);
+    if(!event.isKeyPressed(LogicalKeyboardKey.arrowUp) && !event.isKeyPressed(LogicalKeyboardKey.arrowDown)
+        && !event.isKeyPressed(LogicalKeyboardKey.arrowLeft) && !event.isKeyPressed(LogicalKeyboardKey.arrowRight)){
+      _velocity *= 0;
     }else{
-      moveUp(false);
-    }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
-      moveDown(true);
-    }else{
-      moveDown(false);
-    }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-      moveLeft(true);
-    }else{
-      moveLeft(false);
-    }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-      moveRight(true);
-    }else{
-      moveRight(false);
+      Vector2 velo = Vector2.all(0);
+      if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
+        velo.y = -_moveSpeed;
+      }
+      if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
+        velo.y = _moveSpeed;
+      }
+      if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+        velo.x = -_moveSpeed;
+      }
+      if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+        velo.x = _moveSpeed;
+      }
+      doMoveFromVector2(velo, isRun);
     }
     return true;
   }
 
+  void doMoveFromVector2(Vector2 vel, bool isRun){
+    if(vel.x > 0 && vel.y == 0){
+      movePlayer(PlayerDirectionMove.Right,isRun);
+    }else if(vel.x < 0 && vel.y == 0){
+      movePlayer(PlayerDirectionMove.Left,isRun);
+    }else if(vel.x > 0 && vel.y > 0){
+      movePlayer(PlayerDirectionMove.RightDown,isRun);
+    }else if(vel.x > 0 && vel.y < 0){
+      movePlayer(PlayerDirectionMove.RightUp,isRun);
+    }else if(vel.x < 0 && vel.y < 0){
+      movePlayer(PlayerDirectionMove.LeftUp,isRun);
+    }else if(vel.x < 0 && vel.y > 0){
+      movePlayer(PlayerDirectionMove.LeftDown,isRun);
+    }else if(vel.x == 0 && vel.y > 0){
+      movePlayer(PlayerDirectionMove.Down,isRun);
+    }else if(vel.x == 0 && vel.y < 0){
+      movePlayer(PlayerDirectionMove.Up,isRun);
+    }
+  }
+
+  void groundCalc2(PositionComponent other){
+    double topRight = math.atan2(other.width/2, - other.height/2);
+    double bottomRight = math.atan2(other.width/2, other.height/2);
+    Vector2 nearPoint = Vector2.all(0);
+    if(other.center.x < positionOfAnchor(anchor).x){
+      nearPoint.x = positionOfAnchor(anchor).x - _groundBox.width/2;
+    }else{
+      nearPoint.x = positionOfAnchor(anchor).x + _groundBox.width/2;
+    }
+    if(other.center.y > positionOfAnchor(anchor).y){
+      nearPoint.y = positionOfAnchor(anchor).y + _groundBox.height/2;
+    }else{
+      nearPoint.y = positionOfAnchor(anchor).y - _groundBox.height/2;
+    }
+    double angle = math.atan2(nearPoint.x - other.center.x, nearPoint.y - other.center.y);
+    if(angle < topRight && angle >= bottomRight){
+      position.x=other.x + other.width + _groundBox.width/2;
+    }else if(angle >= topRight || angle < -topRight){
+      position.y = other.y - _groundBox.height/2;
+    }else if(angle >= -topRight && angle < -bottomRight){
+      position.x=other.x - _groundBox.width/2;
+    }else{
+      position.y = other.y + other.height + _groundBox.height/2;
+    }
+  }
+
+  @override
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    if(other is Ground) {
+      groundCalc2(other);
+    }
+    super.onCollision(points, other);
+  }
+
   @override
   void update(double dt) {
-    _speed.x = max(-_maxSpeed,min(_speed.x + dt * _velocity.x,_maxSpeed));
-    _speed.y = max(-_maxSpeed,min(_speed.y + dt * _velocity.y,_maxSpeed));
+    _speed.x = math.max(-_maxSpeed,math.min(_speed.x + dt * _velocity.x,_maxSpeed));
+    _speed.y = math.max(-_maxSpeed,math.min(_speed.y + dt * _velocity.y,_maxSpeed));
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;
@@ -141,7 +214,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       countZero++;
     }
     if(countZero == 2){
-      animation = _dinoIdle;
+      animation = _idleAnimation;
       super.update(dt);
       return;
     }
@@ -154,7 +227,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       countZero++;
     }
     if(countZero == 2){
-      animation = _dinoIdle;
+      animation = _idleAnimation;
     }
     position += _speed;
     super.update(dt);
