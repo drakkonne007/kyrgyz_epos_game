@@ -112,12 +112,14 @@ main()
   Flame.device.setLandscape();
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
+      debugShowMaterialGrid: false,
       home: Scaffold(
         body: GameWidget(
           game: KyrgyzGame(),
           overlayBuilderMap:  {
             'OrthoJoystick': (context, KyrgyzGame game) {
-              return OrthoJoystick(game,Vector2(80,80),Vector2.all(0)
+              return OrthoJoystick(game,Vector2(80,80)
               );
             },
           },

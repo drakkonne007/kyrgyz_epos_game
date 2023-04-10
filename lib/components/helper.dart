@@ -93,24 +93,78 @@ class CustomJoystick extends CircleComponent with Tappable, HasGameRef<KyrgyzGam
   }
 }
 
-class OrthoJoystick extends StatelessWidget
+class OrthoJoystick extends StatefulWidget
 {
   KyrgyzGame _game;
-  Vector2 _size,_pos;
-  OrthoJoystick(this._game, this._size, this._pos);
+  Vector2 _size;
+  OrthoJoystick(this._game, this._size);
+
+  @override
+  State<OrthoJoystick> createState() => _OrthoJoystickState(_size);
+}
+
+class _OrthoJoystickState extends State<OrthoJoystick> {
+  Vector2 _size;
+  late double _left,_top;
+  _OrthoJoystickState(this._size){
+    _left = _size.x/2 - _size.x/8;
+    _top = _size.y/2 - _size.y/8;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomLeft,
-      child:Container(
+      child: Container(
         width: _size.x,
         height: _size.y,
-        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size.x)),color: Colors.green),
-        child: GestureDetector(
-          onTap: (){
-            print('Wohoo');
-            _game.tappableEvent(PlayerDirectionMove.Right,true);
-          },
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size.x)),color: Colors.blue.withAlpha(100)),
+        child:  Stack(
+            fit: StackFit.passthrough,
+            children:<Widget>[GestureDetector(
+              // onTap: (){
+              //   setState(() {
+              //     _left = details.localPosition.dx - _size.x/8;
+              //     _top = details.localPosition.dy - _size.y/8;
+              //   });
+              //   print('Wohoo');
+              //   widget._game.tappableEvent(PlayerDirectionMove.Right,true);
+              //
+              // },
+              onTapUp: (details){
+                setState(() {
+                  _left = _size.x/2 - _size.x/8;
+                  _top = _size.y/2 - _size.y/8;
+                });
+              },
+              onPanStart: (details){
+                setState(() {
+                  _left = details.localPosition.dx - _size.x/8;
+                  _top = details.localPosition.dy - _size.y/8;
+                });
+              },
+              onPanUpdate: (details){
+                setState(() {
+                  _left = details.localPosition.dx - _size.x/8;
+                  _top = details.localPosition.dy - _size.y/8;
+                });
+              },
+              onPanCancel: (){
+                setState(() {
+                  _left = _size.x/2 - _size.x/8;
+                  _top = _size.y/2 - _size.y/8;
+                });
+              },
+            ),
+              Positioned(
+                  width: _size.x/4,
+                  height: _size.y/4,
+                  left: _left,
+                  top: _top,
+                  child: Container(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size.x)),color: Colors.red.withAlpha(220)),
+                  ))]
         ),
       ),
     );
