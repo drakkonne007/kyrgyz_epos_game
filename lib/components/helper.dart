@@ -1,5 +1,5 @@
 
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -65,7 +65,7 @@ class CustomJoystick extends CircleComponent with Tappable, HasGameRef<KyrgyzGam
 
   @override
   bool onTapDown(TapDownInfo info) {
-    if(atan2(info.raw.localPosition.dx - center.x, info.raw.localPosition.dy - center.y) > 10){
+    if(math.atan2(info.raw.localPosition.dx - center.x, info.raw.localPosition.dy - center.y) > 10){
 
     }
     print('Hohoho222');
@@ -96,7 +96,7 @@ class CustomJoystick extends CircleComponent with Tappable, HasGameRef<KyrgyzGam
 class OrthoJoystick extends StatefulWidget
 {
   KyrgyzGame _game;
-  Vector2 _size;
+  double _size;
   OrthoJoystick(this._game, this._size);
 
   @override
@@ -104,11 +104,31 @@ class OrthoJoystick extends StatefulWidget
 }
 
 class _OrthoJoystickState extends State<OrthoJoystick> {
-  Vector2 _size;
+  double _size;
   late double _left,_top;
   _OrthoJoystickState(this._size){
-    _left = _size.x/2 - _size.x/8;
-    _top = _size.y/2 - _size.y/8;
+    _left = _size/2 - _size/8;
+    _top = _size/2 - _size/8;
+  }
+
+  void doMove(double dx, double dy){
+    setState(() {
+      if(math.sqrt(math.pow(dx-_size / 2,2) + math.pow(dy-_size / 2, 2)) > _size / 2){
+        var ugol = math.atan2(dx - _size/2,dy - _size / 2);
+        _left = math.sin(ugol) * _size / 2 - _size/8 + _size/2;
+        _top = math.cos(ugol) * _size / 2 - _size/8 + _size/2;
+      }else {
+        _left = dx - _size/8;
+        _top = dy - _size/8;
+      }
+    });
+  }
+
+  void stopMove(){
+    setState(() {
+      _left = _size/2 - _size/8;
+      _top = _size/2 - _size/8;
+    });
   }
 
   @override
@@ -116,54 +136,34 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        width: _size.x,
-        height: _size.y,
+        width: _size,
+        height: _size,
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size.x)),color: Colors.blue.withAlpha(100)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.blue.withAlpha(100)),
         child:  Stack(
             fit: StackFit.passthrough,
-            children:<Widget>[GestureDetector(
-              // onTap: (){
-              //   setState(() {
-              //     _left = details.localPosition.dx - _size.x/8;
-              //     _top = details.localPosition.dy - _size.y/8;
-              //   });
-              //   print('Wohoo');
-              //   widget._game.tappableEvent(PlayerDirectionMove.Right,true);
-              //
-              // },
-              onTapUp: (details){
-                setState(() {
-                  _left = _size.x/2 - _size.x/8;
-                  _top = _size.y/2 - _size.y/8;
-                });
-              },
-              onPanStart: (details){
-                setState(() {
-                  _left = details.localPosition.dx - _size.x/8;
-                  _top = details.localPosition.dy - _size.y/8;
-                });
-              },
-              onPanUpdate: (details){
-                setState(() {
-                  _left = details.localPosition.dx - _size.x/8;
-                  _top = details.localPosition.dy - _size.y/8;
-                });
-              },
-              onPanCancel: (){
-                setState(() {
-                  _left = _size.x/2 - _size.x/8;
-                  _top = _size.y/2 - _size.y/8;
-                });
-              },
-            ),
+            children:<Widget>[
+              GestureDetector(
+                onTapUp: (details){
+                  stopMove();
+                },
+                onPanStart: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onPanUpdate: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onPanCancel: (){
+                  stopMove();
+                },
+              ),
               Positioned(
-                  width: _size.x/4,
-                  height: _size.y/4,
+                  width: _size/4,
+                  height: _size/4,
                   left: _left,
                   top: _top,
                   child: Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size.x)),color: Colors.red.withAlpha(220)),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
                   ))]
         ),
       ),

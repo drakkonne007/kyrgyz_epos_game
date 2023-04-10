@@ -119,8 +119,7 @@ main()
           game: KyrgyzGame(),
           overlayBuilderMap:  {
             'OrthoJoystick': (context, KyrgyzGame game) {
-              return OrthoJoystick(game,Vector2(80,80)
-              );
+              return OrthoJoystick(game,80);
             },
           },
           initialActiveOverlays: const ['OrthoJoystick'],
