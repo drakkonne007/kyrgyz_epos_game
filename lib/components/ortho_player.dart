@@ -2,6 +2,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/ground_component.dart';
@@ -158,36 +159,98 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
   }
 
+  void groundCalcLines(Set<Vector2> points, PositionComponent other){
+    if(points.length < 2){
+      return;
+    }
+    var df = Line.fromPoints(points.first, points.last);
+    if(df.angle == -0.0){
+      return;
+    }
+    print(df.angle);
+    if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
+      if(positionOfAnchor(anchor).y < other.center.y){
+        position.y = other.y - _groundBox.height/2;
+      }else{
+        position.y = other.y + other.height + _groundBox.height/2;
+      }
+    }else{
+      if(positionOfAnchor(anchor).x > other.center.x){
+        position.x=other.x + other.width + _groundBox.width/2;
+      }else{
+        position.x=other.x - _groundBox.width/2;
+      }
+    }
+  }
+
   void groundCalc2(PositionComponent other){
-    double topRight = math.atan2(other.width/2, - other.height/2);
-    double bottomRight = math.atan2(other.width/2, other.height/2);
-    Vector2 nearPoint = Vector2.all(0);
-    if(other.center.x < positionOfAnchor(anchor).x){
-      nearPoint.x = positionOfAnchor(anchor).x - _groundBox.width/2;
-    }else{
-      nearPoint.x = positionOfAnchor(anchor).x + _groundBox.width/2;
+    //
+    // double topRight = math.atan2(other.width/2, - other.height/2);
+    // double bottomRight = math.atan2(other.width/2, other.height/2);
+    // Vector2 nearPoint = Vector2.all(0);
+    // if(other.center.x < positionOfAnchor(anchor).x){
+    //   nearPoint.x = positionOfAnchor(anchor).x - _groundBox.width/2;
+    // }else{
+    //   nearPoint.x = positionOfAnchor(anchor).x + _groundBox.width/2;
+    // }
+    // if(other.center.y > positionOfAnchor(anchor).y){
+    //   nearPoint.y = positionOfAnchor(anchor).y + _groundBox.height/2;
+    // }else{
+    //   nearPoint.y = positionOfAnchor(anchor).y - _groundBox.height/2;
+    // }
+    // PlayerDirectionMove centerMove = PlayerDirectionMove.NoMove;
+    // PlayerDirectionMove angleMove = PlayerDirectionMove.NoMove;
+    // double angle = math.atan2(nearPoint.x - other.center.x, nearPoint.y - other.center.y);
+    // double angleCenter = math.atan2(positionOfAnchor(anchor).x - other.center.x, positionOfAnchor(anchor).y - other.center.y);
+    // if(angleCenter < topRight && angleCenter >= bottomRight){
+    //   centerMove = PlayerDirectionMove.Right;
+    //   position.x=other.x + other.width + _groundBox.width/2;
+    // }else if(angleCenter >= topRight || angleCenter < -topRight){
+    //   centerMove = PlayerDirectionMove.Up;
+    //   position.y = other.y - _groundBox.height/2;
+    // }else if(angleCenter >= -topRight && angleCenter < -bottomRight){
+    //   centerMove = PlayerDirectionMove.Left;
+    //   position.x=other.x - _groundBox.width/2;
+    // }else{
+    //   position.y = other.y + other.height + _groundBox.height/2;
+    //   centerMove = PlayerDirectionMove.Down;
+    // }
+    // var curr = position;
+    // curr.absolute();
+    // if(angle < topRight && angle >= bottomRight){
+    //   angleMove = PlayerDirectionMove.Right;
+    //   position.x=other.x + other.width + _groundBox.width/2;
+    // }else if(angle >= topRight || angle < -topRight){
+    //   angleMove = PlayerDirectionMove.Up;
+    //   position.y = other.y - _groundBox.height/2;
+    // }else if(angle >= -topRight && angle < -bottomRight){
+    //   angleMove = PlayerDirectionMove.Left;
+    //   position.x=other.x - _groundBox.width/2;
+    // }else{
+    //   position.y = other.y + other.height + _groundBox.height/2;
+    //   angleMove = PlayerDirectionMove.Down;
+    // }
+    // print('${curr.x - position.x}, y: ${curr.y - position.y}');
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
+   for(final as in points){
+     gameRef.add(TimePoint(as));
+   }
+    if(other is Ground) {
+      groundCalcLines(points,other);
     }
-    if(other.center.y > positionOfAnchor(anchor).y){
-      nearPoint.y = positionOfAnchor(anchor).y + _groundBox.height/2;
-    }else{
-      nearPoint.y = positionOfAnchor(anchor).y - _groundBox.height/2;
-    }
-    double angle = math.atan2(nearPoint.x - other.center.x, nearPoint.y - other.center.y);
-    if(angle < topRight && angle >= bottomRight){
-      position.x=other.x + other.width + _groundBox.width/2;
-    }else if(angle >= topRight || angle < -topRight){
-      position.y = other.y - _groundBox.height/2;
-    }else if(angle >= -topRight && angle < -bottomRight){
-      position.x=other.x - _groundBox.width/2;
-    }else{
-      position.y = other.y + other.height + _groundBox.height/2;
-    }
+    super.onCollisionStart(points, other);
   }
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
+    for(final as in points){
+      gameRef.add(TimePoint(as));
+    }
     if(other is Ground) {
-      groundCalc2(other);
+      groundCalcLines(points,other);
     }
     super.onCollision(points, other);
   }

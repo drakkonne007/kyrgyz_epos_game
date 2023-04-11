@@ -3,7 +3,6 @@ import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/components/circle_position_component.dart';
 import 'package:game_flame/components/front_player.dart';
