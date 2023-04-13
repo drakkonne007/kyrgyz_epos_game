@@ -1,11 +1,20 @@
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/components/ground_component.dart';
+import 'package:game_flame/components/ortho_player.dart';
+import 'package:game_flame/components/physic_vals.dart';
 
-class SwordEnemy extends SpriteAnimationComponent
+class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks
 {
+  SwordEnemy(this._startPos);
 
+  late SpriteAnimation _leftMove, _idleAnimation;
+  final Vector2 _spriteSheetSize = Vector2(193.6, 232);
+  Vector2 _startPos;
+  Vector2 _speed = Vector2(0,20);
 
   @override
   Future<void> onLoad() async{
@@ -13,33 +22,32 @@ class SwordEnemy extends SpriteAnimationComponent
     final spriteImage = await Flame.images.load(
         'tiles/sprites/players/arrowman.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
-        srcSize: Vector2(_spriteSheetWidth, _spriteSheetHeight));
+        srcSize: _spriteSheetSize);
     _leftMove =
-        spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0, to: 4);
-    _rightMove =
-        spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0, to: 4);
-    _upMove =
-        spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0, to: 4);
-    _downMove =
-        spriteSheet.createAnimation(row: 6, stepTime: 0.3, from: 0, to: 4);
-    _rightUpMove =
-        spriteSheet.createAnimation(row: 3, stepTime: 0.3, from: 0, to: 4);
-    _rightDownMove =
-        spriteSheet.createAnimation(row: 5, stepTime: 0.3, from: 0, to: 4);
-    _leftUpMove =
-        spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 0, to: 4);
-    _leftDownMove =
-        spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 0, to: 4);
-    _idleAnimation =
-        spriteSheet.createAnimation(row: 6, stepTime: 0.3, from: 6, to: 7);
+        spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0, to: 5);
+    _idleAnimation = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 2, to: 3);
     animation = _idleAnimation;
-    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    topLeftPosition = _startPos - Vector2(0, height);
-    _groundBox = RectangleHitbox(position: Vector2(width / 4, 15),
-        size: Vector2(width / 2, height * 0.6));
-    anchor = Anchor(_groundBox.center.x / width, _groundBox.center.y / height);
+    size = _spriteSheetSize * GameConsts.gameScale / 7;
+    topLeftPosition = _startPos;
     //_groundBox.anchor = Anchor.center;
-    add(_groundBox);
+    add(RectangleHitbox(size: this.size));
   }
 
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if(other is Ground){
+      _speed *= -1;
+    }else if(other is OrthoPlayer){
+      other.doHurt(hurt: 1);
+      _speed *= -1;
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
+
+  @override
+  void update(double dt){
+    position += _speed * dt;
+    super.update(dt);
+  }
 }

@@ -12,8 +12,8 @@ class Ground extends PositionComponent
 
   @override
   Future<void> onLoad() async{
-    debugMode = true;
-    var hitBox = RectangleHitbox(isSolid: true);
+    // debugMode = true;
+    var hitBox = RectangleHitbox();
     hitBox.collisionType = CollisionType.passive;
     add(hitBox);
   }

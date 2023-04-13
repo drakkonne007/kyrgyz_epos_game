@@ -18,14 +18,34 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove, _idleAnimation;
   Vector2 _speed = Vector2.all(0);
-  double _maxSpeed = 3;
+  double _maxSpeed = 300;
   Vector2 _velocity = Vector2.all(0);
-  double _moveSpeed = 50;
+  double _startSpeed = 300;
+  double _runCoef = 1.3;
+  late RectangleHitbox _hitBox;
   late RectangleHitbox _groundBox;
+  bool _isPlayerRun = false;
+
+  void doHurt({required int hurt,bool inArmor=true,int permanentDamage = 0, double secsOfPermDamage=0}){
+    if(inArmor){
+      if(OrthoPLayerVals.armor < hurt){
+        OrthoPLayerVals.health -= (hurt - OrthoPLayerVals.armor);
+        OrthoPLayerVals.armor = 0;
+      }
+    }else{
+      OrthoPLayerVals.health -= hurt - OrthoPLayerVals.armor;
+    }
+    gameRef.overlays.notifyListeners();
+    if(OrthoPLayerVals.health <1){
+      OrthoPLayerVals.doNewGame();
+      gameRef.pauseEngine();
+      gameRef.overlays.add('DeadMenu');
+    }
+  }
 
   @override
   Future<void> onLoad() async{
-    debugMode = true;
+    // debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _leftMove = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0,to: 4);
@@ -40,64 +60,63 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     animation = _idleAnimation;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     topLeftPosition = _startPos - Vector2(0,height);
-    _groundBox = RectangleHitbox(position: Vector2(width/4,15),size: Vector2(width/2,height*0.6));
-    anchor = Anchor(_groundBox.center.x / width, _groundBox.center.y / height);
-    //_groundBox.anchor = Anchor.center;
+    _hitBox = RectangleHitbox(position: Vector2(width/4,15),size: Vector2(width/2,height*0.6));
+    _hitBox.collisionType = CollisionType.passive;
+    _hitBox.debugMode=true;
+    add(_hitBox);
+    anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
+    _groundBox = RectangleHitbox(position: Vector2(width/4,height*0.6 - 5),size: Vector2(width/2,20));
+    _groundBox.debugMode = true;
     add(_groundBox);
   }
 
   void movePlayer(PlayerDirectionMove direct, bool isRun){
-    if(isRun){
-      _maxSpeed = 5;
-    }else{
-      _maxSpeed = 3;
-    }
     switch(direct){
       case PlayerDirectionMove.Right: {
-        _velocity.x = _moveSpeed;
+        _velocity.x = _startSpeed;
         _velocity.y = 0;
         animation = _rightMove;
       }
       break;
       case PlayerDirectionMove.Up: {
-        _velocity.y = -_moveSpeed;
+        _velocity.y = -_startSpeed;
         _velocity.x = 0;
         animation = _upMove;
       }
       break;
       case PlayerDirectionMove.Left: {
-        _velocity.x = -_moveSpeed;
+        _velocity.x = -_startSpeed;
         _velocity.y = 0;
         animation = _leftMove;
       }
       break;
       case PlayerDirectionMove.Down:{
-        _velocity.y = _moveSpeed;
+        _velocity.y = _startSpeed;
         _velocity.x = 0;
         animation = _downMove;
       }
       break;
       case PlayerDirectionMove.RightUp:{
-        _velocity.y = -_moveSpeed;
-        _velocity.x = _moveSpeed;
+        _velocity.y = -_startSpeed;
+        _velocity.x = _startSpeed;
         animation = _rightUpMove;
       }
       break;
       case PlayerDirectionMove.RightDown:{
-        _velocity.y = _moveSpeed;
-        _velocity.x = _moveSpeed;
+        _velocity.y = _startSpeed;
+        _velocity.x = _startSpeed;
         animation = _rightDownMove;
       }
       break;
       case PlayerDirectionMove.LeftUp:{
-        _velocity.y = -_moveSpeed;
-        _velocity.x = -_moveSpeed;
+        _velocity.y = -_startSpeed;
+        _velocity.x = -_startSpeed;
         animation = _leftUpMove;
       }
       break;
       case PlayerDirectionMove.LeftDown:{
-        _velocity.y = _moveSpeed;
-        _velocity.x = -_moveSpeed;
+        _velocity.y = _startSpeed;
+        _velocity.x = -_startSpeed;
         animation = _leftDownMove;
       }
       break;
@@ -105,6 +124,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
         _velocity *= 0;
       }
       break;
+    }
+    if(isRun && OrthoPLayerVals.energy > 0.1){
+      _velocity *= _runCoef;
+      _isPlayerRun = true;
+    }else{
+      _isPlayerRun = false;
     }
   }
 
@@ -120,16 +145,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }else{
       Vector2 velo = Vector2.all(0);
       if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
-        velo.y = -_moveSpeed;
+        velo.y = -_startSpeed;
       }
       if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
-        velo.y = _moveSpeed;
+        velo.y = _startSpeed;
       }
       if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-        velo.x = -_moveSpeed;
+        velo.x = -_startSpeed;
       }
       if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-        velo.x = _moveSpeed;
+        velo.x = _startSpeed;
       }
       doMoveFromVector2(velo, isRun);
     }
@@ -164,27 +189,27 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     if(df.angle == -0.0){
       return;
     }
-    print(df.angle);
+    // print(df.angle);
     if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
       if(positionOfAnchor(anchor).y < other.center.y){
-        position.y = other.y - _groundBox.height/2;
+        position.y = other.y - _hitBox.height/2;
       }else{
-        position.y = other.y + other.height + _groundBox.height/2;
+        position.y = other.y + other.height - (_hitBox.height/2-_groundBox.height);
       }
     }else{
       if(positionOfAnchor(anchor).x > other.center.x){
-        position.x=other.x + other.width + _groundBox.width/2;
+        position.x=other.x + other.width + _hitBox.width/2;
       }else{
-        position.x=other.x - _groundBox.width/2;
+        position.x=other.x - _hitBox.width/2;
       }
     }
   }
 
   @override
   void onCollisionStart(Set<Vector2> points, PositionComponent other) {
-   for(final as in points){
-     gameRef.add(TimePoint(as));
-   }
+   // for(final as in points){
+   //   gameRef.add(TimePoint(as));
+   // }
     if(other is Ground) {
       groundCalcLines(points,other);
     }
@@ -193,9 +218,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
-    for(final as in points){
-      gameRef.add(TimePoint(as));
-    }
+    // for(final as in points){
+    //   gameRef.add(TimePoint(as));
+    // }
     if(other is Ground) {
       groundCalcLines(points,other);
     }
@@ -239,7 +264,19 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     if(countZero == 2){
       animation = _idleAnimation;
     }
-    position += _speed;
+    position += _speed * dt;
+    if(_isPlayerRun){
+      OrthoPLayerVals.energy -= dt;
+      if(OrthoPLayerVals.energy < 0){
+        OrthoPLayerVals.energy = 0;
+      }
+    }else{
+      OrthoPLayerVals.energy += dt;
+      if(OrthoPLayerVals.energy > 10){
+        OrthoPLayerVals.energy = 10;
+      }
+    }
+    print(dt);
     super.update(dt);
   }
 }
