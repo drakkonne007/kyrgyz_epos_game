@@ -20,13 +20,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   Vector2 _speed = Vector2.all(0);
   double _maxSpeed = 300;
   Vector2 _velocity = Vector2.all(0);
-  double _startSpeed = 300;
+  double _startSpeed = 600;
   double _runCoef = 1.3;
   late RectangleHitbox _hitBox;
   late RectangleHitbox _groundBox;
   bool _isPlayerRun = false;
 
   void doHurt({required int hurt,bool inArmor=true,int permanentDamage = 0, double secsOfPermDamage=0}){
+    print('${OrthoPLayerVals.armor} armor, ${OrthoPLayerVals.health} health');
     if(inArmor){
       if(OrthoPLayerVals.armor < hurt){
         OrthoPLayerVals.health -= (hurt - OrthoPLayerVals.armor);
@@ -35,7 +36,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }else{
       OrthoPLayerVals.health -= hurt - OrthoPLayerVals.armor;
     }
-    gameRef.overlays.notifyListeners();
+    // gameRef/.overlays.activeOverlays.re;
     if(OrthoPLayerVals.health <1){
       OrthoPLayerVals.doNewGame();
       gameRef.pauseEngine();
@@ -126,11 +127,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       break;
     }
     if(isRun && OrthoPLayerVals.energy > 0.1){
-      _velocity *= _runCoef;
+      _runCoef = 1.3;
       _isPlayerRun = true;
     }else{
+      _runCoef = 1;
       _isPlayerRun = false;
     }
+    _velocity *= _runCoef;
   }
 
   @override
@@ -142,6 +145,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     if(!event.isKeyPressed(LogicalKeyboardKey.arrowUp) && !event.isKeyPressed(LogicalKeyboardKey.arrowDown)
         && !event.isKeyPressed(LogicalKeyboardKey.arrowLeft) && !event.isKeyPressed(LogicalKeyboardKey.arrowRight)){
       _velocity *= 0;
+      _runCoef = 1;
     }else{
       Vector2 velo = Vector2.all(0);
       if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
@@ -191,12 +195,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
     // print(df.angle);
     if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
+      _speed.y = 0;
       if(positionOfAnchor(anchor).y < other.center.y){
         position.y = other.y - _hitBox.height/2;
       }else{
         position.y = other.y + other.height - (_hitBox.height/2-_groundBox.height);
       }
     }else{
+      _speed.x = 0;
       if(positionOfAnchor(anchor).x > other.center.x){
         position.x=other.x + other.width + _hitBox.width/2;
       }else{
@@ -207,9 +213,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void onCollisionStart(Set<Vector2> points, PositionComponent other) {
-   // for(final as in points){
-   //   gameRef.add(TimePoint(as));
-   // }
+    // for(final as in points){
+    //   gameRef.add(TimePoint(as));
+    // }
     if(other is Ground) {
       groundCalcLines(points,other);
     }
@@ -229,24 +235,28 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void update(double dt) {
-    _speed.x = math.max(-_maxSpeed,math.min(_speed.x + dt * _velocity.x,_maxSpeed));
-    _speed.y = math.max(-_maxSpeed,math.min(_speed.y + dt * _velocity.y,_maxSpeed));
+    _speed.x = math.max(-_maxSpeed * _runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeed * _runCoef));
+    _speed.y = math.max(-_maxSpeed * _runCoef,math.min(_speed.y + dt * _velocity.y,_maxSpeed * _runCoef));
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;
-    if(_speed.x > 0){
-      _speed.x -= PhysicsVals.athmosphereResistance * dt;
-    }else if(_speed.x < 0){
-      _speed.x += PhysicsVals.athmosphereResistance * dt;
-    }else{
-      countZero++;
+    if(_velocity.x == 0) {
+      if (_speed.x > 0) {
+        _speed.x -= PhysicsVals.athmosphereResistance * dt;
+      } else if (_speed.x < 0) {
+        _speed.x += PhysicsVals.athmosphereResistance * dt;
+      } else {
+        countZero++;
+      }
     }
-    if(_speed.y > 0){
-      _speed.y -= PhysicsVals.athmosphereResistance * dt;
-    }else if(_speed.y < 0){
-      _speed.y += PhysicsVals.athmosphereResistance * dt;
-    }else{
-      countZero++;
+    if(_velocity.y == 0){
+      if (_speed.y > 0) {
+        _speed.y -= PhysicsVals.athmosphereResistance * dt;
+      } else if (_speed.y < 0) {
+        _speed.y += PhysicsVals.athmosphereResistance * dt;
+      } else {
+        countZero++;
+      }
     }
     if(countZero == 2){
       animation = _idleAnimation;
@@ -276,7 +286,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
         OrthoPLayerVals.energy = 10;
       }
     }
-    print(dt);
     super.update(dt);
   }
 }

@@ -10,14 +10,14 @@ class GameConsts
 
 class OrthoPLayerVals
 {
-  static int health = 5;
-  static double energy = 10;
-  static int armor = 0;
+  static int health = 10;
+  static double energy = 5;
+  static int armor = 20;
 
   static void doNewGame(){
-    health = 5;
-    energy = 10;
-    armor = 0;
+    health = 10;
+    energy = 5;
+    armor = 20;
   }
 }
 
@@ -25,7 +25,7 @@ class PhysicsVals
 {
   static double gravity = 20;
   static double rigidy = 0.5;
-  static double athmosphereResistance = 150;
+  static double athmosphereResistance = 450;
 }
 
 class TimePoint extends CircleComponent
