@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/components/ground_component.dart';
-import 'package:game_flame/components/ortho_player.dart';
+import 'package:game_flame/players/ortho_player.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
 class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks

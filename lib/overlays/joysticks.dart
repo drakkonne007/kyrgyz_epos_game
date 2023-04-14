@@ -1,55 +1,52 @@
 import 'dart:math' as math;
 import 'package:game_flame/components/helper.dart';
-import 'package:flame/components.dart';
-import 'package:flame/events.dart';
-import 'package:flame/game.dart';
-import 'package:flame/palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:game_flame/main.dart';
+import 'package:game_flame/abstract_game.dart';
 
-class MoveArrow extends RectangleComponent with Tappable, HasGameRef<KyrgyzGame>
-{
-  PlayerDirectionMove _direction;
-  MoveArrow(this._direction, Vector2 pos, Vector2 size){
-    position = pos;
-    this.size = size;
-    positionType = PositionType.widget;
-  }
-
-  @override
-  Future<void> onLoad() async{
-    setColor(BasicPalette.red.color);
-  }
-
-  @override
-  bool onTapDown(TapDownInfo info) {
-    gameRef.moveFrontPLayer();
-    return true;
-  }
-
-  @override
-  bool onLongTapDown(TapDownInfo info) {
-    gameRef.moveFrontPLayer();
-    return true;
-  }
-
-  @override
-  bool onTapCancel() {
-    gameRef.moveFrontPLayer();
-    return true;
-  }
-
-  @override
-  bool onTapUp(TapUpInfo info) {
-    gameRef.moveFrontPLayer();
-    return true;
-  }
-}
+// class MoveArrow extends RectangleComponent with Tappable, ParentIsA<KyrgyzGame>
+// {
+//   PlayerDirectionMove _direction;
+//   MoveArrow(this._direction, Vector2 pos, Vector2 size){
+//     position = pos;
+//     this.size = size;
+//     positionType = PositionType.widget;
+//   }
+//
+//   @override
+//   Future<void> onLoad() async{
+//     setColor(BasicPalette.red.color);
+//   }
+//
+//   @override
+//   bool onTapDown(TapDownInfo info) {
+//     parent.moveFrontPLayer();
+//     return true;
+//   }
+//
+//   @override
+//   bool onLongTapDown(TapDownInfo info) {
+//     gameRef.moveFrontPLayer();
+//     return true;
+//   }
+//
+//   @override
+//   bool onTapCancel() {
+//     gameRef.moveFrontPLayer();
+//     return true;
+//   }
+//
+//   @override
+//   bool onTapUp(TapUpInfo info) {
+//     gameRef.moveFrontPLayer();
+//     return true;
+//   }
+// }
 
 class OrthoJoystick extends StatefulWidget
 {
-  KyrgyzGame _game;
+  static const id = 'OrthoJoystick';
+  AbstractGame _game;
   double _size;
   OrthoJoystick(this._game, this._size);
 

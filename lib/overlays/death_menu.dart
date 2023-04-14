@@ -1,18 +1,21 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:game_flame/abstract_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/main.dart';
+import 'package:game_flame/overlays/health_bar.dart';
+import 'package:game_flame/overlays/joysticks.dart';
 
-class DeadMenu extends StatelessWidget
+class DeathMenu extends StatelessWidget
 {
-  KyrgyzGame _game;
-  DeadMenu(this._game);
+  static const id = 'DeathMenu';
+  AbstractGame _game;
+  DeathMenu(this._game);
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.center,
+        alignment: Alignment.center,
         child: Column(
           children: [
             Text('Вы погибли. Повторить?'),
@@ -22,32 +25,26 @@ class DeadMenu extends StatelessWidget
               children: [
                 FloatingActionButton(
                   onPressed: (){
-                    _game.restartFromCheckpoint();
+                    _game.myMap.smallRestart();
+                    _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
+                    _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
+                    OrthoPLayerVals.doNewGame();
                   },
                   child: Text('Да'),),
                 FloatingActionButton(
                   onPressed: (){
-                    _game.restartFromCheckpoint();
+                    _game.myMap.smallRestart();
+                    _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
+                    _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
+                    OrthoPLayerVals.doNewGame();
                   },
                   child: Text('Нет'),)
               ],
             )
           ],
         )
-    );
-  }
-}
-
-class HealthBar extends StatelessWidget
-{
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.bottomRight,
-        child: Text('${OrthoPLayerVals.health}',
-        textScaleFactor: 3,)
     );
   }
 }

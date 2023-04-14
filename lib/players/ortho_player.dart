@@ -7,14 +7,15 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/ground_component.dart';
 import 'package:game_flame/components/helper.dart';
+import 'package:game_flame/overlays/death_menu.dart';
+import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/abstract_game.dart';
 import 'package:game_flame/main.dart';
 import 'dart:math' as math;
 
-class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>
+class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<AbstractGame>
 {
-  final Vector2 _startPos;
-  OrthoPlayer(this._startPos);
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove, _idleAnimation;
   Vector2 _speed = Vector2.all(0);
@@ -29,18 +30,18 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   void doHurt({required int hurt,bool inArmor=true,int permanentDamage = 0, double secsOfPermDamage=0}){
     print('${OrthoPLayerVals.armor} armor, ${OrthoPLayerVals.health} health');
     if(inArmor){
-      if(OrthoPLayerVals.armor < hurt){
-        OrthoPLayerVals.health -= (hurt - OrthoPLayerVals.armor);
-        OrthoPLayerVals.armor = 0;
+      if(OrthoPLayerVals.armor.value < hurt){
+        OrthoPLayerVals.health.value -= (hurt - OrthoPLayerVals.armor.value);
+        OrthoPLayerVals.armor.value = 0;
       }
     }else{
-      OrthoPLayerVals.health -= hurt - OrthoPLayerVals.armor;
+      OrthoPLayerVals.health.value -= hurt - OrthoPLayerVals.armor.value;
     }
+    // OrthoPLayerVals.health.notifyListeners();
     // gameRef/.overlays.activeOverlays.re;
-    if(OrthoPLayerVals.health <1){
-      OrthoPLayerVals.doNewGame();
+    if(OrthoPLayerVals.health.value <1){
       gameRef.pauseEngine();
-      gameRef.overlays.add('DeadMenu');
+      gameRef.showOverlay(overlayName: DeathMenu.id,isHideOther: true);
     }
   }
 
@@ -60,7 +61,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     _idleAnimation = spriteSheet.createAnimation(row: 6, stepTime: 0.3, from: 6,to: 7);
     animation = _idleAnimation;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    topLeftPosition = _startPos - Vector2(0,height);
     _hitBox = RectangleHitbox(position: Vector2(width/4,15),size: Vector2(width/2,height*0.6));
     _hitBox.collisionType = CollisionType.passive;
     _hitBox.debugMode=true;
@@ -126,7 +126,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       break;
     }
-    if(isRun && OrthoPLayerVals.energy > 0.1){
+    if(isRun && OrthoPLayerVals.energy.value > 0.1){
       _runCoef = 1.3;
       _isPlayerRun = true;
     }else{
@@ -235,6 +235,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void update(double dt) {
+    print(position);
     _speed.x = math.max(-_maxSpeed * _runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeed * _runCoef));
     _speed.y = math.max(-_maxSpeed * _runCoef,math.min(_speed.y + dt * _velocity.y,_maxSpeed * _runCoef));
     bool isXNan = _speed.x.isNegative;
@@ -276,14 +277,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
     position += _speed * dt;
     if(_isPlayerRun){
-      OrthoPLayerVals.energy -= dt;
-      if(OrthoPLayerVals.energy < 0){
-        OrthoPLayerVals.energy = 0;
+      OrthoPLayerVals.energy.value -= dt;
+      if(OrthoPLayerVals.energy.value < 0){
+        OrthoPLayerVals.energy.value = 0;
       }
     }else{
-      OrthoPLayerVals.energy += dt;
-      if(OrthoPLayerVals.energy > 10){
-        OrthoPLayerVals.energy = 10;
+      OrthoPLayerVals.energy.value += dt;
+      if(OrthoPLayerVals.energy.value > 10){
+        OrthoPLayerVals.energy.value = 10;
       }
     }
     super.update(dt);

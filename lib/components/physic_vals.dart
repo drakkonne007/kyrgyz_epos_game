@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flutter/foundation.dart';
 
 
 class GameConsts
@@ -10,14 +11,14 @@ class GameConsts
 
 class OrthoPLayerVals
 {
-  static int health = 10;
-  static double energy = 5;
-  static int armor = 20;
+  static var health = ValueNotifier<int>(10);
+  static var energy = ValueNotifier<double>(5);
+  static var armor = ValueNotifier<int>(0);
 
   static void doNewGame(){
-    health = 10;
-    energy = 5;
-    armor = 20;
+    health.value = 10;
+    energy.value = 5;
+    armor.value  = 0;
   }
 }
 
