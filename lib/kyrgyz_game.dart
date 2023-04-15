@@ -10,10 +10,11 @@ import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/players/ortho_player.dart';
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection
 {
-  late CustomTileMap gameMap;
+  CustomTileMap? gameMap = null;
 
   void showOverlay({required String overlayName, bool isHideOther = false}){
     if(isHideOther){
@@ -27,16 +28,17 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     overlays.add(overlayName);
   }
 
-  Future <void> loadNewMap(String filePath) async{
+  void loadNewMap(String filePath){
     gameMap?.removeFromParent();
     gameMap = CustomTileMap(filePath);
-    add(gameMap);
+    add(gameMap!);
+    camera.followComponent(OrthoPlayer(),worldBounds: Rect.fromLTWH(0,0, gameMap!.width, gameMap!.height));
   }
-
-  @override
-  Color backgroundColor() {
-    return Colors.blue;
-  }
+  //
+  // @override
+  // Color backgroundColor() {
+  //   return Colors.blue;
+  // }
 
   @override
   Future<void> onLoad() async {

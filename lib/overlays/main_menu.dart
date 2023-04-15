@@ -18,7 +18,7 @@ class MainMenu extends StatelessWidget
           FloatingActionButton(
             onPressed: (){
               _game.overlays.remove(id);
-              _game.add(KyrgyzGame());
+              _game.loadNewMap('tiles/map/firstMap2.tmx');
             },
             child: Text('Продолжить'),
           ),

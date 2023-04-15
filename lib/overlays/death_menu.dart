@@ -25,7 +25,7 @@ class DeathMenu extends StatelessWidget
               children: [
                 FloatingActionButton(
                   onPressed: (){
-                    _game.gameMap.smallRestart();
+                    _game.gameMap?.smallRestart();
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
@@ -34,7 +34,7 @@ class DeathMenu extends StatelessWidget
                   child: Text('Да'),),
                 FloatingActionButton(
                   onPressed: (){
-                    _game.gameMap.smallRestart();
+                    _game.gameMap?.smallRestart();
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
