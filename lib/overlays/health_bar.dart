@@ -15,9 +15,11 @@ class _HealthBarState extends State<HealthBar> {
   int _health = OrthoPLayerVals.health.value;
   _HealthBarState() {
     OrthoPLayerVals.health.addListener(() {
-      setState(() {
-        _health = OrthoPLayerVals.health.value;
-      });
+      if(mounted) {
+        setState(() {
+          _health = OrthoPLayerVals.health.value;
+        });
+      }
     });
   }
   @override

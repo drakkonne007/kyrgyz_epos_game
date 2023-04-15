@@ -21,7 +21,7 @@ main()
           game: KyrgyzGame(),
           overlayBuilderMap:  {
             DeathMenu.id: (context, KyrgyzGame game) => DeathMenu(game),
-            GamePause.id: (context, KyrgyzGame game) => GamePause(),
+            GamePause.id: (context, KyrgyzGame game) => GamePause(game),
             HealthBar.id: (context, KyrgyzGame game) => HealthBar(),
             OrthoJoystick.id: (context, KyrgyzGame game) => OrthoJoystick(game,80),
             MainMenu.id: (context, KyrgyzGame game) => MainMenu(game),

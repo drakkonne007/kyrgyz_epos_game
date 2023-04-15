@@ -1,0 +1,40 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "firstMap.tmx",
+    "automapping.whileDrawing": true,
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "Все файлы (*)",
+    "fileStates": {
+        "firstMap.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 3844,
+                "y": 2512
+            }
+        },
+        "firstMap.tmx#ground": {
+            "scaleInDock": 1
+        },
+        "firstMap.tmx#groundsThings": {
+            "scaleInDock": 1
+        },
+        "firstMap.tmx#lava": {
+            "scaleInDock": 1
+        },
+        "firstMap.tmx#trees": {
+            "scaleInDock": 0.33
+        }
+    },
+    "openFiles": [
+        "firstMap.tmx"
+    ],
+    "project": "project.tiled-project",
+    "recentFiles": [
+        "firstMap.tmx"
+    ]
+}

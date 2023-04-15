@@ -14,33 +14,36 @@ class MainMenu extends StatelessWidget
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          FloatingActionButton(
+          ElevatedButton(
             onPressed: (){
               _game.overlays.remove(id);
               _game.loadNewMap('tiles/map/firstMap2.tmx');
             },
-            child: Text('Продолжить'),
+            child:Text('Продолжить',softWrap: false,),
           ),
-          FloatingActionButton(
+          ElevatedButton(
             onPressed: (){
-
+              _game.overlays.remove(id);
+              _game.loadNewMap('tiles/map/firstMap3.tmx');
             },
             child: Text('Новая игра'),
           ),
-          FloatingActionButton(
+          ElevatedButton(
             onPressed: (){
 
             },
             child: Text('Загрузить'),
           ),
-          FloatingActionButton(
+          ElevatedButton(
             onPressed: (){
 
             },
             child: Text('Настройки'),
           ),
-          FloatingActionButton(
+          ElevatedButton(
             onPressed: (){
 
             },

@@ -21,6 +21,10 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   late Vector2 playerPos;
   late List<SpriteAnimationComponent> _moveParticals = [];
 
+  @override clearGameMap(){
+    removeAll(children);
+  }
+
   @override
   Future<void> onLoad() async
   {
@@ -41,7 +45,13 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       add(sword);
       _moveParticals.add(sword);
     }
-    add(OrthoPlayer());
+    if(OrthoPlayer().parent != null){
+      OrthoPlayer().changeParent(this);
+      OrthoPlayer().refreshMoves();
+    }else {
+      add(OrthoPlayer());
+      OrthoPlayer().priority = 99999;
+    }
     OrthoPlayer().position = playerPos;
     add(ScreenHitbox());
     add(FpsTextComponent());
@@ -52,14 +62,14 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
 
   void smallRestart(){
-      removeAll(_moveParticals);
-      _moveParticals.clear();
-      final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("enemySpawn");
-      for(final obj in enemySpawn!.objects){
-        var sword = SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale));
-        add(sword);
-        _moveParticals.add(sword);
-      }
-      OrthoPlayer().position = playerPos;
+    removeAll(_moveParticals);
+    _moveParticals.clear();
+    final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("enemySpawn");
+    for(final obj in enemySpawn!.objects){
+      var sword = SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale));
+      add(sword);
+      _moveParticals.add(sword);
+    }
+    //OrthoPlayer().position = playerPos;
   }
 }

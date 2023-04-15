@@ -1,16 +1,52 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/overlays/health_bar.dart';
+import 'package:game_flame/overlays/joysticks.dart';
 
 class GamePause extends StatelessWidget
 {
   static const id = 'GamePause';
+  KyrgyzGame _game;
+  GamePause(this._game);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-  
-  
-}
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: (){
+              _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
+              _game.showOverlay(overlayName: HealthBar.id);
+              _game.resumeEngine();
+            },
+            child:Text('Продолжить',softWrap: false,),
+          ),
+          ElevatedButton(
+              onPressed: (){
+                _game.overlays.remove(id);
+                _game.loadNewMap('tiles/map/firstMap2.tmx');
+                _game.resumeEngine();
+              },
+            child: Text('Загрузить'),
+          ),
+          ElevatedButton(
+            onPressed: (){
+
+            },
+            child: Text('Настройки'),
+          ),
+          ElevatedButton(
+            onPressed: (){
+
+            },
+            child: Text('Exit'),),
+        ],
+      ),
+    );
+  }}

@@ -14,16 +14,6 @@ import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/main.dart';
 import 'dart:math' as math;
 
-class Singleton {
-  static final Singleton _singleton = Singleton._internal();
-
-  factory Singleton() {
-    return _singleton;
-  }
-
-  Singleton._internal();
-}
-
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>
 {
   static final OrthoPlayer _orthoPlayer = OrthoPlayer._internal();
@@ -46,7 +36,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   bool _isPlayerRun = false;
 
   void doHurt({required int hurt,bool inArmor=true,int permanentDamage = 0, double secsOfPermDamage=0}){
-    print('${OrthoPLayerVals.armor} armor, ${OrthoPLayerVals.health} health');
     if(inArmor){
       if(OrthoPLayerVals.armor.value < hurt){
         OrthoPLayerVals.health.value -= (hurt - OrthoPLayerVals.armor.value);
@@ -57,13 +46,21 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
     if(OrthoPLayerVals.health.value <1){
       gameRef.pauseEngine();
+      _isPlayerRun = false;
+      _velocity *= 0;
+      _speed *= 0;
       gameRef.showOverlay(overlayName: DeathMenu.id,isHideOther: true);
     }
   }
 
+  void refreshMoves(){
+    _velocity *= 0;
+    _speed *= 0;
+    animation?.reset();
+  }
+
   @override
   Future<void> onLoad() async{
-    print('Load orthoPlayer');
     // debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
@@ -253,7 +250,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void update(double dt) {
-    print(position);
     _speed.x = math.max(-_maxSpeed * _runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeed * _runCoef));
     _speed.y = math.max(-_maxSpeed * _runCoef,math.min(_speed.y + dt * _velocity.y,_maxSpeed * _runCoef));
     bool isXNan = _speed.x.isNegative;
