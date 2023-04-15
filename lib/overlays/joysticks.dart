@@ -2,7 +2,8 @@ import 'dart:math' as math;
 import 'package:game_flame/components/helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:game_flame/abstract_game.dart';
+import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/players/ortho_player.dart';
 
 // class MoveArrow extends RectangleComponent with Tappable, ParentIsA<KyrgyzGame>
 // {
@@ -46,7 +47,7 @@ import 'package:game_flame/abstract_game.dart';
 class OrthoJoystick extends StatefulWidget
 {
   static const id = 'OrthoJoystick';
-  AbstractGame _game;
+  KyrgyzGame _game;
   double _size;
   OrthoJoystick(this._game, this._size);
 
@@ -75,27 +76,27 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
     }
     setState(() {
       if(ugol >= math.pi/3 && ugol < math.pi * 2/3){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.Right,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.Right,isRun);
       }else if(ugol < 5 * math.pi/6 && ugol >= math.pi * 2/3){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.RightUp,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.RightUp,isRun);
       }else if(ugol < -5 * math.pi/6 || ugol >= 5 * math.pi/6){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.Up,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.Up,isRun);
       }else if(ugol >= -5 * math.pi/6 && ugol < math.pi * -2 / 3){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.LeftUp,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.LeftUp,isRun);
       }else if(ugol >= -2 * math.pi/3 && ugol < -math.pi / 3){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.Left,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.Left,isRun);
       }else if(ugol >= -math.pi/3 && ugol < -math.pi / 6){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.LeftDown,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.LeftDown,isRun);
       }else if(ugol >= -math.pi/6 && ugol < math.pi / 6){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.Down,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.Down,isRun);
       }else if(ugol > math.pi/6 && ugol < math.pi / 3){
-        widget._game.moveOrthoPlayer(PlayerDirectionMove.RightDown,isRun);
+        OrthoPlayer().movePlayer(PlayerDirectionMove.RightDown,isRun);
       }
     });
   }
 
   void stopMove(){
-    widget._game.moveOrthoPlayer(PlayerDirectionMove.NoMove,false);
+    OrthoPlayer().movePlayer(PlayerDirectionMove.NoMove,false);
     setState(() {
       _left = _size/2 - _size/8;
       _top = _size/2 - _size/8;

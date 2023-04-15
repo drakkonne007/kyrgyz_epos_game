@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:game_flame/abstract_game.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
@@ -9,7 +9,7 @@ import 'package:game_flame/overlays/joysticks.dart';
 class DeathMenu extends StatelessWidget
 {
   static const id = 'DeathMenu';
-  AbstractGame _game;
+  KyrgyzGame _game;
   DeathMenu(this._game);
 
   @override
@@ -25,7 +25,7 @@ class DeathMenu extends StatelessWidget
               children: [
                 FloatingActionButton(
                   onPressed: (){
-                    _game.myMap.smallRestart();
+                    _game.gameMap.smallRestart();
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
@@ -34,7 +34,7 @@ class DeathMenu extends StatelessWidget
                   child: Text('Да'),),
                 FloatingActionButton(
                   onPressed: (){
-                    _game.myMap.smallRestart();
+                    _game.gameMap.smallRestart();
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();

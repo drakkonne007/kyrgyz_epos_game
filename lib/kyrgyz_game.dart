@@ -1,32 +1,46 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
-import 'package:flame/extensions.dart';
+import 'package:flame/events.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:game_flame/abstract_game.dart';
+import 'package:flutter/material.dart';
+import 'package:game_flame/overlays/death_menu.dart';
+import 'package:game_flame/overlays/game_pause.dart';
+import 'package:game_flame/overlays/health_bar.dart';
+import 'package:game_flame/overlays/joysticks.dart';
+import 'package:game_flame/overlays/main_menu.dart';
+import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 
-class KyrgyzGame extends World with HasGameRef<AbstractGame>
+class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection
 {
-  late CustomTileMap _bground;
-  // late CameraComponent camera;
+  late CustomTileMap gameMap;
 
-  @override
-  Future <void> onLoad() async{
-    _bground = CustomTileMap();
-    _bground.loaded.then((value){
-      _bground.init('tiles/map/firstMap2.tmx');}
-    );
-    add(_bground);
-    gameRef.camera.followComponent(gameRef.orthoPlayer);
-    // camera.followComponent(gameRef.player,worldBounds: Rect.fromLTWH(0, 0, _bground.width, _bground.height));
-    // add(camera);
+  void showOverlay({required String overlayName, bool isHideOther = false}){
+    if(isHideOther){
+      overlays.removeAll( <String>[DeathMenu.id,
+        GamePause.id,
+        HealthBar.id,
+        OrthoJoystick.id,
+        MainMenu.id,
+        SaveDialog.id,]);
+    }
+    overlays.add(overlayName);
   }
 
   Future <void> loadNewMap(String filePath) async{
-    _bground.removeFromParent();
-    _bground = CustomTileMap();
-    _bground.init(filePath);
-    add(_bground);
-    gameRef.camera.followComponent(gameRef.orthoPlayer,worldBounds: Rect.fromLTWH(0, 0, _bground.width, _bground.height));
+    gameMap?.removeFromParent();
+    gameMap = CustomTileMap(filePath);
+    add(gameMap);
+  }
+
+  @override
+  Color backgroundColor() {
+    return Colors.blue;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await Flame.device.fullScreen();
+    await Flame.device.setLandscape();
   }
 }

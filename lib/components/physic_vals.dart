@@ -1,12 +1,20 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
+import 'package:game_flame/components/helper.dart';
 
 
 class GameConsts
 {
   static const gameScale = 1.5;
   static const maxSpeed = 3;
+}
+
+class OrthoPlayerMove extends Component with Notifier
+{
+    static var isChange = ValueNotifier<bool>(false);
+    static PlayerDirectionMove directMove = PlayerDirectionMove.NoMove;
+    static bool isRun = false;
 }
 
 class OrthoPLayerVals

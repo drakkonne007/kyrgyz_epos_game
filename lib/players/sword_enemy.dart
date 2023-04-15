@@ -3,6 +3,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:game_flame/components/ground_component.dart';
 import 'package:game_flame/players/ortho_player.dart';
 import 'package:game_flame/components/physic_vals.dart';

@@ -2,13 +2,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:game_flame/abstract_game.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class MainMenu extends StatelessWidget
 {
   static const id = 'mainMenu';
-  AbstractGame _game;
+  KyrgyzGame _game;
   MainMenu(this._game);
 
   @override

@@ -10,12 +10,30 @@ import 'package:game_flame/components/helper.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/abstract_game.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/main.dart';
 import 'dart:math' as math;
 
-class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<AbstractGame>
+class Singleton {
+  static final Singleton _singleton = Singleton._internal();
+
+  factory Singleton() {
+    return _singleton;
+  }
+
+  Singleton._internal();
+}
+
+class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>
 {
+  static final OrthoPlayer _orthoPlayer = OrthoPlayer._internal();
+
+  factory OrthoPlayer() {
+    return _orthoPlayer;
+  }
+
+  OrthoPlayer._internal();
+
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove, _idleAnimation;
   Vector2 _speed = Vector2.all(0);
@@ -37,8 +55,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }else{
       OrthoPLayerVals.health.value -= hurt - OrthoPLayerVals.armor.value;
     }
-    // OrthoPLayerVals.health.notifyListeners();
-    // gameRef/.overlays.activeOverlays.re;
     if(OrthoPLayerVals.health.value <1){
       gameRef.pauseEngine();
       gameRef.showOverlay(overlayName: DeathMenu.id,isHideOther: true);
@@ -47,6 +63,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   Future<void> onLoad() async{
+    print('Load orthoPlayer');
     // debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
@@ -69,6 +86,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     _groundBox = RectangleHitbox(position: Vector2(width/4,height*0.6 - 5),size: Vector2(width/2,20));
     _groundBox.debugMode = true;
     add(_groundBox);
+    OrthoPlayerMove.isChange.addListener(() {movePlayer(OrthoPlayerMove.directMove, OrthoPlayerMove.isRun);});
   }
 
   void movePlayer(PlayerDirectionMove direct, bool isRun){
