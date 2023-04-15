@@ -3,6 +3,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:game_flame/components/ground_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -46,6 +47,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     add(FpsTextComponent());
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
+    gameRef.camera.followComponent(OrthoPlayer(),worldBounds: Rect.fromLTWH(0, 0, width, height));
   }
 
 

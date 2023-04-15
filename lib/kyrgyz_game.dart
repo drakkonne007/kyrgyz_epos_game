@@ -32,7 +32,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     gameMap?.removeFromParent();
     gameMap = CustomTileMap(filePath);
     add(gameMap!);
-    camera.followComponent(OrthoPlayer(),worldBounds: Rect.fromLTWH(0,0, gameMap!.width, gameMap!.height));
+    // camera.followComponent(OrthoPlayer(),worldBounds: Rect.fromLTWH(0,0, gameMap!.width, gameMap!.height));
   }
   //
   // @override
