@@ -24,6 +24,7 @@ class MainMenu extends StatelessWidget
             },
             child:Text('Продолжить',softWrap: false,),
           ),
+          SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
               _game.overlays.remove(id);
@@ -31,18 +32,21 @@ class MainMenu extends StatelessWidget
             },
             child: Text('Новая игра'),
           ),
+          SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
 
             },
             child: Text('Загрузить'),
           ),
+          SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
 
             },
             child: Text('Настройки'),
           ),
+          SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
 

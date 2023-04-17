@@ -17,11 +17,15 @@ class OrthoPlayerMove extends Component with Notifier
     static bool isRun = false;
 }
 
-class OrthoPLayerVals
+class OrthoPlayerVals
 {
-  static var health = ValueNotifier<int>(10);
+  static var health = ValueNotifier<double>(10);
   static var energy = ValueNotifier<double>(5);
-  static var armor = ValueNotifier<int>(0);
+  static var armor = ValueNotifier<double>(0);
+
+  static double maxHealth = 10;
+  static double maxEnergy = 5;
+  static double maxArmor = 0;
 
   static void doNewGame(){
     health.value = 10;

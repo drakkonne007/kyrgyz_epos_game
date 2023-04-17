@@ -31,7 +31,7 @@ class DeathMenu extends StatelessWidget
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
-                    OrthoPLayerVals.doNewGame();
+                    OrthoPlayerVals.doNewGame();
                   },
                   child: Text('Да'),),
                 ElevatedButton(
@@ -40,7 +40,7 @@ class DeathMenu extends StatelessWidget
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
-                    OrthoPLayerVals.doNewGame();
+                    OrthoPlayerVals.doNewGame();
                   },
                   child: Text('Нет'),)
               ],

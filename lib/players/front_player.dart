@@ -9,13 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/components/ground_component.dart';
+import 'package:game_flame/Obstacles/ground_component.dart';
+import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/circle_position_component.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/main.dart';
 
-class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>{
+class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
+{
   Vector2 _startPos;
   FrontPlayer(this._startPos);
   late double _spriteSheetWidth = 680, _spriteSheetHeight = 472;
@@ -251,6 +253,11 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       _isOnGround = false;
     }
     super.onCollisionEnd(other);
+  }
+
+  @override
+  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0}) {
+    // TODO: implement doHurt
   }
 
 }

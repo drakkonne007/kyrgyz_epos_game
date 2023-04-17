@@ -5,7 +5,8 @@ import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:game_flame/components/ground_component.dart';
+import 'package:game_flame/Obstacles/ground_component.dart';
+import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/overlays/health_bar.dart';
@@ -19,7 +20,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   CustomTileMap(this.fileName);
   late TiledComponent tiledMap;
   late Vector2 playerPos;
-  late List<SpriteAnimationComponent> _moveParticals = [];
 
   @override clearGameMap(){
     removeAll(children);
@@ -43,7 +43,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     for(final obj in enemySpawn!.objects){
       var sword = SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale));
       add(sword);
-      _moveParticals.add(sword);
     }
     if(OrthoPlayer().parent != null){
       OrthoPlayer().changeParent(this);
@@ -62,13 +61,11 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
 
   void smallRestart(){
-    removeAll(_moveParticals);
-    _moveParticals.clear();
+    removeWhere((component) => component is KyrgyzEnemy);
     final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("enemySpawn");
     for(final obj in enemySpawn!.objects){
       var sword = SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale));
       add(sword);
-      _moveParticals.add(sword);
     }
     //OrthoPlayer().position = playerPos;
   }

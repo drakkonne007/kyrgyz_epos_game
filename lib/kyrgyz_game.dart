@@ -21,11 +21,13 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   KeyEventResult onKeyEvent(RawKeyEvent event,
       Set<LogicalKeyboardKey> keysPressed,)
   {
+    super.onKeyEvent(event, keysPressed);
     if(keysPressed.contains(LogicalKeyboardKey.escape)){
       pauseEngine();
       showOverlay(overlayName: GamePause.id,isHideOther: true);
+      return KeyEventResult.handled;
     }
-    return KeyEventResult.handled;
+    return KeyEventResult.ignored;
   }
 
   void showOverlay({required String overlayName, bool isHideOther = false}){

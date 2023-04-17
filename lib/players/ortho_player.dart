@@ -5,7 +5,10 @@ import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/components/ground_component.dart';
+import 'package:game_flame/Obstacles/ground_component.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/abstracts/player.dart';
+import 'package:game_flame/abstracts/weapon.dart';
 import 'package:game_flame/components/helper.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/health_bar.dart';
@@ -14,7 +17,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/main.dart';
 import 'dart:math' as math;
 
-class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame>
+class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
 {
   static final OrthoPlayer _orthoPlayer = OrthoPlayer._internal();
 
@@ -27,7 +30,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove, _idleAnimation;
   Vector2 _speed = Vector2.all(0);
-  double _maxSpeed = 300;
+  double _maxSpeed = 200;
   Vector2 _velocity = Vector2.all(0);
   double _startSpeed = 600;
   double _runCoef = 1.3;
@@ -35,16 +38,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   late RectangleHitbox _groundBox;
   bool _isPlayerRun = false;
 
-  void doHurt({required int hurt,bool inArmor=true,int permanentDamage = 0, double secsOfPermDamage=0}){
+  @override
+  void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0}){
     if(inArmor){
-      if(OrthoPLayerVals.armor.value < hurt){
-        OrthoPLayerVals.health.value -= (hurt - OrthoPLayerVals.armor.value);
-        OrthoPLayerVals.armor.value = 0;
+      if(OrthoPlayerVals.armor.value < hurt){
+        OrthoPlayerVals.health.value -= (hurt - OrthoPlayerVals.armor.value);
+        OrthoPlayerVals.armor.value = 0;
       }
     }else{
-      OrthoPLayerVals.health.value -= hurt - OrthoPLayerVals.armor.value;
+      OrthoPlayerVals.health.value -= hurt - OrthoPlayerVals.armor.value;
     }
-    if(OrthoPLayerVals.health.value <1){
+    if(OrthoPlayerVals.health.value <1){
       gameRef.pauseEngine();
       _isPlayerRun = false;
       _velocity *= 0;
@@ -77,11 +81,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     _hitBox = RectangleHitbox(position: Vector2(width/4,15),size: Vector2(width/2,height*0.6));
     _hitBox.collisionType = CollisionType.passive;
-    _hitBox.debugMode=true;
+    // _hitBox.debugMode=true;
     add(_hitBox);
     anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
     _groundBox = RectangleHitbox(position: Vector2(width/4,height*0.6 - 5),size: Vector2(width/2,20));
-    _groundBox.debugMode = true;
+    // _groundBox.debugMode = true;
     add(_groundBox);
     OrthoPlayerMove.isChange.addListener(() {movePlayer(OrthoPlayerMove.directMove, OrthoPlayerMove.isRun);});
   }
@@ -113,26 +117,26 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       break;
       case PlayerDirectionMove.RightUp:{
-        _velocity.y = -_startSpeed;
-        _velocity.x = _startSpeed;
+        _velocity.y = -_startSpeed/2;
+        _velocity.x = _startSpeed/2;
         animation = _rightUpMove;
       }
       break;
       case PlayerDirectionMove.RightDown:{
-        _velocity.y = _startSpeed;
-        _velocity.x = _startSpeed;
+        _velocity.y = _startSpeed/2;
+        _velocity.x = _startSpeed/2;
         animation = _rightDownMove;
       }
       break;
       case PlayerDirectionMove.LeftUp:{
-        _velocity.y = -_startSpeed;
-        _velocity.x = -_startSpeed;
+        _velocity.y = -_startSpeed/2;
+        _velocity.x = -_startSpeed/2;
         animation = _leftUpMove;
       }
       break;
       case PlayerDirectionMove.LeftDown:{
-        _velocity.y = _startSpeed;
-        _velocity.x = -_startSpeed;
+        _velocity.y = _startSpeed/2;
+        _velocity.x = -_startSpeed/2;
         animation = _leftDownMove;
       }
       break;
@@ -141,7 +145,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       break;
     }
-    if(isRun && OrthoPLayerVals.energy.value > 0.1){
+    if(isRun && OrthoPlayerVals.energy.value > 0.1){
       _runCoef = 1.3;
       _isPlayerRun = true;
     }else{
@@ -231,8 +235,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // for(final as in points){
     //   gameRef.add(TimePoint(as));
     // }
-    if(other is Ground) {
+    if(other is MapObstacle) {
       groundCalcLines(points,other);
+    }else if(other is Weapon){
+      var temp = other as Weapon;
+      doHurt(hurt: temp.damage,inArmor: temp.inArmor, permanentDamage: temp.permanentDamage, secsOfPermDamage: temp.secsOfPermDamage);
     }
     super.onCollisionStart(points, other);
   }
@@ -242,7 +249,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // for(final as in points){
     //   gameRef.add(TimePoint(as));
     // }
-    if(other is Ground) {
+    if(other is MapObstacle) {
       groundCalcLines(points,other);
     }
     super.onCollision(points, other);
@@ -275,7 +282,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
     if(countZero == 2){
       animation = _idleAnimation;
+      _isPlayerRun = false;
       super.update(dt);
+      OrthoPlayerVals.energy.value += dt;
+      if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
+        OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
+      }
       return;
     }
     if(_speed.y.isNegative != isYNan){
@@ -288,17 +300,18 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
     if(countZero == 2){
       animation = _idleAnimation;
+      _isPlayerRun = false;
     }
     position += _speed * dt;
     if(_isPlayerRun){
-      OrthoPLayerVals.energy.value -= dt;
-      if(OrthoPLayerVals.energy.value < 0){
-        OrthoPLayerVals.energy.value = 0;
+      OrthoPlayerVals.energy.value -= dt;
+      if(OrthoPlayerVals.energy.value < 0){
+        OrthoPlayerVals.energy.value = 0;
       }
     }else{
-      OrthoPLayerVals.energy.value += dt;
-      if(OrthoPLayerVals.energy.value > 10){
-        OrthoPLayerVals.energy.value = 10;
+      OrthoPlayerVals.energy.value += dt;
+      if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
+        OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
       }
     }
     super.update(dt);
