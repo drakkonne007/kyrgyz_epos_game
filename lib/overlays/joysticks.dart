@@ -115,9 +115,23 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
         child:  Stack(
             fit: StackFit.passthrough,
             children:<Widget>[
+              Positioned(
+                  width: _size/4,
+                  height: _size/4,
+                  left: _left,
+                  top: _top,
+                  child: Container(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
+                  )),
               GestureDetector(
                 onTapUp: (details){
                   stopMove();
+                },
+                onLongPressDown: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onTapDown: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
                 },
                 onPanStart: (details){
                   doMove(details.localPosition.dx, details.localPosition.dy);
@@ -128,15 +142,14 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
                 onPanCancel: (){
                   stopMove();
                 },
+                onTapCancel: (){
+                  stopMove();
+                },
+                onLongPressCancel: () {
+                  stopMove();
+                },
               ),
-              Positioned(
-                  width: _size/4,
-                  height: _size/4,
-                  left: _left,
-                  top: _top,
-                  child: Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
-                  ))]
+              ]
         ),
       ),
     );
