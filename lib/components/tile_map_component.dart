@@ -21,7 +21,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   late TiledComponent tiledMap;
   late Vector2 playerPos;
 
-  @override clearGameMap(){
+  clearGameMap(){
     removeAll(children);
   }
 
@@ -33,16 +33,15 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     size = tiledMap.absoluteScaledSize;
     tiledMap.position = Vector2.all(0);
     add(tiledMap);
-    final groundObj = tiledMap.tileMap.getLayer<ObjectGroup>("ground");
-    final playerSpawn = tiledMap.tileMap.getLayer<ObjectGroup>("playerSpawn");
-    final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("enemySpawn");
-    playerPos = Vector2(playerSpawn!.objects.first.x * GameConsts.gameScale,playerSpawn!.objects.first.y * GameConsts.gameScale);
-    for(final obj in groundObj!.objects){
-      add(Ground(Vector2(obj.width * GameConsts.gameScale, obj.height * GameConsts.gameScale), Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
-    }
-    for(final obj in enemySpawn!.objects){
-      var sword = SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale));
-      add(sword);
+    final objs = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
+    for(final obj in objs!.objects){
+      switch(obj.class_){
+        case 'enemy': add(SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
+        break;
+        case 'ground':  add(Ground(Vector2(obj.width * GameConsts.gameScale, obj.height * GameConsts.gameScale), Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
+        break;
+        case 'player': playerPos = Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale);
+      }
     }
     if(OrthoPlayer().parent != null){
       OrthoPlayer().changeParent(this);
@@ -62,10 +61,12 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   void smallRestart(){
     removeWhere((component) => component is KyrgyzEnemy);
-    final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("enemySpawn");
+    final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in enemySpawn!.objects){
-      var sword = SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale));
-      add(sword);
+      if(obj.class_ == 'enemy') {
+        add(SwordEnemy(Vector2(
+            obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
+      }
     }
     //OrthoPlayer().position = playerPos;
   }

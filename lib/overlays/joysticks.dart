@@ -66,9 +66,9 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
   void doMove(double dx, double dy){
     bool isRun = false;
     var ugol = math.atan2(dx - _size/2, dy - _size / 2);
-    if(math.sqrt(math.pow(dx-_size / 2,2) + math.pow(dy-_size / 2, 2)) > _size / 2){
-      _left = math.sin(ugol) * _size / 2 - _size/8 + _size/2;
-      _top = math.cos(ugol) * _size / 2 - _size/8 + _size/2;
+    if(math.sqrt(math.pow(dx- _size / 2,2) + math.pow(dy- _size / 2, 2)) >= _size / 2 - _size/8){
+      _left = math.sin(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
+      _top = math.cos(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
       isRun = true;
     }else {
       _left = dx - _size/8;
@@ -106,52 +106,58 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.bottomLeft,
-      child: Container(
-        width: _size,
-        height: _size,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.blue.withAlpha(100)),
-        child:  Stack(
-            fit: StackFit.passthrough,
-            children:<Widget>[
-              Positioned(
-                  width: _size/4,
-                  height: _size/4,
-                  left: _left,
-                  top: _top,
-                  child: Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
-                  )),
-              GestureDetector(
-                onTapUp: (details){
-                  stopMove();
-                },
-                onLongPressDown: (details){
-                  doMove(details.localPosition.dx, details.localPosition.dy);
-                },
-                onTapDown: (details){
-                  doMove(details.localPosition.dx, details.localPosition.dy);
-                },
-                onPanStart: (details){
-                  doMove(details.localPosition.dx, details.localPosition.dy);
-                },
-                onPanUpdate: (details){
-                  doMove(details.localPosition.dx, details.localPosition.dy);
-                },
-                onPanCancel: (){
-                  stopMove();
-                },
-                onTapCancel: (){
-                  stopMove();
-                },
-                onLongPressCancel: () {
-                  stopMove();
-                },
-              ),
-              ]
-        ),
-      ),
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, bottom: 10),
+          child: Container(
+            width: _size,
+            height: _size,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(color: Colors.blue.withAlpha(100), shape: BoxShape.circle),
+            child:  Stack(
+                fit: StackFit.passthrough,
+                children:<Widget>[
+                  Positioned(
+                      width: _size/4,
+                      height: _size/4,
+                      left: _left,
+                      top: _top,
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
+                      )),
+                  GestureDetector(
+                    onTapUp: (details){
+                      stopMove();
+                    },
+                    onLongPressDown: (details){
+                      doMove(details.localPosition.dx, details.localPosition.dy);
+                    },
+                    onTapDown: (details){
+                      doMove(details.localPosition.dx, details.localPosition.dy);
+                    },
+                    onPanStart: (details){
+                      doMove(details.localPosition.dx, details.localPosition.dy);
+                    },
+                    onPanUpdate: (details){
+                      doMove(details.localPosition.dx, details.localPosition.dy);
+                    },
+                    onPanCancel: (){
+                      stopMove();
+                    },
+                    onTapCancel: (){
+                      stopMove();
+                    },
+                    onLongPressCancel: () {
+                      stopMove();
+                    },
+                    onPanEnd: (details){
+                      stopMove();
+                    },
+                  ),
+                ]
+            ),
+          ),
+        )
     );
   }
 }

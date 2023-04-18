@@ -20,7 +20,7 @@ class DeathMenu extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Вы погибли. Повторить?'),
+            const Text('Вы погибли. Повторить?'),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +33,7 @@ class DeathMenu extends StatelessWidget
                     _game.resumeEngine();
                     OrthoPlayerVals.doNewGame();
                   },
-                  child: Text('Да'),),
+                  child: const Text('Да'),),
                 ElevatedButton(
                   onPressed: (){
                     _game.gameMap?.smallRestart();
@@ -42,7 +42,7 @@ class DeathMenu extends StatelessWidget
                     _game.resumeEngine();
                     OrthoPlayerVals.doNewGame();
                   },
-                  child: Text('Нет'),)
+                  child: const Text('Нет'),)
               ],
             )
           ],

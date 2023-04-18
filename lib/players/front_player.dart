@@ -41,7 +41,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     _dinoWalk = spriteSheet.createAnimation(row: 6, stepTime: 0.18, from: 2,to: 12);
     animation = _dinoDead;
     size = Vector2(_spriteSheetWidth/7, _spriteSheetHeight/7);
-    anchor = Anchor(0.3,0.5);
+    anchor = const Anchor(0.3,0.5);
     topLeftPosition = _startPos - Vector2(0,height);
     add(RectangleHitbox(position: Vector2.all(0),size: Vector2(width*0.6,height)));
     // print("${_topHit.isColliding}, ${_botHit.isColliding},${_leftHit.isColliding},${_rightHit.isColliding}");

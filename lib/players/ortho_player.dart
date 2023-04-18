@@ -240,6 +240,19 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }else if(other is Weapon){
       var temp = other as Weapon;
       doHurt(hurt: temp.damage,inArmor: temp.inArmor, permanentDamage: temp.permanentDamage, secsOfPermDamage: temp.secsOfPermDamage);
+    }else if(other is ScreenHitbox){
+      if(x < 0){
+        position.x = 1;
+      }
+      if(y < 0){
+        position.y = 1;
+      }
+      if(x > gameRef.gameMap!.size.x){
+        position.x = gameRef.size.x - 1;
+      }
+      if(y > gameRef.gameMap!.size.y){
+        position.y = gameRef.size.y - 1;
+      }
     }
     super.onCollisionStart(points, other);
   }

@@ -25,7 +25,7 @@ class GamePause extends StatelessWidget
               _game.showOverlay(overlayName: HealthBar.id);
               _game.resumeEngine();
             },
-            child:Text('Продолжить',softWrap: false,),
+            child:const Text('Продолжить',softWrap: false,),
           ),
           ElevatedButton(
               onPressed: (){
@@ -33,19 +33,19 @@ class GamePause extends StatelessWidget
                 _game.loadNewMap('tiles/map/firstMap2.tmx');
                 _game.resumeEngine();
               },
-            child: Text('Загрузить'),
+            child: const Text('Загрузить'),
           ),
           ElevatedButton(
             onPressed: (){
 
             },
-            child: Text('Настройки'),
+            child: const Text('Настройки'),
           ),
           ElevatedButton(
             onPressed: (){
 
             },
-            child: Text('Exit'),),
+            child: const Text('Exit'),),
         ],
       ),
     );

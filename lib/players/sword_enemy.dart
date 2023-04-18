@@ -40,7 +40,7 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if(other is MapObstacle || other is MainPlayer){
+    if(other is MapObstacle || other is MainPlayer || other is ScreenHitbox){
       _speed *= -1;
     }else if(other is PlayerWeapon){
 

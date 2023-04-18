@@ -23,7 +23,7 @@ main()
             DeathMenu.id: (context, KyrgyzGame game) => DeathMenu(game),
             GamePause.id: (context, KyrgyzGame game) => GamePause(game),
             HealthBar.id: (context, KyrgyzGame game) => HealthBar(),
-            OrthoJoystick.id: (context, KyrgyzGame game) => OrthoJoystick(game,100),
+            OrthoJoystick.id: (context, KyrgyzGame game) => OrthoJoystick(game,120),
             MainMenu.id: (context, KyrgyzGame game) => MainMenu(game),
             SaveDialog.id: (context, KyrgyzGame game) => SaveDialog(),
           },

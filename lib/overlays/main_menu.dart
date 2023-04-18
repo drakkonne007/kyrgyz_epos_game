@@ -22,36 +22,36 @@ class MainMenu extends StatelessWidget
               _game.overlays.remove(id);
               _game.loadNewMap('tiles/map/firstMap2.tmx');
             },
-            child:Text('Продолжить',softWrap: false,),
+            child:const Text('Продолжить',softWrap: false,),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
               _game.overlays.remove(id);
-              _game.loadNewMap('tiles/map/firstMap3.tmx');
+              _game.loadNewMap('tiles/map/firstMap2.tmx');
             },
-            child: Text('Новая игра'),
+            child: const Text('Новая игра'),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
 
             },
-            child: Text('Загрузить'),
+            child: const Text('Загрузить'),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
 
             },
-            child: Text('Настройки'),
+            child: const Text('Настройки'),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
 
             },
-            child: Text('Exit'),),
+            child: const Text('Exit'),),
         ],
       ),
     );
