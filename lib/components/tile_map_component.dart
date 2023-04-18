@@ -44,7 +44,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       }
     }
     if(OrthoPlayer().parent != null){
-      OrthoPlayer().changeParent(this);
+      OrthoPlayer().parent = this;
       OrthoPlayer().refreshMoves();
     }else {
       add(OrthoPlayer());
