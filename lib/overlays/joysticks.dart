@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/players/ortho_player.dart';
+import 'dart:ui' as ui;
 
 // class MoveArrow extends RectangleComponent with Tappable, ParentIsA<KyrgyzGame>
 // {
@@ -105,59 +106,71 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.bottomLeft,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10, bottom: 10),
-          child: Container(
-            width: _size,
-            height: _size,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(color: Colors.blue.withAlpha(100), shape: BoxShape.circle),
-            child:  Stack(
-                fit: StackFit.passthrough,
-                children:<Widget>[
-                  Positioned(
-                      width: _size/4,
-                      height: _size/4,
-                      left: _left,
-                      top: _top,
-                      child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
-                      )),
-                  GestureDetector(
-                    onTapUp: (details){
-                      stopMove();
-                    },
-                    onLongPressDown: (details){
-                      doMove(details.localPosition.dx, details.localPosition.dy);
-                    },
-                    onTapDown: (details){
-                      doMove(details.localPosition.dx, details.localPosition.dy);
-                    },
-                    onPanStart: (details){
-                      doMove(details.localPosition.dx, details.localPosition.dy);
-                    },
-                    onPanUpdate: (details){
-                      doMove(details.localPosition.dx, details.localPosition.dy);
-                    },
-                    onPanCancel: (){
-                      stopMove();
-                    },
-                    onTapCancel: (){
-                      stopMove();
-                    },
-                    onLongPressCancel: () {
-                      stopMove();
-                    },
-                    onPanEnd: (details){
-                      stopMove();
-                    },
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        children:[
+          Expanded(
+            child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, bottom: 10),
+                  child: Container(
+                    width: _size,
+                    height: _size,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(color: Colors.blue.withAlpha(100), shape: BoxShape.circle),
+                    child:  Stack(
+                        fit: StackFit.passthrough,
+                        children:<Widget>[
+                          Positioned(
+                              width: _size/4,
+                              height: _size/4,
+                              left: _left,
+                              top: _top,
+                              child: Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
+                              )),
+                          GestureDetector(
+                            onTapUp: (details){
+                              stopMove();
+                            },
+                            onLongPressDown: (details){
+                              doMove(details.localPosition.dx, details.localPosition.dy);
+                            },
+                            onTapDown: (details){
+                              doMove(details.localPosition.dx, details.localPosition.dy);
+                            },
+                            onPanStart: (details){
+                              doMove(details.localPosition.dx, details.localPosition.dy);
+                            },
+                            onPanUpdate: (details){
+                              doMove(details.localPosition.dx, details.localPosition.dy);
+                            },
+                            onPanCancel: (){
+                              stopMove();
+                            },
+                            onTapCancel: (){
+                              stopMove();
+                            },
+                            onLongPressCancel: () {
+                              stopMove();
+                            },
+                            onPanEnd: (details){
+                              stopMove();
+                            },
+                          ),
+                        ]
+                    ),
                   ),
-                ]
+                )
             ),
           ),
-        )
+          Expanded(
+              child:
+              GestureDetector(
+                onTap: (){print('asdsada');},
+              ))
+        ]
     );
   }
 }
