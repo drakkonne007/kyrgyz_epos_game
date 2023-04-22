@@ -5,38 +5,38 @@ import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/Obstacles/ground_component.dart';
+import 'package:game_flame/abstracts/PlayerWeaponsList.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/abstracts/weapon.dart';
 import 'package:game_flame/components/helper.dart';
 import 'package:game_flame/overlays/death_menu.dart';
-import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/main.dart';
 import 'dart:math' as math;
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
 {
   static final OrthoPlayer _orthoPlayer = OrthoPlayer._internal();
-
   factory OrthoPlayer() {
     return _orthoPlayer;
   }
-
   OrthoPlayer._internal();
 
+  PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
-  late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove, _idleAnimation;
+  late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove,
+      _leftIdle, _rightIdle, _upIdle, _downIdle, _rightUpIdle, _rightDownIdle, _leftUpIdle, _leftDownIdle, _currentIdleAnimation;
   Vector2 _speed = Vector2.all(0);
   double _maxSpeed = 200;
   Vector2 _velocity = Vector2.all(0);
   double _startSpeed = 600;
   double _runCoef = 1.3;
-  late RectangleHitbox _hitBox;
-  late RectangleHitbox _groundBox;
+  late PlayerHitbox _hitBox;
+  late GroundHitbox _groundBox;
   bool _isPlayerRun = false;
+  late PlayerWeapon _weapon;
 
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0}){
@@ -69,25 +69,55 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _leftMove = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0,to: 4);
+    _leftIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 6,to: 7);
     _rightMove = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0,to: 4);
+    _rightIdle = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 6,to: 7);
     _upMove = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0,to: 4);
+    _upIdle = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 6,to: 7);
     _downMove = spriteSheet.createAnimation (row: 6, stepTime: 0.3, from: 0,to: 4);
+    _downIdle = spriteSheet.createAnimation(row: 6, stepTime: 0.3, from: 6,to: 7);
     _rightUpMove = spriteSheet.createAnimation(row: 3, stepTime: 0.3, from: 0,to: 4);
+    _rightUpIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.3, from: 6,to: 7);
     _rightDownMove = spriteSheet.createAnimation(row: 5, stepTime: 0.3, from: 0,to: 4);
+    _rightDownIdle = spriteSheet.createAnimation(row: 5, stepTime: 0.3, from: 6,to: 7);
     _leftUpMove = spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 0,to: 4);
+    _leftUpIdle = spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 6,to: 7);
     _leftDownMove = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 0,to: 4);
-    _idleAnimation = spriteSheet.createAnimation(row: 6, stepTime: 0.3, from: 6,to: 7);
-    animation = _idleAnimation;
+    _leftDownIdle = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 6,to: 7);
+    animation = _downIdle;
+    _currentIdleAnimation = _downIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    _hitBox = RectangleHitbox(position: Vector2(width/4,15),size: Vector2(width/2,height*0.6));
-    _hitBox.collisionType = CollisionType.passive;
+    _hitBox = PlayerHitbox();
+    _hitBox.position = Vector2(width/4,15);
+    _hitBox.size = Vector2(width/2,height*0.6);
     // _hitBox.debugMode=true;
     add(_hitBox);
     anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
-    _groundBox = RectangleHitbox(position: Vector2(width/4,height*0.6 - 5),size: Vector2(width/2,20));
+    _groundBox = GroundHitbox();
+    _groundBox.position = Vector2(width/4,height*0.6 - 5);
+    _groundBox.size = Vector2(width/2,20);
     // _groundBox.debugMode = true;
     add(_groundBox);
-    OrthoPlayerMove.isChange.addListener(() {movePlayer(OrthoPlayerMove.directMove, OrthoPlayerMove.isRun);});
+    _weapon = WDubina();
+    add(_weapon);
+  }
+
+  void startHit(){
+    _weapon.collisionType = CollisionType.passive;
+
+  }
+
+  void setIdleAnimation(){
+    switch(_direction){
+      case PlayerDirectionMove.Right:     animation = _rightIdle; break;
+      case PlayerDirectionMove.Left:      animation = _leftIdle; break;
+      case PlayerDirectionMove.Up:        animation = _upIdle; break;
+      case PlayerDirectionMove.Down:      animation = _downIdle; break;
+      case PlayerDirectionMove.RightUp:   animation = _rightUpIdle; break;
+      case PlayerDirectionMove.RightDown: animation = _rightDownIdle; break;
+      case PlayerDirectionMove.LeftUp:    animation = _leftUpIdle; break;
+      case PlayerDirectionMove.LeftDown:  animation = _leftDownIdle; break;
+    }
   }
 
   void movePlayer(PlayerDirectionMove direct, bool isRun){
@@ -145,6 +175,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       break;
     }
+    _direction = direct;
     if(isRun && OrthoPlayerVals.energy.value > 0.1){
       _runCoef = 1.3;
       _isPlayerRun = true;
@@ -235,10 +266,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // for(final as in points){
     //   gameRef.add(TimePoint(as));
     // }
-    if(other is MapObstacle) {
+    if(other.parent is MapObstacle) {
       groundCalcLines(points,other);
-    }else if(other is Weapon){
-      var temp = other as Weapon;
+    }else if(other.parent is EnemyWeapon){
+      var temp = other as EnemyWeapon;
       doHurt(hurt: temp.damage,inArmor: temp.inArmor, permanentDamage: temp.permanentDamage, secsOfPermDamage: temp.secsOfPermDamage);
     }else if(other is ScreenHitbox){
       if(x < 0){
@@ -262,7 +293,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // for(final as in points){
     //   gameRef.add(TimePoint(as));
     // }
-    if(other is MapObstacle) {
+    if(other.parent is MapObstacle) {
       groundCalcLines(points,other);
     }
     super.onCollision(points, other);
@@ -294,7 +325,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
     }
     if(countZero == 2){
-      animation = _idleAnimation;
+      setIdleAnimation();
       _isPlayerRun = false;
       super.update(dt);
       OrthoPlayerVals.energy.value += dt;
@@ -312,7 +343,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       countZero++;
     }
     if(countZero == 2){
-      animation = _idleAnimation;
+      setIdleAnimation();
       _isPlayerRun = false;
     }
     position += _speed * dt;

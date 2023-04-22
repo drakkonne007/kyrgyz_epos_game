@@ -1,19 +1,24 @@
 
+import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/enemy.dart';
+import 'package:game_flame/abstracts/enemy_weapons_list.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
-import 'package:game_flame/abstracts/weapon.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
-class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implements KyrgyzEnemy, Weapon
+class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implements KyrgyzEnemy
 {
   SwordEnemy(this._startPos);
 
   late SpriteAnimation _leftMove, _idleAnimation;
+  late EnemyHitbox _hitbox;
+  late GroundHitbox _groundBox;
   final Vector2 _spriteSheetSize = Vector2(193.6, 232);
   Vector2 _startPos;
   Vector2 _speed = Vector2(0,20);
@@ -35,15 +40,22 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
     size = _spriteSheetSize * GameConsts.gameScale / 3.5;
     topLeftPosition = _startPos;
     //_groundBox.anchor = Anchor.center;
-    add(RectangleHitbox(size: this.size));
+    _hitbox = EnemyHitbox();
+    _hitbox.size = size;
+    add(_hitbox);
+    _groundBox = GroundHitbox();
+    _groundBox.size = size;
+    add(_groundBox);
+    EWBody _body = EWBody();
+    _body.size = size;
+    _body.collisionType = CollisionType.active;
+    add(_body);
   }
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if(other is MapObstacle || other is MainPlayer || other is ScreenHitbox){
+    if(other is MapObstacle || other.parent is MainPlayer || other is ScreenHitbox){
       _speed *= -1;
-    }else if(other is PlayerWeapon){
-
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -53,18 +65,6 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
     position += _speed * dt;
     super.update(dt);
   }
-
-  @override
-  double damage = 1;
-
-  @override
-  bool inArmor = true;
-
-  @override
-  double permanentDamage = 0;
-
-  @override
-  double secsOfPermDamage = 0;
 
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0}) {

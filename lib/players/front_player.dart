@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/Obstacles/ground_component.dart';
+import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/circle_position_component.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -228,7 +229,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       if (!game.camera.shaking) {
         game.camera.shake(duration: 1, intensity: 50);
       }
-    } else if (other is Ground) {
+    } else if (other.parent is MapObstacle) {
       doGroundCalc(points, other);
     }
     super.onCollisionStart(points, other);
@@ -241,7 +242,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       if (!game.camera.shaking) {
         game.camera.shake(duration: 1, intensity: 50);
       }
-    } else if(other is Ground){
+    } else if(other.parent is MapObstacle){
       doGroundCalc(points,other);
     }
     super.onCollision(points,other);
@@ -249,7 +250,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if(other is Ground){
+    if(other.parent is MapObstacle){
       _isOnGround = false;
     }
     super.onCollisionEnd(other);

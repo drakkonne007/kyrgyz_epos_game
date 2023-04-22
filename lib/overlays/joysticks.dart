@@ -168,7 +168,9 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
           Expanded(
               child:
               GestureDetector(
-                onTap: (){print('asdsada');},
+                onTap: (){
+                  OrthoPlayer().startHit();
+                  },
               ))
         ]
     );

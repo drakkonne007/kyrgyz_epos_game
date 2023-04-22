@@ -10,13 +10,6 @@ class GameConsts
   static const maxSpeed = 3;
 }
 
-class OrthoPlayerMove extends Component with Notifier
-{
-    static var isChange = ValueNotifier<bool>(false);
-    static PlayerDirectionMove directMove = PlayerDirectionMove.NoMove;
-    static bool isRun = false;
-}
-
 class OrthoPlayerVals
 {
   static var health = ValueNotifier<double>(10);
