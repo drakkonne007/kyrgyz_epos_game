@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/enemy_weapons_list.dart';
@@ -18,7 +19,7 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
 
   late SpriteAnimation _leftMove, _idleAnimation;
   late EnemyHitbox _hitbox;
-  late GroundHitbox _groundBox;
+  late GroundHitBox _groundBox;
   final Vector2 _spriteSheetSize = Vector2(193.6, 232);
   Vector2 _startPos;
   Vector2 _speed = Vector2(0,20);
@@ -41,23 +42,19 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
     topLeftPosition = _startPos;
     //_groundBox.anchor = Anchor.center;
     _hitbox = EnemyHitbox();
-    _hitbox.size = size;
-    add(_hitbox);
-    _groundBox = GroundHitbox();
-    _groundBox.size = size;
-    add(_groundBox);
+    await add(_hitbox);
+    _hitbox.debugMode = true;
+    _hitbox.debugColor = BasicPalette.black.color;
+    _groundBox = GroundHitBox(obstacleBehavoiur: obstacleBehaviour);
+    await add(_groundBox);
     EWBody _body = EWBody();
     _body.size = size;
     _body.collisionType = CollisionType.active;
     add(_body);
   }
 
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if(other is MapObstacle || other.parent is MainPlayer || other is ScreenHitbox){
-      _speed *= -1;
-    }
-    super.onCollisionStart(intersectionPoints, other);
+  void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other){
+    _speed *= -1;
   }
 
   @override

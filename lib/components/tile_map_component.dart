@@ -38,7 +38,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       switch(obj.class_){
         case 'enemy': add(SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
         break;
-        case 'ground':  add(Ground(Vector2(obj.width * GameConsts.gameScale, obj.height * GameConsts.gameScale), Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
+        case 'ground':  add(Ground(size: Vector2(obj.width * GameConsts.gameScale, obj.height * GameConsts.gameScale),position: Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
         break;
         case 'player': playerPos = Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale);
       }
@@ -57,7 +57,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(OrthoPlayer(),worldBounds: Rect.fromLTWH(0, 0, width, height));
   }
-
 
   void smallRestart(){
     removeWhere((component) => component is KyrgyzEnemy);

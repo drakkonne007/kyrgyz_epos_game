@@ -1,13 +1,18 @@
-
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 
 class Ground extends MapObstacle
 {
-  Ground(Vector2 size, Vector2 pos){
-    this.size = size;
-    position = pos;
+  Ground({
+    super.position,
+    super.size,
+    super.angle,
+    super.anchor,
+    super.priority,
+    bool isSolid = false,
+  }){
+    debugMode = true;
   }
 }

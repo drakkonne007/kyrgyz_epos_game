@@ -7,7 +7,6 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/PlayerWeaponsList.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/abstracts/weapon.dart';
 import 'package:game_flame/components/helper.dart';
@@ -29,12 +28,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove,
       _leftIdle, _rightIdle, _upIdle, _downIdle, _rightUpIdle, _rightDownIdle, _leftUpIdle, _leftDownIdle, _currentIdleAnimation;
   Vector2 _speed = Vector2.all(0);
-  double _maxSpeed = 200;
+  final double _maxSpeed = 200;
   Vector2 _velocity = Vector2.all(0);
-  double _startSpeed = 600;
+  final double _startSpeed = 600;
   double _runCoef = 1.3;
   late PlayerHitbox _hitBox;
-  late GroundHitbox _groundBox;
+  late GroundHitBox _groundBox;
   bool _isPlayerRun = false;
   late PlayerWeapon _weapon;
 
@@ -87,24 +86,21 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     animation = _downIdle;
     _currentIdleAnimation = _downIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    _hitBox = PlayerHitbox();
-    _hitBox.position = Vector2(width/4,15);
-    _hitBox.size = Vector2(width/2,height*0.6);
+    _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
+    await add(_hitBox);
     // _hitBox.debugMode=true;
-    add(_hitBox);
     anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
-    _groundBox = GroundHitbox();
-    _groundBox.position = Vector2(width/4,height*0.6 - 5);
-    _groundBox.size = Vector2(width/2,20);
+    _groundBox = GroundHitBox(obstacleBehavoiur: groundCalcLines,size: Vector2(width/2,20),position: Vector2(width/4,height*0.6 - 5));
+    await add(_groundBox);
+    // _groundBox.position = Vector2(width/4,height*0.6 - 5);
+    // _groundBox.size = Vector2(width/2,20);
     // _groundBox.debugMode = true;
-    add(_groundBox);
     _weapon = WDubina();
-    add(_weapon);
+    await add(_weapon);
   }
 
   void startHit(){
     _weapon.collisionType = CollisionType.passive;
-
   }
 
   void setIdleAnimation(){
@@ -261,43 +257,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
   }
 
-  @override
-  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
-    // for(final as in points){
-    //   gameRef.add(TimePoint(as));
-    // }
-    if(other.parent is MapObstacle) {
-      groundCalcLines(points,other);
-    }else if(other.parent is EnemyWeapon){
-      var temp = other as EnemyWeapon;
-      doHurt(hurt: temp.damage,inArmor: temp.inArmor, permanentDamage: temp.permanentDamage, secsOfPermDamage: temp.secsOfPermDamage);
-    }else if(other is ScreenHitbox){
-      if(x < 0){
-        position.x = 1;
-      }
-      if(y < 0){
-        position.y = 1;
-      }
-      if(x > gameRef.gameMap!.size.x){
-        position.x = gameRef.size.x - 1;
-      }
-      if(y > gameRef.gameMap!.size.y){
-        position.y = gameRef.size.y - 1;
-      }
-    }
-    super.onCollisionStart(points, other);
-  }
-
-  @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    // for(final as in points){
-    //   gameRef.add(TimePoint(as));
-    // }
-    if(other.parent is MapObstacle) {
-      groundCalcLines(points,other);
-    }
-    super.onCollision(points, other);
-  }
 
   @override
   void update(double dt) {
