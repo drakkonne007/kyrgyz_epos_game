@@ -50,6 +50,8 @@ class GroundHitBox extends RectangleHitbox
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     if(other is MapObstacle) {
       obstacleBehavoiur.call(intersectionPoints,other);
+    }else{
+      print(other);
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -57,6 +59,8 @@ class GroundHitBox extends RectangleHitbox
   @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     if(other is MapObstacle) {
       obstacleBehavoiur.call(intersectionPoints,other);
+    }else{
+      print(other);
     }
     super.onCollision(intersectionPoints, other);
   }
