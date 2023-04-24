@@ -42,10 +42,10 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     overlays.add(overlayName);
   }
 
-  void loadNewMap(String filePath){
+  Future<void> loadNewMap(String filePath) async{
     gameMap?.removeFromParent();
     gameMap = CustomTileMap(filePath);
-    add(gameMap!);
+    await add(gameMap!);
   }
 
   @override

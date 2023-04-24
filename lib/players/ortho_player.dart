@@ -5,11 +5,10 @@ import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/abstracts/PlayerWeaponsList.dart';
+import 'package:game_flame/abstracts/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/abstracts/weapon.dart';
-import 'package:game_flame/components/helper.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -28,11 +27,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove,
       _leftIdle, _rightIdle, _upIdle, _downIdle, _rightUpIdle, _rightDownIdle, _leftUpIdle, _leftDownIdle;
   Vector2 _speed = Vector2.all(0);
-  final double _maxSpeed = 200;
   Vector2 _velocity = Vector2.all(0);
-  final double _startSpeed = 600;
-  double _runCoef = 1.3;
-  double _playerScale = 1.4;
   late PlayerHitbox _hitBox;
   late GroundHitBox _groundBox;
   bool _isPlayerRun = false;
@@ -85,7 +80,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     _leftDownMove = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 0,to: 4);
     _leftDownIdle = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 6,to: 7);
     animation = _downIdle;
-    size = Vector2(_spriteSheetWidth/_playerScale, _spriteSheetHeight/_playerScale);
+    size = Vector2(_spriteSheetWidth/OrthoPlayerVals.playerScale * GameConsts.gameScale, _spriteSheetHeight/OrthoPlayerVals.playerScale * GameConsts.gameScale);
     _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
     await add(_hitBox);
     // _hitBox.debugMode=true;
@@ -120,50 +115,50 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   void movePlayer(PlayerDirectionMove direct, bool isRun){
     switch(direct){
       case PlayerDirectionMove.Right: {
-        _velocity.x = _startSpeed;
+        _velocity.x = OrthoPlayerVals.startSpeed;
         _velocity.y = 0;
         animation = _rightMove;
       }
       break;
       case PlayerDirectionMove.Up: {
-        _velocity.y = -_startSpeed;
+        _velocity.y = -OrthoPlayerVals.startSpeed;
         _velocity.x = 0;
         animation = _upMove;
       }
       break;
       case PlayerDirectionMove.Left: {
-        _velocity.x = -_startSpeed;
+        _velocity.x = -OrthoPlayerVals.startSpeed;
         _velocity.y = 0;
         animation = _leftMove;
       }
       break;
       case PlayerDirectionMove.Down:{
-        _velocity.y = _startSpeed;
+        _velocity.y = OrthoPlayerVals.startSpeed;
         _velocity.x = 0;
         animation = _downMove;
       }
       break;
       case PlayerDirectionMove.RightUp:{
-        _velocity.y = -_startSpeed/2;
-        _velocity.x = _startSpeed/2;
+        _velocity.y = -OrthoPlayerVals.startSpeed/2;
+        _velocity.x =  OrthoPlayerVals.startSpeed/2;
         animation = _rightUpMove;
       }
       break;
       case PlayerDirectionMove.RightDown:{
-        _velocity.y = _startSpeed/2;
-        _velocity.x = _startSpeed/2;
+        _velocity.y = OrthoPlayerVals.startSpeed/2;
+        _velocity.x = OrthoPlayerVals.startSpeed/2;
         animation = _rightDownMove;
       }
       break;
       case PlayerDirectionMove.LeftUp:{
-        _velocity.y = -_startSpeed/2;
-        _velocity.x = -_startSpeed/2;
+        _velocity.y = -OrthoPlayerVals.startSpeed/2;
+        _velocity.x = -OrthoPlayerVals.startSpeed/2;
         animation = _leftUpMove;
       }
       break;
       case PlayerDirectionMove.LeftDown:{
-        _velocity.y = _startSpeed/2;
-        _velocity.x = -_startSpeed/2;
+        _velocity.y =  OrthoPlayerVals.startSpeed/2;
+        _velocity.x = -OrthoPlayerVals.startSpeed/2;
         animation = _leftDownMove;
       }
       break;
@@ -175,39 +170,38 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     if(direct != PlayerDirectionMove.NoMove) {
       _direction = direct;
     }
-    if(isRun && OrthoPlayerVals.energy.value > 0.1){
-      _runCoef = 1.3;
+    if(isRun && OrthoPlayerVals.energy.value > OrthoPlayerVals.runMinimum){
+      OrthoPlayerVals.runCoef = 1.3;
       _isPlayerRun = true;
     }else{
-      _runCoef = 1;
+      OrthoPlayerVals.runCoef = 1;
       _isPlayerRun = false;
     }
-    _velocity *= _runCoef;
+    _velocity *= OrthoPlayerVals.runCoef;
   }
 
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     bool isRun = false;
-    if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
-      isRun = true;
+    Vector2 velo = Vector2.all(0);
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) || event.isKeyPressed(const LogicalKeyboardKey(0x00000057)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000077))) {
+      velo.y = -OrthoPlayerVals.startSpeed;
     }
-    if(!event.isKeyPressed(LogicalKeyboardKey.arrowUp) && !event.isKeyPressed(LogicalKeyboardKey.arrowDown)
-        && !event.isKeyPressed(LogicalKeyboardKey.arrowLeft) && !event.isKeyPressed(LogicalKeyboardKey.arrowRight)){
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowDown) || event.isKeyPressed(const LogicalKeyboardKey(0x00000073)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000053))) {
+      velo.y = OrthoPlayerVals.startSpeed;
+    }
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)  || event.isKeyPressed(const LogicalKeyboardKey(0x00000061)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000041))) {
+      velo.x = -OrthoPlayerVals.startSpeed;
+    }
+    if(event.isKeyPressed(LogicalKeyboardKey.arrowRight) || event.isKeyPressed(const LogicalKeyboardKey(0x00000064)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000044))) {
+      velo.x = OrthoPlayerVals.startSpeed;
+    }
+    if(velo.x == 0 && velo.y == 0){
       _velocity *= 0;
-      _runCoef = 1;
+      OrthoPlayerVals.runCoef = 1;
     }else{
-      Vector2 velo = Vector2.all(0);
-      if(event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
-        velo.y = -_startSpeed;
-      }
-      if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
-        velo.y = _startSpeed;
-      }
-      if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-        velo.x = -_startSpeed;
-      }
-      if(event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-        velo.x = _startSpeed;
+      if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
+        isRun = true;
       }
       doMoveFromVector2(velo, isRun);
     }
@@ -263,25 +257,41 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void update(double dt) {
-    _speed.x = math.max(-_maxSpeed * _runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeed * _runCoef));
-    _speed.y = math.max(-_maxSpeed * _runCoef,math.min(_speed.y + dt * _velocity.y,_maxSpeed * _runCoef));
+    if(_isPlayerRun){
+      OrthoPlayerVals.energy.value -= dt;
+      if(OrthoPlayerVals.energy.value < 0){
+        OrthoPlayerVals.runCoef = 1;
+        OrthoPlayerVals.energy.value = 0;
+      }else{
+        OrthoPlayerVals.runCoef = 1.3;
+      }
+    }else{
+      if(!OrthoPlayerVals.isLockEnergy) {
+        OrthoPlayerVals.energy.value += dt;
+      }
+      if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
+        OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
+      }
+    }
+    _speed.x = math.max(-OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef,math.min(_speed.x + dt * _velocity.x,OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef));
+    _speed.y = math.max(-OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef,math.min(_speed.y + dt * _velocity.y,OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef));
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;
     if(_velocity.x == 0) {
       if (_speed.x > 0) {
-        _speed.x -= PhysicsVals.athmosphereResistance * dt;
+        _speed.x -= OrthoPlayerVals.stopSpeed * dt;
       } else if (_speed.x < 0) {
-        _speed.x += PhysicsVals.athmosphereResistance * dt;
+        _speed.x += OrthoPlayerVals.stopSpeed * dt;
       } else {
         countZero++;
       }
     }
     if(_velocity.y == 0){
       if (_speed.y > 0) {
-        _speed.y -= PhysicsVals.athmosphereResistance * dt;
+        _speed.y -= OrthoPlayerVals.stopSpeed * dt;
       } else if (_speed.y < 0) {
-        _speed.y += PhysicsVals.athmosphereResistance * dt;
+        _speed.y += OrthoPlayerVals.stopSpeed * dt;
       } else {
         countZero++;
       }
@@ -311,19 +321,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       _isPlayerRun = false;
     }
     position += _speed * dt;
-    if(_isPlayerRun){
-      OrthoPlayerVals.energy.value -= dt;
-      if(OrthoPlayerVals.energy.value < 0){
-        OrthoPlayerVals.energy.value = 0;
-      }
-    }else{
-      if(!OrthoPlayerVals.isLockEnergy) {
-        OrthoPlayerVals.energy.value += dt;
-      }
-      if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
-        OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
-      }
-    }
     super.update(dt);
   }
 }

@@ -1,5 +1,6 @@
 
 import 'package:game_flame/abstracts/weapon.dart';
+import 'package:game_flame/components/physic_vals.dart';
 
 class EWBody extends EnemyWeapon
 {
@@ -8,7 +9,9 @@ class EWBody extends EnemyWeapon
   }
 
   @override
-  void hit() {
+  void hit(PlayerDirectionMove direct) {
     // TODO: implement hit
   }
+
+  
 }

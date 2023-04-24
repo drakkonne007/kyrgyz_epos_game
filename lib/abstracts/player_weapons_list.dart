@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:game_flame/abstracts/weapon.dart';
-import 'package:game_flame/components/helper.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
 class WDubina extends PlayerWeapon
@@ -27,7 +26,7 @@ class WDubina extends PlayerWeapon
   @override
   Future<void> onLoad() async{
     damage = 1;
-    activeSecs = 0.200;
+    activeSecs = 0.4;
     anchor = Anchor.bottomCenter;
     energyCost = 0.4;
   }
@@ -42,6 +41,13 @@ class WDubina extends PlayerWeapon
       angle = startAngle;
       debugMode = true;
       collisionType = CollisionType.active;
+      print('start hit');
+      await Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
+          collisionType = CollisionType.inactive;
+          debugMode = false;
+          OrthoPlayerVals.isLockEnergy = false;
+          print('end hit');
+      });
     }
   }
 
@@ -50,11 +56,6 @@ class WDubina extends PlayerWeapon
     if(collisionType == CollisionType.active){
       diffAngle -= dt/activeSecs * sectorInRadian;
       angle = startAngle + diffAngle;
-      if(diffAngle < -sectorInRadian){
-        collisionType = CollisionType.inactive;
-        debugMode = false;
-        OrthoPlayerVals.isLockEnergy = false;
-      }
     }
     super.update(dt);
   }

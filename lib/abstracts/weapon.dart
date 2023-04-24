@@ -5,8 +5,9 @@ import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
-import 'package:game_flame/components/helper.dart';
 import 'dart:math' as math;
+
+import 'package:game_flame/components/physic_vals.dart';
 
 double radiansOfPlayerDirect(PlayerDirectionMove direct) {
   switch (direct) {
@@ -50,12 +51,11 @@ abstract class EnemyWeapon extends RectangleHitbox
   bool inArmor = true;
   double activeSecs = 0;
 
-  void hit();
+  void hit(PlayerDirectionMove direct);
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     if(other is PlayerHitbox){
-      print("MainPlayer hurt");
       var temp = other.parent as MainPlayer;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }
@@ -85,12 +85,12 @@ abstract class PlayerWeapon extends RectangleHitbox
   double activeSecs = 0;
   double energyCost = 0;
 
-  Future<void> hit(PlayerDirectionMove direct) async{}
+  Future<void> hit(PlayerDirectionMove direct);
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
     if(other is EnemyHitbox){
-      print("KyrgyzEnemy hurt");
+      print('HOhoho Enemy');
       var temp = other.parent as KyrgyzEnemy;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }

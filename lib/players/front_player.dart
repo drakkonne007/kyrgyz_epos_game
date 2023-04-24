@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -9,13 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
-import 'package:game_flame/components/circle_position_component.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/main.dart';
 
 class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
 {
@@ -152,10 +148,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       position.y = other.y + other.height + height / 2;
     } else if (isLeft == points.length || (isLeft > isTop && isLeft > isBott)) {
-      _speedX *= -1 * PhysicsVals.rigidy;
+      _speedX *= -1 * OrthoPlayerVals.rigidy;
       position.x = other.x - width * 0.3;
     } else if (isRight == points.length || (isRight > isTop && isRight > isBott)) {
-      _speedX *= -1 * PhysicsVals.rigidy;
+      _speedX *= -1 * OrthoPlayerVals.rigidy;
       position.x = other.x + other.width + width * 0.3;
     }
   }
@@ -193,7 +189,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   @override
   void update(double dt) {
     if(!_isOnGround) {
-      _speedY += PhysicsVals.gravity * dt;
+      _speedY += OrthoPlayerVals.gravity * dt;
       position.y += min(_speedY,28);
     }
     if(_isXMove) {
@@ -224,12 +220,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void onCollisionStart(Set<Vector2> points, PositionComponent other) {
-    if (other is CustomCircle) {
-      var game = findGame() as FlameGame;
-      if (!game.camera.shaking) {
-        game.camera.shake(duration: 1, intensity: 50);
-      }
-    } else if (other.parent is MapObstacle) {
+    if (other.parent is MapObstacle) {
       doGroundCalc(points, other);
     }
     super.onCollisionStart(points, other);
@@ -237,12 +228,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
-    if (other is CustomCircle) {
-      var game = findGame() as FlameGame;
-      if (!game.camera.shaking) {
-        game.camera.shake(duration: 1, intensity: 50);
-      }
-    } else if(other.parent is MapObstacle){
+    if(other.parent is MapObstacle){
       doGroundCalc(points,other);
     }
     super.onCollision(points,other);

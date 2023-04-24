@@ -1,7 +1,7 @@
 import 'dart:math' as math;
-import 'package:game_flame/components/helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/players/ortho_player.dart';
 import 'dart:ui' as ui;
@@ -131,6 +131,15 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
                                 decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
                               )),
                           GestureDetector(
+                            onLongPressStart: (details){
+                              doMove(details.localPosition.dx, details.localPosition.dy);
+                            },
+                            onLongPressMoveUpdate: (details){
+                              doMove(details.localPosition.dx, details.localPosition.dy);
+                            },
+                            onLongPressEnd: (details){
+                              stopMove();
+                            },
                             onTapUp: (details){
                               stopMove();
                             },

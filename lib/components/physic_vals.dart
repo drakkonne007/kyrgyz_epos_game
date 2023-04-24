@@ -1,13 +1,24 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
-import 'package:game_flame/components/helper.dart';
+
+
+enum PlayerDirectionMove{
+  NoMove,
+  Left,
+  Right,
+  Up,
+  Down,
+  LeftUp,
+  LeftDown,
+  RightUp,
+  RightDown,
+}
 
 
 class GameConsts
 {
-  static const double gameScale = 1;
-  static const double maxSpeed = 3;
+  static const double gameScale = 1.3;
 }
 
 class OrthoPlayerVals
@@ -22,19 +33,24 @@ class OrthoPlayerVals
   static double maxEnergy = 5;
   static double maxArmor = 0;
 
+  static const double maxSpeed = 130 * GameConsts.gameScale;
+  static const double startSpeed = 400 * GameConsts.gameScale;
+  static double runCoef = 1.3;
+  static double runMinimum = 0.2;
+  static double playerScale = 1.4;
+
+  static double gravity = 20 * GameConsts.gameScale;
+  static double rigidy = 0.5;
+  static double stopSpeed = 800 * GameConsts.gameScale;
+
   static void doNewGame(){
     health.value = maxHealth;
     energy.value = maxEnergy;
     armor.value  = maxArmor;
+    isLockEnergy = false;
   }
 }
 
-class PhysicsVals
-{
-  static double gravity = 20;
-  static double rigidy = 0.5;
-  static double athmosphereResistance = 450;
-}
 
 class TimePoint extends CircleComponent
 {

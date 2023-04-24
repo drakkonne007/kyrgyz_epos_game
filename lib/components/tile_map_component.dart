@@ -5,6 +5,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -28,11 +29,32 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> onLoad() async
   {
+    final imageCompiler = ImageBatchCompiler();
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
-    tiledMap.scale = Vector2.all(GameConsts.gameScale);
-    size = tiledMap.absoluteScaledSize;
-    tiledMap.position = Vector2.all(0);
-    add(tiledMap);
+    size = tiledMap.size * GameConsts.gameScale;
+    // add(tiledMap);
+
+
+    // Adding separate ground layer
+    final ground = await imageCompiler.compileMapLayer(
+        tileMap: tiledMap.tileMap, layerNames: ['bground']);
+    ground.priority = 0;
+    ground.scale = Vector2.all(GameConsts.gameScale);
+    await add(ground);
+
+    final road = await imageCompiler.compileMapLayer(
+        tileMap: tiledMap.tileMap, layerNames: ['road']);
+    road.priority = 0;
+    road.scale = Vector2.all(GameConsts.gameScale);
+    await add(road);
+
+    // Adding separate tree layer
+    final woods = await imageCompiler.compileMapLayer(
+        tileMap: tiledMap.tileMap, layerNames: ['woods']);
+    woods.priority = 0;
+    woods.scale = Vector2.all(GameConsts.gameScale);
+    await add(woods);
+
     final objs = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in objs!.objects){
       switch(obj.class_){
@@ -51,7 +73,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       OrthoPlayer().priority = 10;
     }
     OrthoPlayer().position = playerPos;
-    // add(FpsTextComponent(priority: 99999));
+    gameRef.add(FpsTextComponent());
     add(ScreenHitbox());
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
