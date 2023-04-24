@@ -5,6 +5,30 @@ import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
+import 'package:game_flame/components/helper.dart';
+import 'dart:math' as math;
+
+double radiansOfPlayerDirect(PlayerDirectionMove direct) {
+  switch (direct) {
+    case PlayerDirectionMove.Right:
+      return math.pi * 2 / 3;
+    case PlayerDirectionMove.RightUp:
+      return math.pi / 3;
+    case PlayerDirectionMove.Up:
+      return 2*math.pi + math.pi / 6;
+    case PlayerDirectionMove.LeftUp:
+      return math.pi * 11 / 6;
+    case PlayerDirectionMove.Left:
+      return math.pi * 5 / 3;
+    case PlayerDirectionMove.LeftDown:
+      return math.pi * 4 / 3;
+    case PlayerDirectionMove.Down:
+      return math.pi * 7 / 6;
+    case PlayerDirectionMove.RightDown:
+      return math.pi * 5 / 6;
+    case PlayerDirectionMove.NoMove: throw 'Error in choose weapon direction';
+  }
+}
 
 abstract class EnemyWeapon extends RectangleHitbox
 {
@@ -16,6 +40,7 @@ abstract class EnemyWeapon extends RectangleHitbox
     super.priority,
     bool isSolid = false,
   }){
+    collisionType = CollisionType.inactive;
     // debugColor = BasicPalette.orange.color;
     // debugMode = true;
   }
@@ -23,7 +48,9 @@ abstract class EnemyWeapon extends RectangleHitbox
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;
-  double activeSecs = 1;
+  double activeSecs = 0;
+
+  void hit();
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
@@ -47,13 +74,18 @@ abstract class PlayerWeapon extends RectangleHitbox
     bool isSolid = false,
   }){
     debugColor = BasicPalette.orange.color;
-    debugMode = true;
+    collisionType = CollisionType.inactive;
   }
+
+  final double sectorInRadian = 0.383972 * 2;
   double damage = 0;
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;
-  double activeSecs = 1;
+  double activeSecs = 0;
+  double energyCost = 0;
+
+  Future<void> hit(PlayerDirectionMove direct) async{}
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {

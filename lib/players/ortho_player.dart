@@ -26,12 +26,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove,
-      _leftIdle, _rightIdle, _upIdle, _downIdle, _rightUpIdle, _rightDownIdle, _leftUpIdle, _leftDownIdle, _currentIdleAnimation;
+      _leftIdle, _rightIdle, _upIdle, _downIdle, _rightUpIdle, _rightDownIdle, _leftUpIdle, _leftDownIdle;
   Vector2 _speed = Vector2.all(0);
   final double _maxSpeed = 200;
   Vector2 _velocity = Vector2.all(0);
   final double _startSpeed = 600;
   double _runCoef = 1.3;
+  double _playerScale = 1.4;
   late PlayerHitbox _hitBox;
   late GroundHitBox _groundBox;
   bool _isPlayerRun = false;
@@ -84,8 +85,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     _leftDownMove = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 0,to: 4);
     _leftDownIdle = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 6,to: 7);
     animation = _downIdle;
-    _currentIdleAnimation = _downIdle;
-    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
+    size = Vector2(_spriteSheetWidth/_playerScale, _spriteSheetHeight/_playerScale);
     _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
     await add(_hitBox);
     // _hitBox.debugMode=true;
@@ -95,12 +95,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // _groundBox.position = Vector2(width/4,height*0.6 - 5);
     // _groundBox.size = Vector2(width/2,20);
     // _groundBox.debugMode = true;
-    _weapon = WDubina();
+    _weapon = WDubina(position: Vector2(width/2,height/2));
     await add(_weapon);
   }
 
   void startHit(){
-    _weapon.collisionType = CollisionType.passive;
+    _weapon.hit(_direction);
   }
 
   void setIdleAnimation(){
@@ -113,6 +113,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       case PlayerDirectionMove.RightDown: animation = _rightDownIdle; break;
       case PlayerDirectionMove.LeftUp:    animation = _leftUpIdle; break;
       case PlayerDirectionMove.LeftDown:  animation = _leftDownIdle; break;
+      case PlayerDirectionMove.NoMove:    throw 'Unknown idle Ortho Player animation';
     }
   }
 
@@ -171,7 +172,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       break;
     }
-    _direction = direct;
+    if(direct != PlayerDirectionMove.NoMove) {
+      _direction = direct;
+    }
     if(isRun && OrthoPlayerVals.energy.value > 0.1){
       _runCoef = 1.3;
       _isPlayerRun = true;
@@ -286,11 +289,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     if(countZero == 2){
       setIdleAnimation();
       _isPlayerRun = false;
-      super.update(dt);
-      OrthoPlayerVals.energy.value += dt;
+      if(!OrthoPlayerVals.isLockEnergy) {
+        OrthoPlayerVals.energy.value += dt;
+      }
       if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
         OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
       }
+      super.update(dt);
       return;
     }
     if(_speed.y.isNegative != isYNan){
@@ -312,7 +317,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
         OrthoPlayerVals.energy.value = 0;
       }
     }else{
-      OrthoPlayerVals.energy.value += dt;
+      if(!OrthoPlayerVals.isLockEnergy) {
+        OrthoPlayerVals.energy.value += dt;
+      }
       if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
         OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
       }

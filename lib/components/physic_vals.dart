@@ -6,24 +6,26 @@ import 'package:game_flame/components/helper.dart';
 
 class GameConsts
 {
-  static const gameScale = 1.5;
-  static const maxSpeed = 3;
+  static const double gameScale = 1;
+  static const double maxSpeed = 3;
 }
 
 class OrthoPlayerVals
 {
-  static var health = ValueNotifier<double>(10);
-  static var energy = ValueNotifier<double>(5);
-  static var armor = ValueNotifier<double>(0);
+  static var health = ValueNotifier<double>(maxHealth);
+  static var energy = ValueNotifier<double>(maxEnergy);
+  static var armor = ValueNotifier<double>(maxArmor);
+
+  static bool isLockEnergy = false;
 
   static double maxHealth = 10;
   static double maxEnergy = 5;
   static double maxArmor = 0;
 
   static void doNewGame(){
-    health.value = 10;
-    energy.value = 5;
-    armor.value  = 0;
+    health.value = maxHealth;
+    energy.value = maxEnergy;
+    armor.value  = maxArmor;
   }
 }
 
