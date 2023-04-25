@@ -3,62 +3,67 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
+
+import 'package:game_flame/kyrgyz_game.dart';
 
 
 class HealthBar extends StatefulWidget
 {
+  KyrgyzGame game;
+  HealthBar(this.game);
   static const id = 'HealthBar';
   @override
-  State<HealthBar> createState() => _HealthBarState();
+  State<HealthBar> createState() => _HealthBarState(game);
 
   var myTextStyle =  const TextStyle( fontSize: 45, letterSpacing: 0.5, fontFamily: 'Samson');
 }
 
-class _HealthBarState extends State<HealthBar> {
-  var _health = OrthoPlayerVals.health.value;
-  var _armor = OrthoPlayerVals.armor.value;
-  var _energy = OrthoPlayerVals.energy.value;
+class _HealthBarState extends State<HealthBar>
+{
+  KyrgyzGame game;
+  _HealthBarState(this.game);
+  late double _health;
+  late double _armor;
+  late double _energy;
   double _percRun = 1;
   double _percHealth = 1;
-  double _percArm = 1;
 
   @override
-  initState(){
+  initState()
+  {
+    _health = game.playerData.health.value;
+    _armor = game.playerData.armor;
+    _energy = game.playerData.energy.value;
+    _percHealth = _health / game.playerData.maxHealth.value;
+    _percRun = _energy / game.playerData.maxEnergy.value;
     super.initState();
-    _percHealth = _health / OrthoPlayerVals.maxHealth;
-    _percArm = _armor / OrthoPlayerVals.maxArmor;
-    _percRun = _energy / OrthoPlayerVals.maxEnergy;
-  }
-
-
-  _HealthBarState() {
-    OrthoPlayerVals.health.addListener(() {
-      _health = OrthoPlayerVals.health.value;
-      _percHealth = _health / OrthoPlayerVals.maxHealth;
+    game.playerData.health.addListener(() {
+      _health = game.playerData.health.value;
+      _percHealth = _health / game.playerData.maxHealth.value;
       if(mounted) {
         setState(() {
         });
       }
     });
-    OrthoPlayerVals.armor.addListener(() {
-      _armor = OrthoPlayerVals.armor.value;
-      _percArm = _armor / OrthoPlayerVals.maxArmor;
-      if(mounted) {
-        setState(() {
-        });
-      }
-    });
-    OrthoPlayerVals.energy.addListener(() {
-      _energy = OrthoPlayerVals.energy.value;
-      _percRun = _energy / OrthoPlayerVals.maxEnergy;
+    // game.playerData.armor.addListener(() {
+    //   _armor = OrthoPlayerVals.armor.value;
+    //   _percArm = _armor / OrthoPlayerVals.maxArmor;
+    //   if(mounted) {
+    //     setState(() {
+    //     });
+    //   }
+    // });
+    game.playerData.energy.addListener(() {
+      _energy = game.playerData.energy.value;
+      _percRun = _energy / game.playerData.maxEnergy.value;
       if(mounted) {
         setState(() {
         });
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -92,7 +97,7 @@ class _HealthBarState extends State<HealthBar> {
                           width: 42,
                           height: 42,
                           child: CustomPaint(
-                            painter: ArcGradientPainter(color: Colors.green, currentProc: _percArm),
+                            painter: ArcGradientPainter(color: Colors.green, currentProc: 100),
                             child:const Icon(Icons.shield_sharp, color: Colors.green,size: 35,
                               shadows: [
                                 BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1),spreadRadius: 1, blurStyle: BlurStyle.normal)

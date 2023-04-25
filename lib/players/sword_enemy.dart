@@ -6,13 +6,14 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/loot.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
-import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'dart:math' as math;
 
 class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implements KyrgyzEnemy
 {
@@ -28,7 +29,7 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
   @override
   double armor = 0;
   @override
-  List<int> loots = [LootItems.pureHat.index];
+  List<Item> loots = [PureHat()];
   @override
   double health = 3;
   @override
@@ -74,16 +75,19 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
     if(inArmor){
-      if(armor < hurt){
-        health -= (hurt - armor);
-        armor = 0;
-      }
+      health -= math.max(hurt - armor, 0);
     }else{
-      health -= hurt - armor;
+      health -= hurt;
     }
     if(health <1){
+      if(loots.isNotEmpty) {
+        if(loots.length > 1){
+          parent?.add(Chest(myItems: loots));
+        }else{
+          parent?.add(LootOnMap(loots.first));
+        }
+      }
       removeFromParent();
-      for()
     }
   }
 }

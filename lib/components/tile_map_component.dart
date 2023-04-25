@@ -22,7 +22,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   late TiledComponent tiledMap;
   late Vector2 playerPos;
 
-  clearGameMap(){
+  clearGameMap()
+  {
     removeAll(children);
   }
 
@@ -80,7 +81,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.camera.followComponent(OrthoPlayer(),worldBounds: Rect.fromLTWH(0, 0, width, height));
   }
 
-  void smallRestart(){
+  void smallRestart()
+  {
     removeWhere((component) => component is KyrgyzEnemy);
     final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in enemySpawn!.objects){

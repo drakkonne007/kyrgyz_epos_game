@@ -1,6 +1,10 @@
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/loot.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 
 enum LootItems
 {
@@ -33,4 +37,32 @@ class Item
   int row = -1;
   Vector2 srcSize = Vector2.all(0);
   int countOfUses = 0;
+}
+
+class LootOnMap extends SpriteComponent with CollisionCallbacks
+{
+  Item _item;
+  LootOnMap(this._item);
+  @override
+  Future<void> onLoad() async
+  {
+    final spriteImage = await Flame.images.load(
+        _item.source);
+    final spriteSheet = SpriteSheet(image: spriteImage,
+        srcSize: _item.srcSize);
+    sprite = spriteSheet.getSprite(_item.row, _item.column);
+    size = Vector2(16,16);
+    await add(RectangleHitbox());
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other)
+  {
+    if(other is PlayerHitbox){
+      print('you take a ${_item.id.name}');
+      removeAll(children);
+      removeFromParent();
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
 }

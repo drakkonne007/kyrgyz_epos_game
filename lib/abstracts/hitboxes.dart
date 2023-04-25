@@ -16,7 +16,8 @@ class ChestHitbox extends RectangleHitbox
   });
   Function(Set<Vector2> intersectionPoints, ShapeHitbox other) obstacleBehavoiur;
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  {
     if(other is PlayerHitbox) {
       obstacleBehavoiur.call(intersectionPoints,other);
     }else{
@@ -25,7 +26,8 @@ class ChestHitbox extends RectangleHitbox
     super.onCollisionStart(intersectionPoints, other);
   }
 
-  @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  {
     if(other is PlayerHitbox) {
       obstacleBehavoiur.call(intersectionPoints,other);
     }else{
@@ -46,7 +48,8 @@ class PlayerHitbox extends RectangleHitbox
     bool isSolid = false,
   });
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async
+  {
     collisionType = CollisionType.passive;
   }
 }
@@ -62,7 +65,8 @@ class EnemyHitbox extends RectangleHitbox
     bool isSolid = false,
   });
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async
+  {
     collisionType = CollisionType.passive;
   }
 }
@@ -80,7 +84,8 @@ class GroundHitBox extends RectangleHitbox
   });
   Function(Set<Vector2> intersectionPoints, ShapeHitbox other) obstacleBehavoiur;
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  {
     if(other is MapObstacle) {
       obstacleBehavoiur.call(intersectionPoints,other);
     }else{
@@ -89,7 +94,8 @@ class GroundHitBox extends RectangleHitbox
     super.onCollisionStart(intersectionPoints, other);
   }
 
-  @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  {
     if(other is MapObstacle) {
       obstacleBehavoiur.call(intersectionPoints,other);
     }else{

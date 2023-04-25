@@ -32,7 +32,8 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     return KeyEventResult.ignored;
   }
 
-  void showOverlay({required String overlayName, bool isHideOther = false}){
+  void showOverlay({required String overlayName, bool isHideOther = false})
+  {
     if(isHideOther){
       overlays.removeAll( <String>[DeathMenu.id,
         GamePause.id,
@@ -44,19 +45,22 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     overlays.add(overlayName);
   }
 
-  Future<void> loadNewMap(String filePath) async{
+  Future<void> loadNewMap(String filePath) async
+  {
     gameMap?.removeFromParent();
     gameMap = CustomTileMap(filePath);
     await add(gameMap!);
   }
 
   @override
-  Color backgroundColor() {
+  Color backgroundColor()
+  {
     return Colors.orange;
   }
 
   @override
-  Future<void> onLoad() async {
+  Future<void> onLoad() async
+  {
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
   }

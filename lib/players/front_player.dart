@@ -28,7 +28,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   bool _isNeedColl = false;
 
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async
+  {
     final spriteImage = await Flame.images.load('assets/tiles/sprites/players/dinoFull.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _dinoDead = spriteSheet.createAnimation(row: 0, stepTime: 0.18, from: 0,to: 8);
@@ -44,7 +45,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     // print("${_topHit.isColliding}, ${_botHit.isColliding},${_leftHit.isColliding},${_rightHit.isColliding}");
   }
 
-  void moveRight(bool isMove){
+  void moveRight(bool isMove)
+  {
     if(!isMove){
       _isXMove = false;
     }else{
@@ -56,7 +58,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       animation = _dinoRun;
     }
   }
-  void moveLeft(bool isMove){
+  void moveLeft(bool isMove)
+  {
     if(!isMove){
       _isXMove = false;
     }else{
@@ -68,7 +71,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       animation = _dinoRun;
     }
   }
-  void moveUp(bool isMove){
+  void moveUp(bool isMove)
+  {
     if(isMove){
       if(_isOnGround) {
         _isOnGround = false;
@@ -79,7 +83,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
   }
 
-  void doGroundCalc(Set<Vector2> points, PositionComponent other) {
+  void doGroundCalc(Set<Vector2> points, PositionComponent other)
+  {
     int isTop = 0,
         isBott = 0,
         isLeft = 0,
@@ -148,16 +153,17 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
       }
       position.y = other.y + other.height + height / 2;
     } else if (isLeft == points.length || (isLeft > isTop && isLeft > isBott)) {
-      _speedX *= -1 * OrthoPlayerVals.rigidy;
+      _speedX *= -1 * PhysicVals.rigidy;
       position.x = other.x - width * 0.3;
     } else if (isRight == points.length || (isRight > isTop && isRight > isBott)) {
-      _speedX *= -1 * OrthoPlayerVals.rigidy;
+      _speedX *= -1 * PhysicVals.rigidy;
       position.x = other.x + other.width + width * 0.3;
     }
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed)
+  {
     if(event.isKeyPressed(LogicalKeyboardKey.keyC)){
       _isNeedColl = !_isNeedColl;
     }
@@ -187,9 +193,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   }
 
   @override
-  void update(double dt) {
+  void update(double dt)
+  {
     if(!_isOnGround) {
-      _speedY += OrthoPlayerVals.gravity * dt;
+      _speedY += PhysicVals.gravity * dt;
       position.y += min(_speedY,28);
     }
     if(_isXMove) {
@@ -219,7 +226,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   }
 
   @override
-  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
+  void onCollisionStart(Set<Vector2> points, PositionComponent other)
+  {
     if (other.parent is MapObstacle) {
       doGroundCalc(points, other);
     }
@@ -227,7 +235,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   }
 
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
+  void onCollision(Set<Vector2> points, PositionComponent other)
+  {
     if(other.parent is MapObstacle){
       doGroundCalc(points,other);
     }
@@ -235,7 +244,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionComponent other)
+  {
     if(other.parent is MapObstacle){
       _isOnGround = false;
     }
@@ -243,7 +253,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0}) {
+  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  {
     // TODO: implement doHurt
   }
 

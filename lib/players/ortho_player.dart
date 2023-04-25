@@ -17,7 +17,8 @@ import 'dart:math' as math;
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
 {
   static final OrthoPlayer _orthoPlayer = OrthoPlayer._internal();
-  factory OrthoPlayer() {
+  factory OrthoPlayer()
+  {
     return _orthoPlayer;
   }
   OrthoPlayer._internal();
@@ -34,14 +35,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   late PlayerWeapon _weapon;
 
   @override
-  void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0}){
+  void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
+  {
     if(inArmor){
-      if(gameRef.playerData.armor.value < hurt){
-        gameRef.playerData.health.value -= (hurt - gameRef.playerData.armor.value);
-        gameRef.playerData.armor.value = 0;
-      }
+      hurt -= gameRef.playerData.armor;
+      gameRef.playerData.health.value -= math.max(hurt, 0);
     }else{
-      gameRef.playerData.health.value -= hurt - gameRef.playerData.armor.value;
+      gameRef.playerData.health.value -= hurt;
     }
     if(gameRef.playerData.health.value <1){
       gameRef.pauseEngine();
@@ -52,14 +52,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
   }
 
-  void refreshMoves(){
+  void refreshMoves()
+  {
     _velocity *= 0;
     _speed *= 0;
     animation?.reset();
   }
 
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async
+  {
     // debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
@@ -80,7 +82,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     _leftDownMove = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 0,to: 4);
     _leftDownIdle = spriteSheet.createAnimation(row: 7, stepTime: 0.3, from: 6,to: 7);
     animation = _downIdle;
-    size = Vector2(_spriteSheetWidth/OrthoPlayerVals.playerScale * GameConsts.gameScale, _spriteSheetHeight/OrthoPlayerVals.playerScale * GameConsts.gameScale);
+    size = Vector2(_spriteSheetWidth/PhysicVals.orthoPlayerScale * GameConsts.gameScale, _spriteSheetHeight/PhysicVals.orthoPlayerScale * GameConsts.gameScale);
     _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
     await add(_hitBox);
     // _hitBox.debugMode=true;
@@ -94,11 +96,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     await add(_weapon);
   }
 
-  void startHit(){
+  void startHit()
+  {
     _weapon.hit(_direction);
   }
 
-  void setIdleAnimation(){
+  void setIdleAnimation()
+  {
     switch(_direction){
       case PlayerDirectionMove.Right:     animation = _rightIdle; break;
       case PlayerDirectionMove.Left:      animation = _leftIdle; break;
@@ -112,7 +116,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
   }
 
-  void movePlayer(PlayerDirectionMove direct, bool isRun){
+  void movePlayer(PlayerDirectionMove direct, bool isRun)
+  {
     switch(direct){
       case PlayerDirectionMove.Right: {
         _velocity.x = PhysicVals.startSpeed;
@@ -170,18 +175,19 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     if(direct != PlayerDirectionMove.NoMove) {
       _direction = direct;
     }
-    if(isRun && OrthoPlayerVals.energy.value > OrthoPlayerVals.runMinimum){
-      OrthoPlayerVals.runCoef = 1.3;
+    if(isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum){
+      PhysicVals.runCoef = 1.3;
       _isPlayerRun = true;
     }else{
-      OrthoPlayerVals.runCoef = 1;
+      PhysicVals.runCoef = 1;
       _isPlayerRun = false;
     }
-    _velocity *= OrthoPlayerVals.runCoef;
+    _velocity *= PhysicVals.runCoef;
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed)
+  {
     bool isRun = false;
     Vector2 velo = Vector2.all(0);
     if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) || event.isKeyPressed(const LogicalKeyboardKey(0x00000057)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000077))) {
@@ -208,7 +214,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     return true;
   }
 
-  void doMoveFromVector2(Vector2 vel, bool isRun){
+  void doMoveFromVector2(Vector2 vel, bool isRun)
+  {
     if(vel.x > 0 && vel.y == 0){
       movePlayer(PlayerDirectionMove.Right,isRun);
     }else if(vel.x < 0 && vel.y == 0){
@@ -228,7 +235,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
   }
 
-  void groundCalcLines(Set<Vector2> points, PositionComponent other){
+  void groundCalcLines(Set<Vector2> points, PositionComponent other)
+  {
     if(points.length < 2){
       return;
     }
@@ -254,27 +262,27 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     }
   }
 
-
   @override
-  void update(double dt) {
+  void update(double dt)
+  {
     if(_isPlayerRun){
-      OrthoPlayerVals.energy.value -= dt;
-      if(OrthoPlayerVals.energy.value < 0){
-        OrthoPlayerVals.runCoef = 1;
-        OrthoPlayerVals.energy.value = 0;
+      gameRef.playerData.energy.value -= dt;
+      if(gameRef.playerData.energy.value < 0){
+        PhysicVals.runCoef = 1;
+        gameRef.playerData.energy.value = 0;
       }else{
-        OrthoPlayerVals.runCoef = 1.3;
+        PhysicVals.runCoef = 1.3;
       }
     }else{
-      if(!OrthoPlayerVals.isLockEnergy) {
-        OrthoPlayerVals.energy.value += dt;
+      if(!gameRef.playerData.isLockEnergy) {
+        gameRef.playerData.energy.value += dt;
       }
-      if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
-        OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
+      if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
+        gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
       }
     }
-    _speed.x = math.max(-OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef,math.min(_speed.x + dt * _velocity.x,OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef));
-    _speed.y = math.max(-OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef,math.min(_speed.y + dt * _velocity.y,OrthoPlayerVals.maxSpeed * OrthoPlayerVals.runCoef));
+    _speed.x = math.max(-PhysicVals.maxSpeed * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,PhysicVals.maxSpeed * PhysicVals.runCoef));
+    _speed.y = math.max(-PhysicVals.maxSpeed * PhysicVals.runCoef,math.min(_speed.y + dt * _velocity.y,PhysicVals.maxSpeed * PhysicVals.runCoef));
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;
@@ -299,11 +307,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     if(countZero == 2){
       setIdleAnimation();
       _isPlayerRun = false;
-      if(!OrthoPlayerVals.isLockEnergy) {
-        OrthoPlayerVals.energy.value += dt;
+      if(!gameRef.playerData.isLockEnergy) {
+        gameRef.playerData.energy.value += dt;
       }
-      if(OrthoPlayerVals.energy.value > OrthoPlayerVals.maxEnergy){
-        OrthoPlayerVals.energy.value = OrthoPlayerVals.maxEnergy;
+      if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
+        gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
       }
       super.update(dt);
       return;

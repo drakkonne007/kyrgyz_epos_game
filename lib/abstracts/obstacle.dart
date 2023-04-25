@@ -11,7 +11,8 @@ abstract class MapObstacle extends RectangleHitbox
     bool isSolid = false,
   });
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async
+  {
     collisionType = CollisionType.passive;
   }
 }

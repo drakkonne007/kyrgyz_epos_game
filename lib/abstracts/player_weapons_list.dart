@@ -15,7 +15,8 @@ class WDubina extends PlayerWeapon
   });
 
   @override
-  void onMount() {
+  void onMount()
+  {
     super.onMount();
     size = Vector2(20,50);
   }
@@ -24,7 +25,8 @@ class WDubina extends PlayerWeapon
   double diffAngle = 0;
 
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async
+  {
     damage = 1;
     activeSecs = 0.4;
     anchor = Anchor.bottomCenter;
@@ -32,7 +34,8 @@ class WDubina extends PlayerWeapon
   }
 
   @override
-  Future<void> hit(PlayerDirectionMove direct) async{
+  Future<void> hit(PlayerDirectionMove direct) async
+  {
     if(collisionType == CollisionType.inactive && gameRef.playerData.energy.value > energyCost) {
       gameRef.playerData.energy.value -= energyCost;
       gameRef.playerData.isLockEnergy = true;
@@ -52,7 +55,8 @@ class WDubina extends PlayerWeapon
   }
 
   @override
-  void update(double dt) {
+  void update(double dt)
+  {
     if(collisionType == CollisionType.active){
       diffAngle -= dt/activeSecs * sectorInRadian;
       angle = startAngle + diffAngle;

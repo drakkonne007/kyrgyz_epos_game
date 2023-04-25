@@ -22,10 +22,10 @@ main()
           overlayBuilderMap:  {
             DeathMenu.id: (context, KyrgyzGame game) => DeathMenu(game),
             GamePause.id: (context, KyrgyzGame game) => GamePause(game),
-            HealthBar.id: (context, KyrgyzGame game) => HealthBar(),
+            HealthBar.id: (context, KyrgyzGame game) => HealthBar(game),
             OrthoJoystick.id: (context, KyrgyzGame game) => OrthoJoystick(game,120),
             MainMenu.id: (context, KyrgyzGame game) => MainMenu(game),
-            SaveDialog.id: (context, KyrgyzGame game) => SaveDialog(),
+            SaveDialog.id: (context, KyrgyzGame game) => SaveDialog(game),
           },
           initialActiveOverlays: const [MainMenu.id],
         )
