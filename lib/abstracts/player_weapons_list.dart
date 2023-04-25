@@ -33,9 +33,9 @@ class WDubina extends PlayerWeapon
 
   @override
   Future<void> hit(PlayerDirectionMove direct) async{
-    if(collisionType == CollisionType.inactive && OrthoPlayerVals.energy.value > energyCost) {
-      OrthoPlayerVals.energy.value -= energyCost;
-      OrthoPlayerVals.isLockEnergy = true;
+    if(collisionType == CollisionType.inactive && gameRef.playerData.energy.value > energyCost) {
+      gameRef.playerData.energy.value -= energyCost;
+      gameRef.playerData.isLockEnergy = true;
       startAngle = radiansOfPlayerDirect(direct);
       diffAngle = 0;
       angle = startAngle;
@@ -45,7 +45,7 @@ class WDubina extends PlayerWeapon
       await Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
           collisionType = CollisionType.inactive;
           debugMode = false;
-          OrthoPlayerVals.isLockEnergy = false;
+          gameRef.playerData.isLockEnergy = false;
           print('end hit');
       });
     }

@@ -6,10 +6,11 @@ import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'dart:math' as math;
-
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 
-double radiansOfPlayerDirect(PlayerDirectionMove direct) {
+double radiansOfPlayerDirect(PlayerDirectionMove direct)
+{
   switch (direct) {
     case PlayerDirectionMove.Right:
       return math.pi * 2 / 3;
@@ -31,7 +32,7 @@ double radiansOfPlayerDirect(PlayerDirectionMove direct) {
   }
 }
 
-abstract class EnemyWeapon extends RectangleHitbox
+abstract class EnemyWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
 {
   EnemyWeapon({
     super.position,
@@ -40,7 +41,8 @@ abstract class EnemyWeapon extends RectangleHitbox
     super.anchor,
     super.priority,
     bool isSolid = false,
-  }){
+  })
+  {
     collisionType = CollisionType.inactive;
     // debugColor = BasicPalette.orange.color;
     // debugMode = true;
@@ -54,7 +56,8 @@ abstract class EnemyWeapon extends RectangleHitbox
   void hit(PlayerDirectionMove direct);
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  {
     if(other is PlayerHitbox){
       var temp = other.parent as MainPlayer;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
@@ -63,7 +66,7 @@ abstract class EnemyWeapon extends RectangleHitbox
   }
 }
 
-abstract class PlayerWeapon extends RectangleHitbox
+abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
 {
   PlayerWeapon({
     super.position,
@@ -72,7 +75,8 @@ abstract class PlayerWeapon extends RectangleHitbox
     super.anchor,
     super.priority,
     bool isSolid = false,
-  }){
+  })
+  {
     debugColor = BasicPalette.orange.color;
     collisionType = CollisionType.inactive;
   }
@@ -88,7 +92,8 @@ abstract class PlayerWeapon extends RectangleHitbox
   Future<void> hit(PlayerDirectionMove direct);
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  {
     if(other is EnemyHitbox){
       print('HOhoho Enemy');
       var temp = other.parent as KyrgyzEnemy;

@@ -4,6 +4,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/game_pause.dart';
 import 'package:game_flame/overlays/health_bar.dart';
@@ -15,7 +16,8 @@ import 'package:game_flame/players/ortho_player.dart';
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection
 {
-  CustomTileMap? gameMap = null;
+  CustomTileMap? gameMap;
+  late PlayerData playerData;
 
   @override
   KeyEventResult onKeyEvent(RawKeyEvent event,

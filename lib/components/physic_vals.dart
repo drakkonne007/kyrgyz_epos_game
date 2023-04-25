@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
+import 'package:game_flame/abstracts/item.dart';
 
 
 enum PlayerDirectionMove{
@@ -21,45 +22,91 @@ class GameConsts
   static const double gameScale = 1.3;
 }
 
-class OrthoPlayerVals
+class PlayerData
 {
-  static var health = ValueNotifier<double>(maxHealth);
-  static var energy = ValueNotifier<double>(maxEnergy);
-  static var armor = ValueNotifier<double>(maxArmor);
+  void setStartValues({double? curHp,double? maxHp,double? curEnergy,double? maxEnergy
+    ,Set<int>?killedBosses
+    ,List<int>?inventoryItems, int? money, int? curWeapon,List<int>? curDress,Vector2? location
+    , Vector2? curPosition,double? gameTime,double? milisecsInGame})
+  {
+    maxHealth = maxHp == null ? ValueNotifier<double>(100) : ValueNotifier<double>(maxHp);
+    this.maxEnergy = maxEnergy == null ? ValueNotifier<double>(5) : ValueNotifier<double>(maxEnergy);
+    health = curHp == null ? ValueNotifier<double>(maxHealth.value) : ValueNotifier<double>(curHp);
+    energy = curEnergy == null ? ValueNotifier<double>(this.maxEnergy.value) : ValueNotifier<double>(curEnergy);
+    this.killedBosses = killedBosses ?? {};
+    this.money = money ?? 0;
+    this.curWeapon = curWeapon ?? -1;
 
-  static bool isLockEnergy = false;
+    this.location = location ?? PhysicVals.startLocation;
+    this.curPosition = curPosition ?? Vector2.all(-1);
+    this.gameTime = gameTime ?? 720;
+    this.milisecsInGame = milisecsInGame ?? 0;
 
-  static double maxHealth = 10;
-  static double maxEnergy = 5;
-  static double maxArmor = 0;
+    if(curDress == null){
+      armor = 0;
+      this.curDress = [];
+    }else{
+      for(int i=0;i<curDress.length;i++){
+        var item = getDescriptOfItems(LootItems.values.elementAt(curDress[i]));
+        this.curDress.add(item);
+        armor += item.armor;
+        maxHealth.value += item.hp;
+        this.maxEnergy.value += item.energy;
+      }
+    }
+    if(inventoryItems == null){
+      this.inventoryItems = [];
+    }else{
+      for(int i=0;i<inventoryItems.length;i++){
+        var item = getDescriptOfItems(LootItems.values.elementAt(inventoryItems[i]));
+        this.inventoryItems.add(item);
+      }
+    }
+  }
 
-  static const double maxSpeed = 130 * GameConsts.gameScale;
-  static const double startSpeed = 400 * GameConsts.gameScale;
+  late ValueNotifier<double> health;
+  late ValueNotifier<double> energy;
+  late double armor;
+  late ValueNotifier<double> maxHealth;
+  late ValueNotifier<double> maxEnergy;
+  late bool isLockEnergy;
+  late Set<int> killedBosses;
+  late int money;
+  late int curWeapon;
+  List<Item> inventoryItems = [];
+  List<Item> curDress = [];
+  late Vector2 location;
+  late Vector2 curPosition;
+  late double gameTime;
+  late double milisecsInGame;
+
+// static void doNewGame(){
+//   health.value = maxHealth;
+//   energy.value = maxEnergy;
+//   armor.value  = maxArmor;
+//   isLockEnergy = false;
+// }
+}
+
+class PhysicVals
+{
+  static Vector2 startLocation = Vector2(10, 10);
+  static double maxSpeed = 130 * GameConsts.gameScale;
+  static double startSpeed = 400 * GameConsts.gameScale;
   static double runCoef = 1.3;
   static double runMinimum = 0.2;
-  static double playerScale = 1.4;
-
+  static double orthoPlayerScale = 1.4;
   static double gravity = 20 * GameConsts.gameScale;
   static double rigidy = 0.5;
   static double stopSpeed = 800 * GameConsts.gameScale;
-
-  static void doNewGame(){
-    health.value = maxHealth;
-    energy.value = maxEnergy;
-    armor.value  = maxArmor;
-    isLockEnergy = false;
-  }
 }
-
 
 class TimePoint extends CircleComponent
 {
-
   TimePoint(Vector2 pos){
     position = pos;
   }
-  double _lifeTime = 0;
-
+  int _lifeTime = 500;
   @override
   Future <void> onLoad() async{
     anchor = Anchor.center;
@@ -68,14 +115,10 @@ class TimePoint extends CircleComponent
     setColor(ColorExtension.random());
     renderShape = true;
     super.onLoad();
-  }
-
-  @override
-  void update(double dt){
-    _lifeTime += dt;
-    if(_lifeTime > 2){
+    await Future.delayed(Duration(milliseconds: _lifeTime),(){
       removeFromParent();
-    }
+    });
   }
 }
+
 

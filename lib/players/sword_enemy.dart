@@ -9,6 +9,7 @@ import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -25,10 +26,14 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
   Vector2 _speed = Vector2(0,20);
 
   @override
-  double health = 3;
-
+  double armor = 0;
   @override
-  Future<void> onLoad() async{
+  List<int> loots = [LootItems.pureHat.index];
+  @override
+  double health = 3;
+  @override
+  Future<void> onLoad() async
+  {
     // debugMode = true;
     final spriteImage = await Flame.images.load(
         'tiles/sprites/players/arrowman.png');
@@ -53,18 +58,21 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
     add(_body);
   }
 
-  void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other){
+  void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)
+  {
     _speed *= -1;
   }
 
   @override
-  void update(double dt){
+  void update(double dt)
+  {
     position += _speed * dt;
     super.update(dt);
   }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0}) {
+  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  {
     if(inArmor){
       if(armor < hurt){
         health -= (hurt - armor);
@@ -75,9 +83,7 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
     }
     if(health <1){
       removeFromParent();
+      for()
     }
   }
-
-  @override
-  double armor = 0;
 }

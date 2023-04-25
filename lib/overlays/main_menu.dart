@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -49,7 +51,7 @@ class MainMenu extends StatelessWidget
           const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
-
+                exit(0);
             },
             child: const Text('Exit'),),
         ],
