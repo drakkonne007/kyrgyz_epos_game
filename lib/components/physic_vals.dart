@@ -29,10 +29,10 @@ class PlayerData
     ,List<int>?inventoryItems, int? money, int? curWeapon,List<int>? curDress,Vector2? location
     , Vector2? curPosition,double? gameTime,double? milisecsInGame})
   {
-    maxHealth = maxHp == null ? ValueNotifier<double>(100) : ValueNotifier<double>(maxHp);
-    this.maxEnergy = maxEnergy == null ? ValueNotifier<double>(5) : ValueNotifier<double>(maxEnergy);
-    health = curHp == null ? ValueNotifier<double>(maxHealth.value) : ValueNotifier<double>(curHp);
-    energy = curEnergy == null ? ValueNotifier<double>(this.maxEnergy.value) : ValueNotifier<double>(curEnergy);
+    maxHealth.value = maxHp ?? 100;
+    this.maxEnergy.value = maxEnergy ?? 5;
+    health.value = curHp ?? maxHealth.value;
+    energy.value = curEnergy ?? this.maxEnergy.value;
     this.killedBosses = killedBosses ?? {};
     this.money = money ?? 0;
     this.curWeapon = curWeapon ?? -1;
@@ -64,21 +64,21 @@ class PlayerData
     }
   }
 
-  late ValueNotifier<double> health;
-  late ValueNotifier<double> energy;
-  late double armor;
-  late ValueNotifier<double> maxHealth;
-  late ValueNotifier<double> maxEnergy;
-  late bool isLockEnergy;
-  late Set<int> killedBosses;
-  late int money;
-  late int curWeapon;
+  ValueNotifier<double> health = ValueNotifier<double>(0);
+  ValueNotifier<double> energy = ValueNotifier<double>(0);
+  double armor = 0;
+  ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
+  ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
+  bool isLockEnergy = false;
+  Set<int> killedBosses = {};
+  int money = 0;
+  int curWeapon = -1;
   List<Item> inventoryItems = [];
   List<Item> curDress = [];
-  late Vector2 location;
-  late Vector2 curPosition;
-  late double gameTime;
-  late double milisecsInGame;
+  Vector2 location = Vector2(-1,-1);
+  Vector2 curPosition = Vector2(-1,-1);
+  double gameTime = 720;
+  double milisecsInGame = 0;
 
 // static void doNewGame(){
 //   health.value = maxHealth;

@@ -1,6 +1,4 @@
-
 import 'package:flame/components.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:game_flame/abstracts/item.dart';
 
 class PureHat implements Item
@@ -10,7 +8,7 @@ class PureHat implements Item
   @override
   int row = 10;
   @override
-  Vector2 srcSize = Vector2(384,5760);
+  Vector2 srcSize = Vector2(15,15);
   @override
   String source = 'tiles/map/loot/loot.png';
   @override
@@ -40,7 +38,7 @@ class StrongHat implements Item
   @override
   int row = 6;
   @override
-  Vector2 srcSize = Vector2(384,5760);
+  Vector2 srcSize = Vector2(15,15);
   @override
   String source = 'tiles/map/loot/loot.png';
   @override

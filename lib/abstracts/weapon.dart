@@ -32,7 +32,7 @@ double radiansOfPlayerDirect(PlayerDirectionMove direct)
   }
 }
 
-abstract class EnemyWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
+abstract class EnemyWeapon extends RectangleHitbox
 {
   EnemyWeapon({
     super.position,

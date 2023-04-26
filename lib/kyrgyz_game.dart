@@ -12,7 +12,6 @@ import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
-import 'package:game_flame/players/ortho_player.dart';
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection
 {
@@ -47,6 +46,8 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   Future<void> loadNewMap(String filePath) async
   {
+    playerData = PlayerData();
+    playerData.setStartValues();
     gameMap?.removeFromParent();
     gameMap = CustomTileMap(filePath);
     await add(gameMap!);

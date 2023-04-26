@@ -1,6 +1,3 @@
-
-import 'dart:ui';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
@@ -15,7 +12,9 @@ import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
 
-class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implements KyrgyzEnemy
+import 'package:game_flame/kyrgyz_game.dart';
+
+class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
   SwordEnemy(this._startPos);
 
@@ -53,10 +52,10 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
     _hitbox.debugColor = BasicPalette.black.color;
     _groundBox = GroundHitBox(obstacleBehavoiur: obstacleBehaviour);
     await add(_groundBox);
-    EWBody _body = EWBody();
-    _body.size = size;
-    _body.collisionType = CollisionType.active;
-    add(_body);
+    EWBody body = EWBody();
+    body.size = size;
+    body.collisionType = CollisionType.active;
+    await add(body);
   }
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)
@@ -82,9 +81,9 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks implem
     if(health <1){
       if(loots.isNotEmpty) {
         if(loots.length > 1){
-          parent?.add(Chest(myItems: loots));
+          gameRef.gameMap?.add(Chest(myItems: loots, position: position));
         }else{
-          parent?.add(LootOnMap(loots.first));
+          gameRef.gameMap?.add(LootOnMap(loots.first, position: position));
         }
       }
       removeFromParent();

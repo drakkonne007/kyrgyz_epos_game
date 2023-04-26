@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -16,6 +15,12 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
     this.autoTrigger = false,
     required this.obstacleBehavoiur,
   }){
+    print('Create object hitbox');
+  }
+
+  @override
+  Future<void> onLoad() async
+  {
     id = gameRef.gameMap!.getNewId();
   }
 
@@ -29,11 +34,11 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
     if(other is PlayerHitbox) {
       if(autoTrigger) {
         obstacleBehavoiur.call();
+        print('call ObjectHitbox callback');
       }else{
+        print('onCollisionStart else');
         gameRef.gameMap?.currentObject = this;
       }
-    }else{
-      print(other);
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -41,9 +46,12 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
   @override
   void onCollisionEnd(ShapeHitbox other)
   {
-    if(other is PlayerHitbox) {
-      if(gameRef.gameMap?.currentObject != null && gameRef.gameMap?.currentObject?.id == id){
-        gameRef.gameMap?.currentObject = null;
+    if(other is PlayerHitbox && !autoTrigger) {
+      if(gameRef.gameMap?.currentObject != null){
+        if(gameRef.gameMap?.currentObject?.id == id){
+          gameRef.gameMap?.currentObject = null;
+          print('currentObject = null');
+        }
       }
     }
     super.onCollisionEnd(other);
@@ -102,7 +110,7 @@ class GroundHitBox extends RectangleHitbox
     if(other is MapObstacle) {
       obstacleBehavoiur.call(intersectionPoints,other);
     }else{
-      print(other);
+      // print(other);
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -112,7 +120,7 @@ class GroundHitBox extends RectangleHitbox
     if(other is MapObstacle) {
       obstacleBehavoiur.call(intersectionPoints,other);
     }else{
-      print(other);
+      // print(other);
     }
     super.onCollision(intersectionPoints, other);
   }

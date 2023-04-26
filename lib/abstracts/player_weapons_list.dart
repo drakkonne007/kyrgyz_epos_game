@@ -44,12 +44,12 @@ class WDubina extends PlayerWeapon
       angle = startAngle;
       debugMode = true;
       collisionType = CollisionType.active;
-      print('start hit');
+      // print('start hit');
       await Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
           collisionType = CollisionType.inactive;
           debugMode = false;
           gameRef.playerData.isLockEnergy = false;
-          print('end hit');
+          // print('end hit');
       });
     }
   }

@@ -32,11 +32,6 @@ class _HealthBarState extends State<HealthBar>
   @override
   initState()
   {
-    _health = game.playerData.health.value;
-    _armor = game.playerData.armor;
-    _energy = game.playerData.energy.value;
-    _percHealth = _health / game.playerData.maxHealth.value;
-    _percRun = _energy / game.playerData.maxEnergy.value;
     super.initState();
     game.playerData.health.addListener(() {
       _health = game.playerData.health.value;
@@ -62,6 +57,11 @@ class _HealthBarState extends State<HealthBar>
         });
       }
     });
+    _health = game.playerData.health.value;
+    _armor = game.playerData.armor;
+    _energy = game.playerData.energy.value;
+    _percHealth = _health / game.playerData.maxHealth.value;
+    _percRun = _energy / game.playerData.maxEnergy.value;
   }
 
   @override

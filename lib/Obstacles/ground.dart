@@ -1,6 +1,3 @@
-import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
-import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 
 class Ground extends MapObstacle

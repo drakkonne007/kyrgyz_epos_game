@@ -1,5 +1,3 @@
-import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/components.dart';
 
 class Back extends SpriteComponent{

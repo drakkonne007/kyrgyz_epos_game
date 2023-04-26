@@ -64,6 +64,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   {
     // debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
+    // final spriteImage = await Flame.images.load('tiles/map/loot/loot.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _leftMove = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0,to: 4);
     _leftIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 6,to: 7);

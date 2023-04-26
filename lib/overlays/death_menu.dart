@@ -1,8 +1,5 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
 
@@ -31,7 +28,6 @@ class DeathMenu extends StatelessWidget
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
-                    OrthoPlayerVals.doNewGame();
                   },
                   child: const Text('Да'),),
                 ElevatedButton(
@@ -40,7 +36,6 @@ class DeathMenu extends StatelessWidget
                     _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
-                    OrthoPlayerVals.doNewGame();
                   },
                   child: const Text('Нет'),)
               ],

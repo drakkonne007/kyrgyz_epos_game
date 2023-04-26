@@ -1,10 +1,14 @@
 
+import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/loot.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 
 enum LootItems
 {
@@ -39,10 +43,21 @@ class Item
   int countOfUses = 0;
 }
 
-class LootOnMap extends SpriteComponent with CollisionCallbacks
+class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
 {
+  LootOnMap(this._item,
+      {bool? autoResize,
+        Paint? paint,
+        required super.position,
+        Vector2? size,
+        super.scale,
+        super.angle,
+        super.nativeAngle,
+        super.anchor,
+        super.children,
+        super.priority,});
   Item _item;
-  LootOnMap(this._item);
+  late ObjectHitbox _objectHitbox;
 
   @override
   Future<void> onLoad() async
@@ -52,13 +67,20 @@ class LootOnMap extends SpriteComponent with CollisionCallbacks
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _item.srcSize);
     sprite = spriteSheet.getSprite(_item.row, _item.column);
-    size = Vector2(16,16);
-    await add(ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer));
+    size = Vector2.all(30);
+    _objectHitbox = ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);
+    await add(_objectHitbox);
   }
 
   void getItemToPlayer()
   {
-    removeAll(children);
-    removeFromParent();
+    print('getItemToPlayer');
+    remove(_objectHitbox);
+    double dur = 0.4;
+    add(ScaleEffect.to(Vector2.all(2), EffectController(duration: dur)));
+    add(OpacityEffect.by(-0.9,EffectController(duration: dur),onComplete: (){
+      removeFromParent();
+    }));
   }
+
 }
