@@ -43,6 +43,7 @@ class LootOnMap extends SpriteComponent with CollisionCallbacks
 {
   Item _item;
   LootOnMap(this._item);
+
   @override
   Future<void> onLoad() async
   {
@@ -52,17 +53,12 @@ class LootOnMap extends SpriteComponent with CollisionCallbacks
         srcSize: _item.srcSize);
     sprite = spriteSheet.getSprite(_item.row, _item.column);
     size = Vector2(16,16);
-    await add(RectangleHitbox());
+    await add(ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer));
   }
 
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other)
+  void getItemToPlayer()
   {
-    if(other is PlayerHitbox){
-      print('you take a ${_item.id.name}');
-      removeAll(children);
-      removeFromParent();
-    }
-    super.onCollisionStart(intersectionPoints, other);
+    removeAll(children);
+    removeFromParent();
   }
 }

@@ -2,38 +2,51 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 
-class ChestHitbox extends RectangleHitbox
+class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
 {
-  ChestHitbox({
+  ObjectHitbox({
     super.position,
     super.size,
     super.angle,
     super.anchor,
     super.priority,
     bool isSolid = false,
-    required this.obstacleBehavoiur
-  });
-  Function(Set<Vector2> intersectionPoints, ShapeHitbox other) obstacleBehavoiur;
+    this.autoTrigger = false,
+    required this.obstacleBehavoiur,
+  }){
+    id = gameRef.gameMap!.getNewId();
+  }
+
+  late int id;
+  bool autoTrigger;
+  Function() obstacleBehavoiur;
+
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
   {
     if(other is PlayerHitbox) {
-      obstacleBehavoiur.call(intersectionPoints,other);
+      if(autoTrigger) {
+        obstacleBehavoiur.call();
+      }else{
+        gameRef.gameMap?.currentObject = this;
+      }
     }else{
       print(other);
     }
     super.onCollisionStart(intersectionPoints, other);
   }
 
-  @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  @override
+  void onCollisionEnd(ShapeHitbox other)
   {
     if(other is PlayerHitbox) {
-      obstacleBehavoiur.call(intersectionPoints,other);
-    }else{
-      print(other);
+      if(gameRef.gameMap?.currentObject != null && gameRef.gameMap?.currentObject?.id == id){
+        gameRef.gameMap?.currentObject = null;
+      }
     }
-    super.onCollision(intersectionPoints, other);
+    super.onCollisionEnd(other);
   }
 }
 

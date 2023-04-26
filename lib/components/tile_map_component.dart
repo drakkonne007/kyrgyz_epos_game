@@ -8,6 +8,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/overlays/health_bar.dart';
@@ -21,6 +22,12 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   CustomTileMap(this.fileName);
   late TiledComponent tiledMap;
   late Vector2 playerPos;
+  late ObjectHitbox? currentObject;
+  int countId=0;
+
+  int getNewId(){
+    return countId++;
+  }
 
   clearGameMap()
   {

@@ -15,21 +15,21 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
   Set<int>? nedeedKilledBosses;
   Set<int>? neededItems;
   List<Item> myItems;
+  int _row = 10;
+  int _column = 7;
   Chest({this.nedeedKilledBosses, this.neededItems, required this.myItems});
 
-  void checkIsIOpen(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  void checkIsIOpen()
   {
-    bool isOpen = true;
     if(nedeedKilledBosses != null){
       if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
-
-        isOpen = false;
+        return;
       }
     }
     if(neededItems != null){
       for(final a in neededItems!) {
         if (!gameRef.playerData.inventoryItems.contains(a)) {
-
+            return;
         }
       }
     }
@@ -42,9 +42,9 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
         'tiles/map/loot/loot.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: Vector2.all(16));
-    sprite = spriteSheet.getSprite(10, 5);
+    sprite = spriteSheet.getSprite(_row, _column);
     size = Vector2.all(16);
-    var asd = ChestHitbox(obstacleBehavoiur: checkIsIOpen);
+    var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     add(RectangleHitbox(size: Vector2.all(16)));
   }
 }
