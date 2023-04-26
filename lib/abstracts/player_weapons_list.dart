@@ -27,7 +27,7 @@ class WDubina extends PlayerWeapon
   @override
   Future<void> onLoad() async
   {
-    damage = 1;
+    damage = 10;
     activeSecs = 0.4;
     anchor = Anchor.bottomCenter;
     energyCost = 0.4;

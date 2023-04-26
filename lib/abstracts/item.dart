@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/loot.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 enum LootItems
@@ -62,6 +63,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> onLoad() async
   {
+    priority = GamePriority.loot;
     final spriteImage = await Flame.images.load(
         _item.source);
     final spriteSheet = SpriteSheet(image: spriteImage,
@@ -76,9 +78,10 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
   {
     print('getItemToPlayer');
     remove(_objectHitbox);
-    double dur = 0.4;
-    add(ScaleEffect.to(Vector2.all(2), EffectController(duration: dur)));
-    add(OpacityEffect.by(-0.9,EffectController(duration: dur),onComplete: (){
+    double dur = 0.5;
+    priority = GamePriority.maxPriority;
+    add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));
+    add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){
       removeFromParent();
     }));
   }

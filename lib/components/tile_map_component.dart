@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -39,19 +40,19 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
     final ground = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['bground']);
-    ground.priority = 0;
+    ground.priority = GamePriority.ground;
     ground.scale = Vector2.all(GameConsts.gameScale);
     await add(ground);
 
     final road = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['road']);
-    road.priority = 0;
+    road.priority = GamePriority.road;
     road.scale = Vector2.all(GameConsts.gameScale);
     await add(road);
 
     final woods = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['woods']);
-    woods.priority = 0;
+    woods.priority = GamePriority.woods;
     woods.scale = Vector2.all(GameConsts.gameScale);
     await add(woods);
 
@@ -70,7 +71,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       OrthoPlayer().refreshMoves();
     }else {
       await add(OrthoPlayer());
-      OrthoPlayer().priority = 10;
+      OrthoPlayer().priority = GamePriority.player;
     }
     OrthoPlayer().position = playerPos;
     await gameRef.add(FpsTextComponent());

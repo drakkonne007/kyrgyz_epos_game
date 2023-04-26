@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
@@ -56,6 +57,7 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     body.size = size;
     body.collisionType = CollisionType.active;
     await add(body);
+    priority = GamePriority.player - 1;
   }
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)
@@ -86,7 +88,10 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
           gameRef.gameMap?.add(LootOnMap(loots.first, position: position));
         }
       }
-      removeFromParent();
+      removeAll(children);
+      add(OpacityEffect.by(-0.95,EffectController(duration: 0.2),onComplete: (){
+        removeFromParent();
+      }));
     }
   }
 }

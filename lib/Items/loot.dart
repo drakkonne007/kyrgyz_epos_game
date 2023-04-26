@@ -6,9 +6,9 @@ class PureHat implements Item
   @override
   int column = 1;
   @override
-  int row = 10;
+  int row = 0;
   @override
-  Vector2 srcSize = Vector2(15,15);
+  Vector2 srcSize = Vector2.all(24);
   @override
   String source = 'tiles/map/loot/loot.png';
   @override
@@ -38,7 +38,7 @@ class StrongHat implements Item
   @override
   int row = 6;
   @override
-  Vector2 srcSize = Vector2(15,15);
+  Vector2 srcSize = Vector2.all(24);
   @override
   String source = 'tiles/map/loot/loot.png';
   @override

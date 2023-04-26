@@ -101,6 +101,17 @@ class PhysicVals
   static double stopSpeed = 800 * GameConsts.gameScale;
 }
 
+class GamePriority
+{
+  static const int ground = 0;
+  static const int road = 1;
+  static const int items = 2;
+  static const int woods = 3;
+  static const int loot = 40;
+  static const int player = 100;
+  static const int maxPriority = 999999;
+}
+
 class TimePoint extends CircleComponent
 {
   TimePoint(Vector2 pos){
