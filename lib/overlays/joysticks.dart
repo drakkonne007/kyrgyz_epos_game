@@ -46,9 +46,8 @@ import 'package:game_flame/players/ortho_player.dart';
 class OrthoJoystick extends StatefulWidget
 {
   static const id = 'OrthoJoystick';
-  KyrgyzGame game;
-  double size;
-  OrthoJoystick(this.game, this.size);
+  double _size;
+  OrthoJoystick(this._size);
 
   @override
   State<OrthoJoystick> createState() => _OrthoJoystickState();
@@ -57,11 +56,6 @@ class OrthoJoystick extends StatefulWidget
 class _OrthoJoystickState extends State<OrthoJoystick> {
   late double _size;
   late double _left,_top;
-  _OrthoJoystickState(){
-    _size = widget.size;
-    _left = _size/2 - _size/8;
-    _top = _size/2 - _size/8;
-  }
 
   void doMove(double dx, double dy){
     bool isRun = false;
@@ -105,6 +99,9 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
 
   @override
   Widget build(BuildContext context) {
+    _size = widget._size;
+    _left = _size/2 - _size/8;
+    _top = _size/2 - _size/8;
     return Row(
         mainAxisSize: MainAxisSize.max,
         children:[

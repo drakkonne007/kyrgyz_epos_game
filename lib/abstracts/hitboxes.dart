@@ -34,7 +34,6 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
     if(other is PlayerHitbox) {
       if(autoTrigger) {
         obstacleBehavoiur.call();
-        print('call ObjectHitbox callback');
       }else{
         print('onCollisionStart else');
         gameRef.gameMap?.currentObject = this;

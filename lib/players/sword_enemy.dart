@@ -5,13 +5,13 @@ import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
-
 import 'package:game_flame/kyrgyz_game.dart';
 
 class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef<KyrgyzGame> implements KyrgyzEnemy
@@ -61,15 +61,17 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     body.collisionType = CollisionType.active;
     await add(body);
     priority = GamePriority.player - 1;
-
+    int totalLoots = 0;
     math.Random rand = math.Random();
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
-      if(chance > chanceOfLoot){
+      if(chance >= chanceOfLoot){
+        totalLoots++;
         var item = itemFromId(2);
-        if()
+        loots.add(item);
       }
     }
+    print('totalLoots - $totalLoots');
   }
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)
@@ -95,9 +97,9 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     if(health <1){
       if(loots.isNotEmpty) {
         if(loots.length > 1){
-          gameRef.gameMap?.add(Chest(myItems: loots, position: position));
+          gameRef.gameMap?.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
         }else{
-          gameRef.gameMap?.add(LootOnMap(loots.first, position: position));
+          gameRef.gameMap?.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
         }
       }
       removeAll(children);

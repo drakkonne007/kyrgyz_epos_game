@@ -99,7 +99,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
 
   void startHit()
   {
-    _weapon.hit(_direction);
+    if(gameRef.gameMap?.currentObject != null){
+      print('call chestCreate');
+      gameRef.gameMap?.currentObject?.obstacleBehavoiur.call();
+    }else {
+      _weapon.hit(_direction);
+    }
   }
 
   void setIdleAnimation()

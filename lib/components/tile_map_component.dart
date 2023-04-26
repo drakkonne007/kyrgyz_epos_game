@@ -19,7 +19,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   String fileName;
   late TiledComponent tiledMap;
   late Vector2 playerPos;
-  late ObjectHitbox? currentObject;
+  ObjectHitbox? currentObject;
   int countId=0;
 
   int getNewId(){
