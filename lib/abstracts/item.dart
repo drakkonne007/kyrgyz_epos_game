@@ -11,35 +11,29 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-enum LootItems
-{
-  noItem,
-  pureHat,
-  strongHat,
-}
-
-Item getDescriptOfItems(LootItems id)
+Item itemFromId(int id)
 {
   switch(id){
-    case LootItems.noItem:    return Item();
-    case LootItems.pureHat:   return PureHat();
-    case LootItems.strongHat: return StrongHat();
+    case 0:   return PureHat(1);
+    case 1:   return StrongHat(2);
+    default: return PureHat(1);
   }
 }
 
-class Item
+abstract class Item
 {
-  LootItems id = LootItems.noItem;
-  double hp = -1;
-  double energy = -1;
-  double armor = -1;
+  int id = 0;
+  double hp = 0;
+  double energy = 0;
+  double armor = 0;
+  int gold = 0;
   bool enabled = false;
   bool isDress = false;
   bool isAnimated = false;
   String source = '';
-  int cost = -1;
-  int column = -1;
-  int row = -1;
+  int cost = 0;
+  int column = 0;
+  int row = 0;
   Vector2 srcSize = Vector2.all(0);
   int countOfUses = 0;
 }

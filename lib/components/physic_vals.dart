@@ -47,7 +47,7 @@ class PlayerData
       this.curDress = [];
     }else{
       for(int i=0;i<curDress.length;i++){
-        var item = getDescriptOfItems(LootItems.values.elementAt(curDress[i]));
+        var item = itemFromId(curDress[i]);
         this.curDress.add(item);
         armor += item.armor;
         maxHealth.value += item.hp;
@@ -58,7 +58,7 @@ class PlayerData
       this.inventoryItems = [];
     }else{
       for(int i=0;i<inventoryItems.length;i++){
-        var item = getDescriptOfItems(LootItems.values.elementAt(inventoryItems[i]));
+        var item = itemFromId(inventoryItems[i]);
         this.inventoryItems.add(item);
       }
     }

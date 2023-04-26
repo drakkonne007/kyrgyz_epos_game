@@ -3,6 +3,9 @@ import 'package:game_flame/abstracts/item.dart';
 
 class PureHat implements Item
 {
+  PureHat(this.id);
+  @override
+  int gold = 0;
   @override
   int column = 1;
   @override
@@ -22,17 +25,20 @@ class PureHat implements Item
   @override
   double hp = 0;
   @override
-  LootItems id = LootItems.pureHat;
-  @override
   bool isDress = true;
   @override
   bool isAnimated = false;
   @override
   int countOfUses = 100;
+  @override
+  int id;
 }
 
 class StrongHat implements Item
 {
+  StrongHat(this.id);
+  @override
+  int gold = 0;
   @override
   int column = 4;
   @override
@@ -52,11 +58,11 @@ class StrongHat implements Item
   @override
   double hp = 0;
   @override
-  LootItems id = LootItems.pureHat;
-  @override
   bool isDress = true;
   @override
   bool isAnimated = false;
   @override
   int countOfUses = 200;
+  @override
+  int id;
 }

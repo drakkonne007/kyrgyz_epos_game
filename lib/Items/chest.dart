@@ -40,7 +40,7 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
       for(final myNeeded in neededItems!) {
         bool isNeed = true;
         for(final playerHas in gameRef.playerData.inventoryItems){
-          if(playerHas.id.index == myNeeded){
+          if(playerHas.id == myNeeded){
             isNeed = false;
             break;
           }

@@ -10,19 +10,18 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class HealthBar extends StatefulWidget
 {
-  KyrgyzGame game;
   HealthBar(this.game);
+  KyrgyzGame game;
   static const id = 'HealthBar';
   @override
-  State<HealthBar> createState() => _HealthBarState(game);
+  State<HealthBar> createState() => _HealthBarState();
 
   var myTextStyle =  const TextStyle( fontSize: 45, letterSpacing: 0.5, fontFamily: 'Samson');
 }
 
 class _HealthBarState extends State<HealthBar>
 {
-  KyrgyzGame game;
-  _HealthBarState(this.game);
+  _HealthBarState();
   late double _health;
   late double _armor;
   late double _energy;
@@ -33,9 +32,9 @@ class _HealthBarState extends State<HealthBar>
   initState()
   {
     super.initState();
-    game.playerData.health.addListener(() {
-      _health = game.playerData.health.value;
-      _percHealth = _health / game.playerData.maxHealth.value;
+    widget.game.playerData.health.addListener(() {
+      _health = widget.game.playerData.health.value;
+      _percHealth = _health / widget.game.playerData.maxHealth.value;
       if(mounted) {
         setState(() {
         });
@@ -49,19 +48,19 @@ class _HealthBarState extends State<HealthBar>
     //     });
     //   }
     // });
-    game.playerData.energy.addListener(() {
-      _energy = game.playerData.energy.value;
-      _percRun = _energy / game.playerData.maxEnergy.value;
+    widget.game.playerData.energy.addListener(() {
+      _energy = widget.game.playerData.energy.value;
+      _percRun = _energy / widget.game.playerData.maxEnergy.value;
       if(mounted) {
         setState(() {
         });
       }
     });
-    _health = game.playerData.health.value;
-    _armor = game.playerData.armor;
-    _energy = game.playerData.energy.value;
-    _percHealth = _health / game.playerData.maxHealth.value;
-    _percRun = _energy / game.playerData.maxEnergy.value;
+    _health = widget.game.playerData.health.value;
+    _armor = widget.game.playerData.armor;
+    _energy = widget.game.playerData.energy.value;
+    _percHealth = _health / widget.game.playerData.maxHealth.value;
+    _percRun = _energy / widget.game.playerData.maxEnergy.value;
   }
 
   @override

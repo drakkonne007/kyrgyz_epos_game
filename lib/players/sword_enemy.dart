@@ -5,7 +5,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -27,9 +26,13 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
   Vector2 _speed = Vector2(0,20);
 
   @override
+  int maxLoots = 10;
+  @override
+  double chanceOfLoot = 0.8;
+  @override
   double armor = 0;
   @override
-  List<Item> loots = [PureHat()];
+  List<Item> loots = [];
   @override
   double health = 3;
   @override
@@ -58,6 +61,15 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     body.collisionType = CollisionType.active;
     await add(body);
     priority = GamePriority.player - 1;
+
+    math.Random rand = math.Random();
+    for(int i=0;i<maxLoots;i++){
+      double chance = rand.nextDouble();
+      if(chance > chanceOfLoot){
+        var item = itemFromId(2);
+        if()
+      }
+    }
   }
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)

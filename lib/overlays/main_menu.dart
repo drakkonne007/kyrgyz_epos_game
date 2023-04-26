@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -10,7 +9,7 @@ class MainMenu extends StatelessWidget
 {
   static const id = 'mainMenu';
   KyrgyzGame _game;
-  MainMenu(this._game);
+  MainMenu(this._game, {super.key});
 
   @override
   Widget build(BuildContext context) {
