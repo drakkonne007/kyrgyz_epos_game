@@ -29,13 +29,14 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
   Set<int>? nedeedKilledBosses;
   Set<int>? neededItems;
   List<Item> myItems;
-  int _row = 10;
-  int _column = 7;
+  int _row = 9;
+  int _column = 0;
 
   void checkIsIOpen()
   {
     if(nedeedKilledBosses != null){
       if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
+        print('not kill needed boss');
         return;
       }
     }
@@ -49,6 +50,7 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
           }
         }
         if(isNeed){
+          print('not has nedeed item');
           return;
         }
       }

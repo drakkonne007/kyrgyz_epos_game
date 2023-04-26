@@ -1,5 +1,25 @@
 import 'package:flame/components.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/kyrgyz_game.dart';
+
+class Gold extends Item
+{
+  Gold(int id){
+    this.id = id;
+    row = 12;
+    column = 13;
+    gold = 10;
+    enabled = true;
+    source = 'tiles/map/loot/loot.png';
+    srcSize = Vector2.all(24);
+  }
+
+  @override
+  void getEffect(KyrgyzGame game)
+  {
+      game.playerData.money += gold;
+  }
+}
 
 class PureHat implements Item
 {

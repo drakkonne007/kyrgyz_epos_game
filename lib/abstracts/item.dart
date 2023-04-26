@@ -23,6 +23,7 @@ Item itemFromId(int id)
 abstract class Item
 {
   int id = 0;
+  void getEffect(KyrgyzGame game){throw 'Not override catch item';}
   double hp = 0;
   double energy = 0;
   double armor = 0;

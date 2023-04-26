@@ -26,7 +26,7 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
   Vector2 _speed = Vector2(0,20);
 
   @override
-  int maxLoots = 10;
+  int maxLoots = 2;
   @override
   double chanceOfLoot = 0.8;
   @override

@@ -46,6 +46,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));
     add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){
       removeFromParent();
+      _item.getEffect();
     }));
   }
 
