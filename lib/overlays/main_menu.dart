@@ -3,7 +3,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/gen/strings.g.dart';
 
 class MainMenu extends StatelessWidget
 {
@@ -31,19 +33,23 @@ class MainMenu extends StatelessWidget
               _game.overlays.remove(id);
               _game.loadNewMap('tiles/map/firstMap2.tmx');
             },
-            child: const Text('Новая игра'),
+            child: Text(context.t.newGame),
           ),
           const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
 
             },
-            child: const Text('Загрузить'),
+            child: Text(context.t.loadGame),
           ),
           const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: (){
-
+              if(LocaleSettings.currentLocale != AppLocale.ru) {
+                LocaleSettings.setLocale(AppLocale.ru);
+              }else{
+                LocaleSettings.setLocale(AppLocale.kg);
+              }
             },
             child: const Text('Настройки'),
           ),
