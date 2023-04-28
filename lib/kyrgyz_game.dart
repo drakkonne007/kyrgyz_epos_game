@@ -28,6 +28,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     prefs = await SharedPreferences.getInstance();
+    prefs.remove('locale');
     var loc = prefs.getString('locale');
     if(loc == null){
       overlays.add(LanguageChooser.id);

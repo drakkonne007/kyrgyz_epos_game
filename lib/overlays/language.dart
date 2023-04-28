@@ -10,15 +10,11 @@ import 'package:game_flame/overlays/main_menu.dart';
 
 class LanguageChooser extends StatelessWidget
 {
-  LanguageChooser(this._game)
-  {
-    list = getFlags();
-  }
-  List<Widget> list = [];
+  LanguageChooser(this._game);
   static const id = 'LanguageChooser';
   KyrgyzGame _game;
 
-  List<Widget> getFlags()
+  List<Widget> getFlags(double width, double height)
   {
     String source = '';
     String locale = '';
@@ -33,12 +29,12 @@ class LanguageChooser extends StatelessWidget
         ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(0),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(MediaQueryData.fromWindow(ui.window).size.height/4)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(min(height, width)/6)),
             ),
             clipBehavior: Clip.hardEdge,
             child: Image.asset(source,
-              width: MediaQueryData.fromWindow(ui.window).size.width/4,
-              height: MediaQueryData.fromWindow(ui.window).size.height/3,
+              width: width/4,
+              height: height/3,
               fit: BoxFit.cover,),
             onPressed: (){
               _game.prefs.setString('locale', locale);
@@ -55,12 +51,16 @@ class LanguageChooser extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: list,
-      ),
+      child:LayoutBuilder(
+        builder: (context,constraints){
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: getFlags(constraints.maxWidth, constraints.maxHeight),
+          );
+        }
+      )
     );
   }
   void close()
