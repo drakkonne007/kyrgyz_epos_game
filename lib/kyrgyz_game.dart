@@ -10,18 +10,32 @@ import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/game_pause.dart';
 import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
+import 'package:game_flame/overlays/language.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection
 {
   CustomTileMap? gameMap;
-  late PlayerData playerData;
+  PlayerData playerData = PlayerData();
+  late final SharedPreferences prefs;
 
-  final engLoc = AppLocale.en.build();
-  final rusLoc = AppLocale.ru.build();
-  final kgLoc = AppLocale.kg.build();
+  @override
+  Future<void> onLoad() async
+  {
+    await Flame.device.fullScreen();
+    await Flame.device.setLandscape();
+    prefs = await SharedPreferences.getInstance();
+    var loc = prefs.getString('locale');
+    if(loc == null){
+      overlays.add(LanguageChooser.id);
+    }else{
+      LocaleSettings.setLocaleRaw(loc);
+      overlays.add(MainMenu.id);
+    }
+  }
 
   @override
   KeyEventResult onKeyEvent(RawKeyEvent event,
@@ -49,10 +63,26 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     overlays.add(overlayName);
   }
 
+  void createNewGame(int saveId)
+  {
+    prefs.remove('${saveId}_maxHp');
+    prefs.remove('${saveId}_curHp');
+    prefs.remove('${saveId}_maxEnergy');
+    prefs.remove('${saveId}_curEnergy');
+    prefs.remove('${saveId}_bosses');
+    prefs.remove('${saveId}_items');
+    prefs.remove('${saveId}_gold');
+    prefs.remove('${saveId}_curWeapon');
+    prefs.remove('${saveId}_curDress');
+    prefs.remove('${saveId}_location');
+    prefs.remove('${saveId}_position');
+    prefs.remove('${saveId}_gameTime');
+    prefs.remove('${saveId}_secsInGame');
+
+  }
+
   Future<void> loadNewMap(String filePath) async
   {
-    playerData = PlayerData();
-    playerData.setStartValues();
     gameMap?.removeFromParent();
     gameMap = CustomTileMap(filePath);
     await add(gameMap!);
@@ -62,12 +92,5 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   Color backgroundColor()
   {
     return Colors.orange;
-  }
-
-  @override
-  Future<void> onLoad() async
-  {
-    await Flame.device.fullScreen();
-    await Flame.device.setLandscape();
   }
 }

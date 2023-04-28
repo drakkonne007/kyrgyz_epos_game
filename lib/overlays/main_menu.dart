@@ -9,7 +9,7 @@ import 'package:game_flame/gen/strings.g.dart';
 
 class MainMenu extends StatelessWidget
 {
-  static const id = 'mainMenu';
+  static const id = 'MainMenu';
   KyrgyzGame _game;
   MainMenu(this._game, {super.key});
 

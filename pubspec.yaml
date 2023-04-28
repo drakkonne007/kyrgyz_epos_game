@@ -66,6 +66,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/images/flags/
     - assets/tiles/
     - assets/tiles/buttons/
     - assets/tiles/map/
