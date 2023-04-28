@@ -16,7 +16,7 @@ import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection
+class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection, WidgetsBindingObserver
 {
   CustomTileMap? gameMap;
   PlayerData playerData = PlayerData();
@@ -36,6 +36,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
       LocaleSettings.setLocaleRaw(loc);
       overlays.add(MainMenu.id);
     }
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -93,5 +94,29 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   Color backgroundColor()
   {
     return Colors.orange;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // super.didChangeAppLifecycleState(state);
+    print('asdsad');
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print('resume');
+        resumeEngine();
+        break;
+      case AppLifecycleState.inactive:
+        print('inactive');
+        pauseEngine();
+        break;
+      case AppLifecycleState.paused:
+        print('paused');
+        pauseEngine();
+        break;
+      case AppLifecycleState.detached:
+        print('detached');
+        pauseEngine();
+        break;
+    }
   }
 }
