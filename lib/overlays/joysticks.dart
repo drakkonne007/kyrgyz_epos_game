@@ -55,53 +55,56 @@ class OrthoJoystick extends StatefulWidget
 
 class _OrthoJoystickState extends State<OrthoJoystick> {
   late double _size;
-  late double _left,_top;
+  final ValueNotifier<double> _left = ValueNotifier<double>(0),_top = ValueNotifier<double>(0);
+
+  @override
+  void initState() {
+    _size = widget._size;
+    _left.value = _size/2 - _size/8;
+    _top.value = _size/2 - _size/8;
+    super.initState();
+  }
 
   void doMove(double dx, double dy){
     bool isRun = false;
     var ugol = math.atan2(dx - _size/2, dy - _size / 2);
     if(math.sqrt(math.pow(dx- _size / 2,2) + math.pow(dy- _size / 2, 2)) >= _size / 2 - _size/8){
-      _left = math.sin(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
-      _top = math.cos(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
+      _left.value = math.sin(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
+      _top.value = math.cos(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
       isRun = true;
     }else {
-      _left = dx - _size/8;
-      _top = dy - _size/8;
+      _left.value = dx - _size/8;
+      _top.value = dy - _size/8;
     }
-    setState(() {
-      if(ugol >= math.pi/3 && ugol < math.pi * 2/3){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.Right,isRun);
-      }else if(ugol < 5 * math.pi/6 && ugol >= math.pi * 2/3){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.RightUp,isRun);
-      }else if(ugol < -5 * math.pi/6 || ugol >= 5 * math.pi/6){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.Up,isRun);
-      }else if(ugol >= -5 * math.pi/6 && ugol < math.pi * -2 / 3){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.LeftUp,isRun);
-      }else if(ugol >= -2 * math.pi/3 && ugol < -math.pi / 3){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.Left,isRun);
-      }else if(ugol >= -math.pi/3 && ugol < -math.pi / 6){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.LeftDown,isRun);
-      }else if(ugol >= -math.pi/6 && ugol < math.pi / 6){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.Down,isRun);
-      }else if(ugol > math.pi/6 && ugol < math.pi / 3){
-        OrthoPlayer().movePlayer(PlayerDirectionMove.RightDown,isRun);
-      }
-    });
+    // _left.notifyListeners();
+    if(ugol >= math.pi/3 && ugol < math.pi * 2/3){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.Right,isRun);
+    }else if(ugol < 5 * math.pi/6 && ugol >= math.pi * 2/3){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.RightUp,isRun);
+    }else if(ugol < -5 * math.pi/6 || ugol >= 5 * math.pi/6){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.Up,isRun);
+    }else if(ugol >= -5 * math.pi/6 && ugol < math.pi * -2 / 3){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.LeftUp,isRun);
+    }else if(ugol >= -2 * math.pi/3 && ugol < -math.pi / 3){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.Left,isRun);
+    }else if(ugol >= -math.pi/3 && ugol < -math.pi / 6){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.LeftDown,isRun);
+    }else if(ugol >= -math.pi/6 && ugol < math.pi / 6){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.Down,isRun);
+    }else if(ugol > math.pi/6 && ugol < math.pi / 3){
+      OrthoPlayer().movePlayer(PlayerDirectionMove.RightDown,isRun);
+    }
   }
 
   void stopMove(){
     OrthoPlayer().movePlayer(PlayerDirectionMove.NoMove,false);
-    setState(() {
-      _left = _size/2 - _size/8;
-      _top = _size/2 - _size/8;
-    });
+    _left.value = _size/2 - _size/8;
+    _top.value = _size/2 - _size/8;
+    // _left.notifyListeners();
   }
 
   @override
   Widget build(BuildContext context) {
-    _size = widget._size;
-    _left = _size/2 - _size/8;
-    _top = _size/2 - _size/8;
     return Row(
         mainAxisSize: MainAxisSize.max,
         children:[
@@ -118,14 +121,15 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
                     child:  Stack(
                         fit: StackFit.passthrough,
                         children:<Widget>[
-                          Positioned(
-                              width: _size/4,
-                              height: _size/4,
-                              left: _left,
-                              top: _top,
-                              child: Container(
-                                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
-                              )),
+                          ValueListenableBuilder(valueListenable: _left,
+                            builder: (_,val,__) => Positioned(
+                                width: _size/4,
+                                height: _size/4,
+                                left: val,
+                                top: _top.value,
+                                child: Container(
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
+                                )),),
                           GestureDetector(
                             onLongPressStart: (details){
                               doMove(details.localPosition.dx, details.localPosition.dy);
@@ -175,7 +179,7 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
               GestureDetector(
                 onTap: (){
                   OrthoPlayer().startHit();
-                  },
+                },
               ))
         ]
     );
