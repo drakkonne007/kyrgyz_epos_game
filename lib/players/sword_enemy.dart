@@ -61,17 +61,14 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     body.collisionType = CollisionType.active;
     await add(body);
     priority = GamePriority.player - 1;
-    int totalLoots = 0;
     math.Random rand = math.Random();
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
       if(chance >= chanceOfLoot){
-        totalLoots++;
         var item = itemFromId(2);
         loots.add(item);
       }
     }
-    print('totalLoots - $totalLoots');
   }
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)

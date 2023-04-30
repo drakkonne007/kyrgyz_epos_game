@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/gen/strings.g.dart';
 
 class MainMenu extends StatelessWidget
 {

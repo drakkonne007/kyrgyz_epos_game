@@ -38,7 +38,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
     if(inArmor){
-      hurt -= gameRef.playerData.armor;
+      hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
     }else{
       gameRef.playerData.health.value -= hurt;
@@ -100,7 +100,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   void startHit()
   {
     if(gameRef.gameMap?.currentObject != null){
-      print('call chestCreate');
       gameRef.gameMap?.currentObject?.obstacleBehavoiur.call();
     }else {
       _weapon.hit(_direction);

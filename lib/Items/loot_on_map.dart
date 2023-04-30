@@ -21,7 +21,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
         super.anchor = Anchor.center,
         super.children,
         super.priority = GamePriority.loot,});
-  Item _item;
+  final Item _item;
   late ObjectHitbox _objectHitbox;
 
   @override
@@ -39,7 +39,6 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
 
   void getItemToPlayer()
   {
-    print('getItemToPlayer');
     remove(_objectHitbox);
     double dur = 0.5;
     priority = GamePriority.maxPriority;

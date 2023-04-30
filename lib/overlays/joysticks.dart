@@ -55,7 +55,12 @@ class OrthoJoystick extends StatefulWidget
 
 class _OrthoJoystickState extends State<OrthoJoystick> {
   late double _size;
-  final ValueNotifier<double> _left = ValueNotifier<double>(0),_top = ValueNotifier<double>(0);
+  final ValueNotifier<double> _left = ValueNotifier<double>(0), _top = ValueNotifier<double>(0);
+  final double right1 = math.pi/3;
+  final double right2 = math.pi * 2/3;
+  final double rightUp1 = 5 * math.pi/6;
+  final double up1 = -5 * math.pi/6;
+  final double left1 = math.pi / 6;
 
   @override
   void initState() {
@@ -76,22 +81,21 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
       _left.value = dx - _size/8;
       _top.value = dy - _size/8;
     }
-    // _left.notifyListeners();
-    if(ugol >= math.pi/3 && ugol < math.pi * 2/3){
+    if(ugol >= right1 && ugol < right2){
       OrthoPlayer().movePlayer(PlayerDirectionMove.Right,isRun);
-    }else if(ugol < 5 * math.pi/6 && ugol >= math.pi * 2/3){
+    }else if(ugol < rightUp1 && ugol >= right2){
       OrthoPlayer().movePlayer(PlayerDirectionMove.RightUp,isRun);
-    }else if(ugol < -5 * math.pi/6 || ugol >= 5 * math.pi/6){
+    }else if(ugol < -rightUp1 || ugol >= rightUp1){
       OrthoPlayer().movePlayer(PlayerDirectionMove.Up,isRun);
-    }else if(ugol >= -5 * math.pi/6 && ugol < math.pi * -2 / 3){
+    }else if(ugol >= -rightUp1 && ugol < -right2){
       OrthoPlayer().movePlayer(PlayerDirectionMove.LeftUp,isRun);
-    }else if(ugol >= -2 * math.pi/3 && ugol < -math.pi / 3){
+    }else if(ugol >= -right2 && ugol < -right1){
       OrthoPlayer().movePlayer(PlayerDirectionMove.Left,isRun);
-    }else if(ugol >= -math.pi/3 && ugol < -math.pi / 6){
+    }else if(ugol >= -right1 && ugol < -left1){
       OrthoPlayer().movePlayer(PlayerDirectionMove.LeftDown,isRun);
-    }else if(ugol >= -math.pi/6 && ugol < math.pi / 6){
+    }else if(ugol >= -left1 && ugol < left1){
       OrthoPlayer().movePlayer(PlayerDirectionMove.Down,isRun);
-    }else if(ugol > math.pi/6 && ugol < math.pi / 3){
+    }else if(ugol > left1 && ugol < right1){
       OrthoPlayer().movePlayer(PlayerDirectionMove.RightDown,isRun);
     }
   }
@@ -100,7 +104,6 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
     OrthoPlayer().movePlayer(PlayerDirectionMove.NoMove,false);
     _left.value = _size/2 - _size/8;
     _top.value = _size/2 - _size/8;
-    // _left.notifyListeners();
   }
 
   @override
@@ -121,7 +124,8 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
                     child:  Stack(
                         fit: StackFit.passthrough,
                         children:<Widget>[
-                          ValueListenableBuilder(valueListenable: _left,
+                          ValueListenableBuilder(
+                            valueListenable: _left,
                             builder: (_,val,__) => Positioned(
                                 width: _size/4,
                                 height: _size/4,

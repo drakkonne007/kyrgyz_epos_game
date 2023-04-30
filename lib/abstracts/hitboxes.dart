@@ -14,9 +14,7 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
     bool isSolid = false,
     this.autoTrigger = false,
     required this.obstacleBehavoiur,
-  }){
-    print('Create object hitbox');
-  }
+  });
 
   @override
   Future<void> onLoad() async
@@ -34,8 +32,7 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
     if(other is PlayerHitbox) {
       if(autoTrigger) {
         obstacleBehavoiur.call();
-      }else{
-        print('onCollisionStart else');
+      }else{;
         gameRef.gameMap?.currentObject = this;
       }
     }

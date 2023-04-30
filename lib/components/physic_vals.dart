@@ -43,13 +43,12 @@ class PlayerData
     this.milisecsInGame = milisecsInGame ?? 0;
 
     if(curDress == null){
-      armor = 0;
       this.curDress = [];
     }else{
       for(int i=0;i<curDress.length;i++){
         var item = itemFromId(curDress[i]);
         this.curDress.add(item);
-        armor += item.armor;
+        armor.value += item.armor;
         maxHealth.value += item.hp;
         this.maxEnergy.value += item.energy;
       }
@@ -66,7 +65,7 @@ class PlayerData
 
   ValueNotifier<double> health = ValueNotifier<double>(0);
   ValueNotifier<double> energy = ValueNotifier<double>(0);
-  double armor = 0;
+  ValueNotifier<double> armor =ValueNotifier<double>(0);
   ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
   ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
   bool isLockEnergy = false;

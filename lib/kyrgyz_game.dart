@@ -85,6 +85,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   Future<void> loadNewMap(String filePath) async
   {
+    playerData.setStartValues();
     gameMap?.removeFromParent();
     gameMap = CustomTileMap(filePath);
     await add(gameMap!);
@@ -98,8 +99,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // super.didChangeAppLifecycleState(state);
-    print('asdsad');
+    // super.didChangeAppLifecycleState(state);;
     switch (state) {
       case AppLifecycleState.resumed:
         print('resume');

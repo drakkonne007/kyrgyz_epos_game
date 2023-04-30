@@ -29,8 +29,8 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
   Set<int>? nedeedKilledBosses;
   Set<int>? neededItems;
   List<Item> myItems;
-  int _row = 9;
-  int _column = 0;
+  final int _row = 9;
+  final int _column = 0;
 
   void checkIsIOpen()
   {

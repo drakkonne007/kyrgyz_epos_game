@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
 
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/main_menu.dart';
