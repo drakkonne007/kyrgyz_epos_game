@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/geometry.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
@@ -23,14 +24,23 @@ class HealthBar extends StatefulWidget
 class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMixin
 {
   _HealthBarState();
-  late Animation<double> animationHp,animationEnergy;
-  late AnimationController controllerHp,controllerEnergy;
+  double _firstHp = 0;
+
+  bool isHurt(double val){
+    bool isLower = val < _firstHp;
+    _firstHp = val;
+    if(val > 5 && isLower){
+      Future.delayed(const Duration(milliseconds: 500),(){
+        widget.game.playerData.health.notifyListeners();
+        print('Stop this crazy');
+      });
+    }
+    return isLower;
+  }
 
   @override
   void initState() {
-    controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    animationHp = Tween<double>(begin: 0, end: 300).animate(controller);
+    _firstHp = widget.game.playerData.health.value;
     super.initState();
   }
 
@@ -47,16 +57,20 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                     valueListenable: widget.game.playerData.health,
                     builder: (_,val,__) => Row(
                         children:[
-                          SizedBox(
-                            width: 42,
-                            height: 42,
-                            child:
-                            CustomPaint(
-                              painter: ArcGradientPainter(color: Colors.red, currentProc: val / widget.game.playerData.maxHealth.value),
-                              child:const Icon(Icons.heart_broken, color: Colors.red,size: 35,
-                                shadows: [
-                                  BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1), blurStyle: BlurStyle.normal)
-                                ],),
+                          ShakeWidget(
+                            shakeConstant: val > 5 ? ShakeDefaultConstant2() : ShakeHardConstant2(),
+                            autoPlay: isHurt(val),
+                            child: SizedBox(
+                              width: 42,
+                              height: 42,
+                              child:
+                              CustomPaint(
+                                painter: ArcGradientPainter(color: Colors.red, currentProc: val / widget.game.playerData.maxHealth.value),
+                                child:const Icon(Icons.heart_broken, color: Colors.red,size: 35,
+                                  shadows: [
+                                    BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1), blurStyle: BlurStyle.normal)
+                                  ],),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 5, height: 0,),
@@ -90,10 +104,9 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                       valueListenable: widget.game.playerData.energy,
                       builder: (_,val,__) => Row(
                         children:[
-                          AnimatedPositioned(
-                            duration: Duration(milliseconds: 700),
-                            curve: Curves.elasticInOut,
-                            left: 20,
+                          ShakeWidget(
+                            shakeConstant: ShakeDefaultConstant2(),
+                            autoPlay: val <= 2,
                             child: SizedBox(
                               width: 42,
                               height: 42,
