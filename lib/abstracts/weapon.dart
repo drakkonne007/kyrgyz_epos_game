@@ -56,6 +56,14 @@ abstract class EnemyWeapon extends RectangleHitbox
   void hit(PlayerDirectionMove direct);
 
   @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if(other is PlayerHitbox) {
+      return super.onComponentTypeCheck(other);
+    }
+    return false;
+  }
+
+  @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
   {
     if(other is PlayerHitbox){
@@ -90,6 +98,14 @@ abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
   double energyCost = 0;
 
   Future<void> hit(PlayerDirectionMove direct);
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if(other is EnemyHitbox) {
+      return super.onComponentTypeCheck(other);
+    }
+    return false;
+  }
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)

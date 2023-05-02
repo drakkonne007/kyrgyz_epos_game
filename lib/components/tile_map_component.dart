@@ -74,7 +74,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       OrthoPlayer().priority = GamePriority.player;
     }
     OrthoPlayer().position = playerPos;
-    await gameRef.add(FpsTextComponent());
     await add(ScreenHitbox());
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);

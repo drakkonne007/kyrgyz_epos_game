@@ -47,11 +47,11 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.topLeft,
         child: Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10, top: 10),
             child:Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ValueListenableBuilder(
                     valueListenable: widget.game.playerData.health,

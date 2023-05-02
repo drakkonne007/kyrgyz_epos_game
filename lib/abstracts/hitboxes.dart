@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/abstracts/weapon.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
@@ -25,6 +26,14 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
   late int id;
   bool autoTrigger;
   Function() obstacleBehavoiur;
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if(other is PlayerHitbox) {
+      return super.onComponentTypeCheck(other);
+    }
+    return false;
+  }
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
@@ -64,6 +73,15 @@ class PlayerHitbox extends RectangleHitbox
     super.priority,
     bool isSolid = false,
   });
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if(other is EnemyWeapon) {
+      return super.onComponentTypeCheck(other);
+    }
+    return false;
+  }
+
   @override
   Future<void> onLoad() async
   {
@@ -81,6 +99,15 @@ class EnemyHitbox extends RectangleHitbox
     super.priority,
     bool isSolid = false,
   });
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if(other is PlayerWeapon) {
+      return super.onComponentTypeCheck(other);
+    }
+    return false;
+  }
+
   @override
   Future<void> onLoad() async
   {
@@ -100,6 +127,15 @@ class GroundHitBox extends RectangleHitbox
     required this.obstacleBehavoiur
   });
   Function(Set<Vector2> intersectionPoints, ShapeHitbox other) obstacleBehavoiur;
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if(other is MapObstacle) {
+      return super.onComponentTypeCheck(other);
+    }
+    return false;
+  }
+
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
   {

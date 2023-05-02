@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
@@ -18,6 +19,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection, WidgetsBindingObserver
 {
+  // KyrgyzGame() : super(){
+  //   collisionDetection = StandardCollisionDetection(broadphase: );
+  // }
   CustomTileMap? gameMap;
   PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
