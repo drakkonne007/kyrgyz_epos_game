@@ -108,6 +108,7 @@ class GamePriority
   static const int woods = 3;
   static const int loot = 40;
   static const int player = 100;
+  static const int high = 150;
   static const int maxPriority = 999999;
 }
 

@@ -124,9 +124,11 @@ class GroundHitBox extends RectangleHitbox
     super.anchor,
     super.priority,
     bool isSolid = false,
-    required this.obstacleBehavoiur
+    this.obstacleBehavoiurStart,
+    this.obstacleBehavoiurContinue,
   });
-  Function(Set<Vector2> intersectionPoints, ShapeHitbox other) obstacleBehavoiur;
+  Function(Set<Vector2> intersectionPoints, ShapeHitbox other)? obstacleBehavoiurStart;
+  Function(Set<Vector2> intersectionPoints, ShapeHitbox other)? obstacleBehavoiurContinue;
 
   @override
   bool onComponentTypeCheck(PositionComponent other) {
@@ -140,9 +142,7 @@ class GroundHitBox extends RectangleHitbox
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
   {
     if(other is MapObstacle) {
-      obstacleBehavoiur.call(intersectionPoints,other);
-    }else{
-      // print(other);
+      obstacleBehavoiurStart?.call(intersectionPoints,other);
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -150,9 +150,7 @@ class GroundHitBox extends RectangleHitbox
   @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other)
   {
     if(other is MapObstacle) {
-      obstacleBehavoiur.call(intersectionPoints,other);
-    }else{
-      // print(other);
+      obstacleBehavoiurContinue?.call(intersectionPoints,other);
     }
     super.onCollision(intersectionPoints, other);
   }

@@ -88,7 +88,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     await add(_hitBox);
     // _hitBox.debugMode=true;
     anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
-    _groundBox = GroundHitBox(obstacleBehavoiur: groundCalcLines,size: Vector2(width/2,20),position: Vector2(width/4,height*0.6 - 5));
+    _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,size: Vector2(width/2,20),position: Vector2(width/4,height*0.6 - 5));
     await add(_groundBox);
     // _groundBox.position = Vector2(width/4,height*0.6 - 5);
     // _groundBox.size = Vector2(width/2,20);
@@ -271,7 +271,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
   void update(double dt)
   {
     if(_isPlayerRun){
-      gameRef.playerData.energy.value -= dt;
+      gameRef.playerData.energy.value -= dt * 2;
       if(gameRef.playerData.energy.value < 0){
         PhysicVals.runCoef = 1;
         gameRef.playerData.energy.value = 0;

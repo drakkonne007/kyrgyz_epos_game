@@ -54,7 +54,7 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     await add(_hitbox);
     // _hitbox.debugMode = true;
     _hitbox.debugColor = BasicPalette.black.color;
-    _groundBox = GroundHitBox(obstacleBehavoiur: obstacleBehaviour);
+    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour);
     await add(_groundBox);
     EWBody body = EWBody();
     body.size = size;
@@ -93,9 +93,9 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     if(health <1){
       if(loots.isNotEmpty) {
         if(loots.length > 1){
-          gameRef.gameMap?.items.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
+          gameRef.gameMap?.bground.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
         }else{
-          gameRef.gameMap?.items.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
+          gameRef.gameMap?.bground.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
         }
       }
       removeAll(children);

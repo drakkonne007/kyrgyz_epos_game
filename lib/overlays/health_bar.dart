@@ -106,7 +106,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                         children:[
                           ShakeWidget(
                             shakeConstant: ShakeDefaultConstant2(),
-                            autoPlay: val <= 2,
+                            autoPlay: false,
                             child: SizedBox(
                               width: 42,
                               height: 42,
