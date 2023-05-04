@@ -25,7 +25,7 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
     super.nativeAngle,
     super.anchor = Anchor.center,
     super.children,
-    super.priority = GamePriority.loot,});
+    super.priority});
   Set<int>? nedeedKilledBosses;
   Set<int>? neededItems;
   List<Item> myItems;
@@ -57,7 +57,6 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
     }
     removeAll(children);
     double dur = 0.8;
-    priority = GamePriority.maxPriority;
     add(RotateEffect.by(tau/4,EffectController(duration: 0.2,reverseDuration: 0.2,infinite: true)));
     add(ScaleEffect.to(Vector2.all(1.5), EffectController(duration: dur)));
     add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){

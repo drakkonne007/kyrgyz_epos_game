@@ -20,7 +20,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
         super.nativeAngle,
         super.anchor = Anchor.center,
         super.children,
-        super.priority = GamePriority.loot,});
+        super.priority});
   final Item _item;
   late ObjectHitbox _objectHitbox;
 
@@ -41,7 +41,6 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
   {
     remove(_objectHitbox);
     double dur = 0.5;
-    priority = GamePriority.maxPriority;
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));
     add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){
       if(_item.hideAfterUse) {

@@ -21,6 +21,11 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   late Vector2 playerPos;
   ObjectHitbox? currentObject;
   int countId=0;
+  late PositionComponent bground;
+  PositionComponent? road;
+  late PositionComponent items;
+  PositionComponent? woods;
+  PositionComponent? underPlayer;
 
   int getNewId(){
     return countId++;
@@ -37,29 +42,38 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     final imageCompiler = ImageBatchCompiler();
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
     size = tiledMap.size * GameConsts.gameScale;
-
-    final ground = imageCompiler.compileMapLayer(
+    bground = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['bground']);
-    ground.priority = GamePriority.ground;
-    ground.scale = Vector2.all(GameConsts.gameScale);
-    await add(ground);
+    bground.priority = GamePriority.ground;
+    bground.scale = Vector2.all(GameConsts.gameScale);
+    await add(bground);
 
-    final road = imageCompiler.compileMapLayer(
+    road = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['road']);
-    road.priority = GamePriority.road;
-    road.scale = Vector2.all(GameConsts.gameScale);
-    await add(road);
+    road?.priority = GamePriority.road;
+    road?.scale = Vector2.all(GameConsts.gameScale);
+    if(road != null){
+      await add(road!);
+    }
 
-    final woods = imageCompiler.compileMapLayer(
+    items = imageCompiler.compileMapLayer(
+        tileMap: tiledMap.tileMap, layerNames: ['items']);
+    items.priority = GamePriority.items;
+    items.scale = Vector2.all(GameConsts.gameScale);
+    await add(items);
+
+    woods = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['woods']);
-    woods.priority = GamePriority.woods;
-    woods.scale = Vector2.all(GameConsts.gameScale);
-    await add(woods);
+    woods?.priority = GamePriority.woods;
+    woods?.scale = Vector2.all(GameConsts.gameScale);
+    if(woods != null) {
+      await add(woods!);
+    }
 
     final objs = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in objs!.objects){
       switch(obj.class_){
-        case 'enemy': await add(SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
+        case 'enemy': await items.add(SwordEnemy(Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
         break;
         case 'ground': await add(Ground(size: Vector2(obj.width * GameConsts.gameScale, obj.height * GameConsts.gameScale),position: Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
         break;
@@ -86,7 +100,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in enemySpawn!.objects){
       if(obj.class_ == 'enemy') {
-        await add(SwordEnemy(Vector2(
+        await items.add(SwordEnemy(Vector2(
             obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale)));
       }
     }
