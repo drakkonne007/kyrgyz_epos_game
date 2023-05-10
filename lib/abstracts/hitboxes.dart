@@ -20,7 +20,11 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
   @override
   Future<void> onLoad() async
   {
-    id = gameRef.gameMap!.getNewId();
+    if(gameRef.gameMap != null) {
+      id = gameRef.gameMap!.getNewId();
+    }else{
+      id = -1;
+    }
   }
 
   late int id;

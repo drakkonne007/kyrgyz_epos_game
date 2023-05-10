@@ -22,7 +22,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   // KyrgyzGame() : super(){
   //   collisionDetection = StandardCollisionDetection(broadphase: );
   // }
-  CustomTileMap? gameMap;
+  CustomTileMap gameMap = CustomTileMap();
   PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
 
@@ -41,6 +41,8 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
       overlays.add(MainMenu.id);
     }
     WidgetsBinding.instance.addObserver(this);
+    playerData.setStartValues();
+    add(gameMap);
   }
 
   @override
@@ -84,15 +86,12 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     prefs.remove('${saveId}_position');
     prefs.remove('${saveId}_gameTime');
     prefs.remove('${saveId}_secsInGame');
-
   }
 
   Future<void> loadNewMap(String filePath) async
   {
-    playerData.setStartValues();
-    gameMap?.removeFromParent();
-    gameMap = CustomTileMap(filePath);
-    await add(gameMap!);
+    gameMap.removeAll(gameMap.children);
+    gameMap.loadNewMap(filePath);
   }
 
   @override

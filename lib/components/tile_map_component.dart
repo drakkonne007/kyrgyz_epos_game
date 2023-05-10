@@ -6,23 +6,25 @@ import 'package:flutter/scheduler.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
+import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
 import 'package:game_flame/players/sword_enemy.dart';
 
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
-  CustomTileMap(this.fileName);
-  String fileName;
   late TiledComponent tiledMap;
   late Vector2 playerPos;
   ObjectHitbox? currentObject;
   int countId=0;
   late PositionComponent bground;
-  late PositionComponent underPlayer;
+  late PositionComponent upperPlayer;
+  OrthoPlayer? orthoPlayer;
+  late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
 
   int getNewId(){
     return countId++;
@@ -30,49 +32,48 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   clearGameMap()
   {
-    removeAll(children);
+    removeWhere((component) => component is! OrthoPlayer || component is! FrontPlayer);
   }
 
-  @override
-  Future<void> onLoad() async
+  Future<void> loadNewMap(String fileName) async
   {
-    final imageCompiler = ImageBatchCompiler();
+    var imageCompiler = ImageBatchCompiler();
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
-    size = tiledMap.size * GameConsts.gameScale;
     bground = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['bground','road','items']);
+    size = tiledMap.size * GameConsts.gameScale;
     // bground.priority = GamePriority.ground;
     bground.scale = Vector2.all(GameConsts.gameScale);
-    await add(bground);
-
-    underPlayer = imageCompiler.compileMapLayer(
+    add(bground);
+    upperPlayer = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['high']);
-    underPlayer.priority = GamePriority.high;
-    underPlayer.scale = Vector2.all(GameConsts.gameScale);
-    await add(underPlayer);
-
+    upperPlayer.priority = GamePriority.high;
+    upperPlayer.scale = Vector2.all(GameConsts.gameScale);
+    add(upperPlayer);
+    orthoPlayer?.position = Vector2.all(-150);
     final objs = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in objs!.objects){
       switch(obj.class_){
-        case 'enemy': await bground.add(SwordEnemy(Vector2(obj.x, obj.y)));
+        case 'enemy': bground.add(SwordEnemy(Vector2(obj.x, obj.y)));
         break;
-        case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
+        case 'ground': add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
+        break;
+        case 'mapWarp': add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx'));
         break;
         case 'player': playerPos = Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale);
       }
     }
-    if(OrthoPlayer().parent != null){
-      OrthoPlayer().parent = this;
-      OrthoPlayer().refreshMoves();
-    }else {
-      await add(OrthoPlayer());
-      OrthoPlayer().priority = GamePriority.player;
-    }
-    OrthoPlayer().position = playerPos;
-    await add(ScreenHitbox());
+    print(orthoPlayer);
+    orthoPlayer = null;
+    orthoPlayer = OrthoPlayer();
+    add(orthoPlayer!);
+    orthoPlayer?.position = playerPos;
+    orthoPlayer?.priority = GamePriority.player;
+    // await add(ScreenHitbox());
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
-    gameRef.camera.followComponent(OrthoPlayer(),worldBounds: Rect.fromLTWH(0, 0, width, height));
+    gameRef.camera.followComponent(orthoPlayer!,worldBounds: Rect.fromLTWH(0, 0, width, height));
+    print('end load new map');
   }
 
   Future<void> smallRestart() async
@@ -81,7 +82,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in enemySpawn!.objects){
       if(obj.class_ == 'enemy') {
-        await bground.add(SwordEnemy(Vector2(
+        bground.add(SwordEnemy(Vector2(
             obj.x, obj.y)));
       }
     }

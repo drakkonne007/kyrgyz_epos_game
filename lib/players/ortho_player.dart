@@ -16,13 +16,6 @@ import 'dart:math' as math;
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
 {
-  static final OrthoPlayer _orthoPlayer = OrthoPlayer._internal();
-  factory OrthoPlayer()
-  {
-    return _orthoPlayer;
-  }
-  OrthoPlayer._internal();
-
   PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
   late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove,

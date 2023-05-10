@@ -47,7 +47,8 @@ class OrthoJoystick extends StatefulWidget
 {
   static const id = 'OrthoJoystick';
   double _size;
-  OrthoJoystick(this._size);
+  KyrgyzGame game;
+  OrthoJoystick(this._size,this.game);
 
   @override
   State<OrthoJoystick> createState() => _OrthoJoystickState();
@@ -82,26 +83,26 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
       _top.value = dy - _size/8;
     }
     if(ugol >= right1 && ugol < right2){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.Right,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.Right,isRun);
     }else if(ugol < rightUp1 && ugol >= right2){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.RightUp,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.RightUp,isRun);
     }else if(ugol < -rightUp1 || ugol >= rightUp1){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.Up,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.Up,isRun);
     }else if(ugol >= -rightUp1 && ugol < -right2){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.LeftUp,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.LeftUp,isRun);
     }else if(ugol >= -right2 && ugol < -right1){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.Left,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.Left,isRun);
     }else if(ugol >= -right1 && ugol < -left1){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.LeftDown,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.LeftDown,isRun);
     }else if(ugol >= -left1 && ugol < left1){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.Down,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.Down,isRun);
     }else if(ugol > left1 && ugol < right1){
-      OrthoPlayer().movePlayer(PlayerDirectionMove.RightDown,isRun);
+      widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.RightDown,isRun);
     }
   }
 
   void stopMove(){
-    OrthoPlayer().movePlayer(PlayerDirectionMove.NoMove,false);
+    widget.game.gameMap?.orthoPlayer?.movePlayer(PlayerDirectionMove.NoMove,false);
     _left.value = _size/2 - _size/8;
     _top.value = _size/2 - _size/8;
   }
@@ -182,7 +183,7 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
               child:
               GestureDetector(
                 onTap: (){
-                  OrthoPlayer().startHit();
+                  widget.game.gameMap?.orthoPlayer?.startHit();
                 },
               ))
         ]
