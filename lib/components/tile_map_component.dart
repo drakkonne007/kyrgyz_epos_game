@@ -44,29 +44,28 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     size = tiledMap.size * GameConsts.gameScale;
     // bground.priority = GamePriority.ground;
     bground.scale = Vector2.all(GameConsts.gameScale);
-    add(bground);
+    await add(bground);
     upperPlayer = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['high']);
     upperPlayer.priority = GamePriority.high;
     upperPlayer.scale = Vector2.all(GameConsts.gameScale);
-    add(upperPlayer);
+    await add(upperPlayer);
     orthoPlayer?.position = Vector2.all(-150);
     final objs = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in objs!.objects){
       switch(obj.class_){
-        case 'enemy': bground.add(SwordEnemy(Vector2(obj.x, obj.y)));
+        case 'enemy': await bground.add(SwordEnemy(Vector2(obj.x, obj.y)));
         break;
-        case 'ground': add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
+        case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
         break;
-        case 'mapWarp': add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx'));
+        case 'mapWarp': await add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx'));
         break;
         case 'player': playerPos = Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale);
       }
     }
-    print(orthoPlayer);
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
-    add(orthoPlayer!);
+    await add(orthoPlayer!);
     orthoPlayer?.position = playerPos;
     orthoPlayer?.priority = GamePriority.player;
     // await add(ScreenHitbox());
