@@ -3,18 +3,21 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "firstMap.tmx",
+    "activeFile": "test.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "Все файлы (*)",
     "fileStates": {
+        "": {
+            "scaleInEditor": 1
+        },
         "firstMap.tmx": {
             "scale": 0.125,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 3844,
-                "y": 2512
+                "x": 3832,
+                "y": 2508
             }
         },
         "firstMap.tmx#ground": {
@@ -28,10 +31,27 @@
         },
         "firstMap.tmx#trees": {
             "scaleInDock": 0.33
+        },
+        "test.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 1712,
+                "y": 822
+            }
+        },
+        "test.tmx#ground": {
+            "scaleInDock": 1
+        },
+        "test.tmx#groundsThings": {
+            "scaleInDock": 1
+        },
+        "test.tmx#lava": {
+            "scaleInDock": 1
         }
     },
     "openFiles": [
-        "firstMap.tmx"
+        "test.tmx"
     ],
     "project": "project.tiled-project",
     "recentFiles": [
