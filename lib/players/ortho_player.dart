@@ -14,7 +14,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
-class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
+class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
   PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;

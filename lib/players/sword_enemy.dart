@@ -14,7 +14,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
-class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef<KyrgyzGame> implements KyrgyzEnemy
+class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
   SwordEnemy(this._startPos);
 

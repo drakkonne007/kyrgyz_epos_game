@@ -9,7 +9,7 @@ import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameRef<KyrgyzGame> implements MainPlayer
+class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
   Vector2 _startPos;
   FrontPlayer(this._startPos);
@@ -221,32 +221,32 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler, Collisi
     super.update(dt);
   }
 
-  @override
-  void onCollisionStart(Set<Vector2> points, PositionComponent other)
-  {
-    if (other.parent is MapObstacle) {
-      doGroundCalc(points, other);
-    }
-    super.onCollisionStart(points, other);
-  }
-
-  @override
-  void onCollision(Set<Vector2> points, PositionComponent other)
-  {
-    if(other.parent is MapObstacle){
-      doGroundCalc(points,other);
-    }
-    super.onCollision(points,other);
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other)
-  {
-    if(other.parent is MapObstacle){
-      _isOnGround = false;
-    }
-    super.onCollisionEnd(other);
-  }
+  // @override
+  // void onCollisionStart(Set<Vector2> points, PositionComponent other)
+  // {
+  //   if (other.parent is MapObstacle) {
+  //     doGroundCalc(points, other);
+  //   }
+  //   super.onCollisionStart(points, other);
+  // }
+  //
+  // @override
+  // void onCollision(Set<Vector2> points, PositionComponent other)
+  // {
+  //   if(other.parent is MapObstacle){
+  //     doGroundCalc(points,other);
+  //   }
+  //   super.onCollision(points,other);
+  // }
+  //
+  // @override
+  // void onCollisionEnd(PositionComponent other)
+  // {
+  //   if(other.parent is MapObstacle){
+  //     _isOnGround = false;
+  //   }
+  //   super.onCollisionEnd(other);
+  // }
 
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
