@@ -85,7 +85,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     await add(_groundBox);
     // _groundBox.position = Vector2(width/4,height*0.6 - 5);
     // _groundBox.size = Vector2(width/2,20);
-    // _groundBox.debugMode = true;
+    _groundBox.debugMode = true;
     _weapon = WDubina(position: Vector2(width/2,height/2));
     await add(_weapon);
   }

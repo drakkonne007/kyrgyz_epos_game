@@ -56,18 +56,18 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       switch(obj.class_){
         case 'enemy': await bground.add(SwordEnemy(Vector2(obj.x, obj.y)));
         break;
-        case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
+        case 'ground': await bground.add(Ground(size: Vector2(obj.width, obj.height),position: Vector2(obj.x, obj.y)));
         break;
-        case 'mapWarp': await add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx'));
+        case 'mapWarp': await bground.add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx'));
         break;
-        case 'player': playerPos = Vector2(obj.x * GameConsts.gameScale, obj.y * GameConsts.gameScale);
+        case 'player': playerPos = Vector2(obj.x, obj.y);
       }
     }
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
-    await add(orthoPlayer!);
+    await bground.add(orthoPlayer!);
     orthoPlayer?.position = playerPos;
-    orthoPlayer?.priority = GamePriority.player;
+    // orthoPlayer?.priority = GamePriority.player;
     // await add(ScreenHitbox());
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);

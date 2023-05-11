@@ -6,6 +6,7 @@ import 'package:game_flame/players/ortho_player.dart';
 
 abstract class MapObstacle extends RectangleHitbox
 {
+  bool _isFirst = true;
   MapObstacle({
     super.position,
     super.size,
@@ -21,6 +22,14 @@ abstract class MapObstacle extends RectangleHitbox
       return super.onComponentTypeCheck(other);
     }
     return false;
+  }
+
+  @override
+  void updateTree(double dt) {
+    if(_isFirst) {
+      _isFirst = false;
+      super.updateTree(dt);
+    }
   }
 
   @override
