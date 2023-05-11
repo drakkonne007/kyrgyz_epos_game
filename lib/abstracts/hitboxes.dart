@@ -20,11 +20,7 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
   @override
   Future<void> onLoad() async
   {
-    if(gameRef.gameMap != null) {
-      id = gameRef.gameMap!.getNewId();
-    }else{
-      id = -1;
-    }
+    id = gameRef.gameMap.getNewId();
   }
 
   late int id;
@@ -46,7 +42,7 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
       if(autoTrigger) {
         obstacleBehavoiur.call();
       }else{;
-        gameRef.gameMap?.currentObject = this;
+      gameRef.gameMap.currentObject = this;
       }
     }
     super.onCollisionStart(intersectionPoints, other);
@@ -56,9 +52,9 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
   void onCollisionEnd(ShapeHitbox other)
   {
     if(other is PlayerHitbox && !autoTrigger) {
-      if(gameRef.gameMap?.currentObject != null){
-        if(gameRef.gameMap?.currentObject?.id == id){
-          gameRef.gameMap?.currentObject = null;
+      if(gameRef.gameMap.currentObject != null){
+        if(gameRef.gameMap.currentObject?.id == id){
+          gameRef.gameMap.currentObject = null;
           print('currentObject = null');
         }
       }

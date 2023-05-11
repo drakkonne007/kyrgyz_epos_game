@@ -93,9 +93,9 @@ class SwordEnemy extends SpriteAnimationComponent with CollisionCallbacks, HasGa
     if(health <1){
       if(loots.isNotEmpty) {
         if(loots.length > 1){
-          gameRef.gameMap?.bground.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
+          gameRef.gameMap.bground.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
         }else{
-          gameRef.gameMap?.bground.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
+          gameRef.gameMap.bground.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
         }
       }
       removeAll(children);
