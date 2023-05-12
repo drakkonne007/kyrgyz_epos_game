@@ -56,21 +56,23 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       switch(obj.class_){
         case 'enemy': await bground.add(SwordEnemy(Vector2(obj.x, obj.y)));
         break;
-        case 'ground': await bground.add(Ground(size: Vector2(obj.width, obj.height),position: Vector2(obj.x, obj.y)));
+        case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
         break;
-        case 'mapWarp': await bground.add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx'));
+        case 'mapWarp': await add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx',size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
         break;
         case 'player': playerPos = Vector2(obj.x, obj.y);
       }
     }
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
-    await bground.add(orthoPlayer!);
-    orthoPlayer?.position = playerPos;
+    await add(orthoPlayer!);
+    orthoPlayer?.priority = GamePriority.player;
+    orthoPlayer?.position = playerPos * GameConsts.gameScale;
     // orthoPlayer?.priority = GamePriority.player;
     // await add(ScreenHitbox());
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
+    // gameRef.camera.scaleVector(Vector2.all(0.2));
     gameRef.camera.followComponent(orthoPlayer!,worldBounds: Rect.fromLTWH(0, 0, width, height));
     print('end load new map');
   }

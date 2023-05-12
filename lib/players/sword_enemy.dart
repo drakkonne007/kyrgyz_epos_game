@@ -57,6 +57,7 @@ class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour);
     await add(_groundBox);
     EWBody body = EWBody();
+    body.debugMode = true;
     body.size = size;
     body.collisionType = CollisionType.active;
     await add(body);

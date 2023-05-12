@@ -79,13 +79,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     size = Vector2(_spriteSheetWidth/PhysicVals.orthoPlayerScale * GameConsts.gameScale, _spriteSheetHeight/PhysicVals.orthoPlayerScale * GameConsts.gameScale);
     _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
     await add(_hitBox);
-    // _hitBox.debugMode=true;
+    _hitBox.debugMode=true;
     anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
     _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,size: Vector2(width/2,20),position: Vector2(width/4,height*0.6 - 5));
     await add(_groundBox);
     // _groundBox.position = Vector2(width/4,height*0.6 - 5);
     // _groundBox.size = Vector2(width/2,20);
-    _groundBox.debugMode = true;
+    // _groundBox.debugMode = true;
     _weapon = WDubina(position: Vector2(width/2,height/2));
     await add(_weapon);
   }
