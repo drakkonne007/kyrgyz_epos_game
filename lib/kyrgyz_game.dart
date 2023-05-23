@@ -17,7 +17,7 @@ import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasQuadTreeCollisionDetection, WidgetsBindingObserver
+class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables,HasCollisionDetection, WidgetsBindingObserver
 {
   CustomTileMap gameMap = CustomTileMap();
   PlayerData playerData = PlayerData();
@@ -39,7 +39,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     }
     WidgetsBinding.instance.addObserver(this);
     playerData.setStartValues();
-    initializeCollisionDetection(mapDimensions: const Rect.fromLTWH(0, 0, 3328*3, 3328*3), minimumDistance: 500);
+    // initializeCollisionDetection(mapDimensions: const Rect.fromLTWH(0, 0, 3328*3, 3328*3), minimumDistance: 500);
     // QuadTreeNodeDebugInfo.init(collisionDetection).
     add(gameMap);
   }
