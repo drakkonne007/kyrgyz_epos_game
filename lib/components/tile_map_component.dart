@@ -38,13 +38,23 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   Future<void> loadNewMap(String fileName) async
   {
     var imageCompiler = ImageBatchCompiler();
+    var animationCompiler = AnimationBatchCompiler();
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
+    await TileProcessor.processTileType(tileMap: tiledMap.tileMap, processorByType: <String, TileProcessorFunc>{
+      'animated': ((tile, position, size) async {
+        // saving tile for merge
+        return animationCompiler.addTile(position, tile);
+      }),
+    }, layersToLoad: ['animated']);
+    final animatedWater = await animationCompiler.compile();
+
     bground = imageCompiler.compileMapLayer(
-        tileMap: tiledMap.tileMap, layerNames: ['bground','road','items']);
+        tileMap: tiledMap.tileMap, layerNames: ['ground','walls-5-6-7-8','walls-1-2-3-4']);
     size = tiledMap.size * GameConsts.gameScale;
     // bground.priority = GamePriority.ground;
     bground.scale = Vector2.all(GameConsts.gameScale);
     await add(bground);
+    bground.add(animatedWater);
     upperPlayer = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['high']);
     upperPlayer.priority = GamePriority.high;
