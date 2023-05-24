@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="Ancient Ruins-Animated Terrains1-8 frames-with transparency" tilewidth="32" tileheight="32" tilecount="957" columns="29">
- <image source="../../Tilesets/Tileset-Animated Terrains-8 frames-with transparency.png" width="928" height="1078"/>
+<tileset version="1.9" tiledversion="1.9.2" name="Ancient Ruins-Animated Terrains2-8 frames-with transparency" tilewidth="32" tileheight="32" tilecount="957" columns="29">
+ <image source="tiles/map/ancientLand/Tilesets/Tileset-Animated Terrains2-8 frames-with transparency.png" width="928" height="1078"/>
  <tile id="29">
   <animation>
    <frame tileid="29" duration="100"/>
@@ -878,7 +878,7 @@
   </animation>
  </tile>
  <wangsets>
-  <wangset name="platform-grass to water (platform orientation)" type="corner" tile="89">
+  <wangset name="platform-grass to blood (platform orientation)" type="corner" tile="89">
    <wangcolor name="" color="#ff0000" tile="89" probability="1"/>
    <wangtile tileid="88" wangid="0,0,0,1,0,0,0,0"/>
    <wangtile tileid="89" wangid="0,0,0,1,0,1,0,0"/>
@@ -914,7 +914,7 @@
    <wangtile tileid="408" wangid="0,1,0,0,0,0,0,1"/>
    <wangtile tileid="409" wangid="0,0,0,0,0,0,0,1"/>
   </wangset>
-  <wangset name="platform-water to grass (water orientation)" type="corner" tile="36">
+  <wangset name="platform-water to blood (blood orientation)" type="corner" tile="36">
    <wangcolor name="" color="#ff0000" tile="36" probability="1"/>
    <wangtile tileid="29" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="476" wangid="0,0,0,1,0,1,0,1"/>

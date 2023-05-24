@@ -40,26 +40,28 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     var imageCompiler = ImageBatchCompiler();
     var animationCompiler = AnimationBatchCompiler();
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
-    TileProcessor.processTileType(tileMap: tiledMap.tileMap, processorByType: <String, TileProcessorFunc>{
-      'animated': ((tile, position, size) async {
-        // saving tile for merge
-        return animationCompiler.addTile(position, tile);
-      }),
-    }, layersToLoad: ['animated']);
-    final animatedWater = await animationCompiler.compile();
-    animatedWater.priority = GamePriority.ground + 1;
     bground = imageCompiler.compileMapLayer(
-        tileMap: tiledMap.tileMap, layerNames: ['ground','walls-5-6-7-8','walls-1-2-3-4']);
+        tileMap: tiledMap.tileMap, layerNames: ['ground','walls-1-2-3-4', 'walls-5-6-7-8']);
     size = tiledMap.size * GameConsts.gameScale;
     bground.priority = GamePriority.ground;
     bground.scale = Vector2.all(GameConsts.gameScale);
     await add(bground);
-    await add(animatedWater);
-    upperPlayer = imageCompiler.compileMapLayer(
-        tileMap: tiledMap.tileMap, layerNames: ['high']);
-    upperPlayer.priority = GamePriority.high;
-    upperPlayer.scale = Vector2.all(GameConsts.gameScale);
-    await add(upperPlayer);
+
+    await TileProcessor.processTileType(tileMap: tiledMap.tileMap, processorByType: <String, TileProcessorFunc>{
+      'woof': ((tile, position, size) async {
+        // saving tile for merge
+        return animationCompiler.addTile(position, tile);
+      }),
+    }, layersToLoad: ['water']);
+    final animatedWater = await animationCompiler.compile();
+    animatedWater.priority = GamePriority.ground + 100;
+
+    await bground.add(animatedWater);
+    // upperPlayer = imageCompiler.compileMapLayer(
+    //     tileMap: tiledMap.tileMap, layerNames: ['high']);
+    // upperPlayer.priority = GamePriority.high;
+    // upperPlayer.scale = Vector2.all(GameConsts.gameScale);
+    // await add(upperPlayer);
     orthoPlayer?.position = Vector2.all(-150);
     final objs = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in objs!.objects){
@@ -68,7 +70,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         break;
         case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
         break;
-        case 'mapWarp': await add(MapWarp(to: fileName == 'tiles/map/test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx',size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
+        // case 'mapWarp': await add(MapWarp(to: fileName == 'test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx',size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
         break;
         case 'player': playerPos = Vector2(obj.x, obj.y);
       }
