@@ -22,7 +22,7 @@ class MainMenu extends StatelessWidget
           ElevatedButton(
             onPressed: (){
               _game.overlays.remove(id);
-              _game.loadNewMap('tiles/map/test.tmx');
+              _game.loadNewMap('tiles/map/ancientLand/TiledMap/test.tmx');
             },
             child:const Text('Продолжить',softWrap: false,),
           ),
@@ -30,7 +30,7 @@ class MainMenu extends StatelessWidget
           ElevatedButton(
             onPressed: (){
               _game.overlays.remove(id);
-              _game.loadNewMap('tiles/map/test.tmx');
+              _game.loadNewMap('tiles/map/ancientLand/TiledMap/test.tmx');
             },
             child: Text(context.t.newGame),
           ),

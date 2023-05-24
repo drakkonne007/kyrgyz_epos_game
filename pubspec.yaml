@@ -77,6 +77,11 @@ flutter:
     - assets/tiles/sprites/effects/
     - assets/tiles/sprites/players/
     - assets/locale/
+    - assets/tiles/map/ancientLand/TiledMap/
+    - assets/tiles/map/ancientLand/TiledMap/Tilesets/
+    - assets/tiles/map/ancientLand/TiledMap/Rules/
+    - assets/tiles/map/ancientLand/Tilesets/
+    - assets/tiles/map/ancientLand/Props/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

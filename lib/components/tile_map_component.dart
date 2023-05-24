@@ -40,21 +40,21 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     var imageCompiler = ImageBatchCompiler();
     var animationCompiler = AnimationBatchCompiler();
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
-    await TileProcessor.processTileType(tileMap: tiledMap.tileMap, processorByType: <String, TileProcessorFunc>{
+    TileProcessor.processTileType(tileMap: tiledMap.tileMap, processorByType: <String, TileProcessorFunc>{
       'animated': ((tile, position, size) async {
         // saving tile for merge
         return animationCompiler.addTile(position, tile);
       }),
     }, layersToLoad: ['animated']);
     final animatedWater = await animationCompiler.compile();
-
+    animatedWater.priority = GamePriority.ground + 1;
     bground = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['ground','walls-5-6-7-8','walls-1-2-3-4']);
     size = tiledMap.size * GameConsts.gameScale;
-    // bground.priority = GamePriority.ground;
+    bground.priority = GamePriority.ground;
     bground.scale = Vector2.all(GameConsts.gameScale);
     await add(bground);
-    bground.add(animatedWater);
+    await add(animatedWater);
     upperPlayer = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['high']);
     upperPlayer.priority = GamePriority.high;
@@ -63,7 +63,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     orthoPlayer?.position = Vector2.all(-150);
     final objs = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in objs!.objects){
-      switch(obj.class_){
+      switch(obj.name){
         case 'enemy': await bground.add(SwordEnemy(Vector2(obj.x, obj.y)));
         break;
         case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
@@ -92,7 +92,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     removeWhere((component) => component is KyrgyzEnemy);
     final enemySpawn = tiledMap.tileMap.getLayer<ObjectGroup>("objects");
     for(final obj in enemySpawn!.objects){
-      if(obj.class_ == 'enemy') {
+      if(obj.name == 'enemy') {
         bground.add(SwordEnemy(Vector2(
             obj.x, obj.y)));
       }
