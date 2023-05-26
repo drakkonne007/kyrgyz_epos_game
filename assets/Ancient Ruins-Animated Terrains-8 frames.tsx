@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.0" name="Ancient Ruins-Animated Terrains1-8 frames" tilewidth="32" tileheight="32" tilecount="957" columns="29">
  <image source="tiles/map/ancientLand/Tilesets/Tileset-Animated Terrains-8 frames.png" width="928" height="1078"/>
- <tile id="29" type="woof">
+ <tile id="29" type="water1">
   <animation>
    <frame tileid="29" duration="100"/>
    <frame tileid="30" duration="100"/>
@@ -13,7 +13,7 @@
    <frame tileid="36" duration="100"/>
   </animation>
  </tile>
- <tile id="88">
+ <tile id="88" type="water2">
   <animation>
    <frame tileid="88" duration="100"/>
    <frame tileid="129" duration="100"/>
@@ -25,7 +25,7 @@
    <frame tileid="135" duration="100"/>
   </animation>
  </tile>
- <tile id="89">
+ <tile id="89" type="water3">
   <animation>
    <frame tileid="89" duration="100"/>
    <frame tileid="100" duration="100"/>
@@ -37,7 +37,7 @@
    <frame tileid="106" duration="100"/>
   </animation>
  </tile>
- <tile id="90">
+ <tile id="90" type="water4">
   <animation>
    <frame tileid="90" duration="100"/>
    <frame tileid="71" duration="100"/>
@@ -49,7 +49,7 @@
    <frame tileid="77" duration="100"/>
   </animation>
  </tile>
- <tile id="116">
+ <tile id="116" type="water5">
   <animation>
    <frame tileid="116" duration="100"/>
    <frame tileid="187" duration="100"/>
@@ -61,7 +61,7 @@
    <frame tileid="193" duration="100"/>
   </animation>
  </tile>
- <tile id="117">
+ <tile id="117" type="water6">
   <animation>
    <frame tileid="117" duration="100"/>
    <frame tileid="158" duration="100"/>
@@ -73,7 +73,7 @@
    <frame tileid="164" duration="100"/>
   </animation>
  </tile>
- <tile id="119">
+ <tile id="119" type="water7">
   <animation>
    <frame tileid="119" duration="100"/>
    <frame tileid="208" duration="100"/>
@@ -85,7 +85,7 @@
    <frame tileid="214" duration="100"/>
   </animation>
  </tile>
- <tile id="120">
+ <tile id="120" type="water8">
   <animation>
    <frame tileid="120" duration="100"/>
    <frame tileid="179" duration="100"/>
@@ -97,7 +97,7 @@
    <frame tileid="185" duration="100"/>
   </animation>
  </tile>
- <tile id="145">
+ <tile id="145" type="water9">
   <animation>
    <frame tileid="145" duration="100"/>
    <frame tileid="216" duration="100"/>
@@ -109,7 +109,7 @@
    <frame tileid="222" duration="100"/>
   </animation>
  </tile>
- <tile id="149">
+ <tile id="149" type="water10">
   <animation>
    <frame tileid="149" duration="100"/>
    <frame tileid="150" duration="100"/>
@@ -121,7 +121,7 @@
    <frame tileid="156" duration="100"/>
   </animation>
  </tile>
- <tile id="174">
+ <tile id="174" type="water11">
   <animation>
    <frame tileid="174" duration="100"/>
    <frame tileid="79" duration="100"/>
@@ -133,7 +133,7 @@
    <frame tileid="85" duration="100"/>
   </animation>
  </tile>
- <tile id="175">
+ <tile id="175" type="water12">
   <animation>
    <frame tileid="175" duration="100"/>
    <frame tileid="108" duration="100"/>
@@ -145,7 +145,7 @@
    <frame tileid="114" duration="100"/>
   </animation>
  </tile>
- <tile id="177">
+ <tile id="177" type="water13">
   <animation>
    <frame tileid="177" duration="100"/>
    <frame tileid="92" duration="100"/>
@@ -157,7 +157,7 @@
    <frame tileid="98" duration="100"/>
   </animation>
  </tile>
- <tile id="178">
+ <tile id="178" type="water14">
   <animation>
    <frame tileid="178" duration="100"/>
    <frame tileid="121" duration="100"/>
@@ -169,7 +169,7 @@
    <frame tileid="127" duration="100"/>
   </animation>
  </tile>
- <tile id="204">
+ <tile id="204" type="water15">
   <animation>
    <frame tileid="204" duration="100"/>
    <frame tileid="137" duration="100"/>
@@ -181,7 +181,7 @@
    <frame tileid="143" duration="100"/>
   </animation>
  </tile>
- <tile id="205">
+ <tile id="205" type="water16">
   <animation>
    <frame tileid="205" duration="100"/>
    <frame tileid="166" duration="100"/>
@@ -193,7 +193,7 @@
    <frame tileid="172" duration="100"/>
   </animation>
  </tile>
- <tile id="206">
+ <tile id="206" type="water17">
   <animation>
    <frame tileid="206" duration="100"/>
    <frame tileid="63" duration="100"/>
@@ -205,7 +205,7 @@
    <frame tileid="69" duration="100"/>
   </animation>
  </tile>
- <tile id="291">
+ <tile id="291" type="water18">
   <animation>
    <frame tileid="291" duration="100"/>
    <frame tileid="332" duration="100"/>
@@ -217,7 +217,7 @@
    <frame tileid="338" duration="100"/>
   </animation>
  </tile>
- <tile id="292">
+ <tile id="292" type="water19">
   <animation>
    <frame tileid="292" duration="100"/>
    <frame tileid="303" duration="100"/>
@@ -229,7 +229,7 @@
    <frame tileid="309" duration="100"/>
   </animation>
  </tile>
- <tile id="293">
+ <tile id="293" type="water20">
   <animation>
    <frame tileid="293" duration="100"/>
    <frame tileid="274" duration="100"/>
@@ -241,7 +241,7 @@
    <frame tileid="280" duration="100"/>
   </animation>
  </tile>
- <tile id="319">
+ <tile id="319" type="water21">
   <animation>
    <frame tileid="319" duration="100"/>
    <frame tileid="390" duration="100"/>
@@ -253,7 +253,7 @@
    <frame tileid="396" duration="100"/>
   </animation>
  </tile>
- <tile id="320">
+ <tile id="320" type="water22">
   <animation>
    <frame tileid="320" duration="100"/>
    <frame tileid="361" duration="100"/>
@@ -265,7 +265,7 @@
    <frame tileid="367" duration="100"/>
   </animation>
  </tile>
- <tile id="322">
+ <tile id="322" type="water23">
   <animation>
    <frame tileid="322" duration="100"/>
    <frame tileid="411" duration="100"/>
@@ -277,7 +277,7 @@
    <frame tileid="417" duration="100"/>
   </animation>
  </tile>
- <tile id="323">
+ <tile id="323" type="water24">
   <animation>
    <frame tileid="323" duration="100"/>
    <frame tileid="382" duration="100"/>
@@ -289,7 +289,7 @@
    <frame tileid="388" duration="100"/>
   </animation>
  </tile>
- <tile id="348">
+ <tile id="348" type="water25">
   <animation>
    <frame tileid="348" duration="100"/>
    <frame tileid="419" duration="100"/>
@@ -301,7 +301,7 @@
    <frame tileid="425" duration="100"/>
   </animation>
  </tile>
- <tile id="352">
+ <tile id="352" type="water26">
   <animation>
    <frame tileid="352" duration="100"/>
    <frame tileid="353" duration="100"/>
@@ -313,7 +313,7 @@
    <frame tileid="359" duration="100"/>
   </animation>
  </tile>
- <tile id="377">
+ <tile id="377" type="water27">
   <animation>
    <frame tileid="377" duration="100"/>
    <frame tileid="282" duration="100"/>
@@ -325,7 +325,7 @@
    <frame tileid="288" duration="100"/>
   </animation>
  </tile>
- <tile id="378">
+ <tile id="378" type="water28">
   <animation>
    <frame tileid="378" duration="100"/>
    <frame tileid="311" duration="100"/>
@@ -337,7 +337,7 @@
    <frame tileid="317" duration="100"/>
   </animation>
  </tile>
- <tile id="380">
+ <tile id="380" type="water29">
   <animation>
    <frame tileid="380" duration="100"/>
    <frame tileid="295" duration="100"/>
@@ -349,7 +349,7 @@
    <frame tileid="301" duration="100"/>
   </animation>
  </tile>
- <tile id="381">
+ <tile id="381" type="water30">
   <animation>
    <frame tileid="381" duration="100"/>
    <frame tileid="324" duration="100"/>
@@ -361,7 +361,7 @@
    <frame tileid="330" duration="100"/>
   </animation>
  </tile>
- <tile id="407">
+ <tile id="407" type="water31">
   <animation>
    <frame tileid="407" duration="100"/>
    <frame tileid="340" duration="100"/>
@@ -373,7 +373,7 @@
    <frame tileid="346" duration="100"/>
   </animation>
  </tile>
- <tile id="408">
+ <tile id="408" type="water32">
   <animation>
    <frame tileid="408" duration="100"/>
    <frame tileid="369" duration="100"/>
@@ -385,7 +385,7 @@
    <frame tileid="375" duration="100"/>
   </animation>
  </tile>
- <tile id="409">
+ <tile id="409" type="water33">
   <animation>
    <frame tileid="409" duration="100"/>
    <frame tileid="266" duration="100"/>
@@ -397,7 +397,7 @@
    <frame tileid="272" duration="100"/>
   </animation>
  </tile>
- <tile id="476">
+ <tile id="476" type="water34">
   <animation>
    <frame tileid="476" duration="100"/>
    <frame tileid="477" duration="100"/>
@@ -409,7 +409,7 @@
    <frame tileid="483" duration="100"/>
   </animation>
  </tile>
- <tile id="494">
+ <tile id="494" type="water35">
   <animation>
    <frame tileid="494" duration="100"/>
    <frame tileid="564" duration="100"/>
@@ -421,7 +421,7 @@
    <frame tileid="570" duration="100"/>
   </animation>
  </tile>
- <tile id="495">
+ <tile id="495" type="water36">
   <animation>
    <frame tileid="495" duration="100"/>
    <frame tileid="535" duration="100"/>
@@ -433,7 +433,7 @@
    <frame tileid="541" duration="100"/>
   </animation>
  </tile>
- <tile id="496">
+ <tile id="496" type="water37">
   <animation>
    <frame tileid="496" duration="100"/>
    <frame tileid="506" duration="100"/>
@@ -445,7 +445,7 @@
    <frame tileid="512" duration="100"/>
   </animation>
  </tile>
- <tile id="497">
+ <tile id="497" type="water38">
   <animation>
    <frame tileid="497" duration="100"/>
    <frame tileid="498" duration="100"/>
@@ -457,7 +457,7 @@
    <frame tileid="504" duration="100"/>
   </animation>
  </tile>
- <tile id="522">
+ <tile id="522" type="water39">
   <animation>
    <frame tileid="522" duration="100"/>
    <frame tileid="651" duration="100"/>
@@ -469,7 +469,7 @@
    <frame tileid="657" duration="100"/>
   </animation>
  </tile>
- <tile id="523">
+ <tile id="523" type="water40">
   <animation>
    <frame tileid="523" duration="100"/>
    <frame tileid="593" duration="100"/>
@@ -481,7 +481,7 @@
    <frame tileid="599" duration="100"/>
   </animation>
  </tile>
- <tile id="525">
+ <tile id="525" type="water41">
   <animation>
    <frame tileid="525" duration="100"/>
    <frame tileid="643" duration="100"/>
@@ -493,7 +493,7 @@
    <frame tileid="649" duration="100"/>
   </animation>
  </tile>
- <tile id="526">
+ <tile id="526" type="water42">
   <animation>
    <frame tileid="526" duration="100"/>
    <frame tileid="614" duration="100"/>
@@ -505,7 +505,7 @@
    <frame tileid="620" duration="100"/>
   </animation>
  </tile>
- <tile id="551">
+ <tile id="551" type="water43">
   <animation>
    <frame tileid="551" duration="100"/>
    <frame tileid="485" duration="100"/>
@@ -517,7 +517,7 @@
    <frame tileid="491" duration="100"/>
   </animation>
  </tile>
- <tile id="555">
+ <tile id="555" type="water44">
   <animation>
    <frame tileid="555" duration="100"/>
    <frame tileid="585" duration="100"/>
@@ -529,7 +529,7 @@
    <frame tileid="591" duration="100"/>
   </animation>
  </tile>
- <tile id="580">
+ <tile id="580" type="water45">
   <animation>
    <frame tileid="580" duration="100"/>
    <frame tileid="514" duration="100"/>
@@ -541,7 +541,7 @@
    <frame tileid="520" duration="100"/>
   </animation>
  </tile>
- <tile id="581">
+ <tile id="581" type="water46">
   <animation>
    <frame tileid="581" duration="100"/>
    <frame tileid="543" duration="100"/>
@@ -553,7 +553,7 @@
    <frame tileid="549" duration="100"/>
   </animation>
  </tile>
- <tile id="583">
+ <tile id="583" type="water47">
   <animation>
    <frame tileid="583" duration="100"/>
    <frame tileid="527" duration="100"/>
@@ -565,7 +565,7 @@
    <frame tileid="533" duration="100"/>
   </animation>
  </tile>
- <tile id="584">
+ <tile id="584" type="water48">
   <animation>
    <frame tileid="584" duration="100"/>
    <frame tileid="556" duration="100"/>
@@ -577,7 +577,7 @@
    <frame tileid="562" duration="100"/>
   </animation>
  </tile>
- <tile id="600">
+ <tile id="600" type="water49">
   <animation>
    <frame tileid="600" duration="100"/>
    <frame tileid="601" duration="100"/>
@@ -589,7 +589,7 @@
    <frame tileid="607" duration="100"/>
   </animation>
  </tile>
- <tile id="610">
+ <tile id="610" type="water50">
   <animation>
    <frame tileid="610" duration="100"/>
    <frame tileid="572" duration="100"/>
@@ -601,7 +601,7 @@
    <frame tileid="578" duration="100"/>
   </animation>
  </tile>
- <tile id="611">
+ <tile id="611" type="water51">
   <animation>
    <frame tileid="611" duration="100"/>
    <frame tileid="630" duration="100"/>
@@ -613,7 +613,7 @@
    <frame tileid="636" duration="100"/>
   </animation>
  </tile>
- <tile id="612">
+ <tile id="612" type="water52">
   <animation>
    <frame tileid="612" duration="100"/>
    <frame tileid="469" duration="100"/>
@@ -625,7 +625,7 @@
    <frame tileid="475" duration="100"/>
   </animation>
  </tile>
- <tile id="621">
+ <tile id="621" type="water53">
   <animation>
    <frame tileid="621" duration="100"/>
    <frame tileid="622" duration="100"/>
@@ -637,7 +637,7 @@
    <frame tileid="628" duration="100"/>
   </animation>
  </tile>
- <tile id="708">
+ <tile id="708" type="water54">
   <animation>
    <frame tileid="708" duration="100"/>
    <frame tileid="709" duration="100"/>
@@ -649,7 +649,7 @@
    <frame tileid="715" duration="100"/>
   </animation>
  </tile>
- <tile id="726">
+ <tile id="726" type="water55">
   <animation>
    <frame tileid="726" duration="100"/>
    <frame tileid="796" duration="100"/>
@@ -661,7 +661,7 @@
    <frame tileid="802" duration="100"/>
   </animation>
  </tile>
- <tile id="727">
+ <tile id="727" type="water56">
   <animation>
    <frame tileid="727" duration="100"/>
    <frame tileid="767" duration="100"/>
@@ -673,7 +673,7 @@
    <frame tileid="773" duration="100"/>
   </animation>
  </tile>
- <tile id="728">
+ <tile id="728" type="water57">
   <animation>
    <frame tileid="728" duration="100"/>
    <frame tileid="738" duration="100"/>
@@ -685,7 +685,7 @@
    <frame tileid="744" duration="100"/>
   </animation>
  </tile>
- <tile id="729">
+ <tile id="729" type="water58">
   <animation>
    <frame tileid="729" duration="100"/>
    <frame tileid="730" duration="100"/>
@@ -697,7 +697,7 @@
    <frame tileid="736" duration="100"/>
   </animation>
  </tile>
- <tile id="754">
+ <tile id="754" type="water59">
   <animation>
    <frame tileid="754" duration="100"/>
    <frame tileid="883" duration="100"/>
@@ -709,7 +709,7 @@
    <frame tileid="889" duration="100"/>
   </animation>
  </tile>
- <tile id="755">
+ <tile id="755" type="water60">
   <animation>
    <frame tileid="755" duration="100"/>
    <frame tileid="825" duration="100"/>
@@ -721,7 +721,7 @@
    <frame tileid="831" duration="100"/>
   </animation>
  </tile>
- <tile id="757">
+ <tile id="757" type="water61">
   <animation>
    <frame tileid="757" duration="100"/>
    <frame tileid="875" duration="100"/>
@@ -733,7 +733,7 @@
    <frame tileid="881" duration="100"/>
   </animation>
  </tile>
- <tile id="758">
+ <tile id="758" type="water62">
   <animation>
    <frame tileid="758" duration="100"/>
    <frame tileid="846" duration="100"/>
@@ -745,7 +745,7 @@
    <frame tileid="852" duration="100"/>
   </animation>
  </tile>
- <tile id="783">
+ <tile id="783" type="water63">
   <animation>
    <frame tileid="783" duration="100"/>
    <frame tileid="717" duration="100"/>
@@ -757,7 +757,7 @@
    <frame tileid="723" duration="100"/>
   </animation>
  </tile>
- <tile id="787">
+ <tile id="787" type="water64">
   <animation>
    <frame tileid="787" duration="100"/>
    <frame tileid="817" duration="100"/>
@@ -769,7 +769,7 @@
    <frame tileid="823" duration="100"/>
   </animation>
  </tile>
- <tile id="812">
+ <tile id="812" type="water65">
   <animation>
    <frame tileid="812" duration="100"/>
    <frame tileid="746" duration="100"/>
@@ -781,7 +781,7 @@
    <frame tileid="752" duration="100"/>
   </animation>
  </tile>
- <tile id="813">
+ <tile id="813" type="water66">
   <animation>
    <frame tileid="813" duration="100"/>
    <frame tileid="775" duration="100"/>
@@ -793,7 +793,7 @@
    <frame tileid="781" duration="100"/>
   </animation>
  </tile>
- <tile id="815">
+ <tile id="815" type="water67">
   <animation>
    <frame tileid="815" duration="100"/>
    <frame tileid="759" duration="100"/>
@@ -805,7 +805,7 @@
    <frame tileid="765" duration="100"/>
   </animation>
  </tile>
- <tile id="816">
+ <tile id="816" type="water68">
   <animation>
    <frame tileid="816" duration="100"/>
    <frame tileid="788" duration="100"/>
@@ -817,7 +817,7 @@
    <frame tileid="794" duration="100"/>
   </animation>
  </tile>
- <tile id="832">
+ <tile id="832" type="water69">
   <animation>
    <frame tileid="832" duration="100"/>
    <frame tileid="833" duration="100"/>
@@ -829,7 +829,7 @@
    <frame tileid="839" duration="100"/>
   </animation>
  </tile>
- <tile id="842">
+ <tile id="842" type="water70">
   <animation>
    <frame tileid="842" duration="100"/>
    <frame tileid="804" duration="100"/>
@@ -841,7 +841,7 @@
    <frame tileid="810" duration="100"/>
   </animation>
  </tile>
- <tile id="843">
+ <tile id="843" type="water71">
   <animation>
    <frame tileid="843" duration="100"/>
    <frame tileid="862" duration="100"/>
@@ -853,7 +853,7 @@
    <frame tileid="868" duration="100"/>
   </animation>
  </tile>
- <tile id="844">
+ <tile id="844" type="water72">
   <animation>
    <frame tileid="844" duration="100"/>
    <frame tileid="701" duration="100"/>
@@ -865,7 +865,7 @@
    <frame tileid="707" duration="100"/>
   </animation>
  </tile>
- <tile id="853">
+ <tile id="853" type="water73">
   <animation>
    <frame tileid="853" duration="100"/>
    <frame tileid="854" duration="100"/>

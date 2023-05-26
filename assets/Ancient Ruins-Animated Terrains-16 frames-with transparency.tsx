@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.0" name="Ancient Ruins-Animated Terrains-16 frames-with transparency" tilewidth="32" tileheight="32" tilecount="2340" columns="52">
  <image source="tiles/map/ancientLand/Tilesets/Tileset-Animated Terrains-16 frames-with transparency.png" width="1670" height="1440"/>
- <tile id="52" type="animated">
+ <tile id="52" type="temple1">
   <animation>
    <frame tileid="52" duration="100"/>
    <frame tileid="53" duration="100"/>
@@ -20,7 +20,7 @@
    <frame tileid="66" duration="100"/>
   </animation>
  </tile>
- <tile id="157">
+ <tile id="157" type="temple2">
   <animation>
    <frame tileid="157" duration="100"/>
    <frame tileid="229" duration="100"/>
@@ -40,7 +40,7 @@
    <frame tileid="243" duration="100"/>
   </animation>
  </tile>
- <tile id="158">
+ <tile id="158" type="temple3">
   <animation>
    <frame tileid="158" duration="100"/>
    <frame tileid="177" duration="100"/>
@@ -60,7 +60,7 @@
    <frame tileid="191" duration="100"/>
   </animation>
  </tile>
- <tile id="159">
+ <tile id="159" type="temple4">
   <animation>
    <frame tileid="159" duration="100"/>
    <frame tileid="125" duration="100"/>
@@ -80,7 +80,7 @@
    <frame tileid="139" duration="100"/>
   </animation>
  </tile>
- <tile id="208">
+ <tile id="208" type="temple5">
   <animation>
    <frame tileid="208" duration="100"/>
    <frame tileid="333" duration="100"/>
@@ -100,7 +100,7 @@
    <frame tileid="347" duration="100"/>
   </animation>
  </tile>
- <tile id="209">
+ <tile id="209" type="temple6">
   <animation>
    <frame tileid="209" duration="100"/>
    <frame tileid="281" duration="100"/>
@@ -120,7 +120,7 @@
    <frame tileid="295" duration="100"/>
   </animation>
  </tile>
- <tile id="211">
+ <tile id="211" type="temple7">
   <animation>
    <frame tileid="211" duration="100"/>
    <frame tileid="369" duration="100"/>
@@ -140,7 +140,7 @@
    <frame tileid="383" duration="100"/>
   </animation>
  </tile>
- <tile id="212">
+ <tile id="212" type="temple8">
   <animation>
    <frame tileid="212" duration="100"/>
    <frame tileid="317" duration="100"/>
@@ -160,7 +160,7 @@
    <frame tileid="331" duration="100"/>
   </animation>
  </tile>
- <tile id="260">
+ <tile id="260" type="temple9">
   <animation>
    <frame tileid="260" duration="100"/>
    <frame tileid="385" duration="100"/>
@@ -180,7 +180,7 @@
    <frame tileid="399" duration="100"/>
   </animation>
  </tile>
- <tile id="264">
+ <tile id="264" type="temple10">
   <animation>
    <frame tileid="264" duration="100"/>
    <frame tileid="265" duration="100"/>
@@ -200,7 +200,7 @@
    <frame tileid="279" duration="100"/>
   </animation>
  </tile>
- <tile id="312">
+ <tile id="312" type="temple11">
   <animation>
    <frame tileid="312" duration="100"/>
    <frame tileid="141" duration="100"/>
@@ -220,7 +220,7 @@
    <frame tileid="155" duration="100"/>
   </animation>
  </tile>
- <tile id="313">
+ <tile id="313" type="temple12">
   <animation>
    <frame tileid="313" duration="100"/>
    <frame tileid="193" duration="100"/>
@@ -240,7 +240,7 @@
    <frame tileid="207" duration="100"/>
   </animation>
  </tile>
- <tile id="315">
+ <tile id="315" type="temple13">
   <animation>
    <frame tileid="315" duration="100"/>
    <frame tileid="161" duration="100"/>
@@ -260,7 +260,7 @@
    <frame tileid="175" duration="100"/>
   </animation>
  </tile>
- <tile id="316">
+ <tile id="316" type="temple14">
   <animation>
    <frame tileid="316" duration="100"/>
    <frame tileid="213" duration="100"/>
@@ -280,7 +280,7 @@
    <frame tileid="227" duration="100"/>
   </animation>
  </tile>
- <tile id="365">
+ <tile id="365" type="temple15">
   <animation>
    <frame tileid="365" duration="100"/>
    <frame tileid="245" duration="100"/>
@@ -300,7 +300,7 @@
    <frame tileid="259" duration="100"/>
   </animation>
  </tile>
- <tile id="366">
+ <tile id="366" type="temple16">
   <animation>
    <frame tileid="366" duration="100"/>
    <frame tileid="297" duration="100"/>
@@ -320,7 +320,7 @@
    <frame tileid="311" duration="100"/>
   </animation>
  </tile>
- <tile id="367">
+ <tile id="367" type="temple17">
   <animation>
    <frame tileid="367" duration="100"/>
    <frame tileid="109" duration="100"/>
@@ -340,7 +340,7 @@
    <frame tileid="123" duration="100"/>
   </animation>
  </tile>
- <tile id="573">
+ <tile id="573" type="temple18">
   <animation>
    <frame tileid="573" duration="100"/>
    <frame tileid="525" duration="100"/>
@@ -360,7 +360,7 @@
    <frame tileid="539" duration="100"/>
   </animation>
  </tile>
- <tile id="575">
+ <tile id="575" type="temple19">
   <animation>
    <frame tileid="575" duration="100"/>
    <frame tileid="593" duration="100"/>
@@ -380,7 +380,7 @@
    <frame tileid="607" duration="100"/>
   </animation>
  </tile>
- <tile id="625">
+ <tile id="625" type="temple20">
   <animation>
    <frame tileid="625" duration="100"/>
    <frame tileid="577" duration="100"/>
@@ -400,7 +400,7 @@
    <frame tileid="591" duration="100"/>
   </animation>
  </tile>
- <tile id="626">
+ <tile id="626" type="temple21">
   <animation>
    <frame tileid="626" duration="100"/>
    <frame tileid="629" duration="100"/>
@@ -420,7 +420,7 @@
    <frame tileid="643" duration="100"/>
   </animation>
  </tile>
- <tile id="627">
+ <tile id="627" type="temple22">
   <animation>
    <frame tileid="627" duration="100"/>
    <frame tileid="541" duration="100"/>
@@ -440,7 +440,7 @@
    <frame tileid="555" duration="100"/>
   </animation>
  </tile>
- <tile id="781">
+ <tile id="781" type="temple23">
   <animation>
    <frame tileid="781" duration="100"/>
    <frame tileid="853" duration="100"/>
@@ -460,7 +460,7 @@
    <frame tileid="867" duration="100"/>
   </animation>
  </tile>
- <tile id="782">
+ <tile id="782" type="temple24">
   <animation>
    <frame tileid="782" duration="100"/>
    <frame tileid="801" duration="100"/>
@@ -480,7 +480,7 @@
    <frame tileid="815" duration="100"/>
   </animation>
  </tile>
- <tile id="783">
+ <tile id="783" type="temple25">
   <animation>
    <frame tileid="783" duration="100"/>
    <frame tileid="749" duration="100"/>
@@ -500,7 +500,7 @@
    <frame tileid="763" duration="100"/>
   </animation>
  </tile>
- <tile id="832">
+ <tile id="832" type="temple26">
   <animation>
    <frame tileid="832" duration="100"/>
    <frame tileid="957" duration="100"/>
@@ -520,7 +520,7 @@
    <frame tileid="971" duration="100"/>
   </animation>
  </tile>
- <tile id="833">
+ <tile id="833" type="temple27">
   <animation>
    <frame tileid="833" duration="100"/>
    <frame tileid="905" duration="100"/>
@@ -540,7 +540,7 @@
    <frame tileid="919" duration="100"/>
   </animation>
  </tile>
- <tile id="835">
+ <tile id="835" type="temple28">
   <animation>
    <frame tileid="835" duration="100"/>
    <frame tileid="993" duration="100"/>
@@ -560,7 +560,7 @@
    <frame tileid="1007" duration="100"/>
   </animation>
  </tile>
- <tile id="836">
+ <tile id="836" type="temple29">
   <animation>
    <frame tileid="836" duration="100"/>
    <frame tileid="941" duration="100"/>
@@ -580,7 +580,7 @@
    <frame tileid="955" duration="100"/>
   </animation>
  </tile>
- <tile id="884">
+ <tile id="884" type="temple30">
   <animation>
    <frame tileid="884" duration="100"/>
    <frame tileid="1009" duration="100"/>
@@ -600,7 +600,7 @@
    <frame tileid="1023" duration="100"/>
   </animation>
  </tile>
- <tile id="888">
+ <tile id="888" type="temple31">
   <animation>
    <frame tileid="888" duration="100"/>
    <frame tileid="889" duration="100"/>
@@ -620,7 +620,7 @@
    <frame tileid="903" duration="100"/>
   </animation>
  </tile>
- <tile id="936">
+ <tile id="936" type="temple32">
   <animation>
    <frame tileid="936" duration="100"/>
    <frame tileid="765" duration="100"/>
@@ -640,7 +640,7 @@
    <frame tileid="779" duration="100"/>
   </animation>
  </tile>
- <tile id="937">
+ <tile id="937" type="temple33">
   <animation>
    <frame tileid="937" duration="100"/>
    <frame tileid="817" duration="100"/>
@@ -660,7 +660,7 @@
    <frame tileid="831" duration="100"/>
   </animation>
  </tile>
- <tile id="939">
+ <tile id="939" type="temple34">
   <animation>
    <frame tileid="939" duration="100"/>
    <frame tileid="785" duration="100"/>
@@ -680,7 +680,7 @@
    <frame tileid="799" duration="100"/>
   </animation>
  </tile>
- <tile id="940">
+ <tile id="940" type="temple35">
   <animation>
    <frame tileid="940" duration="100"/>
    <frame tileid="837" duration="100"/>
@@ -700,7 +700,7 @@
    <frame tileid="851" duration="100"/>
   </animation>
  </tile>
- <tile id="989">
+ <tile id="989" type="temple36">
   <animation>
    <frame tileid="989" duration="100"/>
    <frame tileid="869" duration="100"/>
@@ -720,7 +720,7 @@
    <frame tileid="883" duration="100"/>
   </animation>
  </tile>
- <tile id="990">
+ <tile id="990" type="temple37">
   <animation>
    <frame tileid="990" duration="100"/>
    <frame tileid="921" duration="100"/>
@@ -740,7 +740,7 @@
    <frame tileid="935" duration="100"/>
   </animation>
  </tile>
- <tile id="991">
+ <tile id="991" type="temple38">
   <animation>
    <frame tileid="991" duration="100"/>
    <frame tileid="733" duration="100"/>
@@ -760,7 +760,7 @@
    <frame tileid="747" duration="100"/>
   </animation>
  </tile>
- <tile id="1093">
+ <tile id="1093" type="temple39">
   <animation>
    <frame tileid="1093" duration="100"/>
    <frame tileid="1097" duration="100"/>
@@ -780,7 +780,7 @@
    <frame tileid="1111" duration="100"/>
   </animation>
  </tile>
- <tile id="1095">
+ <tile id="1095" type="temple40">
   <animation>
    <frame tileid="1095" duration="100"/>
    <frame tileid="1165" duration="100"/>
@@ -800,7 +800,7 @@
    <frame tileid="1179" duration="100"/>
   </animation>
  </tile>
- <tile id="1145">
+ <tile id="1145" type="temple41">
   <animation>
    <frame tileid="1145" duration="100"/>
    <frame tileid="1149" duration="100"/>
@@ -820,7 +820,7 @@
    <frame tileid="1163" duration="100"/>
   </animation>
  </tile>
- <tile id="1146">
+ <tile id="1146" type="temple42">
   <animation>
    <frame tileid="1146" duration="100"/>
    <frame tileid="1201" duration="100"/>
@@ -840,7 +840,7 @@
    <frame tileid="1215" duration="100"/>
   </animation>
  </tile>
- <tile id="1147">
+ <tile id="1147" type="temple43">
   <animation>
    <frame tileid="1147" duration="100"/>
    <frame tileid="1113" duration="100"/>
@@ -860,7 +860,7 @@
    <frame tileid="1127" duration="100"/>
   </animation>
  </tile>
- <tile id="1303">
+ <tile id="1303" type="temple44">
   <animation>
    <frame tileid="1303" duration="100"/>
    <frame tileid="1321" duration="100"/>
@@ -880,7 +880,7 @@
    <frame tileid="1335" duration="100"/>
   </animation>
  </tile>
- <tile id="1353">
+ <tile id="1353" type="temple45">
   <animation>
    <frame tileid="1353" duration="100"/>
    <frame tileid="1305" duration="100"/>
@@ -900,7 +900,7 @@
    <frame tileid="1319" duration="100"/>
   </animation>
  </tile>
- <tile id="1354">
+ <tile id="1354" type="temple46">
   <animation>
    <frame tileid="1354" duration="100"/>
    <frame tileid="1357" duration="100"/>
@@ -920,7 +920,7 @@
    <frame tileid="1371" duration="100"/>
   </animation>
  </tile>
- <tile id="1355">
+ <tile id="1355" type="temple47">
   <animation>
    <frame tileid="1355" duration="100"/>
    <frame tileid="1409" duration="100"/>
@@ -940,7 +940,7 @@
    <frame tileid="1423" duration="100"/>
   </animation>
  </tile>
- <tile id="1560">
+ <tile id="1560" type="temple48">
   <animation>
    <frame tileid="1560" duration="100"/>
    <frame tileid="1753" duration="100"/>
@@ -960,7 +960,7 @@
    <frame tileid="1767" duration="100"/>
   </animation>
  </tile>
- <tile id="1561">
+ <tile id="1561" type="temple49">
   <animation>
    <frame tileid="1561" duration="100"/>
    <frame tileid="1633" duration="100"/>
@@ -980,7 +980,7 @@
    <frame tileid="1647" duration="100"/>
   </animation>
  </tile>
- <tile id="1562">
+ <tile id="1562" type="temple50">
   <animation>
    <frame tileid="1562" duration="100"/>
    <frame tileid="1581" duration="100"/>
@@ -1000,7 +1000,7 @@
    <frame tileid="1595" duration="100"/>
   </animation>
  </tile>
- <tile id="1563">
+ <tile id="1563" type="temple51">
   <animation>
    <frame tileid="1563" duration="100"/>
    <frame tileid="1529" duration="100"/>
@@ -1020,7 +1020,7 @@
    <frame tileid="1543" duration="100"/>
   </animation>
  </tile>
- <tile id="1564">
+ <tile id="1564" type="temple52">
   <animation>
    <frame tileid="1564" duration="100"/>
    <frame tileid="1805" duration="100"/>
@@ -1040,7 +1040,7 @@
    <frame tileid="1819" duration="100"/>
   </animation>
  </tile>
- <tile id="1612">
+ <tile id="1612" type="temple53">
   <animation>
    <frame tileid="1612" duration="100"/>
    <frame tileid="1737" duration="100"/>
@@ -1060,7 +1060,7 @@
    <frame tileid="1751" duration="100"/>
   </animation>
  </tile>
- <tile id="1613">
+ <tile id="1613" type="temple54">
   <animation>
    <frame tileid="1613" duration="100"/>
    <frame tileid="1685" duration="100"/>
@@ -1080,7 +1080,7 @@
    <frame tileid="1699" duration="100"/>
   </animation>
  </tile>
- <tile id="1614">
+ <tile id="1614" type="temple55">
   <animation>
    <frame tileid="1614" duration="100"/>
    <frame tileid="1337" duration="100"/>
@@ -1100,7 +1100,7 @@
    <frame tileid="1351" duration="100"/>
   </animation>
  </tile>
- <tile id="1615">
+ <tile id="1615" type="temple56">
   <animation>
    <frame tileid="1615" duration="100"/>
    <frame tileid="1773" duration="100"/>
@@ -1120,7 +1120,7 @@
    <frame tileid="1787" duration="100"/>
   </animation>
  </tile>
- <tile id="1616">
+ <tile id="1616" type="temple57">
   <animation>
    <frame tileid="1616" duration="100"/>
    <frame tileid="1721" duration="100"/>
@@ -1140,7 +1140,7 @@
    <frame tileid="1735" duration="100"/>
   </animation>
  </tile>
- <tile id="1664">
+ <tile id="1664" type="temple58">
   <animation>
    <frame tileid="1664" duration="100"/>
    <frame tileid="1789" duration="100"/>
@@ -1160,7 +1160,7 @@
    <frame tileid="1803" duration="100"/>
   </animation>
  </tile>
- <tile id="1665">
+ <tile id="1665" type="temple59">
   <animation>
    <frame tileid="1665" duration="100"/>
    <frame tileid="1389" duration="100"/>
@@ -1180,7 +1180,7 @@
    <frame tileid="1403" duration="100"/>
   </animation>
  </tile>
- <tile id="1666">
+ <tile id="1666" type="temple60">
   <animation>
    <frame tileid="1666" duration="100"/>
    <frame tileid="1285" duration="100"/>
@@ -1200,7 +1200,7 @@
    <frame tileid="1299" duration="100"/>
   </animation>
  </tile>
- <tile id="1667">
+ <tile id="1667" type="temple61">
   <animation>
    <frame tileid="1667" duration="100"/>
    <frame tileid="1493" duration="100"/>
@@ -1220,7 +1220,7 @@
    <frame tileid="1507" duration="100"/>
   </animation>
  </tile>
- <tile id="1668">
+ <tile id="1668" type="temple62">
   <animation>
    <frame tileid="1668" duration="100"/>
    <frame tileid="1669" duration="100"/>
@@ -1240,7 +1240,7 @@
    <frame tileid="1683" duration="100"/>
   </animation>
  </tile>
- <tile id="1716">
+ <tile id="1716" type="temple63">
   <animation>
    <frame tileid="1716" duration="100"/>
    <frame tileid="1545" duration="100"/>
@@ -1260,7 +1260,7 @@
    <frame tileid="1559" duration="100"/>
   </animation>
  </tile>
- <tile id="1717">
+ <tile id="1717" type="temple64">
   <animation>
    <frame tileid="1717" duration="100"/>
    <frame tileid="1597" duration="100"/>
@@ -1280,7 +1280,7 @@
    <frame tileid="1611" duration="100"/>
   </animation>
  </tile>
- <tile id="1718">
+ <tile id="1718" type="temple65">
   <animation>
    <frame tileid="1718" duration="100"/>
    <frame tileid="1441" duration="100"/>
@@ -1300,7 +1300,7 @@
    <frame tileid="1455" duration="100"/>
   </animation>
  </tile>
- <tile id="1719">
+ <tile id="1719" type="temple66">
   <animation>
    <frame tileid="1719" duration="100"/>
    <frame tileid="1565" duration="100"/>
@@ -1320,7 +1320,7 @@
    <frame tileid="1579" duration="100"/>
   </animation>
  </tile>
- <tile id="1720">
+ <tile id="1720" type="temple67">
   <animation>
    <frame tileid="1720" duration="100"/>
    <frame tileid="1617" duration="100"/>
@@ -1340,7 +1340,7 @@
    <frame tileid="1631" duration="100"/>
   </animation>
  </tile>
- <tile id="1769">
+ <tile id="1769" type="temple68">
   <animation>
    <frame tileid="1769" duration="100"/>
    <frame tileid="1649" duration="100"/>
@@ -1360,7 +1360,7 @@
    <frame tileid="1663" duration="100"/>
   </animation>
  </tile>
- <tile id="1770">
+ <tile id="1770" type="temple69">
   <animation>
    <frame tileid="1770" duration="100"/>
    <frame tileid="1701" duration="100"/>
@@ -1380,7 +1380,7 @@
    <frame tileid="1715" duration="100"/>
   </animation>
  </tile>
- <tile id="1771">
+ <tile id="1771" type="temple70">
   <animation>
    <frame tileid="1771" duration="100"/>
    <frame tileid="1513" duration="100"/>
@@ -1400,7 +1400,7 @@
    <frame tileid="1527" duration="100"/>
   </animation>
  </tile>
- <tile id="1924">
+ <tile id="1924" type="temple71">
   <animation>
    <frame tileid="1924" duration="100"/>
    <frame tileid="2117" duration="100"/>
@@ -1420,7 +1420,7 @@
    <frame tileid="2131" duration="100"/>
   </animation>
  </tile>
- <tile id="1925">
+ <tile id="1925" type="temple72">
   <animation>
    <frame tileid="1925" duration="100"/>
    <frame tileid="1997" duration="100"/>
@@ -1440,7 +1440,7 @@
    <frame tileid="2011" duration="100"/>
   </animation>
  </tile>
- <tile id="1926">
+ <tile id="1926" type="temple73">
   <animation>
    <frame tileid="1926" duration="100"/>
    <frame tileid="1945" duration="100"/>
@@ -1460,7 +1460,7 @@
    <frame tileid="1959" duration="100"/>
   </animation>
  </tile>
- <tile id="1927">
+ <tile id="1927" type="temple74">
   <animation>
    <frame tileid="1927" duration="100"/>
    <frame tileid="1893" duration="100"/>
@@ -1480,7 +1480,7 @@
    <frame tileid="1907" duration="100"/>
   </animation>
  </tile>
- <tile id="1928">
+ <tile id="1928" type="temple75">
   <animation>
    <frame tileid="1928" duration="100"/>
    <frame tileid="2169" duration="100"/>
@@ -1500,7 +1500,7 @@
    <frame tileid="2183" duration="100"/>
   </animation>
  </tile>
- <tile id="1976">
+ <tile id="1976" type="temple76">
   <animation>
    <frame tileid="1976" duration="100"/>
    <frame tileid="2101" duration="100"/>
@@ -1520,7 +1520,7 @@
    <frame tileid="2115" duration="100"/>
   </animation>
  </tile>
- <tile id="1977">
+ <tile id="1977" type="temple77">
   <animation>
    <frame tileid="1977" duration="100"/>
    <frame tileid="2049" duration="100"/>
@@ -1540,7 +1540,7 @@
    <frame tileid="2063" duration="100"/>
   </animation>
  </tile>
- <tile id="1979">
+ <tile id="1979" type="temple78">
   <animation>
    <frame tileid="1979" duration="100"/>
    <frame tileid="2137" duration="100"/>
@@ -1560,7 +1560,7 @@
    <frame tileid="2151" duration="100"/>
   </animation>
  </tile>
- <tile id="1980">
+ <tile id="1980" type="temple79">
   <animation>
    <frame tileid="1980" duration="100"/>
    <frame tileid="2085" duration="100"/>
@@ -1580,7 +1580,7 @@
    <frame tileid="2099" duration="100"/>
   </animation>
  </tile>
- <tile id="2028">
+ <tile id="2028" type="temple80">
   <animation>
    <frame tileid="2028" duration="100"/>
    <frame tileid="2153" duration="100"/>
@@ -1600,7 +1600,7 @@
    <frame tileid="2167" duration="100"/>
   </animation>
  </tile>
- <tile id="2032">
+ <tile id="2032" type="temple81">
   <animation>
    <frame tileid="2032" duration="100"/>
    <frame tileid="2033" duration="100"/>
@@ -1620,7 +1620,7 @@
    <frame tileid="2047" duration="100"/>
   </animation>
  </tile>
- <tile id="2080">
+ <tile id="2080" type="temple82">
   <animation>
    <frame tileid="2080" duration="100"/>
    <frame tileid="1909" duration="100"/>
@@ -1640,7 +1640,7 @@
    <frame tileid="1923" duration="100"/>
   </animation>
  </tile>
- <tile id="2081">
+ <tile id="2081" type="temple83">
   <animation>
    <frame tileid="2081" duration="100"/>
    <frame tileid="1961" duration="100"/>
@@ -1660,7 +1660,7 @@
    <frame tileid="1975" duration="100"/>
   </animation>
  </tile>
- <tile id="2083">
+ <tile id="2083" type="temple84">
   <animation>
    <frame tileid="2083" duration="100"/>
    <frame tileid="1929" duration="100"/>
@@ -1680,7 +1680,7 @@
    <frame tileid="1943" duration="100"/>
   </animation>
  </tile>
- <tile id="2084">
+ <tile id="2084" type="temple85">
   <animation>
    <frame tileid="2084" duration="100"/>
    <frame tileid="1981" duration="100"/>
@@ -1700,7 +1700,7 @@
    <frame tileid="1995" duration="100"/>
   </animation>
  </tile>
- <tile id="2133">
+ <tile id="2133" type="temple86">
   <animation>
    <frame tileid="2133" duration="100"/>
    <frame tileid="2013" duration="100"/>
@@ -1720,7 +1720,7 @@
    <frame tileid="2027" duration="100"/>
   </animation>
  </tile>
- <tile id="2134">
+ <tile id="2134" type="temple87">
   <animation>
    <frame tileid="2134" duration="100"/>
    <frame tileid="2065" duration="100"/>
@@ -1740,7 +1740,7 @@
    <frame tileid="2079" duration="100"/>
   </animation>
  </tile>
- <tile id="2135">
+ <tile id="2135" type="temple88">
   <animation>
    <frame tileid="2135" duration="100"/>
    <frame tileid="1877" duration="100"/>

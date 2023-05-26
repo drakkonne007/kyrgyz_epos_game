@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.0" name="Ancient Ruins-Animated Terrains1-8 frames-with transparency" tilewidth="32" tileheight="32" tilecount="957" columns="29">
  <image source="tiles/map/ancientLand/Tilesets/Tileset-Animated Terrains-8 frames-with transparency.png" width="928" height="1078"/>
- <tile id="29" type="woof">
+ <tile id="29" type="waterBlue1">
   <animation>
    <frame tileid="29" duration="100"/>
    <frame tileid="30" duration="100"/>
@@ -13,34 +13,7 @@
    <frame tileid="36" duration="100"/>
   </animation>
  </tile>
- <tile id="58" type=" "/>
- <tile id="59" type=" "/>
- <tile id="60" type=" "/>
- <tile id="61" type=" "/>
- <tile id="62" type=" "/>
- <tile id="63" type=" "/>
- <tile id="64" type=" "/>
- <tile id="65" type=" "/>
- <tile id="66" type=" "/>
- <tile id="67" type=" "/>
- <tile id="68" type=" "/>
- <tile id="69" type=" "/>
- <tile id="70" type=" "/>
- <tile id="71" type=" "/>
- <tile id="72" type=" "/>
- <tile id="73" type=" "/>
- <tile id="74" type=" "/>
- <tile id="75" type=" "/>
- <tile id="76" type=" "/>
- <tile id="77" type=" "/>
- <tile id="78" type=" "/>
- <tile id="79" type=" "/>
- <tile id="80" type=" "/>
- <tile id="81" type=" "/>
- <tile id="82" type=" "/>
- <tile id="83" type=" "/>
- <tile id="87" type=" "/>
- <tile id="88" type=" ">
+ <tile id="88" type="waterBlue2">
   <animation>
    <frame tileid="88" duration="100"/>
    <frame tileid="129" duration="100"/>
@@ -52,7 +25,7 @@
    <frame tileid="135" duration="100"/>
   </animation>
  </tile>
- <tile id="89" type=" ">
+ <tile id="89" type="waterBlue3">
   <animation>
    <frame tileid="89" duration="100"/>
    <frame tileid="100" duration="100"/>
@@ -64,7 +37,7 @@
    <frame tileid="106" duration="100"/>
   </animation>
  </tile>
- <tile id="90" type=" ">
+ <tile id="90" type="waterBlue4">
   <animation>
    <frame tileid="90" duration="100"/>
    <frame tileid="71" duration="100"/>
@@ -76,29 +49,7 @@
    <frame tileid="77" duration="100"/>
   </animation>
  </tile>
- <tile id="91" type=" "/>
- <tile id="92" type=" "/>
- <tile id="93" type=" "/>
- <tile id="94" type=" "/>
- <tile id="95" type=" "/>
- <tile id="96" type=" "/>
- <tile id="97" type=" "/>
- <tile id="98" type=" "/>
- <tile id="99" type=" "/>
- <tile id="100" type=" "/>
- <tile id="101" type=" "/>
- <tile id="102" type=" "/>
- <tile id="103" type=" "/>
- <tile id="104" type=" "/>
- <tile id="105" type=" "/>
- <tile id="106" type=" "/>
- <tile id="107" type=" "/>
- <tile id="108" type=" "/>
- <tile id="109" type=" "/>
- <tile id="110" type=" "/>
- <tile id="111" type=" "/>
- <tile id="112" type=" "/>
- <tile id="116" type=" ">
+ <tile id="116" type="waterBlue5">
   <animation>
    <frame tileid="116" duration="100"/>
    <frame tileid="187" duration="100"/>
@@ -110,7 +61,7 @@
    <frame tileid="193" duration="100"/>
   </animation>
  </tile>
- <tile id="117" type=" ">
+ <tile id="117" type="waterBlue6">
   <animation>
    <frame tileid="117" duration="100"/>
    <frame tileid="158" duration="100"/>
@@ -122,8 +73,7 @@
    <frame tileid="164" duration="100"/>
   </animation>
  </tile>
- <tile id="118" type=" "/>
- <tile id="119" type=" ">
+ <tile id="119" type="waterBlue7">
   <animation>
    <frame tileid="119" duration="100"/>
    <frame tileid="208" duration="100"/>
@@ -135,7 +85,7 @@
    <frame tileid="214" duration="100"/>
   </animation>
  </tile>
- <tile id="120" type=" ">
+ <tile id="120" type="waterBlue8">
   <animation>
    <frame tileid="120" duration="100"/>
    <frame tileid="179" duration="100"/>
@@ -147,28 +97,7 @@
    <frame tileid="185" duration="100"/>
   </animation>
  </tile>
- <tile id="121" type=" "/>
- <tile id="122" type=" "/>
- <tile id="123" type=" "/>
- <tile id="124" type=" "/>
- <tile id="125" type=" "/>
- <tile id="126" type=" "/>
- <tile id="127" type=" "/>
- <tile id="128" type=" "/>
- <tile id="129" type=" "/>
- <tile id="130" type=" "/>
- <tile id="131" type=" "/>
- <tile id="132" type=" "/>
- <tile id="133" type=" "/>
- <tile id="134" type=" "/>
- <tile id="135" type=" "/>
- <tile id="136" type=" "/>
- <tile id="137" type=" "/>
- <tile id="138" type=" "/>
- <tile id="139" type=" "/>
- <tile id="140" type=" "/>
- <tile id="141" type=" "/>
- <tile id="145" type=" ">
+ <tile id="145" type="waterBlue9">
   <animation>
    <frame tileid="145" duration="100"/>
    <frame tileid="216" duration="100"/>
@@ -180,10 +109,7 @@
    <frame tileid="222" duration="100"/>
   </animation>
  </tile>
- <tile id="146" type=" "/>
- <tile id="147" type=" "/>
- <tile id="148" type=" "/>
- <tile id="149" type=" ">
+ <tile id="149" type="waterBlue10">
   <animation>
    <frame tileid="149" duration="100"/>
    <frame tileid="150" duration="100"/>
@@ -195,28 +121,7 @@
    <frame tileid="156" duration="100"/>
   </animation>
  </tile>
- <tile id="150" type=" "/>
- <tile id="151" type=" "/>
- <tile id="152" type=" "/>
- <tile id="153" type=" "/>
- <tile id="154" type=" "/>
- <tile id="155" type=" "/>
- <tile id="156" type=" "/>
- <tile id="157" type=" "/>
- <tile id="158" type=" "/>
- <tile id="159" type=" "/>
- <tile id="160" type=" "/>
- <tile id="161" type=" "/>
- <tile id="162" type=" "/>
- <tile id="163" type=" "/>
- <tile id="164" type=" "/>
- <tile id="165" type=" "/>
- <tile id="166" type=" "/>
- <tile id="167" type=" "/>
- <tile id="168" type=" "/>
- <tile id="169" type=" "/>
- <tile id="170" type=" "/>
- <tile id="174" type=" ">
+ <tile id="174" type="waterBlue11">
   <animation>
    <frame tileid="174" duration="100"/>
    <frame tileid="79" duration="100"/>
@@ -228,7 +133,7 @@
    <frame tileid="85" duration="100"/>
   </animation>
  </tile>
- <tile id="175" type=" ">
+ <tile id="175" type="waterBlue12">
   <animation>
    <frame tileid="175" duration="100"/>
    <frame tileid="108" duration="100"/>
@@ -240,8 +145,7 @@
    <frame tileid="114" duration="100"/>
   </animation>
  </tile>
- <tile id="176" type=" "/>
- <tile id="177" type=" ">
+ <tile id="177" type="waterBlue13">
   <animation>
    <frame tileid="177" duration="100"/>
    <frame tileid="92" duration="100"/>
@@ -253,7 +157,7 @@
    <frame tileid="98" duration="100"/>
   </animation>
  </tile>
- <tile id="178" type=" ">
+ <tile id="178" type="waterBlue14">
   <animation>
    <frame tileid="178" duration="100"/>
    <frame tileid="121" duration="100"/>
@@ -265,29 +169,7 @@
    <frame tileid="127" duration="100"/>
   </animation>
  </tile>
- <tile id="179" type=" "/>
- <tile id="180" type=" "/>
- <tile id="181" type=" "/>
- <tile id="182" type=" "/>
- <tile id="183" type=" "/>
- <tile id="184" type=" "/>
- <tile id="185" type=" "/>
- <tile id="186" type=" "/>
- <tile id="187" type=" "/>
- <tile id="188" type=" "/>
- <tile id="189" type=" "/>
- <tile id="190" type=" "/>
- <tile id="191" type=" "/>
- <tile id="192" type=" "/>
- <tile id="193" type=" "/>
- <tile id="194" type=" "/>
- <tile id="195" type=" "/>
- <tile id="196" type=" "/>
- <tile id="197" type=" "/>
- <tile id="198" type=" "/>
- <tile id="199" type=" "/>
- <tile id="203" type=" "/>
- <tile id="204" type=" ">
+ <tile id="204" type="waterBlue15">
   <animation>
    <frame tileid="204" duration="100"/>
    <frame tileid="137" duration="100"/>
@@ -299,7 +181,7 @@
    <frame tileid="143" duration="100"/>
   </animation>
  </tile>
- <tile id="205" type=" ">
+ <tile id="205" type="waterBlue16">
   <animation>
    <frame tileid="205" duration="100"/>
    <frame tileid="166" duration="100"/>
@@ -311,7 +193,7 @@
    <frame tileid="172" duration="100"/>
   </animation>
  </tile>
- <tile id="206" type=" ">
+ <tile id="206" type="waterBlue17">
   <animation>
    <frame tileid="206" duration="100"/>
    <frame tileid="63" duration="100"/>
@@ -323,82 +205,7 @@
    <frame tileid="69" duration="100"/>
   </animation>
  </tile>
- <tile id="207" type=" "/>
- <tile id="208" type=" "/>
- <tile id="209" type=" "/>
- <tile id="210" type=" "/>
- <tile id="211" type=" "/>
- <tile id="212" type=" "/>
- <tile id="213" type=" "/>
- <tile id="214" type=" "/>
- <tile id="215" type=" "/>
- <tile id="216" type=" "/>
- <tile id="217" type=" "/>
- <tile id="218" type=" "/>
- <tile id="219" type=" "/>
- <tile id="220" type=" "/>
- <tile id="221" type=" "/>
- <tile id="222" type=" "/>
- <tile id="223" type=" "/>
- <tile id="224" type=" "/>
- <tile id="225" type=" "/>
- <tile id="226" type=" "/>
- <tile id="227" type=" "/>
- <tile id="228" type=" "/>
- <tile id="232" type=" "/>
- <tile id="233" type=" "/>
- <tile id="234" type=" "/>
- <tile id="235" type=" "/>
- <tile id="236" type=" "/>
- <tile id="237" type=" "/>
- <tile id="238" type=" "/>
- <tile id="239" type=" "/>
- <tile id="240" type=" "/>
- <tile id="241" type=" "/>
- <tile id="242" type=" "/>
- <tile id="243" type=" "/>
- <tile id="244" type=" "/>
- <tile id="245" type=" "/>
- <tile id="246" type=" "/>
- <tile id="247" type=" "/>
- <tile id="248" type=" "/>
- <tile id="249" type=" "/>
- <tile id="250" type=" "/>
- <tile id="251" type=" "/>
- <tile id="252" type=" "/>
- <tile id="253" type=" "/>
- <tile id="254" type=" "/>
- <tile id="255" type=" "/>
- <tile id="256" type=" "/>
- <tile id="257" type=" "/>
- <tile id="261" type=" "/>
- <tile id="262" type=" "/>
- <tile id="263" type=" "/>
- <tile id="264" type=" "/>
- <tile id="265" type=" "/>
- <tile id="266" type=" "/>
- <tile id="267" type=" "/>
- <tile id="268" type=" "/>
- <tile id="269" type=" "/>
- <tile id="270" type=" "/>
- <tile id="271" type=" "/>
- <tile id="272" type=" "/>
- <tile id="273" type=" "/>
- <tile id="274" type=" "/>
- <tile id="275" type=" "/>
- <tile id="276" type=" "/>
- <tile id="277" type=" "/>
- <tile id="278" type=" "/>
- <tile id="279" type=" "/>
- <tile id="280" type=" "/>
- <tile id="281" type=" "/>
- <tile id="282" type=" "/>
- <tile id="283" type=" "/>
- <tile id="284" type=" "/>
- <tile id="285" type=" "/>
- <tile id="286" type=" "/>
- <tile id="290" type=" "/>
- <tile id="291" type=" ">
+ <tile id="291" type="waterBlue18">
   <animation>
    <frame tileid="291" duration="100"/>
    <frame tileid="332" duration="100"/>
@@ -410,7 +217,7 @@
    <frame tileid="338" duration="100"/>
   </animation>
  </tile>
- <tile id="292" type=" ">
+ <tile id="292" type="waterBlue19">
   <animation>
    <frame tileid="292" duration="100"/>
    <frame tileid="303" duration="100"/>
@@ -422,7 +229,7 @@
    <frame tileid="309" duration="100"/>
   </animation>
  </tile>
- <tile id="293" type=" ">
+ <tile id="293" type="waterBlue20">
   <animation>
    <frame tileid="293" duration="100"/>
    <frame tileid="274" duration="100"/>
@@ -434,29 +241,7 @@
    <frame tileid="280" duration="100"/>
   </animation>
  </tile>
- <tile id="294" type=" "/>
- <tile id="295" type=" "/>
- <tile id="296" type=" "/>
- <tile id="297" type=" "/>
- <tile id="298" type=" "/>
- <tile id="299" type=" "/>
- <tile id="300" type=" "/>
- <tile id="301" type=" "/>
- <tile id="302" type=" "/>
- <tile id="303" type=" "/>
- <tile id="304" type=" "/>
- <tile id="305" type=" "/>
- <tile id="306" type=" "/>
- <tile id="307" type=" "/>
- <tile id="308" type=" "/>
- <tile id="309" type=" "/>
- <tile id="310" type=" "/>
- <tile id="311" type=" "/>
- <tile id="312" type=" "/>
- <tile id="313" type=" "/>
- <tile id="314" type=" "/>
- <tile id="315" type=" "/>
- <tile id="319" type=" ">
+ <tile id="319" type="waterBlue21">
   <animation>
    <frame tileid="319" duration="100"/>
    <frame tileid="390" duration="100"/>
@@ -468,7 +253,7 @@
    <frame tileid="396" duration="100"/>
   </animation>
  </tile>
- <tile id="320" type=" ">
+ <tile id="320" type="waterBlue22">
   <animation>
    <frame tileid="320" duration="100"/>
    <frame tileid="361" duration="100"/>
@@ -480,8 +265,7 @@
    <frame tileid="367" duration="100"/>
   </animation>
  </tile>
- <tile id="321" type=" "/>
- <tile id="322" type=" ">
+ <tile id="322" type="waterBlue23">
   <animation>
    <frame tileid="322" duration="100"/>
    <frame tileid="411" duration="100"/>
@@ -493,7 +277,7 @@
    <frame tileid="417" duration="100"/>
   </animation>
  </tile>
- <tile id="323" type=" ">
+ <tile id="323" type="waterBlue24">
   <animation>
    <frame tileid="323" duration="100"/>
    <frame tileid="382" duration="100"/>
@@ -505,28 +289,7 @@
    <frame tileid="388" duration="100"/>
   </animation>
  </tile>
- <tile id="324" type=" "/>
- <tile id="325" type=" "/>
- <tile id="326" type=" "/>
- <tile id="327" type=" "/>
- <tile id="328" type=" "/>
- <tile id="329" type=" "/>
- <tile id="330" type=" "/>
- <tile id="331" type=" "/>
- <tile id="332" type=" "/>
- <tile id="333" type=" "/>
- <tile id="334" type=" "/>
- <tile id="335" type=" "/>
- <tile id="336" type=" "/>
- <tile id="337" type=" "/>
- <tile id="338" type=" "/>
- <tile id="339" type=" "/>
- <tile id="340" type=" "/>
- <tile id="341" type=" "/>
- <tile id="342" type=" "/>
- <tile id="343" type=" "/>
- <tile id="344" type=" "/>
- <tile id="348" type=" ">
+ <tile id="348" type="waterBlue25">
   <animation>
    <frame tileid="348" duration="100"/>
    <frame tileid="419" duration="100"/>
@@ -538,10 +301,7 @@
    <frame tileid="425" duration="100"/>
   </animation>
  </tile>
- <tile id="349" type=" "/>
- <tile id="350" type=" "/>
- <tile id="351" type=" "/>
- <tile id="352" type=" ">
+ <tile id="352" type="waterBlue26">
   <animation>
    <frame tileid="352" duration="100"/>
    <frame tileid="353" duration="100"/>
@@ -553,28 +313,7 @@
    <frame tileid="359" duration="100"/>
   </animation>
  </tile>
- <tile id="353" type=" "/>
- <tile id="354" type=" "/>
- <tile id="355" type=" "/>
- <tile id="356" type=" "/>
- <tile id="357" type=" "/>
- <tile id="358" type=" "/>
- <tile id="359" type=" "/>
- <tile id="360" type=" "/>
- <tile id="361" type=" "/>
- <tile id="362" type=" "/>
- <tile id="363" type=" "/>
- <tile id="364" type=" "/>
- <tile id="365" type=" "/>
- <tile id="366" type=" "/>
- <tile id="367" type=" "/>
- <tile id="368" type=" "/>
- <tile id="369" type=" "/>
- <tile id="370" type=" "/>
- <tile id="371" type=" "/>
- <tile id="372" type=" "/>
- <tile id="373" type=" "/>
- <tile id="377" type=" ">
+ <tile id="377" type="waterBlue27">
   <animation>
    <frame tileid="377" duration="100"/>
    <frame tileid="282" duration="100"/>
@@ -586,7 +325,7 @@
    <frame tileid="288" duration="100"/>
   </animation>
  </tile>
- <tile id="378" type=" ">
+ <tile id="378" type="waterBlue28">
   <animation>
    <frame tileid="378" duration="100"/>
    <frame tileid="311" duration="100"/>
@@ -598,8 +337,7 @@
    <frame tileid="317" duration="100"/>
   </animation>
  </tile>
- <tile id="379" type=" "/>
- <tile id="380" type=" ">
+ <tile id="380" type="waterBlue29">
   <animation>
    <frame tileid="380" duration="100"/>
    <frame tileid="295" duration="100"/>
@@ -611,7 +349,7 @@
    <frame tileid="301" duration="100"/>
   </animation>
  </tile>
- <tile id="381" type=" ">
+ <tile id="381" type="waterBlue30">
   <animation>
    <frame tileid="381" duration="100"/>
    <frame tileid="324" duration="100"/>
@@ -623,29 +361,7 @@
    <frame tileid="330" duration="100"/>
   </animation>
  </tile>
- <tile id="382" type=" "/>
- <tile id="383" type=" "/>
- <tile id="384" type=" "/>
- <tile id="385" type=" "/>
- <tile id="386" type=" "/>
- <tile id="387" type=" "/>
- <tile id="388" type=" "/>
- <tile id="389" type=" "/>
- <tile id="390" type=" "/>
- <tile id="391" type=" "/>
- <tile id="392" type=" "/>
- <tile id="393" type=" "/>
- <tile id="394" type=" "/>
- <tile id="395" type=" "/>
- <tile id="396" type=" "/>
- <tile id="397" type=" "/>
- <tile id="398" type=" "/>
- <tile id="399" type=" "/>
- <tile id="400" type=" "/>
- <tile id="401" type=" "/>
- <tile id="402" type=" "/>
- <tile id="406" type=" "/>
- <tile id="407" type=" ">
+ <tile id="407" type="waterBlue31">
   <animation>
    <frame tileid="407" duration="100"/>
    <frame tileid="340" duration="100"/>
@@ -657,7 +373,7 @@
    <frame tileid="346" duration="100"/>
   </animation>
  </tile>
- <tile id="408" type=" ">
+ <tile id="408" type="waterBlue32">
   <animation>
    <frame tileid="408" duration="100"/>
    <frame tileid="369" duration="100"/>
@@ -669,7 +385,7 @@
    <frame tileid="375" duration="100"/>
   </animation>
  </tile>
- <tile id="409" type=" ">
+ <tile id="409" type="waterBlue33">
   <animation>
    <frame tileid="409" duration="100"/>
    <frame tileid="266" duration="100"/>
@@ -681,67 +397,7 @@
    <frame tileid="272" duration="100"/>
   </animation>
  </tile>
- <tile id="410" type=" "/>
- <tile id="411" type=" "/>
- <tile id="412" type=" "/>
- <tile id="413" type=" "/>
- <tile id="414" type=" "/>
- <tile id="415" type=" "/>
- <tile id="416" type=" "/>
- <tile id="417" type=" "/>
- <tile id="418" type=" "/>
- <tile id="419" type=" "/>
- <tile id="420" type=" "/>
- <tile id="421" type=" "/>
- <tile id="422" type=" "/>
- <tile id="423" type=" "/>
- <tile id="424" type=" "/>
- <tile id="425" type=" "/>
- <tile id="426" type=" "/>
- <tile id="427" type=" "/>
- <tile id="428" type=" "/>
- <tile id="429" type=" "/>
- <tile id="430" type=" "/>
- <tile id="431" type=" "/>
- <tile id="435" type=" "/>
- <tile id="436" type=" "/>
- <tile id="437" type=" "/>
- <tile id="438" type=" "/>
- <tile id="439" type=" "/>
- <tile id="440" type=" "/>
- <tile id="441" type=" "/>
- <tile id="442" type=" "/>
- <tile id="443" type=" "/>
- <tile id="444" type=" "/>
- <tile id="445" type=" "/>
- <tile id="446" type=" "/>
- <tile id="447" type=" "/>
- <tile id="448" type=" "/>
- <tile id="449" type=" "/>
- <tile id="450" type=" "/>
- <tile id="451" type=" "/>
- <tile id="452" type=" "/>
- <tile id="453" type=" "/>
- <tile id="454" type=" "/>
- <tile id="455" type=" "/>
- <tile id="456" type=" "/>
- <tile id="457" type=" "/>
- <tile id="458" type=" "/>
- <tile id="459" type=" "/>
- <tile id="460" type=" "/>
- <tile id="464" type=" "/>
- <tile id="465" type=" "/>
- <tile id="466" type=" "/>
- <tile id="467" type=" "/>
- <tile id="468" type=" "/>
- <tile id="469" type=" "/>
- <tile id="470" type=" "/>
- <tile id="471" type=" "/>
- <tile id="472" type=" "/>
- <tile id="473" type=" "/>
- <tile id="474" type=" "/>
- <tile id="475" type=" "/>
- <tile id="476" type=" ">
+ <tile id="476" type="waterBlue34">
   <animation>
    <frame tileid="476" duration="100"/>
    <frame tileid="477" duration="100"/>
@@ -753,21 +409,7 @@
    <frame tileid="483" duration="100"/>
   </animation>
  </tile>
- <tile id="477" type=" "/>
- <tile id="478" type=" "/>
- <tile id="479" type=" "/>
- <tile id="480" type=" "/>
- <tile id="481" type=" "/>
- <tile id="482" type=" "/>
- <tile id="483" type=" "/>
- <tile id="484" type=" "/>
- <tile id="485" type=" "/>
- <tile id="486" type=" "/>
- <tile id="487" type=" "/>
- <tile id="488" type=" "/>
- <tile id="489" type=" "/>
- <tile id="493" type=" "/>
- <tile id="494" type=" ">
+ <tile id="494" type="waterBlue35">
   <animation>
    <frame tileid="494" duration="100"/>
    <frame tileid="564" duration="100"/>
@@ -779,7 +421,7 @@
    <frame tileid="570" duration="100"/>
   </animation>
  </tile>
- <tile id="495" type=" ">
+ <tile id="495" type="waterBlue36">
   <animation>
    <frame tileid="495" duration="100"/>
    <frame tileid="535" duration="100"/>
@@ -791,7 +433,7 @@
    <frame tileid="541" duration="100"/>
   </animation>
  </tile>
- <tile id="496" type=" ">
+ <tile id="496" type="waterBlue37">
   <animation>
    <frame tileid="496" duration="100"/>
    <frame tileid="506" duration="100"/>
@@ -803,7 +445,7 @@
    <frame tileid="512" duration="100"/>
   </animation>
  </tile>
- <tile id="497" type=" ">
+ <tile id="497" type="waterBlue38">
   <animation>
    <frame tileid="497" duration="100"/>
    <frame tileid="498" duration="100"/>
@@ -815,28 +457,7 @@
    <frame tileid="504" duration="100"/>
   </animation>
  </tile>
- <tile id="498" type=" "/>
- <tile id="499" type=" "/>
- <tile id="500" type=" "/>
- <tile id="501" type=" "/>
- <tile id="502" type=" "/>
- <tile id="503" type=" "/>
- <tile id="504" type=" "/>
- <tile id="505" type=" "/>
- <tile id="506" type=" "/>
- <tile id="507" type=" "/>
- <tile id="508" type=" "/>
- <tile id="509" type=" "/>
- <tile id="510" type=" "/>
- <tile id="511" type=" "/>
- <tile id="512" type=" "/>
- <tile id="513" type=" "/>
- <tile id="514" type=" "/>
- <tile id="515" type=" "/>
- <tile id="516" type=" "/>
- <tile id="517" type=" "/>
- <tile id="518" type=" "/>
- <tile id="522" type=" ">
+ <tile id="522" type="waterBlue39">
   <animation>
    <frame tileid="522" duration="100"/>
    <frame tileid="651" duration="100"/>
@@ -848,7 +469,7 @@
    <frame tileid="657" duration="100"/>
   </animation>
  </tile>
- <tile id="523" type=" ">
+ <tile id="523" type="waterBlue40">
   <animation>
    <frame tileid="523" duration="100"/>
    <frame tileid="593" duration="100"/>
@@ -860,8 +481,7 @@
    <frame tileid="599" duration="100"/>
   </animation>
  </tile>
- <tile id="524" type=" "/>
- <tile id="525" type=" ">
+ <tile id="525" type="waterBlue41">
   <animation>
    <frame tileid="525" duration="100"/>
    <frame tileid="643" duration="100"/>
@@ -873,7 +493,7 @@
    <frame tileid="649" duration="100"/>
   </animation>
  </tile>
- <tile id="526" type=" ">
+ <tile id="526" type="waterBlue42">
   <animation>
    <frame tileid="526" duration="100"/>
    <frame tileid="614" duration="100"/>
@@ -885,28 +505,7 @@
    <frame tileid="620" duration="100"/>
   </animation>
  </tile>
- <tile id="527" type=" "/>
- <tile id="528" type=" "/>
- <tile id="529" type=" "/>
- <tile id="530" type=" "/>
- <tile id="531" type=" "/>
- <tile id="532" type=" "/>
- <tile id="533" type=" "/>
- <tile id="534" type=" "/>
- <tile id="535" type=" "/>
- <tile id="536" type=" "/>
- <tile id="537" type=" "/>
- <tile id="538" type=" "/>
- <tile id="539" type=" "/>
- <tile id="540" type=" "/>
- <tile id="541" type=" "/>
- <tile id="542" type=" "/>
- <tile id="543" type=" "/>
- <tile id="544" type=" "/>
- <tile id="545" type=" "/>
- <tile id="546" type=" "/>
- <tile id="547" type=" "/>
- <tile id="551" type=" ">
+ <tile id="551" type="waterBlue43">
   <animation>
    <frame tileid="551" duration="100"/>
    <frame tileid="485" duration="100"/>
@@ -918,10 +517,7 @@
    <frame tileid="491" duration="100"/>
   </animation>
  </tile>
- <tile id="552" type=" "/>
- <tile id="553" type=" "/>
- <tile id="554" type=" "/>
- <tile id="555" type=" ">
+ <tile id="555" type="waterBlue44">
   <animation>
    <frame tileid="555" duration="100"/>
    <frame tileid="585" duration="100"/>
@@ -933,28 +529,7 @@
    <frame tileid="591" duration="100"/>
   </animation>
  </tile>
- <tile id="556" type=" "/>
- <tile id="557" type=" "/>
- <tile id="558" type=" "/>
- <tile id="559" type=" "/>
- <tile id="560" type=" "/>
- <tile id="561" type=" "/>
- <tile id="562" type=" "/>
- <tile id="563" type=" "/>
- <tile id="564" type=" "/>
- <tile id="565" type=" "/>
- <tile id="566" type=" "/>
- <tile id="567" type=" "/>
- <tile id="568" type=" "/>
- <tile id="569" type=" "/>
- <tile id="570" type=" "/>
- <tile id="571" type=" "/>
- <tile id="572" type=" "/>
- <tile id="573" type=" "/>
- <tile id="574" type=" "/>
- <tile id="575" type=" "/>
- <tile id="576" type=" "/>
- <tile id="580" type=" ">
+ <tile id="580" type="waterBlue45">
   <animation>
    <frame tileid="580" duration="100"/>
    <frame tileid="514" duration="100"/>
@@ -966,7 +541,7 @@
    <frame tileid="520" duration="100"/>
   </animation>
  </tile>
- <tile id="581" type=" ">
+ <tile id="581" type="waterBlue46">
   <animation>
    <frame tileid="581" duration="100"/>
    <frame tileid="543" duration="100"/>
@@ -978,8 +553,7 @@
    <frame tileid="549" duration="100"/>
   </animation>
  </tile>
- <tile id="582" type=" "/>
- <tile id="583" type=" ">
+ <tile id="583" type="waterBlue47">
   <animation>
    <frame tileid="583" duration="100"/>
    <frame tileid="527" duration="100"/>
@@ -991,7 +565,7 @@
    <frame tileid="533" duration="100"/>
   </animation>
  </tile>
- <tile id="584" type=" ">
+ <tile id="584" type="waterBlue48">
   <animation>
    <frame tileid="584" duration="100"/>
    <frame tileid="556" duration="100"/>
@@ -1003,22 +577,7 @@
    <frame tileid="562" duration="100"/>
   </animation>
  </tile>
- <tile id="585" type=" "/>
- <tile id="586" type=" "/>
- <tile id="587" type=" "/>
- <tile id="588" type=" "/>
- <tile id="589" type=" "/>
- <tile id="590" type=" "/>
- <tile id="591" type=" "/>
- <tile id="592" type=" "/>
- <tile id="593" type=" "/>
- <tile id="594" type=" "/>
- <tile id="595" type=" "/>
- <tile id="596" type=" "/>
- <tile id="597" type=" "/>
- <tile id="598" type=" "/>
- <tile id="599" type=" "/>
- <tile id="600" type=" ">
+ <tile id="600" type="waterBlue49">
   <animation>
    <frame tileid="600" duration="100"/>
    <frame tileid="601" duration="100"/>
@@ -1030,13 +589,7 @@
    <frame tileid="607" duration="100"/>
   </animation>
  </tile>
- <tile id="601" type=" "/>
- <tile id="602" type=" "/>
- <tile id="603" type=" "/>
- <tile id="604" type=" "/>
- <tile id="605" type=" "/>
- <tile id="609" type=" "/>
- <tile id="610" type=" ">
+ <tile id="610" type="waterBlue50">
   <animation>
    <frame tileid="610" duration="100"/>
    <frame tileid="572" duration="100"/>
@@ -1048,7 +601,7 @@
    <frame tileid="578" duration="100"/>
   </animation>
  </tile>
- <tile id="611" type=" ">
+ <tile id="611" type="waterBlue51">
   <animation>
    <frame tileid="611" duration="100"/>
    <frame tileid="630" duration="100"/>
@@ -1060,7 +613,7 @@
    <frame tileid="636" duration="100"/>
   </animation>
  </tile>
- <tile id="612" type=" ">
+ <tile id="612" type="waterBlue52">
   <animation>
    <frame tileid="612" duration="100"/>
    <frame tileid="469" duration="100"/>
@@ -1072,15 +625,7 @@
    <frame tileid="475" duration="100"/>
   </animation>
  </tile>
- <tile id="613" type=" "/>
- <tile id="614" type=" "/>
- <tile id="615" type=" "/>
- <tile id="616" type=" "/>
- <tile id="617" type=" "/>
- <tile id="618" type=" "/>
- <tile id="619" type=" "/>
- <tile id="620" type=" "/>
- <tile id="621" type=" ">
+ <tile id="621" type="waterBlue53">
   <animation>
    <frame tileid="621" duration="100"/>
    <frame tileid="622" duration="100"/>
@@ -1092,20 +637,7 @@
    <frame tileid="628" duration="100"/>
   </animation>
  </tile>
- <tile id="622" type=" "/>
- <tile id="623" type=" "/>
- <tile id="624" type=" "/>
- <tile id="625" type=" "/>
- <tile id="626" type=" "/>
- <tile id="627" type=" "/>
- <tile id="628" type=" "/>
- <tile id="629" type=" "/>
- <tile id="630" type=" "/>
- <tile id="631" type=" "/>
- <tile id="632" type=" "/>
- <tile id="633" type=" "/>
- <tile id="634" type=" "/>
- <tile id="708">
+ <tile id="708" type="waterBlue54">
   <animation>
    <frame tileid="708" duration="100"/>
    <frame tileid="709" duration="100"/>
@@ -1117,7 +649,7 @@
    <frame tileid="715" duration="100"/>
   </animation>
  </tile>
- <tile id="726">
+ <tile id="726" type="waterBlue55">
   <animation>
    <frame tileid="726" duration="100"/>
    <frame tileid="796" duration="100"/>
@@ -1129,7 +661,7 @@
    <frame tileid="802" duration="100"/>
   </animation>
  </tile>
- <tile id="727">
+ <tile id="727" type="waterBlue56">
   <animation>
    <frame tileid="727" duration="100"/>
    <frame tileid="767" duration="100"/>
@@ -1141,7 +673,7 @@
    <frame tileid="773" duration="100"/>
   </animation>
  </tile>
- <tile id="728">
+ <tile id="728" type="waterBlue57">
   <animation>
    <frame tileid="728" duration="100"/>
    <frame tileid="738" duration="100"/>
@@ -1153,7 +685,7 @@
    <frame tileid="744" duration="100"/>
   </animation>
  </tile>
- <tile id="729">
+ <tile id="729" type="waterBlue58">
   <animation>
    <frame tileid="729" duration="100"/>
    <frame tileid="730" duration="100"/>
@@ -1165,7 +697,7 @@
    <frame tileid="736" duration="100"/>
   </animation>
  </tile>
- <tile id="754">
+ <tile id="754" type="waterBlue59">
   <animation>
    <frame tileid="754" duration="100"/>
    <frame tileid="883" duration="100"/>
@@ -1177,7 +709,7 @@
    <frame tileid="889" duration="100"/>
   </animation>
  </tile>
- <tile id="755">
+ <tile id="755" type="waterBlue60">
   <animation>
    <frame tileid="755" duration="100"/>
    <frame tileid="825" duration="100"/>
@@ -1189,7 +721,7 @@
    <frame tileid="831" duration="100"/>
   </animation>
  </tile>
- <tile id="757">
+ <tile id="757" type="waterBlue61">
   <animation>
    <frame tileid="757" duration="100"/>
    <frame tileid="875" duration="100"/>
@@ -1201,7 +733,7 @@
    <frame tileid="881" duration="100"/>
   </animation>
  </tile>
- <tile id="758">
+ <tile id="758" type="waterBlue62">
   <animation>
    <frame tileid="758" duration="100"/>
    <frame tileid="846" duration="100"/>
@@ -1213,7 +745,7 @@
    <frame tileid="852" duration="100"/>
   </animation>
  </tile>
- <tile id="783">
+ <tile id="783" type="waterBlue63">
   <animation>
    <frame tileid="783" duration="100"/>
    <frame tileid="717" duration="100"/>
@@ -1225,7 +757,7 @@
    <frame tileid="723" duration="100"/>
   </animation>
  </tile>
- <tile id="787">
+ <tile id="787" type="waterBlue64">
   <animation>
    <frame tileid="787" duration="100"/>
    <frame tileid="817" duration="100"/>
@@ -1237,7 +769,7 @@
    <frame tileid="823" duration="100"/>
   </animation>
  </tile>
- <tile id="812">
+ <tile id="812" type="waterBlue65">
   <animation>
    <frame tileid="812" duration="100"/>
    <frame tileid="746" duration="100"/>
@@ -1249,7 +781,7 @@
    <frame tileid="752" duration="100"/>
   </animation>
  </tile>
- <tile id="813">
+ <tile id="813" type="waterBlue66">
   <animation>
    <frame tileid="813" duration="100"/>
    <frame tileid="775" duration="100"/>
@@ -1261,7 +793,7 @@
    <frame tileid="781" duration="100"/>
   </animation>
  </tile>
- <tile id="815">
+ <tile id="815" type="waterBlue67">
   <animation>
    <frame tileid="815" duration="100"/>
    <frame tileid="759" duration="100"/>
@@ -1273,7 +805,7 @@
    <frame tileid="765" duration="100"/>
   </animation>
  </tile>
- <tile id="816">
+ <tile id="816" type="waterBlue68">
   <animation>
    <frame tileid="816" duration="100"/>
    <frame tileid="788" duration="100"/>
@@ -1285,7 +817,7 @@
    <frame tileid="794" duration="100"/>
   </animation>
  </tile>
- <tile id="832">
+ <tile id="832" type="waterBlue69">
   <animation>
    <frame tileid="832" duration="100"/>
    <frame tileid="833" duration="100"/>
@@ -1297,7 +829,7 @@
    <frame tileid="839" duration="100"/>
   </animation>
  </tile>
- <tile id="842">
+ <tile id="842" type="waterBlue70">
   <animation>
    <frame tileid="842" duration="100"/>
    <frame tileid="804" duration="100"/>
@@ -1309,7 +841,7 @@
    <frame tileid="810" duration="100"/>
   </animation>
  </tile>
- <tile id="843">
+ <tile id="843" type="waterBlue71">
   <animation>
    <frame tileid="843" duration="100"/>
    <frame tileid="862" duration="100"/>
@@ -1321,7 +853,7 @@
    <frame tileid="868" duration="100"/>
   </animation>
  </tile>
- <tile id="844">
+ <tile id="844" type="waterBlue72">
   <animation>
    <frame tileid="844" duration="100"/>
    <frame tileid="701" duration="100"/>
@@ -1333,7 +865,7 @@
    <frame tileid="707" duration="100"/>
   </animation>
  </tile>
- <tile id="853">
+ <tile id="853" type="waterBlue73">
   <animation>
    <frame tileid="853" duration="100"/>
    <frame tileid="854" duration="100"/>

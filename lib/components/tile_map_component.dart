@@ -38,7 +38,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   Future<void> loadNewMap(String fileName) async
   {
     var imageCompiler = ImageBatchCompiler();
-    var animationCompiler = AnimationBatchCompiler();
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
     bground = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['ground','walls-1-2-3-4', 'walls-5-6-7-8']);
@@ -46,30 +45,40 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     bground.priority = GamePriority.ground;
     bground.scale = Vector2.all(GameConsts.gameScale);
     await add(bground);
-    final tileLayer = tiledMap.tileMap.getLayer<TileLayer>('animated');
+
+    Set<String>layerNames = {};
+    final tileLayer = tiledMap.tileMap.getLayer<TileLayer>('water');
     final tileData = tileLayer?.data;
     if(tileData != null) {
       for (var tileId in tileData) {
         if (tileId != 0) {
           final tileset = tiledMap.tileMap.map.tilesetByTileGId(tileId);
+          final firstGid = tileset.firstGid;
+          if (firstGid != null) {
+            tileId = tileId - firstGid; //+ 1;
+          }
           final tileData = tileset.tiles[tileId];
-          final currentAnimLayer = tileData.type;
-          if (currentAnimLayer != null) {
-            await TileProcessor.processTileType(tileMap: tiledMap.tileMap,
-                processorByType: <String, TileProcessorFunc>{
-                  currentAnimLayer: ((tile, position, size) async {
-                    // saving tile for merge
-                    return animationCompiler.addTile(position, tile);
-                  }),
-                },
-                layersToLoad: ['animated']);
-            final animatedWater = await animationCompiler.compile();
-            animatedWater.priority = GamePriority.ground + 100;
-            await bground.add(animatedWater);
+          if(tileData.type != null) {
+            layerNames.add(tileData.type!);
           }
         }
       }
     }
+    var animationCompiler = AnimationBatchCompiler();
+    for(final name in layerNames){
+      print(name);
+      TileProcessor.processTileType(tileMap: tiledMap.tileMap,
+          processorByType: <String, TileProcessorFunc>{
+            name: ((tile, position, size) async {
+              // saving tile for merge
+              return animationCompiler.addTile(position, tile);
+            }),
+          },
+          layersToLoad: ['water'], clear: false);
+    }
+    final animatedWater = await animationCompiler.compile();
+    animatedWater.priority = GamePriority.ground + 100;
+    await bground.add(animatedWater);
 
 
     // upperPlayer = imageCompiler.compileMapLayer(
