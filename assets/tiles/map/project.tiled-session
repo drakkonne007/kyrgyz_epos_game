@@ -111,11 +111,11 @@
             "scaleInEditor": 1
         },
         "D:/kyrgyz_epos_game/assets/test.tmx": {
-            "scale": 1,
+            "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 3269,
-                "y": 2314.5
+                "x": 1030.3030303030305,
+                "y": 3001.515151515152
             }
         },
         "D:/kyrgyz_epos_game/assets/wall-5-rule1-places all tiles.tmx": {

@@ -15,7 +15,7 @@ import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
 import 'package:game_flame/players/sword_enemy.dart';
 
-class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
+class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
 {
   late TiledComponent tiledMap;
   late Vector2 playerPos;
@@ -25,6 +25,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   late PositionComponent upperPlayer;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
+
 
   int getNewId(){
     return countId++;
@@ -41,44 +42,44 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
     bground = imageCompiler.compileMapLayer(
         tileMap: tiledMap.tileMap, layerNames: ['ground','walls-1-2-3-4', 'walls-5-6-7-8']);
-    size = tiledMap.size * GameConsts.gameScale;
+    // size = tiledMap.size * GameConsts.gameScale;
     bground.priority = GamePriority.ground;
     bground.scale = Vector2.all(GameConsts.gameScale);
     await add(bground);
 
-    Set<String>layerNames = {};
-    final tileLayer = tiledMap.tileMap.getLayer<TileLayer>('water');
-    final tileData = tileLayer?.data;
-    if(tileData != null) {
-      for (var tileId in tileData) {
-        if (tileId != 0) {
-          final tileset = tiledMap.tileMap.map.tilesetByTileGId(tileId);
-          final firstGid = tileset.firstGid;
-          if (firstGid != null) {
-            tileId = tileId - firstGid; //+ 1;
-          }
-          final tileData = tileset.tiles[tileId];
-          if(tileData.type != null) {
-            layerNames.add(tileData.type!);
-          }
-        }
-      }
-    }
-    var animationCompiler = AnimationBatchCompiler();
-    for(final name in layerNames){
-      print(name);
-      TileProcessor.processTileType(tileMap: tiledMap.tileMap,
-          processorByType: <String, TileProcessorFunc>{
-            name: ((tile, position, size) async {
-              // saving tile for merge
-              return animationCompiler.addTile(position, tile);
-            }),
-          },
-          layersToLoad: ['water'], clear: false);
-    }
-    final animatedWater = await animationCompiler.compile();
-    animatedWater.priority = GamePriority.ground + 100;
-    await bground.add(animatedWater);
+    // Set<String>layerNames = {};
+    // final tileLayer = tiledMap.tileMap.getLayer<TileLayer>('water');
+    // final tileData = tileLayer?.data;
+    // if(tileData != null) {
+    //   for (var tileId in tileData) {
+    //     if (tileId != 0) {
+    //       final tileset = tiledMap.tileMap.map.tilesetByTileGId(tileId);
+    //       final firstGid = tileset.firstGid;
+    //       if (firstGid != null) {
+    //         tileId = tileId - firstGid; //+ 1;
+    //       }
+    //       final tileData = tileset.tiles[tileId];
+    //       if(tileData.type != null) {
+    //         layerNames.add(tileData.type!);
+    //       }
+    //     }
+    //   }
+    // }
+    // var animationCompiler = AnimationBatchCompiler();
+    // for(final name in layerNames){
+    //   print(name);
+    //   TileProcessor.processTileType(tileMap: tiledMap.tileMap,
+    //       processorByType: <String, TileProcessorFunc>{
+    //         name: ((tile, position, size) async {
+    //           // saving tile for merge
+    //           return animationCompiler.addTile(position, tile);
+    //         }),
+    //       },
+    //       layersToLoad: ['water'], clear: false);
+    // }
+    // final animatedWater = await animationCompiler.compile();
+    // animatedWater.priority = GamePriority.ground + 100;
+    // await bground.add(animatedWater);
 
 
     // upperPlayer = imageCompiler.compileMapLayer(
@@ -109,7 +110,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     // gameRef.camera.scaleVector(Vector2.all(0.2));
-    gameRef.camera.followComponent(orthoPlayer!,worldBounds: Rect.fromLTWH(0, 0, width, height));
+    gameRef.camera.followComponent(orthoPlayer!);
     print('end load new map');
   }
 
