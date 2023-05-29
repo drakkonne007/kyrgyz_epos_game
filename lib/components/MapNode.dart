@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
+import 'package:xml/xml.dart';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -106,9 +107,31 @@ class MapNode extends Component
     var fileName = '$column-$row.tmx';
     print(fileName);
     final contents = await Flame.bundle.loadString('assets/$fileName');
-    var tempss = await RenderableTiledMap.fromString(contents, Vector2.all(32));
+
+    var time = DateTime.now();
+    var tempss = await Isolate.run(() async{
+      final func = FlameTsxProvider.parse;
+      // final tsxSourcePaths = XmlDocument.parse(contents)
+      //     .rootElement
+      //     .children
+      //     .whereType<XmlElement>()
+      //     .where((element) => element.name.local == 'tileset')
+      //     .map((e) => e.getAttribute('source'));
+      //
+      // final tsxProviders = await Future.wait(
+      //   tsxSourcePaths
+      //       .where((key) => key != null)
+      //       .map((key) async => func(key!)),
+      // );
+      //
+      // return TileMapParser.parseTmx(
+      //   contents,
+      //   tsxList: tsxProviders.isEmpty ? null : tsxProviders,
+      // );
+    });
+
     // _tiledMap = TiledComponent(tempss);
-    // _tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
+     _tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
     // var bground = imageBatchCompiler.compileMapLayer(
     //     tileMap: _tiledMap!.tileMap, layerNames: ['ground','walls-1-2-3-4', 'walls-5-6-7-8']);
     // // print('$column-$row.tmx');
