@@ -20,6 +20,8 @@ enum PlayerDirectionMove{
 class GameConsts
 {
   static const double gameScale = 1.3;
+  static const maxRow = 3;
+  static const maxColumn = 5;
 }
 
 class PlayerData
