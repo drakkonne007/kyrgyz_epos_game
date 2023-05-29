@@ -8,6 +8,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:flutter/material.dart' as material;
@@ -85,20 +86,14 @@ class MapNode extends Component
     sendPort.send(list);
   }
 
-  @override
-  Future<void> onLoad() async
-  {
-    await generateMap();
-  }
-
-  Future<Image> createImageFromByteData(String byteData)
-  {
-    final Completer<Image> completer = Completer<Image>();
-    decodeImageFromList(byteData, (Image image) {
-      completer.complete(image);
-    });
-    return completer.future;
-  }
+  // Future<Image> createImageFromByteData(String byteData)
+  // {
+    // final Completer<Image> completer = Completer<Image>();
+    // decodeImageFromList(byteData, (Image image) {
+    //   completer.complete(image);
+    // });
+    // return completer.future;
+  // }
 
   Future<void> generateMap() async
   {
@@ -109,35 +104,41 @@ class MapNode extends Component
       return;
     }
     var fileName = '$column-$row.tmx';
-    _tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
-    print('$column-$row.tmx');
-    final ReceivePort receivePort = ReceivePort();
-    var isol = await Isolate.spawn(loadImage, [receivePort.sendPort, column, row]);
-    final Completer<String> completer = Completer<String>();
-    receivePort.listen((data) {
-      if(data is String){
-        completer.complete(data);
-      }
-    });
-    await completer.future;
-    var imgBytes = await completer.future;
-    var bground = ImagePosition(await createImageFromByteData(imgBytes));
-    bground.priority = GamePriority.ground;
-    bground.position = Vector2(column * 32 * 30, row * 32 * 30) * GameConsts.gameScale;
-    bground.scale = Vector2.all(GameConsts.gameScale);
-    await add(bground);
-    final objs = _tiledMap!.tileMap.getLayer<ObjectGroup>("objects");
-    for(final obj in objs!.objects){
-      switch(obj.name){
-        case 'enemy': await bground.add(SwordEnemy(Vector2(obj.x + column * 32 * 30, obj.y + row * 32 * 30)));
-        break;
-        case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x + column * 32 * 30, obj.y + row * 32 * 30) * GameConsts.gameScale));
-        break;
-        // case 'mapWarp': await add(MapWarp(to: fileName == 'test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx',size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
-        break;
-      // case 'player': playerPos = Vector2(obj.x, obj.y);
-      }
-    }
-    isol.kill();
+    print(fileName);
+    final contents = await Flame.bundle.loadString('assets/$fileName');
+    var tempss = await RenderableTiledMap.fromString(contents, Vector2.all(32));
+    // _tiledMap = TiledComponent(tempss);
+    // _tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
+    // var bground = imageBatchCompiler.compileMapLayer(
+    //     tileMap: _tiledMap!.tileMap, layerNames: ['ground','walls-1-2-3-4', 'walls-5-6-7-8']);
+    // // print('$column-$row.tmx');
+    // // final ReceivePort receivePort = ReceivePort();
+    // // var isol = await Isolate.spawn(loadImage, [receivePort.sendPort, column, row]);
+    // // final Completer<String> completer = Completer<String>();
+    // // receivePort.listen((data) {
+    // //   if(data is String){
+    // //     completer.complete(data);
+    // //   }
+    // // });
+    // // await completer.future;
+    // // var imgBytes = await completer.future;
+    // // var bground = ImagePosition(await createImageFromByteData(imgBytes));
+    // bground.priority = GamePriority.ground;
+    // bground.position = Vector2(column * 32 * 30, row * 32 * 30) * GameConsts.gameScale;
+    // bground.scale = Vector2.all(GameConsts.gameScale);
+    // await add(bground);
+    // final objs = _tiledMap!.tileMap.getLayer<ObjectGroup>("objects");
+    // for(final obj in objs!.objects){
+    //   switch(obj.name){
+    //     case 'enemy': await bground.add(SwordEnemy(Vector2(obj.x + column * 32 * 30, obj.y + row * 32 * 30)));
+    //     break;
+    //     case 'ground': await add(Ground(size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x + column * 32 * 30, obj.y + row * 32 * 30) * GameConsts.gameScale));
+    //     break;
+    //     // case 'mapWarp': await add(MapWarp(to: fileName == 'test.tmx' ? 'tiles/map/test2.tmx' : 'tiles/map/test.tmx',size: Vector2(obj.width, obj.height) * GameConsts.gameScale,position: Vector2(obj.x, obj.y) * GameConsts.gameScale));
+    //     break;
+    //   // case 'player': playerPos = Vector2(obj.x, obj.y);
+    //   }
+    // }
+    // // isol.kill();
   }
 }

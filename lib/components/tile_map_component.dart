@@ -33,8 +33,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
   Future<void> reloadWorld(int newColumn, int newRow) async
   {
     print('start dynamic reload, column: $newColumn, row: $newRow');
+    var tempColumn = _column;
+    var tempRow = _row;
+    _column = newColumn;
+    _row = newRow;
     var toRemove = [];
-    if(newColumn < _column){
+    if(newColumn < tempColumn){
       for(final node in _mapNodes) {
         if (node.column == newColumn + 2) {
           toRemove.add(node);
@@ -43,11 +47,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn - 1, newRow + i - 1,_imageBatchCompiler);
+        await node.generateMap();
         await add(node);
         _mapNodes.add(node);
       }
     }
-    if(newColumn > _column){
+    if(newColumn > tempColumn){
       for(final node in _mapNodes) {
         if (node.column == newColumn - 2) {
           toRemove.add(node);
@@ -56,11 +61,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + 1, newRow + i - 1,_imageBatchCompiler);
+        await node.generateMap();
         await add(node);
         _mapNodes.add(node);
       }
     }
-    if(newRow < _row){
+    if(newRow < tempRow){
       for(final node in _mapNodes) {
         if (node.row == newRow + 2) {
           toRemove.add(node);
@@ -69,11 +75,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + i - 1, newRow - 1,_imageBatchCompiler);
+        await node.generateMap();
         await add(node);
         _mapNodes.add(node);
       }
     }
-    if(newRow > _row){
+    if(newRow > tempRow){
       for(final node in _mapNodes) {
         if (node.row == newRow - 2) {
           toRemove.add(node);
@@ -82,13 +89,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + i - 1, newRow + 1,_imageBatchCompiler);
+        await node.generateMap();
         await add(node);
         _mapNodes.add(node);
       }
     }
     _mapNodes.removeWhere((element) => toRemove.contains(element));
-    _column = newColumn;
-    _row = newRow;
   }
 
   clearGameMap()
@@ -143,7 +149,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       int col = orthoPlayer!.position.x ~/ _lengthOfTileSquare;
       int row = orthoPlayer!.position.y ~/ _lengthOfTileSquare;
       if (col != _column || row != _row) {
-        await reloadWorld(col, row);
+        reloadWorld(col, row);
       }
     }
   }
