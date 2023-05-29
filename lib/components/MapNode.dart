@@ -1,6 +1,7 @@
 
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -45,35 +46,43 @@ class MapNode extends Component
     return unlisted;
   }
 
-  static void loadImage(List<dynamic> args)
+  static void loadImage(List<dynamic> args) async
   {
     var sendPort = args[0] as SendPort;
     int column = args[1] as int;
     int row = args[2] as int;
     var fileName = '$column-$row.tmx';
-    var tiledMap = TiledComponent.load(fileName, Vector2(32, 32));
-    var layerNames = ['ground','walls-1-2-3-4', 'walls-5-6-7-8'];
-    _unlistedLayers(tiledMap.tileMap, layerNames).forEach((element) {
-      element.visible = false;
-    });
-    for (var rl in tiledMap.tileMap.renderableLayers) {
-      rl.refreshCache();
-    }
-    final recorder = PictureRecorder();
-    final canvas = Canvas(recorder);
-    tiledMap.tileMap.render(canvas);
-    final picture = recorder.endRecording();
-    _unlistedLayers(tiledMap.tileMap, layerNames).forEach((element) {
-      element.visible = true;
-    });
-    for (final rl in tiledMap.tileMap.renderableLayers) {
-      rl.refreshCache();
-    }
-    final image = picture.toImageSync(tiledMap.tileMap.map.width * tiledMap.tileMap.map.tileWidth,
-        tiledMap.tileMap.map.height * tiledMap.tileMap.map.tileHeight);
-    var bytes = await image.toByteData(format: ImageByteFormat.png);
-    picture.dispose();
-    sendPort.send(bytes);
+    // var tiledMap = await TiledComponent.load(fileName, Vector2(32, 32));
+    // var layerNames = ['ground','walls-1-2-3-4', 'walls-5-6-7-8'];
+    // _unlistedLayers(tiledMap.tileMap, layerNames).forEach((element) {
+    //   element.visible = false;
+    // });
+    // for (var rl in tiledMap.tileMap.renderableLayers) {
+    //   rl.refreshCache();
+    // }
+    // final recorder = PictureRecorder();
+    // final canvas = Canvas(recorder);
+    // tiledMap.tileMap.render(canvas);
+    // final picture = recorder.endRecording();
+    // _unlistedLayers(tiledMap.tileMap, layerNames).forEach((element) {
+    //   element.visible = true;
+    // });
+    // for (final rl in tiledMap.tileMap.renderableLayers) {
+    //   rl.refreshCache();
+    // }
+    // final image = picture.toImageSync(tiledMap.tileMap.map.width * tiledMap.tileMap.map.tileWidth,
+    //     tiledMap.tileMap.map.height * tiledMap.tileMap.map.tileHeight);
+    // var bytes = await image.toByteData(format: ImageByteFormat.png);
+    // picture.dispose();
+    var file = File('assets/tiles/map/ancientLand/Tilesets/tile guide.png');
+    var file2 = File('assets/tiles/map/ancientLand/Tilesets/tile guide.png');
+    var file3 = File('assets/tiles/map/ancientLand/Tilesets/tile guide.png');
+    var file4 = File('assets/tiles/map/ancientLand/Tilesets/tile guide.png');
+    var list = file.readAsStringSync();
+    list += file2.readAsStringSync();
+    list += file3.readAsStringSync();
+    list += file4.readAsStringSync();
+    sendPort.send(list);
   }
 
   @override
@@ -82,10 +91,10 @@ class MapNode extends Component
     await generateMap();
   }
 
-  Future<Image> createImageFromByteData(ByteData byteData)
+  Future<Image> createImageFromByteData(String byteData)
   {
     final Completer<Image> completer = Completer<Image>();
-    decodeImageFromList(byteData.buffer.asUint8List(), (Image image) {
+    decodeImageFromList(byteData, (Image image) {
       completer.complete(image);
     });
     return completer.future;
@@ -104,9 +113,9 @@ class MapNode extends Component
     print('$column-$row.tmx');
     final ReceivePort receivePort = ReceivePort();
     var isol = await Isolate.spawn(loadImage, [receivePort.sendPort, column, row]);
-    final Completer<ByteData> completer = Completer<ByteData>();
+    final Completer<String> completer = Completer<String>();
     receivePort.listen((data) {
-      if(data is ByteData){
+      if(data is String){
         completer.complete(data);
       }
     });
