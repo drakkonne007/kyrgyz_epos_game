@@ -19,6 +19,9 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
   final int row;
   final ImageBatchCompiler imageBatchCompiler;
   Image? _image;
+  int _id = 0;
+
+  int id() => _id++;
 
   Iterable<XmlElement> getObjects(String name)
   {
@@ -42,12 +45,21 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     final text = await File(fileName).readAsString();
     final objects = XmlDocument.parse(text.toString()).findAllElements('object');
     for(final obj in objects) {
-      print(obj.getAttribute('name'));
       switch(obj.getAttribute('name')) {
-        case 'enemy': await gameRef.gameMap.add(SwordEnemy(Vector2(double.parse(obj.getAttribute('x')!) + column * 32 * 30, double.parse(obj.getAttribute('y')!)+ row * 32 * 30) * GameConsts.gameScale)); break;
-        case 'ground': await gameRef.gameMap.add(Ground(size: Vector2(double.parse(obj.getAttribute('width')!), double.parse(obj.getAttribute('height')!) * GameConsts.gameScale),position: Vector2(double.parse(obj.getAttribute('x')!) + column * 32 * 30, double.parse(obj.getAttribute('y')!) + row * 32 * 30) * GameConsts.gameScale)); break;
+        case 'enemy':  await createEnemy(obj); break;
+        case 'ground': add(Ground(size: Vector2(double.parse(obj.getAttribute('width')!), double.parse(obj.getAttribute('height')!)),position: Vector2(double.parse(obj.getAttribute('x')!) + column * 32 * 30, double.parse(obj.getAttribute('y')!) + row * 32 * 30))); break;
       }
     }
+  }
+
+  Future<void> createEnemy(XmlElement obj) async{
+    if(gameRef.gameMap.metaEnemyData.contains(MetaEnemyData(id(), column, row))){
+      return;
+    }
+    await gameRef.gameMap.add(SwordEnemy(Vector2(
+      double.parse(obj.getAttribute('x')!) + column * 32 * 30,
+      double.parse(obj.getAttribute('y')!) + row * 32 * 30) *
+      GameConsts.gameScale, MetaEnemyData(id(), column, row)));
   }
 
   @override

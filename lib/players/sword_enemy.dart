@@ -4,6 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -16,8 +17,8 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  SwordEnemy(this._startPos);
-
+  SwordEnemy(this._startPos, this.metaData);
+  MetaEnemyData metaData;
   late SpriteAnimation _leftMove, _idleAnimation;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;

@@ -13,17 +13,15 @@ import 'package:game_flame/players/sword_enemy.dart';
 
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
-  final _lengthOfTileSquare = 32*30 * GameConsts.gameScale;
-  ImageBatchCompiler _imageBatchCompiler = ImageBatchCompiler();
-  late Vector2 _playerPos;
+  final _imageBatchCompiler = ImageBatchCompiler();
   ObjectHitbox? currentObject;
   int countId=0;
-  late PositionComponent upperPlayer;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
   int _column=0,_row=0;
   List<MapNode> _mapNodes = []; //Ноды по столбикам
   bool isFirstLoad = false;
+  List<MetaEnemyData> metaEnemyData = [];
 
   int getNewId(){
     return countId++;
@@ -103,9 +101,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
-    _playerPos = playerPos;
-    _column = _playerPos.x ~/ _lengthOfTileSquare;
-    _row = _playerPos.y ~/ _lengthOfTileSquare;
+    _column = playerPos.x ~/ GameConsts.lengthOfTileSquare;
+    _row = playerPos.y ~/ GameConsts.lengthOfTileSquare;
     print('load new map');
     print('column: $_column, row: $_row');
     for(int i=0;i<3;i++) {
@@ -120,7 +117,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     orthoPlayer = OrthoPlayer();
     await add(orthoPlayer!);
     orthoPlayer?.priority = GamePriority.player;
-    orthoPlayer?.position = _playerPos;
+    orthoPlayer?.position = playerPos;
     // await add(ScreenHitbox());
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
@@ -145,8 +142,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   Future<void> update(double dt) async
   {
     if(orthoPlayer != null && isFirstLoad) {
-      int col = orthoPlayer!.position.x ~/ _lengthOfTileSquare;
-      int row = orthoPlayer!.position.y ~/ _lengthOfTileSquare;
+      int col = orthoPlayer!.position.x ~/ GameConsts.lengthOfTileSquare;
+      int row = orthoPlayer!.position.y ~/ GameConsts.lengthOfTileSquare;
       if (col != _column || row != _row) {
         reloadWorld(col, row);
       }

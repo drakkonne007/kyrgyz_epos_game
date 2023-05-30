@@ -3,6 +3,13 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/abstracts/item.dart';
 
+class MetaEnemyData
+{
+  MetaEnemyData(this.id, this.column, this.row);
+  int id;
+  int column;
+  int row;
+}
 
 enum PlayerDirectionMove{
   NoMove,
@@ -22,6 +29,7 @@ class GameConsts
   static const double gameScale = 1.3;
   static const maxRow = 3;
   static const maxColumn = 5;
+  static const lengthOfTileSquare = 32*30 * gameScale;
 }
 
 class PlayerData

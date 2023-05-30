@@ -242,20 +242,26 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(df.angle == -0.0){
       return;
     }
-    // print(df.angle);
+
+    print('${other.x} - x, ${other.y} - y, ${other.width} - other.width, ${other.height} - other.height');
     if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
       _speed.y = 0;
-      if(positionOfAnchor(anchor).y < other.center.y){
-        position.y = other.y - _hitBox.height/2;
+      if(positionOfAnchor(anchor).y < other.center.y * GameConsts.gameScale){
+        position.y = other.y* GameConsts.gameScale - _hitBox.height/2;
       }else{
-        position.y = other.y + other.height - (_hitBox.height/2-_groundBox.height);
+        position.y = other.y*GameConsts.gameScale + other.height*GameConsts.gameScale - (_hitBox.height/2-_groundBox.height);
       }
     }else{
       _speed.x = 0;
-      if(positionOfAnchor(anchor).x > other.center.x){
-        position.x=other.x + other.width + _hitBox.width/2;
+      if(positionOfAnchor(anchor).x > other.center.x * GameConsts.gameScale){
+        print(position.x);
+        position.x=other.x * GameConsts.gameScale + other.width * GameConsts.gameScale + _hitBox.width/2;
+        print(position.x);
       }else{
-        position.x=other.x - _hitBox.width/2;
+        print('left');
+        print(position.x);
+        position.x=other.x * GameConsts.gameScale - _hitBox.width/2;
+        print(position.x);
       }
     }
   }
