@@ -11,14 +11,13 @@ import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
 import 'package:game_flame/players/sword_enemy.dart';
 
-class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
+class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
   final _lengthOfTileSquare = 32*30 * GameConsts.gameScale;
   ImageBatchCompiler _imageBatchCompiler = ImageBatchCompiler();
   late Vector2 _playerPos;
   ObjectHitbox? currentObject;
   int countId=0;
-  late PositionComponent bground;
   late PositionComponent upperPlayer;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
@@ -47,8 +46,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn - 1, newRow + i - 1,_imageBatchCompiler);
-        await node.generateMap();
         await add(node);
+        await node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -61,8 +60,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + 1, newRow + i - 1,_imageBatchCompiler);
-        await node.generateMap();
         await add(node);
+        await node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -75,8 +74,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + i - 1, newRow - 1,_imageBatchCompiler);
-        await node.generateMap();
         await add(node);
+        await node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -89,8 +88,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + i - 1, newRow + 1,_imageBatchCompiler);
-        await node.generateMap();
         await add(node);
+        await node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -112,8 +111,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
         var node = MapNode(_column + j - 1, _row + i - 1,_imageBatchCompiler);
-        await node.generateMap();
         await add(node);
+        await node.generateMap();
         _mapNodes.add(node);
       }
     }

@@ -42,7 +42,7 @@ dependencies:
   slang: ^3.16.2
   slang_flutter: ^3.16.0
   flutter_shake_animated: ^0.0.5
-  image: ^4.0.17
+  xml: ^6.3.0
 
 dev_dependencies:
   flutter_test:

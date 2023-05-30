@@ -9,5 +9,8 @@ class Ground extends MapObstacle
     super.anchor,
     super.priority,
     bool isSolid = false,
-  });
+  })
+  {
+    debugMode = true;
+  }
 }

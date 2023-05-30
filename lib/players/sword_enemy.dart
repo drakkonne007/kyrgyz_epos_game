@@ -51,6 +51,7 @@ class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     topLeftPosition = _startPos;
     //_groundBox.anchor = Anchor.center;
     _hitbox = EnemyHitbox();
+    priority = 150;
     await add(_hitbox);
     // _hitbox.debugMode = true;
     _hitbox.debugColor = BasicPalette.black.color;
@@ -94,9 +95,9 @@ class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(health <1){
       if(loots.isNotEmpty) {
         if(loots.length > 1){
-          gameRef.gameMap.bground.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
+          gameRef.gameMap.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
         }else{
-          gameRef.gameMap.bground.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
+          gameRef.gameMap.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
         }
       }
       removeAll(children);
