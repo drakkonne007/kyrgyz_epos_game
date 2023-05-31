@@ -49,7 +49,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     _velocity *= 0;
     _speed *= 0;
-    animation?.reset();
+    if(animation != null){
+      SpriteAnimationTicker tick = SpriteAnimationTicker(animation!);
+      tick.reset();
+    }
   }
 
   @override

@@ -73,7 +73,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(_isOnGround) {
         _isOnGround = false;
         _speedY = -17;
-        _dinoJump.reset();
+        SpriteAnimationTicker tick = SpriteAnimationTicker(_dinoJump);
+        tick.reset();
         animation = _dinoJump;
       }
     }

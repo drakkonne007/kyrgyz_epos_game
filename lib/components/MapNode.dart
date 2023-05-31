@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -13,7 +14,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/players/sword_enemy.dart';
 import 'package:xml/xml.dart';
 
-class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
+class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>, FlameIsolate
 {
   MapNode(this.column, this.row, this.imageBatchCompiler);
   final int column;
@@ -24,13 +25,6 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
   bool isNeedLoadEnemy = true;
 
   int id() => _id++;
-
-  Iterable<XmlElement> getObjects(String name)
-  {
-    final text = File('assets/0-0.tmx').readAsString();
-    final document = XmlDocument.parse(text.toString()).findAllElements('object');
-    return document;
-  }
 
   Future<void> generateMap() async
   {
