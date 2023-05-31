@@ -55,7 +55,6 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
       if(gameRef.gameMap.currentObject != null){
         if(gameRef.gameMap.currentObject?.id == id){
           gameRef.gameMap.currentObject = null;
-          print('currentObject = null');
         }
       }
     }

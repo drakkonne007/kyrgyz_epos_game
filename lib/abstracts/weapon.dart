@@ -111,7 +111,6 @@ abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
   void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
   {
     if(other is EnemyHitbox){
-      print('HOhoho Enemy');
       var temp = other.parent as KyrgyzEnemy;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }

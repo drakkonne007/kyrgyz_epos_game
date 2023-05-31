@@ -17,8 +17,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  SwordEnemy(this._startPos, this.metaData);
-  MetaEnemyData metaData;
+  SwordEnemy(this._startPos);
   late SpriteAnimation _leftMove, _idleAnimation;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
@@ -26,6 +25,10 @@ class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   Vector2 _startPos;
   Vector2 _speed = Vector2(0,20);
 
+  @override
+  int column=0;
+  @override
+  int row=0;
   @override
   int maxLoots = 2;
   @override
@@ -59,7 +62,6 @@ class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour);
     await add(_groundBox);
     EWBody body = EWBody();
-    body.debugMode = true;
     body.size = size;
     body.collisionType = CollisionType.active;
     await add(body);
@@ -81,6 +83,17 @@ class SwordEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void update(double dt)
   {
+    column = position.x ~/ GameConsts.lengthOfTileSquare;
+    row =    position.y ~/ GameConsts.lengthOfTileSquare;
+    int diffCol = (column - gameRef.gameMap.column()).abs();
+    int diffRow = (row - gameRef.gameMap.row()).abs();
+    if(diffCol > 2 || diffRow > 2){
+      print('Ohooooo');
+      removeFromParent();
+    }
+    if(diffCol > 1 || diffRow > 1){
+      return;
+    }
     position += _speed * dt;
     super.update(dt);
   }

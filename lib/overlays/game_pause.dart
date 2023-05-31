@@ -9,7 +9,7 @@ import 'package:game_flame/overlays/joysticks.dart';
 class GamePause extends StatelessWidget
 {
   static const id = 'GamePause';
-  KyrgyzGame _game;
+  final KyrgyzGame _game;
   GamePause(this._game, {super.key});
 
   @override

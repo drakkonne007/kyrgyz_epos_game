@@ -13,7 +13,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 class HealthBar extends StatefulWidget
 {
   HealthBar(this.game);
-  KyrgyzGame game;
+  final KyrgyzGame game;
   static const id = 'HealthBar';
   @override
   State<HealthBar> createState() => _HealthBarState();
@@ -32,7 +32,6 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
     if(val > 5 && isLower){
       Future.delayed(const Duration(milliseconds: 500),(){
         widget.game.playerData.health.notifyListeners();
-        print('Stop this crazy');
       });
     }
     return isLower;

@@ -9,7 +9,13 @@ import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
-import 'package:game_flame/players/sword_enemy.dart';
+
+class LoadedColumnRow
+{
+  LoadedColumnRow(this.column, this.row);
+  int column;
+  int row;
+}
 
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
@@ -19,9 +25,20 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
   int _column=0,_row=0;
-  List<MapNode> _mapNodes = []; //Ноды по столбикам
+  final List<MapNode> _mapNodes = [];
   bool isFirstLoad = false;
-  List<MetaEnemyData> metaEnemyData = [];
+  Set<int> loadedColumns = {};
+  Set<int> loadedRows = {};
+
+  int column()
+  {
+    return _column;
+  }
+
+  int row()
+  {
+    return _row;
+  }
 
   int getNewId(){
     return countId++;
@@ -29,11 +46,12 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> reloadWorld(int newColumn, int newRow) async
   {
-    print('start dynamic reload, column: $newColumn, row: $newRow');
     var tempColumn = _column;
     var tempRow = _row;
     _column = newColumn;
     _row = newRow;
+    loadedColumns.removeWhere((element) => (element - newColumn).abs() > 2);
+    loadedRows.removeWhere((element) => (element - newRow).abs() > 2);
     var toRemove = [];
     if(newColumn < tempColumn){
       for(final node in _mapNodes) {
@@ -91,6 +109,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         _mapNodes.add(node);
       }
     }
+    loadedColumns.addAll({_column,_column - 1, _column + 1});
+    loadedRows.addAll({_row,_row - 1, _row + 1});
     _mapNodes.removeWhere((element) => toRemove.contains(element));
   }
 
@@ -103,8 +123,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   {
     _column = playerPos.x ~/ GameConsts.lengthOfTileSquare;
     _row = playerPos.y ~/ GameConsts.lengthOfTileSquare;
-    print('load new map');
-    print('column: $_column, row: $_row');
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
         var node = MapNode(_column + j - 1, _row + i - 1,_imageBatchCompiler);
@@ -113,6 +131,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         _mapNodes.add(node);
       }
     }
+    loadedColumns.addAll({_column,_column - 1, _column + 1});
+    loadedRows.addAll({_row,_row - 1, _row + 1});
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
     await add(orthoPlayer!);
@@ -122,7 +142,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(orthoPlayer!);
-    print('end load new map');
     isFirstLoad = true;
   }
 

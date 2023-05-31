@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/players/sword_enemy.dart';
 import 'package:xml/xml.dart';
@@ -20,6 +21,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
   final ImageBatchCompiler imageBatchCompiler;
   Image? _image;
   int _id = 0;
+  bool isNeedLoadEnemy = true;
 
   int id() => _id++;
 
@@ -38,11 +40,12 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     if(column < 0 || row < 0) {
       return;
     }
+    isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
     _image = await Flame.images.load('0-0.png');
     position = Vector2(column * 32 * 30, row * 32 * 30) * GameConsts.gameScale;
     scale = Vector2.all(GameConsts.gameScale);
-    var fileName = 'assets/$column-$row.tmx';
-    final text = await File(fileName).readAsString();
+    var fileName = '$column-$row.tmx';
+    final text = await Flame.assets.readFile(fileName);
     final objects = XmlDocument.parse(text.toString()).findAllElements('object');
     for(final obj in objects) {
       switch(obj.getAttribute('name')) {
@@ -53,13 +56,14 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
   }
 
   Future<void> createEnemy(XmlElement obj) async{
-    if(gameRef.gameMap.metaEnemyData.contains(MetaEnemyData(id(), column, row))){
+    if(!isNeedLoadEnemy){
+      print('already exists');
       return;
     }
     await gameRef.gameMap.add(SwordEnemy(Vector2(
       double.parse(obj.getAttribute('x')!) + column * 32 * 30,
       double.parse(obj.getAttribute('y')!) + row * 32 * 30) *
-      GameConsts.gameScale, MetaEnemyData(id(), column, row)));
+      GameConsts.gameScale));
   }
 
   @override

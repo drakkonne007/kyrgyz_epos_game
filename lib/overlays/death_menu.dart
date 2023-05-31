@@ -6,7 +6,7 @@ import 'package:game_flame/overlays/joysticks.dart';
 class DeathMenu extends StatelessWidget
 {
   static const id = 'DeathMenu';
-  KyrgyzGame _game;
+  final KyrgyzGame _game;
   DeathMenu(this._game);
 
   @override
