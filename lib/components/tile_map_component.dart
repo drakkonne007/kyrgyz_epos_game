@@ -121,8 +121,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
-    _column = playerPos.x ~/ GameConsts.lengthOfTileSquare;
-    _row = playerPos.y ~/ GameConsts.lengthOfTileSquare;
+    _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare * GameConsts.gameScale);
+    _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare * GameConsts.gameScale);
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
         var node = MapNode(_column + j - 1, _row + i - 1,_imageBatchCompiler);
@@ -161,8 +161,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   Future<void> update(double dt) async
   {
     if(orthoPlayer != null && isFirstLoad) {
-      int col = orthoPlayer!.position.x ~/ GameConsts.lengthOfTileSquare;
-      int row = orthoPlayer!.position.y ~/ GameConsts.lengthOfTileSquare;
+      int col = orthoPlayer!.position.x ~/ (GameConsts.lengthOfTileSquare * GameConsts.gameScale);
+      int row = orthoPlayer!.position.y ~/ (GameConsts.lengthOfTileSquare * GameConsts.gameScale);
       if (col != _column || row != _row) {
         reloadWorld(col, row);
       }

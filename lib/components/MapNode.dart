@@ -34,7 +34,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     }
     isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
     _image = await Flame.images.load('0-0.png');
-    position = Vector2(column * 32 * 30, row * 32 * 30) * GameConsts.gameScale;
+    position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare) * GameConsts.gameScale;
     scale = Vector2.all(GameConsts.gameScale);
     var fileName = '$column-$row.tmx';
     final text = await Flame.assets.readFile(fileName);
@@ -42,7 +42,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     for(final obj in objects) {
       switch(obj.getAttribute('name')) {
         case 'enemy':  await createEnemy(obj); break;
-        case 'ground': add(Ground(size: Vector2(double.parse(obj.getAttribute('width')!), double.parse(obj.getAttribute('height')!)),position: Vector2(double.parse(obj.getAttribute('x')!) + column * 32 * 30, double.parse(obj.getAttribute('y')!) + row * 32 * 30))); break;
+        case 'ground': add(Ground(size: Vector2(double.parse(obj.getAttribute('width')!), double.parse(obj.getAttribute('height')!)),position: Vector2(double.parse(obj.getAttribute('x')!) + column * GameConsts.lengthOfTileSquare, double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare))); break;
       }
     }
   }
@@ -53,8 +53,8 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
       return;
     }
     await gameRef.gameMap.add(SwordEnemy(Vector2(
-      double.parse(obj.getAttribute('x')!) + column * 32 * 30,
-      double.parse(obj.getAttribute('y')!) + row * 32 * 30) *
+      double.parse(obj.getAttribute('x')!) + column * GameConsts.lengthOfTileSquare,
+      double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare) *
       GameConsts.gameScale));
   }
 

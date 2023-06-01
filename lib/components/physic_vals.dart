@@ -29,7 +29,7 @@ class GameConsts
   static const double gameScale = 1.3;
   static const maxRow = 3;
   static const maxColumn = 5;
-  static const lengthOfTileSquare = 32*30 * gameScale;
+  static const double lengthOfTileSquare = 32*30;
 }
 
 class PlayerData
