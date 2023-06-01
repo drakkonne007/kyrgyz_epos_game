@@ -5,16 +5,14 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/players/sword_enemy.dart';
 import 'package:xml/xml.dart';
 
-class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>, FlameIsolate
+class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
 {
   MapNode(this.column, this.row, this.imageBatchCompiler);
   final int column;

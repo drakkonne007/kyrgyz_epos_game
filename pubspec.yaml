@@ -39,7 +39,6 @@ dependencies:
   flame_tiled: ^1.9.1
   flame_tiled_utils: ^1.0.7
   shared_preferences: ^2.1.0
-  slang: ^3.16.2
   slang_flutter: ^3.16.0
   flutter_shake_animated: ^0.0.5
   xml: ^6.3.0
