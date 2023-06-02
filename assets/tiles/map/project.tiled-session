@@ -40,10 +40,10 @@
         },
         "D:/kyrgyz_epos_game/assets/0-0.tmx": {
             "scale": 0.75,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 492,
-                "y": 344.6666666666667
+                "x": 490.6666666666666,
+                "y": 511.3333333333333
             }
         },
         "D:/kyrgyz_epos_game/assets/Ancient Ruins-Animated Terrains-16 frames-with transparency.tsx": {
