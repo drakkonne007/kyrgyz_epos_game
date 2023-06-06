@@ -951,7 +951,6 @@
    <wangtile tileid="1854" wangid="0,1,0,0,0,0,0,1"/>
    <wangtile tileid="1855" wangid="0,1,0,1,0,0,0,0"/>
    <wangtile tileid="1856" wangid="0,0,0,0,0,1,0,1"/>
-   <wangtile tileid="2209" wangid="0,1,0,1,0,1,0,1"/>
   </wangset>
   <wangset name="dark grass to extra dark grass" type="corner" tile="764">
    <wangcolor name="" color="#ff0000" tile="764" probability="1"/>

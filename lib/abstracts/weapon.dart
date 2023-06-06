@@ -83,21 +83,25 @@ abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
     super.anchor,
     super.priority,
     bool isSolid = false,
+    required this.onStartWeaponHit,
+    required this.onEndWeaponHit
   })
   {
     debugColor = BasicPalette.orange.color;
     collisionType = CollisionType.inactive;
   }
 
+  Function() onStartWeaponHit;
+  Function() onEndWeaponHit;
+
   final double sectorInRadian = 0.383972 * 2;
   double damage = 0;
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;
-  double activeSecs = 0;
   double energyCost = 0;
 
-  Future<void> hit(PlayerDirectionMove direct);
+  Future<void> hit(PlayerDirectionMove direct, double long);
 
   @override
   bool onComponentTypeCheck(PositionComponent other) {

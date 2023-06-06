@@ -16,9 +16,8 @@ import 'dart:math' as math;
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
   PlayerDirectionMove _direction = PlayerDirectionMove.Down;
-  final double _spriteSheetWidth = 112.5, _spriteSheetHeight = 112.5;
-  late SpriteAnimation _leftMove, _rightMove, _upMove, _downMove, _rightUpMove, _rightDownMove, _leftUpMove, _leftDownMove,
-      _leftIdle, _rightIdle, _upIdle, _downIdle, _rightUpIdle, _rightDownIdle, _leftUpIdle, _leftDownIdle;
+  final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
+  late SpriteAnimation _animMove, _animIdle, _animAttack1, _animAttack2, _animHurt, _animDeath;
   Vector2 _speed = Vector2.all(0);
   Vector2 _velocity = Vector2.all(0);
   late PlayerHitbox _hitBox;
@@ -58,26 +57,18 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   Future<void> onLoad() async
   {
     // debugMode = true;
-    final spriteImage = await Flame.images.load('tiles/sprites/players/dubina.png');
+    final spriteImage = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     // final spriteImage = await Flame.images.load('tiles/map/loot/loot.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
-    _leftMove = spriteSheet.createAnimation(row: 0, stepTime: 0.2, from: 0,to: 4);
-    _leftIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.2, from: 6,to: 7);
-    _rightMove = spriteSheet.createAnimation(row: 4, stepTime: 0.2, from: 0,to: 4);
-    _rightIdle = spriteSheet.createAnimation(row: 4, stepTime: 0.2, from: 6,to: 7);
-    _upMove = spriteSheet.createAnimation(row: 2, stepTime: 0.2, from: 0,to: 4);
-    _upIdle = spriteSheet.createAnimation(row: 2, stepTime: 0.2, from: 6,to: 7);
-    _downMove = spriteSheet.createAnimation (row: 6, stepTime: 0.2, from: 0,to: 4);
-    _downIdle = spriteSheet.createAnimation(row: 6, stepTime: 0.2, from: 6,to: 7);
-    _rightUpMove = spriteSheet.createAnimation(row: 3, stepTime: 0.2, from: 0,to: 4);
-    _rightUpIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.2, from: 6,to: 7);
-    _rightDownMove = spriteSheet.createAnimation(row: 5, stepTime: 0.2, from: 0,to: 4);
-    _rightDownIdle = spriteSheet.createAnimation(row: 5, stepTime: 0.2, from: 6,to: 7);
-    _leftUpMove = spriteSheet.createAnimation(row: 1, stepTime: 0.2, from: 0,to: 4);
-    _leftUpIdle = spriteSheet.createAnimation(row: 1, stepTime: 0.2, from: 6,to: 7);
-    _leftDownMove = spriteSheet.createAnimation(row: 7, stepTime: 0.2, from: 0,to: 4);
-    _leftDownIdle = spriteSheet.createAnimation(row: 7, stepTime: 0.2, from: 6,to: 7);
-    animation = _downIdle;
+
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
+    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
+    _animAttack1 = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11);
+    _animAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16);
+    _animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.15, from: 0,to: 8);
+    _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0,to: 19);
+
+    animation = _animIdle;
     size = Vector2(_spriteSheetWidth/PhysicVals.orthoPlayerScale * GameConsts.gameScale, _spriteSheetHeight/PhysicVals.orthoPlayerScale * GameConsts.gameScale);
     _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
     await add(_hitBox);
@@ -88,7 +79,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     // _groundBox.position = Vector2(width/4,height*0.6 - 5);
     // _groundBox.size = Vector2(width/2,20);
     // _groundBox.debugMode = true;
-    _weapon = WDubina(position: Vector2(width/2,height/2));
+    _weapon = WDubina(position: Vector2(width/2,height/2), onStartWeaponHit: (){}, onEndWeaponHit: (){animation = _animIdle;});
     await add(_weapon);
   }
 
@@ -97,92 +88,116 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.gameMap.currentObject != null){
       gameRef.gameMap.currentObject?.obstacleBehavoiur.call();
     }else {
-      _weapon.hit(_direction);
+      if(gameRef.playerData.energy.value > _weapon.energyCost){
+        _velocity = Vector2.all(0);
+        int random = math.Random().nextInt(2);
+        late SpriteAnimationTicker ticker;
+        if(random == 0){
+          animation = _animAttack1;
+        }else{
+          animation = _animAttack2;
+        }
+        ticker = SpriteAnimationTicker(animation!);
+        _weapon.hit(_direction,ticker.totalDuration());
+      }
     }
   }
 
   void setIdleAnimation()
   {
-    switch(_direction){
-      case PlayerDirectionMove.Right:     animation = _rightIdle; break;
-      case PlayerDirectionMove.Left:      animation = _leftIdle; break;
-      case PlayerDirectionMove.Up:        animation = _upIdle; break;
-      case PlayerDirectionMove.Down:      animation = _downIdle; break;
-      case PlayerDirectionMove.RightUp:   animation = _rightUpIdle; break;
-      case PlayerDirectionMove.RightDown: animation = _rightDownIdle; break;
-      case PlayerDirectionMove.LeftUp:    animation = _leftUpIdle; break;
-      case PlayerDirectionMove.LeftDown:  animation = _leftDownIdle; break;
-      case PlayerDirectionMove.NoMove:    throw 'Unknown idle Ortho Player animation';
+    if(animation == _animMove){
+      switch(_direction){
+        case PlayerDirectionMove.Right:     animation = _animIdle; break;
+        case PlayerDirectionMove.Left:      animation = _animIdle; break;
+        case PlayerDirectionMove.Up:        animation = _animIdle; break;
+        case PlayerDirectionMove.Down:      animation = _animIdle; break;
+        case PlayerDirectionMove.RightUp:   animation = _animIdle; break;
+        case PlayerDirectionMove.RightDown: animation = _animIdle; break;
+        case PlayerDirectionMove.LeftUp:    animation = _animIdle; break;
+        case PlayerDirectionMove.LeftDown:  animation = _animIdle; break;
+        case PlayerDirectionMove.NoMove:    throw 'Unknown idle Ortho Player animation';
+      }
     }
   }
 
   void movePlayer(PlayerDirectionMove direct, bool isRun)
   {
-    switch(direct){
-      case PlayerDirectionMove.Right: {
-        _velocity.x = PhysicVals.startSpeed;
-        _velocity.y = 0;
-        animation = _rightMove;
+    if(animation == _animIdle  || animation == _animMove) {
+      switch (direct) {
+        case PlayerDirectionMove.Right:
+          {
+            _velocity.x = PhysicVals.startSpeed;
+            _velocity.y = 0;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.Up:
+          {
+            _velocity.y = -PhysicVals.startSpeed;
+            _velocity.x = 0;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.Left:
+          {
+            _velocity.x = -PhysicVals.startSpeed;
+            _velocity.y = 0;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.Down:
+          {
+            _velocity.y = PhysicVals.startSpeed;
+            _velocity.x = 0;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.RightUp:
+          {
+            _velocity.y = -PhysicVals.startSpeed / 2;
+            _velocity.x = PhysicVals.startSpeed / 2;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.RightDown:
+          {
+            _velocity.y = PhysicVals.startSpeed / 2;
+            _velocity.x = PhysicVals.startSpeed / 2;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.LeftUp:
+          {
+            _velocity.y = -PhysicVals.startSpeed / 2;
+            _velocity.x = -PhysicVals.startSpeed / 2;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.LeftDown:
+          {
+            _velocity.y = PhysicVals.startSpeed / 2;
+            _velocity.x = -PhysicVals.startSpeed / 2;
+            animation = _animMove;
+          }
+          break;
+        case PlayerDirectionMove.NoMove:
+          {
+            _velocity *= 0;
+          }
+          break;
       }
-      break;
-      case PlayerDirectionMove.Up: {
-        _velocity.y = -PhysicVals.startSpeed;
-        _velocity.x = 0;
-        animation = _upMove;
+      if (direct != PlayerDirectionMove.NoMove) {
+        _direction = direct;
       }
-      break;
-      case PlayerDirectionMove.Left: {
-        _velocity.x = -PhysicVals.startSpeed;
-        _velocity.y = 0;
-        animation = _leftMove;
+      if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
+        PhysicVals.runCoef = 1.3;
+        _isPlayerRun = true;
+      } else {
+        PhysicVals.runCoef = 1;
+        _isPlayerRun = false;
       }
-      break;
-      case PlayerDirectionMove.Down:{
-        _velocity.y = PhysicVals.startSpeed;
-        _velocity.x = 0;
-        animation = _downMove;
-      }
-      break;
-      case PlayerDirectionMove.RightUp:{
-        _velocity.y = -PhysicVals.startSpeed/2;
-        _velocity.x =  PhysicVals.startSpeed/2;
-        animation = _rightUpMove;
-      }
-      break;
-      case PlayerDirectionMove.RightDown:{
-        _velocity.y = PhysicVals.startSpeed/2;
-        _velocity.x = PhysicVals.startSpeed/2;
-        animation = _rightDownMove;
-      }
-      break;
-      case PlayerDirectionMove.LeftUp:{
-        _velocity.y = -PhysicVals.startSpeed/2;
-        _velocity.x = -PhysicVals.startSpeed/2;
-        animation = _leftUpMove;
-      }
-      break;
-      case PlayerDirectionMove.LeftDown:{
-        _velocity.y =  PhysicVals.startSpeed/2;
-        _velocity.x = -PhysicVals.startSpeed/2;
-        animation = _leftDownMove;
-      }
-      break;
-      case PlayerDirectionMove.NoMove:{
-        _velocity *= 0;
-      }
-      break;
+      _velocity *= PhysicVals.runCoef;
     }
-    if(direct != PlayerDirectionMove.NoMove) {
-      _direction = direct;
-    }
-    if(isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum){
-      PhysicVals.runCoef = 1.3;
-      _isPlayerRun = true;
-    }else{
-      PhysicVals.runCoef = 1;
-      _isPlayerRun = false;
-    }
-    _velocity *= PhysicVals.runCoef;
   }
 
   @override

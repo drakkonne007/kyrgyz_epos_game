@@ -133,10 +133,10 @@ packages:
     dependency: "direct main"
     description:
       name: flame_tiled_utils
-      sha256: ecdcb33202f6e59687449285106667e053a6aa95142a989a62f3ea2a9b032e26
+      sha256: f39dfe6e8fb31cc04f74ae85b869fa57c292922b176362203a414e5a058dea1d
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.7"
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -196,10 +196,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "6b0206b0bf4f04961fc5438198ccb3a885685cd67d4d4a32cc20ad7f8adbe015"
+      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   matcher:
     dependency: transitive
     description:
@@ -369,10 +369,10 @@ packages:
     dependency: transitive
     description:
       name: slang
-      sha256: "6b59a1a6eb1534a87331bedad83b218cb9bbdd11aa42bb1791d344f445a1e0e0"
+      sha256: aaa8decf0d3e4572903964b04f7a4f23972f8696be6e4d3269b39e68fde3e880
       url: "https://pub.dev"
     source: hosted
-    version: "3.18.0"
+    version: "3.18.1"
   slang_flutter:
     dependency: "direct main"
     description:

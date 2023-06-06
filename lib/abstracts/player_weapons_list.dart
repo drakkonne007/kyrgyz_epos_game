@@ -12,6 +12,8 @@ class WDubina extends PlayerWeapon
     super.anchor,
     super.priority,
     bool isSolid = false,
+    required super.onStartWeaponHit,
+    required super.onEndWeaponHit,
   });
 
   @override
@@ -22,21 +24,24 @@ class WDubina extends PlayerWeapon
   }
 
   late double startAngle;
+  late double activeSecs;
   double diffAngle = 0;
 
   @override
   Future<void> onLoad() async
   {
     damage = 10;
-    activeSecs = 0.4;
     anchor = Anchor.bottomCenter;
     energyCost = 0.4;
   }
 
   @override
-  Future<void> hit(PlayerDirectionMove direct) async
+  Future<void> hit(PlayerDirectionMove direct, double long) async
   {
-    if(collisionType == CollisionType.inactive && gameRef.playerData.energy.value > energyCost) {
+    activeSecs = long;
+    if(collisionType == CollisionType.inactive) {
+      print(long);
+      onStartWeaponHit.call();
       gameRef.playerData.energy.value -= energyCost;
       gameRef.playerData.isLockEnergy = true;
       startAngle = radiansOfPlayerDirect(direct);
@@ -49,6 +54,7 @@ class WDubina extends PlayerWeapon
           collisionType = CollisionType.inactive;
           debugMode = false;
           gameRef.playerData.isLockEnergy = false;
+          onEndWeaponHit.call();
           // print('end hit');
       });
     }

@@ -9,7 +9,7 @@ import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/players/sword_enemy.dart';
+import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:xml/xml.dart';
 
 class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
@@ -52,7 +52,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
       print('already exists');
       return;
     }
-    await gameRef.gameMap.add(SwordEnemy(Vector2(
+    await gameRef.gameMap.add(GrassGolem(Vector2(
       double.parse(obj.getAttribute('x')!) + column * GameConsts.lengthOfTileSquare,
       double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare) *
       GameConsts.gameScale));
