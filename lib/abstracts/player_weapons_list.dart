@@ -40,7 +40,7 @@ class WDubina extends PlayerWeapon
   {
     activeSecs = long;
     if(collisionType == CollisionType.inactive) {
-      print(long);
+      print(direct);
       onStartWeaponHit.call();
       gameRef.playerData.energy.value -= energyCost;
       gameRef.playerData.isLockEnergy = true;

@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -58,6 +57,11 @@ class OrthoJoystick extends StatefulWidget
 class _OrthoJoystickState extends State<OrthoJoystick> {
   late double _size;
   final ValueNotifier<double> _left = ValueNotifier<double>(0), _top = ValueNotifier<double>(0);
+  final double right1 = math.pi/3;
+  final double right2 = math.pi * 2/3;
+  final double rightUp1 = 5 * math.pi/6;
+  final double up1 = -5 * math.pi/6;
+  final double left1 = math.pi / 6;
 
   @override
   void initState() {
@@ -69,7 +73,6 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
 
   void doMove(double dx, double dy){
     bool isRun = false;
-    Vector2 velo = Vector2(dx - _size/2,dy - _size/2);
     var ugol = math.atan2(dx - _size/2, dy - _size / 2);
     if(math.sqrt(math.pow(dx- _size / 2,2) + math.pow(dy- _size / 2, 2)) >= _size / 2 - _size/8){
       _left.value = math.sin(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
@@ -79,7 +82,23 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
       _left.value = dx - _size/8;
       _top.value = dy - _size/8;
     }
-    widget.game.gameMap.orthoPlayer?.movePlayer(velo,isRun);
+    if(ugol >= right1 && ugol < right2){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Right,isRun);
+    }else if(ugol < rightUp1 && ugol >= right2){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.RightUp,isRun);
+    }else if(ugol < -rightUp1 || ugol >= rightUp1){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Up,isRun);
+    }else if(ugol >= -rightUp1 && ugol < -right2){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.LeftUp,isRun);
+    }else if(ugol >= -right2 && ugol < -right1){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Left,isRun);
+    }else if(ugol >= -right1 && ugol < -left1){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.LeftDown,isRun);
+    }else if(ugol >= -left1 && ugol < left1){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Down,isRun);
+    }else if(ugol > left1 && ugol < right1){
+      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.RightDown,isRun);
+    }
   }
 
   void stopMove(){

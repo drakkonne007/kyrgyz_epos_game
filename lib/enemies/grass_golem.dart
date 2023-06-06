@@ -51,22 +51,22 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 0, to: 8);
     _animAttack1 = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0, to: 17);
     _animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0, to: 16);
-    _animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.3, from: 0, to: 16);
+    _animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.4, from: 0, to: 16);
 
     animation = _animMove;
     size = _spriteSheetSize;
     topLeftPosition = _startPos;
     //_groundBox.anchor = Anchor.center;
     _hitbox = EnemyHitbox();
-    priority = 150;
     await add(_hitbox);
     // _hitbox.debugMode = true;
     _hitbox.debugColor = BasicPalette.black.color;
-    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour);
+    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(width/3,height/2), position: center);
     await add(_groundBox);
-    EWBody body = EWBody();
-    body.size = size;
+    _groundBox.debugMode = true;
+    EWBody body = EWBody(size: Vector2(width/3,height/2), position: center, isSolid: true);
     body.collisionType = CollisionType.active;
+    body.debugMode = true;
     await add(body);
     math.Random rand = math.Random();
     for(int i=0;i<maxLoots;i++){
@@ -104,6 +104,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
+    animation = _animHurt;
     if(inArmor){
       health -= math.max(hurt - armor, 0);
     }else{
@@ -118,8 +119,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         }
       }
       removeAll(children);
-      SpriteAnimationTicker tick = SpriteAnimationTicker(_animDeath);
       animation = _animDeath;
+      SpriteAnimationTicker tick = SpriteAnimationTicker(_animDeath);
+      print(tick.totalDuration());
       add(OpacityEffect.by(-0.95,EffectController(duration: tick.totalDuration()),onComplete: (){
         removeFromParent();
       }));

@@ -89,7 +89,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       gameRef.gameMap.currentObject?.obstacleBehavoiur.call();
     }else {
       if(gameRef.playerData.energy.value > _weapon.energyCost){
-        _velocity = Vector2.all(0);
         int random = math.Random().nextInt(2);
         late SpriteAnimationTicker ticker;
         if(random == 0){
@@ -106,26 +105,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void setIdleAnimation()
   {
     if(animation == _animMove){
-      switch(_direction){
-        case PlayerDirectionMove.Right:     animation = _animIdle; break;
-        case PlayerDirectionMove.Left:      animation = _animIdle; break;
-        case PlayerDirectionMove.Up:        animation = _animIdle; break;
-        case PlayerDirectionMove.Down:      animation = _animIdle; break;
-        case PlayerDirectionMove.RightUp:   animation = _animIdle; break;
-        case PlayerDirectionMove.RightDown: animation = _animIdle; break;
-        case PlayerDirectionMove.LeftUp:    animation = _animIdle; break;
-        case PlayerDirectionMove.LeftDown:  animation = _animIdle; break;
-        case PlayerDirectionMove.NoMove:    throw 'Unknown idle Ortho Player animation';
-      }
+      animation = _animIdle;
     }
   }
 
-  void changeAnimation(SpriteAnimation anim)
-  {
-
-  }
-
-  void movePlayer(Vector2 velocity, bool isRun)
+  void movePlayer(PlayerDirectionMove direct, bool isRun)
   {
     if(animation == _animIdle  || animation == _animMove) {
       switch (direct) {
@@ -190,6 +174,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
             _velocity *= 0;
           }
           break;
+      }
+      if(_velocity.x > 0 && isFlippedHorizontally){
+        flipHorizontally();
+      }else if (_velocity.x < 0 && !isFlippedHorizontally){
+        flipHorizontally();
       }
       if (direct != PlayerDirectionMove.NoMove) {
         _direction = direct;
