@@ -26,7 +26,6 @@ enum PlayerDirectionMove{
 
 class GameConsts
 {
-  static const double gameScale = 1.3;
   static const maxRow = 3;
   static const maxColumn = 5;
   static const double lengthOfTileSquare = 32*30;
@@ -100,14 +99,13 @@ class PlayerData
 class PhysicVals
 {
   static Vector2 startLocation = Vector2(10, 10);
-  static double maxSpeed = 130 * GameConsts.gameScale;
-  static double startSpeed = 400 * GameConsts.gameScale;
+  static double maxSpeed = 130;
+  static double startSpeed = 400;
   static double runCoef = 1.3;
   static double runMinimum = 0.2;
-  static double orthoPlayerScale = 1.4;
-  static double gravity = 20 * GameConsts.gameScale;
+  static double gravity = 20;
   static double rigidy = 0.5;
-  static double stopSpeed = 800 * GameConsts.gameScale;
+  static double stopSpeed = 800;
 }
 
 class GamePriority

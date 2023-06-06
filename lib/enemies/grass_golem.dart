@@ -54,7 +54,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.3, from: 0, to: 16);
 
     animation = _animMove;
-    size = _spriteSheetSize * GameConsts.gameScale / 3.5;
+    size = _spriteSheetSize;
     topLeftPosition = _startPos;
     //_groundBox.anchor = Anchor.center;
     _hitbox = EnemyHitbox();

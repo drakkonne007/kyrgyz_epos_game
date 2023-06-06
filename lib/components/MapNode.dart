@@ -34,8 +34,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     }
     isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
     _image = await Flame.images.load('0-0.png');
-    position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare) * GameConsts.gameScale;
-    scale = Vector2.all(GameConsts.gameScale);
+    position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare);
     var fileName = '$column-$row.tmx';
     final text = await Flame.assets.readFile(fileName);
     final objects = XmlDocument.parse(text.toString()).findAllElements('object');
@@ -54,8 +53,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     }
     await gameRef.gameMap.add(GrassGolem(Vector2(
       double.parse(obj.getAttribute('x')!) + column * GameConsts.lengthOfTileSquare,
-      double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare) *
-      GameConsts.gameScale));
+      double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare)));
   }
 
   @override

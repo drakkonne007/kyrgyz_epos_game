@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "D:/kyrgyz_epos_game/assets/0-0.tmx",
+    "activeFile": "D:/kyrgyz_epos_game/assets/top_left.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
     ],
@@ -40,10 +40,10 @@
         },
         "D:/kyrgyz_epos_game/assets/0-0.tmx": {
             "scale": 0.75,
-            "selectedLayer": 1,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 490.6666666666666,
-                "y": 511.3333333333333
+                "x": 469.33333333333326,
+                "y": 983.3333333333333
             }
         },
         "D:/kyrgyz_epos_game/assets/Ancient Ruins-Animated Terrains-16 frames-with transparency.tsx": {
@@ -125,6 +125,26 @@
                 "x": 1030.3030303030305,
                 "y": 3001.515151515152
             }
+        },
+        "D:/kyrgyz_epos_game/assets/top_left.tmx": {
+            "scale": 0.03125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 11376,
+                "y": 8560
+            }
+        },
+        "D:/kyrgyz_epos_game/assets/top_left.tmx#Ancient-Temple-entrance stairs": {
+            "scaleInDock": 1
+        },
+        "D:/kyrgyz_epos_game/assets/top_left.tmx#Ancient-Temple-whole structure2": {
+            "scaleInDock": 1
+        },
+        "D:/kyrgyz_epos_game/assets/top_left.tmx#Atlas-Props": {
+            "scaleInDock": 1
+        },
+        "D:/kyrgyz_epos_game/assets/top_left.tmx#giant statues-feet-2-on grass": {
+            "scaleInDock": 1
         },
         "D:/kyrgyz_epos_game/assets/wall-5-rule1-places all tiles.tmx": {
             "scale": 0.38556640625,
@@ -300,11 +320,13 @@
     "last.externalTilesetPath": "D:/flame_tiled_utils/example/assets/tiles",
     "last.imagePath": "D:/flame_tiled_utils/example/assets/images",
     "openFiles": [
-        "D:/kyrgyz_epos_game/assets/0-0.tmx"
+        "D:/kyrgyz_epos_game/assets/0-0.tmx",
+        "D:/kyrgyz_epos_game/assets/top_left.tmx"
     ],
     "project": "project.tiled-project",
     "recentFiles": [
         "D:/kyrgyz_epos_game/assets/0-0.tmx",
+        "D:/kyrgyz_epos_game/assets/top_left.tmx",
         "D:/kyrgyz_epos_game/assets/test.tmx",
         "D:/kyrgyz_epos_game/assets/Ancient Ruins-Animated Terrains2-16 frames-with transparency.tsx",
         "D:/kyrgyz_epos_game/assets/Ancient Ruins-Animated Terrains2-16 frames.tsx",
@@ -314,7 +336,6 @@
         "D:/kyrgyz_epos_game/assets/Ancient Ruins-Animated Terrains-8 frames.tsx",
         "D:/kyrgyz_epos_game/assets/Ancient Ruins-Animated Terrains-16 frames.tsx",
         "D:/kyrgyz_epos_game/assets/Ancient Ruins-Animated Terrains-8 frames-with transparency.tsx",
-        "D:/kyrgyz_epos_game/assets/Terrain - Ancient Ruins.tsx",
-        "D:/kyrgyz_epos_game/assets/Ancient Ruins-Tileset - wall 8.tsx"
+        "D:/kyrgyz_epos_game/assets/Terrain - Ancient Ruins.tsx"
     ]
 }

@@ -69,7 +69,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0,to: 19);
 
     animation = _animIdle;
-    size = Vector2(_spriteSheetWidth/PhysicVals.orthoPlayerScale * GameConsts.gameScale, _spriteSheetHeight/PhysicVals.orthoPlayerScale * GameConsts.gameScale);
+    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
     await add(_hitBox);
     _hitBox.debugMode=true;
@@ -120,7 +120,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void movePlayer(PlayerDirectionMove direct, bool isRun)
+  void changeAnimation(SpriteAnimation anim)
+  {
+
+  }
+
+  void movePlayer(Vector2 velocity, bool isRun)
   {
     if(animation == _animIdle  || animation == _animMove) {
       switch (direct) {
@@ -261,17 +266,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
       _speed.y = 0;
-      if(positionOfAnchor(anchor).y < other.center.y * GameConsts.gameScale){
-        position.y = other.y* GameConsts.gameScale - _hitBox.height/2;
+      if(positionOfAnchor(anchor).y < other.center.y){
+        position.y = other.y- _hitBox.height/2;
       }else{
-        position.y = other.y*GameConsts.gameScale + other.height*GameConsts.gameScale - (_hitBox.height/2-_groundBox.height);
+        position.y = other.y + other.height - (_hitBox.height/2-_groundBox.height);
       }
     }else{
       _speed.x = 0;
-      if(positionOfAnchor(anchor).x > other.center.x * GameConsts.gameScale){
-        position.x=other.x * GameConsts.gameScale + other.width * GameConsts.gameScale + _hitBox.width/2;
+      if(positionOfAnchor(anchor).x > other.center.x){
+        position.x=other.x + other.width + _hitBox.width/2;
       }else{
-        position.x=other.x * GameConsts.gameScale - _hitBox.width/2;
+        position.x=other.x - _hitBox.width/2;
       }
     }
   }

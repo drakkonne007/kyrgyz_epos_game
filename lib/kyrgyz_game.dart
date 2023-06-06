@@ -90,7 +90,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   Future<void> loadNewMap(String filePath) async
   {
     gameMap.removeAll(gameMap.children);
-    gameMap.loadNewMap(Vector2(1300,1300) * GameConsts.gameScale);
+    gameMap.loadNewMap(Vector2(1300,1300));
   }
 
   @override
