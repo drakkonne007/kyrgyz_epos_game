@@ -42,7 +42,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   Future<void> onLoad() async
   {
-    // debugMode = true;
+    priority = GamePriority.player;
     final spriteImage = await Flame.images.load(
         'tiles/sprites/players/Stone2-224x192.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
@@ -52,21 +52,23 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _animAttack1 = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0, to: 17);
     _animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0, to: 16);
     _animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.4, from: 0, to: 16);
-
+    anchor = Anchor.center;
     animation = _animMove;
     size = _spriteSheetSize;
-    topLeftPosition = _startPos;
+    position = _startPos;
     //_groundBox.anchor = Anchor.center;
-    _hitbox = EnemyHitbox();
+    _hitbox = EnemyHitbox(size: Vector2(69,71),position: Vector2(77, 55));
     await add(_hitbox);
-    // _hitbox.debugMode = true;
+    _hitbox.debugMode = true;
     _hitbox.debugColor = BasicPalette.black.color;
-    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(width/3,height/2), position: center);
+    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(width/3,height/2), position: Vector2(position.x + width/2 - width/6, position.y + height/2 - height/6));
     await add(_groundBox);
-    _groundBox.debugMode = true;
-    EWBody body = EWBody(size: Vector2(width/3,height/2), position: center, isSolid: true);
+    // _groundBox.debugMode = true;
+    _groundBox.debugColor = BasicPalette.red.color;
+    EWBody body = EWBody(size: Vector2(69,71),position: Vector2(77, 55));
     body.collisionType = CollisionType.active;
-    body.debugMode = true;
+    // body.debugMode = true;
+    body.debugColor = BasicPalette.blue.color;
     await add(body);
     math.Random rand = math.Random();
     for(int i=0;i<maxLoots;i++){
@@ -91,7 +93,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
-      print('Ohooooo');
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){

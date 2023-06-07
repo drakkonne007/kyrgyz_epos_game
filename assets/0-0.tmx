@@ -163,6 +163,5 @@
   </object>
   <object id="59" name="ground" x="21.3333" y="10.6667" width="266.667" height="112"/>
   <object id="60" name="ground" x="54.6667" y="308" width="274.667" height="73.3333"/>
-  <object id="61" name="ground" x="76" y="798.667" width="841.333" height="94.6667"/>
  </objectgroup>
 </map>
