@@ -8,6 +8,7 @@ import 'package:game_flame/abstracts/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/abstracts/weapon.dart';
+import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -56,29 +57,22 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   Future<void> onLoad() async
   {
-    // debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
-    // final spriteImage = await Flame.images.load('tiles/map/loot/loot.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
-
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
     _animAttack1 = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11);
     _animAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16);
     _animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.15, from: 0,to: 8);
     _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0,to: 19);
-
     animation = _animIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    _hitBox = PlayerHitbox(size:Vector2(width/2,height*0.6),position: Vector2(width/4,15));
+    _hitBox = PlayerHitbox(size:Vector2(47,47),position: Vector2(49,27));
     await add(_hitBox);
     _hitBox.debugMode=true;
     anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
-    _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,size: Vector2(width/2,20),position: Vector2(width/4,height*0.6 - 5));
+    _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,anchor:Anchor.center,size: Vector2(width/2,20),position: Vector2(_spriteSheetWidth/2, _spriteSheetHeight/2));
     await add(_groundBox);
-    // _groundBox.position = Vector2(width/4,height*0.6 - 5);
-    // _groundBox.size = Vector2(width/2,20);
-    // _groundBox.debugMode = true;
     _weapon = WDubina(position: Vector2(width/2,height/2), onStartWeaponHit: (){}, onEndWeaponHit: (){animation = _animIdle;});
     await add(_weapon);
   }
@@ -199,6 +193,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     bool isRun = false;
     Vector2 velo = Vector2.all(0);
+    if(event.isKeyPressed(LogicalKeyboardKey.keyE)){
+      gameRef.gameMap.add(GrassGolem(position));
+    }
     if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) || event.isKeyPressed(const LogicalKeyboardKey(0x00000057)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000077))) {
       velo.y = -PhysicVals.startSpeed;
     }

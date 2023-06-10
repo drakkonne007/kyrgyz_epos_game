@@ -49,7 +49,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   Future<void> onLoad() async
   {
-    priority = GamePriority.player;
+<<<<<<< HEAD
+    // debugMode = true;
     final spriteImage;
     if(spriteVariant == GolemVariant.Water){
       spriteImage = await Flame.images.load(
@@ -58,6 +59,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       spriteImage = await Flame.images.load(
           'tiles/sprites/players/Stone2-224x192.png');
     }
+=======
+    priority = GamePriority.player;
+    final spriteImage = await Flame.images.load(
+        'tiles/sprites/players/Stone2-224x192.png');
+>>>>>>> b8c57072200ac8b8fb7a9cd5bea9b0fb34206d85
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0, to: 8);
