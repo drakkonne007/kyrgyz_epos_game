@@ -14,15 +14,22 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
+enum GolemVariant
+{
+  Water,
+  Grass
+}
+
 class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  GrassGolem(this._startPos);
+  GrassGolem(this._startPos,this.spriteVariant);
   late SpriteAnimation _animMove, _animIdle, _animAttack1, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
   final Vector2 _spriteSheetSize = Vector2(224,192);
   Vector2 _startPos;
   Vector2 _speed = Vector2(0,20);
+  GolemVariant spriteVariant;
 
   @override
   int column=0;
@@ -43,8 +50,14 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   Future<void> onLoad() async
   {
     // debugMode = true;
-    final spriteImage = await Flame.images.load(
-        'tiles/sprites/players/Stone2-224x192.png');
+    final spriteImage;
+    if(spriteVariant == GolemVariant.Water){
+      spriteImage = await Flame.images.load(
+          'tiles/sprites/players/Stone-224x192.png');
+    }else{
+      spriteImage = await Flame.images.load(
+          'tiles/sprites/players/Stone2-224x192.png');
+    }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0, to: 8);

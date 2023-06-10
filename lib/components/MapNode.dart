@@ -53,7 +53,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     }
     await gameRef.gameMap.add(GrassGolem(Vector2(
       double.parse(obj.getAttribute('x')!) + column * GameConsts.lengthOfTileSquare,
-      double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare)));
+      double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare), GolemVariant.Water));
   }
 
   @override
