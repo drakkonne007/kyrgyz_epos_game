@@ -19,11 +19,11 @@ double radiansOfPlayerDirect(PlayerDirectionMove direct)
     case PlayerDirectionMove.Up:
       return 2*math.pi + math.pi / 6;
     case PlayerDirectionMove.LeftUp:
-      return math.pi * 11 / 6;
+      return math.pi / 3;
     case PlayerDirectionMove.Left:
-      return math.pi * 5 / 3;
+      return math.pi * 2 / 3;
     case PlayerDirectionMove.LeftDown:
-      return math.pi * 4 / 3;
+      return math.pi * 5 / 6;
     case PlayerDirectionMove.Down:
       return math.pi * 7 / 6;
     case PlayerDirectionMove.RightDown:
@@ -101,7 +101,7 @@ abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
   bool inArmor = true;
   double energyCost = 0;
 
-  Future<void> hit(PlayerDirectionMove direct, double long);
+  Future<void> hit(PlayerDirectionMove direct, double long, int hitAnimationVariant);
 
   @override
   bool onComponentTypeCheck(PositionComponent other) {

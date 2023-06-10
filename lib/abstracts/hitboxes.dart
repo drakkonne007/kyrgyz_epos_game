@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/abstracts/weapon.dart';
+import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>

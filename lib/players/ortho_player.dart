@@ -4,10 +4,10 @@ import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/abstracts/player_weapons_list.dart';
+import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
-import 'package:game_flame/abstracts/weapon.dart';
+import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -73,8 +73,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
     _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,anchor:Anchor.center,size: Vector2(width/2,20),position: Vector2(_spriteSheetWidth/2, _spriteSheetHeight/2));
     await add(_groundBox);
-    _weapon = WDubina(position: Vector2(width/2,height/2), onStartWeaponHit: (){}, onEndWeaponHit: (){animation = _animIdle;});
+    _weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
     await add(_weapon);
+  }
+
+  void onStartHit()
+  {
+    _velocity = Vector2.all(0);
   }
 
   void startHit()
@@ -82,17 +87,15 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.gameMap.currentObject != null){
       gameRef.gameMap.currentObject?.obstacleBehavoiur.call();
     }else {
-      if(gameRef.playerData.energy.value > _weapon.energyCost){
-        int random = math.Random().nextInt(2);
-        late SpriteAnimationTicker ticker;
-        if(random == 0){
-          animation = _animAttack1;
-        }else{
-          animation = _animAttack2;
-        }
-        ticker = SpriteAnimationTicker(animation!);
-        _weapon.hit(_direction,ticker.totalDuration());
+      int random = math.Random().nextInt(10);
+      late SpriteAnimationTicker ticker;
+      if(random < 5){
+        animation = _animAttack1;
+      }else{
+        animation = _animAttack2; // Длинная атака
       }
+      ticker = SpriteAnimationTicker(animation!);
+      _weapon.hit(_direction,ticker.totalDuration(),random);
     }
   }
 
@@ -194,7 +197,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     bool isRun = false;
     Vector2 velo = Vector2.all(0);
     if(event.isKeyPressed(LogicalKeyboardKey.keyE)){
-      gameRef.gameMap.add(GrassGolem(position));
+      gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water));
     }
     if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) || event.isKeyPressed(const LogicalKeyboardKey(0x00000057)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000077))) {
       velo.y = -PhysicVals.startSpeed;
@@ -253,16 +256,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
       _speed.y = 0;
       if(positionOfAnchor(anchor).y < other.center.y){
-        position.y = other.y- _hitBox.height/2;
+        position.y = other.y- _groundBox.height/2;
       }else{
-        position.y = other.y + other.height - (_hitBox.height/2-_groundBox.height);
+        position.y = other.y + other.height - (_groundBox.height/2-_groundBox.height);
       }
     }else{
       _speed.x = 0;
       if(positionOfAnchor(anchor).x > other.center.x){
-        position.x=other.x + other.width + _hitBox.width/2;
+        position.x=other.x + other.width + _groundBox.width/2;
       }else{
-        position.x=other.x - _hitBox.width/2;
+        position.x=other.x - _groundBox.width/2;
       }
     }
   }

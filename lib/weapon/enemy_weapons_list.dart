@@ -1,5 +1,5 @@
 
-import 'package:game_flame/abstracts/weapon.dart';
+import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
 class EWBody extends EnemyWeapon

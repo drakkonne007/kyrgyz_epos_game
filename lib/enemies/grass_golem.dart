@@ -7,7 +7,7 @@ import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
-import 'package:game_flame/abstracts/enemy_weapons_list.dart';
+import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -60,11 +60,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.3, from: 0, to: 8);
-    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.3, from: 0, to: 8);
-    _animAttack1 = spriteSheet.createAnimation(row: 2, stepTime: 0.3, from: 0, to: 17);
-    _animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.3, from: 0, to: 16);
-    _animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.4, from: 0, to: 16);
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
+    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
+    _animAttack1 = spriteSheet.createAnimation(row: 2, stepTime: 0.15, from: 0, to: 17);
+    _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.15, from: 0, to: 16);
+    _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.15, from: 0, to: 16);
     anchor = Anchor.center;
     animation = _animMove;
     size = _spriteSheetSize;
@@ -118,13 +118,13 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
-    animation = _animHurt;
     if(inArmor){
       health -= math.max(hurt - armor, 0);
     }else{
       health -= hurt;
     }
     if(health <1){
+      _speed = Vector2.all(0);
       if(loots.isNotEmpty) {
         if(loots.length > 1){
           gameRef.gameMap.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
@@ -132,13 +132,14 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
           gameRef.gameMap.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
         }
       }
-      removeAll(children);
       animation = _animDeath;
+      removeAll(children);
       SpriteAnimationTicker tick = SpriteAnimationTicker(_animDeath);
-      print(tick.totalDuration());
       add(OpacityEffect.by(-0.95,EffectController(duration: tick.totalDuration()),onComplete: (){
         removeFromParent();
       }));
+    }else{
+      animation = _animHurt;
     }
   }
 }
