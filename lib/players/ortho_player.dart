@@ -61,8 +61,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
-    _animAttack1 = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11);
-    _animAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16);
     _animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.15, from: 0,to: 8);
     _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0,to: 19);
     animation = _animIdle;
@@ -87,15 +85,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.gameMap.currentObject != null){
       gameRef.gameMap.currentObject?.obstacleBehavoiur.call();
     }else {
-      int random = math.Random().nextInt(10);
-      late SpriteAnimationTicker ticker;
-      if(random < 5){
-        animation = _animAttack1;
-      }else{
-        animation = _animAttack2; // Длинная атака
-      }
-      ticker = SpriteAnimationTicker(animation!);
-      _weapon.hit(_direction,ticker.totalDuration(),random);
+      _weapon.hit();
     }
   }
 

@@ -101,7 +101,7 @@ abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
   bool inArmor = true;
   double energyCost = 0;
 
-  Future<void> hit(PlayerDirectionMove direct, double long, int hitAnimationVariant);
+  Future<void> hit();
 
   @override
   bool onComponentTypeCheck(PositionComponent other) {
