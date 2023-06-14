@@ -135,11 +135,11 @@
             }
         },
         "D:/kyrgyz_epos_game/assets/top_left.tmx": {
-            "scale": 0.25,
+            "scale": 0.33,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 1306,
-                "y": 8206
+                "x": 1699.9999999999998,
+                "y": 6106.060606060606
             }
         },
         "D:/kyrgyz_epos_game/assets/top_left.tmx#Ancient-Temple-entrance stairs": {
@@ -149,7 +149,7 @@
             "scaleInDock": 1
         },
         "D:/kyrgyz_epos_game/assets/top_left.tmx#Atlas-Props": {
-            "scaleInDock": 0.5
+            "scaleInDock": 1.5
         },
         "D:/kyrgyz_epos_game/assets/top_left.tmx#giant statues-feet-2-on grass": {
             "scaleInDock": 1
