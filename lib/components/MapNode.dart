@@ -11,6 +11,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:xml/xml.dart';
+import 'package:flutter_gif/flutter_gif.dart';
 
 class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
 {
@@ -33,7 +34,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
       return;
     }
     isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
-    _image = await Flame.images.load('0-0.png');
+    _image = await Flame.images.load('0-0.gif');
     position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare);
     var fileName = '$column-$row.tmx';
     final text = await Flame.assets.readFile(fileName);
