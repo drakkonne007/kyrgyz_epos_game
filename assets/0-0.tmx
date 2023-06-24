@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="52">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="191">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -157,5 +157,96 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="16" name="objects"/>
+ <objectgroup id="16" name="objects">
+  <object id="86" name="water" x="0" y="0" width="32" height="32"/>
+  <object id="87" name="water" x="32" y="0" width="32" height="32"/>
+  <object id="88" name="water" x="0" y="32" width="32" height="32"/>
+  <object id="89" name="water" x="32" y="32" width="32" height="32"/>
+  <object id="90" name="water" x="64" y="0" width="32" height="32"/>
+  <object id="91" name="water" x="64" y="32" width="32" height="32"/>
+  <object id="92" name="water" x="0" y="64" width="32" height="32"/>
+  <object id="93" name="water" x="32" y="64" width="32" height="32"/>
+  <object id="94" name="water" x="64" y="64" width="32" height="32"/>
+  <object id="95" name="water" x="96" y="0" width="32" height="32"/>
+  <object id="96" name="water" x="96" y="32" width="32" height="32"/>
+  <object id="97" name="water" x="96" y="64" width="32" height="32"/>
+  <object id="98" name="water" x="128" y="0" width="32" height="32"/>
+  <object id="99" name="water" x="128" y="32" width="32" height="32"/>
+  <object id="100" name="water" x="128" y="64" width="32" height="32"/>
+  <object id="101" name="water" x="160" y="0" width="32" height="32"/>
+  <object id="102" name="water" x="192" y="0" width="32" height="32"/>
+  <object id="103" name="water" x="160" y="32" width="32" height="32"/>
+  <object id="104" name="water" x="192" y="32" width="32" height="32"/>
+  <object id="105" name="water" x="224" y="0" width="32" height="32"/>
+  <object id="106" name="water" x="224" y="32" width="32" height="32"/>
+  <object id="107" name="water" x="160" y="64" width="32" height="32"/>
+  <object id="108" name="water" x="192" y="64" width="32" height="32"/>
+  <object id="109" name="water" x="224" y="64" width="32" height="32"/>
+  <object id="110" name="water" x="256" y="0" width="32" height="32"/>
+  <object id="111" name="water" x="256" y="32" width="32" height="32"/>
+  <object id="112" name="water" x="256" y="64" width="32" height="32"/>
+  <object id="113" name="water" x="288" y="0" width="32" height="32"/>
+  <object id="114" name="water" x="288" y="32" width="32" height="32"/>
+  <object id="115" name="water" x="288" y="64" width="32" height="32"/>
+  <object id="116" name="water" x="0" y="96" width="32" height="32"/>
+  <object id="117" name="water" x="32" y="96" width="32" height="32"/>
+  <object id="118" name="water" x="0" y="128" width="32" height="32"/>
+  <object id="119" name="water" x="32" y="128" width="32" height="32"/>
+  <object id="120" name="water" x="64" y="96" width="32" height="32"/>
+  <object id="121" name="water" x="64" y="128" width="32" height="32"/>
+  <object id="122" name="water" x="0" y="160" width="32" height="32"/>
+  <object id="123" name="water" x="32" y="160" width="32" height="32"/>
+  <object id="124" name="water" x="64" y="160" width="32" height="32"/>
+  <object id="125" name="water" x="96" y="96" width="32" height="32"/>
+  <object id="126" name="water" x="96" y="128" width="32" height="32"/>
+  <object id="127" name="water" x="96" y="160" width="32" height="32"/>
+  <object id="128" name="water" x="128" y="96" width="32" height="32"/>
+  <object id="129" name="water" x="128" y="128" width="32" height="32"/>
+  <object id="130" name="water" x="128" y="160" width="32" height="32"/>
+  <object id="131" name="water" x="160" y="96" width="32" height="32"/>
+  <object id="132" name="water" x="192" y="96" width="32" height="32"/>
+  <object id="133" name="water" x="160" y="128" width="32" height="32"/>
+  <object id="134" name="water" x="192" y="128" width="32" height="32"/>
+  <object id="135" name="water" x="224" y="96" width="32" height="32"/>
+  <object id="136" name="water" x="224" y="128" width="32" height="32"/>
+  <object id="137" name="water" x="160" y="160" width="32" height="32"/>
+  <object id="138" name="water" x="192" y="160" width="32" height="32"/>
+  <object id="139" name="water" x="224" y="160" width="32" height="32"/>
+  <object id="140" name="water" x="256" y="96" width="32" height="32"/>
+  <object id="141" name="water" x="256" y="128" width="32" height="32"/>
+  <object id="142" name="water" x="256" y="160" width="32" height="32"/>
+  <object id="143" name="water" x="288" y="96" width="32" height="32"/>
+  <object id="144" name="water" x="288" y="128" width="32" height="32"/>
+  <object id="145" name="water" x="288" y="160" width="32" height="32"/>
+  <object id="161" name="water" x="0" y="192" width="32" height="32"/>
+  <object id="162" name="water" x="32" y="192" width="32" height="32"/>
+  <object id="163" name="water" x="0" y="224" width="32" height="32"/>
+  <object id="164" name="water" x="32" y="224" width="32" height="32"/>
+  <object id="165" name="water" x="64" y="192" width="32" height="32"/>
+  <object id="166" name="water" x="64" y="224" width="32" height="32"/>
+  <object id="167" name="water" x="0" y="256" width="32" height="32"/>
+  <object id="168" name="water" x="32" y="256" width="32" height="32"/>
+  <object id="169" name="water" x="64" y="256" width="32" height="32"/>
+  <object id="170" name="water" x="96" y="192" width="32" height="32"/>
+  <object id="171" name="water" x="96" y="224" width="32" height="32"/>
+  <object id="172" name="water" x="96" y="256" width="32" height="32"/>
+  <object id="173" name="water" x="128" y="192" width="32" height="32"/>
+  <object id="174" name="water" x="128" y="224" width="32" height="32"/>
+  <object id="175" name="water" x="128" y="256" width="32" height="32"/>
+  <object id="176" name="water" x="160" y="192" width="32" height="32"/>
+  <object id="177" name="water" x="192" y="192" width="32" height="32"/>
+  <object id="178" name="water" x="160" y="224" width="32" height="32"/>
+  <object id="179" name="water" x="192" y="224" width="32" height="32"/>
+  <object id="180" name="water" x="224" y="192" width="32" height="32"/>
+  <object id="181" name="water" x="224" y="224" width="32" height="32"/>
+  <object id="182" name="water" x="160" y="256" width="32" height="32"/>
+  <object id="183" name="water" x="192" y="256" width="32" height="32"/>
+  <object id="184" name="water" x="224" y="256" width="32" height="32"/>
+  <object id="185" name="water" x="256" y="192" width="32" height="32"/>
+  <object id="186" name="water" x="256" y="224" width="32" height="32"/>
+  <object id="187" name="water" x="256" y="256" width="32" height="32"/>
+  <object id="188" name="water" x="288" y="192" width="32" height="32"/>
+  <object id="189" name="water" x="288" y="224" width="32" height="32"/>
+  <object id="190" name="water" x="288" y="256" width="32" height="32"/>
+ </objectgroup>
 </map>

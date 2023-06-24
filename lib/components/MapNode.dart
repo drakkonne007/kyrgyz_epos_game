@@ -5,12 +5,28 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:xml/xml.dart';
+
+class Water extends SpriteAnimationComponent
+{
+  Water(this.pos);
+  Vector2 pos;
+  @override
+  Future<void> onLoad() async
+  {
+    final spriteImage = await Flame.images.load('tiles/map/ancientLand/Tilesets/Tileset-Animated Terrains-8 frames.png');
+    final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(32,32));
+    animation = spriteSheet.createAnimation(row: 1, stepTime: 0.1, from: 0,to: 8);
+    size = Vector2(33, 33);
+    position = pos;
+  }
+}
 
 class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
 {
@@ -33,7 +49,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
       return;
     }
     isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
-    _image = await Flame.images.load('0-0.gif');
+    _image = await Flame.images.load('0-0.png');
     position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare);
     var fileName = '$column-$row.tmx';
     final text = await Flame.assets.readFile(fileName);
@@ -42,6 +58,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
       switch(obj.getAttribute('name')) {
         case 'enemy':  await createEnemy(obj); break;
         case 'ground': add(Ground(size: Vector2(double.parse(obj.getAttribute('width')!), double.parse(obj.getAttribute('height')!)),position: Vector2(double.parse(obj.getAttribute('x')!) + column * GameConsts.lengthOfTileSquare, double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare))); break;
+        case 'water':  add(Water(Vector2(double.parse(obj.getAttribute('x')!) + column * GameConsts.lengthOfTileSquare, double.parse(obj.getAttribute('y')!) + row * GameConsts.lengthOfTileSquare)));
       }
     }
   }

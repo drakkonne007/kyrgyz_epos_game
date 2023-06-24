@@ -1,0 +1,821 @@
+2210
+
+<tile id="1560" type="temple48">
+  <animation>
+   <frame tileid="1560" duration="100"/>
+   <frame tileid="1753" duration="100"/>
+   <frame tileid="1754" duration="100"/>
+   <frame tileid="1755" duration="100"/>
+   <frame tileid="1756" duration="100"/>
+   <frame tileid="1757" duration="100"/>
+   <frame tileid="1758" duration="100"/>
+   <frame tileid="1759" duration="100"/>
+   <frame tileid="1760" duration="100"/>
+   <frame tileid="1761" duration="100"/>
+   <frame tileid="1762" duration="100"/>
+   <frame tileid="1763" duration="100"/>
+   <frame tileid="1764" duration="100"/>
+   <frame tileid="1765" duration="100"/>
+   <frame tileid="1766" duration="100"/>
+   <frame tileid="1767" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1561" type="temple49">
+  <animation>
+   <frame tileid="1561" duration="100"/>
+   <frame tileid="1633" duration="100"/>
+   <frame tileid="1634" duration="100"/>
+   <frame tileid="1635" duration="100"/>
+   <frame tileid="1636" duration="100"/>
+   <frame tileid="1637" duration="100"/>
+   <frame tileid="1638" duration="100"/>
+   <frame tileid="1639" duration="100"/>
+   <frame tileid="1640" duration="100"/>
+   <frame tileid="1641" duration="100"/>
+   <frame tileid="1642" duration="100"/>
+   <frame tileid="1643" duration="100"/>
+   <frame tileid="1644" duration="100"/>
+   <frame tileid="1645" duration="100"/>
+   <frame tileid="1646" duration="100"/>
+   <frame tileid="1647" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1562" type="temple50">
+  <animation>
+   <frame tileid="1562" duration="100"/>
+   <frame tileid="1581" duration="100"/>
+   <frame tileid="1582" duration="100"/>
+   <frame tileid="1583" duration="100"/>
+   <frame tileid="1584" duration="100"/>
+   <frame tileid="1585" duration="100"/>
+   <frame tileid="1586" duration="100"/>
+   <frame tileid="1587" duration="100"/>
+   <frame tileid="1588" duration="100"/>
+   <frame tileid="1589" duration="100"/>
+   <frame tileid="1590" duration="100"/>
+   <frame tileid="1591" duration="100"/>
+   <frame tileid="1592" duration="100"/>
+   <frame tileid="1593" duration="100"/>
+   <frame tileid="1594" duration="100"/>
+   <frame tileid="1595" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1563" type="temple51">
+  <animation>
+   <frame tileid="1563" duration="100"/>
+   <frame tileid="1529" duration="100"/>
+   <frame tileid="1530" duration="100"/>
+   <frame tileid="1531" duration="100"/>
+   <frame tileid="1532" duration="100"/>
+   <frame tileid="1533" duration="100"/>
+   <frame tileid="1534" duration="100"/>
+   <frame tileid="1535" duration="100"/>
+   <frame tileid="1536" duration="100"/>
+   <frame tileid="1537" duration="100"/>
+   <frame tileid="1538" duration="100"/>
+   <frame tileid="1539" duration="100"/>
+   <frame tileid="1540" duration="100"/>
+   <frame tileid="1541" duration="100"/>
+   <frame tileid="1542" duration="100"/>
+   <frame tileid="1543" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1564" type="temple52">
+  <animation>
+   <frame tileid="1564" duration="100"/>
+   <frame tileid="1805" duration="100"/>
+   <frame tileid="1806" duration="100"/>
+   <frame tileid="1807" duration="100"/>
+   <frame tileid="1808" duration="100"/>
+   <frame tileid="1809" duration="100"/>
+   <frame tileid="1810" duration="100"/>
+   <frame tileid="1811" duration="100"/>
+   <frame tileid="1812" duration="100"/>
+   <frame tileid="1813" duration="100"/>
+   <frame tileid="1814" duration="100"/>
+   <frame tileid="1815" duration="100"/>
+   <frame tileid="1816" duration="100"/>
+   <frame tileid="1817" duration="100"/>
+   <frame tileid="1818" duration="100"/>
+   <frame tileid="1819" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1612" type="temple53">
+  <animation>
+   <frame tileid="1612" duration="100"/>
+   <frame tileid="1737" duration="100"/>
+   <frame tileid="1738" duration="100"/>
+   <frame tileid="1739" duration="100"/>
+   <frame tileid="1740" duration="100"/>
+   <frame tileid="1741" duration="100"/>
+   <frame tileid="1742" duration="100"/>
+   <frame tileid="1743" duration="100"/>
+   <frame tileid="1744" duration="100"/>
+   <frame tileid="1745" duration="100"/>
+   <frame tileid="1746" duration="100"/>
+   <frame tileid="1747" duration="100"/>
+   <frame tileid="1748" duration="100"/>
+   <frame tileid="1749" duration="100"/>
+   <frame tileid="1750" duration="100"/>
+   <frame tileid="1751" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1613" type="temple54">
+  <animation>
+   <frame tileid="1613" duration="100"/>
+   <frame tileid="1685" duration="100"/>
+   <frame tileid="1686" duration="100"/>
+   <frame tileid="1687" duration="100"/>
+   <frame tileid="1688" duration="100"/>
+   <frame tileid="1689" duration="100"/>
+   <frame tileid="1690" duration="100"/>
+   <frame tileid="1691" duration="100"/>
+   <frame tileid="1692" duration="100"/>
+   <frame tileid="1693" duration="100"/>
+   <frame tileid="1694" duration="100"/>
+   <frame tileid="1695" duration="100"/>
+   <frame tileid="1696" duration="100"/>
+   <frame tileid="1697" duration="100"/>
+   <frame tileid="1698" duration="100"/>
+   <frame tileid="1699" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1614" type="temple55">
+  <animation>
+   <frame tileid="1614" duration="100"/>
+   <frame tileid="1337" duration="100"/>
+   <frame tileid="1338" duration="100"/>
+   <frame tileid="1339" duration="100"/>
+   <frame tileid="1340" duration="100"/>
+   <frame tileid="1341" duration="100"/>
+   <frame tileid="1342" duration="100"/>
+   <frame tileid="1343" duration="100"/>
+   <frame tileid="1344" duration="100"/>
+   <frame tileid="1345" duration="100"/>
+   <frame tileid="1346" duration="100"/>
+   <frame tileid="1347" duration="100"/>
+   <frame tileid="1348" duration="100"/>
+   <frame tileid="1349" duration="100"/>
+   <frame tileid="1350" duration="100"/>
+   <frame tileid="1351" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1615" type="temple56">
+  <animation>
+   <frame tileid="1615" duration="100"/>
+   <frame tileid="1773" duration="100"/>
+   <frame tileid="1774" duration="100"/>
+   <frame tileid="1775" duration="100"/>
+   <frame tileid="1776" duration="100"/>
+   <frame tileid="1777" duration="100"/>
+   <frame tileid="1778" duration="100"/>
+   <frame tileid="1779" duration="100"/>
+   <frame tileid="1780" duration="100"/>
+   <frame tileid="1781" duration="100"/>
+   <frame tileid="1782" duration="100"/>
+   <frame tileid="1783" duration="100"/>
+   <frame tileid="1784" duration="100"/>
+   <frame tileid="1785" duration="100"/>
+   <frame tileid="1786" duration="100"/>
+   <frame tileid="1787" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1616" type="temple57">
+  <animation>
+   <frame tileid="1616" duration="100"/>
+   <frame tileid="1721" duration="100"/>
+   <frame tileid="1722" duration="100"/>
+   <frame tileid="1723" duration="100"/>
+   <frame tileid="1724" duration="100"/>
+   <frame tileid="1725" duration="100"/>
+   <frame tileid="1726" duration="100"/>
+   <frame tileid="1727" duration="100"/>
+   <frame tileid="1728" duration="100"/>
+   <frame tileid="1729" duration="100"/>
+   <frame tileid="1730" duration="100"/>
+   <frame tileid="1731" duration="100"/>
+   <frame tileid="1732" duration="100"/>
+   <frame tileid="1733" duration="100"/>
+   <frame tileid="1734" duration="100"/>
+   <frame tileid="1735" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1664" type="temple58">
+  <animation>
+   <frame tileid="1664" duration="100"/>
+   <frame tileid="1789" duration="100"/>
+   <frame tileid="1790" duration="100"/>
+   <frame tileid="1791" duration="100"/>
+   <frame tileid="1792" duration="100"/>
+   <frame tileid="1793" duration="100"/>
+   <frame tileid="1794" duration="100"/>
+   <frame tileid="1795" duration="100"/>
+   <frame tileid="1796" duration="100"/>
+   <frame tileid="1797" duration="100"/>
+   <frame tileid="1798" duration="100"/>
+   <frame tileid="1799" duration="100"/>
+   <frame tileid="1800" duration="100"/>
+   <frame tileid="1801" duration="100"/>
+   <frame tileid="1802" duration="100"/>
+   <frame tileid="1803" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1665" type="temple59">
+  <animation>
+   <frame tileid="1665" duration="100"/>
+   <frame tileid="1389" duration="100"/>
+   <frame tileid="1390" duration="100"/>
+   <frame tileid="1391" duration="100"/>
+   <frame tileid="1392" duration="100"/>
+   <frame tileid="1393" duration="100"/>
+   <frame tileid="1394" duration="100"/>
+   <frame tileid="1395" duration="100"/>
+   <frame tileid="1396" duration="100"/>
+   <frame tileid="1397" duration="100"/>
+   <frame tileid="1398" duration="100"/>
+   <frame tileid="1399" duration="100"/>
+   <frame tileid="1400" duration="100"/>
+   <frame tileid="1401" duration="100"/>
+   <frame tileid="1402" duration="100"/>
+   <frame tileid="1403" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1666" type="temple60">
+  <animation>
+   <frame tileid="1666" duration="100"/>
+   <frame tileid="1285" duration="100"/>
+   <frame tileid="1286" duration="100"/>
+   <frame tileid="1287" duration="100"/>
+   <frame tileid="1288" duration="100"/>
+   <frame tileid="1289" duration="100"/>
+   <frame tileid="1290" duration="100"/>
+   <frame tileid="1291" duration="100"/>
+   <frame tileid="1292" duration="100"/>
+   <frame tileid="1293" duration="100"/>
+   <frame tileid="1294" duration="100"/>
+   <frame tileid="1295" duration="100"/>
+   <frame tileid="1296" duration="100"/>
+   <frame tileid="1297" duration="100"/>
+   <frame tileid="1298" duration="100"/>
+   <frame tileid="1299" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1667" type="temple61">
+  <animation>
+   <frame tileid="1667" duration="100"/>
+   <frame tileid="1493" duration="100"/>
+   <frame tileid="1494" duration="100"/>
+   <frame tileid="1495" duration="100"/>
+   <frame tileid="1496" duration="100"/>
+   <frame tileid="1497" duration="100"/>
+   <frame tileid="1498" duration="100"/>
+   <frame tileid="1499" duration="100"/>
+   <frame tileid="1500" duration="100"/>
+   <frame tileid="1501" duration="100"/>
+   <frame tileid="1502" duration="100"/>
+   <frame tileid="1503" duration="100"/>
+   <frame tileid="1504" duration="100"/>
+   <frame tileid="1505" duration="100"/>
+   <frame tileid="1506" duration="100"/>
+   <frame tileid="1507" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1668" type="temple62">
+  <animation>
+   <frame tileid="1668" duration="100"/>
+   <frame tileid="1669" duration="100"/>
+   <frame tileid="1670" duration="100"/>
+   <frame tileid="1671" duration="100"/>
+   <frame tileid="1672" duration="100"/>
+   <frame tileid="1673" duration="100"/>
+   <frame tileid="1674" duration="100"/>
+   <frame tileid="1675" duration="100"/>
+   <frame tileid="1676" duration="100"/>
+   <frame tileid="1677" duration="100"/>
+   <frame tileid="1678" duration="100"/>
+   <frame tileid="1679" duration="100"/>
+   <frame tileid="1680" duration="100"/>
+   <frame tileid="1681" duration="100"/>
+   <frame tileid="1682" duration="100"/>
+   <frame tileid="1683" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1716" type="temple63">
+  <animation>
+   <frame tileid="1716" duration="100"/>
+   <frame tileid="1545" duration="100"/>
+   <frame tileid="1546" duration="100"/>
+   <frame tileid="1547" duration="100"/>
+   <frame tileid="1548" duration="100"/>
+   <frame tileid="1549" duration="100"/>
+   <frame tileid="1550" duration="100"/>
+   <frame tileid="1551" duration="100"/>
+   <frame tileid="1552" duration="100"/>
+   <frame tileid="1553" duration="100"/>
+   <frame tileid="1554" duration="100"/>
+   <frame tileid="1555" duration="100"/>
+   <frame tileid="1556" duration="100"/>
+   <frame tileid="1557" duration="100"/>
+   <frame tileid="1558" duration="100"/>
+   <frame tileid="1559" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1717" type="temple64">
+  <animation>
+   <frame tileid="1717" duration="100"/>
+   <frame tileid="1597" duration="100"/>
+   <frame tileid="1598" duration="100"/>
+   <frame tileid="1599" duration="100"/>
+   <frame tileid="1600" duration="100"/>
+   <frame tileid="1601" duration="100"/>
+   <frame tileid="1602" duration="100"/>
+   <frame tileid="1603" duration="100"/>
+   <frame tileid="1604" duration="100"/>
+   <frame tileid="1605" duration="100"/>
+   <frame tileid="1606" duration="100"/>
+   <frame tileid="1607" duration="100"/>
+   <frame tileid="1608" duration="100"/>
+   <frame tileid="1609" duration="100"/>
+   <frame tileid="1610" duration="100"/>
+   <frame tileid="1611" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1718" type="temple65">
+  <animation>
+   <frame tileid="1718" duration="100"/>
+   <frame tileid="1441" duration="100"/>
+   <frame tileid="1442" duration="100"/>
+   <frame tileid="1443" duration="100"/>
+   <frame tileid="1444" duration="100"/>
+   <frame tileid="1445" duration="100"/>
+   <frame tileid="1446" duration="100"/>
+   <frame tileid="1447" duration="100"/>
+   <frame tileid="1448" duration="100"/>
+   <frame tileid="1449" duration="100"/>
+   <frame tileid="1450" duration="100"/>
+   <frame tileid="1451" duration="100"/>
+   <frame tileid="1452" duration="100"/>
+   <frame tileid="1453" duration="100"/>
+   <frame tileid="1454" duration="100"/>
+   <frame tileid="1455" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1719" type="temple66">
+  <animation>
+   <frame tileid="1719" duration="100"/>
+   <frame tileid="1565" duration="100"/>
+   <frame tileid="1566" duration="100"/>
+   <frame tileid="1567" duration="100"/>
+   <frame tileid="1568" duration="100"/>
+   <frame tileid="1569" duration="100"/>
+   <frame tileid="1570" duration="100"/>
+   <frame tileid="1571" duration="100"/>
+   <frame tileid="1572" duration="100"/>
+   <frame tileid="1573" duration="100"/>
+   <frame tileid="1574" duration="100"/>
+   <frame tileid="1575" duration="100"/>
+   <frame tileid="1576" duration="100"/>
+   <frame tileid="1577" duration="100"/>
+   <frame tileid="1578" duration="100"/>
+   <frame tileid="1579" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1720" type="temple67">
+  <animation>
+   <frame tileid="1720" duration="100"/>
+   <frame tileid="1617" duration="100"/>
+   <frame tileid="1618" duration="100"/>
+   <frame tileid="1619" duration="100"/>
+   <frame tileid="1620" duration="100"/>
+   <frame tileid="1621" duration="100"/>
+   <frame tileid="1622" duration="100"/>
+   <frame tileid="1623" duration="100"/>
+   <frame tileid="1624" duration="100"/>
+   <frame tileid="1625" duration="100"/>
+   <frame tileid="1626" duration="100"/>
+   <frame tileid="1627" duration="100"/>
+   <frame tileid="1628" duration="100"/>
+   <frame tileid="1629" duration="100"/>
+   <frame tileid="1630" duration="100"/>
+   <frame tileid="1631" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1769" type="temple68">
+  <animation>
+   <frame tileid="1769" duration="100"/>
+   <frame tileid="1649" duration="100"/>
+   <frame tileid="1650" duration="100"/>
+   <frame tileid="1651" duration="100"/>
+   <frame tileid="1652" duration="100"/>
+   <frame tileid="1653" duration="100"/>
+   <frame tileid="1654" duration="100"/>
+   <frame tileid="1655" duration="100"/>
+   <frame tileid="1656" duration="100"/>
+   <frame tileid="1657" duration="100"/>
+   <frame tileid="1658" duration="100"/>
+   <frame tileid="1659" duration="100"/>
+   <frame tileid="1660" duration="100"/>
+   <frame tileid="1661" duration="100"/>
+   <frame tileid="1662" duration="100"/>
+   <frame tileid="1663" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1770" type="temple69">
+  <animation>
+   <frame tileid="1770" duration="100"/>
+   <frame tileid="1701" duration="100"/>
+   <frame tileid="1702" duration="100"/>
+   <frame tileid="1703" duration="100"/>
+   <frame tileid="1704" duration="100"/>
+   <frame tileid="1705" duration="100"/>
+   <frame tileid="1706" duration="100"/>
+   <frame tileid="1707" duration="100"/>
+   <frame tileid="1708" duration="100"/>
+   <frame tileid="1709" duration="100"/>
+   <frame tileid="1710" duration="100"/>
+   <frame tileid="1711" duration="100"/>
+   <frame tileid="1712" duration="100"/>
+   <frame tileid="1713" duration="100"/>
+   <frame tileid="1714" duration="100"/>
+   <frame tileid="1715" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1771" type="temple70">
+  <animation>
+   <frame tileid="1771" duration="100"/>
+   <frame tileid="1513" duration="100"/>
+   <frame tileid="1514" duration="100"/>
+   <frame tileid="1515" duration="100"/>
+   <frame tileid="1516" duration="100"/>
+   <frame tileid="1517" duration="100"/>
+   <frame tileid="1518" duration="100"/>
+   <frame tileid="1519" duration="100"/>
+   <frame tileid="1520" duration="100"/>
+   <frame tileid="1521" duration="100"/>
+   <frame tileid="1522" duration="100"/>
+   <frame tileid="1523" duration="100"/>
+   <frame tileid="1524" duration="100"/>
+   <frame tileid="1525" duration="100"/>
+   <frame tileid="1526" duration="100"/>
+   <frame tileid="1527" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1924" type="temple71">
+  <animation>
+   <frame tileid="1924" duration="100"/>
+   <frame tileid="2117" duration="100"/>
+   <frame tileid="2118" duration="100"/>
+   <frame tileid="2119" duration="100"/>
+   <frame tileid="2120" duration="100"/>
+   <frame tileid="2121" duration="100"/>
+   <frame tileid="2122" duration="100"/>
+   <frame tileid="2123" duration="100"/>
+   <frame tileid="2124" duration="100"/>
+   <frame tileid="2125" duration="100"/>
+   <frame tileid="2126" duration="100"/>
+   <frame tileid="2127" duration="100"/>
+   <frame tileid="2128" duration="100"/>
+   <frame tileid="2129" duration="100"/>
+   <frame tileid="2130" duration="100"/>
+   <frame tileid="2131" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1925" type="temple72">
+  <animation>
+   <frame tileid="1925" duration="100"/>
+   <frame tileid="1997" duration="100"/>
+   <frame tileid="1998" duration="100"/>
+   <frame tileid="1999" duration="100"/>
+   <frame tileid="2000" duration="100"/>
+   <frame tileid="2001" duration="100"/>
+   <frame tileid="2002" duration="100"/>
+   <frame tileid="2003" duration="100"/>
+   <frame tileid="2004" duration="100"/>
+   <frame tileid="2005" duration="100"/>
+   <frame tileid="2006" duration="100"/>
+   <frame tileid="2007" duration="100"/>
+   <frame tileid="2008" duration="100"/>
+   <frame tileid="2009" duration="100"/>
+   <frame tileid="2010" duration="100"/>
+   <frame tileid="2011" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1926" type="temple73">
+  <animation>
+   <frame tileid="1926" duration="100"/>
+   <frame tileid="1945" duration="100"/>
+   <frame tileid="1946" duration="100"/>
+   <frame tileid="1947" duration="100"/>
+   <frame tileid="1948" duration="100"/>
+   <frame tileid="1949" duration="100"/>
+   <frame tileid="1950" duration="100"/>
+   <frame tileid="1951" duration="100"/>
+   <frame tileid="1952" duration="100"/>
+   <frame tileid="1953" duration="100"/>
+   <frame tileid="1954" duration="100"/>
+   <frame tileid="1955" duration="100"/>
+   <frame tileid="1956" duration="100"/>
+   <frame tileid="1957" duration="100"/>
+   <frame tileid="1958" duration="100"/>
+   <frame tileid="1959" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1927" type="temple74">
+  <animation>
+   <frame tileid="1927" duration="100"/>
+   <frame tileid="1893" duration="100"/>
+   <frame tileid="1894" duration="100"/>
+   <frame tileid="1895" duration="100"/>
+   <frame tileid="1896" duration="100"/>
+   <frame tileid="1897" duration="100"/>
+   <frame tileid="1898" duration="100"/>
+   <frame tileid="1899" duration="100"/>
+   <frame tileid="1900" duration="100"/>
+   <frame tileid="1901" duration="100"/>
+   <frame tileid="1902" duration="100"/>
+   <frame tileid="1903" duration="100"/>
+   <frame tileid="1904" duration="100"/>
+   <frame tileid="1905" duration="100"/>
+   <frame tileid="1906" duration="100"/>
+   <frame tileid="1907" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1928" type="temple75">
+  <animation>
+   <frame tileid="1928" duration="100"/>
+   <frame tileid="2169" duration="100"/>
+   <frame tileid="2170" duration="100"/>
+   <frame tileid="2171" duration="100"/>
+   <frame tileid="2172" duration="100"/>
+   <frame tileid="2173" duration="100"/>
+   <frame tileid="2174" duration="100"/>
+   <frame tileid="2175" duration="100"/>
+   <frame tileid="2176" duration="100"/>
+   <frame tileid="2177" duration="100"/>
+   <frame tileid="2178" duration="100"/>
+   <frame tileid="2179" duration="100"/>
+   <frame tileid="2180" duration="100"/>
+   <frame tileid="2181" duration="100"/>
+   <frame tileid="2182" duration="100"/>
+   <frame tileid="2183" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1976" type="temple76">
+  <animation>
+   <frame tileid="1976" duration="100"/>
+   <frame tileid="2101" duration="100"/>
+   <frame tileid="2102" duration="100"/>
+   <frame tileid="2103" duration="100"/>
+   <frame tileid="2104" duration="100"/>
+   <frame tileid="2105" duration="100"/>
+   <frame tileid="2106" duration="100"/>
+   <frame tileid="2107" duration="100"/>
+   <frame tileid="2108" duration="100"/>
+   <frame tileid="2109" duration="100"/>
+   <frame tileid="2110" duration="100"/>
+   <frame tileid="2111" duration="100"/>
+   <frame tileid="2112" duration="100"/>
+   <frame tileid="2113" duration="100"/>
+   <frame tileid="2114" duration="100"/>
+   <frame tileid="2115" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1977" type="temple77">
+  <animation>
+   <frame tileid="1977" duration="100"/>
+   <frame tileid="2049" duration="100"/>
+   <frame tileid="2050" duration="100"/>
+   <frame tileid="2051" duration="100"/>
+   <frame tileid="2052" duration="100"/>
+   <frame tileid="2053" duration="100"/>
+   <frame tileid="2054" duration="100"/>
+   <frame tileid="2055" duration="100"/>
+   <frame tileid="2056" duration="100"/>
+   <frame tileid="2057" duration="100"/>
+   <frame tileid="2058" duration="100"/>
+   <frame tileid="2059" duration="100"/>
+   <frame tileid="2060" duration="100"/>
+   <frame tileid="2061" duration="100"/>
+   <frame tileid="2062" duration="100"/>
+   <frame tileid="2063" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1979" type="temple78">
+  <animation>
+   <frame tileid="1979" duration="100"/>
+   <frame tileid="2137" duration="100"/>
+   <frame tileid="2138" duration="100"/>
+   <frame tileid="2139" duration="100"/>
+   <frame tileid="2140" duration="100"/>
+   <frame tileid="2141" duration="100"/>
+   <frame tileid="2142" duration="100"/>
+   <frame tileid="2143" duration="100"/>
+   <frame tileid="2144" duration="100"/>
+   <frame tileid="2145" duration="100"/>
+   <frame tileid="2146" duration="100"/>
+   <frame tileid="2147" duration="100"/>
+   <frame tileid="2148" duration="100"/>
+   <frame tileid="2149" duration="100"/>
+   <frame tileid="2150" duration="100"/>
+   <frame tileid="2151" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="1980" type="temple79">
+  <animation>
+   <frame tileid="1980" duration="100"/>
+   <frame tileid="2085" duration="100"/>
+   <frame tileid="2086" duration="100"/>
+   <frame tileid="2087" duration="100"/>
+   <frame tileid="2088" duration="100"/>
+   <frame tileid="2089" duration="100"/>
+   <frame tileid="2090" duration="100"/>
+   <frame tileid="2091" duration="100"/>
+   <frame tileid="2092" duration="100"/>
+   <frame tileid="2093" duration="100"/>
+   <frame tileid="2094" duration="100"/>
+   <frame tileid="2095" duration="100"/>
+   <frame tileid="2096" duration="100"/>
+   <frame tileid="2097" duration="100"/>
+   <frame tileid="2098" duration="100"/>
+   <frame tileid="2099" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2028" type="temple80">
+  <animation>
+   <frame tileid="2028" duration="100"/>
+   <frame tileid="2153" duration="100"/>
+   <frame tileid="2154" duration="100"/>
+   <frame tileid="2155" duration="100"/>
+   <frame tileid="2156" duration="100"/>
+   <frame tileid="2157" duration="100"/>
+   <frame tileid="2158" duration="100"/>
+   <frame tileid="2159" duration="100"/>
+   <frame tileid="2160" duration="100"/>
+   <frame tileid="2161" duration="100"/>
+   <frame tileid="2162" duration="100"/>
+   <frame tileid="2163" duration="100"/>
+   <frame tileid="2164" duration="100"/>
+   <frame tileid="2165" duration="100"/>
+   <frame tileid="2166" duration="100"/>
+   <frame tileid="2167" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2032" type="temple81">
+  <animation>
+   <frame tileid="2032" duration="100"/>
+   <frame tileid="2033" duration="100"/>
+   <frame tileid="2034" duration="100"/>
+   <frame tileid="2035" duration="100"/>
+   <frame tileid="2036" duration="100"/>
+   <frame tileid="2037" duration="100"/>
+   <frame tileid="2038" duration="100"/>
+   <frame tileid="2039" duration="100"/>
+   <frame tileid="2040" duration="100"/>
+   <frame tileid="2041" duration="100"/>
+   <frame tileid="2042" duration="100"/>
+   <frame tileid="2043" duration="100"/>
+   <frame tileid="2044" duration="100"/>
+   <frame tileid="2045" duration="100"/>
+   <frame tileid="2046" duration="100"/>
+   <frame tileid="2047" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2080" type="temple82">
+  <animation>
+   <frame tileid="2080" duration="100"/>
+   <frame tileid="1909" duration="100"/>
+   <frame tileid="1910" duration="100"/>
+   <frame tileid="1911" duration="100"/>
+   <frame tileid="1912" duration="100"/>
+   <frame tileid="1913" duration="100"/>
+   <frame tileid="1914" duration="100"/>
+   <frame tileid="1915" duration="100"/>
+   <frame tileid="1916" duration="100"/>
+   <frame tileid="1917" duration="100"/>
+   <frame tileid="1918" duration="100"/>
+   <frame tileid="1919" duration="100"/>
+   <frame tileid="1920" duration="100"/>
+   <frame tileid="1921" duration="100"/>
+   <frame tileid="1922" duration="100"/>
+   <frame tileid="1923" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2081" type="temple83">
+  <animation>
+   <frame tileid="2081" duration="100"/>
+   <frame tileid="1961" duration="100"/>
+   <frame tileid="1962" duration="100"/>
+   <frame tileid="1963" duration="100"/>
+   <frame tileid="1964" duration="100"/>
+   <frame tileid="1965" duration="100"/>
+   <frame tileid="1966" duration="100"/>
+   <frame tileid="1967" duration="100"/>
+   <frame tileid="1968" duration="100"/>
+   <frame tileid="1969" duration="100"/>
+   <frame tileid="1970" duration="100"/>
+   <frame tileid="1971" duration="100"/>
+   <frame tileid="1972" duration="100"/>
+   <frame tileid="1973" duration="100"/>
+   <frame tileid="1974" duration="100"/>
+   <frame tileid="1975" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2083" type="temple84">
+  <animation>
+   <frame tileid="2083" duration="100"/>
+   <frame tileid="1929" duration="100"/>
+   <frame tileid="1930" duration="100"/>
+   <frame tileid="1931" duration="100"/>
+   <frame tileid="1932" duration="100"/>
+   <frame tileid="1933" duration="100"/>
+   <frame tileid="1934" duration="100"/>
+   <frame tileid="1935" duration="100"/>
+   <frame tileid="1936" duration="100"/>
+   <frame tileid="1937" duration="100"/>
+   <frame tileid="1938" duration="100"/>
+   <frame tileid="1939" duration="100"/>
+   <frame tileid="1940" duration="100"/>
+   <frame tileid="1941" duration="100"/>
+   <frame tileid="1942" duration="100"/>
+   <frame tileid="1943" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2084" type="temple85">
+  <animation>
+   <frame tileid="2084" duration="100"/>
+   <frame tileid="1981" duration="100"/>
+   <frame tileid="1982" duration="100"/>
+   <frame tileid="1983" duration="100"/>
+   <frame tileid="1984" duration="100"/>
+   <frame tileid="1985" duration="100"/>
+   <frame tileid="1986" duration="100"/>
+   <frame tileid="1987" duration="100"/>
+   <frame tileid="1988" duration="100"/>
+   <frame tileid="1989" duration="100"/>
+   <frame tileid="1990" duration="100"/>
+   <frame tileid="1991" duration="100"/>
+   <frame tileid="1992" duration="100"/>
+   <frame tileid="1993" duration="100"/>
+   <frame tileid="1994" duration="100"/>
+   <frame tileid="1995" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2133" type="temple86">
+  <animation>
+   <frame tileid="2133" duration="100"/>
+   <frame tileid="2013" duration="100"/>
+   <frame tileid="2014" duration="100"/>
+   <frame tileid="2015" duration="100"/>
+   <frame tileid="2016" duration="100"/>
+   <frame tileid="2017" duration="100"/>
+   <frame tileid="2018" duration="100"/>
+   <frame tileid="2019" duration="100"/>
+   <frame tileid="2020" duration="100"/>
+   <frame tileid="2021" duration="100"/>
+   <frame tileid="2022" duration="100"/>
+   <frame tileid="2023" duration="100"/>
+   <frame tileid="2024" duration="100"/>
+   <frame tileid="2025" duration="100"/>
+   <frame tileid="2026" duration="100"/>
+   <frame tileid="2027" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2134" type="temple87">
+  <animation>
+   <frame tileid="2134" duration="100"/>
+   <frame tileid="2065" duration="100"/>
+   <frame tileid="2066" duration="100"/>
+   <frame tileid="2067" duration="100"/>
+   <frame tileid="2068" duration="100"/>
+   <frame tileid="2069" duration="100"/>
+   <frame tileid="2070" duration="100"/>
+   <frame tileid="2071" duration="100"/>
+   <frame tileid="2072" duration="100"/>
+   <frame tileid="2073" duration="100"/>
+   <frame tileid="2074" duration="100"/>
+   <frame tileid="2075" duration="100"/>
+   <frame tileid="2076" duration="100"/>
+   <frame tileid="2077" duration="100"/>
+   <frame tileid="2078" duration="100"/>
+   <frame tileid="2079" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="2135" type="temple88">
+  <animation>
+   <frame tileid="2135" duration="100"/>
+   <frame tileid="1877" duration="100"/>
+   <frame tileid="1878" duration="100"/>
+   <frame tileid="1879" duration="100"/>
+   <frame tileid="1880" duration="100"/>
+   <frame tileid="1881" duration="100"/>
+   <frame tileid="1882" duration="100"/>
+   <frame tileid="1883" duration="100"/>
+   <frame tileid="1884" duration="100"/>
+   <frame tileid="1885" duration="100"/>
+   <frame tileid="1886" duration="100"/>
+   <frame tileid="1887" duration="100"/>
+   <frame tileid="1888" duration="100"/>
+   <frame tileid="1889" duration="100"/>
+   <frame tileid="1890" duration="100"/>
+   <frame tileid="1891" duration="100"/>
+  </animation>

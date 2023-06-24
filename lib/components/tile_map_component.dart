@@ -121,6 +121,10 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
+    if(!isFirstLoad){
+      gameRef.camera.zoom = 1.2;
+      gameRef.camera.followVector2(playerPos);
+    }
     _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare);
     _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare);
     for(int i=0;i<3;i++) {
@@ -142,7 +146,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(orthoPlayer!);
-    gameRef.camera.zoom = 1.2;
     isFirstLoad = true;
   }
 
