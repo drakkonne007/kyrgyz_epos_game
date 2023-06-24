@@ -11,7 +11,6 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:xml/xml.dart';
-import 'package:flutter_gif/flutter_gif.dart';
 
 class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
 {
