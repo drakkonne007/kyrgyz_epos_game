@@ -6,12 +6,62 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:xml/xml.dart';
+
+
+Future processTileType(
+    {required RenderableTiledMap tileMap,
+      required TileProcessorFunc addTiles,
+      required List<String> layersToLoad,
+      bool clear = true}) async {
+  for (final layer in layersToLoad) {
+    final tileLayer = tileMap.getLayer<TileLayer>(layer);
+    final tileData = tileLayer?.data;
+    if (tileData != null) {
+      int xOffset = 0;
+      int yOffset = 0;
+      print('start read tiles!');
+      for (var tileId in tileData) {
+        if (tileId != 0) {
+          final tileset = tileMap.map.tilesetByTileGId(tileId);
+
+          final firstGid = tileset.firstGid;
+          if (firstGid != null) {
+            tileId = tileId - firstGid; //+ 1;
+          }
+          final tileData = tileset.tiles[tileId];
+          final position = Vector2(xOffset.toDouble() * tileMap.map.tileWidth,
+              yOffset.toDouble() * tileMap.map.tileWidth);
+          final tileProcessor = TileProcessor(tileData, tileset);
+          await addTiles(
+              tileProcessor,
+              position,
+              Vector2(tileMap.map.tileWidth.toDouble(),
+                  tileMap.map.tileWidth.toDouble()));
+        }
+        xOffset++;
+        if (xOffset == tileLayer?.width) {
+          xOffset = 0;
+          yOffset++;
+        }
+      }
+    }
+  }
+
+  if (clear) {
+    tileMap.map.layers
+        .removeWhere((element) => layersToLoad.contains(element.name));
+    for (var rl in tileMap.renderableLayers) {
+      rl.refreshCache();
+    }
+  }
+}
 
 class MySuperAnimCompiler {
   Map<SpriteAnimation?, List<Vector2>> _allMap = {};
@@ -31,25 +81,23 @@ class MySuperAnimCompiler {
 
   Future<void> compile() async {
     for (int i = 0; i < 16; i++) {
+      print('start write frame $i');
       final composition = ImageCompositionExt();
       for (final anim in _allMap.keys) {
         if (anim == null) {
           continue;
         }
-        _tickers[anim]!;
-        List<Sprite> newSprites = [];
-        while (_tickers[anim]!.currentIndex < anim.frames.length) {
-          final sprite = _tickers[anim]!.getSprite();
-          for (final pos in _allMap[anim]!) {
-            composition.add(sprite.image, pos, source: sprite.src);
-          }
+        final sprite = _tickers[anim]!.getSprite();
+        for (final pos in _allMap[anim]!) {
+          composition.add(sprite.image, pos, source: sprite.src);
         }
       }
       final composedImage = composition.compose();
       // composedImage.resize(Vector2.all(92000));
       var byteData = await composedImage.toByteData(format: ImageByteFormat.png);
-      File file = File(i.toString() + '.png');
+      File file = File('$i.png');
       file.writeAsBytesSync(byteData!.buffer.asUint8List());
+      print('$i - written file');
       for (final anim in _allMap.keys) {
         _tickers[anim]!.currentIndex++;
         if (_tickers[anim]!.currentIndex == anim!.frames.length) {
@@ -117,14 +165,28 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     if(column < 0 || row < 0) {
       return;
     }
-    if(column != 0 && row != 0) {
+    if(column != 0 || row != 0) {
       return;
     }
     isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
     _image = await Flame.images.load('0-0.png');
     position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare);
     // var fileName = '$column-$row.tmx';
-    var fileName = 'top_left_anim.tmx';
+    var fileName = 'test_anim.tmx';
+    var tiled = await TiledComponent.load(fileName, Vector2.all(300*32));
+    var layersLists = tiled.tileMap.renderableLayers;
+    MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
+    for(var a in layersLists){
+      print('start read layer ${a.layer.name}');
+      await processTileType(tileMap: tiled.tileMap,addTiles: (tile, position,size) async {
+        compilerAnimation.addTile(position, tile);
+      },layersToLoad: [a.layer.name]);
+    }
+    print('start compile!');
+    await compilerAnimation.compile();
+    return;
+
+
     print(fileName);
     final text = await Flame.assets.readFile(fileName);
     final objects = XmlDocument.parse(text.toString()).findAllElements('object');

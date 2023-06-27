@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="36" nextobjectid="842">
+ <properties>
+  <property name="AutomappingRadius" type="int" value="4"/>
+ </properties>
+ <tileset firstgid="1" source="Terrain - Ancient Ruins.tsx"/>
+ <tileset firstgid="2210" source="Ancient Ruins-Animated Terrains-16 frames-with transparency.tsx"/>
+ <tileset firstgid="4550" source="Ancient Ruins-Animated Terrains2-8 frames.tsx"/>
+ <tileset firstgid="5507" source="Ancient Ruins-Tileset-Terrain2.tsx"/>
+ <tileset firstgid="9537" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2500" columns="50">
+  <image source="tiles/map/ancientLand/Props/Atlas-Props.png" width="1600" height="1600"/>
+ </tileset>
+ <tileset firstgid="12037" source="Ancient Ruins-Animated Terrains-8 frames.tsx"/>
+ <tileset firstgid="12994" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2496" columns="39">
+  <image source="tiles/map/grassLand/Props/Atlas-Props.png" width="1248" height="2048"/>
+ </tileset>
+ <layer id="30" name="ground2" width="10" height="10">
+  <data encoding="csv">
+368,1335,1382,275,2038,602,583,416,676,583,
+604,321,602,510,133,508,1005,227,1382,678,
+510,1990,0,227,674,1381,583,1524,863,1521,
+650,0,274,1007,1004,725,0,1567,0,0,
+461,508,627,675,228,960,0,0,0,862,
+508,180,1662,370,275,602,1050,677,1053,1521,
+555,1052,275,602,510,508,1665,1662,604,321,
+724,1099,510,179,1238,630,604,1943,605,0,
+630,1006,1383,227,604,273,181,1991,1991,182,
+1571,228,604,273,181,179,604,2038,2038,322
+</data>
+ </layer>
+ <layer id="28" name="ground3" width="10" height="10">
+  <data encoding="csv">
+3928,3877,3824,3929,3930,4135,4187,3825,3823,3877,
+3928,3929,4344,3981,3822,4187,3824,3876,3876,4293,
+4293,3930,0,4135,4187,3824,3877,4293,3980,4345,
+3878,0,4186,3823,3928,4293,0,3981,0,0,
+4189,3772,3823,3824,3929,4294,0,0,0,4135,
+3877,3877,3824,3877,4189,3772,3772,3772,3772,4187,
+3824,3875,3876,3824,3928,3875,3876,3875,3877,3824,
+3876,4293,4344,3980,4291,3928,3875,3876,3929,3927,
+3928,4189,4136,4136,3823,3928,3929,3927,3825,3823,
+3876,3875,3877,3877,3877,3928,4189,4187,3824,3876
+</data>
+ </layer>
+ <layer id="29" name="water" width="10" height="10">
+  <data encoding="csv">
+11007,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,14422,14423,14424,0,0,
+0,0,0,0,0,14461,0,14463,0,0,
+0,0,0,0,0,14500,0,0,0,0,
+0,0,0,0,0,14539,14540,14541,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="32" name="water2" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,9910,0,0,10864,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,9912,0,0,0,0,
+0,0,0,0,0,0,9861,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="33" name="water3" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,9707,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>
