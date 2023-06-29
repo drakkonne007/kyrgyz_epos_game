@@ -43,7 +43,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     _image = await Flame.images.load('0-0.png');
     position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare);
     // var fileName = '$column-$row.tmx';
-    var fileName = 'test_anim.tmx';
+    var fileName = 'top_left_anim.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(320));
     var layersLists = tiled.tileMap.renderableLayers;
     MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
