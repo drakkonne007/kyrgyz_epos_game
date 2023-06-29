@@ -20,6 +20,10 @@ main()
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             debugShowMaterialGrid: false,
+            theme: ThemeData(
+                colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.brown),
+                useMaterial3: true,
+            ),
             home: Scaffold(
                 body: GameWidget(
                   game: KyrgyzGame(),

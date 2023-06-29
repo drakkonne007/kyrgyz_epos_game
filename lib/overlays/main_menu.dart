@@ -1,13 +1,19 @@
 
 
 import 'dart:io';
-
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+
+TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.amber);
+ButtonStyle bStyle = ElevatedButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30.0),
+    ),
+    padding: EdgeInsets.zero,
+    shadowColor: Colors.brown,
+    backgroundColor: Colors.transparent
+);
 
 class MainMenu extends StatelessWidget
 {
@@ -24,6 +30,7 @@ class MainMenu extends StatelessWidget
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(height: 20,),
               Expanded(
                 child:ElevatedButton(
                     clipBehavior: Clip.antiAlias,
@@ -31,23 +38,17 @@ class MainMenu extends StatelessWidget
                       _game.overlays.remove(id);
                       _game.loadNewMap('test.tmx');
                     },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      padding: EdgeInsets.zero,
-                      backgroundColor: Colors.transparent,
-                    ),
+                    style: bStyle,
                     child:
-                    const Stack(
+                    Stack(
                       fit: StackFit.passthrough,
                       alignment: Alignment.center,
                       children: [
-                        Image(
+                        const Image(
                           image: AssetImage('assets/images/gui/wood_button.png'),
                           fit: BoxFit.fill,
                         ),
-                        Text('Продолжить',softWrap: false,),
+                        Text('Продолжить',softWrap: false,style: textStyle),
                       ],
                     )
                 ),
@@ -61,13 +62,7 @@ class MainMenu extends StatelessWidget
                       _game.overlays.remove(id);
                       _game.loadNewMap('test.tmx');
                     },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        padding: EdgeInsets.zero,
-                      backgroundColor: Colors.transparent,
-                    ),
+                    style: bStyle,
                     child:
                     Stack(
                       fit: StackFit.passthrough,
@@ -77,7 +72,7 @@ class MainMenu extends StatelessWidget
                           image: AssetImage('assets/images/gui/wood_button.png'),
                           fit: BoxFit.fill,
                         ),
-                        Text(context.t.newGame),
+                        Text(context.t.newGame,style: textStyle),
                       ],
                     )
                 ),
@@ -88,13 +83,7 @@ class MainMenu extends StatelessWidget
                 ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        padding: EdgeInsets.zero,
-                      backgroundColor: Colors.transparent,
-                    ),
+                    style: bStyle,
                     child:
                     Stack(
                       fit: StackFit.passthrough,
@@ -104,7 +93,7 @@ class MainMenu extends StatelessWidget
                           image: AssetImage('assets/images/gui/wood_button.png'),
                           fit: BoxFit.fill,
                         ),
-                        Text(context.t.loadGame),
+                        Text(context.t.loadGame,style: textStyle),
                       ],
                     )
                 ),
@@ -121,23 +110,17 @@ class MainMenu extends StatelessWidget
                           LocaleSettings.setLocale(AppLocale.kg);
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          padding: EdgeInsets.zero,
-                        backgroundColor: Colors.transparent,
-                      ),
+                      style: bStyle,
                       child:
-                      const Stack(
+                      Stack(
                         fit: StackFit.passthrough,
                         alignment: Alignment.center,
                         children: [
-                          Image(
+                          const Image(
                             image: AssetImage('assets/images/gui/wood_button.png'),
                             fit: BoxFit.fill,
                           ),
-                          Text('Настройки'),
+                          Text('Настройки',style: textStyle),
                         ],
                       )
                   )
@@ -150,27 +133,22 @@ class MainMenu extends StatelessWidget
                     onPressed: (){
                       exit(0);
                     },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        padding: EdgeInsets.zero,
-                      backgroundColor: Colors.transparent,
-                    ),
+                    style: bStyle,
                     child:
-                    const Stack(
+                    Stack(
                       fit: StackFit.passthrough,
                       alignment: Alignment.center,
                       children: [
-                        Image(
+                        const Image(
                           image: AssetImage('assets/images/gui/wood_button.png'),
                           fit: BoxFit.fill,
                         ),
-                        Text('Exit')
+                        Text('Exit',style: textStyle),
                       ],
                     )
                 ),
-              )
+              ),
+              const SizedBox(height: 20,),
             ]
         )
     );
