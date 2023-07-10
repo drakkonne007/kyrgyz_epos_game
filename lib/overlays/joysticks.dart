@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/players/ortho_player.dart';
 
 // class MoveArrow extends RectangleComponent with Tappable, ParentIsA<KyrgyzGame>
 // {
@@ -48,8 +47,7 @@ class OrthoJoystick extends StatefulWidget
   static const id = 'OrthoJoystick';
   double _size;
   KyrgyzGame game;
-  OrthoJoystick(this._size,this.game);
-
+  OrthoJoystick(this._size,this.game,{Key? key}) : super(key: key);
   @override
   State<OrthoJoystick> createState() => _OrthoJoystickState();
 }

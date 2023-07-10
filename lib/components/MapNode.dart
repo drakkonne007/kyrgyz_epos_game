@@ -1,11 +1,9 @@
-
 import 'dart:async';
 import 'package:game_flame/components/precompile_animation.dart';
 import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
@@ -23,6 +21,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
   Image? _image;
   int _id = 0;
   bool isNeedLoadEnemy = true;
+  bool isMapCompile = false; //Надо ли компилить просто карту
 
   int id() => _id++;
 
@@ -34,29 +33,31 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     if(column < 0 || row < 0) {
       return;
     }
-
-    //Стереть, если не надо прекомпилировать
-    if(column != 0 || row != 0) {
-      return;
+    if(isMapCompile) {
+      if (column != 0 || row != 0) {
+        return;
+      }
     }
     isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
     _image = await Flame.images.load('0-0.png');
     position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare);
-    // var fileName = '$column-$row.tmx';
-    var fileName = 'top_left_anim.tmx';
-    var tiled = await TiledComponent.load(fileName, Vector2.all(320));
-    var layersLists = tiled.tileMap.renderableLayers;
-    MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
-    for(var a in layersLists){
-      print('start read layer ${a.layer.name}');
-      await processTileType(tileMap: tiled.tileMap,addTiles: (tile, position,size) async {
-        compilerAnimation.addTile(position, tile);
-      },layersToLoad: [a.layer.name]);
-      compilerAnimation.addLayer();
+    var fileName = isMapCompile ? 'top_left_anim.tmx' : '$column-$row.tmx';
+    if(isMapCompile) {
+      var tiled = await TiledComponent.load(fileName, Vector2.all(320));
+      var layersLists = tiled.tileMap.renderableLayers;
+      MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
+      for (var a in layersLists) {
+        print('start read layer ${a.layer.name}');
+        await processTileType(
+            tileMap: tiled.tileMap, addTiles: (tile, position, size) async {
+          compilerAnimation.addTile(position, tile);
+        }, layersToLoad: [a.layer.name]);
+        compilerAnimation.addLayer();
+      }
+      print('start compile!');
+      await compilerAnimation.compile();
+      return;
     }
-    print('start compile!');
-    await compilerAnimation.compile();
-    return;
     //ЗАкончить стирать
 
     print(fileName);
@@ -72,7 +73,8 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     }
   }
 
-  Future<void> createEnemy(XmlElement obj) async{
+  Future<void> createEnemy(XmlElement obj) async
+  {
     if(!isNeedLoadEnemy){
       print('already exists');
       return;
@@ -83,7 +85,8 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
   }
 
   @override
-  void render(Canvas canvas) {
+  void render(Canvas canvas)
+  {
     if(_image != null) {
       canvas.drawImage(_image!, const Offset(0, 0), Paint());
     }

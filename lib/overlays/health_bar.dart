@@ -9,15 +9,14 @@ import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
 
-
+@immutable
 class HealthBar extends StatefulWidget
 {
-  HealthBar(this.game);
+  HealthBar(this.game, {Key? key}) : super(key: key);
   final KyrgyzGame game;
   static const id = 'HealthBar';
   @override
   State<HealthBar> createState() => _HealthBarState();
-
   var myTextStyle =  const TextStyle( fontSize: 45, letterSpacing: 0.5, fontFamily: 'Samson');
 }
 
