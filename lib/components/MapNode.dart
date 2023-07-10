@@ -97,7 +97,8 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
         }
         file.writeAsStringSync(newObjs);
       }
-      return;
+      print('precompile done');
+      exit(0);
     }
     //Закончить стирать
 
