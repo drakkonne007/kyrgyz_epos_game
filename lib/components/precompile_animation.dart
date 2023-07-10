@@ -104,7 +104,6 @@ class MySuperAnimCompiler {
             composition.add(sprite.image, pos, source: sprite.src);
           }
         }
-
         for (final spr in currentSprites.keys) {
           if (spr == null) {
             continue;
