@@ -74,8 +74,13 @@ Future processTileType(
 
 class AnimationPos
 {
-  late Vector2 position;
-  late SpriteAnimation animation;
+  String sourceImg = '';
+  Vector2 pos = Vector2.all(-1);
+  List<Frame> anim = [];
+  int width = 0;
+  int height = 0;
+  int spriteWidth = 0;
+  int spriteHeight = 0;
 }
 
 class MySuperAnimCompiler
@@ -86,12 +91,24 @@ class MySuperAnimCompiler
   Future addTile(Vector2 position, TileProcessor tileProcessor) async
   {
     var animation = await tileProcessor.getSpriteAnimation();
+    var sprite = await tileProcessor.getSprite();
     if (animation == null) {
       var sprite = await tileProcessor.getSprite();
+      print('sss');
+      print(tileProcessor.tileset.image!.source!);
       if(!_allSpriteMap.containsKey(sprite)) {
         _allSpriteMap.putIfAbsent(sprite, () => []);
       }
       _allSpriteMap[sprite]!.add(position);
+    }else{
+      AnimationPos animPos = AnimationPos();
+      animPos.sourceImg = tileProcessor.tileset.image!.source!;
+      animPos.pos = position;
+      animPos.anim = tileProcessor.tile.animation;
+      animPos.width = tileProcessor.tile.image!.width!;
+      animPos.height = tileProcessor.tile.image!.height!;
+      animPos.spriteWidth = tileProcessor.tileset.tileWidth!;
+      animPos.spriteHeight = tileProcessor.tileset.tileHeight!;
     }
   }
 
