@@ -85,6 +85,8 @@ flutter:
     - assets/tiles/map/grassLand/Props/
     - assets/images/gui/
     - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on grass/
+    - assets/tiles/map/grassLand/TiledMap/
+    - assets/tiles/map/grassLand/Tilesets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

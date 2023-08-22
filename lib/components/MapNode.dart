@@ -14,18 +14,6 @@ import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:xml/xml.dart';
 
-
-const List<String> mapsForCompile = [
-  'top_left_anim.tmx', //0
-  'top_left_bottom.tmx',
-  'top_right_anim.tmx', //2
-  'top_right_bottom.tmx',
-  'bottom_left_anim.tmx', //4
-  'bottom_left_bottom.tmx',
-  'bottom_right_anim.tmx', //6
-  'bottom_right_bottom.tmx',
-];
-
 const int currentMaps = 0;
 
 //function is intersect two rectangles
@@ -65,27 +53,41 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
     isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) || !gameRef.gameMap.loadedRows.contains(row);
     _image = await Flame.images.load('0-0.png');
     position = Vector2(column * GameConsts.lengthOfTileSquare, row * GameConsts.lengthOfTileSquare);
-    var fileName = isMapCompile ? mapsForCompile[currentMaps] : '$column-$row.tmx';
+    var fileName = isMapCompile ? 'top_left_bottom.tmx' : '$column-$row.tmx';
     if(isMapCompile) {
       var tiled = await TiledComponent.load(fileName, Vector2.all(320));
-      if(false) {
+      if(true) {
         var layersLists = tiled.tileMap.renderableLayers;
+        MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
         MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
         for (var a in layersLists) {
-          print('start read layer ${a.layer.name}');
+          if(a.layer.type != LayerType.tileLayer) {
+            continue;
+          }
           await processTileType(
+              clear: false,
+              renderMode: RenderCompileMode.Background,
+              tileMap: tiled.tileMap, addTiles: (tile, position, size) async {
+            compilerAnimationBack.addTile(position, tile);
+          }, layersToLoad: [a.layer.name]);
+          compilerAnimationBack.addLayer();
+
+          await processTileType(
+              clear: false,
+              renderMode: RenderCompileMode.Foreground,
               tileMap: tiled.tileMap, addTiles: (tile, position, size) async {
             compilerAnimation.addTile(position, tile);
           }, layersToLoad: [a.layer.name]);
           compilerAnimation.addLayer();
         }
         print('start compile!');
-        await compilerAnimation.compile();
+        await compilerAnimation.compile('high');
+        await compilerAnimationBack.compile('down');
       }
-      tiled = await TiledComponent.load(mapsForCompile[currentMaps + 1], Vector2.all(320));
+      tiled = await TiledComponent.load(fileName, Vector2.all(320));
       var objs = tiled.tileMap.getLayer<ObjectGroup>("objects");
       if(objs != null){
-        File file = File('$column-$row.tmx');
+        File file = File('$column-$row.danmx');
         String newObjs = '';
         Rectangle rec = Rectangle.fromPoints(position, Vector2(position.x + GameConsts.lengthOfTileSquare,position.y + GameConsts.lengthOfTileSquare));
         for(final obj in objs.objects){
