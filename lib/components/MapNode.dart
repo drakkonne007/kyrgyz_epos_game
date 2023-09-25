@@ -39,7 +39,7 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> generateMap() async
   {
-    if(column > GameConsts.maxColumn || row > GameConsts.maxRow) {
+    if(column >= GameConsts.maxColumn || row >= GameConsts.maxRow) {
       return;
     }
     if(column < 0 || row < 0) {
@@ -84,20 +84,33 @@ class MapNode extends PositionComponent with HasGameRef<KyrgyzGame>
         await compilerAnimation.compile('high');
         await compilerAnimationBack.compile('down');
       }
-      tiled = await TiledComponent.load(fileName, Vector2.all(320));
+      // tiled = await TiledComponent.load(fileName, Vector2.all(320));
       var objs = tiled.tileMap.getLayer<ObjectGroup>("objects");
-      if(objs != null){
-        File file = File('$column-$row.danmx');
-        String newObjs = '';
-        Rectangle rec = Rectangle.fromPoints(position, Vector2(position.x + GameConsts.lengthOfTileSquare,position.y + GameConsts.lengthOfTileSquare));
-        for(final obj in objs.objects){
-          Rectangle objRect = Rectangle.fromPoints(Vector2(obj.x, obj.y), Vector2(obj.x + obj.width, obj.y + obj.height));
-          if(isIntersect(rec, objRect)) {
-            newObjs += '<object name="${obj.name}" class="${obj.type}" x="${obj.x}" y="${obj.y}" width="${obj.width}" height="${obj.height}"/>';
-            newObjs += '\n';
+      if(objs != null) {
+        for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
+          for (int rows = 0; rows < GameConsts.maxRow; rows++) {
+            var positionCurs = Vector2(cols * GameConsts.lengthOfTileSquare, rows * GameConsts.lengthOfTileSquare);
+            String newObjs = '';
+            Rectangle rec = Rectangle.fromPoints(positionCurs, Vector2(
+                positionCurs.x + GameConsts.lengthOfTileSquare,
+                positionCurs.y + GameConsts.lengthOfTileSquare));
+            for (final obj in objs.objects) {
+              Rectangle objRect = Rectangle.fromPoints(Vector2(obj.x, obj.y),
+                  Vector2(obj.x + obj.width, obj.y + obj.height));
+              if (isIntersect(rec, objRect)) {
+                newObjs +=
+                '<object name="${obj.name}" class="${obj.type}" x="${obj
+                    .x}" y="${obj.y}" width="${obj.width}" height="${obj
+                    .height}"/>';
+                newObjs += '\n';
+              }
+            }
+            if(newObjs != '') {
+              File file = File('metaData/$cols-$rows.objXml');
+              file.writeAsStringSync(newObjs);
+            }
           }
         }
-        file.writeAsStringSync(newObjs);
       }
       print('precompile done');
       exit(0);

@@ -38,8 +38,6 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     }
     WidgetsBinding.instance.addObserver(this);
     playerData.setStartValues();
-    // initializeCollisionDetection(mapDimensions: const Rect.fromLTWH(0, 0, 3328*3, 3328*3), minimumDistance: 500);
-    // QuadTreeNodeDebugInfo.init(collisionDetection).
     add(gameMap);
   }
 
