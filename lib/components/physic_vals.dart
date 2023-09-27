@@ -26,9 +26,9 @@ enum PlayerDirectionMove{
 
 class GameConsts
 {
-  static const maxRow = 10;
-  static const maxColumn = 10;
-  static const double lengthOfTileSquare = 32*30;
+  static const maxRow = 30;
+  static const maxColumn = 30;
+  static const double lengthOfTileSquare = 32*10;
 }
 
 class PlayerData

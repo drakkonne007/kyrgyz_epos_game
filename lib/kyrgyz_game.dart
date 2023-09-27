@@ -21,6 +21,9 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   CustomTileMap gameMap = CustomTileMap();
   PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
+  static List<String> objXmls = [];
+  static List<String> anims = [];
+  static List<String> tiledPngs = [];
 
   @override
   Future<void> onLoad() async
@@ -39,6 +42,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     WidgetsBinding.instance.addObserver(this);
     playerData.setStartValues();
     add(gameMap);
+    gameMap.preloadAnimAndObj();
   }
 
   @override
@@ -87,7 +91,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   Future<void> loadNewMap(String filePath) async
   {
     gameMap.removeAll(gameMap.children);
-    gameMap.loadNewMap(Vector2(1300,1300));
+    gameMap.loadNewMap(Vector2(0,0));
   }
 
   @override
@@ -115,6 +119,9 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
       case AppLifecycleState.detached:
         print('detached');
         pauseEngine();
+        break;
+      case AppLifecycleState.hidden:
+        // TODO: Handle this case.
         break;
     }
   }

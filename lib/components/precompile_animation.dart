@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -78,23 +77,69 @@ class IntPoint
   IntPoint(this.x, this.y);
   int x; //column
   int y; //row
+
+  @override
+  bool operator ==(other)
+  {
+    if(other is IntPoint){
+      if(x != other.x || y != other.y){
+        return false;
+      }
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode => x.hashCode + y.hashCode;
+
 }
 
 class AnimationPos
 {
   String sourceImg = '';
-  Vector2 pos = Vector2.all(-1);
   final List<IntPoint> spritePos = [];
   final List<double> stepTimes = [];
-  int spriteWidth = 32;
-  int spriteHeight = 32;
+
+  @override
+  operator ==(other)
+  {
+    if(other is AnimationPos){
+      if(spritePos.length == other.spritePos.length){
+        for(int i=0;i<spritePos.length;i++){
+          if(spritePos[i] != other.spritePos[i]){
+            return false;
+          }
+        }
+      }else{
+        return false;
+      }
+      if(stepTimes.length == other.stepTimes.length){
+        for(int i=0;i<stepTimes.length;i++){
+          if(stepTimes[i] != other.stepTimes[i]){
+            return false;
+          }
+        }
+      }else{
+        return false;
+      }
+      if(sourceImg != other.sourceImg){
+        return false;
+      }
+    }else{
+      return false;
+    }
+    return true;
+  }
+  @override
+  int get hashCode => sourceImg.hashCode + spritePos[0].hashCode + stepTimes[0].hashCode;
 }
 
-class MySuperAnimCompiler
-{
+class MySuperAnimCompiler {
   List<Map<Sprite?, List<Vector2>>> _mapsSprite = [];
   Map<Sprite?, List<Vector2>> _allSpriteMap = {};
-  List<AnimationPos> _animations = [];
+  Map<AnimationPos, List<Vector2>> _animations = {};
 
   Future addTile(Vector2 position, TileProcessor tileProcessor) async
   {
@@ -103,22 +148,22 @@ class MySuperAnimCompiler
       var sprite = await tileProcessor.getSprite();
       _allSpriteMap.putIfAbsent(sprite, () => []);
       _allSpriteMap[sprite]!.add(position);
-    }else{
+    } else {
       AnimationPos pos = AnimationPos();
-      pos.pos = position;
       pos.sourceImg = tileProcessor.tileset.image!.source!;
       Image image = await Flame.images.load(pos.sourceImg);
-      int maxColumn = image.width ~/ pos.spriteWidth;
-      for(final frame in tileProcessor.tile.animation){
+      int maxColumn = image.width ~/ 32;
+      for (final frame in tileProcessor.tile.animation) {
         pos.stepTimes.add(frame.duration / 1000);
-        pos.spritePos.add(IntPoint(frame.tileId % maxColumn, frame.tileId ~/ maxColumn));
+        pos.spritePos.add(
+            IntPoint(frame.tileId % maxColumn, frame.tileId ~/ maxColumn));
       }
-      _animations.add(pos);
+      _animations.putIfAbsent(pos, () => []);
+      _animations[pos]!.add(position);
     }
   }
 
-  void addLayer()
-  {
+  void addLayer() {
     _mapsSprite.add(_allSpriteMap);
     _allSpriteMap = {};
   }
@@ -126,11 +171,12 @@ class MySuperAnimCompiler
   Future<void> compile(String path) async
   {
     print('start compile! $path');
-    final nullImage = await Flame.images.load('null_image.png');
+    final nullImage = await Flame.images.load('null_image-small.png');
     for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
       for (int rows = 0; rows < GameConsts.maxRow; rows++) {
         bool isWas = false;
-        var position = Vector2(cols * GameConsts.lengthOfTileSquare, rows * GameConsts.lengthOfTileSquare);
+        var position = Vector2(cols * GameConsts.lengthOfTileSquare,
+            rows * GameConsts.lengthOfTileSquare);
         Rectangle rec = Rectangle.fromPoints(position, Vector2(
             position.x + GameConsts.lengthOfTileSquare,
             position.y + GameConsts.lengthOfTileSquare));
@@ -142,7 +188,7 @@ class MySuperAnimCompiler
               continue;
             }
             for (final pos in currentSprites[spr]!) {
-              if(!rec.containsPoint(pos + Vector2.all(1))){
+              if (!rec.containsPoint(pos + Vector2.all(1))) {
                 continue;
               }
               composition.add(spr.image, pos - position, source: spr.src);
@@ -151,35 +197,55 @@ class MySuperAnimCompiler
           }
         }
         if (isWas) {
-          composition.add(nullImage, Vector2.all(0), source: nullImage.getBoundingRect());
+          composition.add(
+              nullImage, Vector2.all(0), source: nullImage.getBoundingRect());
           final composedImage = composition.compose();
           var byteData = await composedImage.toByteData(
               format: ImageByteFormat.png);
-          File file = File('metaData/$cols-${rows}_$path.png');
+          File file = File('assets/metaData/$cols-${rows}_$path.png');
           file.writeAsBytesSync(byteData!.buffer.asUint8List());
         }
       }
     }
     for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
       for (int rows = 0; rows < GameConsts.maxRow; rows++) {
-        var position = Vector2(cols * GameConsts.lengthOfTileSquare, rows * GameConsts.lengthOfTileSquare);
+        var position = Vector2(cols * GameConsts.lengthOfTileSquare,
+            rows * GameConsts.lengthOfTileSquare);
         Rectangle rec = Rectangle.fromPoints(position, Vector2(
             position.x + GameConsts.lengthOfTileSquare,
             position.y + GameConsts.lengthOfTileSquare));
-        String xml = '';
-        for(final anim in _animations){
-          if(!rec.containsPoint(Vector2(anim.pos.x, anim.pos.y))){
-            continue;
+        bool isStartFile = false;
+        for (final anim in _animations.keys) {
+          String animText = '';
+          List<Vector2> currentPoints = _animations[anim]!;
+          for (final point in currentPoints) {
+            if (!rec.containsPoint(point + Vector2.all(1))) {
+              continue;
+            }
+            if (animText == '') {
+              animText = '<an src="${anim.sourceImg}">\n';
+              for (int i = 0; i < anim.stepTimes.length; i++) {
+                animText +=
+                '<fr dr="${anim.stepTimes[i]}" cl="${anim.spritePos[i]
+                    .x}" rw="${anim.spritePos[i].y}"/>\n';
+              }
+            }
+            animText +=
+            '<ps x="${point.x}" y="${point.y}"/>\n';
           }
-          xml += '<animation source="${anim.sourceImg}" x="${anim.pos.x}" y="${anim.pos.y}">\n';
-          for(int i=0;i<anim.stepTimes.length;i++){
-            xml += '<stepTime="${anim.stepTimes[i]}" column="${anim.spritePos[i].x}" row="${anim.spritePos[i].y}">\n';
+          if (animText != '') {
+            File file = File('assets/metaData/$cols-${rows}_$path.anim');
+            if(!isStartFile){
+              isStartFile = true;
+              file.writeAsStringSync('<p>\n', mode: FileMode.append);
+            }
+            file.writeAsStringSync(animText, mode: FileMode.append);
+            file.writeAsStringSync('</an>\n', mode: FileMode.append);
           }
-          xml += '</animation>\n';
         }
-        if(xml != '') {
-          File file = File('metaData/$cols-${rows}_$path.anim');
-          file.writeAsStringSync(xml, mode: FileMode.append);
+        if (isStartFile) {
+          File file = File('assets/metaData/$cols-${rows}_$path.anim');
+          file.writeAsStringSync('</p>\n', mode: FileMode.append);
         }
       }
     }

@@ -67,6 +67,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/metaData/
     - assets/
     - assets/images/flags/
     - assets/tiles/

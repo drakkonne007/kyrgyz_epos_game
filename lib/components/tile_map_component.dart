@@ -1,5 +1,9 @@
+import 'dart:math';
+
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
@@ -9,16 +13,26 @@ import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
+import 'package:xml/xml.dart';
 
 class LoadedColumnRow
 {
   LoadedColumnRow(this.column, this.row);
   int column;
   int row;
+
+  @override
+  bool operator ==(Object other) {
+    return other is LoadedColumnRow && other.column == column && other.row == row;
+  }
+
+  @override
+  int get hashCode => column.hashCode ^ row.hashCode;
 }
 
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
+  bool isCached = false;
   final _imageBatchCompiler = ImageBatchCompiler();
   ObjectHitbox? currentObject;
   int countId=0;
@@ -29,6 +43,63 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   bool isFirstLoad = false;
   Set<int> loadedColumns = {};
   Set<int> loadedRows = {};
+  Map<RectangleHitbox,int> rectHitboxes = {};
+  Map<LoadedColumnRow,List<PositionComponent>> allEls = {};
+
+  void preloadAnimAndObj() async
+  {
+    KyrgyzGame.anims.clear();
+    KyrgyzGame.objXmls.clear();
+    KyrgyzGame.tiledPngs.clear();
+    for(int cl = 0; cl < GameConsts.maxColumn; cl++){
+      for(int rw = 0; rw < GameConsts.maxRow; rw++){
+        try{
+          await Flame.assets.readFile('metaData/$cl-$rw.objXml');
+          KyrgyzGame.objXmls.add('metaData/$cl-$rw.objXml');
+        }catch(e){
+          print(e);
+        }
+        try{
+          var animsDown = await Flame.assets.readFile(
+              'metaData/$cl-${rw}_high.anim');
+          KyrgyzGame.anims.add('metaData/$cl-${rw}_high.anim');
+          var objects =
+          XmlDocument.parse(animsDown.toString()).findAllElements('an');
+          for (final obj in objects) {
+            await Flame.images.load(obj.getAttribute('src')!);
+          }
+        }catch(e){
+          print(e);
+        }
+        try{
+          var animsHigh = await Flame.assets.readFile(
+              'metaData/$cl-${rw}_down.anim');
+          KyrgyzGame.anims.add('metaData/$cl-${rw}_down.anim');
+          var objects
+          = XmlDocument.parse(animsHigh.toString()).findAllElements('an');
+          for (final obj in objects) {
+            await Flame.images.load(obj.getAttribute('src')!);
+          }
+        }catch(e){
+          print(e);
+        }
+        try{
+          await Flame.images.load('metaData/$cl-${rw}_high.png');
+          KyrgyzGame.tiledPngs.add('metaData/$cl-${rw}_high.png');
+        }catch(e){
+          print(e);
+        }
+        try{
+          await Flame.images.load('metaData/$cl-${rw}_down.png');
+          KyrgyzGame.tiledPngs.add('metaData/$cl-${rw}_down.png');
+        }catch(e){
+          print(e);
+        }
+      }
+    }
+    isCached = true;
+    print('stop cached map');
+  }
 
   int column()
   {
@@ -52,7 +123,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     _row = newRow;
     loadedColumns.removeWhere((element) => (element - newColumn).abs() > 2);
     loadedRows.removeWhere((element) => (element - newRow).abs() > 2);
-    var toRemove = [];
+    List<MapNode> toRemove = [];
     if(newColumn < tempColumn){
       for(final node in _mapNodes) {
         if (node.column == newColumn + 2) {
@@ -109,9 +180,44 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         _mapNodes.add(node);
       }
     }
+    LoadedColumnRow? cl;
+    for(final node in toRemove) {
+      cl = LoadedColumnRow(node.column, node.row);
+      _mapNodes.remove(node);
+      if(allEls.containsKey(cl)) {
+        for(final list in allEls[cl]!){
+          list.priority = -1000;
+          list.removeFromParent();
+          remove(list);
+        }
+        allEls.remove(cl);
+      }
+      for(final recs in node.hits){
+        if(rectHitboxes.containsKey(recs)){
+          rectHitboxes[recs] = rectHitboxes[recs]! - 1;
+        }
+        if(rectHitboxes[recs]! < 0){
+          rectHitboxes.remove(recs);
+          remove(recs);          // remove(recs);
+        }
+      }
+    }
+    // int minPriority = 0;
+    // for(final node in allEls.values) {
+    //   for(final recs in node){
+    //     minPriority = min(minPriority, recs.priority);
+    //   }
+    // }
+    // print('sizes: ${rectHitboxes.length} - hitBoxes; $minPriority - minPriority; ${orthoPlayer?.priority} - orthoPlayer.priority');
+    // if(orthoPlayer == null){
+    //   print('orthoPlayer suddenly null');
+    //   orthoPlayer = OrthoPlayer();
+    //   await add(orthoPlayer!);
+    //   orthoPlayer?.priority = GamePriority.player;
+    // }
+    // orthoPlayer?.priority = GamePriority.player;
     loadedColumns.addAll({_column,_column - 1, _column + 1});
     loadedRows.addAll({_row,_row - 1, _row + 1});
-    _mapNodes.removeWhere((element) => toRemove.contains(element));
   }
 
   clearGameMap()
@@ -140,9 +246,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
     await add(orthoPlayer!);
-    orthoPlayer?.priority = GamePriority.player;
     orthoPlayer?.position = playerPos;
-    // await add(ScreenHitbox());
+    orthoPlayer?.priority = GamePriority.player;
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(orthoPlayer!);

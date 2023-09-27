@@ -8,5 +8,6 @@
 /web
 /windows
 /.idea
-/metaData/*
+/metaData/
+/assets/metaData/
 *.xcf

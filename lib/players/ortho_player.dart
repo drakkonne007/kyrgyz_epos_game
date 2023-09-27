@@ -67,10 +67,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     _hitBox = PlayerHitbox(size:Vector2(47,47),position: Vector2(49,27));
     await add(_hitBox);
-    _hitBox.debugMode=true;
-    anchor = Anchor(_hitBox.center.x / width, _hitBox.center.y / height);
-    _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,anchor:Anchor.center,size: Vector2(width/2,20),position: Vector2(_spriteSheetWidth/2, _spriteSheetHeight/2));
+    _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,anchor:Anchor.center,size: Vector2(30,30),position: Vector2(_spriteSheetWidth/2, _spriteSheetHeight - 30));
+    _groundBox.debugMode = true;
     await add(_groundBox);
+    anchor = Anchor(_groundBox.center.x / width, _groundBox.center.y / height);
     _weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
     await add(_weapon);
   }
@@ -186,6 +186,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     bool isRun = false;
     Vector2 velo = Vector2.all(0);
+    if(event.isKeyPressed(LogicalKeyboardKey.keyO)){
+      position=Vector2(0,0);
+    }
     if(event.isKeyPressed(LogicalKeyboardKey.keyE)){
       gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water));
     }
@@ -245,17 +248,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
       _speed.y = 0;
-      if(positionOfAnchor(anchor).y < other.center.y){
-        position.y = other.y- _groundBox.height/2;
+      if(_groundBox.absoluteCenter.y < other.absoluteCenter.y){
+        position.y = other.absolutePosition.y - _groundBox.height/2 - 1;
       }else{
-        position.y = other.y + other.height - (_groundBox.height/2-_groundBox.height);
+        position.y = other.absolutePosition.y + other.height - (_groundBox.height/2-_groundBox.height) + 1;
       }
     }else{
       _speed.x = 0;
-      if(positionOfAnchor(anchor).x > other.center.x){
-        position.x=other.x + other.width + _groundBox.width/2;
+      if(_groundBox.absoluteCenter.x > other.absoluteCenter.x){
+        position.x=other.absolutePosition.x + other.width + _groundBox.width/2 + 1;
       }else{
-        position.x=other.x - _groundBox.width/2;
+        position.x=other.absolutePosition.x - _groundBox.width/2 - 1;
       }
     }
   }

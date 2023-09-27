@@ -35,8 +35,12 @@ class MainMenu extends StatelessWidget
                 child:ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      _game.overlays.remove(id);
-                      _game.loadNewMap('test.tmx');
+                      if(_game.gameMap.isCached){
+                        _game.overlays.remove(id);
+                        _game.loadNewMap('test.tmx');
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('still cached resourses')));
+                      }
                     },
                     style: bStyle,
                     child:
@@ -59,8 +63,12 @@ class MainMenu extends StatelessWidget
                 ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      _game.overlays.remove(id);
-                      _game.loadNewMap('test.tmx');
+                      if(_game.gameMap.isCached){
+                        _game.overlays.remove(id);
+                        _game.loadNewMap('test.tmx');
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('still cached resourses')));
+                      }
                     },
                     style: bStyle,
                     child:
