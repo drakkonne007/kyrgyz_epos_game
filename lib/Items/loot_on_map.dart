@@ -1,17 +1,17 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
 {
   LootOnMap(this._item,
       {bool? autoResize,
-        Paint? paint,
         required super.position,
         Vector2? size,
         super.scale,
@@ -19,15 +19,24 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
         super.nativeAngle,
         super.anchor = Anchor.center,
         super.children,
-        super.priority});
+        super.priority = GamePriority.items}){
+    _startPosition = position;
+  }
+  Vector2? _startPosition;
   final Item _item;
   late ObjectHitbox _objectHitbox;
 
   @override
   Future<void> onLoad() async
   {
-    final spriteImage = await Flame.images.load(
-        _item.source);
+    Image? spriteImage;
+    try{
+      spriteImage = Flame.images.fromCache(
+          _item.source);
+    }catch(e){
+      spriteImage = await Flame.images.load(
+          _item.source);
+    }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _item.srcSize);
     sprite = spriteSheet.getSprite(_item.row, _item.column);
@@ -43,6 +52,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));
     add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){
       if(_item.hideAfterUse) {
+        gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
         removeFromParent();
       }
       _item.getEffect(gameRef);

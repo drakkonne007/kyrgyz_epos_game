@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
+import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -45,6 +44,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   Set<int> loadedRows = {};
   Map<RectangleHitbox,int> rectHitboxes = {};
   Map<LoadedColumnRow,List<PositionComponent>> allEls = {};
+  Set<Vector2> loadedLivesObjs = {};
 
   void preloadAnimAndObj() async
   {
@@ -54,19 +54,20 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     for(int cl = 0; cl < GameConsts.maxColumn; cl++){
       for(int rw = 0; rw < GameConsts.maxRow; rw++){
         try{
-          await Flame.assets.readFile('metaData/$cl-$rw.objXml');
-          KyrgyzGame.objXmls.add('metaData/$cl-$rw.objXml');
+          var temp = await Flame.assets.readFile('metaData/$cl-$rw.objXml');
+          KyrgyzGame.objXmls['metaData/$cl-$rw.objXml'] = temp;
         }catch(e){
           print(e);
         }
         try{
           var animsDown = await Flame.assets.readFile(
               'metaData/$cl-${rw}_high.anim');
-          KyrgyzGame.anims.add('metaData/$cl-${rw}_high.anim');
+          KyrgyzGame.anims['metaData/$cl-${rw}_high.anim'] = animsDown;
           var objects =
           XmlDocument.parse(animsDown.toString()).findAllElements('an');
           for (final obj in objects) {
-            await Flame.images.load(obj.getAttribute('src')!);
+            var temp = await Flame.images.load(obj.getAttribute('src')!);
+            KyrgyzGame.animsImgs[obj.getAttribute('src')!] = temp;
           }
         }catch(e){
           print(e);
@@ -74,24 +75,25 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         try{
           var animsHigh = await Flame.assets.readFile(
               'metaData/$cl-${rw}_down.anim');
-          KyrgyzGame.anims.add('metaData/$cl-${rw}_down.anim');
+          KyrgyzGame.anims['metaData/$cl-${rw}_down.anim'] = animsHigh;
           var objects
           = XmlDocument.parse(animsHigh.toString()).findAllElements('an');
           for (final obj in objects) {
-            await Flame.images.load(obj.getAttribute('src')!);
+            var temp = await Flame.images.load(obj.getAttribute('src')!);
+            KyrgyzGame.animsImgs[obj.getAttribute('src')!] = temp;
           }
         }catch(e){
           print(e);
         }
         try{
-          await Flame.images.load('metaData/$cl-${rw}_high.png');
-          KyrgyzGame.tiledPngs.add('metaData/$cl-${rw}_high.png');
+          var temp = await Flame.images.load('metaData/$cl-${rw}_high.png');
+          KyrgyzGame.tiledPngs['metaData/$cl-${rw}_high.png'] = temp;
         }catch(e){
           print(e);
         }
         try{
-          await Flame.images.load('metaData/$cl-${rw}_down.png');
-          KyrgyzGame.tiledPngs.add('metaData/$cl-${rw}_down.png');
+          var temp = await Flame.images.load('metaData/$cl-${rw}_down.png');
+          KyrgyzGame.tiledPngs['metaData/$cl-${rw}_down.png'] = temp;
         }catch(e){
           print(e);
         }
@@ -186,9 +188,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       _mapNodes.remove(node);
       if(allEls.containsKey(cl)) {
         for(final list in allEls[cl]!){
-          list.priority = -1000;
           list.removeFromParent();
-          remove(list);
         }
         allEls.remove(cl);
       }
@@ -202,20 +202,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         }
       }
     }
-    // int minPriority = 0;
-    // for(final node in allEls.values) {
-    //   for(final recs in node){
-    //     minPriority = min(minPriority, recs.priority);
-    //   }
-    // }
-    // print('sizes: ${rectHitboxes.length} - hitBoxes; $minPriority - minPriority; ${orthoPlayer?.priority} - orthoPlayer.priority');
-    // if(orthoPlayer == null){
-    //   print('orthoPlayer suddenly null');
-    //   orthoPlayer = OrthoPlayer();
-    //   await add(orthoPlayer!);
-    //   orthoPlayer?.priority = GamePriority.player;
-    // }
-    // orthoPlayer?.priority = GamePriority.player;
     loadedColumns.addAll({_column,_column - 1, _column + 1});
     loadedRows.addAll({_row,_row - 1, _row + 1});
   }
@@ -251,6 +237,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(orthoPlayer!);
+    gameRef.camera.zoom = 1.2;
     isFirstLoad = true;
   }
 

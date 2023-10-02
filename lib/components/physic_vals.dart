@@ -26,9 +26,9 @@ enum PlayerDirectionMove{
 
 class GameConsts
 {
-  static const maxRow = 30;
-  static const maxColumn = 30;
-  static const double lengthOfTileSquare = 32*10;
+  static const maxRow = 27;
+  static const maxColumn = 27;
+  static const double lengthOfTileSquare = 32*11;
 }
 
 class PlayerData
@@ -39,7 +39,7 @@ class PlayerData
     , Vector2? curPosition,double? gameTime,double? milisecsInGame})
   {
     maxHealth.value = maxHp ?? 100;
-    this.maxEnergy.value = maxEnergy ?? 5;
+    this.maxEnergy.value = maxEnergy ?? 9999999;
     health.value = curHp ?? maxHealth.value;
     energy.value = curEnergy ?? this.maxEnergy.value;
     this.killedBosses = killedBosses ?? {};

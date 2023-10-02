@@ -171,7 +171,7 @@ class MySuperAnimCompiler {
   Future<void> compile(String path) async
   {
     print('start compile! $path');
-    final nullImage = await Flame.images.load('null_image-small.png');
+    final nullImage = await Flame.images.load('null_image-352px.png');
     for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
       for (int rows = 0; rows < GameConsts.maxRow; rows++) {
         bool isWas = false;

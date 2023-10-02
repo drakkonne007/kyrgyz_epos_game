@@ -1,5 +1,6 @@
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
@@ -57,8 +58,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   Future<void> onLoad() async
   {
-    final spriteImage = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
-    final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
+    Image? spriteImg;
+    try{
+      spriteImg = Flame.images.fromCache('tiles/sprites/players/warrior-144x96.png');
+    }catch(e){
+      spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
+    }
+    final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
     _animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.15, from: 0,to: 8);
@@ -68,7 +74,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _hitBox = PlayerHitbox(size:Vector2(47,47),position: Vector2(49,27));
     await add(_hitBox);
     _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,anchor:Anchor.center,size: Vector2(30,30),position: Vector2(_spriteSheetWidth/2, _spriteSheetHeight - 30));
-    _groundBox.debugMode = true;
+    // _groundBox.debugMode = true;
     await add(_groundBox);
     anchor = Anchor(_groundBox.center.x / width, _groundBox.center.y / height);
     _weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});

@@ -1,12 +1,14 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
+import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -28,7 +30,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   late GroundHitBox _groundBox;
   final Vector2 _spriteSheetSize = Vector2(224,192);
   Vector2 _startPos;
-  Vector2 _speed = Vector2(0,20);
+  Vector2 _speed = Vector2(0,10);
   GolemVariant spriteVariant;
 
   @override
@@ -50,13 +52,23 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   Future<void> onLoad() async
   {
     priority = GamePriority.player;
-    final spriteImage;
+    Image? spriteImage;
     if(spriteVariant == GolemVariant.Water){
-      spriteImage = await Flame.images.load(
-          'tiles/sprites/players/Stone-224x192.png');
+      try {
+        spriteImage = Flame.images.fromCache(
+            'tiles/sprites/players/Stone-224x192.png');
+      }catch(e){
+        spriteImage = await Flame.images.load(
+            'tiles/sprites/players/Stone-224x192.png');
+      }
     }else{
-      spriteImage = await Flame.images.load(
-          'tiles/sprites/players/Stone2-224x192.png');
+      try {
+        spriteImage = Flame.images.fromCache(
+            'tiles/sprites/players/Stone2-224x192.png');
+      }catch(e){
+        spriteImage = await Flame.images.load(
+            'tiles/sprites/players/Stone2-224x192.png');
+      }
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
@@ -72,9 +84,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     //_groundBox.anchor = Anchor.center;
     _hitbox = EnemyHitbox(size: Vector2(69,71),position: Vector2(77, 55));
     await add(_hitbox);
-    _hitbox.debugMode = true;
-    _hitbox.debugColor = BasicPalette.black.color;
-    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(width/3,height/2), position: Vector2(position.x + width/2 - width/6, position.y + height/2 - height/6));
+    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(69,71), position: Vector2(77, 55));
     await add(_groundBox);
     // _groundBox.debugMode = true;
     _groundBox.debugColor = BasicPalette.red.color;
@@ -106,6 +116,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
+      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){
@@ -127,19 +138,36 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       _speed = Vector2.all(0);
       if(loots.isNotEmpty) {
         if(loots.length > 1){
-          gameRef.gameMap.add(Chest(myItems: loots, position: positionOfAnchor(Anchor.center)));
+          var temp = Chest(myItems: loots, position: positionOfAnchor(Anchor.center));
+          gameRef.gameMap.add(temp);
+          int col = positionOfAnchor(Anchor.center).x ~/ (GameConsts.lengthOfTileSquare);
+          int row = positionOfAnchor(Anchor.center).y ~/ (GameConsts.lengthOfTileSquare);
+          LoadedColumnRow tempCoord = LoadedColumnRow(col, row);
+          gameRef.gameMap.allEls.putIfAbsent(tempCoord, () => []);
+          gameRef.gameMap.allEls[tempCoord]!.add(temp);
         }else{
-          gameRef.gameMap.add(LootOnMap(loots.first, position: positionOfAnchor(Anchor.center)));
+          var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
+          gameRef.gameMap.add(temp);
+          int col = positionOfAnchor(Anchor.center).x ~/ (GameConsts.lengthOfTileSquare);
+          int row = positionOfAnchor(Anchor.center).y ~/ (GameConsts.lengthOfTileSquare);
+          LoadedColumnRow tempCoord = LoadedColumnRow(col, row);
+          gameRef.gameMap.allEls.putIfAbsent(tempCoord, () => []);
+          gameRef.gameMap.allEls[tempCoord]!.add(temp);
         }
       }
       animation = _animDeath;
       removeAll(children);
       SpriteAnimationTicker tick = SpriteAnimationTicker(_animDeath);
       add(OpacityEffect.by(-0.95,EffectController(duration: tick.totalDuration()),onComplete: (){
+        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
       }));
     }else{
       animation = _animHurt;
+      SpriteAnimationTicker tick = SpriteAnimationTicker(_animHurt);
+      tick.onComplete = (){
+        animation = _animMove;
+      };
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
@@ -21,9 +22,10 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   CustomTileMap gameMap = CustomTileMap();
   PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
-  static List<String> objXmls = [];
-  static List<String> anims = [];
-  static List<String> tiledPngs = [];
+  static Map<String,String> objXmls = {};
+  static Map<String,String> anims = {};
+  static Map<String,ext.Image> tiledPngs = {};
+  static Map<String,ext.Image> animsImgs = {};
 
   @override
   Future<void> onLoad() async

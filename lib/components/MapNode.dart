@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
+import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/precompile_animation.dart';
-import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
@@ -36,7 +37,6 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
   Image? _imageDown;
   Image? _highImg;
   int _id = 0;
-  bool isNeedLoadEnemy = true;
   bool isMapCompile = false; //Надо ли компилить просто карту
   Set<RectangleHitbox> hits = {};
 
@@ -54,13 +54,12 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
       await compileAll();
       exit(0);
     }
-    isNeedLoadEnemy = !gameRef.gameMap.loadedColumns.contains(column) ||
-        !gameRef.gameMap.loadedRows.contains(row);
-    if (KyrgyzGame.tiledPngs.contains('metaData/$column-${row}_high.png')) {
-      _highImg = Flame.images.fromCache('metaData/$column-${row}_high.png');
+    LoadedColumnRow lcr = LoadedColumnRow(column, row);
+    if (KyrgyzGame.tiledPngs.containsKey('metaData/$column-${row}_high.png')) {
+      _highImg = KyrgyzGame.tiledPngs['metaData/$column-${row}_high.png'];
     }
-    if (KyrgyzGame.tiledPngs.contains('metaData/$column-${row}_down.png')) {
-      _imageDown = Flame.images.fromCache('metaData/$column-${row}_down.png');
+    if (KyrgyzGame.tiledPngs.containsKey('metaData/$column-${row}_down.png')) {
+      _imageDown = KyrgyzGame.tiledPngs['metaData/$column-${row}_down.png'];
     }
     if (_imageDown != null) {
       var spriteDown = SpriteComponent(
@@ -70,18 +69,14 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
         size: Vector2.all(GameConsts.lengthOfTileSquare+1),
         priority: 0,
       );
-      LoadedColumnRow lcr = LoadedColumnRow(column, row);
       gameRef.gameMap.add(spriteDown);
       gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
       gameRef.gameMap.allEls[lcr]!.add(spriteDown);
     }
-    if (KyrgyzGame.anims.contains('metaData/$column-${row}_down.anim')) {
-      var animsDown = await Flame.assets.readFile(
-          'metaData/$column-${row}_down.anim');
-      var objects
-      = XmlDocument.parse(animsDown.toString()).findAllElements('an');
+    if (KyrgyzGame.anims.containsKey('metaData/$column-${row}_down.anim')) {
+      var objects = XmlDocument.parse(KyrgyzGame.anims['metaData/$column-${row}_down.anim']!).findAllElements('an');
       for (final obj in objects) {
-        var srcImage = await Flame.images.load(obj.getAttribute('src')!);
+        Image srcImage = KyrgyzGame.animsImgs[obj.getAttribute('src')!]!;
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
         for (final anim in obj.findAllElements('fr')) {
@@ -99,20 +94,17 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
                 double.parse(anim.getAttribute('y')!)),
             size: Vector2.all(33),
               priority: GamePriority.ground + 1);
-          LoadedColumnRow lcr = LoadedColumnRow(column, row);
           gameRef.gameMap.add(ss);
           gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
           gameRef.gameMap.allEls[lcr]!.add(ss);
         }
       }
     }
-    if (KyrgyzGame.anims.contains('metaData/$column-${row}_high.anim')) {
-      var animsHigh = await Flame.assets.readFile(
-          'metaData/$column-${row}_high.anim');
+    if (KyrgyzGame.anims.containsKey('metaData/$column-${row}_high.anim')) {
       var objects =
-      XmlDocument.parse(animsHigh.toString()).findAllElements('an');
+      XmlDocument.parse(KyrgyzGame.anims['metaData/$column-${row}_high.anim']!).findAllElements('an');
       for (final obj in objects) {
-        var srcImage = Flame.images.fromCache(obj.getAttribute('src')!);
+        Image srcImage = KyrgyzGame.animsImgs[obj.getAttribute('src')!]!;
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
         for (final anim in obj.findAllElements('fr')) {
@@ -130,7 +122,6 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
                   double.parse(anim.getAttribute('y')!)),
               priority: GamePriority.high,
               size: Vector2.all(33));
-          LoadedColumnRow lcr = LoadedColumnRow(column, row);
           gameRef.gameMap.add(ss);
           gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
           gameRef.gameMap.allEls[lcr]!.add(ss);
@@ -145,26 +136,24 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
         priority: GamePriority.high - 1,
         size: Vector2.all(GameConsts.lengthOfTileSquare+1),
       );
-      LoadedColumnRow lcr = LoadedColumnRow(column, row);
       gameRef.gameMap.add(spriteHigh);
       gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
       gameRef.gameMap.allEls[lcr]!.add(spriteHigh);
     }
-    if (KyrgyzGame.objXmls.contains('metaData/$column-$row.objXml')) {
-      var text = await Flame.assets.readFile('metaData/$column-$row.objXml');
-      var objects = XmlDocument.parse(text.toString()).findAllElements('obj');
+    if (KyrgyzGame.objXmls.containsKey('metaData/$column-$row.objXml')) {
+      var objects = XmlDocument.parse(KyrgyzGame.objXmls['metaData/$column-$row.objXml']!).findAllElements('obj');
       for (final obj in objects) {
-        switch (obj.getAttribute('nm')) {
-        // case 'enemy':  await createEnemy(obj); break;
-          default:
-            Vector2 size = Vector2(
-                double.parse(obj.getAttribute('w')!),
-                double.parse(obj.getAttribute('h')!)
-            );
-            Vector2 position = Vector2(
-                double.parse(obj.getAttribute('x')!),
-                double.parse(obj.getAttribute('y')!)
-            );
+        Vector2 size = Vector2(
+            double.parse(obj.getAttribute('w')!),
+            double.parse(obj.getAttribute('h')!)
+        );
+        Vector2 position = Vector2(
+            double.parse(obj.getAttribute('x')!),
+            double.parse(obj.getAttribute('y')!)
+        );
+        String? name = obj.getAttribute('nm');
+        switch (name) {
+          case '':
             bool isNeed = true;
             for(final hit in gameRef.gameMap.rectHitboxes.keys){
               if(hit.position == position && hit.size == size){
@@ -181,22 +170,35 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
               hits.add(ground);
             }
             break;
+          default: createLiveObj(position,name); break;
         }
       }
     }
   }
 
-  Future<void> createEnemy(XmlElement obj) async
+  Future<void> createLiveObj(Vector2 position,String? name) async
   {
-    if (!isNeedLoadEnemy) {
-      print('already exists');
+    if (gameRef.gameMap.loadedLivesObjs.contains(position)) {
       return;
     }
-    await gameRef.gameMap.add(GrassGolem(Vector2(
-        double.parse(obj.getAttribute('x')!) +
-            column * GameConsts.lengthOfTileSquare,
-        double.parse(obj.getAttribute('y')!) +
-            row * GameConsts.lengthOfTileSquare), GolemVariant.Water));
+    switch(name){
+      case 'enemy':
+        gameRef.gameMap.loadedLivesObjs.add(position);
+        gameRef.gameMap.add(GrassGolem(position, GolemVariant.Water));
+        break;
+      case 'gold':
+        var temp = LootOnMap(itemFromId(2), position: position);
+        gameRef.gameMap.add(temp);
+        gameRef.gameMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        gameRef.gameMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
+        break;
+      case 'chest':
+        var temp = Chest(myItems: [itemFromId(2)], position: position);
+        gameRef.gameMap.add(temp);
+        gameRef.gameMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        gameRef.gameMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
+        break;
+    }    
   }
 
   Future<void> compileAll() async
