@@ -117,8 +117,6 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                               ),
                             ),
                           ),
-                          const SizedBox(width: 5, height: 0,),
-                          Text(val.toStringAsFixed(1),style: widget.myTextStyle.copyWith(color: Colors.blue[700]!),),
                         ],
                       )
                   ),

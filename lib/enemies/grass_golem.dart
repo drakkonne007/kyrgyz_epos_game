@@ -32,6 +32,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   Vector2 _startPos;
   Vector2 _speed = Vector2(0,10);
   GolemVariant spriteVariant;
+  SpriteAnimationTicker? _ticker;
 
   @override
   int column=0;
@@ -74,25 +75,25 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         srcSize: _spriteSheetSize);
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
-    _animAttack1 = spriteSheet.createAnimation(row: 2, stepTime: 0.15, from: 0, to: 17);
-    _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.15, from: 0, to: 16);
-    _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.15, from: 0, to: 16);
+    _animAttack1 = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 17);
+    _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 16);
+    _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 16);
     anchor = Anchor.center;
     animation = _animMove;
     size = _spriteSheetSize;
     position = _startPos;
     //_groundBox.anchor = Anchor.center;
     _hitbox = EnemyHitbox(size: Vector2(69,71),position: Vector2(77, 55));
-    await add(_hitbox);
+    add(_hitbox);
     _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(69,71), position: Vector2(77, 55));
-    await add(_groundBox);
+    add(_groundBox);
     // _groundBox.debugMode = true;
     _groundBox.debugColor = BasicPalette.red.color;
     EWBody body = EWBody(size: Vector2(69,71),position: Vector2(77, 55));
     body.collisionType = CollisionType.active;
     // body.debugMode = true;
     body.debugColor = BasicPalette.blue.color;
-    await add(body);
+    add(body);
     math.Random rand = math.Random();
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
