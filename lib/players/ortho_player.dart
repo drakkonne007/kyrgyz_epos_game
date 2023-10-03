@@ -28,7 +28,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   late PlayerWeapon _weapon;
 
   @override
-  void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
+  void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})async
   {
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;

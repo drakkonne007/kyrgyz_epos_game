@@ -9,7 +9,6 @@ import 'package:game_flame/components/precompile_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -28,21 +27,13 @@ bool isIntersect(Rectangle rect1, Rectangle rect2)
       rect2.top < rect1.bottom);
 }
 
-class MapNode extends Component with HasGameRef<KyrgyzGame>
+class MapNode
 {
-  MapNode(this.column, this.row, this.imageBatchCompiler);
-  final int column;
-  final int row;
-  final ImageBatchCompiler imageBatchCompiler;
-  Image? _imageDown;
-  Image? _highImg;
-  int _id = 0;
+  MapNode(this.tileMap);
+  CustomTileMap tileMap;
   bool isMapCompile = false; //Надо ли компилить просто карту
-  Set<RectangleHitbox> hits = {};
 
-  int id() => _id++;
-
-  Future<void> generateMap() async
+  Future<void> generateMap(int column, int row) async
   {
     if (column >= GameConsts.maxColumn || row >= GameConsts.maxRow) {
       return;
@@ -51,9 +42,10 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
       return;
     }
     if (isMapCompile) {
-      await compileAll();
+      await compileAll(column,row);
       exit(0);
     }
+    Image? _imageDown, _highImg;
     LoadedColumnRow lcr = LoadedColumnRow(column, row);
     if (KyrgyzGame.tiledPngs.containsKey('metaData/$column-${row}_high.png')) {
       _highImg = KyrgyzGame.tiledPngs['metaData/$column-${row}_high.png'];
@@ -63,15 +55,15 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
     }
     if (_imageDown != null) {
       var spriteDown = SpriteComponent(
-        sprite: Sprite(_imageDown!),
+        sprite: Sprite(_imageDown),
         position: Vector2(column * GameConsts.lengthOfTileSquare,
             row * GameConsts.lengthOfTileSquare),
         size: Vector2.all(GameConsts.lengthOfTileSquare+1),
         priority: 0,
       );
-      gameRef.gameMap.add(spriteDown);
-      gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
-      gameRef.gameMap.allEls[lcr]!.add(spriteDown);
+      tileMap.add(spriteDown);
+      tileMap.allEls.putIfAbsent(lcr, () => []);
+      tileMap.allEls[lcr]!.add(spriteDown);
     }
     if (KyrgyzGame.anims.containsKey('metaData/$column-${row}_down.anim')) {
       var objects = XmlDocument.parse(KyrgyzGame.anims['metaData/$column-${row}_down.anim']!).findAllElements('an');
@@ -94,9 +86,9 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
                 double.parse(anim.getAttribute('y')!)),
             size: Vector2.all(33),
               priority: GamePriority.ground + 1);
-          gameRef.gameMap.add(ss);
-          gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
-          gameRef.gameMap.allEls[lcr]!.add(ss);
+          tileMap.add(ss);
+          tileMap.allEls.putIfAbsent(lcr, () => []);
+          tileMap.allEls[lcr]!.add(ss);
         }
       }
     }
@@ -122,9 +114,9 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
                   double.parse(anim.getAttribute('y')!)),
               priority: GamePriority.high,
               size: Vector2.all(33));
-          gameRef.gameMap.add(ss);
-          gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
-          gameRef.gameMap.allEls[lcr]!.add(ss);
+          tileMap.add(ss);
+          tileMap.allEls.putIfAbsent(lcr, () => []);
+          tileMap.allEls[lcr]!.add(ss);
         }
       }
     }
@@ -136,9 +128,9 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
         priority: GamePriority.high - 1,
         size: Vector2.all(GameConsts.lengthOfTileSquare+1),
       );
-      gameRef.gameMap.add(spriteHigh);
-      gameRef.gameMap.allEls.putIfAbsent(lcr, () => []);
-      gameRef.gameMap.allEls[lcr]!.add(spriteHigh);
+      tileMap.add(spriteHigh);
+      tileMap.allEls.putIfAbsent(lcr, () => []);
+      tileMap.allEls[lcr]!.add(spriteHigh);
     }
     if (KyrgyzGame.objXmls.containsKey('metaData/$column-$row.objXml')) {
       var objects = XmlDocument.parse(KyrgyzGame.objXmls['metaData/$column-$row.objXml']!).findAllElements('obj');
@@ -155,53 +147,55 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
         switch (name) {
           case '':
             bool isNeed = true;
-            for(final hit in gameRef.gameMap.rectHitboxes.keys){
+            for(final hit in tileMap.rectHitboxes.keys){
               if(hit.position == position && hit.size == size){
-                gameRef.gameMap.rectHitboxes[hit] = gameRef.gameMap.rectHitboxes[hit]! + 1;
+                tileMap.rectHitboxes[hit] = tileMap.rectHitboxes[hit]! + 1;
                 isNeed = false;
-                hits.add(hit);
+                tileMap.allRecs.putIfAbsent(lcr, () => []);
+                tileMap.allRecs[lcr]!.add(hit);
                 break;
               }
             }
             if(isNeed){
               var ground = Ground(size: size, position: position);
-              gameRef.gameMap.add(ground);
-              gameRef.gameMap.rectHitboxes.putIfAbsent(ground, () => 0);
-              hits.add(ground);
+              tileMap.add(ground);
+              tileMap.rectHitboxes.putIfAbsent(ground, () => 0);
+              tileMap.allRecs.putIfAbsent(lcr, () => []);
+              tileMap.allRecs[lcr]!.add(ground);
             }
             break;
-          default: createLiveObj(position,name); break;
+          default: createLiveObj(position,name,column,row); break;
         }
       }
     }
   }
 
-  Future<void> createLiveObj(Vector2 position,String? name) async
+  Future<void> createLiveObj(Vector2 position,String? name, int column, int row) async
   {
-    if (gameRef.gameMap.loadedLivesObjs.contains(position)) {
+    if (tileMap.loadedLivesObjs.contains(position)) {
       return;
     }
     switch(name){
       case 'enemy':
-        gameRef.gameMap.loadedLivesObjs.add(position);
-        gameRef.gameMap.add(GrassGolem(position, GolemVariant.Water));
+        tileMap.loadedLivesObjs.add(position);
+        tileMap.add(GrassGolem(position, GolemVariant.Water));
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
-        gameRef.gameMap.add(temp);
-        gameRef.gameMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        gameRef.gameMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
+        tileMap.add(temp);
+        tileMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        tileMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         break;
       case 'chest':
         var temp = Chest(myItems: [itemFromId(2)], position: position);
-        gameRef.gameMap.add(temp);
-        gameRef.gameMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        gameRef.gameMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
+        tileMap.add(temp);
+        tileMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        tileMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         break;
     }    
   }
 
-  Future<void> compileAll() async
+  Future<void> compileAll(int column, int row) async
   {
     if(column != 0 && row != 0) {
       return;
@@ -272,14 +266,4 @@ class MapNode extends Component with HasGameRef<KyrgyzGame>
     }
     print('precompile done');
   }
-// @override
-// void render(Canvas canvas)
-// {
-//   if(_imageDown != null) {
-//     canvas.drawImage(_imageDown!, const Offset(0, 0), Paint());
-//   }
-//   if(_highImg != null) {
-//     canvas.drawImage(_highImg!, const Offset(0, 0), Paint());
-//   }
-// }
 }

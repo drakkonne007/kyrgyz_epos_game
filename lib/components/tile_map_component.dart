@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
-import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -32,19 +31,25 @@ class LoadedColumnRow
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
   bool isCached = false;
-  final _imageBatchCompiler = ImageBatchCompiler();
   ObjectHitbox? currentObject;
   int countId=0;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
   int _column=0,_row=0;
-  final List<MapNode> _mapNodes = [];
   bool isFirstLoad = false;
-  Set<int> loadedColumns = {};
-  Set<int> loadedRows = {};
   Map<RectangleHitbox,int> rectHitboxes = {};
   Map<LoadedColumnRow,List<PositionComponent>> allEls = {};
   Set<Vector2> loadedLivesObjs = {};
+  Set<LoadedColumnRow> _loadedColumns = {};
+  Map<LoadedColumnRow,List<RectangleHitbox>> allRecs = {};
+  MapNode? _mapNode;
+
+  @override
+  Future<void> onLoad() async
+  {
+    _mapNode = MapNode(this);
+    await super.onLoad();
+  }
 
   void preloadAnimAndObj() async
   {
@@ -123,87 +128,91 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     var tempRow = _row;
     _column = newColumn;
     _row = newRow;
-    loadedColumns.removeWhere((element) => (element - newColumn).abs() > 2);
-    loadedRows.removeWhere((element) => (element - newRow).abs() > 2);
-    List<MapNode> toRemove = [];
+    Set<LoadedColumnRow> _toRemove = {};
     if(newColumn < tempColumn){
-      for(final node in _mapNodes) {
+      for(final node in _loadedColumns) {
         if (node.column == newColumn + 2) {
-          toRemove.add(node);
-          node.removeFromParent();
+          if(allEls.containsKey(node)) {
+            for(final list in allEls[node]!){
+              list.removeFromParent();
+            }
+            allEls.remove(node);
+          }
+          _toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn - 1, newRow + i - 1,_imageBatchCompiler);
-        await add(node);
-        await node.generateMap();
-        _mapNodes.add(node);
+        _mapNode?.generateMap(newColumn - 1, newRow + i - 1);
+        _loadedColumns.add(LoadedColumnRow(newColumn - 1, newRow + i - 1));
       }
     }
     if(newColumn > tempColumn){
-      for(final node in _mapNodes) {
+      for(final node in _loadedColumns) {
         if (node.column == newColumn - 2) {
-          toRemove.add(node);
-          node.removeFromParent();
+          if(allEls.containsKey(node)) {
+            for(final list in allEls[node]!){
+              list.removeFromParent();
+            }
+            allEls.remove(node);
+          }
+          _toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn + 1, newRow + i - 1,_imageBatchCompiler);
-        await add(node);
-        await node.generateMap();
-        _mapNodes.add(node);
+        _mapNode?.generateMap(newColumn + 1, newRow + i - 1);
+        _loadedColumns.add(LoadedColumnRow(newColumn + 1, newRow + i - 1));
       }
     }
     if(newRow < tempRow){
-      for(final node in _mapNodes) {
+      for(final node in _loadedColumns) {
         if (node.row == newRow + 2) {
-          toRemove.add(node);
-          node.removeFromParent();
+          if(allEls.containsKey(node)) {
+            for(final list in allEls[node]!){
+              list.removeFromParent();
+            }
+            allEls.remove(node);
+          }
+          _toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn + i - 1, newRow - 1,_imageBatchCompiler);
-        await add(node);
-        await node.generateMap();
-        _mapNodes.add(node);
+        _mapNode?.generateMap(newColumn + i - 1, newRow - 1);
+        _loadedColumns.add(LoadedColumnRow(newColumn + i - 1, newRow - 1));
       }
     }
     if(newRow > tempRow){
-      for(final node in _mapNodes) {
+      for(final node in _loadedColumns) {
         if (node.row == newRow - 2) {
-          toRemove.add(node);
-          node.removeFromParent();
+          if(allEls.containsKey(node)) {
+            for(final list in allEls[node]!){
+              list.removeFromParent();
+            }
+            allEls.remove(node);
+          }
+          _toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn + i - 1, newRow + 1,_imageBatchCompiler);
-        await add(node);
-        await node.generateMap();
-        _mapNodes.add(node);
+        _mapNode?.generateMap(newColumn + i - 1, newRow + 1);
+        _loadedColumns.add(LoadedColumnRow(newColumn + i - 1, newRow + 1));
       }
     }
-    LoadedColumnRow? cl;
-    for(final node in toRemove) {
-      cl = LoadedColumnRow(node.column, node.row);
-      _mapNodes.remove(node);
-      if(allEls.containsKey(cl)) {
-        for(final list in allEls[cl]!){
-          list.removeFromParent();
+    for(final loadedColumns in _toRemove) {
+      _loadedColumns.remove(loadedColumns);
+      if (allRecs.containsKey(loadedColumns)) {
+        for (int i = 0; i < allRecs[loadedColumns]!.length; i++) {
+          if (rectHitboxes.containsKey(allRecs[loadedColumns]![i])) {
+            rectHitboxes[allRecs[loadedColumns]![i]] =
+                rectHitboxes[allRecs[loadedColumns]![i]]! - 1;
+            if (rectHitboxes[allRecs[loadedColumns]![i]]! < 0) {
+              rectHitboxes.remove(allRecs[loadedColumns]![i]);
+              allRecs[loadedColumns]![i].removeFromParent();
+            }
+          }
         }
-        allEls.remove(cl);
-      }
-      for(final recs in node.hits){
-        if(rectHitboxes.containsKey(recs)){
-          rectHitboxes[recs] = rectHitboxes[recs]! - 1;
-        }
-        if(rectHitboxes[recs]! < 0){
-          rectHitboxes.remove(recs);
-          remove(recs);          // remove(recs);
-        }
+        allRecs.remove(loadedColumns);
       }
     }
-    loadedColumns.addAll({_column,_column - 1, _column + 1});
-    loadedRows.addAll({_row,_row - 1, _row + 1});
   }
 
   clearGameMap()
@@ -213,22 +222,13 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
-    if(!isFirstLoad){
-      gameRef.camera.zoom = 1.2;
-      gameRef.camera.followVector2(playerPos);
-    }
     _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare);
     _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare);
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
-        var node = MapNode(_column + j - 1, _row + i - 1,_imageBatchCompiler);
-        await add(node);
-        await node.generateMap();
-        _mapNodes.add(node);
+        await _mapNode?.generateMap(_column + j - 1, _row + i - 1);
       }
     }
-    loadedColumns.addAll({_column,_column - 1, _column + 1});
-    loadedRows.addAll({_row,_row - 1, _row + 1});
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
     await add(orthoPlayer!);
@@ -237,7 +237,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(orthoPlayer!);
-    gameRef.camera.zoom = 1.2;
+    gameRef.camera.zoom = 1.25;
     isFirstLoad = true;
   }
 

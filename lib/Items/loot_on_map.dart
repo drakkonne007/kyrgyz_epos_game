@@ -42,7 +42,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     sprite = spriteSheet.getSprite(_item.row, _item.column);
     size = Vector2.all(30);
     _objectHitbox = ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);
-    await add(_objectHitbox);
+    add(_objectHitbox);
   }
 
   void getItemToPlayer()

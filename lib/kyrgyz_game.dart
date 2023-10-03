@@ -99,7 +99,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   @override
   Color backgroundColor()
   {
-    return Colors.orange;
+    return Colors.black;
   }
 
   @override

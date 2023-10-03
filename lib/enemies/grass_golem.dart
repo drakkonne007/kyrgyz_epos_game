@@ -83,16 +83,16 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     position = _startPos;
     //_groundBox.anchor = Anchor.center;
     _hitbox = EnemyHitbox(size: Vector2(69,71),position: Vector2(77, 55));
-    await add(_hitbox);
+    add(_hitbox);
     _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(69,71), position: Vector2(77, 55));
-    await add(_groundBox);
-    // _groundBox.debugMode = true;
     _groundBox.debugColor = BasicPalette.red.color;
+    add(_groundBox);
+    // _groundBox.debugMode = true;
     EWBody body = EWBody(size: Vector2(69,71),position: Vector2(77, 55));
     body.collisionType = CollisionType.active;
     // body.debugMode = true;
     body.debugColor = BasicPalette.blue.color;
-    await add(body);
+    add(body);
     math.Random rand = math.Random();
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
@@ -127,7 +127,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})async
   {
     if(inArmor){
       health -= math.max(hurt - armor, 0);
@@ -139,7 +139,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       if(loots.isNotEmpty) {
         if(loots.length > 1){
           var temp = Chest(myItems: loots, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.add(temp);
+          await gameRef.gameMap.add(temp);
           int col = positionOfAnchor(Anchor.center).x ~/ (GameConsts.lengthOfTileSquare);
           int row = positionOfAnchor(Anchor.center).y ~/ (GameConsts.lengthOfTileSquare);
           LoadedColumnRow tempCoord = LoadedColumnRow(col, row);
@@ -147,7 +147,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
           gameRef.gameMap.allEls[tempCoord]!.add(temp);
         }else{
           var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.add(temp);
+          await gameRef.gameMap.add(temp);
           int col = positionOfAnchor(Anchor.center).x ~/ (GameConsts.lengthOfTileSquare);
           int row = positionOfAnchor(Anchor.center).y ~/ (GameConsts.lengthOfTileSquare);
           LoadedColumnRow tempCoord = LoadedColumnRow(col, row);
@@ -158,7 +158,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       animation = _animDeath;
       removeAll(children);
       SpriteAnimationTicker tick = SpriteAnimationTicker(_animDeath);
-      add(OpacityEffect.by(-0.95,EffectController(duration: tick.totalDuration()),onComplete: (){
+      await add(OpacityEffect.by(-0.95,EffectController(duration: tick.totalDuration()),onComplete: (){
         gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
       }));

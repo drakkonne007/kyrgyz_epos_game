@@ -249,7 +249,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   // }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})async
   {
     // TODO: implement doHurt
   }
