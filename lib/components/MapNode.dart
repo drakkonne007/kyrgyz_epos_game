@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/flame.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -9,12 +10,12 @@ import 'package:game_flame/components/precompile_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
+import 'package:game_flame/main.dart';
 import 'package:xml/xml.dart';
 
 const int currentMaps = 0;
@@ -37,7 +38,6 @@ class MapNode
   Image? _imageDown;
   Image? _highImg;
   int _id = 0;
-  bool isMapCompile = false; //Надо ли компилить просто карту
   Set<RectangleHitbox> hits = {};
 
   int id() => _id++;
@@ -55,28 +55,33 @@ class MapNode
       exit(0);
     }
     LoadedColumnRow lcr = LoadedColumnRow(column, row);
-    if (KyrgyzGame.tiledPngs.containsKey('metaData/$column-${row}_high.png')) {
-      _highImg = KyrgyzGame.tiledPngs['metaData/$column-${row}_high.png'];
+    try{
+      _highImg = await Flame.images.load('metaData/$column-${row}_high.png');
+    }catch(e){
+      e;
     }
-    if (KyrgyzGame.tiledPngs.containsKey('metaData/$column-${row}_down.png')) {
-      _imageDown = KyrgyzGame.tiledPngs['metaData/$column-${row}_down.png'];
+    try {
+      _imageDown = await Flame.images.load('metaData/$column-${row}_down.png');
+    }catch(e){
+      e;
     }
     if (_imageDown != null) {
       var spriteDown = SpriteComponent(
         sprite: Sprite(_imageDown!),
-        position: Vector2(column * GameConsts.lengthOfTileSquare,
-            row * GameConsts.lengthOfTileSquare),
-        size: Vector2.all(GameConsts.lengthOfTileSquare+1),
+        position: Vector2(column * GameConsts.lengthOfTileSquare.x,
+            row * GameConsts.lengthOfTileSquare.y),
+        size: GameConsts.lengthOfTileSquare+Vector2.all(1),
         priority: 0,
       );
       custMap.add(spriteDown);
       custMap.allEls.putIfAbsent(lcr, () => []);
       custMap.allEls[lcr]!.add(spriteDown);
     }
-    if (KyrgyzGame.anims.containsKey('metaData/$column-${row}_down.anim')) {
-      var objects = XmlDocument.parse(KyrgyzGame.anims['metaData/$column-${row}_down.anim']!).findAllElements('an');
+    try{
+      var objects = XmlDocument.parse(await Flame.assets.readFile(
+          'metaData/$column-${row}_down.anim')).findAllElements('an');
       for (final obj in objects) {
-        Image srcImage = KyrgyzGame.animsImgs[obj.getAttribute('src')!]!;
+        Image srcImage = await Flame.images.load(obj.getAttribute('src')!);
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
         for (final anim in obj.findAllElements('fr')) {
@@ -90,15 +95,22 @@ class MapNode
             spriteList, stepTimes: stepTimes);
         for(final anim in obj.findAllElements('ps')){
           var ss = SpriteAnimationComponent(animation: sprAnim,
-            position: Vector2(double.parse(anim.getAttribute('x')!),
-                double.parse(anim.getAttribute('y')!)),
-            size: Vector2.all(33),
+              position: Vector2(double.parse(anim.getAttribute('x')!),
+                  double.parse(anim.getAttribute('y')!)),
+              size: Vector2.all(33),
               priority: GamePriority.ground + 1);
           custMap.add(ss);
           custMap.allEls.putIfAbsent(lcr, () => []);
           custMap.allEls[lcr]!.add(ss);
         }
       }
+    }catch(e){
+      e;
+    }
+    try{
+
+    }catch(e){
+      e;
     }
     if (KyrgyzGame.anims.containsKey('metaData/$column-${row}_high.anim')) {
       var objects =
@@ -131,17 +143,17 @@ class MapNode
     if (_highImg != null) {
       var spriteHigh = SpriteComponent(
         sprite: Sprite(_highImg!),
-        position: Vector2(column * GameConsts.lengthOfTileSquare,
-            row * GameConsts.lengthOfTileSquare),
+        position: Vector2(column * GameConsts.lengthOfTileSquare.x,
+            row * GameConsts.lengthOfTileSquare.y),
         priority: GamePriority.high - 1,
-        size: Vector2.all(GameConsts.lengthOfTileSquare+1),
+        size: GameConsts.lengthOfTileSquare+Vector2.all(1),
       );
       custMap.add(spriteHigh);
       custMap.allEls.putIfAbsent(lcr, () => []);
       custMap.allEls[lcr]!.add(spriteHigh);
     }
-    if (KyrgyzGame.objXmls.containsKey('metaData/$column-$row.objXml')) {
-      var objects = XmlDocument.parse(KyrgyzGame.objXmls['metaData/$column-$row.objXml']!).findAllElements('obj');
+    try{
+      var objects = XmlDocument.parse(await Flame.assets.readFile('metaData/$column-$row.objXml')).findAllElements('obj');
       for (final obj in objects) {
         Vector2 size = Vector2(
             double.parse(obj.getAttribute('w')!),
@@ -173,7 +185,7 @@ class MapNode
           default: createLiveObj(position,name); break;
         }
       }
-    }
+    }catch(e){e;}
   }
 
   Future<void> createLiveObj(Vector2 position,String? name) async
@@ -198,7 +210,7 @@ class MapNode
         custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
         custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         break;
-    }    
+    }
   }
 
   Future<void> compileAll() async
@@ -244,12 +256,12 @@ class MapNode
     if (objs != null) {
       for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
         for (int rows = 0; rows < GameConsts.maxRow; rows++) {
-          var positionCurs = Vector2(cols * GameConsts.lengthOfTileSquare,
-              rows * GameConsts.lengthOfTileSquare);
+          var positionCurs = Vector2(cols * GameConsts.lengthOfTileSquare.x,
+              rows * GameConsts.lengthOfTileSquare.y);
           String newObjs = '';
           Rectangle rec = Rectangle.fromPoints(positionCurs, Vector2(
-              positionCurs.x + GameConsts.lengthOfTileSquare,
-              positionCurs.y + GameConsts.lengthOfTileSquare));
+              positionCurs.x + GameConsts.lengthOfTileSquare.x,
+              positionCurs.y + GameConsts.lengthOfTileSquare.y));
           for (final obj in objs.objects) {
             Rectangle objRect = Rectangle.fromPoints(Vector2(obj.x, obj.y),
                 Vector2(obj.x + obj.width, obj.y + obj.height));

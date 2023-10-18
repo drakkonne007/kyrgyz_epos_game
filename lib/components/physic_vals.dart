@@ -26,9 +26,11 @@ enum PlayerDirectionMove{
 
 class GameConsts
 {
-  static const maxRow = 27;
+  //9504 тайла
+  static final Vector2 lengthOfTileSquare = Vector2(32*11,32*9);
   static const maxColumn = 27;
-  static const double lengthOfTileSquare = 32*11;
+  static const maxRow = 33;
+
 }
 
 class PlayerData

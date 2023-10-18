@@ -41,12 +41,16 @@ abstract class EnemyWeapon extends RectangleHitbox
     super.anchor,
     super.priority,
     bool isSolid = false,
+    required this.onStartWeaponHit,
+    required this.onEndWeaponHit
   })
   {
     collisionType = CollisionType.inactive;
     // debugColor = BasicPalette.orange.color;
     // debugMode = true;
   }
+  Function() onStartWeaponHit;
+  Function() onEndWeaponHit;
   double damage = 0;
   double permanentDamage = 0;
   double secsOfPermDamage = 0;

@@ -175,11 +175,11 @@ class MySuperAnimCompiler {
     for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
       for (int rows = 0; rows < GameConsts.maxRow; rows++) {
         bool isWas = false;
-        var position = Vector2(cols * GameConsts.lengthOfTileSquare,
-            rows * GameConsts.lengthOfTileSquare);
+        var position = Vector2(cols * GameConsts.lengthOfTileSquare.x,
+            rows * GameConsts.lengthOfTileSquare.y);
         Rectangle rec = Rectangle.fromPoints(position, Vector2(
-            position.x + GameConsts.lengthOfTileSquare,
-            position.y + GameConsts.lengthOfTileSquare));
+            position.x + GameConsts.lengthOfTileSquare.x,
+            position.y + GameConsts.lengthOfTileSquare.y));
         final composition = ImageCompositionExt();
         for (int i = 0; i < _mapsSprite.length; i++) {
           var currentSprites = _mapsSprite[i];
@@ -209,11 +209,11 @@ class MySuperAnimCompiler {
     }
     for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
       for (int rows = 0; rows < GameConsts.maxRow; rows++) {
-        var position = Vector2(cols * GameConsts.lengthOfTileSquare,
-            rows * GameConsts.lengthOfTileSquare);
+        var position = Vector2(cols * GameConsts.lengthOfTileSquare.x,
+            rows * GameConsts.lengthOfTileSquare.y);
         Rectangle rec = Rectangle.fromPoints(position, Vector2(
-            position.x + GameConsts.lengthOfTileSquare,
-            position.y + GameConsts.lengthOfTileSquare));
+            position.x + GameConsts.lengthOfTileSquare.x,
+            position.y + GameConsts.lengthOfTileSquare.y));
         bool isStartFile = false;
         for (final anim in _animations.keys) {
           String animText = '';

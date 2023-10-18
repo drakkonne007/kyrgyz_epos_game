@@ -6,6 +6,7 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/main.dart';
 import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/players/front_player.dart';
@@ -43,57 +44,54 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   void preloadAnimAndObj() async
   {
-    KyrgyzGame.anims.clear();
-    KyrgyzGame.objXmls.clear();
-    KyrgyzGame.tiledPngs.clear();
+    // KyrgyzGame.anims.clear();
+    // KyrgyzGame.objXmls.clear();
+    // KyrgyzGame.tiledPngs.clear();
     for(int cl = 0; cl < GameConsts.maxColumn; cl++){
       for(int rw = 0; rw < GameConsts.maxRow; rw++){
-        try{
-          var temp = await Flame.assets.readFile('metaData/$cl-$rw.objXml');
-          KyrgyzGame.objXmls['metaData/$cl-$rw.objXml'] = temp;
-        }catch(e){
-          print(e);
-        }
+        // try{
+        //   var temp = await Flame.assets.readFile('metaData/$cl-$rw.objXml');
+        //   KyrgyzGame.objXmls['metaData/$cl-$rw.objXml'] = temp;
+        // }catch(e){
+        //   print(e);
+        // }
         try{
           var animsDown = await Flame.assets.readFile(
               'metaData/$cl-${rw}_high.anim');
-          KyrgyzGame.anims['metaData/$cl-${rw}_high.anim'] = animsDown;
           var objects =
           XmlDocument.parse(animsDown.toString()).findAllElements('an');
           for (final obj in objects) {
-            var temp = await Flame.images.load(obj.getAttribute('src')!);
-            KyrgyzGame.animsImgs[obj.getAttribute('src')!] = temp;
+            await Flame.images.load(obj.getAttribute('src')!);
           }
         }catch(e){
-          print(e);
+          e;
         }
         try{
           var animsHigh = await Flame.assets.readFile(
               'metaData/$cl-${rw}_down.anim');
-          KyrgyzGame.anims['metaData/$cl-${rw}_down.anim'] = animsHigh;
           var objects
           = XmlDocument.parse(animsHigh.toString()).findAllElements('an');
           for (final obj in objects) {
-            var temp = await Flame.images.load(obj.getAttribute('src')!);
-            KyrgyzGame.animsImgs[obj.getAttribute('src')!] = temp;
+            await Flame.images.load(obj.getAttribute('src')!);
           }
         }catch(e){
           print(e);
         }
         try{
-          var temp = await Flame.images.load('metaData/$cl-${rw}_high.png');
-          KyrgyzGame.tiledPngs['metaData/$cl-${rw}_high.png'] = temp;
+          await Flame.images.load('metaData/$cl-${rw}_high.png');
         }catch(e){
           print(e);
         }
         try{
-          var temp = await Flame.images.load('metaData/$cl-${rw}_down.png');
-          KyrgyzGame.tiledPngs['metaData/$cl-${rw}_down.png'] = temp;
+          await Flame.images.load('metaData/$cl-${rw}_down.png');
         }catch(e){
           print(e);
         }
       }
     }
+    // gameRef.prefs.setStringList('tileds', KyrgyzGame.tiledPngs.keys.toList());
+    // gameRef.prefs.setStringList('objs', KyrgyzGame.objXmls.keys.toList());
+    // gameRef.prefs.setStringList('objs', KyrgyzGame.objXmls.keys.toList());
     isCached = true;
     print('stop cached map');
   }
@@ -127,7 +125,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn - 1, newRow + i - 1,this);
-        await node.generateMap();
+        node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -139,7 +137,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + 1, newRow + i - 1,this);
-        await node.generateMap();
+        node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -151,7 +149,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + i - 1, newRow - 1,this);
-        await node.generateMap();
+        node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -163,7 +161,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       }
       for(int i=0;i<3;i++) {
         var node = MapNode(newColumn + i - 1, newRow + 1,this);
-        await node.generateMap();
+        node.generateMap();
         _mapNodes.add(node);
       }
     }
@@ -187,6 +185,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         }
       }
     }
+    orthoPlayer?.priority = GamePriority.player-1;
+    orthoPlayer?.priority = GamePriority.player;
   }
 
   clearGameMap()
@@ -196,12 +196,16 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
-    _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare);
-    _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare);
+    _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare.x);
+    _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare.y);
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
         var node = MapNode(_column + j - 1, _row + i - 1,this);
-        await node.generateMap();
+        if(isMapCompile) {
+          await node.generateMap();
+        }else{
+          node.generateMap();
+        }
         _mapNodes.add(node);
       }
     }
@@ -233,8 +237,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   Future<void> update(double dt) async
   {
     if(orthoPlayer != null && isFirstLoad) {
-      int col = orthoPlayer!.position.x ~/ (GameConsts.lengthOfTileSquare);
-      int row = orthoPlayer!.position.y ~/ (GameConsts.lengthOfTileSquare);
+      int col = orthoPlayer!.position.x ~/ (GameConsts.lengthOfTileSquare.x);
+      int row = orthoPlayer!.position.y ~/ (GameConsts.lengthOfTileSquare.y);
       if (col != _column || row != _row) {
         reloadWorld(col, row);
       }

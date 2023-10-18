@@ -22,7 +22,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   late SpriteAnimation _animMove, _animIdle, _animAttack1, _animAttack2, _animHurt, _animDeath;
   Vector2 _speed = Vector2.all(0);
   Vector2 _velocity = Vector2.all(0);
-  late PlayerHitbox _hitBox;
+  late PlayerHitbox hitBox;
   late GroundHitBox _groundBox;
   bool _isPlayerRun = false;
   late PlayerWeapon _weapon;
@@ -30,6 +30,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
+    gameRef.camera.shake(duration: 0.3,intensity: 5);
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
@@ -71,8 +72,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0,to: 19);
     animation = _animIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    _hitBox = PlayerHitbox(size:Vector2(47,47),position: Vector2(49,27));
-    await add(_hitBox);
+    hitBox = PlayerHitbox(size:Vector2(47,47),position: Vector2(49,27));
+    await add(hitBox);
     _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,anchor:Anchor.center,size: Vector2(30,30),position: Vector2(_spriteSheetWidth/2, _spriteSheetHeight - 30));
     // _groundBox.debugMode = true;
     await add(_groundBox);

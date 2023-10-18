@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/main.dart';
 
 TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.amber);
 ButtonStyle bStyle = ElevatedButton.styleFrom(
@@ -35,7 +36,7 @@ class MainMenu extends StatelessWidget
                 child:ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      if(_game.gameMap.isCached){
+                      if(_game.gameMap.isCached || isMapCompile){
                         _game.overlays.remove(id);
                         _game.loadNewMap('test.tmx');
                       }else{
@@ -63,7 +64,7 @@ class MainMenu extends StatelessWidget
                 ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      if(_game.gameMap.isCached){
+                      if(_game.gameMap.isCached || isMapCompile){
                         _game.overlays.remove(id);
                         _game.loadNewMap('test.tmx');
                       }else{
