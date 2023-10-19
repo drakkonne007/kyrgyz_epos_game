@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/extensions.dart' as ext;
+import 'package:flame/extensions.dart' as ext show Image;
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
@@ -17,15 +17,15 @@ import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables, WidgetsBindingObserver
+class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables, WidgetsBindingObserver, HasCollisionDetection
 {
   CustomTileMap gameMap = CustomTileMap();
   PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
-  // static Map<String,String> objXmls = {};
-  // static Map<String,String> anims = {};
-  // static Map<String,ext.Image> tiledPngs = {};
-  // static Map<String,ext.Image> animsImgs = {};
+  static Map<String,String> objXmls = {};
+  static Map<String,String> anims = {};
+  static Map<String,ext.Image> tiledPngs = {};
+  static Map<String,ext.Image> animsImgs = {};
 
   @override
   Future<void> onLoad() async
@@ -44,7 +44,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     WidgetsBinding.instance.addObserver(this);
     playerData.setStartValues();
     add(gameMap);
-    //gameMap.preloadAnimAndObj();
+    gameMap.preloadAnimAndObj().ignore();
   }
 
   @override

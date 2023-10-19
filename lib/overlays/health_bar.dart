@@ -72,7 +72,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                             ),
                           ),
                           const SizedBox(width: 5, height: 0,),
-                          Text('$val',style: widget.myTextStyle.copyWith(color: Colors.red[700]!),),
+                          // Text('$val',style: widget.myTextStyle.copyWith(color: Colors.red[700]!),),
                         ]
                     ),
                   ),
@@ -93,7 +93,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                             ),
                           ),
                           const SizedBox(width: 5, height: 0,),
-                          Text('$val',style: widget.myTextStyle.copyWith(color: Colors.green[700]!),),
+                          // Text('$val',style: widget.myTextStyle.copyWith(color: Colors.green[700]!),),
                         ]
                     ),
                   ),

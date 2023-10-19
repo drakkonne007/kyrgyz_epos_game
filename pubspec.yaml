@@ -43,6 +43,7 @@ dependencies:
   flutter_shake_animated: ^0.0.5
   xml: ^6.3.0
   flame_isolate: ^0.4.0
+  path_provider: ^2.1.1
 
 dev_dependencies:
   flutter_test:

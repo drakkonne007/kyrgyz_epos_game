@@ -36,7 +36,10 @@ class MainMenu extends StatelessWidget
                 child:ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      if(_game.gameMap.isCached || isMapCompile){
+                      if((KyrgyzGame.objXmls.isNotEmpty &&
+                      KyrgyzGame.anims.isNotEmpty &&
+                      KyrgyzGame.tiledPngs.isNotEmpty &&
+                      KyrgyzGame.animsImgs.isNotEmpty)|| isMapCompile){
                         _game.overlays.remove(id);
                         _game.loadNewMap('test.tmx');
                       }else{
@@ -64,7 +67,10 @@ class MainMenu extends StatelessWidget
                 ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      if(_game.gameMap.isCached || isMapCompile){
+                      if((KyrgyzGame.objXmls.isNotEmpty &&
+                          KyrgyzGame.anims.isNotEmpty &&
+                          KyrgyzGame.tiledPngs.isNotEmpty &&
+                          KyrgyzGame.animsImgs.isNotEmpty)|| isMapCompile){
                         _game.overlays.remove(id);
                         _game.loadNewMap('test.tmx');
                       }else{
