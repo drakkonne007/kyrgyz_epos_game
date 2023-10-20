@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
@@ -54,56 +53,48 @@ class MapNode
       exit(0);
     }
     LoadedColumnRow lcr = LoadedColumnRow(column, row);
-    if (KyrgyzGame.tiledPngs.containsKey('$column-${row}_down.png')) {
-      Image _imageDown;
-      ui.decodeImageFromList(KyrgyzGame.tiledPngs['$column-${row}_down.png']!,(image){
-        _imageDown = image;
-        var spriteDown = SpriteComponent(
-          sprite: Sprite(_imageDown),
-          position: Vector2(column * GameConsts.lengthOfTileSquare.x,
-              row * GameConsts.lengthOfTileSquare.y),
-          size: GameConsts.lengthOfTileSquare+Vector2.all(1),
-          priority: 0,
-        );
-        custMap.add(spriteDown);
-        custMap.allEls.putIfAbsent(lcr, () => []);
-        custMap.allEls[lcr]!.add(spriteDown);
-      });
+    if (KyrgyzGame.cachedImgs.containsKey('$column-${row}_down.png')) {
+      Image _imageDown = KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
+      var spriteDown = SpriteComponent(
+        sprite: Sprite(_imageDown),
+        position: Vector2(column * GameConsts.lengthOfTileSquare.x,
+            row * GameConsts.lengthOfTileSquare.y),
+        size: GameConsts.lengthOfTileSquare+Vector2.all(1),
+        priority: 0,
+      );
+      custMap.add(spriteDown);
+      custMap.allEls.putIfAbsent(lcr, () => []);
+      custMap.allEls[lcr]!.add(spriteDown);
     }
-    if (KyrgyzGame.anims.containsKey('$column-${row}_down.anim')) {
-      var objects = XmlDocument.parse(KyrgyzGame.anims['$column-${row}_down.anim']!).findAllElements('an');
+    if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_down.anim')) {
+      var objects = KyrgyzGame.cachedAnims['$column-${row}_down.anim']!;
       for (final obj in objects) {
-        Image srcImage;
-        ui.decodeImageFromList(KyrgyzGame.animsImgs[obj.getAttribute('src')!]!, (image){
-          srcImage = image;
-          final List<Sprite> spriteList = [];
-          final List<double> stepTimes = [];
-          for (final anim in obj.findAllElements('fr')) {
-            spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
-                srcPosition: Vector2(
-                    double.parse(anim.getAttribute('cl')!) * 32,
-                    double.parse(anim.getAttribute('rw')!) * 32)));
-            stepTimes.add(double.parse(anim.getAttribute('dr')!));
-          }
-          var sprAnim = SpriteAnimation.variableSpriteList(
-              spriteList, stepTimes: stepTimes);
-          for(final anim in obj.findAllElements('ps')){
-            var ss = SpriteAnimationComponent(animation: sprAnim,
-                position: Vector2(double.parse(anim.getAttribute('x')!),
-                    double.parse(anim.getAttribute('y')!)),
-                size: Vector2.all(33),
-                priority: GamePriority.ground + 1);
-            custMap.add(ss);
-            custMap.allEls.putIfAbsent(lcr, () => []);
-            custMap.allEls[lcr]!.add(ss);
-          }
-        });
+        Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
+        final List<Sprite> spriteList = [];
+        final List<double> stepTimes = [];
+        for (final anim in obj.findAllElements('fr')) {
+          spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
+              srcPosition: Vector2(
+                  double.parse(anim.getAttribute('cl')!) * 32,
+                  double.parse(anim.getAttribute('rw')!) * 32)));
+          stepTimes.add(double.parse(anim.getAttribute('dr')!));
+        }
+        var sprAnim = SpriteAnimation.variableSpriteList(
+            spriteList, stepTimes: stepTimes);
+        for(final anim in obj.findAllElements('ps')){
+          var ss = SpriteAnimationComponent(animation: sprAnim,
+              position: Vector2(double.parse(anim.getAttribute('x')!),
+                  double.parse(anim.getAttribute('y')!)),
+              size: Vector2.all(33),
+              priority: GamePriority.ground + 1);
+          custMap.add(ss);
+          custMap.allEls.putIfAbsent(lcr, () => []);
+          custMap.allEls[lcr]!.add(ss);
+        }
       }
     }
-    if (KyrgyzGame.tiledPngs.containsKey('$column-${row}_high.png')) {
-      Image _imageHigh;
-      ui.decodeImageFromList(KyrgyzGame.tiledPngs['$column-${row}_high.png']!,(image){
-        _imageHigh = image;
+    if (KyrgyzGame.cachedImgs.containsKey('$column-${row}_high.png')) {
+      Image _imageHigh = KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
         var spriteHigh = SpriteComponent(
           sprite: Sprite(_imageHigh),
           position: Vector2(column * GameConsts.lengthOfTileSquare.x,
@@ -114,14 +105,11 @@ class MapNode
         custMap.add(spriteHigh);
         custMap.allEls.putIfAbsent(lcr, () => []);
         custMap.allEls[lcr]!.add(spriteHigh);
-      });
     }
-    if (KyrgyzGame.anims.containsKey('$column-${row}_high.anim')) {
-      var objects = XmlDocument.parse(KyrgyzGame.anims['$column-${row}_high.anim']!).findAllElements('an');
+    if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_high.anim')) {
+      var objects = KyrgyzGame.cachedAnims['$column-${row}_high.anim']!;
       for (final obj in objects) {
-        Image srcImage;
-        ui.decodeImageFromList(KyrgyzGame.animsImgs[obj.getAttribute('src')!]!, (image){
-          srcImage = image;
+        Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
           final List<Sprite> spriteList = [];
           final List<double> stepTimes = [];
           for (final anim in obj.findAllElements('fr')) {
@@ -143,11 +131,10 @@ class MapNode
             custMap.allEls.putIfAbsent(lcr, () => []);
             custMap.allEls[lcr]!.add(ss);
           }
-        });
       }
     }
-    if (KyrgyzGame.objXmls.containsKey('$column-$row.objXml')) {
-      var objects = XmlDocument.parse(KyrgyzGame.objXmls['$column-$row.objXml']!).findAllElements('obj');
+    if (KyrgyzGame.cachedObjXmls.containsKey('$column-$row.objXml')) {
+      var objects = KyrgyzGame.cachedObjXmls['$column-$row.objXml']!;
       for (final obj in objects) {
         Vector2 size = Vector2(
             double.parse(obj.getAttribute('w')!),

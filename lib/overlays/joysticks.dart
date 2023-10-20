@@ -44,10 +44,10 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class OrthoJoystick extends StatefulWidget
 {
+  const OrthoJoystick(this._size,this.game,{Key? key}) : super(key: key);
   static const id = 'OrthoJoystick';
-  double _size;
-  KyrgyzGame game;
-  OrthoJoystick(this._size,this.game,{Key? key}) : super(key: key);
+  final double _size;
+  final KyrgyzGame game;
   @override
   State<OrthoJoystick> createState() => _OrthoJoystickState();
 }

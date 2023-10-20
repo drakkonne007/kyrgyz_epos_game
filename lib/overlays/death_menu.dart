@@ -7,7 +7,7 @@ class DeathMenu extends StatelessWidget
 {
   static const id = 'DeathMenu';
   final KyrgyzGame _game;
-  DeathMenu(this._game);
+  const DeathMenu(this._game);
 
   @override
   Widget build(BuildContext context) {

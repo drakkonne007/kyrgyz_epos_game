@@ -10,9 +10,9 @@ import 'package:game_flame/overlays/main_menu.dart';
 
 class LanguageChooser extends StatelessWidget
 {
-  LanguageChooser(this._game);
+  const LanguageChooser(this._game);
   static const id = 'LanguageChooser';
-  KyrgyzGame _game;
+  final KyrgyzGame _game;
 
   List<Widget> getFlags(double width, double height)
   {

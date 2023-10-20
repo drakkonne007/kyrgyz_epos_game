@@ -1,11 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
+import 'package:game_flame/components/cached_utils.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
@@ -15,116 +17,6 @@ import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:xml/xml.dart';
-
-
-void _loadObjs(SendPort mySendPort) async
-{
-  ReceivePort mikeReceivePort = ReceivePort();
-  mySendPort.send(mikeReceivePort.sendPort);
-  await for (final message in mikeReceivePort) {
-    if (message is List) {
-      print('start _loadObjs');
-      final SendPort mikeResponseSendPort = message[0];
-      Map<String,String> objXmls = {};
-      String path = message[1];
-      for(int cl = 0; cl < GameConsts.maxColumn; cl++) {
-        for (int rw = 0; rw < GameConsts.maxRow; rw++) {
-          try {
-            var file = File('$path/$cl-$rw.objXml');
-            // var temp = await rootBundle.loadString('assets/metaData/$cl-$rw.objXml',cache: false);
-            objXmls['$cl-$rw.objXml'] = file.readAsStringSync();
-          } catch (e) {
-            e;
-          }
-        }
-      }
-      mikeResponseSendPort.send(objXmls);
-    }
-  }
-}
-
-void _loadAnims(SendPort mySendPort) async
-{
-  ReceivePort mikeReceivePort = ReceivePort();
-  mySendPort.send(mikeReceivePort.sendPort);
-  await for (final message in mikeReceivePort) {
-    if (message is List) {
-      print('start _loadAnims');
-      final SendPort mikeResponseSendPort = message[0];
-      Map<String, String> anims = {};
-      Map<String, Uint8List> tiledPngs = {};
-      String path = message[1];
-      for (int cl = 0; cl < GameConsts.maxColumn; cl++) {
-        for (int rw = 0; rw < GameConsts.maxRow; rw++) {
-          try {
-            var file = File('$path/$cl-${rw}_high.anim').readAsStringSync();
-            // var temp = await rootBundle.loadString(
-            //     'assets/metaData/$cl-${rw}_high.anim', cache: false);
-            anims['$cl-${rw}_high.anim'] = file;
-            var objects
-            = XmlDocument.parse(file).findAllElements('an');
-            for (final obj in objects) {
-              var file = File('$path/${obj.getAttribute('src')!}');
-              // var temp = await rootBundle.load(obj.getAttribute('src')!);
-              tiledPngs[obj.getAttribute('src')!] = file.readAsBytesSync();
-            }
-          } catch (e) {
-            e;
-          }
-          try {
-            var file = File('$path/$cl-${rw}_down.anim').readAsStringSync();
-            // var temp = await rootBundle.loadString(
-            //     'assets/metaData/$cl-${rw}_down.anim', cache: false);
-            anims['$cl-${rw}_down.anim'] = file;
-            var objects
-            = XmlDocument.parse(file).findAllElements('an');
-            for (final obj in objects) {
-              var file = File('$path/${obj.getAttribute('src')!}');
-              // var temp = await rootBundle.load(obj.getAttribute('src')!);
-              tiledPngs[obj.getAttribute('src')!] = file.readAsBytesSync();
-            }
-          } catch (e) {
-            e;
-          }
-        }
-      }
-      mikeResponseSendPort.send([anims, tiledPngs]);
-    }
-  }
-}
-
-Future<void> _loadPngs(SendPort mySendPort) async
-{
-  ReceivePort mikeReceivePort = ReceivePort();
-  mySendPort.send(mikeReceivePort.sendPort);
-  await for (final message in mikeReceivePort) {
-    if (message is List) {
-      print('start _loadPngs');
-      final SendPort mikeResponseSendPort = message[0];
-      Map<String, Uint8List> pngs = {};
-      String path = message[1];
-      for (int cl = 0; cl < GameConsts.maxColumn; cl++) {
-        for (int rw = 0; rw < GameConsts.maxRow; rw++) {
-          try {
-            var file = File('$path/$cl-${rw}_high.png');
-            // var temp = await rootBundle.load('assets/metaData/$cl-${rw}_high.png');
-            pngs['$cl-${rw}_high.png'] = file.readAsBytesSync();
-          } catch (e) {
-            e;
-          }
-          try {
-            var file = File('$path/$cl-${rw}_down.png');
-            // var temp = await rootBundle.load('assets/metaData/$cl-${rw}_down.png');
-            pngs['$cl-${rw}_down.png'] = file.readAsBytesSync();
-          } catch (e) {
-            e;
-          }
-        }
-      }
-      mikeResponseSendPort.send(pngs);
-    }
-  }
-}
 
 class LoadedColumnRow
 {
@@ -143,7 +35,6 @@ class LoadedColumnRow
 
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
-  bool isCached = false;
   ObjectHitbox? currentObject;
   int countId=0;
   OrthoPlayer? orthoPlayer;
@@ -157,139 +48,25 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future preloadAnimAndObj() async
   {
-    KyrgyzGame.objXmls.clear();
-    KyrgyzGame.anims.clear();
-    KyrgyzGame.tiledPngs.clear();
-    KyrgyzGame.animsImgs.clear();
-
-    var dir = await getApplicationCacheDirectory();
-
-    // for (int cl = 0; cl < GameConsts.maxColumn; cl++) {
-    //   for (int rw = 0; rw < GameConsts.maxRow; rw++) {
-    //     try{
-    //       var temp = await rootBundle.loadString(
-    //           'assets/metaData/$cl-$rw.objXml', cache: false);
-    //       File file = File('${dir.path}/$cl-$rw.objXml');
-    //       file.writeAsStringSync(temp);
-    //     }catch(e){
-    //       e;
-    //     }
-    //     try {
-    //       var temp1 = await rootBundle.loadString(
-    //           'assets/metaData/$cl-${rw}_high.anim', cache: false);
-    //       File file = File('${dir.path}/$cl-${rw}_high.anim');
-    //       file.writeAsStringSync(temp1);
-    //       var objects = XmlDocument.parse(temp1.toString()).findAllElements(
-    //           'an');
-    //       for (final obj in objects) {
-    //         var path = obj.getAttribute('src')!.split('/');
-    //         path.removeLast();
-    //         Directory dirSs = Directory('${dir.path}/${path.join('/')}');
-    //         dirSs.createSync(recursive: true);
-    //         File file = File('${dir.path}/${obj.getAttribute('src')!}');
-    //         var temp = await rootBundle.load('assets/${obj.getAttribute('src')!}');
-    //         file.writeAsBytesSync(temp.buffer.asUint8List());
-    //       }
-    //     }catch(e){
-    //       e;
-    //     }
-    //     try {
-    //       var temp3 = await rootBundle.loadString(
-    //           'assets/metaData/$cl-${rw}_down.anim', cache: false);
-    //       File file = File('${dir.path}/$cl-${rw}_down.anim');
-    //       file.writeAsStringSync(temp3);
-    //       var objects = XmlDocument.parse(temp3.toString()).findAllElements('an');
-    //       for (final obj in objects) {
-    //         var path = obj.getAttribute('src')!.split('/');
-    //         path.removeLast();
-    //         Directory dirSs = Directory('${dir.path}/${path.join('/')}');
-    //         dirSs.createSync(recursive: true);
-    //         File file = File('${dir.path}/${obj.getAttribute('src')!}');
-    //         var temp = await rootBundle.load('assets/${obj.getAttribute('src')!}');
-    //         file.writeAsBytesSync(temp.buffer.asUint8List());
-    //       }
-    //     }catch(e){
-    //       e;
-    //     }
-    //     try {
-    //       var temp5 = await rootBundle.load(
-    //           'assets/metaData/$cl-${rw}_high.png');
-    //       File file = File('${dir.path}/$cl-${rw}_high.png');
-    //       file.writeAsBytesSync(temp5.buffer.asUint8List());
-    //     }catch(e){
-    //       e;
-    //     }
-    //     try {
-    //       var temp6 = await rootBundle.load('assets/metaData/$cl-${rw}_down.png');
-    //       File file = File('${dir.path}/$cl-${rw}_down.png');
-    //       file.writeAsBytesSync(temp6.buffer.asUint8List());
-    //     }catch(e){
-    //       e;
-    //     }
-    //   }
-    // }
-
-    ReceivePort objsReceivePort = ReceivePort();
-    Isolate.spawn<SendPort>(_loadObjs, objsReceivePort.sendPort,errorsAreFatal: false);
-    SendPort objsSendPort = await objsReceivePort.first;
-    ReceivePort objResponseReceivePort = ReceivePort();
-    objsSendPort.send([
-      objResponseReceivePort.sendPort
-      ,dir.path
-    ]);
-
-    ReceivePort upPngsReceivePort = ReceivePort();
-    Isolate.spawn<SendPort>(_loadPngs, upPngsReceivePort.sendPort,errorsAreFatal: false);
-    SendPort upPngsSendPort = await upPngsReceivePort.first;
-    ReceivePort upPngsResponseReceivePort = ReceivePort();
-    upPngsSendPort.send([
-      upPngsResponseReceivePort.sendPort
-      ,dir.path
-    ]);
-
-    ReceivePort animsReceivePort = ReceivePort();
-    Isolate.spawn<SendPort>(_loadAnims, animsReceivePort.sendPort,errorsAreFatal: false);
-    SendPort animsSendPort = await animsReceivePort.first;
-    ReceivePort animsResponseReceivePort = ReceivePort();
-    animsSendPort.send([
-      animsResponseReceivePort.sendPort
-      ,dir.path
-    ]);
-
-    final animPngsResponse = await animsResponseReceivePort.first;
-    if(animPngsResponse is List){
-      print('animPngsResponse');
-      KyrgyzGame.anims = animPngsResponse[0];
-      KyrgyzGame.animsImgs = animPngsResponse[1];
+    isMapCached.value = false;
+    KyrgyzGame.cachedObjXmls.clear();
+    KyrgyzGame.cachedAnims.clear();
+    KyrgyzGame.cachedImgs.clear();
+    // firstCachedIntoInternal();
+    loadObjs();
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
+    final imagePaths = manifestMap.keys.where((path) {
+      return path.startsWith('assets/metaData/') && path.toLowerCase().endsWith('.png');
+    }).map((path) => path.replaceFirst('assets/metaData/', ''));
+    for(final path in imagePaths) {
+      final img = await Flame.images.load('metaData/$path');
+      KyrgyzGame.cachedImgs[path] = img;
     }
-    animsResponseReceivePort.close();
-    animsReceivePort.close();
-
-    final objsResponse = await objResponseReceivePort.first;
-    if(objsResponse is Map<String,String>){
-      print('objsResponse');
-      KyrgyzGame.objXmls = objsResponse;
-    }
-    objResponseReceivePort.close();
-    objsReceivePort.close();
-
-    final upPngsResponse = await upPngsResponseReceivePort.first;
-    if(upPngsResponse is Map<String,Uint8List>){
-      print('upPngsResponse');
-      KyrgyzGame.tiledPngs = upPngsResponse;
-    }
-    upPngsResponseReceivePort.close();
-    upPngsReceivePort.close();
-
-    // static Map<String,String> objXmls = {};
-    // static Map<String,String> anims = {};
-    // static Map<String,Uint8List> tiledPngs = {};
-    // static Map<String,Uint8List> animsImgs = {};
-
-    // gameRef.prefs.setStringList('objs', KyrgyzGame.objXmls.keys.toList());
-    // gameRef.prefs.setStringList('objs', KyrgyzGame.objXmls.keys.toList());
-    // gameRef.prefs.setStringList('objs', KyrgyzGame.objXmls.keys.toList());
-    isCached = true;
+    loadAnimsHigh();
+    loadAnimsDown();
+    print('end preload');
+    isMapCached.value = true;
   }
 
   int column()
@@ -407,9 +184,9 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     }
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
-    await add(orthoPlayer!);
     orthoPlayer?.position = playerPos;
     orthoPlayer?.priority = GamePriority.player;
+    await add(orthoPlayer!);
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(orthoPlayer!);

@@ -9,7 +9,6 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/components/tile_map_component.dart';
-import 'package:game_flame/players/ortho_player.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -123,7 +122,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _tickerAttack?.onComplete = onEndAnimation;
     _animHurt.loop = false;
     _tickerHurt = SpriteAnimationTicker(_animHurt);
-    _tickerHurt?.onComplete = onEndAnimation;
+    _tickerHurt!.onComplete = onEndAnimation;
     anchor = Anchor.center;
     animation = _animMove;
     size = _spriteSheetSize;
@@ -192,14 +191,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(diffCol > 1 || diffRow > 1){
       return;
     }
-    if(animation == _animHurt){
-      _tickerHurt?.update(dt);
-    }
-    if(animation == _animAttack){
-      _tickerAttack?.update(dt);
-    }
     super.update(dt);
-    if(animation == _animDeath){
+    if(animation == _animHurt || animation == _animAttack || animation == _animDeath){
       return;
     }
     _rigidSec -= dt;

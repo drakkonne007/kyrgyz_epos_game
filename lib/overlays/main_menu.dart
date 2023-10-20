@@ -16,11 +16,13 @@ ButtonStyle bStyle = ElevatedButton.styleFrom(
     backgroundColor: Colors.transparent
 );
 
+
+
 class MainMenu extends StatelessWidget
 {
+  const MainMenu(this._game, {super.key});
   static const id = 'MainMenu';
-  KyrgyzGame _game;
-  MainMenu(this._game, {super.key});
+  final KyrgyzGame _game;
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +38,7 @@ class MainMenu extends StatelessWidget
                 child:ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      if((KyrgyzGame.objXmls.isNotEmpty &&
-                      KyrgyzGame.anims.isNotEmpty &&
-                      KyrgyzGame.tiledPngs.isNotEmpty &&
-                      KyrgyzGame.animsImgs.isNotEmpty)|| isMapCompile){
+                      if(isMapCached.value || isMapCompile){
                         _game.overlays.remove(id);
                         _game.loadNewMap('test.tmx');
                       }else{
@@ -67,10 +66,7 @@ class MainMenu extends StatelessWidget
                 ElevatedButton(
                     clipBehavior: Clip.antiAlias,
                     onPressed: (){
-                      if((KyrgyzGame.objXmls.isNotEmpty &&
-                          KyrgyzGame.anims.isNotEmpty &&
-                          KyrgyzGame.tiledPngs.isNotEmpty &&
-                          KyrgyzGame.animsImgs.isNotEmpty)|| isMapCompile){
+                      if(isMapCached.value || isMapCompile){
                         _game.overlays.remove(id);
                         _game.loadNewMap('test.tmx');
                       }else{
@@ -164,8 +160,15 @@ class MainMenu extends StatelessWidget
                 ),
               ),
               const SizedBox(height: 20,),
+              ValueListenableBuilder(
+                valueListenable: isMapCached,
+                builder: (BuildContext context, bool value, Widget? child) {
+                  return isMapCached.value ? const SizedBox.shrink() : const CircularProgressIndicator();
+                },
+
+              )
             ]
-        )
+        ),
     );
   }
 }

@@ -10,7 +10,7 @@ class GamePause extends StatelessWidget
 {
   static const id = 'GamePause';
   final KyrgyzGame _game;
-  GamePause(this._game, {super.key});
+  const GamePause(this._game, {super.key});
 
   @override
   Widget build(BuildContext context) {

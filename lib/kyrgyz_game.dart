@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/extensions.dart' as ext show Image;
+import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
@@ -16,19 +16,21 @@ import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xml/xml.dart';
+
+ValueNotifier<bool> isMapCached = ValueNotifier(false);
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables, WidgetsBindingObserver, HasCollisionDetection
 {
-  CustomTileMap gameMap = CustomTileMap();
-  PlayerData playerData = PlayerData();
+  final CustomTileMap gameMap = CustomTileMap();
+  final PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
-  static Map<String,String> objXmls = {};
-  static Map<String,String> anims = {};
-  static Map<String,ext.Image> tiledPngs = {};
-  static Map<String,ext.Image> animsImgs = {};
+  static Map<String,Iterable<XmlElement>> cachedObjXmls = {};
+  static Map<String,Iterable<XmlElement>> cachedAnims = {};
+  static Map<String,ext.Image> cachedImgs = {};
 
   @override
-  Future<void> onLoad() async
+  Future onLoad() async
   {
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
@@ -44,7 +46,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     WidgetsBinding.instance.addObserver(this);
     playerData.setStartValues();
     add(gameMap);
-    gameMap.preloadAnimAndObj().ignore();
+    gameMap.preloadAnimAndObj();
   }
 
   @override
@@ -90,10 +92,10 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     prefs.remove('${saveId}_secsInGame');
   }
 
-  Future<void> loadNewMap(String filePath) async
+  Future loadNewMap(String filePath) async
   {
     gameMap.removeAll(gameMap.children);
-    gameMap.loadNewMap(Vector2(0,0));
+    gameMap.loadNewMap(Vector2(2000,2000));
   }
 
   @override
