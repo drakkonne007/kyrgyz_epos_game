@@ -19,17 +19,20 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 {
   PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
-  late SpriteAnimation _animMove, _animIdle, _animAttack1, _animAttack2, _animHurt, _animDeath;
+  late SpriteAnimation _animMove, _animIdle, _animHurt, _animDeath;
   Vector2 _speed = Vector2.all(0);
   Vector2 _velocity = Vector2.all(0);
   late PlayerHitbox hitBox;
   late GroundHitBox _groundBox;
   bool _isPlayerRun = false;
   late PlayerWeapon _weapon;
+  Timer? _timerHurt;
 
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
+    _velocity *= 0;
+    _speed *= 0;
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
@@ -39,9 +42,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.health.value <1){
       gameRef.pauseEngine();
       _isPlayerRun = false;
-      _velocity *= 0;
-      _speed *= 0;
       gameRef.showOverlay(overlayName: DeathMenu.id,isHideOther: true);
+    }else{
+      animation = null;
+      animation = _animHurt;
+      animation!.ticker().reset();
+      _timerHurt!.stop();
+      _timerHurt!.start();
     }
   }
 
@@ -50,8 +57,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity *= 0;
     _speed *= 0;
     if(animation != null){
-      SpriteAnimationTicker tick = SpriteAnimationTicker(animation!);
-      tick.reset();
+      animation!.ticker().reset();
     }
   }
 
@@ -63,9 +69,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
-    _animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.15, from: 0,to: 8);
-    _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0,to: 19);
+    _animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0,to: 6);
+    _animHurt.loop = false;
+    _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19);
+    _animDeath.loop = false;
     animation = _animIdle;
+    _timerHurt = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     hitBox = PlayerHitbox(size:Vector2(47,47),position: Vector2(49,27));
     await add(hitBox);
@@ -84,6 +93,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void startHit()
   {
+    if(animation == _animHurt || animation == _animDeath){
+      return;
+    }
     if(gameRef.gameMap.currentObject != null){
       gameRef.gameMap.currentObject?.obstacleBehavoiur.call();
     }else {
@@ -93,7 +105,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setIdleAnimation()
   {
-    if(animation == _animMove){
+    if(animation == _animMove || animation == _animHurt){
       animation = _animIdle;
     }
   }
@@ -268,6 +280,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void update(double dt)
   {
+    super.update(dt);
+    _timerHurt!.update(dt);
+    if(animation != _animMove){
+      return;
+    }
     if(_isPlayerRun){
       gameRef.playerData.energy.value -= dt * 2;
       if(gameRef.playerData.energy.value < 0){
@@ -332,6 +349,5 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       _isPlayerRun = false;
     }
     position += _speed * dt;
-    super.update(dt);
   }
 }

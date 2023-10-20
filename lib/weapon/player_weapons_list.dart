@@ -45,7 +45,9 @@ class WSword extends PlayerWeapon
     final spriteImage = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(144,96));
     _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11);
+    _animShort.loop = false;
     _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16);
+    _animLong.loop = false;
   }
 
   @override

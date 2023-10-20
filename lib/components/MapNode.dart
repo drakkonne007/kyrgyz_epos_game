@@ -85,7 +85,7 @@ class MapNode
           var ss = SpriteAnimationComponent(animation: sprAnim,
               position: Vector2(double.parse(anim.getAttribute('x')!),
                   double.parse(anim.getAttribute('y')!)),
-              size: Vector2.all(33),
+              size: Vector2.all(34),
               priority: GamePriority.ground + 1);
           custMap.add(ss);
           custMap.allEls.putIfAbsent(lcr, () => []);
@@ -125,7 +125,7 @@ class MapNode
             var ss = SpriteAnimationComponent(animation: sprAnim,
                 position: Vector2(double.parse(anim.getAttribute('x')!),
                     double.parse(anim.getAttribute('y')!)),
-                size: Vector2.all(33),
+                size: Vector2.all(34),
                 priority: GamePriority.high);
             custMap.add(ss);
             custMap.allEls.putIfAbsent(lcr, () => []);

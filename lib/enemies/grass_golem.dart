@@ -34,9 +34,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   double _maxSpeed = 20;
   GolemVariant spriteVariant;
   double _rigidSec = 2;
-  SpriteAnimationTicker? _tickerHurt;
-  SpriteAnimationTicker? _tickerAttack;
   EWBody? _body;
+  Timer? _timer;
 
   @override
   int column=0;
@@ -52,12 +51,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   List<Item> loots = [];
   @override
   double health = 3;
-
-  void onEndAnimation()
-  {
-    print('Hohoho');
-    selectBehaviour();
-  }
 
   void selectBehaviour()
   {
@@ -109,11 +102,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 12);
     _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13);
     _animAttack.loop = false;
-    _tickerAttack = SpriteAnimationTicker(_animAttack);
-    _tickerAttack?.onComplete = onEndAnimation;
     _animHurt.loop = false;
-    _tickerHurt = SpriteAnimationTicker(_animHurt);
-    _tickerHurt!.onComplete = onEndAnimation;
+    _timer = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: selectBehaviour,repeat: false);
     anchor = Anchor.center;
     animation = _animMove;
     size = _spriteSheetSize;
@@ -129,7 +119,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _body?.collisionType = CollisionType.active;
     // body.debugMode = true;
     _body?.debugColor = BasicPalette.blue.color;
-    _body?.activeSecs = _tickerAttack!.totalDuration();
+    _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
     math.Random rand = math.Random();
     for(int i=0;i<maxLoots;i++){
@@ -171,6 +161,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void update(double dt)
   {
+    _timer?.update(dt);
     column = position.x ~/ GameConsts.lengthOfTileSquare.x;
     row =    position.y ~/ GameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
@@ -183,7 +174,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       return;
     }
     super.update(dt);
-    if(animation == _animHurt || animation == _animAttack || animation == _animDeath){
+    if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
     _rigidSec -= dt;
@@ -234,8 +225,13 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         removeFromParent();
       }));
     }else{
+      animation = null;
+      _animHurt.ticker().reset();
       animation = _animHurt;
-      animation?.ticker().reset();
+      _timer!.stop();
+      _timer!.start();
+      print('start timer');
+      print(_timer!.current);
     }
   }
 }

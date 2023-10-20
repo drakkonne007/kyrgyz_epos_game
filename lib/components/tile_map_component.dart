@@ -193,7 +193,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
     gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,GameConsts.lengthOfTileSquare.x*GameConsts.maxColumn,GameConsts.lengthOfTileSquare.y*GameConsts.maxRow));
-    gameRef.camera.zoom = 1.5;
+    gameRef.camera.zoom = 1.4;
     isFirstLoad = true;
   }
 
