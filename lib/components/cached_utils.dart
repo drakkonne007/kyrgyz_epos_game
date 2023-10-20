@@ -1,9 +1,6 @@
-
-
-
+import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
-
 import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -14,6 +11,8 @@ import 'package:xml/xml.dart';
 
 Future loadObjs() async
 {
+  var timer = Stopwatch();
+  timer.start();
   var dir = await getApplicationCacheDirectory();
   ReceivePort objsReceivePort = ReceivePort();
   var isol = await  Isolate.spawn<SendPort>(_loadObjs, objsReceivePort.sendPort,errorsAreFatal: false);
@@ -32,6 +31,8 @@ Future loadObjs() async
   objResponseReceivePort.close();
   objsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
+  print(timer.elapsed.inMilliseconds);
+  timer.stop();
 }
 
 void _loadObjs(SendPort mySendPort) async
@@ -61,6 +62,8 @@ void _loadObjs(SendPort mySendPort) async
 
 Future loadAnimsHigh() async
 {
+  var timer = Stopwatch();
+  timer.start();
   var dir = await getApplicationCacheDirectory();
   ReceivePort animsReceivePort = ReceivePort();
   var isol = await Isolate.spawn<SendPort>(_loadAnimsHigh, animsReceivePort.sendPort,errorsAreFatal: false);
@@ -84,6 +87,8 @@ Future loadAnimsHigh() async
   animsResponseReceivePort.close();
   animsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
+  timer.stop();
+  print(timer.elapsed.inMilliseconds);
 }
 
 void _loadAnimsHigh(SendPort mySendPort) async
@@ -113,6 +118,8 @@ void _loadAnimsHigh(SendPort mySendPort) async
 
 Future loadAnimsDown() async
 {
+  var timer = Stopwatch();
+  timer.start();
   var dir = await getApplicationCacheDirectory();
   ReceivePort animsReceivePort = ReceivePort();
   var isol = await Isolate.spawn<SendPort>(_loadAnimsDown, animsReceivePort.sendPort,errorsAreFatal: false);
@@ -136,6 +143,8 @@ Future loadAnimsDown() async
   animsResponseReceivePort.close();
   animsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
+  timer.stop();
+  print(timer.elapsed.inMilliseconds);
 }
 
 void _loadAnimsDown(SendPort mySendPort) async

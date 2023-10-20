@@ -48,23 +48,26 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future preloadAnimAndObj() async
   {
+    var timer = Stopwatch();
     isMapCached.value = false;
     KyrgyzGame.cachedObjXmls.clear();
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     // firstCachedIntoInternal();
-    loadObjs();
+    timer.start();
+    loadObjs().ignore();
+    loadAnimsHigh().ignore();
+    loadAnimsDown().ignore();
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
       return path.startsWith('assets/metaData/') && path.toLowerCase().endsWith('.png');
     }).map((path) => path.replaceFirst('assets/metaData/', ''));
     for(final path in imagePaths) {
-      final img = await Flame.images.load('metaData/$path');
-      KyrgyzGame.cachedImgs[path] = img;
+      KyrgyzGame.cachedMapPngs[path] = 1;
     }
-    loadAnimsHigh();
-    loadAnimsDown();
+    timer.stop();
+    print('all map load time: ${timer.elapsedMilliseconds}');
     print('end preload');
     isMapCached.value = true;
   }
@@ -189,8 +192,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     await add(orthoPlayer!);
     gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
     gameRef.showOverlay(overlayName: HealthBar.id);
-    gameRef.camera.followComponent(orthoPlayer!);
-    gameRef.camera.zoom = 1.27;
+    gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,GameConsts.lengthOfTileSquare.x*GameConsts.maxColumn,GameConsts.lengthOfTileSquare.y*GameConsts.maxRow));
+    gameRef.camera.zoom = 1.5;
     isFirstLoad = true;
   }
 

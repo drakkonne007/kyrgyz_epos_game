@@ -53,8 +53,8 @@ class MapNode
       exit(0);
     }
     LoadedColumnRow lcr = LoadedColumnRow(column, row);
-    if (KyrgyzGame.cachedImgs.containsKey('$column-${row}_down.png')) {
-      Image _imageDown = KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
+    if (KyrgyzGame.cachedMapPngs.containsKey('$column-${row}_down.png')) {
+      Image _imageDown = await Flame.images.load('metaData/$column-${row}_down.png');//KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
       var spriteDown = SpriteComponent(
         sprite: Sprite(_imageDown),
         position: Vector2(column * GameConsts.lengthOfTileSquare.x,
@@ -93,8 +93,8 @@ class MapNode
         }
       }
     }
-    if (KyrgyzGame.cachedImgs.containsKey('$column-${row}_high.png')) {
-      Image _imageHigh = KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
+    if (KyrgyzGame.cachedMapPngs.containsKey('$column-${row}_high.png')) {
+      Image _imageHigh = await Flame.images.load('metaData/$column-${row}_high.png');//KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
         var spriteHigh = SpriteComponent(
           sprite: Sprite(_imageHigh),
           position: Vector2(column * GameConsts.lengthOfTileSquare.x,

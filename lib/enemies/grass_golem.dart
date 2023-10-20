@@ -55,6 +55,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
 
   void onEndAnimation()
   {
+    print('Hohoho');
     selectBehaviour();
   }
 
@@ -94,21 +95,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     priority = GamePriority.player;
     Image? spriteImage;
     if(spriteVariant == GolemVariant.Water){
-      try {
-        spriteImage = Flame.images.fromCache(
-            'tiles/sprites/players/Stone-224x192.png');
-      }catch(e){
         spriteImage = await Flame.images.load(
             'tiles/sprites/players/Stone-224x192.png');
-      }
     }else{
-      try {
-        spriteImage = Flame.images.fromCache(
-            'tiles/sprites/players/Stone2-224x192.png');
-      }catch(e){
         spriteImage = await Flame.images.load(
             'tiles/sprites/players/Stone2-224x192.png');
-      }
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);

@@ -30,7 +30,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
-    gameRef.camera.shake(duration: 0.3,intensity: 5);
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
@@ -60,11 +59,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   Future<void> onLoad() async
   {
     Image? spriteImg;
-    try{
-      spriteImg = Flame.images.fromCache('tiles/sprites/players/warrior-144x96.png');
-    }catch(e){
-      spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
-    }
+    spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
@@ -256,16 +251,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
       _speed.y = 0;
       if(_groundBox.absoluteCenter.y < other.absoluteCenter.y){
-        position.y = other.absolutePosition.y - _groundBox.height/2 - 1;
+        position.y = other.absolutePosition.y - _groundBox.height/2;// - 1;
       }else{
-        position.y = other.absolutePosition.y + other.height - (_groundBox.height/2-_groundBox.height) + 1;
+        position.y = other.absolutePosition.y + other.height - (_groundBox.height/2-_groundBox.height);// + 1;
       }
     }else{
       _speed.x = 0;
       if(_groundBox.absoluteCenter.x > other.absoluteCenter.x){
-        position.x=other.absolutePosition.x + other.width + _groundBox.width/2 + 1;
+        position.x=other.absolutePosition.x + other.width + _groundBox.width/2;// + 1;
       }else{
-        position.x=other.absolutePosition.x - _groundBox.width/2 - 1;
+        position.x=other.absolutePosition.x - _groundBox.width/2;// - 1;
       }
     }
   }
