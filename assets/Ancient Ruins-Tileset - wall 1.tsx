@@ -7,6 +7,8 @@
  <tile id="9" probability="0"/>
  <tile id="10" probability="0"/>
  <tile id="16" type="high"/>
+ <tile id="17" type="high"/>
+ <tile id="19" type="high"/>
  <tile id="20" type="high"/>
  <tile id="32">
   <objectgroup draworder="index" id="2">
@@ -42,11 +44,11 @@
  <tile id="154" probability="0"/>
  <tile id="155" probability="0"/>
  <tile id="156" probability="0"/>
- <tile id="192" probability="0"/>
+ <tile id="192" type="high" probability="0"/>
  <tile id="193" probability="0"/>
  <tile id="194" probability="0"/>
  <tile id="195" probability="0"/>
- <tile id="196" probability="0"/>
+ <tile id="196" type="high" probability="0"/>
  <tile id="197" probability="0"/>
  <tile id="198" probability="0"/>
  <tile id="199" probability="0"/>
@@ -59,12 +61,12 @@
  <tile id="209" probability="0"/>
  <tile id="210" probability="0"/>
  <tile id="211" probability="0"/>
- <tile id="212" probability="0"/>
+ <tile id="212" type="high" probability="0"/>
  <tile id="224" probability="0"/>
  <tile id="225" probability="0"/>
  <tile id="226" probability="0"/>
  <tile id="227" probability="0"/>
- <tile id="228" probability="0"/>
+ <tile id="228" type="high" probability="0"/>
  <wangsets>
   <wangset name="wall-1" type="corner" tile="66">
    <wangcolor name="" color="#ff0000" tile="66" probability="1"/>

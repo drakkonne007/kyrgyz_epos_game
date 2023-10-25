@@ -11,27 +11,30 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 
 
-class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
+class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  Chest({this.nedeedKilledBosses, this.neededItems, required this.myItems
+Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myItems
   ,Sprite? sprite,
-    bool? autoResize,
-    required super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
-    super.anchor = Anchor.center,
-    super.children,
-    super.priority = GamePriority.items}){
-    _startPosition = position;
-  }
+  bool? autoResize,
+  required super.position,
+  Vector2? size,
+  super.scale,
+  super.angle,
+  super.nativeAngle,
+  super.anchor = Anchor.center,
+  super.children,
+  super.priority = GamePriority.items}){
+  _startPosition = position;
+}
   Set<int>? nedeedKilledBosses;
   Vector2? _startPosition;
   Set<int>? neededItems;
   List<Item> myItems;
-  final int _row = 9;
-  final int _column = 0;
+  int _level;
+  final Vector2 _spriteSheetSize = Vector2(64,64);
+  late Image _spriteImg;
+  late SpriteSheet _spriteSheet;
+
 
   void checkIsIOpen()
   {
@@ -57,10 +60,9 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
       }
     }
     removeAll(children);
-    double dur = 0.8;
-    add(RotateEffect.by(tau/4,EffectController(duration: 0.2,reverseDuration: 0.2,infinite: true)));
-    add(ScaleEffect.to(Vector2.all(1.5), EffectController(duration: dur)));
-    add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){
+    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 15, loop: false);
+    double dur = animation!.ticker().totalDuration();
+    add(OpacityEffect.by(-0.95,EffectController(duration: dur + 0.3),onComplete: (){
       gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
       removeFromParent();
     }));
@@ -69,17 +71,17 @@ class Chest extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void>onLoad() async
   {
-    Image? spriteImg;
-    try{
-      spriteImg = Flame.images.fromCache(
-          'tiles/map/loot/loot.png');
-    }catch(e){
-      spriteImg = await Flame.images.load(
-          'tiles/map/loot/loot.png');
+    switch(_level){
+      case 0: _spriteImg = await Flame.images.load(
+          'tiles/map/grassLand/Props/treasure chest lvl 1-opening animation-standard style.png'); break;
+      case 1: _spriteImg = await Flame.images.load(
+          'tiles/map/grassLand/Props/treasure chest lvl 2-opening animation-standard style.png'); break;
+      case 2: _spriteImg = await Flame.images.load(
+          'tiles/map/grassLand/Props/treasure chest lvl 3-opening animation-standard style.png'); break;
     }
-    final spriteSheet = SpriteSheet(image: spriteImg,
-        srcSize: Vector2.all(24));
-    sprite = spriteSheet.getSprite(_row, _column);
+    _spriteSheet = SpriteSheet(image: _spriteImg,
+        srcSize: _spriteSheetSize);
+    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 0, loop: false);
     size = Vector2.all(70);
     var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     await add(asd);

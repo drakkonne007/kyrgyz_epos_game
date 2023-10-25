@@ -29,14 +29,8 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> onLoad() async
   {
-    Image? spriteImage;
-    try{
-      spriteImage = Flame.images.fromCache(
+    Image spriteImage = await Flame.images.load(
           _item.source);
-    }catch(e){
-      spriteImage = await Flame.images.load(
-          _item.source);
-    }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _item.srcSize);
     sprite = spriteSheet.getSprite(_item.row, _item.column);

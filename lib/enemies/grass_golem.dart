@@ -31,7 +31,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   final Vector2 _spriteSheetSize = Vector2(224,192);
   Vector2 _startPos;
   Vector2 _speed = Vector2(0,0);
-  double _maxSpeed = 20;
+  double _maxSpeed = 30;
   GolemVariant spriteVariant;
   double _rigidSec = 2;
   EWBody? _body;
@@ -122,13 +122,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
     math.Random rand = math.Random();
-    for(int i=0;i<maxLoots;i++){
-      double chance = rand.nextDouble();
-      if(chance >= chanceOfLoot){
-        var item = itemFromId(2);
-        loots.add(item);
-      }
-    }
   }
 
   void onStartHit()
@@ -144,7 +137,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   bool isNearPlayer()
   {
     var pl = gameRef.gameMap.orthoPlayer!;
-    if((absolutePositionOf(_body!.center).x -  pl.absolutePositionOf(pl.hitBox.center).x).abs() > 80
+    if((absolutePositionOf(_body!.center).x -  pl.absolutePositionOf(pl.hitBox.center).x).abs() > 40
         || pl.absolutePositionOf(pl.hitBox.positionOfAnchor(Anchor.topRight)).y > absolutePositionOf(_body!.positionOfAnchor(Anchor.bottomRight)).y
     || pl.absolutePositionOf(pl.hitBox.positionOfAnchor(Anchor.bottomRight)).y < absolutePositionOf(_body!.positionOfAnchor(Anchor.topRight)).y){
       return false;
@@ -192,6 +185,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
+    _timer!.stop();
     if(inArmor){
       health -= math.max(hurt - armor, 0);
     }else{
@@ -201,7 +195,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       _speed = Vector2.all(0);
       if(loots.isNotEmpty) {
         if(loots.length > 1){
-          var temp = Chest(myItems: loots, position: positionOfAnchor(Anchor.center));
+          var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
           gameRef.gameMap.add(temp);
           int col = positionOfAnchor(Anchor.center).x ~/ (GameConsts.lengthOfTileSquare.x);
           int row = positionOfAnchor(Anchor.center).y ~/ (GameConsts.lengthOfTileSquare.y);
@@ -228,7 +222,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       animation = null;
       _animHurt.ticker().reset();
       animation = _animHurt;
-      _timer!.stop();
       _timer!.start();
       print('start timer');
       print(_timer!.current);

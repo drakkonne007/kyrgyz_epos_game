@@ -1,7 +1,20 @@
+import 'dart:math' as math;
+
 import 'package:game_flame/abstracts/item.dart';
 
 abstract class KyrgyzEnemy
 {
+  KyrgyzEnemy()
+  {
+    math.Random rand = math.Random();
+    for(int i=0;i<maxLoots;i++){
+      double chance = rand.nextDouble();
+      if(chance >= chanceOfLoot){
+        var item = itemFromId(2);
+        loots.add(item);
+      }
+    }
+  }
   double health = 0;
   double armor = 0;
   int maxLoots = 0;

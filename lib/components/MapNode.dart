@@ -175,7 +175,11 @@ class MapNode
       return;
     }
     switch(name){
-      case 'enemy':
+      case 'ggolem':
+        custMap.loadedLivesObjs.add(position);
+        custMap.add(GrassGolem(position, GolemVariant.Grass));
+        break;
+        case 'wgolem':
         custMap.loadedLivesObjs.add(position);
         custMap.add(GrassGolem(position, GolemVariant.Water));
         break;
@@ -186,7 +190,7 @@ class MapNode
         custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         break;
       case 'chest':
-        var temp = Chest(myItems: [itemFromId(2)], position: position);
+        var temp = Chest(1, myItems: [itemFromId(2)], position: position);
         custMap.add(temp);
         custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
         custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
