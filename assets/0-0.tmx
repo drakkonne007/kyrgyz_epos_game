@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="921">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="922">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -158,35 +158,8 @@
 </data>
  </layer>
  <objectgroup id="16" name="objects">
-  <object id="911" x="161.333" y="130.667">
-   <point/>
-  </object>
-  <object id="912" x="604" y="374.667">
-   <point/>
-  </object>
-  <object id="913" x="657.333" y="205.333">
-   <point/>
-  </object>
-  <object id="914" x="810.667" y="104">
-   <point/>
-  </object>
-  <object id="915" x="221.333" y="808">
-   <point/>
-  </object>
-  <object id="916" x="382.667" y="598.667">
-   <point/>
-  </object>
-  <object id="917" x="293.333" y="489.333">
-   <point/>
-  </object>
-  <object id="918" x="346.667" y="370.667">
-   <point/>
-  </object>
-  <object id="919" x="454.667" y="289.333">
-   <point/>
-  </object>
-  <object id="920" x="514.667" y="221.333">
-   <point/>
+  <object id="921" x="207" y="314">
+   <polygon points="0,0 365,-192 669,-76 621,462 29,627 -155,301 464,318 340,132 -143,132 -146,-2"/>
   </object>
  </objectgroup>
 </map>

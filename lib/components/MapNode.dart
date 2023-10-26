@@ -5,6 +5,8 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/Obstacles/flying_obelisk.dart';
+import 'package:game_flame/Obstacles/stand_obelisk.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/precompile_animation.dart';
 import 'package:flame/components.dart';
@@ -95,42 +97,42 @@ class MapNode
     }
     if (KyrgyzGame.cachedMapPngs.containsKey('$column-${row}_high.png')) {
       Image _imageHigh = await Flame.images.load('metaData/$column-${row}_high.png');//KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
-        var spriteHigh = SpriteComponent(
-          sprite: Sprite(_imageHigh),
-          position: Vector2(column * GameConsts.lengthOfTileSquare.x,
-              row * GameConsts.lengthOfTileSquare.y),
-          priority: GamePriority.high - 1,
-          size: GameConsts.lengthOfTileSquare+Vector2.all(1),
-        );
-        custMap.add(spriteHigh);
-        custMap.allEls.putIfAbsent(lcr, () => []);
-        custMap.allEls[lcr]!.add(spriteHigh);
+      var spriteHigh = SpriteComponent(
+        sprite: Sprite(_imageHigh),
+        position: Vector2(column * GameConsts.lengthOfTileSquare.x,
+            row * GameConsts.lengthOfTileSquare.y),
+        priority: GamePriority.high - 1,
+        size: GameConsts.lengthOfTileSquare+Vector2.all(1),
+      );
+      custMap.add(spriteHigh);
+      custMap.allEls.putIfAbsent(lcr, () => []);
+      custMap.allEls[lcr]!.add(spriteHigh);
     }
     if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_high.anim')) {
       var objects = KyrgyzGame.cachedAnims['$column-${row}_high.anim']!;
       for (final obj in objects) {
         Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
-          final List<Sprite> spriteList = [];
-          final List<double> stepTimes = [];
-          for (final anim in obj.findAllElements('fr')) {
-            spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
-                srcPosition: Vector2(
-                    double.parse(anim.getAttribute('cl')!) * 32,
-                    double.parse(anim.getAttribute('rw')!) * 32)));
-            stepTimes.add(double.parse(anim.getAttribute('dr')!));
-          }
-          var sprAnim = SpriteAnimation.variableSpriteList(
-              spriteList, stepTimes: stepTimes);
-          for(final anim in obj.findAllElements('ps')){
-            var ss = SpriteAnimationComponent(animation: sprAnim,
-                position: Vector2(double.parse(anim.getAttribute('x')!),
-                    double.parse(anim.getAttribute('y')!)),
-                size: Vector2.all(34),
-                priority: GamePriority.high);
-            custMap.add(ss);
-            custMap.allEls.putIfAbsent(lcr, () => []);
-            custMap.allEls[lcr]!.add(ss);
-          }
+        final List<Sprite> spriteList = [];
+        final List<double> stepTimes = [];
+        for (final anim in obj.findAllElements('fr')) {
+          spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
+              srcPosition: Vector2(
+                  double.parse(anim.getAttribute('cl')!) * 32,
+                  double.parse(anim.getAttribute('rw')!) * 32)));
+          stepTimes.add(double.parse(anim.getAttribute('dr')!));
+        }
+        var sprAnim = SpriteAnimation.variableSpriteList(
+            spriteList, stepTimes: stepTimes);
+        for(final anim in obj.findAllElements('ps')){
+          var ss = SpriteAnimationComponent(animation: sprAnim,
+              position: Vector2(double.parse(anim.getAttribute('x')!),
+                  double.parse(anim.getAttribute('y')!)),
+              size: Vector2.all(34),
+              priority: GamePriority.high);
+          custMap.add(ss);
+          custMap.allEls.putIfAbsent(lcr, () => []);
+          custMap.allEls[lcr]!.add(ss);
+        }
       }
     }
     if (KyrgyzGame.cachedObjXmls.containsKey('$column-$row.objXml')) {
@@ -177,11 +179,11 @@ class MapNode
     switch(name){
       case 'ggolem':
         custMap.loadedLivesObjs.add(position);
-        custMap.add(GrassGolem(position, GolemVariant.Grass));
+        custMap.add(GrassGolem(position, GolemVariant.Grass,priority: GamePriority.player - 2));
         break;
-        case 'wgolem':
+      case 'wgolem':
         custMap.loadedLivesObjs.add(position);
-        custMap.add(GrassGolem(position, GolemVariant.Water));
+        custMap.add(GrassGolem(position, GolemVariant.Water,priority: GamePriority.player - 2));
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
@@ -194,6 +196,26 @@ class MapNode
         custMap.add(temp);
         custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
         custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
+        break;
+      case 'fObelisk':
+        var temp = FlyingHighObelisk(position,column,row,priority: GamePriority.high - 1);
+        custMap.add(temp);
+        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
+        var temp2 = FlyingDownObelisk(position,column,row,priority: GamePriority.player - 2);
+        custMap.add(temp2);
+        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp2);
+        break;
+      case 'sObelisk':
+        var temp = StandHighObelisk(position,priority: GamePriority.high - 1);
+        custMap.add(temp);
+        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
+        var temp2 = StandDownObelisk(position,priority: GamePriority.player - 2);
+        custMap.add(temp2);
+        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
+        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp2);
         break;
     }
   }

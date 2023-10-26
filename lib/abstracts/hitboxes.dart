@@ -12,7 +12,7 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
     super.angle,
     super.anchor,
     super.priority,
-    bool isSolid = false,
+    bool isSolid = true,
     this.autoTrigger = false,
     required this.obstacleBehavoiur,
   });

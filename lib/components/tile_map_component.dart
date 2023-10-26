@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:isolate';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
@@ -15,8 +12,6 @@ import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:xml/xml.dart';
 
 class LoadedColumnRow
 {
@@ -39,7 +34,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   int countId=0;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
-  int _column=0,_row=0;
+  int _column=0, _row=0;
   final List<MapNode> _mapNodes = [];
   bool isFirstLoad = false;
   Map<RectangleHitbox,int> rectHitboxes = {};

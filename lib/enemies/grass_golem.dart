@@ -24,7 +24,7 @@ enum GolemVariant
 
 class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  GrassGolem(this._startPos,this.spriteVariant);
+  GrassGolem(this._startPos,this.spriteVariant,{super.priority});
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
