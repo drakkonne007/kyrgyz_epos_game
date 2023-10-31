@@ -45,6 +45,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
   bool isLoop;
   late Vector2 transformPoint;
   double angle = 0;
+  Vector2 size = Vector2(1,1);
 
   bool onComponentTypeCheck(DCollisionEntity other);
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
@@ -66,7 +67,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
 
   Vector2 getPoint(int index)
   {
-    return angle == 0 ? _vertices[index] : _rotatePoint(_vertices[index]);
+    return angle == 0 ? Vector2(_vertices[index].x * size.x,_vertices[index].y * size.y) : _rotatePoint(Vector2(_vertices[index].x * size.x,_vertices[index].y * size.y));
   }
 
   //rotate point around center

@@ -2,7 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class StandHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
@@ -29,7 +31,7 @@ class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
 {
   StandDownObelisk(this._startPos,{super.priority});
   final Vector2 _startPos;
-  late GroundHitBox _groundBox;
+  late Ground _groundBox;
   final Vector2 _spriteSheetSize = Vector2(100,75);
 
   @override
@@ -43,7 +45,9 @@ class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
       sprites.add(Sprite(img,srcSize: _spriteSheetSize,srcPosition: Vector2(_spriteSheetSize.x * i,75)));
     }
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
-    _groundBox = GroundHitBox(size: Vector2(43, 67), position: Vector2(26, 0));
+    Vector2 tSize = Vector2(43, 67);
+    Vector2 tPos = Vector2(26, 0);
+    _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: true, isSolid: false, isLoop: true);
     add(_groundBox);
   }
 }
