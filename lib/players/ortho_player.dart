@@ -76,13 +76,20 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animation = _animIdle;
     _timerHurt = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    hitBox = PlayerHitbox(size:Vector2(47,47),position: Vector2(49,27));
+    Vector2 tPos = Vector2(49,27);
+    Vector2 tSize = Vector2(47,47);
+    hitBox = PlayerHitbox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.inactive,isSolid: true,isStatic: false, isLoop: true);
     await add(hitBox);
-    _groundBox = GroundHitBox(obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,anchor:Anchor.center,size: Vector2(30,30),position: Vector2(_spriteSheetWidth/2, _spriteSheetHeight - 30));
+    tPos = Vector2(_spriteSheetWidth/2, _spriteSheetHeight - 30);
+    tSize = Vector2(30,30);
+    _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
+        obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,
+        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true);
     // _groundBox.debugMode = true;
     await add(_groundBox);
-    anchor = Anchor(_groundBox.center.x / width, _groundBox.center.y / height);
-    _weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
+    anchor = Anchor((_groundBox.getPoint(3).x - _groundBox.getPoint(0).x) / 2 /width, (_groundBox.getPoint(1).y - _groundBox.getPoint(0).y) / 2 / height);
+    _weapon = WSword([],collisionType: DCollisionType.inactive,isSolid: true,isStatic: false, isLoop: true, onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
+    //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
     await add(_weapon);
   }
 
@@ -251,7 +258,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void groundCalcLines(Set<Vector2> points, PositionComponent other)
+  void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
   {
     if(points.length < 2){
       return;

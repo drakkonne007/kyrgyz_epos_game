@@ -32,23 +32,11 @@ double radiansOfPlayerDirect(PlayerDirectionMove direct)
   }
 }
 
-abstract class EnemyWeapon extends RectangleHitbox
+abstract class EnemyWeapon extends DCollisionEntity
 {
-  EnemyWeapon({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-    required this.onStartWeaponHit,
-    required this.onEndWeaponHit
-  })
-  {
-    collisionType = CollisionType.inactive;
-    // debugColor = BasicPalette.orange.color;
-    // debugMode = true;
-  }
+  EnemyWeapon(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic,required this.onStartWeaponHit,
+    required this.onEndWeaponHit, required super.isLoop});
+
   Function() onStartWeaponHit;
   Function() onEndWeaponHit;
   double damage = 0;
@@ -57,47 +45,35 @@ abstract class EnemyWeapon extends RectangleHitbox
   bool inArmor = true;
   double activeSecs = 0;
 
+
   void hit(PlayerDirectionMove direct);
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other) {
     if(other is PlayerHitbox) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is PlayerHitbox){
       var temp = other.parent as MainPlayer;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }
-    super.onCollisionStart(intersectionPoints, other);
   }
 }
 
-abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
+abstract class PlayerWeapon extends DCollisionEntity
 {
-  PlayerWeapon({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-    required this.onStartWeaponHit,
-    required this.onEndWeaponHit
-  })
-  {
-    debugColor = BasicPalette.orange.color;
-    collisionType = CollisionType.inactive;
-  }
+
+  PlayerWeapon(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic,required this.onStartWeaponHit,
+    required this.onEndWeaponHit, required super.isLoop});
 
   Function() onStartWeaponHit;
   Function() onEndWeaponHit;
-
   final double sectorInRadian = 0.383972 * 2;
   double damage = 0;
   double permanentDamage = 0;
@@ -105,23 +81,23 @@ abstract class PlayerWeapon extends RectangleHitbox with HasGameRef<KyrgyzGame>
   bool inArmor = true;
   double energyCost = 0;
 
+
   Future<void> hit();
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other) {
     if(other is EnemyHitbox) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is EnemyHitbox){
       var temp = other.parent as KyrgyzEnemy;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }
-    super.onCollisionStart(intersectionPoints, other);
   }
 }

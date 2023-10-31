@@ -1,55 +1,117 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
+enum DCollisionType
 {
-  ObjectHitbox({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = true,
-    this.autoTrigger = false,
-    required this.obstacleBehavoiur,
-  });
+  active,
+  passive,
+  inactive
+}
 
-  @override
-  Future<void> onLoad() async
+abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
+{
+  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop})
   {
-    id = gameRef.gameMap.getNewId();
+    transformPoint = _vertices[0];
+    int column = _vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
+    int row    = _vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
+     if(isStatic) {
+        gameRef.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(column, row), this);
+     }else{
+        gameRef.gameMap.collisionProcessor.addCollEntity(this);
+     }
   }
 
-  late int id;
+  @override
+  void onRemove()
+  {
+      if(!isStatic){
+        gameRef.gameMap.collisionProcessor.removeCollEntity(this);
+      }
+  }
+
+  List<Vector2> _vertices;
+  DCollisionType collisionType;
+  bool isSolid;
+  bool isStatic;
+  bool isLoop;
+  late Vector2 transformPoint;
+  double angle = 0;
+
+  bool onComponentTypeCheck(DCollisionEntity other);
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
+  void onCollisionEnd(DCollisionEntity other);
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other);
+
+  void setVertices(List<Vector2> vertices)
+  {
+    _vertices = vertices;
+    if(!_vertices.contains(transformPoint)){
+      transformPoint = _vertices[0];
+    }
+  }
+
+  int getVerticesCount()
+  {
+    return _vertices.length;
+  }
+
+  Vector2 getPoint(int index)
+  {
+    return angle == 0 ? _vertices[index] : _rotatePoint(_vertices[index]);
+  }
+
+  //rotate point around center
+  Vector2 _rotatePoint(Vector2 point)
+  {
+    Vector2 temp = point - transformPoint;
+    double radian = angle * pi / 180;
+    double x = temp.x * cos(radian) - temp.y * sin(radian);
+    double y = temp.x * sin(radian) + temp.y * cos(radian);
+    return Vector2(x,y) + transformPoint;
+  }
+}
+
+class ObjectHitbox extends DCollisionEntity
+{
+
+  ObjectHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop});
+
+  late int id = gameRef.gameMap.getNewId();
   bool autoTrigger;
+
   Function() obstacleBehavoiur;
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other) {
     if(other is PlayerHitbox) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is PlayerHitbox) {
       if(autoTrigger) {
         obstacleBehavoiur.call();
       }else{;
-      gameRef.gameMap.currentObject = this;
+        gameRef.gameMap.currentObject = this;
       }
-    }
-    super.onCollisionStart(intersectionPoints, other);
+    }    // super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
-  void onCollisionEnd(ShapeHitbox other)
+  void onCollisionEnd(DCollisionEntity other)
   {
     if(other is PlayerHitbox && !autoTrigger) {
       if(gameRef.gameMap.currentObject != null){
@@ -58,25 +120,24 @@ class ObjectHitbox extends RectangleHitbox with HasGameRef<KyrgyzGame>
         }
       }
     }
-    super.onCollisionEnd(other);
+    // super.onCollisionEnd(other);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollision
   }
 }
 
-class PlayerHitbox extends RectangleHitbox
+class PlayerHitbox extends DCollisionEntity
 {
-  PlayerHitbox({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-  });
+  PlayerHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop});
+
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other) {
     if(other is EnemyWeapon) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
@@ -84,25 +145,34 @@ class PlayerHitbox extends RectangleHitbox
   @override
   Future<void> onLoad() async
   {
-    collisionType = CollisionType.passive;
+    collisionType = DCollisionType.passive;
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollision
+  }
+
+  @override
+  void onCollisionEnd(DCollisionEntity other) {
+    // TODO: implement onCollisionEnd
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollisionStart
   }
 }
 
-class EnemyHitbox extends RectangleHitbox
+class EnemyHitbox extends DCollisionEntity
 {
-  EnemyHitbox({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-  });
+  EnemyHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop});
+
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other) {
     if(other is PlayerWeapon) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
@@ -110,47 +180,58 @@ class EnemyHitbox extends RectangleHitbox
   @override
   Future<void> onLoad() async
   {
-    collisionType = CollisionType.passive;
+    collisionType = DCollisionType.passive;
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollision
+  }
+
+  @override
+  void onCollisionEnd(DCollisionEntity other) {
+    // TODO: implement onCollisionEnd
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollisionStart
   }
 }
 
-class GroundHitBox extends RectangleHitbox
+class GroundHitBox extends DCollisionEntity
 {
-  GroundHitBox({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-    this.obstacleBehavoiurStart,
-    this.obstacleBehavoiurContinue,
-  });
-  Function(Set<Vector2> intersectionPoints, ShapeHitbox other)? obstacleBehavoiurStart;
-  Function(Set<Vector2> intersectionPoints, ShapeHitbox other)? obstacleBehavoiurContinue;
+
+  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
+  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurContinue;
+
+  GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, this.obstacleBehavoiurStart, this.obstacleBehavoiurContinue, required super.isLoop});
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other) {
     if(other is MapObstacle) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is MapObstacle) {
       obstacleBehavoiurStart?.call(intersectionPoints,other);
     }
-    super.onCollisionStart(intersectionPoints, other);
   }
 
-  @override void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other)
+  @override void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is MapObstacle) {
       obstacleBehavoiurContinue?.call(intersectionPoints,other);
     }
-    super.onCollision(intersectionPoints, other);
+  }
+
+  @override
+  void onCollisionEnd(DCollisionEntity other) {
+    // TODO: implement onCollisionEnd
   }
 }

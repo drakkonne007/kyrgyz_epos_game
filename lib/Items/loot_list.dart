@@ -39,7 +39,6 @@ class PureHat extends Item
   {
 
   }
-
 }
 
 class StrongHat extends Item

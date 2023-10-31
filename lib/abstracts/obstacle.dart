@@ -4,70 +4,60 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/players/ortho_player.dart';
 
-abstract class MapObstacle extends RectangleHitbox
+abstract class MapObstacle extends DCollisionEntity
 {
   bool _isFirst = true;
-  MapObstacle({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-  });
+
+  MapObstacle(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop});
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other)
+  {
     if(other is GroundHitBox) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
 
   @override
-  void updateTree(double dt) {
+  void updateTree(double dt)
+  {
     if(_isFirst) {
       _isFirst = false;
       super.updateTree(dt);
     }
   }
-
-  @override
-  Future<void> onLoad() async
-  {
-    collisionType = CollisionType.passive;
-  }
 }
 
-class MapWarp extends RectangleHitbox with HasGameRef<KyrgyzGame>
+class MapWarp extends DCollisionEntity
 {
-  MapWarp({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-    required this.to
-  }){
-    collisionType = CollisionType.passive;
-  }
   String to;
 
+  MapWarp(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.to, required super.isLoop});
+
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(DCollisionEntity other) {
     if(other is GroundHitBox && other.parent is OrthoPlayer) {
-      return super.onComponentTypeCheck(other);
+      return true;
     }
     return false;
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
     if(other is GroundHitBox && other.parent is OrthoPlayer){
-      other.position = Vector2.all(-150);
+      // other.position = Vector2.all(-150);
       gameRef.loadNewMap(to);
     }
-    super.onCollisionStart(intersectionPoints, other);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollision
+  }
+
+  @override
+  void onCollisionEnd(DCollisionEntity other) {
+    // TODO: implement onCollisionEnd
   }
 }

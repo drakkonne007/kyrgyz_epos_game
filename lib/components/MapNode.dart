@@ -7,6 +7,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/flying_obelisk.dart';
 import 'package:game_flame/Obstacles/stand_obelisk.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/precompile_animation.dart';
 import 'package:flame/components.dart';
@@ -38,7 +39,6 @@ class MapNode
   CustomTileMap custMap;
   final int row;
   int _id = 0;
-  Set<RectangleHitbox> hits = {};
 
   int id() => _id++;
 
@@ -65,12 +65,11 @@ class MapNode
         priority: 0,
       );
       custMap.add(spriteDown);
-      custMap.allEls.putIfAbsent(lcr, () => []);
-      custMap.allEls[lcr]!.add(spriteDown);
     }
     if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_down.anim')) {
       var objects = KyrgyzGame.cachedAnims['$column-${row}_down.anim']!;
       for (final obj in objects) {
+        print(obj.getAttribute('src')!);
         Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
@@ -90,8 +89,6 @@ class MapNode
               size: Vector2.all(34),
               priority: GamePriority.ground + 1);
           custMap.add(ss);
-          custMap.allEls.putIfAbsent(lcr, () => []);
-          custMap.allEls[lcr]!.add(ss);
         }
       }
     }
@@ -105,8 +102,6 @@ class MapNode
         size: GameConsts.lengthOfTileSquare+Vector2.all(1),
       );
       custMap.add(spriteHigh);
-      custMap.allEls.putIfAbsent(lcr, () => []);
-      custMap.allEls[lcr]!.add(spriteHigh);
     }
     if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_high.anim')) {
       var objects = KyrgyzGame.cachedAnims['$column-${row}_high.anim']!;
@@ -130,8 +125,6 @@ class MapNode
               size: Vector2.all(34),
               priority: GamePriority.high);
           custMap.add(ss);
-          custMap.allEls.putIfAbsent(lcr, () => []);
-          custMap.allEls[lcr]!.add(ss);
         }
       }
     }
@@ -149,21 +142,8 @@ class MapNode
         String? name = obj.getAttribute('nm');
         switch (name) {
           case '':
-            bool isNeed = true;
-            for(final hit in custMap.rectHitboxes.keys){
-              if(hit.position == position && hit.size == size){
-                custMap.rectHitboxes[hit] = custMap.rectHitboxes[hit]! + 1;
-                isNeed = false;
-                hits.add(hit);
-                break;
-              }
-            }
-            if(isNeed){
-              var ground = Ground(size: size, position: position);
-              custMap.add(ground);
-              custMap.rectHitboxes.putIfAbsent(ground, () => 0);
-              hits.add(ground);
-            }
+            var ground = Ground([position,position + Vector2(0, size.y),position + size,position + Vector2(size.x, 0)],collisionType: DCollisionType.passive,isSolid: false,isStatic: true,isLoop: true);
+            custMap.add(ground);
             break;
           default: createLiveObj(position,name); break;
         }
@@ -188,34 +168,22 @@ class MapNode
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
         custMap.add(temp);
-        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         break;
       case 'chest':
         var temp = Chest(1, myItems: [itemFromId(2)], position: position);
         custMap.add(temp);
-        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         break;
       case 'fObelisk':
         var temp = FlyingHighObelisk(position,column,row,priority: GamePriority.high - 1);
         custMap.add(temp);
-        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         var temp2 = FlyingDownObelisk(position,column,row,priority: GamePriority.player - 2);
         custMap.add(temp2);
-        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp2);
         break;
       case 'sObelisk':
         var temp = StandHighObelisk(position,priority: GamePriority.high - 1);
         custMap.add(temp);
-        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp);
         var temp2 = StandDownObelisk(position,priority: GamePriority.player - 2);
         custMap.add(temp2);
-        custMap.allEls.putIfAbsent(LoadedColumnRow(column, row), () => []);
-        custMap.allEls[LoadedColumnRow(column, row)]!.add(temp2);
         break;
     }
   }
@@ -291,14 +259,4 @@ class MapNode
     }
     print('precompile done');
   }
-// @override
-// void render(Canvas canvas)
-// {
-//   if(_imageDown != null) {
-//     canvas.drawImage(_imageDown!, const Offset(0, 0), Paint());
-//   }
-//   if(_highImg != null) {
-//     canvas.drawImage(_highImg!, const Offset(0, 0), Paint());
-//   }
-// }
 }

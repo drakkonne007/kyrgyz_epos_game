@@ -109,14 +109,18 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     size = _spriteSheetSize;
     position = _startPos;
     //_groundBox.anchor = Anchor.center;
-    _hitbox = EnemyHitbox(size: Vector2(69,71),position: Vector2(77, 55));
+    Vector2 tSize = Vector2(69,71);
+    Vector2 tPos = Vector2(77, 55);
+    _hitbox = EnemyHitbox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
+        collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true);
     add(_hitbox);
-    _groundBox = GroundHitBox(obstacleBehavoiurStart: obstacleBehaviour,size: Vector2(69,71), position: Vector2(77, 55));
+    _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
+        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true);
     add(_groundBox);
     // _groundBox.debugMode = true;
     _groundBox.debugColor = BasicPalette.red.color;
-    _body = EWBody(size: Vector2(69,71),position: Vector2(77, 55), onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit);
-    _body?.collisionType = CollisionType.active;
+    _body = EWBody([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)]
+        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true);
     // body.debugMode = true;
     _body?.debugColor = BasicPalette.blue.color;
     _body?.activeSecs = _animAttack.ticker().totalDuration();
@@ -137,9 +141,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   bool isNearPlayer()
   {
     var pl = gameRef.gameMap.orthoPlayer!;
-    if((absolutePositionOf(_body!.center).x -  pl.absolutePositionOf(pl.hitBox.center).x).abs() > 40
-        || pl.absolutePositionOf(pl.hitBox.positionOfAnchor(Anchor.topRight)).y > absolutePositionOf(_body!.positionOfAnchor(Anchor.bottomRight)).y
-    || pl.absolutePositionOf(pl.hitBox.positionOfAnchor(Anchor.bottomRight)).y < absolutePositionOf(_body!.positionOfAnchor(Anchor.topRight)).y){
+    if((absolutePositionOf((_body!.getPoint(3) - _body!.getPoint(0)) / 2).x -  pl.absolutePositionOf((pl.hitBox.getPoint(3) - pl.hitBox.getPoint(0)) / 2).x).abs() > 40
+        || pl.absolutePositionOf(pl.hitBox.getPoint(3)).y > absolutePositionOf(_body!.getPoint(2)).y
+    || pl.absolutePositionOf(pl.hitBox.getPoint(2)).y < absolutePositionOf(_body!.getPoint(3)).y){
       return false;
     }else{
       return true;
@@ -197,19 +201,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         if(loots.length > 1){
           var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
           gameRef.gameMap.add(temp);
-          int col = positionOfAnchor(Anchor.center).x ~/ (GameConsts.lengthOfTileSquare.x);
-          int row = positionOfAnchor(Anchor.center).y ~/ (GameConsts.lengthOfTileSquare.y);
-          LoadedColumnRow tempCoord = LoadedColumnRow(col, row);
-          gameRef.gameMap.allEls.putIfAbsent(tempCoord, () => []);
-          gameRef.gameMap.allEls[tempCoord]!.add(temp);
         }else{
           var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
           gameRef.gameMap.add(temp);
-          int col = positionOfAnchor(Anchor.center).x ~/ (GameConsts.lengthOfTileSquare.x);
-          int row = positionOfAnchor(Anchor.center).y ~/ (GameConsts.lengthOfTileSquare.y);
-          LoadedColumnRow tempCoord = LoadedColumnRow(col, row);
-          gameRef.gameMap.allEls.putIfAbsent(tempCoord, () => []);
-          gameRef.gameMap.allEls[tempCoord]!.add(temp);
         }
       }
       animation = _animDeath;

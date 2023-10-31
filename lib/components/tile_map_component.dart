@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/components/cached_utils.dart';
@@ -12,6 +13,7 @@ import 'package:game_flame/overlays/health_bar.dart';
 import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
+
 
 class LoadedColumnRow
 {
@@ -31,15 +33,16 @@ class LoadedColumnRow
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
   ObjectHitbox? currentObject;
-  int countId=0;
+  static int countId = 0;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
   int _column=0, _row=0;
   final List<MapNode> _mapNodes = [];
   bool isFirstLoad = false;
-  Map<RectangleHitbox,int> rectHitboxes = {};
-  Map<LoadedColumnRow,List<PositionComponent>> allEls = {};
   Set<Vector2> loadedLivesObjs = {};
+  final DCollisionProcessor collisionProcessor = DCollisionProcessor();
+
+
 
   Future preloadAnimAndObj() async
   {
@@ -136,25 +139,8 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         _mapNodes.add(node);
       }
     }
-    LoadedColumnRow? cl;
     for(final node in toRemove) {
-      cl = LoadedColumnRow(node.column, node.row);
       _mapNodes.remove(node);
-      if(allEls.containsKey(cl)) {
-        for(final list in allEls[cl]!){
-          list.removeFromParent();
-        }
-        allEls.remove(cl);
-      }
-      for(final recs in node.hits){
-        if(rectHitboxes.containsKey(recs)){
-          rectHitboxes[recs] = rectHitboxes[recs]! - 1;
-        }
-        if(rectHitboxes[recs]! < 0){
-          rectHitboxes.remove(recs);
-          remove(recs);          // remove(recs);
-        }
-      }
     }
     orthoPlayer?.priority = GamePriority.player-1;
     orthoPlayer?.priority = GamePriority.player;
@@ -207,6 +193,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> update(double dt) async
   {
+    collisionProcessor.updateCollisions();
     if(orthoPlayer != null && isFirstLoad) {
       int col = orthoPlayer!.position.x ~/ (GameConsts.lengthOfTileSquare.x);
       int row = orthoPlayer!.position.y ~/ (GameConsts.lengthOfTileSquare.y);

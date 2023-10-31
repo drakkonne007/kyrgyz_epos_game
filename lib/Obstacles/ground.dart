@@ -1,26 +1,25 @@
+import 'package:flame/src/components/position_component.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class Ground extends MapObstacle
 {
-  Ground({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-  });
+  Ground(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop});
+
 
   @override
-  bool operator ==(Object other)
-  {
-    if(other is Ground){
-      return position == other.position && size == other.size;
-    }else{
-      return false;
-    }
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollision
   }
 
   @override
-  int get hashCode => position.hashCode ^ size.hashCode;
+  void onCollisionEnd(DCollisionEntity other) {
+    // TODO: implement onCollisionEnd
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollisionStart
+  }
 }

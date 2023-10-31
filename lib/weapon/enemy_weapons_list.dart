@@ -1,27 +1,24 @@
 
 import 'package:flame/components.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
 class EWBody extends EnemyWeapon
 {
-  EWBody({
-    super.position,
-    super.size,
-    super.angle,
-    super.anchor,
-    super.priority,
-    bool isSolid = false,
-    required super.onStartWeaponHit,
-    required super.onEndWeaponHit,
-  })
-  {
-    damage = 1;
-  }
-
   bool _isActive = false;
   double _currentActive = 0;
   final Vector2 _startSize = Vector2(69,71);
+
+  EWBody(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop});
+
+  @override
+  Future onLoad() async
+  {
+    damage = 1;
+    isSolid = true;
+    collisionType = DCollisionType.active;
+  }
 
   @override
   void hit(PlayerDirectionMove direct)
@@ -45,5 +42,15 @@ class EWBody extends EnemyWeapon
       _isActive = false;
       onEndWeaponHit.call();
     }
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollision
+  }
+
+  @override
+  void onCollisionEnd(DCollisionEntity other) {
+    // TODO: implement onCollisionEnd
   }
 }
