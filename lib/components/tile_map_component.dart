@@ -43,7 +43,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   final DCollisionProcessor collisionProcessor = DCollisionProcessor();
 
 
-
   Future preloadAnimAndObj() async
   {
     var timer = Stopwatch();

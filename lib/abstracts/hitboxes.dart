@@ -20,6 +20,10 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
 {
   DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop})
   {
+    double minX = 0;
+    double minY = 0;
+    double maxX = 0;
+    double maxY = 0;
     transformPoint = _vertices[0];
     int column = _vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
     int row    = _vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
@@ -28,6 +32,21 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
      }else{
         gameRef.gameMap.collisionProcessor.addCollEntity(this);
      }
+     for(int i = 0; i < _vertices.length; i++){
+       if(_vertices[i].x < minX){
+         minX = _vertices[i].x;
+       }
+       if(_vertices[i].x > maxX){
+         maxX = _vertices[i].x;
+       }
+       if(_vertices[i].y < minY){
+         minY = _vertices[i].y;
+       }
+       if(_vertices[i].y > maxY){
+         maxY = _vertices[i].y;
+       }
+     }
+     _center = Vector2((minX + maxX) / 2, (minY + maxY) / 2);
   }
 
   @override
@@ -46,6 +65,8 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
   late Vector2 transformPoint;
   double angle = 0;
   Vector2 size = Vector2(1,1);
+  Vector2 _center = Vector2(0,0);
+  List<Vector2> obstacleIntersects = [];
 
   bool onComponentTypeCheck(DCollisionEntity other);
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
@@ -60,6 +81,11 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
     }
   }
 
+  Vector2 getCenter()
+  {
+    return _center;
+  }
+
   int getVerticesCount()
   {
     return _vertices.length;
@@ -68,6 +94,11 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
   Vector2 getPoint(int index)
   {
     return angle == 0 ? Vector2(_vertices[index].x * size.x,_vertices[index].y * size.y) : _rotatePoint(Vector2(_vertices[index].x * size.x,_vertices[index].y * size.y));
+  }
+
+  List<Vector2> getPoints()
+  {
+    return List.unmodifiable(_vertices);
   }
 
   //rotate point around center

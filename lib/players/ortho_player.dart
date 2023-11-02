@@ -264,6 +264,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     var df = Line.fromPoints(points.first, points.last);
+    df.
     if(df.angle == -0.0){
       return;
     }

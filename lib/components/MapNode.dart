@@ -32,7 +32,7 @@ bool isIntersect(Rectangle rect1, Rectangle rect2)
       rect2.top < rect1.bottom);
 }
 
-class MapNode
+class MapNode extends Component
 {
   MapNode(this.column, this.row, this.custMap);
   final int column;
@@ -64,7 +64,7 @@ class MapNode
         size: GameConsts.lengthOfTileSquare+Vector2.all(1),
         priority: 0,
       );
-      custMap.add(spriteDown);
+      add(spriteDown);
     }
     if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_down.anim')) {
       var objects = KyrgyzGame.cachedAnims['$column-${row}_down.anim']!;
@@ -88,7 +88,7 @@ class MapNode
                   double.parse(anim.getAttribute('y')!)),
               size: Vector2.all(34),
               priority: GamePriority.ground + 1);
-          custMap.add(ss);
+          add(ss);
         }
       }
     }
@@ -101,7 +101,7 @@ class MapNode
         priority: GamePriority.high - 1,
         size: GameConsts.lengthOfTileSquare+Vector2.all(1),
       );
-      custMap.add(spriteHigh);
+      add(spriteHigh);
     }
     if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_high.anim')) {
       var objects = KyrgyzGame.cachedAnims['$column-${row}_high.anim']!;
@@ -124,7 +124,7 @@ class MapNode
                   double.parse(anim.getAttribute('y')!)),
               size: Vector2.all(34),
               priority: GamePriority.high);
-          custMap.add(ss);
+          add(ss);
         }
       }
     }
@@ -143,7 +143,7 @@ class MapNode
         switch (name) {
           case '':
             var ground = Ground([position,position + Vector2(0, size.y),position + size,position + Vector2(size.x, 0)],collisionType: DCollisionType.passive,isSolid: false,isStatic: true,isLoop: true);
-            custMap.add(ground);
+            add(ground);
             break;
           default: createLiveObj(position,name); break;
         }
@@ -167,23 +167,23 @@ class MapNode
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
-        custMap.add(temp);
+        add(temp);
         break;
       case 'chest':
         var temp = Chest(1, myItems: [itemFromId(2)], position: position);
-        custMap.add(temp);
+        add(temp);
         break;
       case 'fObelisk':
         var temp = FlyingHighObelisk(position,column,row,priority: GamePriority.high - 1);
-        custMap.add(temp);
+        add(temp);
         var temp2 = FlyingDownObelisk(position,column,row,priority: GamePriority.player - 2);
-        custMap.add(temp2);
+        add(temp2);
         break;
       case 'sObelisk':
         var temp = StandHighObelisk(position,priority: GamePriority.high - 1);
-        custMap.add(temp);
+        add(temp);
         var temp2 = StandDownObelisk(position,priority: GamePriority.player - 2);
-        custMap.add(temp2);
+        add(temp2);
         break;
     }
   }

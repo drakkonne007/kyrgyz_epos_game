@@ -8,7 +8,6 @@ import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
-import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -153,6 +152,12 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)
   {
     _speed *= -1;
+  }
+
+  @override
+  void removeFromParent()
+  {
+
   }
 
   @override
