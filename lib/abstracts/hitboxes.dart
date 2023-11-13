@@ -236,7 +236,7 @@ class GroundHitBox extends DCollisionEntity
 
   Function(Set<Vector2> intersectionPoints)? obstacleBehavoiurStart;
 
-  GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, this.obstacleBehavoiurStart, required super.isLoop});
+  GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiurStart, required super.isLoop});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {

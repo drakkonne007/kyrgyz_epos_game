@@ -113,7 +113,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _hitbox = EnemyHitbox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
         collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true);
     add(_hitbox);
-    _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
+    _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true);
     add(_groundBox);
     // _groundBox.debugMode = true;
@@ -149,7 +149,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     }
   }
 
-  void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)
+  void obstacleBehaviour(Set<Vector2> intersectionPoints)
   {
     _speed *= -1;
   }

@@ -146,6 +146,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
         collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true);
     add(_hitbox);
     _groundBox = GroundHitBox([sposition,sposition + Vector2(0,ssize.y), sposition + ssize, sposition + Vector2(ssize.x,0)],
+        obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true);
     add(_groundBox);
     // _groundBox.debugMode = true;
@@ -179,7 +180,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     }
   }
 
-  void obstacleBehaviour(Set<Vector2> intersectionPoints, PositionComponent other)
+  void obstacleBehaviour(Set<Vector2> intersectionPoints)
   {
     _speed *= -1;
   }

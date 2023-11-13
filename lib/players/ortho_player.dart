@@ -83,7 +83,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     tPos = Vector2(_spriteSheetWidth/2, _spriteSheetHeight - 30);
     tSize = Vector2(30,30);
     _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
-        obstacleBehavoiurStart: groundCalcLines, obstacleBehavoiurContinue: groundCalcLines,
+        obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true);
     // _groundBox.debugMode = true;
     await add(_groundBox);
@@ -258,31 +258,33 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
+  void groundCalcLines(Set<Vector2> points)
   {
-    if(points.length < 2){
-      return;
-    }
-    var df = Line.fromPoints(points.first, points.last);
-    df.
-    if(df.angle == -0.0){
-      return;
-    }
-    if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
-      _speed.y = 0;
-      if(_groundBox.absoluteCenter.y < other.absoluteCenter.y){
-        position.y = other.absolutePosition.y - _groundBox.height/2;// - 1;
-      }else{
-        position.y = other.absolutePosition.y + other.height - (_groundBox.height/2-_groundBox.height);// + 1;
-      }
-    }else{
-      _speed.x = 0;
-      if(_groundBox.absoluteCenter.x > other.absoluteCenter.x){
-        position.x=other.absolutePosition.x + other.width + _groundBox.width/2;// + 1;
-      }else{
-        position.x=other.absolutePosition.x - _groundBox.width/2;// - 1;
-      }
-    }
+    for()
+
+    // if(points.length < 2){
+    //   return;
+    // }
+    // var df = Line.fromPoints(points.first, points.last);
+    // df.
+    // if(df.angle == -0.0){
+    //   return;
+    // }
+    // if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
+    //   _speed.y = 0;
+    //   if(_groundBox.absoluteCenter.y < other.absoluteCenter.y){
+    //     position.y = other.absolutePosition.y - _groundBox.height/2;// - 1;
+    //   }else{
+    //     position.y = other.absolutePosition.y + other.height - (_groundBox.height/2-_groundBox.height);// + 1;
+    //   }
+    // }else{
+    //   _speed.x = 0;
+    //   if(_groundBox.absoluteCenter.x > other.absoluteCenter.x){
+    //     position.x=other.absolutePosition.x + other.width + _groundBox.width/2;// + 1;
+    //   }else{
+    //     position.x=other.absolutePosition.x - _groundBox.width/2;// - 1;
+    //   }
+    // }
   }
 
   @override
