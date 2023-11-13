@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -14,6 +16,15 @@ import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
+
+class AxesDiff
+{
+  AxesDiff(leftDiff, rightDiff, upDiff, downDiff);
+  double leftDiff = 0;
+  double rightDiff = 0;
+  double upDiff = 0;
+  double downDiff = 0;
+}
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
@@ -84,7 +95,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     tSize = Vector2(30,30);
     _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
         obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true);
+        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true);
     // _groundBox.debugMode = true;
     await add(_groundBox);
     anchor = Anchor((_groundBox.getPoint(3).x - _groundBox.getPoint(0).x) / 2 /width, (_groundBox.getPoint(1).y - _groundBox.getPoint(0).y) / 2 / height);
@@ -260,31 +271,88 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void groundCalcLines(Set<Vector2> points)
   {
-    for()
+    Map<Vector2,AxesDiff> diffs = {};
+    bool isUp = false;
+    bool isDown = false;
+    bool isLeft = false;
+    bool isRight = false;
+    double maxLeft = 0;
+    double maxRight = 0;
+    double maxUp = 0;
+    double maxDown = 0;
 
-    // if(points.length < 2){
-    //   return;
-    // }
-    // var df = Line.fromPoints(points.first, points.last);
-    // df.
-    // if(df.angle == -0.0){
-    //   return;
-    // }
-    // if((df.angle.abs() - math.pi).abs() < (df.angle.abs() - math.pi/2).abs()){
-    //   _speed.y = 0;
-    //   if(_groundBox.absoluteCenter.y < other.absoluteCenter.y){
-    //     position.y = other.absolutePosition.y - _groundBox.height/2;// - 1;
-    //   }else{
-    //     position.y = other.absolutePosition.y + other.height - (_groundBox.height/2-_groundBox.height);// + 1;
-    //   }
-    // }else{
-    //   _speed.x = 0;
-    //   if(_groundBox.absoluteCenter.x > other.absoluteCenter.x){
-    //     position.x=other.absolutePosition.x + other.width + _groundBox.width/2;// + 1;
-    //   }else{
-    //     position.x=other.absolutePosition.x - _groundBox.width/2;// - 1;
-    //   }
-    // }
+    for(final point in points){
+      double leftDiffX  = point.x - (absoluteTopLeftPosition + _groundBox.getPoint(0)).x;
+      double rightDiffX = point.x - (absoluteTopLeftPosition + _groundBox.getPoint(3)).x;
+      double upDiffY = point.y - (absoluteTopLeftPosition + _groundBox.getPoint(0)).y;
+      double downDiffY = point.y - (absoluteTopLeftPosition + _groundBox.getPoint(1)).y;
+      diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
+      double minDiff = min(leftDiffX.abs(),rightDiffX.abs());
+      minDiff = min(minDiff,upDiffY.abs());
+      minDiff = min(minDiff,downDiffY.abs());
+      if(minDiff == leftDiffX.abs()){
+        isLeft = true;
+        maxLeft = max(maxLeft,minDiff);
+      }
+      if(minDiff == rightDiffX.abs()){
+        isRight = true;
+        maxRight = max(maxRight,minDiff);
+      }
+      if(minDiff == upDiffY.abs()){
+        isUp = true;
+        maxUp = max(maxUp,minDiff);
+      }
+      if(minDiff == downDiffY.abs()){
+        isDown = true;
+        maxDown = max(maxDown,minDiff);
+      }
+    }
+
+    if(isDown && isUp && isLeft && isRight){
+      return;
+    }
+
+    if(isDown && isUp){
+      double maxLeft = 0;
+      double maxRight = 0;
+      for(final diff in diffs.values){
+        maxLeft = max(maxLeft,diff.leftDiff.abs());
+        maxRight = max(maxRight,diff.rightDiff.abs());
+      }
+      if(maxLeft > maxRight){
+        position -= Vector2(maxRight,0);
+      }else{
+        position += Vector2(maxLeft,0);
+      }
+      return;
+    }
+    if(isLeft && isRight){
+      double maxUp = 0;
+      double maxDown = 0;
+      for(final diff in diffs.values){
+        maxUp = max(maxUp,diff.upDiff.abs());
+        maxDown = max(maxDown,diff.downDiff.abs());
+      }
+      if(maxUp > maxDown){
+        position -= Vector2(0,maxDown);
+      }else{
+        position += Vector2(0,maxUp);
+      }
+      return;
+    }
+
+    if(isLeft){
+      position +=  Vector2(maxLeft,0);
+    }
+    if(isRight){
+      position -=  Vector2(maxRight,0);
+    }
+    if(isUp){
+      position +=  Vector2(0,maxUp);
+    }
+    if(isDown){
+      position -=  Vector2(0,maxDown);
+    }
   }
 
   @override

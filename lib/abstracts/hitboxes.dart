@@ -16,7 +16,7 @@ enum DCollisionType
   inactive
 }
 
-abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
+abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //Всегда против часов и ВСЕГДА с верхней левой точки
 {
   DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop})
   {
