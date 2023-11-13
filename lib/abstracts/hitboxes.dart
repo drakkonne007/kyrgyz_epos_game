@@ -30,7 +30,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
      if(isStatic) {
         gameRef.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(column, row), this);
      }else{
-        gameRef.gameMap.collisionProcessor.addCollEntity(this);
+        gameRef.gameMap.collisionProcessor.addActiveCollEntity(this);
      }
      for(int i = 0; i < _vertices.length; i++){
        if(_vertices[i].x < minX){
@@ -53,7 +53,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
   void onRemove()
   {
       if(!isStatic){
-        gameRef.gameMap.collisionProcessor.removeCollEntity(this);
+        gameRef.gameMap.collisionProcessor.removeActiveCollEntity(this);
       }
   }
 
@@ -66,7 +66,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame>
   double angle = 0;
   Vector2 size = Vector2(1,1);
   Vector2 _center = Vector2(0,0);
-  List<Vector2> obstacleIntersects = [];
+  Set<Vector2> obstacleIntersects = {};
 
   bool onComponentTypeCheck(DCollisionEntity other);
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
@@ -234,10 +234,9 @@ class EnemyHitbox extends DCollisionEntity
 class GroundHitBox extends DCollisionEntity
 {
 
-  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
-  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurContinue;
+  Function(Set<Vector2> intersectionPoints)? obstacleBehavoiurStart;
 
-  GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, this.obstacleBehavoiurStart, this.obstacleBehavoiurContinue, required super.isLoop});
+  GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, this.obstacleBehavoiurStart, required super.isLoop});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {
@@ -250,16 +249,12 @@ class GroundHitBox extends DCollisionEntity
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    if(other is MapObstacle) {
-      obstacleBehavoiurStart?.call(intersectionPoints,other);
-    }
+    obstacleBehavoiurStart?.call(intersectionPoints);
   }
 
   @override void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    if(other is MapObstacle) {
-      obstacleBehavoiurContinue?.call(intersectionPoints,other);
-    }
+    obstacleBehavoiurStart?.call(intersectionPoints);
   }
 
   @override
