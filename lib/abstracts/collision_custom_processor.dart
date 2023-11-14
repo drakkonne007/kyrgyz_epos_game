@@ -255,22 +255,22 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
     Vector2 otherSecond = other.getPoint(tS) + otherComponentVector;
     if (isMapObstacle) {
       List<Vector2> tempBorderLines = [];
-      Vector2 point = pointOfIntersect(
+      Vector2 point = f_pointOfIntersect(
           entity.getPoint(0) + componentEntity.position, entity.getPoint(1)  + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
       }
-      point = pointOfIntersect(
+      point = f_pointOfIntersect(
           entity.getPoint(1) + componentEntity.position, entity.getPoint(2) + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
       }
-      point = pointOfIntersect(
+      point = f_pointOfIntersect(
           entity.getPoint(2) + componentEntity.position, entity.getPoint(3) + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
       }
-      point = pointOfIntersect(
+      point = f_pointOfIntersect(
           entity.getPoint(3) + componentEntity.position, entity.getPoint(0) + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
@@ -284,7 +284,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
             absLength.y + math.min(tempBorderLines[0].y, tempBorderLines[1].y)));
       }
     } else {
-      Vector2 point = pointOfIntersect(
+      Vector2 point = f_pointOfIntersect(
           entity.getPoint(0) + componentEntity.position, entity.getPoint(1) + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {
@@ -295,7 +295,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
         }
         return;
       }
-      point = pointOfIntersect(
+      point = f_pointOfIntersect(
           entity.getPoint(1) + componentEntity.position, entity.getPoint(2) + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {
@@ -306,7 +306,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
         }
         return;
       }
-      point = pointOfIntersect(
+      point = f_pointOfIntersect(
           entity.getPoint(2) + componentEntity.position, entity.getPoint(3) + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {
@@ -317,7 +317,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
         }
         return;
       }
-      point = pointOfIntersect(
+      point = f_pointOfIntersect(
           entity.getPoint(3) + componentEntity.position, entity.getPoint(0) + componentEntity.position, otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {

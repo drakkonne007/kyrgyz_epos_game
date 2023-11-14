@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 
-Vector2 pointOfIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+Vector2 f_pointOfIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
 {
   double s1_x, s1_y, s2_x, s2_y;
   s1_x = a2.x - a1.x;

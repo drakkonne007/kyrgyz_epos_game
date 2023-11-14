@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/chest.dart';
@@ -10,6 +9,7 @@ import 'package:game_flame/Obstacles/flying_obelisk.dart';
 import 'package:game_flame/Obstacles/stand_obelisk.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/precompile_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -33,9 +33,9 @@ bool isIntersect(Rectangle rect1, Rectangle rect2)
       rect2.top < rect1.bottom);
 }
 
-class MapNode extends Component
-{
+class MapNode extends Component {
   MapNode(this.column, this.row, this.custMap);
+
   final int column;
   CustomTileMap custMap;
   final int row;
@@ -57,12 +57,13 @@ class MapNode extends Component
     }
     LoadedColumnRow lcr = LoadedColumnRow(column, row);
     if (KyrgyzGame.cachedMapPngs.containsKey('$column-${row}_down.png')) {
-      Image _imageDown = await Flame.images.load('metaData/$column-${row}_down.png');//KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
+      Image _imageDown = await Flame.images.load(
+          'metaData/$column-${row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
       var spriteDown = SpriteComponent(
         sprite: Sprite(_imageDown),
         position: Vector2(column * GameConsts.lengthOfTileSquare.x,
             row * GameConsts.lengthOfTileSquare.y),
-        size: GameConsts.lengthOfTileSquare+Vector2.all(1),
+        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
         priority: 0,
       );
       add(spriteDown);
@@ -83,7 +84,7 @@ class MapNode extends Component
         }
         var sprAnim = SpriteAnimation.variableSpriteList(
             spriteList, stepTimes: stepTimes);
-        for(final anim in obj.findAllElements('ps')){
+        for (final anim in obj.findAllElements('ps')) {
           var ss = SpriteAnimationComponent(animation: sprAnim,
               position: Vector2(double.parse(anim.getAttribute('x')!),
                   double.parse(anim.getAttribute('y')!)),
@@ -94,13 +95,14 @@ class MapNode extends Component
       }
     }
     if (KyrgyzGame.cachedMapPngs.containsKey('$column-${row}_high.png')) {
-      Image _imageHigh = await Flame.images.load('metaData/$column-${row}_high.png');//KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
+      Image _imageHigh = await Flame.images.load(
+          'metaData/$column-${row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
       var spriteHigh = SpriteComponent(
         sprite: Sprite(_imageHigh),
         position: Vector2(column * GameConsts.lengthOfTileSquare.x,
             row * GameConsts.lengthOfTileSquare.y),
         priority: GamePriority.high - 1,
-        size: GameConsts.lengthOfTileSquare+Vector2.all(1),
+        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
       );
       add(spriteHigh);
     }
@@ -119,7 +121,7 @@ class MapNode extends Component
         }
         var sprAnim = SpriteAnimation.variableSpriteList(
             spriteList, stepTimes: stepTimes);
-        for(final anim in obj.findAllElements('ps')){
+        for (final anim in obj.findAllElements('ps')) {
           var ss = SpriteAnimationComponent(animation: sprAnim,
               position: Vector2(double.parse(anim.getAttribute('x')!),
                   double.parse(anim.getAttribute('y')!)),
@@ -143,28 +145,40 @@ class MapNode extends Component
         String? name = obj.getAttribute('nm');
         switch (name) {
           case '':
-            var ground = Ground([position,position + Vector2(0, size.y),position + size,position + Vector2(size.x, 0)],collisionType: DCollisionType.passive,isSolid: false,isStatic: true,isLoop: true);
+            var ground = Ground([
+              position,
+              position + Vector2(0, size.y),
+              position + size,
+              position + Vector2(size.x, 0)
+            ], collisionType: DCollisionType.passive,
+                isSolid: false,
+                isStatic: true,
+                isLoop: true);
             add(ground);
             break;
-          default: createLiveObj(position,name); break;
+          default:
+            createLiveObj(position, name);
+            break;
         }
       }
     }
   }
 
-  Future<void> createLiveObj(Vector2 position,String? name) async
+  Future<void> createLiveObj(Vector2 position, String? name) async
   {
     if (custMap.loadedLivesObjs.contains(position)) {
       return;
     }
-    switch(name){
+    switch (name) {
       case 'ggolem':
         custMap.loadedLivesObjs.add(position);
-        custMap.add(GrassGolem(position, GolemVariant.Grass,priority: GamePriority.player - 2));
+        custMap.add(GrassGolem(
+            position, GolemVariant.Grass, priority: GamePriority.player - 2));
         break;
       case 'wgolem':
         custMap.loadedLivesObjs.add(position);
-        custMap.add(GrassGolem(position, GolemVariant.Water,priority: GamePriority.player - 2));
+        custMap.add(GrassGolem(
+            position, GolemVariant.Water, priority: GamePriority.player - 2));
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
@@ -175,15 +189,18 @@ class MapNode extends Component
         add(temp);
         break;
       case 'fObelisk':
-        var temp = FlyingHighObelisk(position,column,row,priority: GamePriority.high - 1);
+        var temp = FlyingHighObelisk(
+            position, column, row, priority: GamePriority.high - 1);
         add(temp);
-        var temp2 = FlyingDownObelisk(position,column,row,priority: GamePriority.player - 2);
+        var temp2 = FlyingDownObelisk(
+            position, column, row, priority: GamePriority.player - 2);
         add(temp2);
         break;
       case 'sObelisk':
-        var temp = StandHighObelisk(position,priority: GamePriority.high - 1);
+        var temp = StandHighObelisk(position, priority: GamePriority.high - 1);
         add(temp);
-        var temp2 = StandDownObelisk(position,priority: GamePriority.player - 2);
+        var temp2 = StandDownObelisk(
+            position, priority: GamePriority.player - 2);
         add(temp2);
         break;
     }
@@ -191,12 +208,12 @@ class MapNode extends Component
 
   Future<void> compileAll() async
   {
-    if(column != 0 && row != 0) {
+    if (column != 0 && row != 0) {
       return;
     }
-    var fileName = 'top_left_bottom-slice.tmx';
+    var fileName = 'top_left_bottom.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(320));
-    if (false) {
+    if (true) {
       var layersLists = tiled.tileMap.renderableLayers;
       MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
       MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
@@ -228,65 +245,183 @@ class MapNode extends Component
       await compilerAnimationBack.compile('down');
     }
     // tiled = await TiledComponent.load(fileName, Vector2.all(320));
+    Set<String> loadedFiles = {};
+
     var objs = tiled.tileMap.getLayer<ObjectGroup>("objects");
-    for(final obj in objs!.objects){
-      if (objs != null) {
-        Map<LoadedColumnRow,List<String>> objsMap = {};
+    if (objs != null) {
+      for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
+        for (int rows = 0; rows < GameConsts.maxRow; rows++) {
+          var positionCurs = Vector2(
+              cols * GameConsts.lengthOfTileSquare.x,
+              rows * GameConsts.lengthOfTileSquare.y);
+          String newObjs = '';
+          Rectangle rec = Rectangle.fromPoints(positionCurs, Vector2(
+              positionCurs.x + GameConsts.lengthOfTileSquare.x,
+              positionCurs.y + GameConsts.lengthOfTileSquare.y));
+          for (final obj in objs.objects) {
+            if (obj.name == '') {
+              continue;
+            }
+            Rectangle objRect = Rectangle.fromPoints(
+                Vector2(obj.x, obj.y),
+                Vector2(obj.x + obj.width, obj.y + obj.height));
+            if (isIntersect(rec, objRect)) {
+              newObjs +=
+              '<o nm="${obj.name}" cl="${obj.type}" x="${obj
+                  .x}" y="${obj.y}" w="${obj.width}" h="${obj
+                  .height}"/>';
+              newObjs += '\n';
+            }
+          }
+          if (newObjs != '') {
+            File file = File('assets/metaData/$cols-$rows.objXml');
+            loadedFiles.add('assets/metaData/$cols-$rows.objXml');
+            file.writeAsStringSync('<p>\n', mode: FileMode.append);
+            file.writeAsStringSync(newObjs, mode: FileMode.append);
+          }
+        }
+      }
+    }
+    if (objs != null) {
+      Map<LoadedColumnRow, List<List<Vector2>>> objsMap = {};
+      for (final obj in objs.objects) {
+        if (obj.name != '') {
+          continue;
+        }
         for (final obj in objs.objects) {
           bool isLoop = false;
-          List<Point> points = [];
-          if(obj.isPolygon){
+          List<Vector2> points = [];
+          if (obj.isPolygon) {
             isLoop = true;
-            for(final point in obj.polygon){
-              points.add(Point(x: point.x + obj.x, y: point.y + obj.y));
+            for (final point in obj.polygon) {
+              points.add(Vector2(point.x + obj.x, point.y + obj.y));
             }
           }
-          if(obj.isPolyline){
-            for(final point in obj.polygon){
-              points.add(Point(x: point.x + obj.x, y: point.y + obj.y));
+          if (obj.isPolyline) {
+            for (final point in obj.polyline) {
+              points.add(Vector2(point.x + obj.x, point.y + obj.y));
             }
           }
-          if(obj.isRectangle){
+          if (obj.isRectangle) {
             isLoop = true;
-            points.add(Point(x: obj.x + obj.width, y: obj.y));
-            points.add(Point(x: obj.x + obj.width, y: obj.y + obj.height));
-            points.add(Point(x: obj.x, y: obj.y + obj.height));
-            points.add(Point(x: obj.x, y: obj.y));
+            points.add(Vector2(obj.x, obj.y));
+            points.add(Vector2(obj.x, obj.y + obj.height));
+            points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
+            points.add(Vector2(obj.x + obj.width, obj.y));
           }
           int minCol = GameConsts.maxColumn;
           int minRow = GameConsts.maxRow;
           int maxCol = 0;
           int maxRow = 0;
 
-          for(final point in points){
+          for (final point in points) {
             minCol = min(minCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
             minRow = min(minRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
             maxCol = max(maxCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
             maxRow = max(maxRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
           }
-          for(int i=minCol;i<=maxCol;i++){
-            for(int j=minRow;j<=maxRow;j++){
 
+          for (int i = minCol; i <= maxCol; i++) {
+            for (int j = minRow; j <= maxRow; j++) {
+              Vector2 topLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
+                  j * GameConsts.lengthOfTileSquare.y);
+              Vector2 topRight = Vector2(
+                  (i + 1) * GameConsts.lengthOfTileSquare.x,
+                  j * GameConsts.lengthOfTileSquare.y);
+              Vector2 bottomLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
+                  (j + 1) * GameConsts.lengthOfTileSquare.y);
+              Vector2 bottomRight = Vector2(
+                  (i + 1) * GameConsts.lengthOfTileSquare.x,
+                  (j + 1) * GameConsts.lengthOfTileSquare.y);
+              List<Vector2> newPoints = [];
+              for (int i = -1; i < points.length - 1; i++) {
+                if (!isLoop && i == -1) {
+                  continue;
+                }
+                int tF, tS;
+                if (i == -1) {
+                  tF = points.length - 1;
+                  tS = 0;
+                } else {
+                  tF = i;
+                  tS = i + 1;
+                }
+                List<Vector2> tempCoord = [];
+                if (points[tF].x >= topLeft.x && points[tF].x <= topRight.x
+                    && points[tF].y >= topLeft.y && points[tF].y <= bottomLeft
+                    .y) { //Надо ещё если две точки - определить, какая ближе к началу и там сделать первую точку
+                  newPoints.add(points[tF]);
+                }
+                Vector2 answer = f_pointOfIntersect(
+                    topLeft, topRight, points[tF], points[tS]);
+                if (answer != Vector2.zero()) {
+                  tempCoord.add(answer);
+                }
+                answer = f_pointOfIntersect(
+                    topRight, bottomRight, points[tF], points[tS]);
+                if (answer != Vector2.zero()) {
+                  tempCoord.add(answer);
+                }
+                answer = f_pointOfIntersect(
+                    bottomRight, bottomLeft, points[tF], points[tS]);
+                if (answer != Vector2.zero()) {
+                  tempCoord.add(answer);
+                }
+                answer = f_pointOfIntersect(
+                    bottomLeft, topLeft, points[tF], points[tS]);
+                if (answer != Vector2.zero()) {
+                  tempCoord.add(answer);
+                }
+                if (tempCoord.length == 1) {
+                  newPoints.add(tempCoord[0]);
+                } else {
+                  if (tempCoord.length == 2) {
+                    if (points[tF].distanceTo(tempCoord[0]) >
+                        points[tF].distanceTo(tempCoord[1])) {
+                      newPoints.add(tempCoord[1]);
+                      newPoints.add(tempCoord[0]);
+                    } else {
+                      newPoints.add(tempCoord[0]);
+                      newPoints.add(tempCoord[1]);
+                    }
+                  } else {
+                    print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
+                  }
+                }
+              }
+              if (points[points.length - 1].x >= topLeft.x &&
+                  points[points.length - 1].x <= topRight.x
+                  && points[points.length - 1].y >= topLeft.y &&
+                  points[points.length - 1].y <= bottomLeft.y && !isLoop) {
+                newPoints.add(points[points.length - 1]);
+              }
+              objsMap.putIfAbsent(LoadedColumnRow(i, j), () => []);
+              objsMap[LoadedColumnRow(i, j)]!.add(newPoints);
             }
           }
-
-          Rectangle objRect = Rectangle.fromPoints(Vector2(obj.x, obj.y),
-              Vector2(obj.x + obj.width, obj.y + obj.height));
-          if (isIntersect(rec, objRect)) {
-            newObjs +=
-            '<obj nm="${obj.name}" cl="${obj.type}" x="${obj
-                .x}" y="${obj.y}" w="${obj.width}" h="${obj
-                .height}"/>';
-            newObjs += '\n';
-          }
-        }
-        if (newObjs != '') {
-          File file = File('assets/metaData/$cols-$rows.objXml');
-          file.writeAsStringSync('<p>\n', mode: FileMode.append);
-          file.writeAsStringSync(newObjs, mode: FileMode.append);
-          file.writeAsStringSync('\n</p>', mode: FileMode.append);
         }
       }
-      print('precompile done');
+      for(final key in objsMap.keys){
+        File file = File('assets/metaData/${key.column}-${key.row}.objXml');
+        if(!loadedFiles.contains('assets/metaData/${key.column}-${key.row}.objXml')){
+          file.writeAsStringSync('\n<p>\n', mode: FileMode.append);
+          loadedFiles.add('assets/metaData/${key.column}-${key.row}.objXml');
+        }
+        for(int i=0;i<objsMap[key]!.length;i++){
+          file.writeAsStringSync('<o nm="" p="', mode: FileMode.append);
+          for(int j=0;j<objsMap[key]![i].length;j++){
+            if(j > 0){
+              file.writeAsStringSync(' ', mode: FileMode.append);
+            }
+            file.writeAsStringSync('${objsMap[key]![i][j].x},${objsMap[key]![i][j].y}', mode: FileMode.append);
+          }
+          file.writeAsStringSync('"/>', mode: FileMode.append);
+        }
+      }
+    }
+    for(final key in loadedFiles){
+      File file = File(key);
+      file.writeAsStringSync('</p>', mode: FileMode.append);
     }
   }
+}
