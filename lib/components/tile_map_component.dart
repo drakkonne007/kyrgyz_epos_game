@@ -152,16 +152,16 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
+    if(isMapCompile){
+      var node = MapNode(0,0,this);
+      await node.generateMap();
+    }
     _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare.x);
     _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare.y);
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
         var node = MapNode(_column + j - 1, _row + i - 1,this);
-        if(isMapCompile) {
-          await node.generateMap();
-        }else{
-          node.generateMap();
-        }
+        node.generateMap();
         _mapNodes.add(node);
       }
     }

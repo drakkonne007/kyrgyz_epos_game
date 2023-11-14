@@ -10,7 +10,7 @@ import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
 import 'overlays/health_bar.dart';
 
-bool isMapCompile = false; //Надо ли компилить просто карту
+bool isMapCompile = true; //Надо ли компилить просто карту
 
 
 main()

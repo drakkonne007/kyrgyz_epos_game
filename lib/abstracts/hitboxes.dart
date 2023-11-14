@@ -27,6 +27,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //
     transformPoint = _vertices[0];
     int column = _vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
     int row    = _vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
+    _myCoords = LoadedColumnRow(column, row);
      if(isStatic) {
         gameRef.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(column, row), this);
      }else{
@@ -54,6 +55,8 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //
   {
       if(!isStatic){
         gameRef.gameMap.collisionProcessor.removeActiveCollEntity(this);
+      }else{
+        gameRef.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords!);
       }
   }
 
@@ -67,6 +70,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //
   Vector2 size = Vector2(1,1);
   Vector2 _center = Vector2(0,0);
   Set<Vector2> obstacleIntersects = {};
+  LoadedColumnRow? _myCoords;
 
   bool onComponentTypeCheck(DCollisionEntity other);
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);

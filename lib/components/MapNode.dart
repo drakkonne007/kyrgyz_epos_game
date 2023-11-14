@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
@@ -193,9 +194,9 @@ class MapNode extends Component
     if(column != 0 && row != 0) {
       return;
     }
-    var fileName = 'top_left_bottom.tmx';
+    var fileName = 'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(320));
-    if (true) {
+    if (false) {
       var layersLists = tiled.tileMap.renderableLayers;
       MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
       MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
@@ -228,35 +229,64 @@ class MapNode extends Component
     }
     // tiled = await TiledComponent.load(fileName, Vector2.all(320));
     var objs = tiled.tileMap.getLayer<ObjectGroup>("objects");
-    if (objs != null) {
-      for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
-        for (int rows = 0; rows < GameConsts.maxRow; rows++) {
-          var positionCurs = Vector2(cols * GameConsts.lengthOfTileSquare.x,
-              rows * GameConsts.lengthOfTileSquare.y);
-          String newObjs = '';
-          Rectangle rec = Rectangle.fromPoints(positionCurs, Vector2(
-              positionCurs.x + GameConsts.lengthOfTileSquare.x,
-              positionCurs.y + GameConsts.lengthOfTileSquare.y));
-          for (final obj in objs.objects) {
-            Rectangle objRect = Rectangle.fromPoints(Vector2(obj.x, obj.y),
-                Vector2(obj.x + obj.width, obj.y + obj.height));
-            if (isIntersect(rec, objRect)) {
-              newObjs +=
-              '<obj nm="${obj.name}" cl="${obj.type}" x="${obj
-                  .x}" y="${obj.y}" w="${obj.width}" h="${obj
-                  .height}"/>';
-              newObjs += '\n';
+    for(final obj in objs!.objects){
+      if (objs != null) {
+        Map<LoadedColumnRow,List<String>> objsMap = {};
+        for (final obj in objs.objects) {
+          bool isLoop = false;
+          List<Point> points = [];
+          if(obj.isPolygon){
+            isLoop = true;
+            for(final point in obj.polygon){
+              points.add(Point(x: point.x + obj.x, y: point.y + obj.y));
             }
           }
-          if (newObjs != '') {
-            File file = File('assets/metaData/$cols-$rows.objXml');
-            file.writeAsStringSync('<p>\n', mode: FileMode.append);
-            file.writeAsStringSync(newObjs, mode: FileMode.append);
-            file.writeAsStringSync('\n</p>', mode: FileMode.append);
+          if(obj.isPolyline){
+            for(final point in obj.polygon){
+              points.add(Point(x: point.x + obj.x, y: point.y + obj.y));
+            }
+          }
+          if(obj.isRectangle){
+            isLoop = true;
+            points.add(Point(x: obj.x + obj.width, y: obj.y));
+            points.add(Point(x: obj.x + obj.width, y: obj.y + obj.height));
+            points.add(Point(x: obj.x, y: obj.y + obj.height));
+            points.add(Point(x: obj.x, y: obj.y));
+          }
+          int minCol = GameConsts.maxColumn;
+          int minRow = GameConsts.maxRow;
+          int maxCol = 0;
+          int maxRow = 0;
+
+          for(final point in points){
+            minCol = min(minCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
+            minRow = min(minRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
+            maxCol = max(maxCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
+            maxRow = max(maxRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
+          }
+          for(int i=minCol;i<=maxCol;i++){
+            for(int j=minRow;j<=maxRow;j++){
+
+            }
+          }
+
+          Rectangle objRect = Rectangle.fromPoints(Vector2(obj.x, obj.y),
+              Vector2(obj.x + obj.width, obj.y + obj.height));
+          if (isIntersect(rec, objRect)) {
+            newObjs +=
+            '<obj nm="${obj.name}" cl="${obj.type}" x="${obj
+                .x}" y="${obj.y}" w="${obj.width}" h="${obj
+                .height}"/>';
+            newObjs += '\n';
           }
         }
+        if (newObjs != '') {
+          File file = File('assets/metaData/$cols-$rows.objXml');
+          file.writeAsStringSync('<p>\n', mode: FileMode.append);
+          file.writeAsStringSync(newObjs, mode: FileMode.append);
+          file.writeAsStringSync('\n</p>', mode: FileMode.append);
+        }
       }
+      print('precompile done');
     }
-    print('precompile done');
   }
-}

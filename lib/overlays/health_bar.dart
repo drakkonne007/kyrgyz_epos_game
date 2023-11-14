@@ -9,20 +9,11 @@ import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
 
-class HealthBar extends StatefulWidget
+class HealthBar extends StatelessWidget
 {
-  const HealthBar(this.game, {Key? key}) : super(key: key);
+  HealthBar(this.game, {Key? key}) : super(key: key);
   final KyrgyzGame game;
   static String id = 'HealthBar';
-
-  @override
-  State<HealthBar> createState() => _HealthBarState();
-  final myTextStyle =  const TextStyle( fontSize: 45, letterSpacing: 0.5, fontFamily: 'Samson');
-}
-
-class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMixin
-{
-  _HealthBarState();
   double _firstHp = 0;
 
   bool isHurt(double val){
@@ -30,16 +21,10 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
     _firstHp = val;
     if(val > 5 && isLower){
       Future.delayed(const Duration(milliseconds: 500),(){
-        widget.game.playerData.health.notifyListeners();
+        game.playerData.health.notifyListeners();
       });
     }
     return isLower;
-  }
-
-  @override
-  void initState() {
-    _firstHp = widget.game.playerData.health.value;
-    super.initState();
   }
 
   @override
@@ -52,7 +37,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ValueListenableBuilder(
-                    valueListenable: widget.game.playerData.health,
+                    valueListenable: game.playerData.health,
                     builder: (_,val,__) => Row(
                         children:[
                           ShakeWidget(
@@ -63,7 +48,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                               height: 42,
                               child:
                               CustomPaint(
-                                painter: ArcGradientPainter(color: Colors.red, currentProc: val / widget.game.playerData.maxHealth.value),
+                                painter: ArcGradientPainter(color: Colors.red, currentProc: val / game.playerData.maxHealth.value),
                                 child:const Icon(Icons.heart_broken, color: Colors.red,size: 35,
                                   shadows: [
                                     BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1), blurStyle: BlurStyle.normal)
@@ -78,7 +63,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                   ),
                   const SizedBox(width: 1, height: 8,),
                   ValueListenableBuilder(
-                    valueListenable: widget.game.playerData.armor,
+                    valueListenable: game.playerData.armor,
                     builder: (_,val,__) => Row(
                         children:[
                           SizedBox(
@@ -99,7 +84,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                   ),
                   const SizedBox(width: 1, height: 8,),
                   ValueListenableBuilder(
-                      valueListenable: widget.game.playerData.energy,
+                      valueListenable: game.playerData.energy,
                       builder: (_,val,__) => Row(
                         children:[
                           ShakeWidget(
@@ -109,7 +94,7 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
                               width: 42,
                               height: 42,
                               child: CustomPaint(
-                                painter: ArcGradientPainter(color: Colors.blue, currentProc: val / widget.game.playerData.maxEnergy.value),
+                                painter: ArcGradientPainter(color: Colors.blue, currentProc: val / game.playerData.maxEnergy.value),
                                 child:const Icon(Icons.directions_run, color: Colors.blue,size: 35,
                                   shadows: [
                                     BoxShadow(color: Colors.black,blurRadius: 2,offset: Offset(0,0),spreadRadius: 1, blurStyle: BlurStyle.normal)
@@ -125,7 +110,9 @@ class _HealthBarState extends State<HealthBar> with SingleTickerProviderStateMix
         )
     );
   }
-}
+  }
+
+
 
 class ArcGradientPainter extends CustomPainter
 {

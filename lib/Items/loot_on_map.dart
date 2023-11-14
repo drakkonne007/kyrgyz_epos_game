@@ -36,7 +36,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     sprite = spriteSheet.getSprite(_item.row, _item.column);
     size = Vector2.all(30);
     _objectHitbox = ObjectHitbox([absolutePosition, absolutePosition + Vector2(size.x,0), absolutePosition + Vector2(size.x,size.y), absolutePosition + Vector2(0,size.y)]
-        , collisionType: DCollisionType.passive, isSolid: true, isStatic: true, obstacleBehavoiur: getItemToPlayer, autoTrigger: true, isLoop: true);//ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);
+        , collisionType: DCollisionType.passive, isSolid: true, isStatic: false, obstacleBehavoiur: getItemToPlayer, autoTrigger: true, isLoop: true);//ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);
     await add(_objectHitbox);
     Component sd = Component();
   }
