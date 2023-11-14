@@ -7,6 +7,7 @@ import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
+import 'package:game_flame/main.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/game_pause.dart';
 import 'package:game_flame/overlays/health_bar.dart';
@@ -47,7 +48,9 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     WidgetsBinding.instance.addObserver(this);
     playerData.setStartValues();
     add(gameMap);
-    gameMap.preloadAnimAndObj();
+    if(!isMapCompile) {
+      gameMap.preloadAnimAndObj();
+    }
   }
 
   @override

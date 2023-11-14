@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.1" name="Terrain - grass land" tilewidth="32" tileheight="32" tilecount="2538" columns="54">
- <image source="../Tilesets/Tileset-Terrain.png" width="1759" height="1504"/>
+ <image source="tiles/map/grassLand/Tilesets/Tileset-Terrain.png" width="1759" height="1504"/>
  <tile id="164" probability="10"/>
  <tile id="171" probability="10"/>
  <tile id="184" probability="10"/>
