@@ -35,6 +35,10 @@ Future processTileType(
           if (firstGid != null) {
             tileId = tileId - firstGid; //+ 1;
           }
+          print(firstGid);
+          print(tileId);
+          print(tileset.name);
+          print(tileset.source);
           final tileData = tileset.tiles[tileId];
           if(renderMode == RenderCompileMode.Background && (tileData.class_ == 'high' || tileLayer!.name.startsWith('xx'))) {
             isNeedAdd = false;
