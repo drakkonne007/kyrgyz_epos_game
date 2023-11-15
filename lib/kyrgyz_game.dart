@@ -29,7 +29,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   static Map<String,Iterable<XmlElement>> cachedObjXmls = {};
   static Map<String,Iterable<XmlElement>> cachedAnims = {};
   static Map<String,ext.Image> cachedImgs = {};
-  static Map<String,int> cachedMapPngs = {};
+  static Set<String> cachedMapPngs = {};
 
   @override
   Future onLoad() async

@@ -9,7 +9,7 @@ import 'dart:math' as math;
 
 class WSword extends PlayerWeapon
 {
-  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop});
+  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
 
   double _activeSecs = 0;
   double _maxLength = 150;
@@ -38,7 +38,7 @@ class WSword extends PlayerWeapon
   @override
   Future<void> hit() async
   {
-    if(gameRef.playerData.energy.value < energyCost) {
+    if(game.playerData.energy.value < energyCost) {
       return;
     }
     if(collisionType == DCollisionType.inactive) {
@@ -50,25 +50,25 @@ class WSword extends PlayerWeapon
         angle = _startAngle;
         size = Vector2(42,10);
         tick = SpriteAnimationTicker(_animShort);
-        gameRef.gameMap.orthoPlayer?.animation = _animShort;
+        game.gameMap.orthoPlayer?.animation = _animShort;
       }else{
         tick = SpriteAnimationTicker(_animLong);
-        gameRef.gameMap.orthoPlayer?.animation = _animLong;
+        game.gameMap.orthoPlayer?.animation = _animLong;
         size = Vector2(1,10);
         angle = 0;
       }
       debugMode = true;
-      gameRef.playerData.energy.value -= energyCost;
+      game.playerData.energy.value -= energyCost;
       _activeSecs = tick.totalDuration();
       _hitVariant = rand;
-      gameRef.playerData.isLockEnergy = true;
+      game.playerData.isLockEnergy = true;
       collisionType = DCollisionType.active;
       // print('start hit');
       await Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
         collisionType = DCollisionType.inactive;
         _isGrow = true;
         debugMode = false;
-        gameRef.playerData.isLockEnergy = false;
+        game.playerData.isLockEnergy = false;
         onEndWeaponHit.call();
         // print('end hit');
       });

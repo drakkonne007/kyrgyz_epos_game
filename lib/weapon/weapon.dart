@@ -35,7 +35,7 @@ double radiansOfPlayerDirect(PlayerDirectionMove direct)
 abstract class EnemyWeapon extends DCollisionEntity
 {
   EnemyWeapon(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic,required this.onStartWeaponHit,
-    required this.onEndWeaponHit, required super.isLoop});
+    required this.onEndWeaponHit, required super.isLoop, required super.game});
 
   Function() onStartWeaponHit;
   Function() onEndWeaponHit;
@@ -70,7 +70,7 @@ abstract class PlayerWeapon extends DCollisionEntity
 {
 
   PlayerWeapon(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic,required this.onStartWeaponHit,
-    required this.onEndWeaponHit, required super.isLoop});
+    required this.onEndWeaponHit, required super.isLoop, required super.game});
 
   Function() onStartWeaponHit;
   Function() onEndWeaponHit;

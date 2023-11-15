@@ -16,9 +16,10 @@ enum DCollisionType
   inactive
 }
 
-abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //Всегда против часов и ВСЕГДА с верхней левой точки
-{
-  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop})
+abstract class DCollisionEntity extends Component//Всегда против часов и ВСЕГДА с верхней левой точки
+    {
+
+  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop, required this.game})
   {
     double minX = 0;
     double minY = 0;
@@ -28,36 +29,36 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //
     int column = _vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
     int row    = _vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
     _myCoords = LoadedColumnRow(column, row);
-     if(isStatic) {
-        gameRef.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(column, row), this);
-     }else{
-        gameRef.gameMap.collisionProcessor.addActiveCollEntity(this);
-     }
-     for(int i = 0; i < _vertices.length; i++){
-       if(_vertices[i].x < minX){
-         minX = _vertices[i].x;
-       }
-       if(_vertices[i].x > maxX){
-         maxX = _vertices[i].x;
-       }
-       if(_vertices[i].y < minY){
-         minY = _vertices[i].y;
-       }
-       if(_vertices[i].y > maxY){
-         maxY = _vertices[i].y;
-       }
-     }
-     _center = Vector2((minX + maxX) / 2, (minY + maxY) / 2);
+    if(isStatic) {
+      game.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(column, row), this);
+    }else{
+      game.gameMap.collisionProcessor.addActiveCollEntity(this);
+    }
+    for(int i = 0; i < _vertices.length; i++){
+      if(_vertices[i].x < minX){
+        minX = _vertices[i].x;
+      }
+      if(_vertices[i].x > maxX){
+        maxX = _vertices[i].x;
+      }
+      if(_vertices[i].y < minY){
+        minY = _vertices[i].y;
+      }
+      if(_vertices[i].y > maxY){
+        maxY = _vertices[i].y;
+      }
+    }
+    _center = Vector2((minX + maxX) / 2, (minY + maxY) / 2);
   }
 
   @override
   void onRemove()
   {
-      if(!isStatic){
-        gameRef.gameMap.collisionProcessor.removeActiveCollEntity(this);
-      }else{
-        gameRef.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords!);
-      }
+    if(!isStatic){
+      game.gameMap.collisionProcessor.removeActiveCollEntity(this);
+    }else{
+      game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords!);
+    }
   }
 
   List<Vector2> _vertices;
@@ -71,6 +72,7 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //
   Vector2 _center = Vector2(0,0);
   Set<Vector2> obstacleIntersects = {};
   LoadedColumnRow? _myCoords;
+  KyrgyzGame game;
 
   bool onComponentTypeCheck(DCollisionEntity other);
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
@@ -119,9 +121,9 @@ abstract class DCollisionEntity extends Component with HasGameRef<KyrgyzGame> //
 class ObjectHitbox extends DCollisionEntity
 {
 
-  ObjectHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop});
+  ObjectHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop, required super.game});
 
-  late int id = gameRef.gameMap.getNewId();
+  late int id = game.gameMap.getNewId();
   bool autoTrigger;
 
   Function() obstacleBehavoiur;
@@ -141,7 +143,7 @@ class ObjectHitbox extends DCollisionEntity
       if(autoTrigger) {
         obstacleBehavoiur.call();
       }else{;
-        gameRef.gameMap.currentObject = this;
+      game.gameMap.currentObject = this;
       }
     }    // super.onCollisionStart(intersectionPoints, other);
   }
@@ -150,9 +152,9 @@ class ObjectHitbox extends DCollisionEntity
   void onCollisionEnd(DCollisionEntity other)
   {
     if(other is PlayerHitbox && !autoTrigger) {
-      if(gameRef.gameMap.currentObject != null){
-        if(gameRef.gameMap.currentObject?.id == id){
-          gameRef.gameMap.currentObject = null;
+      if(game.gameMap.currentObject != null){
+        if(game.gameMap.currentObject?.id == id){
+          game.gameMap.currentObject = null;
         }
       }
     }
@@ -167,7 +169,7 @@ class ObjectHitbox extends DCollisionEntity
 
 class PlayerHitbox extends DCollisionEntity
 {
-  PlayerHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop});
+  PlayerHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game});
 
 
   @override
@@ -202,7 +204,7 @@ class PlayerHitbox extends DCollisionEntity
 
 class EnemyHitbox extends DCollisionEntity
 {
-  EnemyHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop});
+  EnemyHitbox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game});
 
 
   @override
@@ -240,7 +242,7 @@ class GroundHitBox extends DCollisionEntity
 
   Function(Set<Vector2> intersectionPoints)? obstacleBehavoiurStart;
 
-  GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiurStart, required super.isLoop});
+  GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiurStart, required super.isLoop, required super.game});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {

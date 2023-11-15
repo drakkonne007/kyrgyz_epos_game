@@ -81,10 +81,10 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
     }
     _spriteSheet = SpriteSheet(image: _spriteImg,
         srcSize: _spriteSheetSize);
-    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 0, loop: false);
+    animation = null;
     size = Vector2.all(70);
     var asd = ObjectHitbox([absolutePosition, absolutePosition + Vector2(size.x,0), absolutePosition + Vector2(size.x,size.y), absolutePosition + Vector2(0,size.y)],
-        collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, autoTrigger: false, obstacleBehavoiur: checkIsIOpen);
+        collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     await add(asd);
   }

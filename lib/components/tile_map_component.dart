@@ -50,6 +50,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedObjXmls.clear();
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
+    KyrgyzGame.cachedMapPngs.clear();
     // firstCachedIntoInternal();
     timer.start();
     loadObjs().ignore();
@@ -61,8 +62,9 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       return path.startsWith('assets/metaData/') && path.toLowerCase().endsWith('.png');
     }).map((path) => path.replaceFirst('assets/metaData/', ''));
     for(final path in imagePaths) {
-      KyrgyzGame.cachedMapPngs[path] = 1;
+      KyrgyzGame.cachedMapPngs.add(path);
     }
+    print(KyrgyzGame.cachedMapPngs);
     timer.stop();
     print('all map load time: ${timer.elapsedMilliseconds}');
     print('end preload');
@@ -100,6 +102,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         var node = MapNode(newColumn - 1, newRow + i - 1,this);
         node.generateMap();
         _mapNodes.add(node);
+        add(node);
       }
     }
     if(newColumn > tempColumn){
@@ -112,6 +115,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         var node = MapNode(newColumn + 1, newRow + i - 1,this);
         node.generateMap();
         _mapNodes.add(node);
+        add(node);
       }
     }
     if(newRow < tempRow){
@@ -124,6 +128,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         var node = MapNode(newColumn + i - 1, newRow - 1,this);
         node.generateMap();
         _mapNodes.add(node);
+        add(node);
       }
     }
     if(newRow > tempRow){
@@ -136,10 +141,12 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         var node = MapNode(newColumn + i - 1, newRow + 1,this);
         node.generateMap();
         _mapNodes.add(node);
+        add(node);
       }
     }
     for(final node in toRemove) {
       _mapNodes.remove(node);
+      node.removeFromParent();
     }
     orthoPlayer?.priority = GamePriority.player-1;
     orthoPlayer?.priority = GamePriority.player;
@@ -163,6 +170,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         var node = MapNode(_column + j - 1, _row + i - 1,this);
         node.generateMap();
         _mapNodes.add(node);
+        add(node);
       }
     }
     orthoPlayer = null;

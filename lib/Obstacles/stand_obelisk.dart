@@ -47,7 +47,7 @@ class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
     Vector2 tSize = Vector2(43, 67);
     Vector2 tPos = Vector2(26, 0);
-    _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true);
+    _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true, game: gameRef);
     add(_groundBox);
   }
 }

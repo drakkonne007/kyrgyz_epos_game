@@ -33,7 +33,7 @@ bool isIntersect(Rectangle rect1, Rectangle rect2)
       rect2.top < rect1.bottom);
 }
 
-class MapNode extends Component {
+class MapNode extends Component with HasGameRef<KyrgyzGame> {
   MapNode(this.column, this.row, this.custMap);
 
   final int column;
@@ -55,8 +55,7 @@ class MapNode extends Component {
       await compileAll();
       exit(0);
     }
-    LoadedColumnRow lcr = LoadedColumnRow(column, row);
-    if (KyrgyzGame.cachedMapPngs.containsKey('$column-${row}_down.png')) {
+    if (KyrgyzGame.cachedMapPngs.contains('$column-${row}_down.png')) {
       Image _imageDown = await Flame.images.load(
           'metaData/$column-${row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
       var spriteDown = SpriteComponent(
@@ -68,33 +67,32 @@ class MapNode extends Component {
       );
       add(spriteDown);
     }
-    if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_down.anim')) {
-      var objects = KyrgyzGame.cachedAnims['$column-${row}_down.anim']!;
-      for (final obj in objects) {
-        print(obj.getAttribute('src')!);
-        Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
-        final List<Sprite> spriteList = [];
-        final List<double> stepTimes = [];
-        for (final anim in obj.findAllElements('fr')) {
-          spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
-              srcPosition: Vector2(
-                  double.parse(anim.getAttribute('cl')!) * 32,
-                  double.parse(anim.getAttribute('rw')!) * 32)));
-          stepTimes.add(double.parse(anim.getAttribute('dr')!));
-        }
-        var sprAnim = SpriteAnimation.variableSpriteList(
-            spriteList, stepTimes: stepTimes);
-        for (final anim in obj.findAllElements('ps')) {
-          var ss = SpriteAnimationComponent(animation: sprAnim,
-              position: Vector2(double.parse(anim.getAttribute('x')!),
-                  double.parse(anim.getAttribute('y')!)),
-              size: Vector2.all(34),
-              priority: GamePriority.ground + 1);
-          add(ss);
-        }
+    if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_down.anim')) {      ;
+    var objects = KyrgyzGame.cachedAnims['$column-${row}_down.anim']!;
+    for (final obj in objects) {
+      Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
+      final List<Sprite> spriteList = [];
+      final List<double> stepTimes = [];
+      for (final anim in obj.findAllElements('fr')) {
+        spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
+            srcPosition: Vector2(
+                double.parse(anim.getAttribute('cl')!) * 32,
+                double.parse(anim.getAttribute('rw')!) * 32)));
+        stepTimes.add(double.parse(anim.getAttribute('dr')!));
+      }
+      var sprAnim = SpriteAnimation.variableSpriteList(
+          spriteList, stepTimes: stepTimes);
+      for (final anim in obj.findAllElements('ps')) {
+        var ss = SpriteAnimationComponent(animation: sprAnim,
+            position: Vector2(double.parse(anim.getAttribute('x')!),
+                double.parse(anim.getAttribute('y')!)),
+            size: Vector2.all(34),
+            priority: GamePriority.ground + 1);
+        add(ss);
       }
     }
-    if (KyrgyzGame.cachedMapPngs.containsKey('$column-${row}_high.png')) {
+    }
+    if (KyrgyzGame.cachedMapPngs.contains('$column-${row}_high.png')) {
       Image _imageHigh = await Flame.images.load(
           'metaData/$column-${row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
       var spriteHigh = SpriteComponent(
@@ -134,38 +132,41 @@ class MapNode extends Component {
     if (KyrgyzGame.cachedObjXmls.containsKey('$column-$row.objXml')) {
       var objects = KyrgyzGame.cachedObjXmls['$column-$row.objXml']!;
       for (final obj in objects) {
-        Vector2 size = Vector2(
-            double.parse(obj.getAttribute('w')!),
-            double.parse(obj.getAttribute('h')!)
-        );
-        Vector2 position = Vector2(
-            double.parse(obj.getAttribute('x')!),
-            double.parse(obj.getAttribute('y')!)
-        );
         String? name = obj.getAttribute('nm');
         switch (name) {
           case '':
-            var ground = Ground([
-              position,
-              position + Vector2(0, size.y),
-              position + size,
-              position + Vector2(size.x, 0)
-            ], collisionType: DCollisionType.passive,
-                isSolid: false,
-                isStatic: true,
-                isLoop: true);
-            add(ground);
+            var points = obj.getAttribute('p')!;
+            var pointsList = points.split(' ');
+            List<Vector2> temp = [];
+            for(final sources in pointsList){
+              if(sources == ''){
+                continue;
+              }
+              temp.add(Vector2(double.parse(sources.split(',')[0]),double.parse(sources.split(',')[1])));
+            }
+            if(temp.isNotEmpty) {
+              var ground = Ground(temp, collisionType: DCollisionType.passive,
+                  isSolid: false,
+                  isStatic: true,
+                  isLoop: obj.getAttribute('lp')! == '1',
+                  game: gameRef);
+              add(ground);
+            }
             break;
           default:
-            createLiveObj(position, name);
+            createLiveObj(obj, name);
             break;
         }
       }
     }
   }
 
-  Future<void> createLiveObj(Vector2 position, String? name) async
+  Future<void> createLiveObj(XmlElement obj, String? name) async
   {
+    Vector2 position = Vector2(
+        double.parse(obj.getAttribute('x')!),
+        double.parse(obj.getAttribute('y')!)
+    );
     if (custMap.loadedLivesObjs.contains(position)) {
       return;
     }
@@ -213,7 +214,7 @@ class MapNode extends Component {
     }
     var fileName = 'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(320));
-    if (true) {
+    if (false) {
       var layersLists = tiled.tileMap.renderableLayers;
       MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
       MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
@@ -282,138 +283,139 @@ class MapNode extends Component {
         }
       }
     }
+    print('END OF OBJS COMPILE');
+    print('start grounds compile');
     if (objs != null) {
-      Map<LoadedColumnRow, List<List<Vector2>>> objsMap = {};
+      Map<LoadedColumnRow, List<GroundSource>> objsMap = {};
       for (final obj in objs.objects) {
         if (obj.name != '') {
           continue;
         }
-        for (final obj in objs.objects) {
-          bool isLoop = false;
-          List<Vector2> points = [];
-          if (obj.isPolygon) {
-            isLoop = true;
-            for (final point in obj.polygon) {
-              points.add(Vector2(point.x + obj.x, point.y + obj.y));
-            }
+        bool isLoop = false;
+        List<Vector2> points = [];
+        if (obj.isPolygon) {
+          isLoop = true;
+          for (final point in obj.polygon) {
+            points.add(Vector2(point.x + obj.x, point.y + obj.y));
           }
-          if (obj.isPolyline) {
-            for (final point in obj.polyline) {
-              points.add(Vector2(point.x + obj.x, point.y + obj.y));
-            }
+        }
+        if (obj.isPolyline) {
+          for (final point in obj.polyline) {
+            points.add(Vector2(point.x + obj.x, point.y + obj.y));
           }
-          if (obj.isRectangle) {
-            isLoop = true;
-            points.add(Vector2(obj.x, obj.y));
-            points.add(Vector2(obj.x, obj.y + obj.height));
-            points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
-            points.add(Vector2(obj.x + obj.width, obj.y));
-          }
-          int minCol = GameConsts.maxColumn;
-          int minRow = GameConsts.maxRow;
-          int maxCol = 0;
-          int maxRow = 0;
+        }
+        if (obj.isRectangle) {
+          isLoop = true;
+          points.add(Vector2(obj.x, obj.y));
+          points.add(Vector2(obj.x, obj.y + obj.height));
+          points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
+          points.add(Vector2(obj.x + obj.width, obj.y));
+        }
+        int minCol = GameConsts.maxColumn;
+        int minRow = GameConsts.maxRow;
+        int maxCol = 0;
+        int maxRow = 0;
 
-          for (final point in points) {
-            minCol = min(minCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
-            minRow = min(minRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
-            maxCol = max(maxCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
-            maxRow = max(maxRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
-          }
+        for (final point in points) {
+          minCol = min(minCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
+          minRow = min(minRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
+          maxCol = max(maxCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
+          maxRow = max(maxRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
+        }
 
-          for (int i = minCol; i <= maxCol; i++) {
-            for (int j = minRow; j <= maxRow; j++) {
-              Vector2 topLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
-                  j * GameConsts.lengthOfTileSquare.y);
-              Vector2 topRight = Vector2(
-                  (i + 1) * GameConsts.lengthOfTileSquare.x,
-                  j * GameConsts.lengthOfTileSquare.y);
-              Vector2 bottomLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
-                  (j + 1) * GameConsts.lengthOfTileSquare.y);
-              Vector2 bottomRight = Vector2(
-                  (i + 1) * GameConsts.lengthOfTileSquare.x,
-                  (j + 1) * GameConsts.lengthOfTileSquare.y);
-              List<Vector2> newPoints = [];
-              for (int i = -1; i < points.length - 1; i++) {
-                if (!isLoop && i == -1) {
-                  continue;
-                }
-                int tF, tS;
-                if (i == -1) {
-                  tF = points.length - 1;
-                  tS = 0;
-                } else {
-                  tF = i;
-                  tS = i + 1;
-                }
-                List<Vector2> tempCoord = [];
-                if (points[tF].x >= topLeft.x && points[tF].x <= topRight.x
-                    && points[tF].y >= topLeft.y && points[tF].y <= bottomLeft
-                    .y) { //Надо ещё если две точки - определить, какая ближе к началу и там сделать первую точку
-                  newPoints.add(points[tF]);
-                }
-                Vector2 answer = f_pointOfIntersect(
-                    topLeft, topRight, points[tF], points[tS]);
-                if (answer != Vector2.zero()) {
-                  tempCoord.add(answer);
-                }
-                answer = f_pointOfIntersect(
-                    topRight, bottomRight, points[tF], points[tS]);
-                if (answer != Vector2.zero()) {
-                  tempCoord.add(answer);
-                }
-                answer = f_pointOfIntersect(
-                    bottomRight, bottomLeft, points[tF], points[tS]);
-                if (answer != Vector2.zero()) {
-                  tempCoord.add(answer);
-                }
-                answer = f_pointOfIntersect(
-                    bottomLeft, topLeft, points[tF], points[tS]);
-                if (answer != Vector2.zero()) {
-                  tempCoord.add(answer);
-                }
-                if (tempCoord.length == 1) {
-                  newPoints.add(tempCoord[0]);
-                } else {
-                  if (tempCoord.length == 2) {
-                    if (points[tF].distanceTo(tempCoord[0]) >
-                        points[tF].distanceTo(tempCoord[1])) {
-                      newPoints.add(tempCoord[1]);
-                      newPoints.add(tempCoord[0]);
-                    } else {
-                      newPoints.add(tempCoord[0]);
-                      newPoints.add(tempCoord[1]);
-                    }
-                  } else if(tempCoord.length > 2){
-                    print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
+        for (int i = minCol; i <= maxCol; i++) {
+          for (int j = minRow; j <= maxRow; j++) {
+            Vector2 topLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
+                j * GameConsts.lengthOfTileSquare.y);
+            Vector2 topRight = Vector2(
+                (i + 1) * GameConsts.lengthOfTileSquare.x,
+                j * GameConsts.lengthOfTileSquare.y);
+            Vector2 bottomLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
+                (j + 1) * GameConsts.lengthOfTileSquare.y);
+            Vector2 bottomRight = Vector2(
+                (i + 1) * GameConsts.lengthOfTileSquare.x,
+                (j + 1) * GameConsts.lengthOfTileSquare.y);
+            GroundSource newPoints = GroundSource();
+            newPoints.isLoop = isLoop;
+            for (int i = -1; i < points.length - 1; i++) {
+              if (!isLoop && i == -1) {
+                continue;
+              }
+              int tF, tS;
+              if (i == -1) {
+                tF = points.length - 1;
+                tS = 0;
+              } else {
+                tF = i;
+                tS = i + 1;
+              }
+              List<Vector2> tempCoord = [];
+              if (points[tF].x >= topLeft.x && points[tF].x <= topRight.x
+                  && points[tF].y >= topLeft.y && points[tF].y <= bottomLeft
+                  .y) { //Надо ещё если две точки - определить, какая ближе к началу и там сделать первую точку
+                newPoints.points.add(points[tF]);
+              }
+              Vector2 answer = f_pointOfIntersect(
+                  topLeft, topRight, points[tF], points[tS]);
+              if (answer != Vector2.zero()) {
+                tempCoord.add(answer);
+              }
+              answer = f_pointOfIntersect(
+                  topRight, bottomRight, points[tF], points[tS]);
+              if (answer != Vector2.zero()) {
+                tempCoord.add(answer);
+              }
+              answer = f_pointOfIntersect(
+                  bottomRight, bottomLeft, points[tF], points[tS]);
+              if (answer != Vector2.zero()) {
+                tempCoord.add(answer);
+              }
+              answer = f_pointOfIntersect(
+                  bottomLeft, topLeft, points[tF], points[tS]);
+              if (answer != Vector2.zero()) {
+                tempCoord.add(answer);
+              }
+              if (tempCoord.length == 1) {
+                newPoints.points.add(tempCoord[0]);
+              } else {
+                if (tempCoord.length == 2) {
+                  if (points[tF].distanceTo(tempCoord[0]) >
+                      points[tF].distanceTo(tempCoord[1])) {
+                    newPoints.points.add(tempCoord[1]);
+                    newPoints.points.add(tempCoord[0]);
+                  } else {
+                    newPoints.points.add(tempCoord[0]);
+                    newPoints.points.add(tempCoord[1]);
                   }
+                } else if(tempCoord.length > 2){
+                  print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
                 }
               }
-              if (points[points.length - 1].x >= topLeft.x &&
-                  points[points.length - 1].x <= topRight.x
-                  && points[points.length - 1].y >= topLeft.y &&
-                  points[points.length - 1].y <= bottomLeft.y && !isLoop) {
-                newPoints.add(points[points.length - 1]);
-              }
-              objsMap.putIfAbsent(LoadedColumnRow(i, j), () => []);
-              objsMap[LoadedColumnRow(i, j)]!.add(newPoints);
             }
+            if (points[points.length - 1].x >= topLeft.x &&
+                points[points.length - 1].x <= topRight.x
+                && points[points.length - 1].y >= topLeft.y &&
+                points[points.length - 1].y <= bottomLeft.y && !isLoop) {
+              newPoints.points.add(points[points.length - 1]);
+            }
+            objsMap.putIfAbsent(LoadedColumnRow(i, j), () => []);
+            objsMap[LoadedColumnRow(i, j)]!.add(newPoints);
           }
         }
       }
       for(final key in objsMap.keys){
         File file = File('assets/metaData/${key.column}-${key.row}.objXml');
         if(!loadedFiles.contains('assets/metaData/${key.column}-${key.row}.objXml')){
-          file.writeAsStringSync('\n<p>\n', mode: FileMode.append);
+          file.writeAsStringSync('<p>\n', mode: FileMode.append);
           loadedFiles.add('assets/metaData/${key.column}-${key.row}.objXml');
         }
         for(int i=0;i<objsMap[key]!.length;i++){
-          file.writeAsStringSync('<o nm="" p="', mode: FileMode.append);
-          for(int j=0;j<objsMap[key]![i].length;j++){
+          file.writeAsStringSync('\n<o lp="${objsMap[key]![i].isLoop ? '1' : '0'}" nm="" p="', mode: FileMode.append);
+          for(int j=0;j<objsMap[key]![i].points.length;j++){
             if(j > 0){
               file.writeAsStringSync(' ', mode: FileMode.append);
             }
-            file.writeAsStringSync('${objsMap[key]![i][j].x},${objsMap[key]![i][j].y}', mode: FileMode.append);
+            file.writeAsStringSync('${objsMap[key]![i].points[j].x},${objsMap[key]![i].points[j].y}', mode: FileMode.append);
           }
           file.writeAsStringSync('"/>', mode: FileMode.append);
         }
@@ -421,7 +423,7 @@ class MapNode extends Component {
     }
     for(final key in loadedFiles){
       File file = File(key);
-      file.writeAsStringSync('</p>', mode: FileMode.append);
+      file.writeAsStringSync('\n</p>', mode: FileMode.append);
     }
   }
 }

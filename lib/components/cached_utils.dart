@@ -49,7 +49,7 @@ void _loadObjs(SendPort mySendPort) async
         for (int rw = 0; rw < GameConsts.maxRow; rw++) {
           try {
             var file = File('$path/$cl-$rw.objXml').readAsStringSync();
-            objXmls['$cl-$rw.objXml'] = XmlDocument.parse(file).findAllElements('obj');
+            objXmls['$cl-$rw.objXml'] = XmlDocument.parse(file).findAllElements('o');
           } catch (e) {
             e;
           }
@@ -174,6 +174,7 @@ void _loadAnimsDown(SendPort mySendPort) async
 
 void firstCachedIntoInternal() async
 {
+  print('start');
   var dir = await getApplicationCacheDirectory();
   dir.listSync().forEach((element) {element.deleteSync(recursive: true);});
   for (int cl = 0; cl < GameConsts.maxColumn; cl++) {
@@ -225,4 +226,5 @@ void firstCachedIntoInternal() async
       }
     }
   }
+  print('end copy to internal');
 }

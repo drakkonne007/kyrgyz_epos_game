@@ -68,7 +68,7 @@ class FlyingDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
     Vector2 tSize = Vector2(28, 52);
     Vector2 tPos = Vector2(22, 0);
-    _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true);
+    _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true, game: gameRef);
     add(_groundBox);
   }
 

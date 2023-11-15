@@ -111,15 +111,15 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     Vector2 tSize = Vector2(69,71);
     Vector2 tPos = Vector2(77, 55);
     _hitbox = EnemyHitbox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
-        collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true);
+        collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],obstacleBehavoiurStart: obstacleBehaviour,
-        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true);
+        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     // _groundBox.debugMode = true;
     _groundBox.debugColor = BasicPalette.red.color;
     _body = EWBody([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)]
-        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true);
+        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     // body.debugMode = true;
     _body?.debugColor = BasicPalette.blue.color;
     _body?.activeSecs = _animAttack.ticker().totalDuration();

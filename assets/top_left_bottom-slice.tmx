@@ -5910,7 +5910,7 @@
    <polygon points="0,0 49,-49 48.5,-117.5 -20.5,-139.5 -63,-73.5 -84,-56 -64.5,-27.5 -45,-44.5 -17,-25.5"/>
   </object>
  </objectgroup>
- <objectgroup id="32" name="ground"/>
+ <objectgroup id="32" name="groundObj"/>
  <objectgroup id="31" name="persons">
   <object id="1194" name="enemy" x="324" y="697.333">
    <point/>

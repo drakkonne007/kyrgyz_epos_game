@@ -8,7 +8,7 @@ abstract class MapObstacle extends DCollisionEntity
 {
   bool _isFirst = true;
 
-  MapObstacle(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop});
+  MapObstacle(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other)
@@ -19,21 +19,13 @@ abstract class MapObstacle extends DCollisionEntity
     return false;
   }
 
-  @override
-  void updateTree(double dt)
-  {
-    if(_isFirst) {
-      _isFirst = false;
-      super.updateTree(dt);
-    }
-  }
 }
 
 class MapWarp extends DCollisionEntity
 {
   String to;
 
-  MapWarp(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.to, required super.isLoop});
+  MapWarp(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.to, required super.isLoop, required super.game});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {
@@ -47,7 +39,7 @@ class MapWarp extends DCollisionEntity
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
     if(other is GroundHitBox && other.parent is OrthoPlayer){
       // other.position = Vector2.all(-150);
-      gameRef.loadNewMap(to);
+      game.loadNewMap(to);
     }
   }
 

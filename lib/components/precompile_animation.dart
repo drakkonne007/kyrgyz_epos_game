@@ -22,64 +22,56 @@ Future processTileType(
       bool clear = true}) async
 {
   for (final layer in layersToLoad) {
-    try {
-      final tileLayer = tileMap.getLayer<TileLayer>(layer);
-      final tileData = tileLayer?.data;
-      if (tileData != null) {
-        int xOffset = 0;
-        int yOffset = 0;
-        for (var tileId in tileData) {
-          bool isNeedAdd = true;
-          if (tileId != 0) {
-            final tileset = tileMap.map.tilesetByTileGId(tileId);
-            final firstGid = tileset.firstGid;
-            if (firstGid != null) {
-              tileId = tileId - firstGid; //+ 1;
-            }
-            print(firstGid);
-            print(tileId);
-            print(tileset.name);
-            print(tileset.source);
-            final tileData = tileset.tiles[tileId];
-            if (renderMode == RenderCompileMode.Background &&
-                (tileData.class_ == 'high' ||
-                    tileLayer!.name.startsWith('xx'))) {
+    final tileLayer = tileMap.getLayer<TileLayer>(layer);
+    final tileData = tileLayer?.data;
+    if (tileData != null) {
+      int xOffset = 0;
+      int yOffset = 0;
+      for (var tileId in tileData) {
+        bool isNeedAdd = true;
+        if (tileId != 0) {
+          final tileset = tileMap.map.tilesetByTileGId(tileId);
+          final firstGid = tileset.firstGid;
+          if (firstGid != null) {
+            tileId = tileId - firstGid; //+ 1;
+          }
+          print(firstGid);
+          print(tileId);
+          print(tileset.name);
+          print(tileset.source);
+          final tileData = tileset.tiles[tileId];
+          if(renderMode == RenderCompileMode.Background && (tileData.class_ == 'high' || tileLayer!.name.startsWith('xx'))) {
+            isNeedAdd = false;
+          }
+          if(renderMode == RenderCompileMode.Foreground){
+            if(tileData.class_ != 'high' && !tileLayer!.name.startsWith('xx')) {
               isNeedAdd = false;
             }
-            if (renderMode == RenderCompileMode.Foreground) {
-              if (tileData.class_ != 'high' &&
-                  !tileLayer!.name.startsWith('xx')) {
-                isNeedAdd = false;
-              }
-            }
-            if (isNeedAdd) {
-              final position = Vector2(
-                  xOffset.toDouble() * tileMap.map.tileWidth,
-                  yOffset.toDouble() * tileMap.map.tileWidth);
-              final tileProcessor = TileProcessor(tileData, tileset);
-              await addTiles(
-                  tileProcessor,
-                  position,
-                  Vector2(tileMap.map.tileWidth.toDouble(),
-                      tileMap.map.tileWidth.toDouble()));
-            }
           }
-          xOffset++;
-          if (xOffset == tileLayer?.width) {
-            xOffset = 0;
-            yOffset++;
+          if(isNeedAdd){
+            final position = Vector2(xOffset.toDouble() * tileMap.map.tileWidth,
+                yOffset.toDouble() * tileMap.map.tileWidth);
+            final tileProcessor = TileProcessor(tileData, tileset);
+            await addTiles(
+                tileProcessor,
+                position,
+                Vector2(tileMap.map.tileWidth.toDouble(),
+                    tileMap.map.tileWidth.toDouble()));
           }
         }
-      }
-      if (clear) {
-        tileMap.map.layers
-            .removeWhere((element) => layersToLoad.contains(element.name));
-        for (var rl in tileMap.renderableLayers) {
-          rl.refreshCache();
+        xOffset++;
+        if (xOffset == tileLayer?.width) {
+          xOffset = 0;
+          yOffset++;
         }
       }
-    } catch (e) {
-
+    }
+  }
+  if (clear) {
+    tileMap.map.layers
+        .removeWhere((element) => layersToLoad.contains(element.name));
+    for (var rl in tileMap.renderableLayers) {
+      rl.refreshCache();
     }
   }
 }

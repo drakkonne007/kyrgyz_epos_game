@@ -10,7 +10,7 @@ class EWBody extends EnemyWeapon
   double _currentActive = 0;
   final Vector2 _startSize = Vector2(69,71);
 
-  EWBody(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop});
+  EWBody(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
 
   @override
   Future onLoad() async
