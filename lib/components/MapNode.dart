@@ -211,7 +211,7 @@ class MapNode extends Component {
     if (column != 0 && row != 0) {
       return;
     }
-    var fileName = 'top_left_bottom.tmx';
+    var fileName = 'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(320));
     if (true) {
       var layersLists = tiled.tileMap.renderableLayers;
@@ -384,7 +384,7 @@ class MapNode extends Component {
                       newPoints.add(tempCoord[0]);
                       newPoints.add(tempCoord[1]);
                     }
-                  } else {
+                  } else if(tempCoord.length > 2){
                     print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
                   }
                 }

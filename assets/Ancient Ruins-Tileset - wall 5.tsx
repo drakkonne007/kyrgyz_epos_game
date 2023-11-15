@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="wall-5" tilewidth="32" tileheight="32" tilecount="240" columns="16">
+<tileset version="1.9" tiledversion="1.9.2" name="wall-5" tilewidth="32" tileheight="32" tilecount="240" columns="16">
  <image source="tiles/map/ancientLand/Tilesets/wall-5 - 2 tiles tall.png" width="512" height="480"/>
  <tile id="1" probability="0"/>
  <tile id="3" probability="0"/>
