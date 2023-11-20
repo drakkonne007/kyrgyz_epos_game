@@ -16,8 +16,6 @@ class EWBody extends EnemyWeapon
   Future onLoad() async
   {
     damage = 1;
-    isSolid = true;
-    collisionType = DCollisionType.active;
   }
 
   @override

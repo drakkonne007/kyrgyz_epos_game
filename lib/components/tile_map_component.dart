@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
@@ -32,16 +31,25 @@ class LoadedColumnRow
 
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
+
   ObjectHitbox? currentObject;
   static int countId = 0;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
   int _column=0, _row=0;
-  final List<MapNode> _mapNodes = [];
+  MapNode? _mapNode;
   bool isFirstLoad = false;
   Set<Vector2> loadedLivesObjs = {};
+  Map<LoadedColumnRow,List<Component>> allEls = {};
   final DCollisionProcessor collisionProcessor = DCollisionProcessor();
+  double _tickUpdateCollision = 0;
 
+  @override
+  Future<void> onLoad() async
+  {
+    _mapNode = MapNode(this);
+    await add(_mapNode!);
+  }
 
   Future preloadAnimAndObj() async
   {
@@ -51,7 +59,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
-    // await firstCachedIntoInternal();
+    await firstCachedIntoInternal();
     timer.start();
     loadObjs().ignore();
     loadAnimsHigh().ignore();
@@ -90,62 +98,56 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     var tempRow = _row;
     _column = newColumn;
     _row = newRow;
-    List<MapNode> toRemove = [];
+    print('loadNewMap $newColumn $newRow');
+    List<LoadedColumnRow> toRemove = [];
+    Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     if(newColumn < tempColumn){
-      for(final node in _mapNodes) {
+      for(final node in allEllsSet) {
         if (node.column == newColumn + 2) {
           toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn - 1, newRow + i - 1,this);
-        node.generateMap();
-        _mapNodes.add(node);
-        add(node);
+        _mapNode?.generateMap(LoadedColumnRow(newColumn - 1, newRow + i - 1));
       }
     }
     if(newColumn > tempColumn){
-      for(final node in _mapNodes) {
+      for(final node in allEllsSet) {
         if (node.column == newColumn - 2) {
           toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn + 1, newRow + i - 1,this);
-        node.generateMap();
-        _mapNodes.add(node);
-        add(node);
+        _mapNode?.generateMap(LoadedColumnRow(newColumn + 1, newRow + i - 1));
       }
     }
     if(newRow < tempRow){
-      for(final node in _mapNodes) {
+      for(final node in allEllsSet) {
         if (node.row == newRow + 2) {
           toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn + i - 1, newRow - 1,this);
-        node.generateMap();
-        _mapNodes.add(node);
-        add(node);
+        _mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow - 1));
       }
     }
     if(newRow > tempRow){
-      for(final node in _mapNodes) {
+      for(final node in allEllsSet) {
         if (node.row == newRow - 2) {
           toRemove.add(node);
         }
       }
       for(int i=0;i<3;i++) {
-        var node = MapNode(newColumn + i - 1, newRow + 1,this);
-        node.generateMap();
-        _mapNodes.add(node);
-        add(node);
+        _mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow + 1));
       }
     }
     for(final node in toRemove) {
-      _mapNodes.remove(node);
-      node.removeFromParent();
+      if(allEls.containsKey([node])){
+        for(final dd in allEls[node]!){
+          dd.removeFromParent();
+        }
+      }
+      allEls.remove(node);
     }
     orthoPlayer?.priority = GamePriority.player-1;
     orthoPlayer?.priority = GamePriority.player;
@@ -158,18 +160,15 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
+    _mapNode?.myGame = gameRef;
     if(isMapCompile){
-      var node = MapNode(0,0,this);
-      await node.generateMap();
+      await _mapNode?.generateMap(LoadedColumnRow(0,0));
     }
     _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare.x);
     _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare.y);
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
-        var node = MapNode(_column + j - 1, _row + i - 1,this);
-        node.generateMap();
-        _mapNodes.add(node);
-        add(node);
+        _mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
       }
     }
     orthoPlayer = null;
@@ -199,7 +198,11 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> update(double dt) async
   {
-    collisionProcessor.updateCollisions();
+    // _tickUpdateCollision += dt;
+    // if(_tickUpdateCollision > 0.1) {
+    //   _tickUpdateCollision = 0;
+    // }
+    // collisionProcessor.updateCollisions();
     if(orthoPlayer != null && isFirstLoad) {
       int col = orthoPlayer!.position.x ~/ (GameConsts.lengthOfTileSquare.x);
       int row = orthoPlayer!.position.y ~/ (GameConsts.lengthOfTileSquare.y);

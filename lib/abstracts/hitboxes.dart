@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -33,22 +32,19 @@ class PointCust extends PositionComponent
   @override
   void onLoad()
   {
-      priority = 800;
-      size = Vector2(5, 5);
-      hitbox.paint.color = BasicPalette.green.color;
-      hitbox.renderShape = true;
-      add(hitbox);
-      // Future.delayed(Duration(seconds: 2),(){
-      //   removeFromParent();
-      // });
+    priority = 800;
+    size = Vector2(5, 5);
+    hitbox.paint.color = BasicPalette.green.color;
+    hitbox.renderShape = true;
+    add(hitbox);
+    // Future.delayed(Duration(seconds: 2),(){
+    //   removeFromParent();
+    // });
   }
 }
 
-abstract class DCollisionEntity extends Component//Всегда против часов и ВСЕГДА с верхней левой точки
-{// {
-
-
-
+abstract class DCollisionEntity extends Component  //Всегда против часов и ВСЕГДА с верхней левой точки
+{
   List<Vector2> _vertices;
   DCollisionType collisionType;
   bool isSolid;
@@ -109,8 +105,6 @@ abstract class DCollisionEntity extends Component//Всегда против ч�
       game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords);
     }
   }
-
-
 
   bool onComponentTypeCheck(DCollisionEntity other);
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
@@ -183,7 +177,7 @@ class ObjectHitbox extends DCollisionEntity
       if(autoTrigger) {
         obstacleBehavoiur.call();
       }else{;
-        game.gameMap.currentObject = this;
+      game.gameMap.currentObject = this;
       }
     }    // super.onCollisionStart(intersectionPoints, other);
   }
@@ -218,12 +212,6 @@ class PlayerHitbox extends DCollisionEntity
       return true;
     }
     return false;
-  }
-
-  @override
-  Future<void> onLoad() async
-  {
-    collisionType = DCollisionType.passive;
   }
 
   @override

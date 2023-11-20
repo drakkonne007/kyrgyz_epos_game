@@ -21,7 +21,7 @@ import 'package:xml/xml.dart';
 
 ValueNotifier<bool> isMapCached = ValueNotifier(false);
 
-class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables, WidgetsBindingObserver, HasCollisionDetection
+class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables, WidgetsBindingObserver
 {
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
@@ -48,6 +48,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     WidgetsBinding.instance.addObserver(this);
     playerData.setStartValues();
     add(gameMap);
+    await gameMap.loaded;
     if(!isMapCompile) {
       gameMap.preloadAnimAndObj();
     }

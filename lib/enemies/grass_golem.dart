@@ -109,15 +109,15 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     position = _startPos;
 
     Vector2 tSize = Vector2(69,71);
-    _hitbox = EnemyHitbox(getPointsForActivs(Vector2(-69/2,-71/2), tSize),
+    _hitbox = EnemyHitbox(getPointsForActivs(-tSize/2, tSize),
         collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-69/2,-71/2), tSize),obstacleBehavoiurStart: obstacleBehaviour,
+    _groundBox = GroundHitBox(getPointsForActivs(-tSize/2, tSize),obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     _groundBox.debugColor = BasicPalette.red.color;
-    _body = EWBody(getPointsForActivs(Vector2(-69/2,-71/2), tSize)
-        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+    _body = EWBody(getPointsForActivs(-tSize/2, tSize)
+        ,collisionType: DCollisionType.passive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
   }
@@ -150,12 +150,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   void obstacleBehaviour(Set<Vector2> intersectionPoints)
   {
     _speed *= -1;
-  }
-
-  @override
-  void removeFromParent()
-  {
-
   }
 
   @override

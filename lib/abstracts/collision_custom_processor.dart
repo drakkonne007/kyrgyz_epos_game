@@ -13,6 +13,8 @@ class DCollisionProcessor
   final List<DCollisionEntity> _activeCollEntity = [];
   final Map<LoadedColumnRow,List<DCollisionEntity>> _staticCollEntity = {};
   Map<DCollisionEntity,DCollisionEntity> _collisions = {};
+  Map<LoadedColumnRow, List<DCollisionEntity>> _potentialActiveEntity = {};
+  Set<LoadedColumnRow> _contactNests = {};
 
   void addActiveCollEntity(DCollisionEntity entity)
   {
@@ -47,14 +49,20 @@ class DCollisionProcessor
 
   void updateCollisions()
   {
-    Map<LoadedColumnRow, List<DCollisionEntity>> potentialActiveEntity = {};
+    Stopwatch stopwatch = Stopwatch()..start();
+    // int count = _activeCollEntity.length;
+    // for(final key in _staticCollEntity.keys){
+    //   count += _staticCollEntity[key]!.length;
+    // }
+    // print('Hohoho $count');
+    _potentialActiveEntity.clear();
     for(DCollisionEntity entity in _activeCollEntity){
       entity.obstacleIntersects = {};
       if(entity.collisionType == DCollisionType.inactive) {
         continue;
       }
       PositionComponent component = entity.parent as PositionComponent;
-      Set<LoadedColumnRow> contactNests = {};
+      _contactNests.clear();
       var firstPoint = component.positionOfAnchor(component.anchor) + entity.getPoint(0);
       var secondPoint = component.positionOfAnchor(component.anchor) + entity.getPoint(1);
       var thirdPoint = component.positionOfAnchor(component.anchor) + entity.getPoint(2);
@@ -72,12 +80,12 @@ class DCollisionProcessor
       for(int col = minCol; col <= maxCol; col++){
         for(int row = minRow; row <= maxRow; row++){
           var lcr = LoadedColumnRow(col, row);
-          potentialActiveEntity.putIfAbsent(lcr, () => []);
-          potentialActiveEntity[lcr]!.add(entity);
-          contactNests.add(lcr);
+          _potentialActiveEntity.putIfAbsent(lcr, () => []);
+          _potentialActiveEntity[lcr]!.add(entity);
+          _contactNests.add(lcr);
         }
       }
-      for(final lcr in contactNests){
+      for(final lcr in _contactNests){
         if(_staticCollEntity.containsKey(lcr)) {
           for(final other in _staticCollEntity[lcr]!){
             // print('STATIC OBJECT POINTS: ${other.getPoints()}');
@@ -95,18 +103,21 @@ class DCollisionProcessor
         }
       }
     }
-    for(final key in potentialActiveEntity.keys) {
+    for(final key in _potentialActiveEntity.keys) {
       Set<int> removeList = {};
-      for(int i = 0; i < potentialActiveEntity[key]!.length; i++){
-        for(int j = 0; j < potentialActiveEntity[key]!.length; j++){
+      for(int i = 0; i < _potentialActiveEntity[key]!.length; i++){
+        for(int j = 0; j < _potentialActiveEntity[key]!.length; j++){
           if(i == j || removeList.contains(j)){
             continue;
           }
-          if(!potentialActiveEntity[key]![i].onComponentTypeCheck(potentialActiveEntity[key]![j])
-              && !potentialActiveEntity[key]![j].onComponentTypeCheck(potentialActiveEntity[key]![i])) {
+          if(!_potentialActiveEntity[key]![i].onComponentTypeCheck(_potentialActiveEntity[key]![j])
+              && !_potentialActiveEntity[key]![j].onComponentTypeCheck(_potentialActiveEntity[key]![i])) {
             continue;
           }
-          _calcTwoActiveEntities(potentialActiveEntity[key]![i], potentialActiveEntity[key]![j]);
+          if(_potentialActiveEntity[key]![i].collisionType == DCollisionType.passive && _potentialActiveEntity[key]![j].collisionType == DCollisionType.passive){
+            continue;
+          }
+          _calcTwoActiveEntities(_potentialActiveEntity[key]![i], _potentialActiveEntity[key]![j]);
         }
         removeList.add(i);
       }
@@ -117,6 +128,7 @@ class DCollisionProcessor
         entity.obstacleIntersects.clear();
       }
     }
+    // print('Hohoho ${stopwatch.elapsedMilliseconds} ms');
   }
 }
 

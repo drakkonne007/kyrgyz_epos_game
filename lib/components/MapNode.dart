@@ -35,80 +35,81 @@ bool isIntersect(Rectangle rect1, Rectangle rect2)
       rect2.top < rect1.bottom);
 }
 
-class MapNode extends Component with HasGameRef<KyrgyzGame> {
-  MapNode(this.column, this.row, this.custMap);
-
-  final int column;
+class MapNode extends Component{
+  MapNode(this.custMap);
   CustomTileMap custMap;
-  final int row;
   int _id = 0;
-
+  KyrgyzGame? myGame;
   int id() => _id++;
 
-  Future<void> generateMap() async
+  Future<void> generateMap(LoadedColumnRow colRow) async
   {
-    if (column >= GameConsts.maxColumn || row >= GameConsts.maxRow) {
+    if (colRow.column >= GameConsts.maxColumn || colRow.row >= GameConsts.maxRow) {
       return;
     }
-    if (column < 0 || row < 0) {
+    if (colRow.column < 0 || colRow.row < 0) {
       return;
     }
     if (isMapCompile) {
-      await compileAll();
+      await compileAll(colRow);
       exit(0);
     }
     priority = 0;
-    if (KyrgyzGame.cachedMapPngs.contains('$column-${row}_down.png')) {
+    custMap.allEls.putIfAbsent(colRow, () => []);
+    if (KyrgyzGame.cachedMapPngs.contains('${colRow.column}-${colRow.row}_down.png')) {
       Image _imageDown = await Flame.images.load(
-          'metaData/$column-${row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
+          'metaData/${colRow.column}-${colRow.row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
       var spriteDown = SpriteComponent(
         sprite: Sprite(_imageDown),
-        position: Vector2(column * GameConsts.lengthOfTileSquare.x,
-            row * GameConsts.lengthOfTileSquare.y),
+        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
+            colRow.row * GameConsts.lengthOfTileSquare.y),
         size: GameConsts.lengthOfTileSquare + Vector2.all(1),
         priority: 0,
       );
-      add(spriteDown);
+      custMap.allEls[colRow]!.add(spriteDown);
+      custMap.add(spriteDown);
     }
-    if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_down.anim')) {      ;
-    var objects = KyrgyzGame.cachedAnims['$column-${row}_down.anim']!;
-    for (final obj in objects) {
-      Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
-      final List<Sprite> spriteList = [];
-      final List<double> stepTimes = [];
-      for (final anim in obj.findAllElements('fr')) {
-        spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
-            srcPosition: Vector2(
-                double.parse(anim.getAttribute('cl')!) * 32,
-                double.parse(anim.getAttribute('rw')!) * 32)));
-        stepTimes.add(double.parse(anim.getAttribute('dr')!));
+    if (KyrgyzGame.cachedAnims.containsKey('${colRow.column}-${colRow.row}_down.anim')) {
+      var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow.row}_down.anim']!;
+      for (final obj in objects) {
+        Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
+        final List<Sprite> spriteList = [];
+        final List<double> stepTimes = [];
+        for (final anim in obj.findAllElements('fr')) {
+          spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
+              srcPosition: Vector2(
+                  double.parse(anim.getAttribute('cl')!) * 32,
+                  double.parse(anim.getAttribute('rw')!) * 32)));
+          stepTimes.add(double.parse(anim.getAttribute('dr')!));
+        }
+        var sprAnim = SpriteAnimation.variableSpriteList(
+            spriteList, stepTimes: stepTimes);
+        for (final anim in obj.findAllElements('ps')) {
+          var ss = SpriteAnimationComponent(animation: sprAnim,
+              position: Vector2(double.parse(anim.getAttribute('x')!),
+                  double.parse(anim.getAttribute('y')!)),
+              size: Vector2.all(34),
+              priority: GamePriority.ground + 1);
+          custMap.allEls[colRow]!.add(ss);
+          custMap.add(ss);
+        }
       }
-      var sprAnim = SpriteAnimation.variableSpriteList(
-          spriteList, stepTimes: stepTimes);
-      for (final anim in obj.findAllElements('ps')) {
-        var ss = SpriteAnimationComponent(animation: sprAnim,
-            position: Vector2(double.parse(anim.getAttribute('x')!),
-                double.parse(anim.getAttribute('y')!)),
-            size: Vector2.all(34),
-            priority: GamePriority.ground + 1);
-        add(ss);
-      }
     }
-    }
-    if (KyrgyzGame.cachedMapPngs.contains('$column-${row}_high.png')) {
+    if (KyrgyzGame.cachedMapPngs.contains('${colRow.column}-${colRow.row}_high.png')) {
       Image _imageHigh = await Flame.images.load(
-          'metaData/$column-${row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
+          'metaData/${colRow.column}-${colRow.row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
       var spriteHigh = SpriteComponent(
         sprite: Sprite(_imageHigh),
-        position: Vector2(column * GameConsts.lengthOfTileSquare.x,
-            row * GameConsts.lengthOfTileSquare.y),
+        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
+            colRow.row * GameConsts.lengthOfTileSquare.y),
         priority: GamePriority.high - 1,
         size: GameConsts.lengthOfTileSquare + Vector2.all(1),
       );
-      add(spriteHigh);
+      custMap.allEls[colRow]!.add(spriteHigh);
+      custMap.add(spriteHigh);
     }
-    if (KyrgyzGame.cachedAnims.containsKey('$column-${row}_high.anim')) {
-      var objects = KyrgyzGame.cachedAnims['$column-${row}_high.anim']!;
+    if (KyrgyzGame.cachedAnims.containsKey('${colRow.column}-${colRow.row}_high.anim')) {
+      var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow.row}_high.anim']!;
       for (final obj in objects) {
         Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
         final List<Sprite> spriteList = [];
@@ -128,12 +129,13 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
                   double.parse(anim.getAttribute('y')!)),
               size: Vector2.all(34),
               priority: GamePriority.high);
-          add(ss);
+          custMap.allEls[colRow]!.add(ss);
+          custMap.add(ss);
         }
       }
     }
-    if (KyrgyzGame.cachedObjXmls.containsKey('$column-$row.objXml')) {
-      var objects = KyrgyzGame.cachedObjXmls['$column-$row.objXml']!;
+    if (KyrgyzGame.cachedObjXmls.containsKey('${colRow.column}-${colRow.row}.objXml')) {
+      var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow.row}.objXml']!;
       for (final obj in objects) {
         String? name = obj.getAttribute('nm');
         switch (name) {
@@ -153,27 +155,29 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
               //   rect.priority = 800;
               //   rect.paint.color = BasicPalette.red.color;
               //   rect.renderShape = true;
-              //   add(rect);
+              //   custMap.add(rect);
               // }
               var ground = Ground(temp, collisionType: DCollisionType.passive,
                   isSolid: false,
                   isStatic: true,
                   isLoop: obj.getAttribute('lp')! == '1',
-                  game: gameRef,
-                  column: column,
-                  row: row);
-              add(ground);
+                  game: myGame!,
+                  column: colRow.column,
+                  row: colRow.row);
+              print('add Ground');
+              custMap.allEls[colRow]!.add(ground);
+              custMap.add(ground);
             }
             break;
           default:
-            createLiveObj(obj, name);
+            // createLiveObj(obj, name, colRow);
             break;
         }
       }
     }
   }
 
-  Future<void> createLiveObj(XmlElement obj, String? name) async
+  Future<void> createLiveObj(XmlElement obj, String? name, LoadedColumnRow colRow) async
   {
     Vector2 position = Vector2(
         double.parse(obj.getAttribute('x')!),
@@ -195,33 +199,39 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
-        add(temp);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
         break;
       case 'chest':
         var temp = Chest(1, myItems: [itemFromId(2)], position: position);
-        add(temp);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
         break;
       case 'fObelisk':
         var temp = FlyingHighObelisk(
-            position, column, row, priority: GamePriority.high - 1);
-        add(temp);
+            position, colRow.column, colRow.row, priority: GamePriority.high - 1);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
         var temp2 = FlyingDownObelisk(
-            position, column, row, priority: GamePriority.player - 2);
-        add(temp2);
+            position, colRow.column, colRow.row, priority: GamePriority.player - 2);
+        custMap.allEls[colRow]!.add(temp2);
+        custMap.add(temp2);
         break;
       case 'sObelisk':
         var temp = StandHighObelisk(position, priority: GamePriority.high - 1);
-        add(temp);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
         var temp2 = StandDownObelisk(
             position, priority: GamePriority.player - 2);
-        add(temp2);
+        custMap.allEls[colRow]!.add(temp2);
+        custMap.add(temp2);
         break;
     }
   }
 
-  Future<void> compileAll() async
+  Future<void> compileAll(LoadedColumnRow colRow) async
   {
-    if (column != 0 && row != 0) {
+    if (colRow.column != 0 && colRow.row != 0) {
       return;
     }
     var fileName = 'top_left_bottom-slice.tmx';
@@ -289,8 +299,10 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
               }
               if (newObjs != '') {
                 File file = File('assets/metaData/$cols-$rows.objXml');
-                loadedFiles.add('assets/metaData/$cols-$rows.objXml');
-                file.writeAsStringSync('<p>\n', mode: FileMode.append);
+                if (!loadedFiles.contains('assets/metaData/$cols-$rows.objXml')) {
+                  loadedFiles.add('assets/metaData/$cols-$rows.objXml');
+                  file.writeAsStringSync('<p>\n', mode: FileMode.append);
+                }
                 file.writeAsStringSync(newObjs, mode: FileMode.append);
               }
             }
