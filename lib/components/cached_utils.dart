@@ -172,7 +172,7 @@ void _loadAnimsDown(SendPort mySendPort) async
   }
 }
 
-void firstCachedIntoInternal() async
+Future firstCachedIntoInternal() async
 {
   print('start');
   var dir = await getApplicationCacheDirectory();

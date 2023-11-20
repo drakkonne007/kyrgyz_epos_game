@@ -51,7 +51,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
-    // firstCachedIntoInternal();
+    // await firstCachedIntoInternal();
     timer.start();
     loadObjs().ignore();
     loadAnimsHigh().ignore();
@@ -64,7 +64,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     for(final path in imagePaths) {
       KyrgyzGame.cachedMapPngs.add(path);
     }
-    print(KyrgyzGame.cachedMapPngs);
     timer.stop();
     print('all map load time: ${timer.elapsedMilliseconds}');
     print('end preload');

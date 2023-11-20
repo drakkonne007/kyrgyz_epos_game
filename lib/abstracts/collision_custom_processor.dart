@@ -12,6 +12,7 @@ class DCollisionProcessor
 {
   final List<DCollisionEntity> _activeCollEntity = [];
   final Map<LoadedColumnRow,List<DCollisionEntity>> _staticCollEntity = {};
+  Map<DCollisionEntity,DCollisionEntity> _collisions = {};
 
   void addActiveCollEntity(DCollisionEntity entity)
   {
@@ -29,7 +30,7 @@ class DCollisionProcessor
     _staticCollEntity[colRow]!.add(entity);
   }
 
-  void removeStaticCollEntity(LoadedColumnRow colRow)
+  void removeStaticCollEntity(LoadedColumnRow? colRow)
   {
     _staticCollEntity.remove(colRow);
   }
@@ -47,18 +48,17 @@ class DCollisionProcessor
   void updateCollisions()
   {
     Map<LoadedColumnRow, List<DCollisionEntity>> potentialActiveEntity = {};
-    for(DCollisionEntity entity in _activeCollEntity)
-    {
+    for(DCollisionEntity entity in _activeCollEntity){
       entity.obstacleIntersects = {};
       if(entity.collisionType == DCollisionType.inactive) {
         continue;
       }
       PositionComponent component = entity.parent as PositionComponent;
       Set<LoadedColumnRow> contactNests = {};
-      var firstPoint = component.position + entity.getPoint(0);
-      var secondPoint = component.position + entity.getPoint(1);
-      var thirdPoint = component.position + entity.getPoint(2);
-      var fourthPoint = component.position + entity.getPoint(3);
+      var firstPoint = component.positionOfAnchor(component.anchor) + entity.getPoint(0);
+      var secondPoint = component.positionOfAnchor(component.anchor) + entity.getPoint(1);
+      var thirdPoint = component.positionOfAnchor(component.anchor) + entity.getPoint(2);
+      var fourthPoint = component.positionOfAnchor(component.anchor) + entity.getPoint(3);
 
       var first =  LoadedColumnRow(firstPoint.x ~/ GameConsts.lengthOfTileSquare.x, firstPoint.y ~/ GameConsts.lengthOfTileSquare.y);
       var sec =  LoadedColumnRow(secondPoint.x ~/ GameConsts.lengthOfTileSquare.x, secondPoint.y ~/ GameConsts.lengthOfTileSquare.y);
@@ -71,17 +71,16 @@ class DCollisionProcessor
       int maxRow = math.max(first.row, math.max(sec.row, math.max(third.row, fourth.row)));
       for(int col = minCol; col <= maxCol; col++){
         for(int row = minRow; row <= maxRow; row++){
-          contactNests.add(LoadedColumnRow(col, row));
+          var lcr = LoadedColumnRow(col, row);
+          potentialActiveEntity.putIfAbsent(lcr, () => []);
+          potentialActiveEntity[lcr]!.add(entity);
+          contactNests.add(lcr);
         }
-      }
-
-      for(final lcr in contactNests){
-        potentialActiveEntity.putIfAbsent(lcr, () => []);
-        potentialActiveEntity[lcr]!.add(entity);
       }
       for(final lcr in contactNests){
         if(_staticCollEntity.containsKey(lcr)) {
           for(final other in _staticCollEntity[lcr]!){
+            // print('STATIC OBJECT POINTS: ${other.getPoints()}');
             if(other.collisionType == DCollisionType.inactive){
               continue;
             }
@@ -96,8 +95,8 @@ class DCollisionProcessor
         }
       }
     }
-    Set<int> removeList = {};
     for(final key in potentialActiveEntity.keys) {
+      Set<int> removeList = {};
       for(int i = 0; i < potentialActiveEntity[key]!.length; i++){
         for(int j = 0; j < potentialActiveEntity[key]!.length; j++){
           if(i == j || removeList.contains(j)){
@@ -115,6 +114,7 @@ class DCollisionProcessor
     for(DCollisionEntity entity in _activeCollEntity){
       if(entity.obstacleIntersects.isNotEmpty){
         entity.onCollisionStart(entity.obstacleIntersects, entity); ///obstacleIntersects есть только у ГроундХитбоксов, поэтому можно во втором аргументе передать лажу
+        entity.obstacleIntersects.clear();
       }
     }
   }
@@ -128,16 +128,16 @@ void _calcTwoStaticEntities(DCollisionEntity entity, DCollisionEntity other) {
       entity.onComponentTypeCheck(other);
   for (int i = 0; i < other.getVerticesCount(); i++) {
     Vector2 otherFirst = other.getPoint(i);
-    if (otherFirst.x < entity
+    if (otherFirst.x <= entity
         .getPoint(3)
-        .x + component.x && otherFirst.x > entity
+        .x + component.positionOfAnchor(component.anchor).x && otherFirst.x >= entity
         .getPoint(0)
-        .x + component.x
-        && otherFirst.y < entity
+        .x + component.positionOfAnchor(component.anchor).x
+        && otherFirst.y <= entity
             .getPoint(1)
-            .y + component.y && otherFirst.y > entity
+            .y + component.positionOfAnchor(component.anchor).y && otherFirst.y >= entity
         .getPoint(0)
-        .y + component.y) {
+        .y + component.positionOfAnchor(component.anchor).y) {
       insidePoints.add(i);
       if (isMapObstacle) {
         entity.obstacleIntersects.add(otherFirst);
@@ -167,17 +167,17 @@ void _calcTwoActiveEntities(DCollisionEntity entity, DCollisionEntity other)
   PositionComponent componentOther = other.parent as PositionComponent;
 
   for (int i = 0; i < other.getVerticesCount(); i++) {
-    Vector2 otherFirst = other.getPoint(i) + componentOther.position;
-    if (otherFirst.x < entity
+    Vector2 otherFirst = other.getPoint(i) + componentOther.positionOfAnchor(componentOther.anchor);
+    if (otherFirst.x <= entity
         .getPoint(3)
-        .x + componentEntity.x && otherFirst.x > entity
+        .x + componentEntity.positionOfAnchor(componentEntity.anchor).x && otherFirst.x >= entity
         .getPoint(0)
-        .x + componentEntity.x
-        && otherFirst.y < entity
+        .x + componentEntity.positionOfAnchor(componentEntity.anchor).x
+        && otherFirst.y <= entity
             .getPoint(1)
-            .y + componentEntity.y && otherFirst.y > entity
+            .y + componentEntity.positionOfAnchor(componentEntity.anchor).y && otherFirst.y >= entity
         .getPoint(0)
-        .y + componentEntity.y) {
+        .y + componentEntity.positionOfAnchor(componentEntity.anchor).y) {
       insidePoints.add(i);
       if (isMapObstacle) {
         entity.obstacleIntersects.add(otherFirst);
@@ -194,17 +194,17 @@ void _calcTwoActiveEntities(DCollisionEntity entity, DCollisionEntity other)
   }
 
   for (int i = 0; i < entity.getVerticesCount(); i++) {
-    Vector2 entityFirst = entity.getPoint(i) + componentEntity.position;
-    if (entityFirst.x < other
+    Vector2 entityFirst = entity.getPoint(i) + componentEntity.positionOfAnchor(componentEntity.anchor);
+    if (entityFirst.x <= other
         .getPoint(3)
-        .x + componentOther.x && entityFirst.x > other
+        .x + componentOther.positionOfAnchor(componentOther.anchor).x && entityFirst.x >= other
         .getPoint(0)
-        .x + componentOther.x
-        && entityFirst.y < other
+        .x + componentOther.positionOfAnchor(componentOther.anchor).x
+        && entityFirst.y <= other
             .getPoint(1)
-            .y + componentOther.y && entityFirst.y > other
+            .y + componentOther.positionOfAnchor(componentOther.anchor).y && entityFirst.y >= other
         .getPoint(0)
-        .y + componentOther.y) {
+        .y + componentOther.positionOfAnchor(componentOther.anchor).y) {
       otherInsidePoints.add(i);
       if (isOtherMapObstacle) {
         other.obstacleIntersects.add(entityFirst);
@@ -231,47 +231,45 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
     if (!other.isLoop && i == -1) {
       continue;
     }
-    if (insidePoints.contains(i)) {
-      continue;
-    }
     int tF, tS;
     if (i == -1) {
-      tF = 0;
-      tS = other.getVerticesCount() - 1;
+      tF = other.getVerticesCount() - 1;
+      tS = 0;
     } else {
       tF = i;
       tS = i + 1;
     }
-    if (insidePoints.contains(tF) || insidePoints.contains(tS)) {
-      continue;
-    }
+    // if (insidePoints.contains(tF) || insidePoints.contains(tS)) {
+    //   continue;
+    // }
+    //FIXME Надо добавлять точки если внутри тока - то надо ешё и добавлять центры пересечения
     PositionComponent componentEntity = entity.parent as PositionComponent;
     Vector2 otherComponentVector = Vector2.zero();
     if(!other.isStatic){
       var temp = other.parent as PositionComponent;
-      otherComponentVector = temp.position;
+      otherComponentVector = temp.positionOfAnchor(temp.anchor);
     }
     Vector2 otherFirst = other.getPoint(tF) + otherComponentVector;
     Vector2 otherSecond = other.getPoint(tS) + otherComponentVector;
     if (isMapObstacle) {
       List<Vector2> tempBorderLines = [];
       Vector2 point = f_pointOfIntersect(
-          entity.getPoint(0) + componentEntity.position, entity.getPoint(1)  + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(0) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(1)  + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
       }
       point = f_pointOfIntersect(
-          entity.getPoint(1) + componentEntity.position, entity.getPoint(2) + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(1) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(2) + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
       }
       point = f_pointOfIntersect(
-          entity.getPoint(2) + componentEntity.position, entity.getPoint(3) + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(2) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(3) + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
       }
       point = f_pointOfIntersect(
-          entity.getPoint(3) + componentEntity.position, entity.getPoint(0) + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(3) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(0) + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         tempBorderLines.add(point);
       }
@@ -282,10 +280,20 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
         entity.obstacleIntersects.add(Vector2(
             absLength.x + math.min(tempBorderLines[0].x, tempBorderLines[1].x),
             absLength.y + math.min(tempBorderLines[0].y, tempBorderLines[1].y)));
+      }else if(tempBorderLines.length == 1){
+        Vector2 absVec;
+        if(insidePoints.contains(tF)){
+          absVec = tempBorderLines[0] + other.getPoint(tF);
+          absVec /= 2;
+        }else{
+          absVec = tempBorderLines[0] + other.getPoint(tS);
+          absVec /= 2;
+        }
+        entity.obstacleIntersects.add(absVec);
       }
     } else {
       Vector2 point = f_pointOfIntersect(
-          entity.getPoint(0) + componentEntity.position, entity.getPoint(1) + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(0) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(1) + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {
           entity.onCollisionStart({point}, other);
@@ -296,7 +304,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
         return;
       }
       point = f_pointOfIntersect(
-          entity.getPoint(1) + componentEntity.position, entity.getPoint(2) + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(1) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(2) + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {
           entity.onCollisionStart({point}, other);
@@ -307,7 +315,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
         return;
       }
       point = f_pointOfIntersect(
-          entity.getPoint(2) + componentEntity.position, entity.getPoint(3) + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(2) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(3) + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {
           entity.onCollisionStart({point}, other);
@@ -318,7 +326,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
         return;
       }
       point = f_pointOfIntersect(
-          entity.getPoint(3) + componentEntity.position, entity.getPoint(0) + componentEntity.position, otherFirst, otherSecond);
+          entity.getPoint(3) + componentEntity.positionOfAnchor(componentEntity.anchor), entity.getPoint(0) + componentEntity.positionOfAnchor(componentEntity.anchor), otherFirst, otherSecond);
       if (point != Vector2.zero()) {
         if (entity.onComponentTypeCheck(other)) {
           entity.onCollisionStart({point}, other);

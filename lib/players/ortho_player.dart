@@ -20,7 +20,7 @@ import 'dart:math' as math;
 
 class AxesDiff
 {
-  AxesDiff(leftDiff, rightDiff, upDiff, downDiff);
+  AxesDiff(this.leftDiff, this.rightDiff, this.upDiff, this.downDiff);
   double leftDiff = 0;
   double rightDiff = 0;
   double upDiff = 0;
@@ -34,10 +34,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   late SpriteAnimation _animMove, _animIdle, _animHurt, _animDeath;
   Vector2 _speed = Vector2.all(0);
   Vector2 _velocity = Vector2.all(0);
-  late PlayerHitbox hitBox;
-  late GroundHitBox _groundBox;
+  PlayerHitbox? hitBox;
+  GroundHitBox? _groundBox;
   bool _isPlayerRun = false;
-  late PlayerWeapon _weapon;
+  PlayerWeapon? _weapon;
   Timer? _timerHurt;
 
   @override
@@ -88,29 +88,35 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animation = _animIdle;
     _timerHurt = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    Vector2 tPos = Vector2(49,27);
-    Vector2 tSize = Vector2(47,47);
-    hitBox = PlayerHitbox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.inactive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
-    await add(hitBox);
-    tPos = Vector2(_spriteSheetWidth/2, _spriteSheetHeight - 30);
+    anchor = const Anchor(0.5, 0.5);
+
+    Vector2 tPos = positionOfAnchor(anchor) - Vector2(25,25); Vector2(49,27);
+    Vector2 tSize = Vector2(50,50);
+    hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
+        collisionType: DCollisionType.passive,isSolid: true,
+        isStatic: false, isLoop: true, game: gameRef);
+    await add(hitBox!);
+
+    tPos = positionOfAnchor(anchor) - Vector2(15,0);
     tSize = Vector2(30,30);
-    RectangleHitbox rect = RectangleHitbox(position: tPos,size: tSize);
-    rect.debugMode = true;
-    add(rect);
-    _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
+    _groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    // _groundBox.debugMode = true;
-    await add(_groundBox);
-    anchor = Anchor.topLeft;
-    _weapon = WSword([Vector2(20,20), Vector2(20,40),Vector2(40,40), Vector2(40,20)],collisionType: DCollisionType.inactive,isSolid: true,isStatic: false, isLoop: true, onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;}, game: gameRef);
+    await add(_groundBox!);
+    tPos = positionOfAnchor(anchor) - Vector2(10,10);
+    tSize = Vector2(20,20);
+    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: true,
+        isStatic: false, isLoop: true,
+        onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;}, game: gameRef);
     //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
-    await add(_weapon);
+    await add(_weapon!);
   }
 
   void onStartHit()
   {
+    print('START HIT');
     _velocity = Vector2.all(0);
+    _speed = Vector2.all(0);
   }
 
   void startHit()
@@ -121,7 +127,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.gameMap.currentObject != null){
       gameRef.gameMap.currentObject?.obstacleBehavoiur.call();
     }else {
-      _weapon.hit();
+      _weapon?.hit();
     }
   }
 
@@ -275,6 +281,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void groundCalcLines(Set<Vector2> points)
   {
+    if(_groundBox == null){
+      return;
+    }
     Map<Vector2,AxesDiff> diffs = {};
     bool isUp = false;
     bool isDown = false;
@@ -285,19 +294,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     double maxUp = 0;
     double maxDown = 0;
 
-
-    print("groundCalcLines");
-    print(points);
-    print(absoluteTopLeftPosition + _groundBox.getPoint(0));
-    print(absoluteTopLeftPosition + _groundBox.getPoint(1));
-    print(absoluteTopLeftPosition + _groundBox.getPoint(3));
-
     for(final point in points){
-      double leftDiffX  = point.x - (absoluteTopLeftPosition + _groundBox.getPoint(0)).x;
-      double rightDiffX = point.x - (absoluteTopLeftPosition + _groundBox.getPoint(3)).x;
-      double upDiffY = point.y - (absoluteTopLeftPosition + _groundBox.getPoint(0)).y;
-      double downDiffY = point.y - (absoluteTopLeftPosition + _groundBox.getPoint(1)).y;
-       print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
+      // gameRef.add(PointCust(position: point));
+      double leftDiffX  = point.x - (positionOfAnchor(anchor) + _groundBox!.getPoint(0)).x;
+      double rightDiffX = point.x - (positionOfAnchor(anchor) + _groundBox!.getPoint(3)).x;
+      double upDiffY = point.y - (positionOfAnchor(anchor) + _groundBox!.getPoint(0)).y;
+      double downDiffY = point.y - (positionOfAnchor(anchor) + _groundBox!.getPoint(1)).y;
 
       diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
       double minDiff = min(leftDiffX.abs(),rightDiffX.abs());
@@ -320,19 +322,18 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         maxDown = max(maxDown,minDiff);
       }
     }
-    print('bools: $isUp $isDown $isLeft $isRight');
-    print('diffs: $maxLeft $maxRight $maxUp $maxDown');
+    // print('bools: $isUp $isDown $isLeft $isRight');
 
     if(isDown && isUp && isLeft && isRight){
       return;
     }
 
     if(isDown && isUp){
-      double maxLeft = 0;
-      double maxRight = 0;
+      double maxLeft = 1000;
+      double maxRight = 1000;
       for(final diff in diffs.values){
-        maxLeft = max(maxLeft,diff.leftDiff.abs());
-        maxRight = max(maxRight,diff.rightDiff.abs());
+        maxLeft = min(maxLeft,diff.leftDiff.abs());
+        maxRight = min(maxRight,diff.rightDiff.abs());
       }
       if(maxLeft > maxRight){
         position -= Vector2(maxRight,0);
@@ -342,11 +343,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     if(isLeft && isRight){
-      double maxUp = 0;
-      double maxDown = 0;
+      double maxUp = 1000;
+      double maxDown = 1000;
       for(final diff in diffs.values){
-        maxUp = max(maxUp,diff.upDiff.abs());
-        maxDown = max(maxDown,diff.downDiff.abs());
+        maxUp = min(maxUp,diff.upDiff.abs());
+        maxDown = min(maxDown,diff.downDiff.abs());
       }
       if(maxUp > maxDown){
         position -= Vector2(0,maxDown);

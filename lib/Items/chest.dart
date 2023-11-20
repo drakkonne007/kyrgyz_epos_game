@@ -22,7 +22,6 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
   super.angle,
   super.nativeAngle,
   super.anchor = Anchor.center,
-  super.children,
   super.priority = GamePriority.items}){
   _startPosition = position;
 }
@@ -34,6 +33,7 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
   final Vector2 _spriteSheetSize = Vector2(64,64);
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
+  ObjectHitbox? _objectHitbox;
 
 
   void checkIsIOpen()
@@ -59,7 +59,8 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
         }
       }
     }
-    removeAll(children);
+    remove(_objectHitbox!);
+    game.gameMap.currentObject = null;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 15, loop: false);
     double dur = animation!.ticker().totalDuration();
     add(OpacityEffect.by(-0.95,EffectController(duration: dur + 0.3),onComplete: (){
@@ -69,7 +70,7 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
   }
 
   @override
-  Future<void>onLoad() async
+  Future<void> onLoad() async
   {
     switch(_level){
       case 0: _spriteImg = await Flame.images.load(
@@ -83,9 +84,11 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
         srcSize: _spriteSheetSize);
     animation = null;
     size = Vector2.all(70);
-    var asd = ObjectHitbox([absolutePosition, absolutePosition + Vector2(size.x,0), absolutePosition + Vector2(size.x,size.y), absolutePosition + Vector2(0,size.y)],
-        collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
+    anchor = Anchor.center;
+    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2.all(-35), size),
+        collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true,
+        autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
-    await add(asd);
+    await add(_objectHitbox!);
   }
 }

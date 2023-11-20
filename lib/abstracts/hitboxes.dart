@@ -2,7 +2,11 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/palette.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -16,21 +20,66 @@ enum DCollisionType
   inactive
 }
 
-abstract class DCollisionEntity extends Component//Всегда против часов и ВСЕГДА с верхней левой точки
-    {
+List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size)
+{
+  return [pos, pos + Vector2(0,size.y), pos + size, pos + Vector2(size.x,0)];
+}
 
-  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop, required this.game})
+class PointCust extends PositionComponent
+{
+  PointCust({required super.position});
+  final ShapeHitbox hitbox = CircleHitbox();
+
+  @override
+  void onLoad()
+  {
+      priority = 800;
+      size = Vector2(5, 5);
+      hitbox.paint.color = BasicPalette.green.color;
+      hitbox.renderShape = true;
+      add(hitbox);
+      // Future.delayed(Duration(seconds: 2),(){
+      //   removeFromParent();
+      // });
+  }
+}
+
+abstract class DCollisionEntity extends Component//Всегда против часов и ВСЕГДА с верхней левой точки
+{// {
+
+
+
+  List<Vector2> _vertices;
+  DCollisionType collisionType;
+  bool isSolid;
+  bool isStatic;
+  bool isLoop;
+  late Vector2 transformPoint;
+  double angle = 0;
+  Vector2 size = Vector2(1,1);
+  Vector2 _center = Vector2(0,0);
+  Set<Vector2> obstacleIntersects = {};
+  LoadedColumnRow? _myCoords;
+  KyrgyzGame game;
+  int? column;
+  int? row;
+
+
+  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop, required this.game,this.column, this.row})
   {
     double minX = 0;
     double minY = 0;
     double maxX = 0;
     double maxY = 0;
+
+
     transformPoint = _vertices[0];
-    int column = _vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
-    int row    = _vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
-    _myCoords = LoadedColumnRow(column, row);
+
     if(isStatic) {
-      game.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(column, row), this);
+      int currCol = column ?? _vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
+      int currRow = row ?? _vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
+      _myCoords = LoadedColumnRow(currCol, currRow);
+      game.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(currCol, currRow), this);
     }else{
       game.gameMap.collisionProcessor.addActiveCollEntity(this);
     }
@@ -57,22 +106,11 @@ abstract class DCollisionEntity extends Component//Всегда против ч�
     if(!isStatic){
       game.gameMap.collisionProcessor.removeActiveCollEntity(this);
     }else{
-      game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords!);
+      game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords);
     }
   }
 
-  List<Vector2> _vertices;
-  DCollisionType collisionType;
-  bool isSolid;
-  bool isStatic;
-  bool isLoop;
-  late Vector2 transformPoint;
-  double angle = 0;
-  Vector2 size = Vector2(1,1);
-  Vector2 _center = Vector2(0,0);
-  Set<Vector2> obstacleIntersects = {};
-  LoadedColumnRow? _myCoords;
-  KyrgyzGame game;
+
 
   bool onComponentTypeCheck(DCollisionEntity other);
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
@@ -116,6 +154,8 @@ abstract class DCollisionEntity extends Component//Всегда против ч�
     double y = temp.x * sin(radian) + temp.y * cos(radian);
     return Vector2(x,y) + transformPoint;
   }
+
+
 }
 
 class ObjectHitbox extends DCollisionEntity
@@ -143,7 +183,7 @@ class ObjectHitbox extends DCollisionEntity
       if(autoTrigger) {
         obstacleBehavoiur.call();
       }else{;
-      game.gameMap.currentObject = this;
+        game.gameMap.currentObject = this;
       }
     }    // super.onCollisionStart(intersectionPoints, other);
   }

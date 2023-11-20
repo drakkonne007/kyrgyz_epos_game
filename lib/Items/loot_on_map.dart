@@ -35,13 +35,17 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
         srcSize: _item.srcSize);
     sprite = spriteSheet.getSprite(_item.row, _item.column);
     size = Vector2.all(30);
-    _objectHitbox = ObjectHitbox([absolutePosition, absolutePosition + Vector2(size.x,0), absolutePosition + Vector2(size.x,size.y), absolutePosition + Vector2(0,size.y)]
-        , collisionType: DCollisionType.passive, isSolid: true, isStatic: false, obstacleBehavoiur: getItemToPlayer, autoTrigger: true, isLoop: true, game: gameRef);//ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);
+    anchor = Anchor.center;
+    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2(-15,-15), Vector2.all(30)),
+        collisionType: DCollisionType.active, isSolid: true,
+        isStatic: false, obstacleBehavoiur: getItemToPlayer,
+        autoTrigger: true, isLoop: true, game: gameRef);//ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);
     await add(_objectHitbox);
   }
 
   void getItemToPlayer()
   {
+    print('getItemToPlayer');
     remove(_objectHitbox);
     double dur = 0.5;
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/palette.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/flying_obelisk.dart';
@@ -55,6 +57,7 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
       await compileAll();
       exit(0);
     }
+    priority = 0;
     if (KyrgyzGame.cachedMapPngs.contains('$column-${row}_down.png')) {
       Image _imageDown = await Flame.images.load(
           'metaData/$column-${row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
@@ -145,11 +148,20 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
               temp.add(Vector2(double.parse(sources.split(',')[0]),double.parse(sources.split(',')[1])));
             }
             if(temp.isNotEmpty) {
+              // for(var i = 0; i < temp.length - 1; i++){
+              //   PolygonHitbox rect = PolygonHitbox([temp[i], temp[i + 1], temp[i + 1] + Vector2.all(1), temp[i] + Vector2.all(1)]);
+              //   rect.priority = 800;
+              //   rect.paint.color = BasicPalette.red.color;
+              //   rect.renderShape = true;
+              //   add(rect);
+              // }
               var ground = Ground(temp, collisionType: DCollisionType.passive,
                   isSolid: false,
                   isStatic: true,
                   isLoop: obj.getAttribute('lp')! == '1',
-                  game: gameRef);
+                  game: gameRef,
+                  column: column,
+                  row: row);
               add(ground);
             }
             break;
@@ -171,7 +183,7 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
       return;
     }
     switch (name) {
-      case 'ggolem':
+      case 'enemy':
         custMap.loadedLivesObjs.add(position);
         custMap.add(GrassGolem(
             position, GolemVariant.Grass, priority: GamePriority.player - 2));
@@ -214,8 +226,8 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
     }
     var fileName = 'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(320));
-    if (false) {
-      var layersLists = tiled.tileMap.renderableLayers;
+    var layersLists = tiled.tileMap.renderableLayers;
+    if (true) {
       MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
       MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
       for (var a in layersLists) {
@@ -247,180 +259,184 @@ class MapNode extends Component with HasGameRef<KyrgyzGame> {
     }
     // tiled = await TiledComponent.load(fileName, Vector2.all(320));
     Set<String> loadedFiles = {};
-
-    var objs = tiled.tileMap.getLayer<ObjectGroup>("objects");
-    if (objs != null) {
-      for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
-        for (int rows = 0; rows < GameConsts.maxRow; rows++) {
-          var positionCurs = Vector2(
-              cols * GameConsts.lengthOfTileSquare.x,
-              rows * GameConsts.lengthOfTileSquare.y);
-          String newObjs = '';
-          Rectangle rec = Rectangle.fromPoints(positionCurs, Vector2(
-              positionCurs.x + GameConsts.lengthOfTileSquare.x,
-              positionCurs.y + GameConsts.lengthOfTileSquare.y));
-          for (final obj in objs.objects) {
-            if (obj.name == '') {
-              continue;
-            }
-            Rectangle objRect = Rectangle.fromPoints(
-                Vector2(obj.x, obj.y),
-                Vector2(obj.x + obj.width, obj.y + obj.height));
-            if (isIntersect(rec, objRect)) {
-              newObjs +=
-              '<o nm="${obj.name}" cl="${obj.type}" x="${obj
-                  .x}" y="${obj.y}" w="${obj.width}" h="${obj
-                  .height}"/>';
-              newObjs += '\n';
-            }
-          }
-          if (newObjs != '') {
-            File file = File('assets/metaData/$cols-$rows.objXml');
-            loadedFiles.add('assets/metaData/$cols-$rows.objXml');
-            file.writeAsStringSync('<p>\n', mode: FileMode.append);
-            file.writeAsStringSync(newObjs, mode: FileMode.append);
-          }
-        }
-      }
-    }
-    print('END OF OBJS COMPILE');
-    print('start grounds compile');
-    if (objs != null) {
-      Map<LoadedColumnRow, List<GroundSource>> objsMap = {};
-      for (final obj in objs.objects) {
-        if (obj.name != '') {
-          continue;
-        }
-        bool isLoop = false;
-        List<Vector2> points = [];
-        if (obj.isPolygon) {
-          isLoop = true;
-          for (final point in obj.polygon) {
-            points.add(Vector2(point.x + obj.x, point.y + obj.y));
-          }
-        }
-        if (obj.isPolyline) {
-          for (final point in obj.polyline) {
-            points.add(Vector2(point.x + obj.x, point.y + obj.y));
-          }
-        }
-        if (obj.isRectangle) {
-          isLoop = true;
-          points.add(Vector2(obj.x, obj.y));
-          points.add(Vector2(obj.x, obj.y + obj.height));
-          points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
-          points.add(Vector2(obj.x + obj.width, obj.y));
-        }
-        int minCol = GameConsts.maxColumn;
-        int minRow = GameConsts.maxRow;
-        int maxCol = 0;
-        int maxRow = 0;
-
-        for (final point in points) {
-          minCol = min(minCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
-          minRow = min(minRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
-          maxCol = max(maxCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
-          maxRow = max(maxRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
-        }
-
-        for (int i = minCol; i <= maxCol; i++) {
-          for (int j = minRow; j <= maxRow; j++) {
-            Vector2 topLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
-                j * GameConsts.lengthOfTileSquare.y);
-            Vector2 topRight = Vector2(
-                (i + 1) * GameConsts.lengthOfTileSquare.x,
-                j * GameConsts.lengthOfTileSquare.y);
-            Vector2 bottomLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
-                (j + 1) * GameConsts.lengthOfTileSquare.y);
-            Vector2 bottomRight = Vector2(
-                (i + 1) * GameConsts.lengthOfTileSquare.x,
-                (j + 1) * GameConsts.lengthOfTileSquare.y);
-            GroundSource newPoints = GroundSource();
-            newPoints.isLoop = isLoop;
-            for (int i = -1; i < points.length - 1; i++) {
-              if (!isLoop && i == -1) {
-                continue;
-              }
-              int tF, tS;
-              if (i == -1) {
-                tF = points.length - 1;
-                tS = 0;
-              } else {
-                tF = i;
-                tS = i + 1;
-              }
-              List<Vector2> tempCoord = [];
-              if (points[tF].x >= topLeft.x && points[tF].x <= topRight.x
-                  && points[tF].y >= topLeft.y && points[tF].y <= bottomLeft
-                  .y) { //Надо ещё если две точки - определить, какая ближе к началу и там сделать первую точку
-                newPoints.points.add(points[tF]);
-              }
-              Vector2 answer = f_pointOfIntersect(
-                  topLeft, topRight, points[tF], points[tS]);
-              if (answer != Vector2.zero()) {
-                tempCoord.add(answer);
-              }
-              answer = f_pointOfIntersect(
-                  topRight, bottomRight, points[tF], points[tS]);
-              if (answer != Vector2.zero()) {
-                tempCoord.add(answer);
-              }
-              answer = f_pointOfIntersect(
-                  bottomRight, bottomLeft, points[tF], points[tS]);
-              if (answer != Vector2.zero()) {
-                tempCoord.add(answer);
-              }
-              answer = f_pointOfIntersect(
-                  bottomLeft, topLeft, points[tF], points[tS]);
-              if (answer != Vector2.zero()) {
-                tempCoord.add(answer);
-              }
-              if (tempCoord.length == 1) {
-                newPoints.points.add(tempCoord[0]);
-              } else {
-                if (tempCoord.length == 2) {
-                  if (points[tF].distanceTo(tempCoord[0]) >
-                      points[tF].distanceTo(tempCoord[1])) {
-                    newPoints.points.add(tempCoord[1]);
-                    newPoints.points.add(tempCoord[0]);
-                  } else {
-                    newPoints.points.add(tempCoord[0]);
-                    newPoints.points.add(tempCoord[1]);
-                  }
-                } else if(tempCoord.length > 2){
-                  print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
+    for(var layer in layersLists){
+      if(layer.layer.type == LayerType.objectGroup){
+        var objs = tiled.tileMap.getLayer<ObjectGroup>(layer.layer.name);
+        if (objs != null) {
+          for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
+            for (int rows = 0; rows < GameConsts.maxRow; rows++) {
+              var positionCurs = Vector2(
+                  cols * GameConsts.lengthOfTileSquare.x,
+                  rows * GameConsts.lengthOfTileSquare.y);
+              String newObjs = '';
+              Rectangle rec = Rectangle.fromPoints(positionCurs, Vector2(
+                  positionCurs.x + GameConsts.lengthOfTileSquare.x,
+                  positionCurs.y + GameConsts.lengthOfTileSquare.y));
+              for (final obj in objs.objects) {
+                if (obj.name == '') {
+                  continue;
+                }
+                Rectangle objRect = Rectangle.fromPoints(
+                    Vector2(obj.x, obj.y),
+                    Vector2(obj.x + obj.width, obj.y + obj.height));
+                if (isIntersect(rec, objRect)) {
+                  newObjs +=
+                  '<o nm="${obj.name}" cl="${obj.type}" x="${obj
+                      .x}" y="${obj.y}" w="${obj.width}" h="${obj
+                      .height}"/>';
+                  newObjs += '\n';
                 }
               }
+              if (newObjs != '') {
+                File file = File('assets/metaData/$cols-$rows.objXml');
+                loadedFiles.add('assets/metaData/$cols-$rows.objXml');
+                file.writeAsStringSync('<p>\n', mode: FileMode.append);
+                file.writeAsStringSync(newObjs, mode: FileMode.append);
+              }
             }
-            if (points[points.length - 1].x >= topLeft.x &&
-                points[points.length - 1].x <= topRight.x
-                && points[points.length - 1].y >= topLeft.y &&
-                points[points.length - 1].y <= bottomLeft.y && !isLoop) {
-              newPoints.points.add(points[points.length - 1]);
-            }
-            objsMap.putIfAbsent(LoadedColumnRow(i, j), () => []);
-            objsMap[LoadedColumnRow(i, j)]!.add(newPoints);
           }
         }
-      }
-      for(final key in objsMap.keys){
-        File file = File('assets/metaData/${key.column}-${key.row}.objXml');
-        if(!loadedFiles.contains('assets/metaData/${key.column}-${key.row}.objXml')){
-          file.writeAsStringSync('<p>\n', mode: FileMode.append);
-          loadedFiles.add('assets/metaData/${key.column}-${key.row}.objXml');
-        }
-        for(int i=0;i<objsMap[key]!.length;i++){
-          file.writeAsStringSync('\n<o lp="${objsMap[key]![i].isLoop ? '1' : '0'}" nm="" p="', mode: FileMode.append);
-          for(int j=0;j<objsMap[key]![i].points.length;j++){
-            if(j > 0){
-              file.writeAsStringSync(' ', mode: FileMode.append);
+        print('END OF OBJS COMPILE');
+        print('start grounds compile');
+        if (objs != null) {
+          Map<LoadedColumnRow, List<GroundSource>> objsMap = {};
+          for (final obj in objs.objects) {
+            if (obj.name != '') {
+              continue;
             }
-            file.writeAsStringSync('${objsMap[key]![i].points[j].x},${objsMap[key]![i].points[j].y}', mode: FileMode.append);
+            bool isLoop = false;
+            List<Vector2> points = [];
+            if (obj.isPolygon) {
+              isLoop = true;
+              for (final point in obj.polygon) {
+                points.add(Vector2(point.x + obj.x, point.y + obj.y));
+              }
+            }
+            if (obj.isPolyline) {
+              for (final point in obj.polyline) {
+                points.add(Vector2(point.x + obj.x, point.y + obj.y));
+              }
+            }
+            if (obj.isRectangle) {
+              isLoop = true;
+              points.add(Vector2(obj.x, obj.y));
+              points.add(Vector2(obj.x, obj.y + obj.height));
+              points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
+              points.add(Vector2(obj.x + obj.width, obj.y));
+            }
+            int minCol = GameConsts.maxColumn;
+            int minRow = GameConsts.maxRow;
+            int maxCol = 0;
+            int maxRow = 0;
+
+            for (final point in points) {
+              minCol = min(minCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
+              minRow = min(minRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
+              maxCol = max(maxCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
+              maxRow = max(maxRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
+            }
+
+            for (int i = minCol; i <= maxCol; i++) {
+              for (int j = minRow; j <= maxRow; j++) {
+                Vector2 topLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
+                    j * GameConsts.lengthOfTileSquare.y);
+                Vector2 topRight = Vector2(
+                    (i + 1) * GameConsts.lengthOfTileSquare.x,
+                    j * GameConsts.lengthOfTileSquare.y);
+                Vector2 bottomLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
+                    (j + 1) * GameConsts.lengthOfTileSquare.y);
+                Vector2 bottomRight = Vector2(
+                    (i + 1) * GameConsts.lengthOfTileSquare.x,
+                    (j + 1) * GameConsts.lengthOfTileSquare.y);
+                GroundSource newPoints = GroundSource();
+                newPoints.isLoop = isLoop;
+                for (int i = -1; i < points.length - 1; i++) {
+                  if (!isLoop && i == -1) {
+                    continue;
+                  }
+                  int tF, tS;
+                  if (i == -1) {
+                    tF = points.length - 1;
+                    tS = 0;
+                  } else {
+                    tF = i;
+                    tS = i + 1;
+                  }
+                  List<Vector2> tempCoord = [];
+                  if (points[tF].x >= topLeft.x && points[tF].x <= topRight.x
+                      && points[tF].y >= topLeft.y && points[tF].y <= bottomLeft
+                      .y) { //Надо ещё если две точки - определить, какая ближе к началу и там сделать первую точку
+                    newPoints.points.add(points[tF]);
+                  }
+                  Vector2 answer = f_pointOfIntersect(
+                      topLeft, topRight, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  answer = f_pointOfIntersect(
+                      topRight, bottomRight, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  answer = f_pointOfIntersect(
+                      bottomRight, bottomLeft, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  answer = f_pointOfIntersect(
+                      bottomLeft, topLeft, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  if (tempCoord.length == 1) {
+                    newPoints.points.add(tempCoord[0]);
+                  } else {
+                    if (tempCoord.length == 2) {
+                      if (points[tF].distanceTo(tempCoord[0]) >
+                          points[tF].distanceTo(tempCoord[1])) {
+                        newPoints.points.add(tempCoord[1]);
+                        newPoints.points.add(tempCoord[0]);
+                      } else {
+                        newPoints.points.add(tempCoord[0]);
+                        newPoints.points.add(tempCoord[1]);
+                      }
+                    } else if(tempCoord.length > 2){
+                      print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
+                    }
+                  }
+                }
+                if (points[points.length - 1].x >= topLeft.x &&
+                    points[points.length - 1].x <= topRight.x
+                    && points[points.length - 1].y >= topLeft.y &&
+                    points[points.length - 1].y <= bottomLeft.y && !isLoop) {
+                  newPoints.points.add(points[points.length - 1]);
+                }
+                objsMap.putIfAbsent(LoadedColumnRow(i, j), () => []);
+                objsMap[LoadedColumnRow(i, j)]!.add(newPoints);
+              }
+            }
           }
-          file.writeAsStringSync('"/>', mode: FileMode.append);
+          for(final key in objsMap.keys){
+            File file = File('assets/metaData/${key.column}-${key.row}.objXml');
+            if(!loadedFiles.contains('assets/metaData/${key.column}-${key.row}.objXml')){
+              file.writeAsStringSync('<p>\n', mode: FileMode.append);
+              loadedFiles.add('assets/metaData/${key.column}-${key.row}.objXml');
+            }
+            for(int i=0;i<objsMap[key]!.length;i++){
+              file.writeAsStringSync('\n<o lp="${objsMap[key]![i].isLoop ? '1' : '0'}" nm="" p="', mode: FileMode.append);
+              for(int j=0;j<objsMap[key]![i].points.length;j++){
+                if(j > 0){
+                  file.writeAsStringSync(' ', mode: FileMode.append);
+                }
+                file.writeAsStringSync('${objsMap[key]![i].points[j].x},${objsMap[key]![i].points[j].y}', mode: FileMode.append);
+              }
+              file.writeAsStringSync('"/>', mode: FileMode.append);
+            }
+          }
         }
       }
     }
+
     for(final key in loadedFiles){
       File file = File(key);
       file.writeAsStringSync('\n</p>', mode: FileMode.append);

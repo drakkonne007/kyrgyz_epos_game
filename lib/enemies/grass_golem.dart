@@ -107,24 +107,19 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     animation = _animMove;
     size = _spriteSheetSize;
     position = _startPos;
-    //_groundBox.anchor = Anchor.center;
+
     Vector2 tSize = Vector2(69,71);
-    Vector2 tPos = Vector2(77, 55);
-    _hitbox = EnemyHitbox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],
+    _hitbox = EnemyHitbox(getPointsForActivs(Vector2(-69/2,-71/2), tSize),
         collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],obstacleBehavoiurStart: obstacleBehaviour,
+    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-69/2,-71/2), tSize),obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
-    // _groundBox.debugMode = true;
     _groundBox.debugColor = BasicPalette.red.color;
-    _body = EWBody([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)]
+    _body = EWBody(getPointsForActivs(Vector2(-69/2,-71/2), tSize)
         ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
-    // body.debugMode = true;
-    _body?.debugColor = BasicPalette.blue.color;
     _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
-    math.Random rand = math.Random();
   }
 
   void onStartHit()
@@ -140,9 +135,12 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   bool isNearPlayer()
   {
     var pl = gameRef.gameMap.orthoPlayer!;
-    if((absolutePositionOf((_body!.getPoint(3) - _body!.getPoint(0)) / 2).x -  pl.absolutePositionOf((pl.hitBox.getPoint(3) - pl.hitBox.getPoint(0)) / 2).x).abs() > 40
-        || pl.absolutePositionOf(pl.hitBox.getPoint(3)).y > absolutePositionOf(_body!.getPoint(2)).y
-    || pl.absolutePositionOf(pl.hitBox.getPoint(2)).y < absolutePositionOf(_body!.getPoint(3)).y){
+    if(pl.hitBox == null){
+      return false;
+    }
+    if((absolutePositionOf((_body!.getPoint(3) - _body!.getPoint(0)) / 2).x -  pl.absolutePositionOf((pl.hitBox!.getPoint(3) - pl.hitBox!.getPoint(0)) / 2).x).abs() > 40
+        || pl.absolutePositionOf(pl.hitBox!.getPoint(3)).y > absolutePositionOf(_body!.getPoint(2)).y
+    || pl.absolutePositionOf(pl.hitBox!.getPoint(2)).y < absolutePositionOf(_body!.getPoint(3)).y){
       return false;
     }else{
       return true;
