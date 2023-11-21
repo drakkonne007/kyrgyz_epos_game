@@ -4,8 +4,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -37,6 +35,7 @@ class PointCust extends PositionComponent
     hitbox.paint.color = BasicPalette.green.color;
     hitbox.renderShape = true;
     add(hitbox);
+
     // Future.delayed(Duration(seconds: 2),(){
     //   removeFromParent();
     // });
@@ -61,13 +60,13 @@ abstract class DCollisionEntity extends Component  //Всегда против �
   int? row;
 
 
-  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic, required this.isLoop, required this.game,this.column, this.row})
+  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic
+    , required this.isLoop, required this.game,this.column, this.row})
   {
     double minX = 0;
     double minY = 0;
     double maxX = 0;
     double maxY = 0;
-
 
     transformPoint = _vertices[0];
 

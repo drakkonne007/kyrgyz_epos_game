@@ -162,6 +162,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){

@@ -42,13 +42,11 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   Set<Vector2> loadedLivesObjs = {};
   Map<LoadedColumnRow,List<Component>> allEls = {};
   final DCollisionProcessor collisionProcessor = DCollisionProcessor();
-  double _tickUpdateCollision = 0;
 
   @override
   Future<void> onLoad() async
   {
     _mapNode = MapNode(this);
-    await add(_mapNode!);
   }
 
   Future preloadAnimAndObj() async
@@ -59,7 +57,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
-    await firstCachedIntoInternal();
+    // await firstCachedIntoInternal();
     timer.start();
     loadObjs().ignore();
     loadAnimsHigh().ignore();
@@ -142,7 +140,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       }
     }
     for(final node in toRemove) {
-      if(allEls.containsKey([node])){
+      if(allEls.containsKey(node)){
         for(final dd in allEls[node]!){
           dd.removeFromParent();
         }
@@ -202,7 +200,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     // if(_tickUpdateCollision > 0.1) {
     //   _tickUpdateCollision = 0;
     // }
-    // collisionProcessor.updateCollisions();
+    collisionProcessor.updateCollisions();
     if(orthoPlayer != null && isFirstLoad) {
       int col = orthoPlayer!.position.x ~/ (GameConsts.lengthOfTileSquare.x);
       int row = orthoPlayer!.position.y ~/ (GameConsts.lengthOfTileSquare.y);

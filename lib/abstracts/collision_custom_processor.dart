@@ -48,13 +48,12 @@ class DCollisionProcessor
   }
 
   void updateCollisions()
-  {
-    Stopwatch stopwatch = Stopwatch()..start();
-    // int count = _activeCollEntity.length;
-    // for(final key in _staticCollEntity.keys){
-    //   count += _staticCollEntity[key]!.length;
-    // }
-    // print('Hohoho $count');
+{
+    int count = _activeCollEntity.length;
+    for(final key in _staticCollEntity.keys){
+      count += _staticCollEntity[key]!.length;
+    }
+    // print('count $count');
     _potentialActiveEntity.clear();
     for(DCollisionEntity entity in _activeCollEntity){
       entity.obstacleIntersects = {};
@@ -128,7 +127,6 @@ class DCollisionProcessor
         entity.obstacleIntersects.clear();
       }
     }
-    // print('Hohoho ${stopwatch.elapsedMilliseconds} ms');
   }
 }
 

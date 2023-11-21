@@ -35,7 +35,8 @@ bool isIntersect(Rectangle rect1, Rectangle rect2)
       rect2.top < rect1.bottom);
 }
 
-class MapNode extends Component{
+class MapNode
+{
   MapNode(this.custMap);
   CustomTileMap custMap;
   int _id = 0;
@@ -54,7 +55,6 @@ class MapNode extends Component{
       await compileAll(colRow);
       exit(0);
     }
-    priority = 0;
     custMap.allEls.putIfAbsent(colRow, () => []);
     if (KyrgyzGame.cachedMapPngs.contains('${colRow.column}-${colRow.row}_down.png')) {
       Image _imageDown = await Flame.images.load(
@@ -164,20 +164,19 @@ class MapNode extends Component{
                   game: myGame!,
                   column: colRow.column,
                   row: colRow.row);
-              print('add Ground');
               custMap.allEls[colRow]!.add(ground);
               custMap.add(ground);
             }
             break;
           default:
-            // createLiveObj(obj, name, colRow);
+            _createLiveObj(obj, name, colRow);
             break;
         }
       }
     }
   }
 
-  Future<void> createLiveObj(XmlElement obj, String? name, LoadedColumnRow colRow) async
+  Future<void> _createLiveObj(XmlElement obj, String? name, LoadedColumnRow colRow) async
   {
     Vector2 position = Vector2(
         double.parse(obj.getAttribute('x')!),
