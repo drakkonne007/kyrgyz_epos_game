@@ -322,6 +322,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         maxDown = max(maxDown,minDiff);
       }
     }
+
     // print('bools: $isUp $isDown $isLeft $isRight');
 
     if(isDown && isUp && isLeft && isRight){
@@ -329,8 +330,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
 
     if(isDown && isUp){
-      double maxLeft = 1000;
-      double maxRight = 1000;
+      double maxLeft = 1000000000;
+      double maxRight = 1000000000;
       for(final diff in diffs.values){
         maxLeft = min(maxLeft,diff.leftDiff.abs());
         maxRight = min(maxRight,diff.rightDiff.abs());
@@ -356,6 +357,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
       return;
     }
+
+    // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
 
     if(isLeft){
       position +=  Vector2(maxLeft,0);

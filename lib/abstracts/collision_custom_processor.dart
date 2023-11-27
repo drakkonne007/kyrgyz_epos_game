@@ -12,7 +12,7 @@ class DCollisionProcessor
 {
   final List<DCollisionEntity> _activeCollEntity = [];
   final Map<LoadedColumnRow,List<DCollisionEntity>> _staticCollEntity = {};
-  Map<DCollisionEntity,DCollisionEntity> _collisions = {};
+  Map<DCollisionEntity,DCollisionEntity> _collisionPairs = {};
   Map<LoadedColumnRow, List<DCollisionEntity>> _potentialActiveEntity = {};
   Set<LoadedColumnRow> _contactNests = {};
 
@@ -49,11 +49,7 @@ class DCollisionProcessor
 
   void updateCollisions()
 {
-    int count = _activeCollEntity.length;
-    for(final key in _staticCollEntity.keys){
-      count += _staticCollEntity[key]!.length;
-    }
-    // print('count $count');
+
     _potentialActiveEntity.clear();
     for(DCollisionEntity entity in _activeCollEntity){
       entity.obstacleIntersects = {};
@@ -150,7 +146,7 @@ void _calcTwoStaticEntities(DCollisionEntity entity, DCollisionEntity other) {
         .y + component.positionOfAnchor(component.anchor).y) {
       insidePoints.add(i);
       if (isMapObstacle) {
-        entity.obstacleIntersects.add(otherFirst);
+        // entity.obstacleIntersects.add(otherFirst);
       } else {
         if (entity.onComponentTypeCheck(other)) {
           entity.onCollisionStart({otherFirst}, other);
@@ -190,7 +186,7 @@ void _calcTwoActiveEntities(DCollisionEntity entity, DCollisionEntity other)
         .y + componentEntity.positionOfAnchor(componentEntity.anchor).y) {
       insidePoints.add(i);
       if (isMapObstacle) {
-        entity.obstacleIntersects.add(otherFirst);
+        // entity.obstacleIntersects.add(otherFirst);
       } else {
         if (entity.onComponentTypeCheck(other)) {
           entity.onCollisionStart({otherFirst}, other);
@@ -217,7 +213,9 @@ void _calcTwoActiveEntities(DCollisionEntity entity, DCollisionEntity other)
         .y + componentOther.positionOfAnchor(componentOther.anchor).y) {
       otherInsidePoints.add(i);
       if (isOtherMapObstacle) {
-        other.obstacleIntersects.add(entityFirst);
+        //new function
+        // if(entityFirst.d)
+        // other.obstacleIntersects.add(entityFirst);
       } else {
         if (entity.onComponentTypeCheck(other)) {
           entity.onCollisionStart({entityFirst}, other);
