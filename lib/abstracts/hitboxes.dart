@@ -24,131 +24,218 @@ List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size)
 
 class PointCust extends PositionComponent
 {
-  PointCust({required super.position});
+  PointCust({required super.position,this.color});
   final ShapeHitbox hitbox = CircleHitbox();
+  Color? color;
 
   @override
   void onLoad()
   {
     priority = 800;
     size = Vector2(5, 5);
-    hitbox.paint.color = BasicPalette.green.color;
+    hitbox.paint.color = color ?? BasicPalette.green.color;
     hitbox.renderShape = true;
     add(hitbox);
 
-    // Future.delayed(Duration(seconds: 2),(){
-    //   removeFromParent();
-    // });
+    Future.delayed(const Duration(milliseconds: 30),(){
+      removeFromParent();
+    });
   }
 }
 
 abstract class DCollisionEntity extends Component  //Всегда против часов и ВСЕГДА с верхней левой точки
-{
+    {
   List<Vector2> _vertices;
   DCollisionType collisionType;
   bool isSolid;
   bool isStatic;
   bool isLoop;
-  late Vector2 transformPoint;
   double angle = 0;
-  Vector2 size = Vector2(1,1);
-  Vector2 _center = Vector2(0,0);
+  Vector2 size = Vector2(1, 1);
+  Vector2 _center = Vector2(0, 0);
   Set<Vector2> obstacleIntersects = {};
   LoadedColumnRow? _myCoords;
   KyrgyzGame game;
   int? column;
   int? row;
+  bool isHorizontalFlip = false;
+  bool onlyForPlayer = false;
 
 
-  DCollisionEntity(this._vertices ,{required this.collisionType,required this.isSolid,required this.isStatic
-    , required this.isLoop, required this.game,this.column, this.row})
-  {
+  DCollisionEntity(this._vertices,
+      {required this.collisionType, required this.isSolid, required this.isStatic
+        , required this.isLoop, required this.game, this.column, this.row}) {
     double minX = 0;
     double minY = 0;
     double maxX = 0;
     double maxY = 0;
 
-    transformPoint = _vertices[0];
 
-    if(isStatic) {
+    if (isStatic) {
       int currCol = column ?? _vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
       int currRow = row ?? _vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
       _myCoords = LoadedColumnRow(currCol, currRow);
-      game.gameMap.collisionProcessor.addStaticCollEntity(LoadedColumnRow(currCol, currRow), this);
-    }else{
+      game.gameMap.collisionProcessor.addStaticCollEntity(
+          LoadedColumnRow(currCol, currRow), this);
+    } else {
       game.gameMap.collisionProcessor.addActiveCollEntity(this);
     }
-    for(int i = 0; i < _vertices.length; i++){
-      if(_vertices[i].x < minX){
+    for (int i = 0; i < _vertices.length; i++) {
+      if (_vertices[i].x < minX) {
         minX = _vertices[i].x;
       }
-      if(_vertices[i].x > maxX){
+      if (_vertices[i].x > maxX) {
         maxX = _vertices[i].x;
       }
-      if(_vertices[i].y < minY){
+      if (_vertices[i].y < minY) {
         minY = _vertices[i].y;
       }
-      if(_vertices[i].y > maxY){
+      if (_vertices[i].y > maxY) {
         maxY = _vertices[i].y;
       }
     }
     _center = Vector2((minX + maxX) / 2, (minY + maxY) / 2);
   }
 
+  doDebug() {
+    for (int i = 0; i < _vertices.length; i++) {
+      if(parent == null){
+        return;
+      }
+      PointCust p = PointCust(
+          position: getPoint(i));
+      game.gameMap.add(p);
+    }
+  }
+
   @override
-  void onRemove()
-  {
-    if(!isStatic){
+  void onRemove() {
+    if (!isStatic) {
       game.gameMap.collisionProcessor.removeActiveCollEntity(this);
-    }else{
+    } else {
       game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords);
     }
   }
 
   bool onComponentTypeCheck(DCollisionEntity other);
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other);
+
+  void onCollisionStart(Set<Vector2> intersectionPoints,
+      DCollisionEntity other);
+
   void onCollisionEnd(DCollisionEntity other);
+
   void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other);
 
-  void setVertices(List<Vector2> vertices)
-  {
+  void setVertices(List<Vector2> vertices) {
     _vertices = vertices;
-    if(!_vertices.contains(transformPoint)){
-      transformPoint = _vertices[0];
-    }
   }
 
-  Vector2 getCenter()
-  {
+  Vector2 getCenter() {
     return _center;
   }
 
-  int getVerticesCount()
-  {
+  int getVerticesCount() {
     return _vertices.length;
   }
 
-  Vector2 getPoint(int index)
-  {
-    return angle == 0 ? Vector2(_vertices[index].x * size.x,_vertices[index].y * size.y) : _rotatePoint(Vector2(_vertices[index].x * size.x,_vertices[index].y * size.y));
+  Vector2 getPoint(int index) {
+    if(!isStatic){
+      Vector2 temp;
+      Vector2 posAnchor = Vector2.zero();
+      if(parent != null){
+        var temp = parent as PositionComponent;
+        posAnchor = temp.positionOfAnchor(temp.anchor);
+      }
+      if (isHorizontalFlip) {
+        if (index == 0) {
+          angle == 0 ? temp = Vector2(
+              _vertices[index].x * size.x, _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x * size.x, _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+        if (index == 1) {
+          angle == 0 ? temp = Vector2(
+              _vertices[index].x * size.x, _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x * size.x, _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+        if (index == 2) {
+          angle == 0
+              ? temp = Vector2(
+              _vertices[index].x , _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x, _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+        if (index == 3) {
+          angle == 0
+              ? temp = Vector2(
+              _vertices[index].x, _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x, _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+      } else {
+        if (index == 0) {
+          angle == 0
+              ? temp = Vector2(
+              _vertices[index].x, _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x, _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+        if (index == 1) {
+          angle == 0
+              ? temp = Vector2(
+              _vertices[index].x, _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x , _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+        if (index == 2) {
+          angle == 0
+              ? temp = Vector2(
+              _vertices[index].x * size.x, _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x * size.x, _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+        if (index == 3) {
+          angle == 0
+              ? temp = Vector2(
+              _vertices[index].x * size.x, _vertices[index].y * size.y)
+              : temp = _rotatePoint(
+              Vector2(
+                  _vertices[index].x * size.x, _vertices[index].y * size.y));
+          return temp + posAnchor;
+        }
+      }
+    }
+    return _vertices[index];
   }
 
-  List<Vector2> getPoints()
-  {
+  List<Vector2> getPoints() {
     return List.unmodifiable(_vertices);
   }
-
   //rotate point around center
-  Vector2 _rotatePoint(Vector2 point)
-  {
-    Vector2 temp = point - transformPoint;
+  Vector2 _rotatePoint(Vector2 point) {
+    Vector2 temp = isHorizontalFlip ? point - _vertices[3] : point -
+        _vertices[0];
     double radian = angle * pi / 180;
+    isHorizontalFlip ? radian *= -1 : radian;
     double x = temp.x * cos(radian) - temp.y * sin(radian);
     double y = temp.x * sin(radian) + temp.y * cos(radian);
-    return Vector2(x,y) + transformPoint;
+    return Vector2(x, y) + (isHorizontalFlip ? _vertices[3] : _vertices[0]);
   }
-
-
 }
 
 class ObjectHitbox extends DCollisionEntity
@@ -267,7 +354,7 @@ class EnemyHitbox extends DCollisionEntity
 class GroundHitBox extends DCollisionEntity
 {
 
-  Function(Set<Vector2> intersectionPoints)? obstacleBehavoiurStart;
+  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
 
   GroundHitBox(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiurStart, required super.isLoop, required super.game});
 
@@ -282,12 +369,12 @@ class GroundHitBox extends DCollisionEntity
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    obstacleBehavoiurStart?.call(intersectionPoints);
+    obstacleBehavoiurStart?.call(intersectionPoints,other);
   }
 
   @override void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    obstacleBehavoiurStart?.call(intersectionPoints);
+    obstacleBehavoiurStart?.call(intersectionPoints,other);
   }
 
   @override

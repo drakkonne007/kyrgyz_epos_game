@@ -16,6 +16,7 @@ class EWBody extends EnemyWeapon
   Future onLoad() async
   {
     damage = 1;
+    coolDown = 500;
   }
 
   @override

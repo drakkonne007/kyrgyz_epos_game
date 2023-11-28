@@ -88,7 +88,6 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     for (final point in points) {
       if (point.x.round() == center.x.round() &&
           point.y.round() == center.y.round()) {
-        print('ERROR in collision');
         position.y = other.y - height / 2;
         return;
       }

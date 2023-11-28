@@ -16,7 +16,20 @@ abstract class MapObstacle extends DCollisionEntity
     }
     return false;
   }
+}
 
+abstract class MapObstacleForPlayer extends DCollisionEntity
+{
+  MapObstacleForPlayer(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game,super.column, super.row});
+
+  @override
+  bool onComponentTypeCheck(DCollisionEntity other)
+  {
+    if(other is GroundHitBox) {
+      return true;
+    }
+    return false;
+  }
 }
 
 class MapWarp extends DCollisionEntity

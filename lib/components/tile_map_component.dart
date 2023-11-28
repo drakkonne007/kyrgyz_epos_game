@@ -96,7 +96,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     var tempRow = _row;
     _column = newColumn;
     _row = newRow;
-    print('loadNewMap $newColumn $newRow');
     List<LoadedColumnRow> toRemove = [];
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     if(newColumn < tempColumn){

@@ -179,7 +179,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     }
   }
 
-  void obstacleBehaviour(Set<Vector2> intersectionPoints)
+  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     _speed *= -1;
   }

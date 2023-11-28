@@ -7,6 +7,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -27,6 +28,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
+  late Ground _ground;
   final Vector2 _spriteSheetSize = Vector2(224,192);
   Vector2 _startPos;
   Vector2 _speed = Vector2(0,0);
@@ -107,7 +109,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     animation = _animMove;
     size = _spriteSheetSize;
     position = _startPos;
-
     Vector2 tSize = Vector2(69,71);
     _hitbox = EnemyHitbox(getPointsForActivs(-tSize/2, tSize),
         collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
@@ -120,6 +121,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         ,collisionType: DCollisionType.passive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
+    _ground = Ground(getPointsForActivs(-tSize/2, tSize), collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+    _ground.onlyForPlayer = true;
+    add(_ground);
   }
 
   void onStartHit()
@@ -147,7 +151,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     }
   }
 
-  void obstacleBehaviour(Set<Vector2> intersectionPoints)
+  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     _speed *= -1;
   }
@@ -155,6 +159,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void update(double dt)
   {
+    // _ground.doDebug();
+    super.update(dt);
     _timer?.update(dt);
     column = position.x ~/ GameConsts.lengthOfTileSquare.x;
     row =    position.y ~/ GameConsts.lengthOfTileSquare.y;
@@ -162,19 +168,18 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){
       return;
     }
-    super.update(dt);
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
     _rigidSec -= dt;
     if(_rigidSec <= 1){
       if(isNearPlayer()){
+        _body?.currentCoolDown = _body?.coolDown ?? 0;
         _body?.hit(isFlippedHorizontally ? PlayerDirectionMove.Left : PlayerDirectionMove.Right);
       }
     }

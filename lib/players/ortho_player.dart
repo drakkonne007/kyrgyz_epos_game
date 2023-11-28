@@ -1,11 +1,10 @@
 
 import 'dart:math';
 
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/geometry.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
@@ -97,8 +96,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         isStatic: false, isLoop: true, game: gameRef);
     await add(hitBox!);
 
-    tPos = positionOfAnchor(anchor) - Vector2(15,0);
-    tSize = Vector2(30,30);
+    tPos = positionOfAnchor(anchor) - Vector2(15,-10);
+    tSize = Vector2(30,20);
     _groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -114,7 +113,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void onStartHit()
   {
-    print('START HIT');
     _velocity = Vector2.all(0);
     _speed = Vector2.all(0);
   }
@@ -279,7 +277,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void groundCalcLines(Set<Vector2> points)
+  void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
   {
     if(_groundBox == null){
       return;
@@ -296,10 +294,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
     for(final point in points){
       // gameRef.add(PointCust(position: point));
-      double leftDiffX  = point.x - (positionOfAnchor(anchor) + _groundBox!.getPoint(0)).x;
-      double rightDiffX = point.x - (positionOfAnchor(anchor) + _groundBox!.getPoint(3)).x;
-      double upDiffY = point.y - (positionOfAnchor(anchor) + _groundBox!.getPoint(0)).y;
-      double downDiffY = point.y - (positionOfAnchor(anchor) + _groundBox!.getPoint(1)).y;
+      double leftDiffX  = point.x - (_groundBox!.getPoint(0)).x;
+      double rightDiffX = point.x - (_groundBox!.getPoint(3)).x;
+      double upDiffY = point.y - (_groundBox!.getPoint(0)).y;
+      double downDiffY = point.y - (_groundBox!.getPoint(1)).y;
+
+      // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 
       diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
       double minDiff = min(leftDiffX.abs(),rightDiffX.abs());
@@ -323,9 +323,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
     }
 
-    // print('bools: $isUp $isDown $isLeft $isRight');
-
     if(isDown && isUp && isLeft && isRight){
+      print('What is??');
       return;
     }
 
@@ -344,8 +343,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     if(isLeft && isRight){
-      double maxUp = 1000;
-      double maxDown = 1000;
+      double maxUp = 100000000;
+      double maxDown = 100000000;
       for(final diff in diffs.values){
         maxUp = min(maxUp,diff.upDiff.abs());
         maxDown = min(maxDown,diff.downDiff.abs());
@@ -377,6 +376,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void update(double dt)
   {
+    // _groundBox?.doDebug();
     super.update(dt);
     _timerHurt!.update(dt);
     if(animation != _animMove){
@@ -430,7 +430,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
         gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
       }
-      super.update(dt);
       return;
     }
     if(_speed.y.isNegative != isYNan){

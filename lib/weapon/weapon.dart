@@ -44,6 +44,9 @@ abstract class EnemyWeapon extends DCollisionEntity
   double secsOfPermDamage = 0;
   bool inArmor = true;
   double activeSecs = 0;
+  double coolDown = 1000;
+  double currentCoolDown = 0;
+  double latencyBefore = 0;
 
 
   void hit(PlayerDirectionMove direct);
@@ -60,8 +63,20 @@ abstract class EnemyWeapon extends DCollisionEntity
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is PlayerHitbox){
+      if(currentCoolDown < coolDown){
+        return;
+      }
+      currentCoolDown = 0;
       var temp = other.parent as MainPlayer;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
+    }
+  }
+
+  @override
+  void update(double dt)
+  {
+    if(currentCoolDown < coolDown){
+      currentCoolDown += dt;
     }
   }
 }
@@ -80,7 +95,9 @@ abstract class PlayerWeapon extends DCollisionEntity
   double secsOfPermDamage = 0;
   bool inArmor = true;
   double energyCost = 0;
-
+  double coolDown = 1000;
+  double currentCoolDown = 0;
+  double latencyBefore = 0;
 
   Future<void> hit();
 
@@ -96,8 +113,20 @@ abstract class PlayerWeapon extends DCollisionEntity
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is EnemyHitbox){
+      if(currentCoolDown < coolDown){
+        return;
+      }
+      currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
+    }
+  }
+
+  @override
+  void update(double dt)
+  {
+    if(currentCoolDown < coolDown){
+      currentCoolDown += dt;
     }
   }
 }
