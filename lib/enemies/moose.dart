@@ -246,8 +246,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       _animHurt.ticker().reset();
       animation = _animHurt;
       _timer!.start();
-      print('start timer');
-      print(_timer!.current);
     }
   }
 

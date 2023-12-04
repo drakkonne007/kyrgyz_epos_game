@@ -101,7 +101,35 @@
    <frame tileid="95" duration="200"/>
   </animation>
  </tile>
- <tile id="96">
+ <tile id="68" type="high"/>
+ <tile id="69" type="high"/>
+ <tile id="70" type="high"/>
+ <tile id="71" type="high"/>
+ <tile id="72" type="high"/>
+ <tile id="73" type="high"/>
+ <tile id="74" type="high"/>
+ <tile id="75" type="high"/>
+ <tile id="76" type="high"/>
+ <tile id="77" type="high"/>
+ <tile id="78" type="high"/>
+ <tile id="79" type="high"/>
+ <tile id="80" type="high"/>
+ <tile id="81" type="high"/>
+ <tile id="82" type="high"/>
+ <tile id="83" type="high"/>
+ <tile id="84" type="high"/>
+ <tile id="85" type="high"/>
+ <tile id="86" type="high"/>
+ <tile id="87" type="high"/>
+ <tile id="88" type="high"/>
+ <tile id="89" type="high"/>
+ <tile id="90" type="high"/>
+ <tile id="91" type="high"/>
+ <tile id="92" type="high"/>
+ <tile id="93" type="high"/>
+ <tile id="94" type="high"/>
+ <tile id="95" type="high"/>
+ <tile id="96" type="high">
   <animation>
    <frame tileid="96" duration="200"/>
    <frame tileid="100" duration="200"/>
@@ -113,7 +141,7 @@
    <frame tileid="124" duration="200"/>
   </animation>
  </tile>
- <tile id="97">
+ <tile id="97" type="high">
   <animation>
    <frame tileid="97" duration="200"/>
    <frame tileid="101" duration="200"/>
@@ -125,7 +153,7 @@
    <frame tileid="125" duration="200"/>
   </animation>
  </tile>
- <tile id="98">
+ <tile id="98" type="high">
   <animation>
    <frame tileid="98" duration="200"/>
    <frame tileid="102" duration="200"/>
@@ -137,7 +165,7 @@
    <frame tileid="126" duration="200"/>
   </animation>
  </tile>
- <tile id="99">
+ <tile id="99" type="high">
   <animation>
    <frame tileid="99" duration="200"/>
    <frame tileid="103" duration="200"/>
@@ -149,4 +177,32 @@
    <frame tileid="127" duration="200"/>
   </animation>
  </tile>
+ <tile id="100" type="high"/>
+ <tile id="101" type="high"/>
+ <tile id="102" type="high"/>
+ <tile id="103" type="high"/>
+ <tile id="104" type="high"/>
+ <tile id="105" type="high"/>
+ <tile id="106" type="high"/>
+ <tile id="107" type="high"/>
+ <tile id="108" type="high"/>
+ <tile id="109" type="high"/>
+ <tile id="110" type="high"/>
+ <tile id="111" type="high"/>
+ <tile id="112" type="high"/>
+ <tile id="113" type="high"/>
+ <tile id="114" type="high"/>
+ <tile id="115" type="high"/>
+ <tile id="116" type="high"/>
+ <tile id="117" type="high"/>
+ <tile id="118" type="high"/>
+ <tile id="119" type="high"/>
+ <tile id="120" type="high"/>
+ <tile id="121" type="high"/>
+ <tile id="122" type="high"/>
+ <tile id="123" type="high"/>
+ <tile id="124" type="high"/>
+ <tile id="125" type="high"/>
+ <tile id="126" type="high"/>
+ <tile id="127" type="high"/>
 </tileset>

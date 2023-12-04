@@ -86,7 +86,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   Future<void> onLoad() async
   {
-    priority = GamePriority.player;
     Image? spriteImage;
     if(spriteVariant == GolemVariant.Water){
         spriteImage = await Flame.images.load(
@@ -118,9 +117,10 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     add(_groundBox);
     _groundBox.debugColor = BasicPalette.red.color;
     _body = EWBody(getPointsForActivs(-tSize/2, tSize)
-        ,collisionType: DCollisionType.passive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
+    tSize = Vector2(66,78);
     _ground = Ground(getPointsForActivs(-tSize/2, tSize), collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
@@ -159,7 +159,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void update(double dt)
   {
-    // _ground.doDebug();
     super.update(dt);
     _timer?.update(dt);
     column = position.x ~/ GameConsts.lengthOfTileSquare.x;

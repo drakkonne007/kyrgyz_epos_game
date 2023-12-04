@@ -30,7 +30,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 {
   PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
-  late SpriteAnimation _animMove, _animIdle, _animHurt, _animDeath;
+  late SpriteAnimation animMove, animIdle, animHurt, animDeath;
   Vector2 _speed = Vector2.all(0);
   Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
@@ -42,6 +42,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
+    _weapon?.stopHit();
     _velocity *= 0;
     _speed *= 0;
     if(inArmor){
@@ -53,10 +54,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.health.value <1){
       gameRef.pauseEngine();
       _isPlayerRun = false;
-      gameRef.showOverlay(overlayName: DeathMenu.id,isHideOther: true);
+      gameRef.startDeathMenu();
     }else{
       animation = null;
-      animation = _animHurt;
+      animation = animHurt;
       animation!.ticker().reset();
       _timerHurt!.stop();
       _timerHurt!.start();
@@ -78,14 +79,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Image? spriteImg;
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
-    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
-    _animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0,to: 6);
-    _animHurt.loop = false;
-    _animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19);
-    _animDeath.loop = false;
-    animation = _animIdle;
-    _timerHurt = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
+    animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0,to: 6);
+    animHurt.loop = false;
+    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19);
+    animDeath.loop = false;
+    animation = animIdle;
+    _timerHurt = Timer(animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
 
@@ -106,7 +107,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     tSize = Vector2(20,20);
     _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: true,
         isStatic: false, isLoop: true,
-        onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;}, game: gameRef);
+        onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = animIdle;}, game: gameRef);
     //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
     await add(_weapon!);
   }
@@ -119,7 +120,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void startHit()
   {
-    if(animation == _animHurt || animation == _animDeath){
+    if(animation == animHurt || animation == animDeath){
       return;
     }
     if(gameRef.gameMap.currentObject != null){
@@ -131,69 +132,69 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setIdleAnimation()
   {
-    if(animation == _animMove || animation == _animHurt){
-      animation = _animIdle;
+    if(animation == animMove || animation == animHurt){
+      animation = animIdle;
     }
   }
 
   void movePlayer(PlayerDirectionMove direct, bool isRun)
   {
-    if(animation == _animIdle  || animation == _animMove) {
+    if(animation == animIdle  || animation == animMove) {
       switch (direct) {
         case PlayerDirectionMove.Right:
           {
             _velocity.x = PhysicVals.startSpeed;
             _velocity.y = 0;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.Up:
           {
             _velocity.y = -PhysicVals.startSpeed;
             _velocity.x = 0;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.Left:
           {
             _velocity.x = -PhysicVals.startSpeed;
             _velocity.y = 0;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.Down:
           {
             _velocity.y = PhysicVals.startSpeed;
             _velocity.x = 0;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.RightUp:
           {
             _velocity.y = -PhysicVals.startSpeed / 2;
             _velocity.x = PhysicVals.startSpeed / 2;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.RightDown:
           {
             _velocity.y = PhysicVals.startSpeed / 2;
             _velocity.x = PhysicVals.startSpeed / 2;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.LeftUp:
           {
             _velocity.y = -PhysicVals.startSpeed / 2;
             _velocity.x = -PhysicVals.startSpeed / 2;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.LeftDown:
           {
             _velocity.y = PhysicVals.startSpeed / 2;
             _velocity.x = -PhysicVals.startSpeed / 2;
-            animation = _animMove;
+            animation = animMove;
           }
           break;
         case PlayerDirectionMove.NoMove:
@@ -379,7 +380,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     // _groundBox?.doDebug();
     super.update(dt);
     _timerHurt!.update(dt);
-    if(animation != _animMove){
+    if(animation != animMove){
       return;
     }
     if(_isPlayerRun){

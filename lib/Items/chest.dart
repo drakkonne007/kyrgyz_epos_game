@@ -22,7 +22,7 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
   super.angle,
   super.nativeAngle,
   super.anchor = Anchor.center,
-  super.priority = GamePriority.items}){
+  super.priority = GamePriority.player-2}){
   _startPosition = position;
 }
   Set<int>? nedeedKilledBosses;
@@ -63,6 +63,9 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
     game.gameMap.currentObject = null;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 15, loop: false);
     double dur = animation!.ticker().totalDuration();
+    for(final myItem in myItems){
+      myItem.getEffect(gameRef);
+    }
     add(OpacityEffect.by(-0.95,EffectController(duration: dur + 0.3),onComplete: (){
       gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
       removeFromParent();
@@ -82,11 +85,11 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
     }
     _spriteSheet = SpriteSheet(image: _spriteImg,
         srcSize: _spriteSheetSize);
-    animation = null;
+    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     size = Vector2.all(70);
     anchor = Anchor.center;
     _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2.all(-35), size),
-        collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true,
+        collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     await add(_objectHitbox!);

@@ -44,7 +44,7 @@ abstract class EnemyWeapon extends DCollisionEntity
   double secsOfPermDamage = 0;
   bool inArmor = true;
   double activeSecs = 0;
-  double coolDown = 1000;
+  double coolDown = 1;
   double currentCoolDown = 0;
   double latencyBefore = 0;
 
@@ -107,6 +107,11 @@ abstract class PlayerWeapon extends DCollisionEntity
       return true;
     }
     return false;
+  }
+
+  void stopHit()
+  {
+    collisionType = DCollisionType.inactive;
   }
 
   @override

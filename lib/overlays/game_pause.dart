@@ -3,14 +3,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/overlays/health_bar.dart';
-import 'package:game_flame/overlays/joysticks.dart';
 
 class GamePause extends StatelessWidget
 {
   static const id = 'GamePause';
   final KyrgyzGame _game;
-  const GamePause(this._game, {super.key});
+  GamePause(this._game, {super.key});
+  TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +20,31 @@ class GamePause extends StatelessWidget
         children: [
           ElevatedButton(
             onPressed: (){
-              _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
-              _game.showOverlay(overlayName: HealthBar.id);
+              _game.doGameHud();
               _game.resumeEngine();
             },
             child:const Text('Продолжить',softWrap: false,),
           ),
           ElevatedButton(
-              onPressed: (){
-                _game.overlays.remove(id);
-                _game.loadNewMap('tiles/map/firstMap2.tmx');
-                _game.resumeEngine();
-              },
+            onPressed: (){
+              _game.overlays.remove(id);
+              _game.loadNewMap('tiles/map/firstMap2.tmx');
+              _game.resumeEngine();
+            },
             child: const Text('Загрузить'),
+          ),
+          SizedBox(
+            width: 300,
+            child: TextFormField(
+              maxLines: 1,
+              controller: _controller,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: (){
+              _game.gameMap.mapNode!.createCheatElement(_controller.text);
+            },
+            child: const Text('Создать'),
           ),
           ElevatedButton(
             onPressed: (){

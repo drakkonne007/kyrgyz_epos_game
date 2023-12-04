@@ -39,7 +39,8 @@ class WSword extends PlayerWeapon
   @override
   Future<void> hit() async
   {
-    if(game.playerData.energy.value < energyCost) {
+    if(game.playerData.energy.value < energyCost || game.gameMap.orthoPlayer!.animation == game.gameMap.orthoPlayer!.animHurt
+    || game.gameMap.orthoPlayer!.animation == game.gameMap.orthoPlayer!.animDeath){
       return;
     }
     if(collisionType == DCollisionType.inactive) {

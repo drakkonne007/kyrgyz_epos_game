@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/overlays/health_bar.dart';
-import 'package:game_flame/overlays/joysticks.dart';
 
 class DeathMenu extends StatelessWidget
 {
@@ -25,16 +23,16 @@ class DeathMenu extends StatelessWidget
                 ElevatedButton(
                   onPressed: (){
                     _game.loadNewMap('tiles/map/firstMap2.tmx');
-                    _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
-                    _game.showOverlay(overlayName: HealthBar.id);
+                    // _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
+                    // _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
                   },
                   child: const Text('Да'),),
                 ElevatedButton(
                   onPressed: (){
                     _game.gameMap.smallRestart();
-                    _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
-                    _game.showOverlay(overlayName: HealthBar.id);
+                    _game.doGameHud();
+                    // _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
                   },
                   child: const Text('Нет'),)

@@ -245,6 +245,7 @@ class ObjectHitbox extends DCollisionEntity
 
   late int id = game.gameMap.getNewId();
   bool autoTrigger;
+  double _pastTime = 0.5;
 
   Function() obstacleBehavoiur;
 
@@ -262,8 +263,9 @@ class ObjectHitbox extends DCollisionEntity
     if(other is PlayerHitbox) {
       if(autoTrigger) {
         obstacleBehavoiur.call();
-      }else{;
-      game.gameMap.currentObject = this;
+      }else{
+        _pastTime = 0;
+        game.gameMap.currentObject = this;
       }
     }    // super.onCollisionStart(intersectionPoints, other);
   }
@@ -284,6 +286,17 @@ class ObjectHitbox extends DCollisionEntity
   @override
   void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
+  }
+
+  @override
+  void update(double dt) {
+    if(_pastTime < 0.6) {
+      _pastTime += dt;
+    }
+    if(_pastTime > 0.5 && game.gameMap.currentObject == this){
+      game.gameMap.currentObject = null;
+    }
+    super.update(dt);
   }
 }
 

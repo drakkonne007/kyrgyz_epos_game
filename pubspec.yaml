@@ -44,6 +44,7 @@ dependencies:
   xml: ^6.3.0
   flame_isolate: ^0.4.0
   path_provider: ^2.1.1
+  sqflite: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +90,7 @@ flutter:
     - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on grass/
     - assets/tiles/map/grassLand/TiledMap/
     - assets/tiles/map/grassLand/Tilesets/
+    - assets/tiles/map/ancientLand/Characters/NPC merchant/with animated items/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

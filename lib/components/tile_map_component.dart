@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -8,8 +9,6 @@ import 'package:game_flame/components/cached_utils.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
-import 'package:game_flame/overlays/health_bar.dart';
-import 'package:game_flame/overlays/joysticks.dart';
 import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
 
@@ -37,7 +36,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
   int _column=0, _row=0;
-  MapNode? _mapNode;
+  MapNode? mapNode;
   bool isFirstLoad = false;
   Set<Vector2> loadedLivesObjs = {};
   Map<LoadedColumnRow,List<Component>> allEls = {};
@@ -46,7 +45,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> onLoad() async
   {
-    _mapNode = MapNode(this);
+    mapNode = MapNode(this);
   }
 
   Future preloadAnimAndObj() async
@@ -105,7 +104,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         }
       }
       for(int i=0;i<3;i++) {
-        _mapNode?.generateMap(LoadedColumnRow(newColumn - 1, newRow + i - 1));
+        mapNode?.generateMap(LoadedColumnRow(newColumn - 1, newRow + i - 1));
       }
     }
     if(newColumn > tempColumn){
@@ -115,7 +114,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         }
       }
       for(int i=0;i<3;i++) {
-        _mapNode?.generateMap(LoadedColumnRow(newColumn + 1, newRow + i - 1));
+        mapNode?.generateMap(LoadedColumnRow(newColumn + 1, newRow + i - 1));
       }
     }
     if(newRow < tempRow){
@@ -125,7 +124,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         }
       }
       for(int i=0;i<3;i++) {
-        _mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow - 1));
+        mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow - 1));
       }
     }
     if(newRow > tempRow){
@@ -135,7 +134,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         }
       }
       for(int i=0;i<3;i++) {
-        _mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow + 1));
+        mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow + 1));
       }
     }
     for(final node in toRemove) {
@@ -157,26 +156,26 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap(Vector2 playerPos) async
   {
-    _mapNode?.myGame = gameRef;
+    mapNode?.myGame = gameRef;
     if(isMapCompile){
-      await _mapNode?.generateMap(LoadedColumnRow(0,0));
+      await mapNode?.generateMap(LoadedColumnRow(0,0));
     }
     _column = playerPos.x ~/ (GameConsts.lengthOfTileSquare.x);
     _row = playerPos.y ~/ (GameConsts.lengthOfTileSquare.y);
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
-        _mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
+        mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
       }
     }
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
+    await add(orthoPlayer!);
     orthoPlayer?.position = playerPos;
     orthoPlayer?.priority = GamePriority.player;
-    await add(orthoPlayer!);
-    gameRef.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
-    gameRef.showOverlay(overlayName: HealthBar.id);
+    gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
+    gameRef.doGameHud();
     gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,GameConsts.lengthOfTileSquare.x*GameConsts.maxColumn,GameConsts.lengthOfTileSquare.y*GameConsts.maxRow));
-    gameRef.camera.zoom = 1.4;
+    gameRef.camera.zoom = 1.5;
     isFirstLoad = true;
   }
 
@@ -195,10 +194,6 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> update(double dt) async
   {
-    // _tickUpdateCollision += dt;
-    // if(_tickUpdateCollision > 0.1) {
-    //   _tickUpdateCollision = 0;
-    // }
     collisionProcessor.updateCollisions();
     if(orthoPlayer != null && isFirstLoad) {
       int col = orthoPlayer!.position.x ~/ (GameConsts.lengthOfTileSquare.x);

@@ -30,3 +30,4 @@ wall-8-rule0-erases all generated tiles and resets them to their initial state.t
 wall-8-rule1-places all tiles.tmx
 wall-8-rule2-applies variations.tmx
 
+wood_rules.tmx

@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/palette.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/Items/teleport.dart';
 import 'package:game_flame/Obstacles/flying_obelisk.dart';
 import 'package:game_flame/Obstacles/stand_obelisk.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -19,6 +18,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/enemies/strange_merchant.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
 import 'package:game_flame/main.dart';
@@ -176,7 +176,57 @@ class MapNode
     }
   }
 
-  Future<void> _createLiveObj(XmlElement obj, String? name, LoadedColumnRow colRow) async
+  void createCheatElement(String name) {
+    Vector2 position = Vector2(myGame!.gameMap.orthoPlayer!.position.x, myGame!.gameMap.orthoPlayer!.position.y);
+    int col = position.x ~/ (GameConsts.lengthOfTileSquare.x);
+    int row = position.y ~/ (GameConsts.lengthOfTileSquare.y);
+    LoadedColumnRow colRow = LoadedColumnRow(col, row);
+    switch (name) {
+      case 'enemy':
+        custMap.loadedLivesObjs.add(position);
+        custMap.add(GrassGolem(
+            position, GolemVariant.Grass, priority: GamePriority.player - 2));
+        break;
+      case 'wgolem':
+        custMap.loadedLivesObjs.add(position);
+        custMap.add(GrassGolem(
+            position, GolemVariant.Water, priority: GamePriority.player - 2));
+        break;
+      case 'gold':
+        var temp = LootOnMap(itemFromId(2), position: position);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
+        break;
+      case 'chest':
+        int level = Random().nextInt(3);
+        var temp = Chest(level, myItems: [itemFromId(2)], position: position);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
+        break;
+      case 'fObelisk':
+        var temp = FlyingHighObelisk(
+            position, colRow.column, colRow.row, priority: GamePriority.high - 1);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
+        var temp2 = FlyingDownObelisk(
+            position, colRow.column, colRow.row, priority: GamePriority.player - 2);
+        custMap.allEls[colRow]!.add(temp2);
+        custMap.add(temp2);
+        break;
+      case 'sObelisk':
+        var temp = StandHighObelisk(position, priority: GamePriority.high - 1);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
+        var temp2 = StandDownObelisk(
+            position, priority: GamePriority.player - 2);
+        custMap.allEls[colRow]!.add(temp2);
+        custMap.add(temp2);
+        break;
+    }
+  }
+
+
+  Future _createLiveObj(XmlElement obj, String? name, LoadedColumnRow colRow) async
   {
     Vector2 position = Vector2(
         double.parse(obj.getAttribute('x')!),
@@ -198,6 +248,11 @@ class MapNode
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
+        break;
+      case 'stranger':
+        var temp = StrangeMerchant(position,StrangeMerchantVariant.black, priority: GamePriority.player - 2);
         custMap.allEls[colRow]!.add(temp);
         custMap.add(temp);
         break;
@@ -225,6 +280,13 @@ class MapNode
         custMap.allEls[colRow]!.add(temp2);
         custMap.add(temp2);
         break;
+      case 'telep':
+        var targetPos = obj.getAttribute('tar')!.split(',');
+        Vector2 target = Vector2(double.parse(targetPos[0]), double.parse(targetPos[1]));
+        Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!), double.parse(obj.getAttribute('h')!));
+        var temp = Teleport(size: telSize, position: position, targetPos: target);
+        custMap.allEls[colRow]!.add(temp);
+        custMap.add(temp);
     }
   }
 
@@ -292,7 +354,11 @@ class MapNode
                   newObjs +=
                   '<o nm="${obj.name}" cl="${obj.type}" x="${obj
                       .x}" y="${obj.y}" w="${obj.width}" h="${obj
-                      .height}"/>';
+                      .height}"';
+                  for(final props in obj.properties){
+                    newObjs += ' ${props.name}="${props.value}"';
+                  }
+                  newObjs += '/>';
                   newObjs += '\n';
                 }
               }
@@ -434,6 +500,9 @@ class MapNode
               loadedFiles.add('assets/metaData/${key.column}-${key.row}.objXml');
             }
             for(int i=0;i<objsMap[key]!.length;i++){
+              if(objsMap[key]![i].points.isEmpty){
+                continue;
+              }
               file.writeAsStringSync('\n<o lp="${objsMap[key]![i].isLoop ? '1' : '0'}" nm="" p="', mode: FileMode.append);
               for(int j=0;j<objsMap[key]![i].points.length;j++){
                 if(j > 0){

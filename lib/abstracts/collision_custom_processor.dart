@@ -101,8 +101,6 @@ class DCollisionProcessor
         }
       }
     }
-    Map<DCollisionEntity,DCollisionEntity> _tempPair = {};
-    Map<DCollisionEntity,DCollisionEntity> _tempPair2 = {};
     for(final key in _potentialActiveEntity.keys) {
       Set<int> removeList = {};
       for(int i = 0; i < _potentialActiveEntity[key]!.length; i++){
@@ -110,14 +108,6 @@ class DCollisionProcessor
           if(i == j || removeList.contains(j)){
             continue;
           }
-          if(_tempPair.containsKey(_potentialActiveEntity[key]![i]) && _tempPair[_potentialActiveEntity[key]![i]] == _potentialActiveEntity[key]![j]){
-            continue;
-          }
-          if(_tempPair2.containsKey(_potentialActiveEntity[key]![j]) && _tempPair2[_potentialActiveEntity[key]![j]] == _potentialActiveEntity[key]![i]){
-            continue;
-          }
-          _tempPair.putIfAbsent(_potentialActiveEntity[key]![i], () => _potentialActiveEntity[key]![j]);
-          _tempPair2.putIfAbsent(_potentialActiveEntity[key]![j], () => _potentialActiveEntity[key]![i]);
           if(_potentialActiveEntity[key]![i].collisionType == DCollisionType.passive && _potentialActiveEntity[key]![j].collisionType == DCollisionType.passive){
             continue;
           }

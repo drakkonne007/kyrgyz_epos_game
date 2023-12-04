@@ -45,7 +45,6 @@ import 'package:game_flame/kyrgyz_game.dart';
 class OrthoJoystick extends StatefulWidget
 {
   const OrthoJoystick(this._size,this.game,{Key? key}) : super(key: key);
-  static const id = 'OrthoJoystick';
   final double _size;
   final KyrgyzGame game;
   @override
@@ -107,84 +106,67 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisSize: MainAxisSize.max,
-        children:[
-          Expanded(
-            child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10, bottom: 10),
-                  child: Container(
-                    width: _size,
-                    height: _size,
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(color: Colors.blue.withAlpha(100), shape: BoxShape.circle),
-                    child:  Stack(
-                        fit: StackFit.passthrough,
-                        children:<Widget>[
-                          ValueListenableBuilder(
-                            valueListenable: _left,
-                            builder: (_,val,__) => Positioned(
-                                width: _size/4,
-                                height: _size/4,
-                                left: val,
-                                top: _top.value,
-                                child: Container(
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
-                                )),),
-                          GestureDetector(
-                            onLongPressStart: (details){
-                              doMove(details.localPosition.dx, details.localPosition.dy);
-                            },
-                            onLongPressMoveUpdate: (details){
-                              doMove(details.localPosition.dx, details.localPosition.dy);
-                            },
-                            onLongPressEnd: (details){
-                              stopMove();
-                            },
-                            onTapUp: (details){
-                              stopMove();
-                            },
-                            onLongPressDown: (details){
-                              doMove(details.localPosition.dx, details.localPosition.dy);
-                            },
-                            onTapDown: (details){
-                              doMove(details.localPosition.dx, details.localPosition.dy);
-                            },
-                            onPanStart: (details){
-                              doMove(details.localPosition.dx, details.localPosition.dy);
-                            },
-                            onPanUpdate: (details){
-                              doMove(details.localPosition.dx, details.localPosition.dy);
-                            },
-                            onPanCancel: (){
-                              stopMove();
-                            },
-                            onTapCancel: (){
-                              stopMove();
-                            },
-                            onLongPressCancel: () {
-                              stopMove();
-                            },
-                            onPanEnd: (details){
-                              stopMove();
-                            },
-                          ),
-                        ]
-                    ),
-                  ),
-                )
-            ),
-          ),
-          Expanded(
-              child:
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, bottom: 10),
+      child: Container(
+        width: _size,
+        height: _size,
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(color: Colors.blue.withAlpha(100), shape: BoxShape.circle),
+        child:  Stack(
+            fit: StackFit.passthrough,
+            children:<Widget>[
+              ValueListenableBuilder(
+                valueListenable: _left,
+                builder: (_,val,__) => Positioned(
+                    width: _size/4,
+                    height: _size/4,
+                    left: val,
+                    top: _top.value,
+                    child: Container(
+                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(_size)),color: Colors.red.withAlpha(220)),
+                    )),),
               GestureDetector(
-                onTap: (){
-                  widget.game.gameMap.orthoPlayer?.startHit();
+                onLongPressStart: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
                 },
-              ))
-        ]
+                onLongPressMoveUpdate: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onLongPressEnd: (details){
+                  stopMove();
+                },
+                onTapUp: (details){
+                  stopMove();
+                },
+                onLongPressDown: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onTapDown: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onPanStart: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onPanUpdate: (details){
+                  doMove(details.localPosition.dx, details.localPosition.dy);
+                },
+                onPanCancel: (){
+                  stopMove();
+                },
+                onTapCancel: (){
+                  stopMove();
+                },
+                onLongPressCancel: () {
+                  stopMove();
+                },
+                onPanEnd: (details){
+                  stopMove();
+                },
+              ),
+            ]
+        ),
+      ),
     );
   }
 }

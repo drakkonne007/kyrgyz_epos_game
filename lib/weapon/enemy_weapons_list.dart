@@ -8,7 +8,7 @@ class EWBody extends EnemyWeapon
 {
   bool _isActive = false;
   double _currentActive = 0;
-  final Vector2 _startSize = Vector2(69,71);
+  final Vector2 _startSize = Vector2(1,1);
 
   EWBody(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
 
@@ -16,7 +16,6 @@ class EWBody extends EnemyWeapon
   Future onLoad() async
   {
     damage = 1;
-    coolDown = 500;
   }
 
   @override
@@ -35,7 +34,7 @@ class EWBody extends EnemyWeapon
       return;
     }
     _currentActive += dt;
-    size = Vector2(size.x + dt * 5, size.y);
+    // size = Vector2(size.x + dt * 5, size.y);
     if(_currentActive > activeSecs){
       size = _startSize;
       _isActive = false;
