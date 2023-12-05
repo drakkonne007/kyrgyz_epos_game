@@ -31,7 +31,10 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
         srcSize:  Vector2(110,110));
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
     animation = _animIdle;
-    add(ObjectHitbox(getPointsForActivs(Vector2(-25,-55), Vector2(50,110)),collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
+    add(Ground(getPointsForActivs(Vector2(-15,-40), Vector2(30,80)),collisionType: DCollisionType.passive,isSolid: true,
+        isStatic: false, isLoop: true, game: gameRef));
+    add(ObjectHitbox(getPointsForActivs(Vector2(-25,-55), Vector2(50,110)),collisionType: DCollisionType.active,
+        isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
     position = _startPos;
     super.onLoad();
   }

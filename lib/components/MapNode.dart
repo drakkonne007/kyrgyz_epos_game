@@ -72,14 +72,15 @@ class MapNode
     if (KyrgyzGame.cachedAnims.containsKey('${colRow.column}-${colRow.row}_down.anim')) {
       var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow.row}_down.anim']!;
       for (final obj in objects) {
+        Vector2 sourceSize = Vector2(double.parse(obj.getAttribute('w')!),double.parse(obj.getAttribute('h')!));
         Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
         for (final anim in obj.findAllElements('fr')) {
-          spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
+          spriteList.add(Sprite(srcImage, srcSize: sourceSize,
               srcPosition: Vector2(
-                  double.parse(anim.getAttribute('cl')!) * 32,
-                  double.parse(anim.getAttribute('rw')!) * 32)));
+                  double.parse(anim.getAttribute('cl')!) * sourceSize.x,
+                  double.parse(anim.getAttribute('rw')!) * sourceSize.y)));
           stepTimes.add(double.parse(anim.getAttribute('dr')!));
         }
         var sprAnim = SpriteAnimation.variableSpriteList(
@@ -88,7 +89,7 @@ class MapNode
           var ss = SpriteAnimationComponent(animation: sprAnim,
               position: Vector2(double.parse(anim.getAttribute('x')!),
                   double.parse(anim.getAttribute('y')!)),
-              size: Vector2.all(34),
+              size: Vector2(sourceSize.x+1, sourceSize.y+1),
               priority: GamePriority.ground + 1);
           custMap.allEls[colRow]!.add(ss);
           custMap.add(ss);
@@ -111,14 +112,15 @@ class MapNode
     if (KyrgyzGame.cachedAnims.containsKey('${colRow.column}-${colRow.row}_high.anim')) {
       var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow.row}_high.anim']!;
       for (final obj in objects) {
+        Vector2 srcSize = Vector2(double.parse(obj.getAttribute('w')!),double.parse(obj.getAttribute('h')!));
         Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
         for (final anim in obj.findAllElements('fr')) {
-          spriteList.add(Sprite(srcImage, srcSize: Vector2.all(32),
+          spriteList.add(Sprite(srcImage, srcSize: srcSize,
               srcPosition: Vector2(
-                  double.parse(anim.getAttribute('cl')!) * 32,
-                  double.parse(anim.getAttribute('rw')!) * 32)));
+                  double.parse(anim.getAttribute('cl')!) * srcSize.x,
+                  double.parse(anim.getAttribute('rw')!) * srcSize.y)));
           stepTimes.add(double.parse(anim.getAttribute('dr')!));
         }
         var sprAnim = SpriteAnimation.variableSpriteList(
@@ -127,7 +129,7 @@ class MapNode
           var ss = SpriteAnimationComponent(animation: sprAnim,
               position: Vector2(double.parse(anim.getAttribute('x')!),
                   double.parse(anim.getAttribute('y')!)),
-              size: Vector2.all(34),
+              size: Vector2(srcSize.x+1, srcSize.y+1),
               priority: GamePriority.high);
           custMap.allEls[colRow]!.add(ss);
           custMap.add(ss);
@@ -251,7 +253,7 @@ class MapNode
         custMap.allEls[colRow]!.add(temp);
         custMap.add(temp);
         break;
-      case 'stranger':
+      case 'strange_merchant':
         var temp = StrangeMerchant(position,StrangeMerchantVariant.black, priority: GamePriority.player - 2);
         custMap.allEls[colRow]!.add(temp);
         custMap.add(temp);

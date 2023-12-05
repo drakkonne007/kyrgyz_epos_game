@@ -101,6 +101,8 @@ class AnimationPos
   String sourceImg = '';
   final List<IntPoint> spritePos = [];
   final List<double> stepTimes = [];
+  int width = 0;
+  int height = 0;
 
   @override
   operator ==(other)
@@ -151,8 +153,10 @@ class MySuperAnimCompiler {
     } else {
       AnimationPos pos = AnimationPos();
       pos.sourceImg = tileProcessor.tileset.image!.source!;
+      pos.width = tileProcessor.tileset.tileWidth!;
+      pos.height = tileProcessor.tileset.tileHeight!;
       Image image = await Flame.images.load(pos.sourceImg);
-      int maxColumn = image.width ~/ 32;
+      int maxColumn = image.width ~/ pos.width;
       for (final frame in tileProcessor.tile.animation) {
         pos.stepTimes.add(frame.duration / 1000);
         pos.spritePos.add(
@@ -223,7 +227,7 @@ class MySuperAnimCompiler {
               continue;
             }
             if (animText == '') {
-              animText = '<an src="${anim.sourceImg}">\n';
+              animText = '<an src="${anim.sourceImg}" w="${anim.width}" h="${anim.height}" >\n';
               for (int i = 0; i < anim.stepTimes.length; i++) {
                 animText +=
                 '<fr dr="${anim.stepTimes[i]}" cl="${anim.spritePos[i]
