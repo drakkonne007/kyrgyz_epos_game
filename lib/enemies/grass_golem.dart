@@ -219,8 +219,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       _animHurt.ticker().reset();
       animation = _animHurt;
       _timer!.start();
-      print('start timer');
-      print(_timer!.current);
     }
   }
 }

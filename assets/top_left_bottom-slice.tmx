@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="35" nextobjectid="1704">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="35" nextobjectid="1761">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -7175,7 +7175,176 @@
   </object>
  </objectgroup>
  <objectgroup id="32" name="groundObj"/>
- <objectgroup id="31" name="persons"/>
+ <objectgroup id="31" name="persons">
+  <object id="1705" name="chest" x="1504" y="2768">
+   <point/>
+  </object>
+  <object id="1706" name="chest" x="1120" y="3776">
+   <point/>
+  </object>
+  <object id="1707" name="chest" x="1728" y="4736">
+   <point/>
+  </object>
+  <object id="1708" name="chest" x="3008" y="4336">
+   <point/>
+  </object>
+  <object id="1709" name="chest" x="3600" y="3616">
+   <point/>
+  </object>
+  <object id="1710" name="chest" x="2400" y="3024">
+   <point/>
+  </object>
+  <object id="1711" name="chest" x="432" y="2696">
+   <point/>
+  </object>
+  <object id="1712" name="chest" x="492" y="4104">
+   <point/>
+  </object>
+  <object id="1713" name="chest" x="5380" y="2336">
+   <point/>
+  </object>
+  <object id="1714" name="chest" x="5212" y="1704">
+   <point/>
+  </object>
+  <object id="1715" name="chest" x="1604" y="1160">
+   <point/>
+  </object>
+  <object id="1716" name="chest" x="268" y="1120">
+   <point/>
+  </object>
+  <object id="1717" name="chest" x="3524" y="4680">
+   <point/>
+  </object>
+  <object id="1718" name="chest" x="4100" y="3244">
+   <point/>
+  </object>
+  <object id="1719" name="chest" x="5680" y="2892">
+   <point/>
+  </object>
+  <object id="1720" name="chest" x="5148" y="2112">
+   <point/>
+  </object>
+  <object id="1721" name="chest" x="5752" y="1276">
+   <point/>
+  </object>
+  <object id="1722" name="chest" x="5224" y="1172">
+   <point/>
+  </object>
+  <object id="1723" name="chest" x="6312" y="1800">
+   <point/>
+  </object>
+  <object id="1724" name="chest" x="4952" y="740">
+   <point/>
+  </object>
+  <object id="1725" name="chest" x="4496" y="496">
+   <point/>
+  </object>
+  <object id="1726" name="chest" x="6196" y="816">
+   <point/>
+  </object>
+  <object id="1727" name="chest" x="4136" y="1118">
+   <point/>
+  </object>
+  <object id="1728" name="chest" x="1992" y="4312">
+   <point/>
+  </object>
+  <object id="1729" name="chest" x="802" y="3790">
+   <point/>
+  </object>
+  <object id="1730" name="chest" x="540" y="4990">
+   <point/>
+  </object>
+  <object id="1731" name="chest" x="202" y="4388">
+   <point/>
+  </object>
+  <object id="1732" name="chest" x="898" y="5574">
+   <point/>
+  </object>
+  <object id="1733" name="chest" x="2064" y="5852">
+   <point/>
+  </object>
+  <object id="1734" name="chest" x="3032" y="5064">
+   <point/>
+  </object>
+  <object id="1735" name="enemy" x="944" y="2206">
+   <point/>
+  </object>
+  <object id="1736" name="enemy" x="1488" y="1236">
+   <point/>
+  </object>
+  <object id="1737" name="enemy" x="908" y="696">
+   <point/>
+  </object>
+  <object id="1738" name="enemy" x="2560" y="2960">
+   <point/>
+  </object>
+  <object id="1739" name="enemy" x="1340" y="3124">
+   <point/>
+  </object>
+  <object id="1740" name="enemy" x="6712" y="4216">
+   <point/>
+  </object>
+  <object id="1741" name="enemy" x="6880" y="2512">
+   <point/>
+  </object>
+  <object id="1742" name="enemy" x="5400" y="1752">
+   <point/>
+  </object>
+  <object id="1743" name="enemy" x="5088" y="3808">
+   <point/>
+  </object>
+  <object id="1744" name="enemy" x="3968" y="4304">
+   <point/>
+  </object>
+  <object id="1745" name="enemy" x="3144" y="3576">
+   <point/>
+  </object>
+  <object id="1746" name="enemy" x="2136" y="5056">
+   <point/>
+  </object>
+  <object id="1747" name="enemy" x="3288" y="5392">
+   <point/>
+  </object>
+  <object id="1748" name="enemy" x="4376" y="5000">
+   <point/>
+  </object>
+  <object id="1749" name="enemy" x="4376" y="3768">
+   <point/>
+  </object>
+  <object id="1750" name="enemy" x="5176" y="2888">
+   <point/>
+  </object>
+  <object id="1751" name="enemy" x="6240" y="1984">
+   <point/>
+  </object>
+  <object id="1752" name="enemy" x="7312" y="1104">
+   <point/>
+  </object>
+  <object id="1753" name="enemy" x="3384" y="5696">
+   <point/>
+  </object>
+  <object id="1754" name="enemy" x="1024" y="4584">
+   <point/>
+  </object>
+  <object id="1755" name="enemy" x="1936" y="2976">
+   <point/>
+  </object>
+  <object id="1756" name="enemy" x="5928" y="7160">
+   <point/>
+  </object>
+  <object id="1757" name="enemy" x="6816" y="6176">
+   <point/>
+  </object>
+  <object id="1758" name="enemy" x="5992" y="4776">
+   <point/>
+  </object>
+  <object id="1759" name="enemy" x="7120" y="3000">
+   <point/>
+  </object>
+  <object id="1760" name="enemy" x="6264" y="3232">
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="28" name="startObjects">
   <object id="865" name="careta" x="7807.33" y="2340">
    <point/>

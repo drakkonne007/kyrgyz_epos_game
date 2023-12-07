@@ -59,11 +59,13 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   void doGameHud()
   {
+    resumeEngine();
     _showOverlay(overlayName: GameHud.id,isHideOther: true);
   }
 
   void doDialogHud()
   {
+    pauseEngine();
     _showOverlay(overlayName: DialogOverlay.id,isHideOther: true);
   }
 

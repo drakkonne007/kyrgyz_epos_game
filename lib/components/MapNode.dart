@@ -414,21 +414,20 @@ class MapNode
               maxCol = max(maxCol, point.x ~/ (GameConsts.lengthOfTileSquare.x));
               maxRow = max(maxRow, point.y ~/ (GameConsts.lengthOfTileSquare.y));
             }
-
-            for (int i = minCol; i <= maxCol; i++) {
-              for (int j = minRow; j <= maxRow; j++) {
-                Vector2 topLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
-                    j * GameConsts.lengthOfTileSquare.y);
+            bool isReallyLoop = minCol == maxCol && minRow == maxRow && isLoop;
+            for (int currColInCycle = minCol; currColInCycle <= maxCol; currColInCycle++) {
+              for (int currRowInCycle = minRow; currRowInCycle <= maxRow; currRowInCycle++) {
+                Vector2 topLeft = Vector2(currColInCycle * GameConsts.lengthOfTileSquare.x,
+                    currRowInCycle * GameConsts.lengthOfTileSquare.y);
                 Vector2 topRight = Vector2(
-                    (i + 1) * GameConsts.lengthOfTileSquare.x,
-                    j * GameConsts.lengthOfTileSquare.y);
-                Vector2 bottomLeft = Vector2(i * GameConsts.lengthOfTileSquare.x,
-                    (j + 1) * GameConsts.lengthOfTileSquare.y);
+                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x,
+                    currRowInCycle * GameConsts.lengthOfTileSquare.y);
+                Vector2 bottomLeft = Vector2(currColInCycle * GameConsts.lengthOfTileSquare.x,
+                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y);
                 Vector2 bottomRight = Vector2(
-                    (i + 1) * GameConsts.lengthOfTileSquare.x,
-                    (j + 1) * GameConsts.lengthOfTileSquare.y);
-                GroundSource newPoints = GroundSource();
-                newPoints.isLoop = isLoop;
+                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x,
+                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y);
+                List<Vector2> coord = [];
                 for (int i = -1; i < points.length - 1; i++) {
                   if (!isLoop && i == -1) {
                     continue;
@@ -444,8 +443,8 @@ class MapNode
                   List<Vector2> tempCoord = [];
                   if (points[tF].x >= topLeft.x && points[tF].x <= topRight.x
                       && points[tF].y >= topLeft.y && points[tF].y <= bottomLeft
-                      .y) { //Надо ещё если две точки - определить, какая ближе к началу и там сделать первую точку
-                    newPoints.points.add(points[tF]);
+                      .y) {
+                    coord.add(points[tF]);
                   }
                   Vector2 answer = f_pointOfIntersect(
                       topLeft, topRight, points[tF], points[tS]);
@@ -468,17 +467,32 @@ class MapNode
                     tempCoord.add(answer);
                   }
                   if (tempCoord.length == 1) {
-                    newPoints.points.add(tempCoord[0]);
+                    coord.add(tempCoord[0]);
+                    if(coord.length > 1){
+                      GroundSource newPoints = GroundSource();
+                      newPoints.isLoop = false;
+                      newPoints.points = List.unmodifiable(coord);
+                      objsMap.putIfAbsent(LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
+                      objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!.add(newPoints);
+                      coord.clear();
+                    }
                   } else {
                     if (tempCoord.length == 2) {
+                      coord.clear();
                       if (points[tF].distanceTo(tempCoord[0]) >
                           points[tF].distanceTo(tempCoord[1])) {
-                        newPoints.points.add(tempCoord[1]);
-                        newPoints.points.add(tempCoord[0]);
+                        coord.add(tempCoord[1]);
+                        coord.add(tempCoord[0]);
                       } else {
-                        newPoints.points.add(tempCoord[0]);
-                        newPoints.points.add(tempCoord[1]);
+                        coord.add(tempCoord[0]);
+                        coord.add(tempCoord[1]);
                       }
+                      GroundSource newPoints = GroundSource();
+                      newPoints.isLoop = false;
+                      newPoints.points = List.unmodifiable(coord);
+                      objsMap.putIfAbsent(LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
+                      objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!.add(newPoints);
+                      coord.clear();
                     } else if(tempCoord.length > 2){
                       print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
                     }
@@ -488,10 +502,19 @@ class MapNode
                     points[points.length - 1].x <= topRight.x
                     && points[points.length - 1].y >= topLeft.y &&
                     points[points.length - 1].y <= bottomLeft.y && !isLoop) {
-                  newPoints.points.add(points[points.length - 1]);
+                  coord.add(points[points.length - 1]);
                 }
-                objsMap.putIfAbsent(LoadedColumnRow(i, j), () => []);
-                objsMap[LoadedColumnRow(i, j)]!.add(newPoints);
+                if(coord.isNotEmpty) {
+                  GroundSource newPoints = GroundSource();
+                  newPoints.isLoop = isReallyLoop;
+                  newPoints.points = List.unmodifiable(coord);
+                  objsMap.putIfAbsent(
+                      LoadedColumnRow(currColInCycle, currRowInCycle), () =>
+                  [
+                  ]);
+                  objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!.add(
+                      newPoints);
+                }
               }
             }
           }

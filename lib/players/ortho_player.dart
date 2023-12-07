@@ -120,6 +120,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void startHit()
   {
+    gameRef.doDialogHud();
+    return;
     if(animation == animHurt || animation == animDeath){
       return;
     }
