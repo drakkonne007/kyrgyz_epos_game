@@ -9,6 +9,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/main.dart';
 import 'package:game_flame/overlays/death_menu.dart';
+import 'package:game_flame/overlays/dialog_overlay.dart';
 import 'package:game_flame/overlays/game_hud.dart';
 import 'package:game_flame/overlays/game_pause.dart';
 import 'package:game_flame/overlays/language.dart';
@@ -59,6 +60,11 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   void doGameHud()
   {
     _showOverlay(overlayName: GameHud.id,isHideOther: true);
+  }
+
+  void doDialogHud()
+  {
+    _showOverlay(overlayName: DialogOverlay.id,isHideOther: true);
   }
 
   @override

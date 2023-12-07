@@ -265,7 +265,7 @@ class ObjectHitbox extends DCollisionEntity
         obstacleBehavoiur.call();
       }else{
         _pastTime = 0;
-        game.gameMap.currentObject = this;
+        game.gameMap.currentObject.value = this;
       }
     }    // super.onCollisionStart(intersectionPoints, other);
   }
@@ -274,9 +274,9 @@ class ObjectHitbox extends DCollisionEntity
   void onCollisionEnd(DCollisionEntity other)
   {
     if(other is PlayerHitbox && !autoTrigger) {
-      if(game.gameMap.currentObject != null){
-        if(game.gameMap.currentObject?.id == id){
-          game.gameMap.currentObject = null;
+      if(game.gameMap.currentObject.value != null){
+        if(game.gameMap.currentObject.value?.id == id){
+          game.gameMap.currentObject.value = null;
         }
       }
     }
@@ -293,8 +293,8 @@ class ObjectHitbox extends DCollisionEntity
     if(_pastTime < 0.6) {
       _pastTime += dt;
     }
-    if(_pastTime > 0.5 && game.gameMap.currentObject == this){
-      game.gameMap.currentObject = null;
+    if(_pastTime > 0.5 && game.gameMap.currentObject.value == this){
+      game.gameMap.currentObject.value = null;
     }
     super.update(dt);
   }

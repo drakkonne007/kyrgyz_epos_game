@@ -3,49 +3,67 @@
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-class GameDialog extends StatefulWidget
+class DialogOverlay extends StatefulWidget
 {
-  const GameDialog(this._game, {Key? key}) : super(key: key);
+  static const id = 'DialogOverlay';
   final KyrgyzGame _game;
-  static const String id = 'GameDialog';
+  const DialogOverlay(this._game, {super.key});
 
   @override
-  State<GameDialog> createState() => _GameDialogState();
+  State<DialogOverlay> createState() => _DialogOverlayState();
 }
 
-class _GameDialogState extends State<GameDialog> {
-
-  int currentDialogState = 0;
-
-  @override
-  void initState() {
-    currentDialogState = widget._game.playerData.currentDialog;
-    super.initState();
-  }
-
+class _DialogOverlayState extends State<DialogOverlay> {
   @override
   Widget build(BuildContext context) {
-      return Container();
+    return LayoutBuilder(builder: (context,constraints){
+      return
+        Column(
+            mainAxisSize: MainAxisSize.max,
+            children:[
+              Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children:[
+                    Image.asset('assets/tiles/sprites/dialogIcons/azura.png',isAntiAlias: true,width: constraints.maxWidth/2,height: constraints.maxHeight/2,fit: BoxFit.cover,),
+                    DialogAnswers(widget._game),
+                  ]
+              ),
+              SizedBox(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight/2,
+                  child: const Text('Вопрос',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                    ),
+                  )
+              )
+            ]
+        );
+    });
   }
 }
 
 
-
-
-
-
-
-
-
-
-
-class AnswerChooser extends StatelessWidget 
+class DialogAnswers extends StatefulWidget
 {
+  final KyrgyzGame _game;
+  const DialogAnswers(this._game);
+
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-  
+  State<DialogAnswers> createState() => _DialogAnswersState();
 }
 
+class _DialogAnswersState extends State<DialogAnswers> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        children:[
+          TextButton(onPressed: widget._game.doGameHud, child: Text('Первый вариант')),
+          TextButton(onPressed: widget._game.doGameHud, child: Text('Второй вариант')),
+          TextButton(onPressed: widget._game.doGameHud, child: Text('Третий вариант')),
+        ]
+    );
+  }
+}

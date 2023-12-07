@@ -123,11 +123,15 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation == animHurt || animation == animDeath){
       return;
     }
-    if(gameRef.gameMap.currentObject != null){
-      gameRef.gameMap.currentObject?.obstacleBehavoiur.call();
-    }else {
-      _weapon?.hit();
+    _weapon?.hit();
+  }
+
+  void makeAction()
+  {
+    if(animation == animHurt || animation == animDeath){
+      return;
     }
+    gameRef.gameMap.currentObject.value?.obstacleBehavoiur.call();
   }
 
   void setIdleAnimation()

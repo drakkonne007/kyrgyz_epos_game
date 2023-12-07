@@ -101,34 +101,35 @@ class DCollisionProcessor
         }
       }
     }
-    for(final key in _potentialActiveEntity.keys) {
+    final listOfList = List.unmodifiable(_potentialActiveEntity.values.toList());
+    for(int key = 0; key < listOfList.length; key++){
       Set<int> removeList = {};
-      for(int i = 0; i < _potentialActiveEntity[key]!.length; i++){
-        for(int j = 0; j < _potentialActiveEntity[key]!.length; j++){
+      for(int i = 0; i < listOfList[key].length; i++){
+        for(int j = 0; j < listOfList[key].length; j++){
           if(i == j || removeList.contains(j)){
             continue;
           }
-          if(_potentialActiveEntity[key]![i].collisionType == DCollisionType.passive && _potentialActiveEntity[key]![j].collisionType == DCollisionType.passive){
+          if(listOfList[key][i].collisionType == DCollisionType.passive && listOfList[key][j].collisionType == DCollisionType.passive){
             continue;
           }
-          if(!_potentialActiveEntity[key]![i].onComponentTypeCheck(_potentialActiveEntity[key]![j]) && !_potentialActiveEntity[key]![j].onComponentTypeCheck(_potentialActiveEntity[key]![i])){
+          if(!listOfList[key][i].onComponentTypeCheck(listOfList[key][j]) && !listOfList[key][j].onComponentTypeCheck(listOfList[key][i])){
             continue;
           }
-          if(_potentialActiveEntity[key]![j] is MapObstacle){
-            if(_potentialActiveEntity[key]![i].parent != null && _potentialActiveEntity[key]![i].parent is KyrgyzEnemy && _potentialActiveEntity[key]![j].onlyForPlayer){
+          if(listOfList[key][j] is MapObstacle){
+            if(listOfList[key][i].parent != null && listOfList[key][i].parent is KyrgyzEnemy && listOfList[key][j].onlyForPlayer){
               continue;
             }
-            _calcTwoEntities(_potentialActiveEntity[key]![i], _potentialActiveEntity[key]![j],true);
+            _calcTwoEntities(listOfList[key][i], listOfList[key][j],true);
             continue;
           }
-          if(_potentialActiveEntity[key]![i] is MapObstacle){
-            if(_potentialActiveEntity[key]![j].parent != null && _potentialActiveEntity[key]![j].parent is KyrgyzEnemy && _potentialActiveEntity[key]![i].onlyForPlayer){
+          if(listOfList[key][i] is MapObstacle){
+            if(listOfList[key][j].parent != null && listOfList[key][j].parent is KyrgyzEnemy && listOfList[key][i].onlyForPlayer){
               continue;
             }
-            _calcTwoEntities(_potentialActiveEntity[key]![j], _potentialActiveEntity[key]![i],true);
+            _calcTwoEntities(listOfList[key][j], listOfList[key][i],true);
             continue;
           }
-          _calcTwoEntities(_potentialActiveEntity[key]![j], _potentialActiveEntity[key]![i],false);
+          _calcTwoEntities(listOfList[key][j], listOfList[key][i],false);
         }
         removeList.add(i);
       }

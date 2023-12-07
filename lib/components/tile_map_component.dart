@@ -31,7 +31,7 @@ class LoadedColumnRow
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
 
-  ObjectHitbox? currentObject;
+  ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
   static int countId = 0;
   OrthoPlayer? orthoPlayer;
   late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));

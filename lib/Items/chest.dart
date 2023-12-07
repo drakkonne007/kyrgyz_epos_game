@@ -60,7 +60,7 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
       }
     }
     remove(_objectHitbox!);
-    game.gameMap.currentObject = null;
+    game.gameMap.currentObject.value = null;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 15, loop: false);
     double dur = animation!.ticker().totalDuration();
     for(final myItem in myItems){

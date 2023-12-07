@@ -41,6 +41,6 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
 
   void getBuyMenu()
   {
-
+    gameRef.doDialogHud();
   }
 }

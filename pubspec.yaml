@@ -91,6 +91,7 @@ flutter:
     - assets/tiles/map/grassLand/TiledMap/
     - assets/tiles/map/grassLand/Tilesets/
     - assets/tiles/map/ancientLand/Characters/NPC merchant/with animated items/
+    - assets/tiles/sprites/dialogIcons/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

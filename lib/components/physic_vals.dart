@@ -89,7 +89,6 @@ class PlayerData
   Vector2 curPosition = Vector2(-1,-1);
   double gameTime = 720;
   double milisecsInGame = 0;
-  int currentDialog = 0;
 
 // static void doNewGame(){
 //   health.value = maxHealth;
