@@ -14,7 +14,6 @@ class PauseButton extends StatelessWidget
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: (){
-          _game.pauseEngine();
           _game.startPause();
         }, icon: const Icon(Icons.pause_presentation),
     );

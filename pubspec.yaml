@@ -45,6 +45,7 @@ dependencies:
   flame_isolate: ^0.4.0
   path_provider: ^2.1.1
   sqflite: ^2.3.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,7 @@ flutter:
   assets:
     - assets/metaData/
     - assets/
+    - assets/images/
     - assets/images/flags/
     - assets/tiles/
     - assets/tiles/buttons/

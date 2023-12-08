@@ -98,6 +98,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   void startPause()
   {
+    pauseEngine();
     _showOverlay(overlayName: GamePause.id,isHideOther: true);
   }
 
@@ -127,32 +128,17 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   @override
   Color backgroundColor()
   {
-    return Colors.orange;
+    return Colors.black;
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // super.didChangeAppLifecycleState(state);;
-    switch (state) {
-      case AppLifecycleState.resumed:
-        print('resume');
-        resumeEngine();
-        break;
-      case AppLifecycleState.inactive:
-        print('inactive');
+    // super.didChangeAppLifecycleState(state);
+    if(state != AppLifecycleState.resumed) {
+      if(overlays.activeOverlays.contains(GameHud.id)){
         pauseEngine();
-        break;
-      case AppLifecycleState.paused:
-        print('paused');
-        pauseEngine();
-        break;
-      case AppLifecycleState.detached:
-        print('detached');
-        pauseEngine();
-        break;
-      case AppLifecycleState.hidden:
-        // TODO: Handle this case.
-        break;
+        startPause();
+      }
     }
   }
 }

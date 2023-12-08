@@ -142,13 +142,13 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(pl.hitBox == null){
       return false;
     }
-    if((absolutePositionOf((_body!.getPoint(3) - _body!.getPoint(0)) / 2).x -  pl.absolutePositionOf((pl.hitBox!.getPoint(3) - pl.hitBox!.getPoint(0)) / 2).x).abs() > 40
-        || pl.absolutePositionOf(pl.hitBox!.getPoint(3)).y > absolutePositionOf(_body!.getPoint(2)).y
-    || pl.absolutePositionOf(pl.hitBox!.getPoint(2)).y < absolutePositionOf(_body!.getPoint(3)).y){
+    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width/2 + 50){
       return false;
-    }else{
-      return true;
     }
+    if(pl.hitBox!.getPoint(0).y > _body!.getPoint(1).y || pl.hitBox!.getPoint(1).y < _body!.getPoint(0).y){
+      return false;
+    }
+    return true;
   }
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
