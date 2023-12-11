@@ -125,59 +125,60 @@ class _DialogAnswersState extends State<DialogAnswers> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:[
-                    // Stack(
-                    //   fit: StackFit.passthrough,
-                    //   alignment: Alignment.center,
-                    //   children: [
-                    //     const Image(
-                    //       image: AssetImage('assets/images/gui/wood_button.png'),
-                    //       fit: BoxFit.fill,
-                    //     ),
-                    //     Text(context.t.newGame,style: textStyle),
-                    //   ],
-                    // ),
-
-                    SizedBox(
-                      width:(widget.size.x - 20),
-                      height: (widget.size.y - 30)/3,
-                        child: Stack(
-                            fit: StackFit.passthrough,
-                            alignment: Alignment.center,
-                            children: [
-                              getImg((widget.size.x - 20),(widget.size.y - 30)/3),
-                              Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                                  child: TextButton(onPressed: widget._game.doGameHud,
-                                  child: getAnswer('Вот такие вот письмена ха ха ха1232131  dwqdqwd'))),
-                            ]
-                        )
-                    ) ,
-                    SizedBox(
+                    Container(
                         width:(widget.size.x - 20),
                         height: (widget.size.y - 30)/3,
-                        child: Stack(
-                            fit: StackFit.passthrough,
-                            alignment: Alignment.center,
-                            children: [
-                              getImg((widget.size.x - 20),(widget.size.y - 30)/3),
-                              TextButton(onPressed: widget._game.doGameHud,
-                                  child: getAnswer('Вот такие вот письмена ха ха ха1232131  dwqdqwd'))
-                            ]
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(colors: [Colors.transparent,Colors.grey]),
+                          // borderRadius: BorderRadius.zero,
+                        ),
+                        child: TextButton(onPressed: widget._game.doGameHud,
+                            child: getAnswer('Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              foregroundColor: Colors.transparent,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              )
+                            )
                         )
-                    ) ,
-                    SizedBox(
+                    ),
+                    Container(
                         width:(widget.size.x - 20),
                         height: (widget.size.y - 30)/3,
-                        child: Stack(
-                            fit: StackFit.passthrough,
-                            alignment: Alignment.center,
-                            children: [
-                              getImg((widget.size.x - 20),(widget.size.y - 30)/3),
-                              TextButton(onPressed: widget._game.doGameHud,
-                                  child: getAnswer('Вот такие вот письмена ха ха ха1232131  dwqdqwd'))
-                            ]
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(colors: [Colors.transparent,Colors.grey]),
+                          // borderRadius: BorderRadius.zero,
+                        ),
+                        child: TextButton(onPressed: widget._game.doGameHud,
+                            child: getAnswer('Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                foregroundColor: Colors.transparent,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                )
+                            )
                         )
-                    ) ,
+                    ),
+                    Container(
+                        width:(widget.size.x - 20),
+                        height: (widget.size.y - 30)/3,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(colors: [Colors.transparent,Colors.grey]),
+                          // borderRadius: BorderRadius.zero,
+                        ),
+                        child: TextButton(onPressed: widget._game.doGameHud,
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                foregroundColor: Colors.transparent,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                )
+                            ),
+                            child: getAnswer('Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
+                        )
+                    ),
                   ])
           ),
         ]

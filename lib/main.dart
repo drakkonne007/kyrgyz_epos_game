@@ -20,7 +20,7 @@ main()
             debugShowCheckedModeBanner: false,
             debugShowMaterialGrid: false,
             theme: ThemeData(
-                colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.brown),
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.brown),
                 useMaterial3: true,
             ),
             home: Scaffold(
