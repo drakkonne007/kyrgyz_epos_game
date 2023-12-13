@@ -142,10 +142,10 @@ abstract class DCollisionEntity extends Component  //Всегда против �
       Vector2 posAnchor = temp.positionOfAnchor(temp.anchor);
       Vector2 point;
       angle == 0 ? point = Vector2(
-          _center.x * size.x/2, _center.y * size.y/2)
+          _center.x * size.x, _center.y * size.y)
           : point = _rotatePoint(
           Vector2(
-              _center.x * size.x/2, _center.y * size.y/2));
+              _center.x * size.x, _center.y * size.y));
       return point + posAnchor;
     }
   }
@@ -238,10 +238,6 @@ abstract class DCollisionEntity extends Component  //Всегда против �
     }
     return _vertices[index];
   }
-
-  // List<Vector2> getPoints() {
-  //   return List.unmodifiable(_vertices);
-  // }
 
   Vector2 _rotatePoint(Vector2 point) {
     Vector2 temp = isHorizontalFlip ? point - _vertices[3] : point -

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/palette.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/teleport.dart';
@@ -18,6 +20,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/enemies/moose.dart';
 import 'package:game_flame/enemies/strange_merchant.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
@@ -56,58 +59,52 @@ class MapNode
       exit(0);
     }
     custMap.allEls.putIfAbsent(colRow, () => []);
-    if (KyrgyzGame.cachedMapPngs.contains('${colRow.column}-${colRow.row}_down.png')) {
-      Image _imageDown = await Flame.images.load(
-          'metaData/${colRow.column}-${colRow.row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
-      var spriteDown = SpriteComponent(
-        sprite: Sprite(_imageDown),
-        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
-            colRow.row * GameConsts.lengthOfTileSquare.y),
-        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
-        priority: 0,
-      );
-      custMap.allEls[colRow]!.add(spriteDown);
-      custMap.add(spriteDown);
-    }
-    if (KyrgyzGame.cachedAnims.containsKey('${colRow.column}-${colRow.row}_down.anim')) {
-      var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow.row}_down.anim']!;
+    if (KyrgyzGame.cachedObjXmls.containsKey('${colRow.column}-${colRow.row}.objXml')) {
+      var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow.row}.objXml']!;
       for (final obj in objects) {
-        Vector2 sourceSize = Vector2(double.parse(obj.getAttribute('w')!),double.parse(obj.getAttribute('h')!));
-        Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
-        final List<Sprite> spriteList = [];
-        final List<double> stepTimes = [];
-        for (final anim in obj.findAllElements('fr')) {
-          spriteList.add(Sprite(srcImage, srcSize: sourceSize,
-              srcPosition: Vector2(
-                  double.parse(anim.getAttribute('cl')!) * sourceSize.x,
-                  double.parse(anim.getAttribute('rw')!) * sourceSize.y)));
-          stepTimes.add(double.parse(anim.getAttribute('dr')!));
-        }
-        var sprAnim = SpriteAnimation.variableSpriteList(
-            spriteList, stepTimes: stepTimes);
-        for (final anim in obj.findAllElements('ps')) {
-          var ss = SpriteAnimationComponent(animation: sprAnim,
-              position: Vector2(double.parse(anim.getAttribute('x')!),
-                  double.parse(anim.getAttribute('y')!)),
-              size: Vector2(sourceSize.x+1, sourceSize.y+1),
-              priority: GamePriority.ground + 1);
-          custMap.allEls[colRow]!.add(ss);
-          custMap.add(ss);
+        String? name = obj.getAttribute('nm');
+        switch (name) {
+          case '':
+            var points = obj.getAttribute('p')!;
+            var pointsList = points.split(' ');
+            List<Vector2> temp = [];
+            for(final sources in pointsList){
+              if(sources == ''){
+                continue;
+              }
+              temp.add(Vector2(double.parse(sources.split(',')[0]),double.parse(sources.split(',')[1])));
+            }
+            if(temp.isNotEmpty) {
+              for(var i = 0; i < temp.length - 1; i++){
+                PolygonHitbox rect = PolygonHitbox([temp[i], temp[i + 1], temp[i + 1] + Vector2.all(1), temp[i] + Vector2.all(1)]);
+                rect.priority = 800;
+                rect.paint.color = BasicPalette.red.color;
+                rect.renderShape = true;
+                custMap.add(rect);
+              }
+              if(obj.getAttribute('lp')! == '1'){
+                PolygonHitbox rect = PolygonHitbox([temp[0], temp[temp.length - 1], temp[temp.length - 1] + Vector2.all(1), temp[0] + Vector2.all(1)]);
+                rect.priority = 800;
+                rect.paint.color = BasicPalette.red.color;
+                rect.renderShape = true;
+                custMap.add(rect);
+              }
+              var ground = Ground(temp, collisionType: DCollisionType.passive,
+                  isSolid: false,
+                  isStatic: true,
+                  isLoop: obj.getAttribute('lp')! == '1',
+                  game: myGame!,
+                  column: colRow.column,
+                  row: colRow.row);
+              custMap.allEls[colRow]!.add(ground);
+              custMap.add(ground);
+            }
+            break;
+          default:
+            _createLiveObj(obj, name, colRow);
+            break;
         }
       }
-    }
-    if (KyrgyzGame.cachedMapPngs.contains('${colRow.column}-${colRow.row}_high.png')) {
-      Image _imageHigh = await Flame.images.load(
-          'metaData/${colRow.column}-${colRow.row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
-      var spriteHigh = SpriteComponent(
-        sprite: Sprite(_imageHigh),
-        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
-            colRow.row * GameConsts.lengthOfTileSquare.y),
-        priority: GamePriority.high - 1,
-        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
-      );
-      custMap.allEls[colRow]!.add(spriteHigh);
-      custMap.add(spriteHigh);
     }
     if (KyrgyzGame.cachedAnims.containsKey('${colRow.column}-${colRow.row}_high.anim')) {
       var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow.row}_high.anim']!;
@@ -136,45 +133,58 @@ class MapNode
         }
       }
     }
-    if (KyrgyzGame.cachedObjXmls.containsKey('${colRow.column}-${colRow.row}.objXml')) {
-      var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow.row}.objXml']!;
+    if (KyrgyzGame.cachedMapPngs.contains('${colRow.column}-${colRow.row}_high.png')) {
+      Image _imageHigh = await Flame.images.load(
+          'metaData/${colRow.column}-${colRow.row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
+      var spriteHigh = SpriteComponent(
+        sprite: Sprite(_imageHigh),
+        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
+            colRow.row * GameConsts.lengthOfTileSquare.y),
+        priority: GamePriority.high - 1,
+        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
+      );
+      custMap.allEls[colRow]!.add(spriteHigh);
+      custMap.add(spriteHigh);
+    }
+    if (KyrgyzGame.cachedAnims.containsKey('${colRow.column}-${colRow.row}_down.anim')) {
+      var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow.row}_down.anim']!;
       for (final obj in objects) {
-        String? name = obj.getAttribute('nm');
-        switch (name) {
-          case '':
-            var points = obj.getAttribute('p')!;
-            var pointsList = points.split(' ');
-            List<Vector2> temp = [];
-            for(final sources in pointsList){
-              if(sources == ''){
-                continue;
-              }
-              temp.add(Vector2(double.parse(sources.split(',')[0]),double.parse(sources.split(',')[1])));
-            }
-            if(temp.isNotEmpty) {
-              // for(var i = 0; i < temp.length - 1; i++){
-              //   PolygonHitbox rect = PolygonHitbox([temp[i], temp[i + 1], temp[i + 1] + Vector2.all(1), temp[i] + Vector2.all(1)]);
-              //   rect.priority = 800;
-              //   rect.paint.color = BasicPalette.red.color;
-              //   rect.renderShape = true;
-              //   custMap.add(rect);
-              // }
-              var ground = Ground(temp, collisionType: DCollisionType.passive,
-                  isSolid: false,
-                  isStatic: true,
-                  isLoop: obj.getAttribute('lp')! == '1',
-                  game: myGame!,
-                  column: colRow.column,
-                  row: colRow.row);
-              custMap.allEls[colRow]!.add(ground);
-              custMap.add(ground);
-            }
-            break;
-          default:
-            _createLiveObj(obj, name, colRow);
-            break;
+        Vector2 sourceSize = Vector2(double.parse(obj.getAttribute('w')!),double.parse(obj.getAttribute('h')!));
+        Image srcImage = KyrgyzGame.cachedImgs[obj.getAttribute('src')!]!;
+        final List<Sprite> spriteList = [];
+        final List<double> stepTimes = [];
+        for (final anim in obj.findAllElements('fr')) {
+          spriteList.add(Sprite(srcImage, srcSize: sourceSize,
+              srcPosition: Vector2(
+                  double.parse(anim.getAttribute('cl')!) * sourceSize.x,
+                  double.parse(anim.getAttribute('rw')!) * sourceSize.y)));
+          stepTimes.add(double.parse(anim.getAttribute('dr')!));
+        }
+        var sprAnim = SpriteAnimation.variableSpriteList(
+            spriteList, stepTimes: stepTimes);
+        for (final anim in obj.findAllElements('ps')) {
+          var ss = SpriteAnimationComponent(animation: sprAnim,
+              position: Vector2(double.parse(anim.getAttribute('x')!),
+                  double.parse(anim.getAttribute('y')!)),
+              size: Vector2(sourceSize.x+1, sourceSize.y+1),
+              priority: GamePriority.ground + 1);
+          custMap.allEls[colRow]!.add(ss);
+          custMap.add(ss);
         }
       }
+    }
+    if (KyrgyzGame.cachedMapPngs.contains('${colRow.column}-${colRow.row}_down.png')) {
+      Image _imageDown = await Flame.images.load(
+          'metaData/${colRow.column}-${colRow.row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
+      var spriteDown = SpriteComponent(
+        sprite: Sprite(_imageDown),
+        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
+            colRow.row * GameConsts.lengthOfTileSquare.y),
+        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
+        priority: 0,
+      );
+      custMap.allEls[colRow]!.add(spriteDown);
+      custMap.add(spriteDown);
     }
   }
 
@@ -184,7 +194,7 @@ class MapNode
     int row = position.y ~/ (GameConsts.lengthOfTileSquare.y);
     LoadedColumnRow colRow = LoadedColumnRow(col, row);
     switch (name) {
-      case 'enemy':
+      case 'ggolem':
         custMap.loadedLivesObjs.add(position);
         custMap.add(GrassGolem(
             position, GolemVariant.Grass, priority: GamePriority.player - 2));
@@ -198,6 +208,11 @@ class MapNode
         var temp = LootOnMap(itemFromId(2), position: position);
         custMap.allEls[colRow]!.add(temp);
         custMap.add(temp);
+        break;
+      case 'moose':
+        custMap.loadedLivesObjs.add(position);
+        custMap.add(GrassGolem(
+            position, GolemVariant.Water, priority: GamePriority.player - 2));
         break;
       case 'chest':
         int level = Random().nextInt(3);
@@ -238,6 +253,11 @@ class MapNode
       return;
     }
     switch (name) {
+      case 'ggolem':
+        custMap.loadedLivesObjs.add(position);
+        custMap.add(GrassGolem(
+            position, GolemVariant.Grass, priority: GamePriority.player - 2));
+        break;
       case 'enemy':
         custMap.loadedLivesObjs.add(position);
         custMap.add(GrassGolem(
@@ -247,6 +267,11 @@ class MapNode
         custMap.loadedLivesObjs.add(position);
         custMap.add(GrassGolem(
             position, GolemVariant.Water, priority: GamePriority.player - 2));
+        break;
+      case 'moose':
+        custMap.loadedLivesObjs.add(position);
+        custMap.add(Moose(
+            position, MooseVariant.Blue, priority: GamePriority.player - 2));
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
@@ -292,7 +317,7 @@ class MapNode
     }
   }
 
-  Future<void> compileAll(LoadedColumnRow colRow) async
+  Future compileAll(LoadedColumnRow colRow) async
   {
     if (colRow.column != 0 && colRow.row != 0) {
       return;

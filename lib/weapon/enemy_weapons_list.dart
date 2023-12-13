@@ -2,13 +2,12 @@
 import 'package:flame/components.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/weapon/weapon.dart';
-import 'package:game_flame/components/physic_vals.dart';
+import 'dart:math' as math;
 
 class EWBody extends EnemyWeapon
 {
   bool _isActive = false;
-  double _currentActive = 0;
-  final Vector2 _startSize = Vector2(1,1);
+  bool _isGrow = true;
 
   EWBody(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
 
@@ -19,27 +18,35 @@ class EWBody extends EnemyWeapon
   }
 
   @override
-  void hit(PlayerDirectionMove direct)
+  Future<void> hit() async
   {
+    currentCoolDown = coolDown;
     onStartWeaponHit.call();
-    _currentActive = 0;
     _isActive = true;
+    latencyBefore = -activeSecs/3;
+    size = Vector2(1,1);
+    await Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
+      _isGrow = true;
+      onEndWeaponHit.call();
+      _isActive = false;
+      size = Vector2(1,1);
+    });
+
   }
 
   @override
   void update(double dt)
   {
+    if(latencyBefore < 0){
+      latencyBefore += dt;
+    }
+    if(latencyBefore >= 0 && _isActive){
+      if(_isGrow && size.x > 2){
+        _isGrow = false;
+      }
+      _isGrow ? size = Vector2(math.max(1,(size.x + dt/activeSecs * 4)), size.y) : size = Vector2(math.max(1, size.x - dt/activeSecs * 4), size.y);
+    }
     super.update(dt);
-    if(!_isActive){
-      return;
-    }
-    _currentActive += dt;
-    // size = Vector2(size.x + dt * 5, size.y);
-    if(_currentActive > activeSecs){
-      size = _startSize;
-      _isActive = false;
-      onEndWeaponHit.call();
-    }
   }
 
   @override

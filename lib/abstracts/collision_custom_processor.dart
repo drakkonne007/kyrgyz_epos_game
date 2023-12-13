@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/image_composition.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -146,36 +147,28 @@ class DCollisionProcessor
 //Активные entity ВСЕГДА ПРЯМОУГОЛЬНИКИ залупленные
 void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
-  Set<int> insidePoints = {};
-  for (int i = 0; i < other.getVerticesCount(); i++) {
-    Vector2 otherFirst = other.getPoint(i);
-    if (otherFirst.x <= entity
-        .getPoint(3)
-        .x && otherFirst.x >= entity
-        .getPoint(0)
-        .x
-        && otherFirst.y <= entity
-            .getPoint(1)
-            .y && otherFirst.y >= entity
-        .getPoint(0)
-        .y) {
-      if(isMapObstacle){
-        insidePoints.add(i);
-      }else {
-        if (entity.onComponentTypeCheck(other)) {
-          entity.onCollisionStart({otherFirst}, other);
-        }
-        if (other.onComponentTypeCheck(entity)) {
-          other.onCollisionStart({otherFirst}, entity);
-        }
-        return;
-      }
-    }
-  }
-  _finalInterCalc(entity, other, insidePoints, isMapObstacle);
+  // Set<int> insidePoints = {};
+  // if(isMapObstacle){
+  //   for (int i = 0; i < other.getVerticesCount(); i++) {
+  //     Vector2 otherFirst = other.getPoint(i);
+  //     if (otherFirst.x <= entity
+  //         .getPoint(3)
+  //         .x && otherFirst.x >= entity
+  //         .getPoint(0)
+  //         .x
+  //         && otherFirst.y <= entity
+  //             .getPoint(1)
+  //             .y && otherFirst.y >= entity
+  //         .getPoint(0)
+  //         .y) {
+  //         insidePoints.add(i);
+  //       }
+  //     }
+  //   }
+  _finalInterCalc(entity, other, isMapObstacle);
 }
 
-void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> insidePoints, bool isMapObstacle)
+void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
   for (int i = -1; i < other.getVerticesCount() - 1; i++) {
     if (!other.isLoop && i == -1) {
@@ -221,12 +214,39 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, Set<int> i
             absLength.x + math.min(tempBorderLines[0].x, tempBorderLines[1].x),
             absLength.y + math.min(tempBorderLines[0].y, tempBorderLines[1].y)));
       }else if(tempBorderLines.length == 1){
+
         Vector2 absVec;
-        if(insidePoints.contains(tF)){
-          absVec = tempBorderLines[0] + other.getPoint(tF);
+        bool isInside = true;
+        Vector2 tempPos = f_pointOfIntersect(entity.getPoint(0), entity.getPoint(1), entity.getCenter(), otherSecond);
+        if(tempPos != Vector2.zero()){
+          isInside = false;
+        }
+        if(isInside) {
+          tempPos = f_pointOfIntersect(
+              entity.getPoint(1), entity.getPoint(2), entity.getCenter(), otherSecond);
+          if (tempPos != Vector2.zero()) {
+            isInside = false;
+          }
+        }
+        if(isInside) {
+          tempPos = f_pointOfIntersect(
+              entity.getPoint(2), entity.getPoint(3), entity.getCenter(), otherSecond);
+          if (tempPos != Vector2.zero()) {
+            isInside = false;
+          }
+        }
+        if(isInside) {
+          tempPos = f_pointOfIntersect(
+              entity.getPoint(3), entity.getPoint(0), entity.getCenter(), otherSecond);
+          if (tempPos != Vector2.zero()) {
+            isInside = false;
+          }
+        }
+        if(isInside){
+          absVec = tempBorderLines[0] + otherSecond;
           absVec /= 2;
-        }else{
-          absVec = tempBorderLines[0] + other.getPoint(tS);
+        }else {
+          absVec = tempBorderLines[0] + otherFirst;
           absVec /= 2;
         }
         entity.obstacleIntersects.add(absVec);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flame/components.dart';
+import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
@@ -30,7 +31,6 @@ class LoadedColumnRow
 
 class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 {
-
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
   static int countId = 0;
   OrthoPlayer? orthoPlayer;
@@ -56,7 +56,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
-    // await firstCachedIntoInternal();
+    await firstCachedIntoInternal();
     timer.start();
     loadObjs().ignore();
     loadAnimsHigh().ignore();

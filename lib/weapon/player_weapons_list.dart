@@ -33,7 +33,7 @@ class WSword extends PlayerWeapon
     _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16);
     _animLong.loop = false;
     collisionType = DCollisionType.inactive;
-    coolDown = 1000;
+    coolDown = 1;
   }
 
   @override
@@ -63,7 +63,6 @@ class WSword extends PlayerWeapon
         size = Vector2(1,1);
         angle = 0;
       }
-      debugMode = true;
       game.playerData.energy.value -= energyCost;
       _activeSecs = tick.totalDuration() + latencyBefore;
       _hitVariant = rand;

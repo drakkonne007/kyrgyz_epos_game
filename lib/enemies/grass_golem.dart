@@ -88,11 +88,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   {
     Image? spriteImage;
     if(spriteVariant == GolemVariant.Water){
-        spriteImage = await Flame.images.load(
-            'tiles/sprites/players/Stone-224x192.png');
+      spriteImage = await Flame.images.load(
+          'tiles/sprites/players/Stone-224x192.png');
     }else{
-        spriteImage = await Flame.images.load(
-            'tiles/sprites/players/Stone2-224x192.png');
+      spriteImage = await Flame.images.load(
+          'tiles/sprites/players/Stone2-224x192.png');
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
@@ -176,11 +176,10 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       return;
     }
     _rigidSec -= dt;
-    if(_rigidSec <= 1){
-      if(isNearPlayer()){
-        _body?.currentCoolDown = _body?.coolDown ?? 0;
-        _body?.hit(isFlippedHorizontally ? PlayerDirectionMove.Left : PlayerDirectionMove.Right);
-      }
+    if(_rigidSec <= 1 && isNearPlayer()){
+      _body?.currentCoolDown = _body?.coolDown ?? 0;
+      _body?.isHorizontalFlip = isFlippedHorizontally;
+      _body?.hit();
     }
     if(_rigidSec <= 0){
       selectBehaviour();

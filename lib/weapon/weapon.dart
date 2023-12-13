@@ -2,6 +2,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
+import 'package:flutter/widgets.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
@@ -49,7 +50,7 @@ abstract class EnemyWeapon extends DCollisionEntity
   double latencyBefore = 0;
 
 
-  void hit(PlayerDirectionMove direct);
+  Future<void> hit();
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {
@@ -72,12 +73,14 @@ abstract class EnemyWeapon extends DCollisionEntity
     }
   }
 
+  @mustCallSuper
   @override
   void update(double dt)
   {
     if(currentCoolDown < coolDown){
       currentCoolDown += dt;
     }
+    super.update(dt);
   }
 }
 
@@ -95,7 +98,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   double secsOfPermDamage = 0;
   bool inArmor = true;
   double energyCost = 0;
-  double coolDown = 1000;
+  double coolDown = 1;
   double currentCoolDown = 0;
   double latencyBefore = 0;
 
@@ -127,6 +130,7 @@ abstract class PlayerWeapon extends DCollisionEntity
     }
   }
 
+  @mustCallSuper
   @override
   void update(double dt)
   {

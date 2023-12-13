@@ -7,6 +7,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -28,21 +29,19 @@ enum MooseVariant
 
 class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy {
 
-  Moose(this._startPos, this._mooseVariant);
+  Moose(this._startPos, this._mooseVariant,{super.priority});
   Vector2 _startPos;
   MooseVariant _mooseVariant;
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
-  late EnemyHitbox _hitbox;
-  late GroundHitBox _groundBox;
   final Vector2 _spriteSheetSize = Vector2(347,192);
   Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 30;
-  double _rigidSec = 2;
+  final double _maxSpeed = 50;
+  double _rigidSec = 4;
   EWBody? _body;
   Timer? _timer;
 
   @override
-  double armor = 5;
+  double armor = 0;//5;
   @override
   double chanceOfLoot = 10;
   @override
@@ -50,7 +49,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   int row = 0;
   @override
-  double health = 10;
+  double health = 1;//10;
   @override
   int maxLoots = 2;
 
@@ -59,7 +58,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
-    _rigidSec = 2;
+    _rigidSec = 3;
     int random = math.Random().nextInt(4);
     if(random != 0){
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
@@ -135,23 +134,31 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
           loop: false);
     }
     _timer = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: selectBehaviour,repeat: false);
-    anchor = Anchor.center;
-    animation = _animMove;
-    size = _spriteSheetSize;
-    position = _startPos;
-    Vector2 tSize = Vector2(69,71);
 
-    _hitbox = EnemyHitbox(getPointsForActivs(Vector2(-69/2,-71/2), tSize),
-        collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
+    position = _startPos;
+    animation = _animIdle;
+    size = _spriteSheetSize;
+    const double percentOfWidth = 158/347;
+    Vector2 staticConstAnchor = Vector2(size.x * percentOfWidth,size.y/2);
+    anchor = const Anchor(percentOfWidth, 0.5);
+
+    Vector2 tSize = Vector2(28,54);
+
+    var _hitbox = EnemyHitbox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
+        ,collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-69/2,-71/2), tSize),obstacleBehavoiurStart: obstacleBehaviour,
+    var _groundBox = GroundHitBox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
+        ,obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
-    _groundBox.debugColor = BasicPalette.red.color;
-    _body = EWBody(getPointsForActivs(Vector2(-69/2,-71/2), tSize)
+    _body = EWBody(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
         ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
+    var ground = Ground(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
+        , collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+    ground.onlyForPlayer = true;
+    add(ground);
   }
 
   void onStartHit()
@@ -170,13 +177,13 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(pl.hitBox == null){
       return false;
     }
-    if((absolutePositionOf((_body!.getPoint(3) - _body!.getPoint(0)) / 2).x -  pl.absolutePositionOf((pl.hitBox!.getPoint(3) - pl.hitBox!.getPoint(0)) / 2).x).abs() > 40
-        || pl.absolutePositionOf(pl.hitBox!.getPoint(3)).y > absolutePositionOf(_body!.getPoint(2)).y
-        || pl.absolutePositionOf(pl.hitBox!.getPoint(2)).y < absolutePositionOf(_body!.getPoint(3)).y){
+    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width/2 + 100){
       return false;
-    }else{
-      return true;
     }
+    if(pl.hitBox!.getPoint(0).y > _body!.getPoint(1).y || pl.hitBox!.getPoint(1).y < _body!.getPoint(0).y){
+      return false;
+    }
+    return true;
   }
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
@@ -187,6 +194,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   void update(double dt)
   {
+    super.update(dt);
+    _rigidSec -= dt;
     _timer?.update(dt);
     column = position.x ~/ GameConsts.lengthOfTileSquare.x;
     row =    position.y ~/ GameConsts.lengthOfTileSquare.y;
@@ -199,14 +208,12 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(diffCol > 1 || diffRow > 1){
       return;
     }
-    super.update(dt);
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    _rigidSec -= dt;
     if(_rigidSec <= 1){
       if(isNearPlayer()){
-        _body?.hit(isFlippedHorizontally ? PlayerDirectionMove.Left : PlayerDirectionMove.Right);
+        _body?.hit();
       }
     }
     if(_rigidSec <= 0){
@@ -218,7 +225,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
-    _timer!.stop();
+    _timer?.stop();
     if(inArmor){
       health -= math.max(hurt - armor, 0);
     }else{
@@ -245,7 +252,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       animation = null;
       _animHurt.ticker().reset();
       animation = _animHurt;
-      _timer!.start();
+      _timer?.start();
     }
   }
 
