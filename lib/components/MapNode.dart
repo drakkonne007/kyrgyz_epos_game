@@ -75,20 +75,20 @@ class MapNode
               temp.add(Vector2(double.parse(sources.split(',')[0]),double.parse(sources.split(',')[1])));
             }
             if(temp.isNotEmpty) {
-              for(var i = 0; i < temp.length - 1; i++){
-                PolygonHitbox rect = PolygonHitbox([temp[i], temp[i + 1], temp[i + 1] + Vector2.all(1), temp[i] + Vector2.all(1)]);
-                rect.priority = 800;
-                rect.paint.color = BasicPalette.red.color;
-                rect.renderShape = true;
-                custMap.add(rect);
-              }
-              if(obj.getAttribute('lp')! == '1'){
-                PolygonHitbox rect = PolygonHitbox([temp[0], temp[temp.length - 1], temp[temp.length - 1] + Vector2.all(1), temp[0] + Vector2.all(1)]);
-                rect.priority = 800;
-                rect.paint.color = BasicPalette.red.color;
-                rect.renderShape = true;
-                custMap.add(rect);
-              }
+              // for(var i = 0; i < temp.length - 1; i++){
+              //   PolygonHitbox rect = PolygonHitbox([temp[i], temp[i + 1], temp[i + 1] + Vector2.all(1), temp[i] + Vector2.all(1)]);
+              //   rect.priority = 800;
+              //   rect.paint.color = BasicPalette.red.color;
+              //   rect.renderShape = true;
+              //   custMap.add(rect);
+              // }
+              // if(obj.getAttribute('lp')! == '1'){
+              //   PolygonHitbox rect = PolygonHitbox([temp[0], temp[temp.length - 1], temp[temp.length - 1] + Vector2.all(1), temp[0] + Vector2.all(1)]);
+              //   rect.priority = 800;
+              //   rect.paint.color = BasicPalette.red.color;
+              //   rect.renderShape = true;
+              //   custMap.add(rect);
+              // }
               var ground = Ground(temp, collisionType: DCollisionType.passive,
                   isSolid: false,
                   isStatic: true,

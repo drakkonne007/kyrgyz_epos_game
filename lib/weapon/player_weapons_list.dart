@@ -47,7 +47,6 @@ class WSword extends PlayerWeapon
       return;
     }
     if(collisionType == DCollisionType.inactive) {
-      super.isHorizontalFlip = game.gameMap.orthoPlayer?.isFlippedHorizontally ?? false;
       currentCoolDown = coolDown;
       onStartWeaponHit.call();
       int rand = math.Random().nextInt(2);

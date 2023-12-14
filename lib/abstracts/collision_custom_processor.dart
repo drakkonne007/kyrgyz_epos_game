@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/image_composition.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -150,30 +149,12 @@ class DCollisionProcessor
 //Активные entity ВСЕГДА ПРЯМОУГОЛЬНИКИ залупленные
 void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
-  Set<int> insidePoints = {};
-  if(isMapObstacle){
-    for (int i = 0; i < other.getVerticesCount(); i++) {
-      Vector2 otherFirst = other.getPoint(i);
-      if (otherFirst.x <= entity
-          .getPoint(3)
-          .x && otherFirst.x >= entity
-          .getPoint(0)
-          .x
-          && otherFirst.y <= entity
-              .getPoint(1)
-              .y && otherFirst.y >= entity
-          .getPoint(0)
-          .y) {
-          insidePoints.add(i);
-        }
-      }
-    }
-  _finalInterCalc(entity, other,insidePoints, isMapObstacle);
+  _finalInterCalc(entity, other,isMapObstacle);
 }
 
-void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> insidePoints, bool isMapObstacle)
+void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
- Set<Vector2> insidePoints = {};
+  Set<int> insidePoints = {};
   for (int i = -1; i < other.getVerticesCount() - 1; i++) {
     if (!other.isLoop && i == -1) {
       continue;
@@ -216,14 +197,32 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
             absLength.x + math.min(tempBorderLines[0].x, tempBorderLines[1].x),
             absLength.y + math.min(tempBorderLines[0].y, tempBorderLines[1].y)));
       }else if(tempBorderLines.length == 1){
+        print('Hoho');
+        _game.
         Vector2 absVec;
         if(insidePoints.contains(tFirst)){
           absVec = tempBorderLines[0] + otherFirst;
-          absVec /= 2;
-        }else{
+        }else if(insidePoints.contains(tSecond)){
           absVec = tempBorderLines[0] + otherSecond;
-          absVec /= 2;
+        }else{
+            if (otherFirst.x <= entity
+                .getMaxVector()
+                .x && otherFirst.x >= entity
+                .getMinVector()
+                .x
+                && otherFirst.y <= entity
+                    .getMaxVector()
+                    .y && otherFirst.y >= entity
+                .getMinVector()
+                .y) {
+              insidePoints.add(tFirst);
+              absVec = tempBorderLines[0] + otherFirst;
+            }else{
+              insidePoints.add(tSecond);
+              absVec = tempBorderLines[0] + otherSecond;
+            }
         }
+        absVec /= 2;
         entity.obstacleIntersects.add(absVec);
       }
     } else {

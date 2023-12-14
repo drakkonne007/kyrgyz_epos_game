@@ -58,7 +58,6 @@ abstract class DCollisionEntity extends Component
   KyrgyzGame game;
   int? column;
   int? row;
-  bool isHorizontalFlip = false;
   bool onlyForPlayer = false;
   double width = 0;
   double height = 0;
@@ -98,8 +97,32 @@ abstract class DCollisionEntity extends Component
     }
     _center = (_maxCoords + _minCoords) / 2;
     transformPoint??= _center;
-    _maxCoords.x - _minCoords.x;
-    _maxCoords.y - _minCoords.y;
+  }
+
+  Vector2 getMinVector()
+  {
+    if(isStatic){
+      return _minCoords;
+    }
+    var par = parent as PositionComponent;
+    if(par.isFlippedHorizontally){
+      return _getPointFromRawPoint(_maxCoords);
+    }else{
+      return _getPointFromRawPoint(_minCoords);
+    }
+  }
+
+  Vector2 getMaxVector()
+  {
+    if(isStatic){
+      return _maxCoords;
+    }
+    var par = parent as PositionComponent;
+    if(par.isFlippedHorizontally){
+      return _getPointFromRawPoint(_minCoords);
+    }else{
+      return _getPointFromRawPoint(_maxCoords);
+    }
   }
 
   doDebug() {
@@ -145,7 +168,7 @@ abstract class DCollisionEntity extends Component
       point.x *= scale.x;
       point.y *= scale.y;
       if(angle != 0){
-        point = _rotatePoint(point);
+        point = _rotatePoint(point,temp.isFlippedHorizontally);
       }
       point += transformPoint!;
       return point + posAnchor;
@@ -246,7 +269,7 @@ abstract class DCollisionEntity extends Component
     // return _vertices[index];
   }
 
-  Vector2 _rotatePoint(Vector2 point) {
+  Vector2 _rotatePoint(Vector2 point, bool isHorizontalFlip) {
     double radian = angle * pi / 180;
     isHorizontalFlip ? radian *= -1 : radian;
     point.x = point.x * cos(radian) - point.y * sin(radian);
@@ -256,7 +279,7 @@ abstract class DCollisionEntity extends Component
 
   @override
   void update(double dt) {
-    doDebug();
+    // doDebug();
     super.update(dt);
   }
 

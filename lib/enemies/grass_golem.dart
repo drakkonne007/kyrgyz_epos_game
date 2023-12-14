@@ -178,7 +178,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _rigidSec -= dt;
     if(_rigidSec <= 1 && isNearPlayer()){
       _body?.currentCoolDown = _body?.coolDown ?? 0;
-      _body?.isHorizontalFlip = isFlippedHorizontally;
       _body?.hit();
     }
     if(_rigidSec <= 0){
