@@ -9,7 +9,10 @@ import 'dart:math' as math;
 
 class WSword extends PlayerWeapon
 {
-  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
+  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game})
+  {
+    transformPoint = vertices[0];
+  }
 
   double _activeSecs = 0;
   final double _maxLength = 15;
@@ -53,14 +56,14 @@ class WSword extends PlayerWeapon
         latencyBefore = -0.14;
         _diffAngle = 0;
         angle = _startAngle;
-        size = Vector2(3,0.2);
+        scale = Vector2(3,0.2);
         tick = SpriteAnimationTicker(_animShort);
         game.gameMap.orthoPlayer?.animation = _animShort;
       }else{
         latencyBefore = -0.3;
         tick = SpriteAnimationTicker(_animLong);
         game.gameMap.orthoPlayer?.animation = _animLong;
-        size = Vector2(1,1);
+        scale = Vector2(1,1);
         angle = 0;
       }
       game.playerData.energy.value -= energyCost;
@@ -93,10 +96,10 @@ class WSword extends PlayerWeapon
             angle = _startAngle + _diffAngle;
           }
         }else{
-          if(_isGrow && size.x > _maxLength / 2){
+          if(_isGrow && scale.x > _maxLength / 2){
             _isGrow = false;
           }
-          _isGrow ? size = Vector2(size.x + dt/_activeSecs * _maxLength, size.y) : size = Vector2(size.x - dt/_activeSecs * _maxLength, size.y);
+          _isGrow ? scale = Vector2(scale.x + dt/_activeSecs * _maxLength, scale.y) : scale = Vector2(scale.x - dt/_activeSecs * _maxLength, scale.y);
         }
       }
     }

@@ -25,7 +25,7 @@ class Ground extends MapObstacle
 
   @override
   void update(double dt) {
-    doDebug();
+    // doDebug();
     super.update(dt);
   }
 }

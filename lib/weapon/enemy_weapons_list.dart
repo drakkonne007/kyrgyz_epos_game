@@ -15,6 +15,7 @@ class EWBody extends EnemyWeapon
   Future onLoad() async
   {
     damage = 1;
+    transformPoint = vertices[0];
   }
 
   @override
@@ -24,12 +25,12 @@ class EWBody extends EnemyWeapon
     onStartWeaponHit.call();
     _isActive = true;
     latencyBefore = -activeSecs/3;
-    size = Vector2(1,1);
+    scale = Vector2(1,1);
     await Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
       _isGrow = true;
       onEndWeaponHit.call();
       _isActive = false;
-      size = Vector2(1,1);
+      scale = Vector2(1,1);
     });
 
   }
@@ -41,10 +42,10 @@ class EWBody extends EnemyWeapon
       latencyBefore += dt;
     }
     if(latencyBefore >= 0 && _isActive){
-      if(_isGrow && size.x > 2){
+      if(_isGrow && scale.x > 2){
         _isGrow = false;
       }
-      _isGrow ? size = Vector2(math.max(1,(size.x + dt/activeSecs * 4)), size.y) : size = Vector2(math.max(1, size.x - dt/activeSecs * 4), size.y);
+      _isGrow ? scale = Vector2(math.max(1,(scale.x + dt/activeSecs * 4)), scale.y) : scale = Vector2(math.max(1, scale.x - dt/activeSecs * 4), scale.y);
     }
     super.update(dt);
   }
