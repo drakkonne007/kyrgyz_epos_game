@@ -197,8 +197,6 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, bool isMap
             absLength.x + math.min(tempBorderLines[0].x, tempBorderLines[1].x),
             absLength.y + math.min(tempBorderLines[0].y, tempBorderLines[1].y)));
       }else if(tempBorderLines.length == 1){
-        print('Hoho');
-        _game.
         Vector2 absVec;
         if(insidePoints.contains(tFirst)){
           absVec = tempBorderLines[0] + otherFirst;
