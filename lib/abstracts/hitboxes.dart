@@ -170,26 +170,18 @@ abstract class DCollisionEntity extends Component
     }else {
       var temp = parent as PositionComponent;
       Vector2 posAnchor = temp.positionOfAnchor(temp.anchor);
-      // return temp.isFlippedHorizontally ? Vector2(-rawPoint.x,rawPoint.y) + posAnchor : rawPoint + posAnchor;
-      Vector2 point = rawPoint;
+      Vector2 point = rawPoint - transformPoint!;
       if(temp.isFlippedHorizontally){
-        // point = rawPoint - Vector2(-transformPoint!.x,transformPoint!.y);
-        point = Vector2(-rawPoint.x + transformPoint!.x,rawPoint.y - transformPoint!.y);
-        point.x *= scale.x;
-        point.y *= scale.y;
-        point += Vector2(-transformPoint!.x,transformPoint!.y);
-        if(angle != 0){
-          point = _rotatePoint(point,temp.isFlippedHorizontally);
-        }
-      }else{
-        print('false');
-        point = rawPoint - transformPoint!;
-        point.x *= scale.x;
-        point.y *= scale.y;
-        point += transformPoint!;
-        if(angle != 0){
-          point = _rotatePoint(point,temp.isFlippedHorizontally);
-        }
+        point.x *= -1;
+      }
+      point.x *= scale.x;
+      point.y *= scale.y;
+      point += transformPoint!;
+      if(angle != 0){
+        point = _rotatePoint(point,temp.isFlippedHorizontally);
+      }
+      if(temp.isFlippedHorizontally){
+        point.x += -transformPoint!.x;
       }
       return point + posAnchor;
     }
@@ -208,31 +200,12 @@ abstract class DCollisionEntity extends Component
   }
 
   Vector2 _rotatePoint(Vector2 point, bool isHorizontalFlip) {
-    if(isHorizontalFlip){
-      point = Vector2(-point.x + transformPoint!.x,point.y - transformPoint!.y);
-    }else{
-      point = point - transformPoint!;
-    }
-    // point -= transformPoint!;
-
+    point -= transformPoint!;
     double radian = angle * pi / 180;
-    if(isHorizontalFlip){
-      radian += -radian;
-    }
-    double x,y;
-    if(isHorizontalFlip){
-      x = point.x * cos(radian) - point.y * sin(radian);
-      y = point.x * sin(radian) + point.y * cos(radian);
-    }else{
-      x = point.x * cos(radian) - point.y * sin(radian);
-      y = point.x * sin(radian) + point.y * cos(radian);
-    }
-    if(isHorizontalFlip){
-      point = Vector2(x,y) + Vector2(-transformPoint!.x,transformPoint!.y);
-    }else{
-      point = Vector2(x,y) + transformPoint!;
-    }
-    return point;//Vector2(x,y) + transformPoint!;
+    isHorizontalFlip ? radian *= -1 : null;
+    double x = point.x * cos(radian) - point.y * sin(radian);
+    double y = point.x * sin(radian) + point.y * cos(radian);
+    return Vector2(x,y) + transformPoint!;
   }
 }
 
