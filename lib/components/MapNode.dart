@@ -75,20 +75,20 @@ class MapNode
               temp.add(Vector2(double.parse(sources.split(',')[0]),double.parse(sources.split(',')[1])));
             }
             if(temp.isNotEmpty) {
-              for(var i = 0; i < temp.length - 1; i++){
-                PolygonHitbox rect = PolygonHitbox([temp[i], temp[i + 1], temp[i + 1] + Vector2.all(1), temp[i] + Vector2.all(1)]);
-                rect.priority = 800;
-                rect.paint.color = BasicPalette.red.color;
-                rect.renderShape = true;
-                custMap.add(rect);
-              }
-              if(obj.getAttribute('lp')! == '1'){
-                PolygonHitbox rect = PolygonHitbox([temp[0], temp[temp.length - 1], temp[temp.length - 1] + Vector2.all(1), temp[0] + Vector2.all(1)]);
-                rect.priority = 800;
-                rect.paint.color = BasicPalette.red.color;
-                rect.renderShape = true;
-                custMap.add(rect);
-              }
+              // for(var i = 0; i < temp.length - 1; i++){
+              //   PolygonHitbox rect = PolygonHitbox([temp[i], temp[i + 1], temp[i + 1] + Vector2.all(1), temp[i] + Vector2.all(1)]);
+              //   rect.priority = 800;
+              //   rect.paint.color = BasicPalette.red.color;
+              //   rect.renderShape = true;
+              //   custMap.add(rect);
+              // }
+              // if(obj.getAttribute('lp')! == '1'){
+              //   PolygonHitbox rect = PolygonHitbox([temp[0], temp[temp.length - 1], temp[temp.length - 1] + Vector2.all(1), temp[0] + Vector2.all(1)]);
+              //   rect.priority = 800;
+              //   rect.paint.color = BasicPalette.red.color;
+              //   rect.renderShape = true;
+              //   custMap.add(rect);
+              // }
               var ground = Ground(temp, collisionType: DCollisionType.passive,
                   isSolid: false,
                   isStatic: true,
@@ -449,13 +449,14 @@ class MapNode
                 Vector2 topLeft = Vector2(currColInCycle * GameConsts.lengthOfTileSquare.x,
                     currRowInCycle * GameConsts.lengthOfTileSquare.y);
                 Vector2 topRight = Vector2(
-                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x - 0.0000000000001,
+                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x,
                     currRowInCycle * GameConsts.lengthOfTileSquare.y);
                 Vector2 bottomLeft = Vector2(currColInCycle * GameConsts.lengthOfTileSquare.x,
-                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y - 0.0000000000001);
+                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y);
                 Vector2 bottomRight = Vector2(
-                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x - 0.0000000000001,
-                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y - 0.0000000000001);
+                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x,
+                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y);
+
                 List<Vector2> coord = [];
                 for (int i = -1; i < points.length - 1; i++) {
                   if (!isLoop && i == -1) {
@@ -464,17 +465,29 @@ class MapNode
                   int tF, tS;
                   if (i == -1) {
                     tF = points.length - 1;
-                    tS = 0;
                   } else {
                     tF = i;
-                    tS = i + 1;
+                  }
+                  tS = i + 1;
+
+                  int col = points[tF].x ~/ GameConsts.lengthOfTileSquare.x;
+                  int row = points[tF].y ~/ GameConsts.lengthOfTileSquare.y;
+                  bool isFirst = false;
+                  if (col == currColInCycle && row == currRowInCycle) {
+                    coord.add(points[tF]);
+                    isFirst = true;
+                  }
+                  col = points[tS].x ~/ GameConsts.lengthOfTileSquare.x;
+                  row = points[tS].y ~/ GameConsts.lengthOfTileSquare.y;
+                  bool isSecond = false;
+                  if (col == currColInCycle && row == currRowInCycle) {
+                    coord.add(points[tS]);
+                    isSecond = true;
+                  }
+                  if (isFirst && isSecond) {
+                    continue;
                   }
                   List<Vector2> tempCoord = [];
-                  int tempColumn = points[tF].x ~/ GameConsts.lengthOfTileSquare.x;
-                  int tempRow = points[tF].y ~/ GameConsts.lengthOfTileSquare.y;
-                  if(tempColumn == currColInCycle && tempRow == currRowInCycle){
-                    coord.add(points[tF]);
-                  }
                   Vector2 answer = f_pointOfIntersect(
                       topLeft, topRight, points[tF], points[tS]);
                   if (answer != Vector2.zero()) {
@@ -495,67 +508,66 @@ class MapNode
                   if (answer != Vector2.zero()) {
                     tempCoord.add(answer);
                   }
-                  if (tempCoord.length == 1) {
-                    int tempCol = points[tS].x ~/ GameConsts.lengthOfTileSquare.x;
-                    int tempRow = points[tS].y ~/ GameConsts.lengthOfTileSquare.y;
-                    if( tempCol == currColInCycle && tempRow == currRowInCycle){
-                      coord.add(points[tS]);
-                      continue;
-                    }
-                    coord.add(tempCoord.first);
-                    if(coord.length > 1){
-                      GroundSource newPoints = GroundSource();
-                      newPoints.isLoop = false;
-                      newPoints.points = List.unmodifiable(coord);
-                      objsMap.putIfAbsent(LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
-                      objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!.add(newPoints);
+                  if (isFirst && !isSecond) {
+                    coord.add(tempCoord[0]);
+                    GroundSource newPoints = GroundSource();
+                    newPoints.isLoop = false;
+                    newPoints.points = Set.unmodifiable(coord);
+                    objsMap.putIfAbsent(
+                        LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
+                    objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                        .add(newPoints);
+                    coord.clear();
+                  }
+                  if (isSecond && !isFirst) {
+                    Vector2 temp = coord.last;
+                    coord.last = tempCoord[0];
+                    coord.add(temp);
+                    GroundSource newPoints = GroundSource();
+                    newPoints.isLoop = false;
+                    newPoints.points = Set.unmodifiable(coord);
+                    objsMap.putIfAbsent(
+                        LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
+                    objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                        .add(newPoints);
+                    coord.clear();
+                    //Записываем всё что есть
+                  }
+                  if (!isFirst && !isSecond && tempCoord.length == 2) {
+                    if (points[tF].distanceTo(tempCoord.first) >
+                        points[tF].distanceTo(tempCoord.last)) {
                       coord.clear();
-                    }
-                  } else {
-                    if (tempCoord.length == 2) {
+                      coord.add(tempCoord.last);
+                      coord.add(tempCoord.first);
+                      //Записываем всё что есть
+                    } else {
                       coord.clear();
-                      if (points[tF].distanceTo(tempCoord.first) >
-                          points[tF].distanceTo(tempCoord.last)) {
-                        coord.add(tempCoord.last);
-                        coord.add(tempCoord.first);
-                      } else {
-                        coord.add(tempCoord.first);
-                        coord.add(tempCoord.last);
-                      }
-                      GroundSource newPoints = GroundSource();
-                      newPoints.isLoop = false;
-                      newPoints.points = List.unmodifiable(coord);
-                      objsMap.putIfAbsent(LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
-                      objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!.add(newPoints);
-                      coord.clear();
-                    } else if(tempCoord.length > 2){
-                      print('CRITICAL ERROR IN PRECOMPILE GROUND!!!');
+                      coord.add(tempCoord.first);
+                      coord.add(tempCoord.last);
+                      //Записываем всё что есть
                     }
+                    GroundSource newPoints = GroundSource();
+                    newPoints.isLoop = false;
+                    newPoints.points = Set.unmodifiable(coord);
+                    objsMap.putIfAbsent(
+                        LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
+                    objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                        .add(newPoints);
+                    coord.clear();
                   }
                 }
-                if (!isLoop) {
-                  int tempColumn = points[points.length - 1].x ~/ GameConsts.lengthOfTileSquare.x;
-                  int tempRow = points[points.length - 1].y ~/ GameConsts.lengthOfTileSquare.y;
-                  if(tempColumn == currColInCycle && tempRow == currRowInCycle){
-                    coord.add(points[points.length - 1]);
+                if(coord.isNotEmpty){
+                  if(coord.length == 1){
+                    print('Error in calc $coord');
                   }
-                }
-                if(coord.length == 1){
-                  print('STRANNO!!! $currColInCycle $currRowInCycle');
-                  coord.add(points[points.length - 1]);
-                  print(coord);
-                  // exit(0);
-                }
-                if(coord.length > 1) {
                   GroundSource newPoints = GroundSource();
                   newPoints.isLoop = isReallyLoop;
-                  newPoints.points = List.unmodifiable(coord);
+                  newPoints.points = Set.unmodifiable(coord);
                   objsMap.putIfAbsent(
-                      LoadedColumnRow(currColInCycle, currRowInCycle), () =>
-                  [
-                  ]);
-                  objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!.add(
-                      newPoints);
+                      LoadedColumnRow(currColInCycle, currRowInCycle), () => []);
+                  objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                      .add(newPoints);
+                  coord.clear();
                 }
               }
             }
@@ -575,7 +587,7 @@ class MapNode
                 if(j > 0){
                   file.writeAsStringSync(' ', mode: FileMode.append);
                 }
-                file.writeAsStringSync('${objsMap[key]![i].points[j].x},${objsMap[key]![i].points[j].y}', mode: FileMode.append);
+                file.writeAsStringSync('${objsMap[key]![i].points.toList()[j].x},${objsMap[key]![i].points.toList()[j].y}', mode: FileMode.append);
               }
               file.writeAsStringSync('"/>', mode: FileMode.append);
             }

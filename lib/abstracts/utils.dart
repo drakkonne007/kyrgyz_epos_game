@@ -23,5 +23,5 @@ Vector2 f_pointOfIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
 class GroundSource
 {
   bool isLoop = false;
-  List<Vector2> points = [];
+  Set<Vector2> points = {};
 }

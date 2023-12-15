@@ -55,7 +55,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
-    // await firstCachedIntoInternal();
+    await firstCachedIntoInternal();
     loadObjs().ignore();
     loadAnimsHigh().ignore();
     loadAnimsDown().ignore();
