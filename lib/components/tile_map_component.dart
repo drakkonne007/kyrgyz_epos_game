@@ -175,7 +175,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
     gameRef.doGameHud();
     gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,GameConsts.lengthOfTileSquare.x*GameConsts.maxColumn,GameConsts.lengthOfTileSquare.y*GameConsts.maxRow));
-    gameRef.camera.zoom = 1.5;
+    gameRef.camera.zoom = 1.3;
     isFirstLoad = true;
   }
 

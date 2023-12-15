@@ -43,11 +43,11 @@ class WSword extends PlayerWeapon
         || game.gameMap.orthoPlayer!.animation == game.gameMap.orthoPlayer!.animDeath){
       return;
     }
-    if(collisionType == DCollisionType.inactive) {
+    if(collisionType == DCollisionType.inactive){
       transformPoint = vertices[0];
       currentCoolDown = coolDown;
       onStartWeaponHit.call();
-      int rand = 0;//math.Random().nextInt(2);
+      int rand = math.Random().nextInt(2);
       late SpriteAnimationTicker tick;
       if(rand == 0){
         latencyBefore = -0.14;

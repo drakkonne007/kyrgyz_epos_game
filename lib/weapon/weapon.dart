@@ -78,7 +78,7 @@ abstract class EnemyWeapon extends DCollisionEntity
   @override
   void update(double dt)
   {
-    doDebug();
+    // doDebug();
     if(currentCoolDown < coolDown){
       currentCoolDown += dt;
     }
@@ -135,7 +135,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   @override
   void update(double dt)
   {
-    doDebug();
+    // doDebug();
     if(currentCoolDown < coolDown){
       currentCoolDown += dt;
     }
