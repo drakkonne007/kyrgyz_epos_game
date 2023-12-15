@@ -47,7 +47,7 @@ class MainMenu extends StatelessWidget
                     child:ElevatedButton(
                         clipBehavior: Clip.antiAlias,
                         onPressed: (){
-                          if(isMapCached.value || isMapCompile){
+                          if(isMapCached.value >= 4 || isMapCompile){
                             _game.overlays.remove(id);
                             _game.loadNewMap('test.tmx');
                           }else{
@@ -75,7 +75,7 @@ class MainMenu extends StatelessWidget
                     ElevatedButton(
                         clipBehavior: Clip.antiAlias,
                         onPressed: (){
-                          if(isMapCached.value || isMapCompile){
+                          if(isMapCached.value >= 4 || isMapCompile){
                             _game.overlays.remove(id);
                             _game.loadNewMap('test.tmx');
                           }else{
@@ -171,8 +171,8 @@ class MainMenu extends StatelessWidget
                   const SizedBox(height: 20,),
                   ValueListenableBuilder(
                     valueListenable: isMapCached,
-                    builder: (BuildContext context, bool value, Widget? child) {
-                      return isMapCached.value ? const SizedBox.shrink() : const CircularProgressIndicator();
+                    builder: (BuildContext context, int value, Widget? child) {
+                      return value >= 4 ? const SizedBox.shrink() : Row(children: [const CircularProgressIndicator(), Text('$value')]);
                     },
                   )
                 ]

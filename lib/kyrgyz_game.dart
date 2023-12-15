@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:xml/xml.dart';
 
-ValueNotifier<bool> isMapCached = ValueNotifier(false);
+ValueNotifier<int> isMapCached = ValueNotifier(0);
 
 class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables, WidgetsBindingObserver
 {

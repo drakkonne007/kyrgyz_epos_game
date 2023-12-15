@@ -27,6 +27,7 @@ Future loadObjs() async
   if(objsResponse is Map<String,Iterable<XmlElement>>){
     print('objsResponse');
     KyrgyzGame.cachedObjXmls = objsResponse;
+    isMapCached.value++;
   }
   objResponseReceivePort.close();
   objsReceivePort.close();
@@ -82,6 +83,7 @@ Future loadAnimsHigh() async
         KyrgyzGame.cachedImgs[anim.getAttribute('src')!] = await Flame.images.load(anim.getAttribute('src')!);
       }
     }
+    isMapCached.value++;
   }
   animsResponseReceivePort.close();
   animsReceivePort.close();
@@ -116,8 +118,6 @@ void _loadAnimsHigh(SendPort mySendPort) async
 
 Future loadAnimsDown() async
 {
-  var timer = Stopwatch();
-  timer.start();
   var dir = await getApplicationCacheDirectory();
   ReceivePort animsReceivePort = ReceivePort();
   var isol = await Isolate.spawn<SendPort>(_loadAnimsDown, animsReceivePort.sendPort,errorsAreFatal: false);
@@ -137,12 +137,11 @@ Future loadAnimsDown() async
         KyrgyzGame.cachedImgs[anim.getAttribute('src')!] = await Flame.images.load(anim.getAttribute('src')!);
       }
     }
+    isMapCached.value++;
   }
   animsResponseReceivePort.close();
   animsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
-  timer.stop();
-  print(timer.elapsed.inMilliseconds);
 }
 
 void _loadAnimsDown(SendPort mySendPort) async

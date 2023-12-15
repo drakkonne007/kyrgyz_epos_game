@@ -50,14 +50,12 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
 
   Future preloadAnimAndObj() async
   {
-    var timer = Stopwatch();
-    isMapCached.value = false;
+    isMapCached.value = 0;
     KyrgyzGame.cachedObjXmls.clear();
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
     // await firstCachedIntoInternal();
-    timer.start();
     loadObjs().ignore();
     loadAnimsHigh().ignore();
     loadAnimsDown().ignore();
@@ -69,10 +67,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     for(final path in imagePaths) {
       KyrgyzGame.cachedMapPngs.add(path);
     }
-    timer.stop();
-    print('all map load time: ${timer.elapsedMilliseconds}');
-    print('end preload');
-    isMapCached.value = true;
+    isMapCached.value++;
   }
 
   int column()
