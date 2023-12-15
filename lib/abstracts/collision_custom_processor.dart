@@ -149,12 +149,23 @@ class DCollisionProcessor
 //Активные entity ВСЕГДА ПРЯМОУГОЛЬНИКИ залупленные
 void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
-  _finalInterCalc(entity, other,isMapObstacle);
+  Set<int> insidePoints = {};
+  if(isMapObstacle) { //Если у вас все обекты столкновения с препятсвием с землёй квадратные, иначе делать что ближе от центра твоего тела
+    for (int i = 0; i < other.getVerticesCount(); i++) {
+      Vector2 otherFirst = other.getPoint(i);
+      if(otherFirst.x <= entity.getMaxVector().x
+          && otherFirst.x >= entity.getMinVector().x
+          && otherFirst.y <= entity.getPoint(1).y
+          && otherFirst.y >= entity.getPoint(0).y){
+        insidePoints.add(i);
+      }
+    }
+  }
+  _finalInterCalc(entity, other,insidePoints,isMapObstacle);
 }
 
-void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
+void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> insidePoints, bool isMapObstacle)
 {
-  Set<int> insidePoints = {};
   for (int i = -1; i < other.getVerticesCount() - 1; i++) {
     if (!other.isLoop && i == -1) {
       continue;
@@ -162,63 +173,44 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other, bool isMap
     int tFirst, tSecond;
     if (i == -1) {
       tFirst = other.getVerticesCount() - 1;
-      tSecond = i + 1;
     } else {
       tFirst = i;
-      tSecond = i + 1;
     }
+    tSecond = i + 1;
     Vector2 otherFirst = other.getPoint(tFirst);
     Vector2 otherSecond = other.getPoint(tSecond);
     if (isMapObstacle) {
+      if(insidePoints.contains(tFirst) && insidePoints.contains(tSecond)) {
+        entity.obstacleIntersects.add((otherFirst + otherSecond) / 2);
+        continue;
+      }
       List<Vector2> tempBorderLines = [];
-      for(int i=0; i<entity.getVerticesCount() - 1; i++){
+      for(int i= - 1; i<entity.getVerticesCount() - 1; i++){
         if (!entity.isLoop && i == -1) {
           continue;
         }
         int tF, tS;
         if (i == -1) {
           tF = entity.getVerticesCount() - 1;
-          tS = i + 1;
         } else {
           tF = i;
-          tS = i + 1;
         }
-        Vector2 point = f_pointOfIntersect(
-            entity.getPoint(tF), entity.getPoint(tS), otherFirst, otherSecond);
+        tS = i + 1;
+        Vector2 point = f_pointOfIntersect(entity.getPoint(tF), entity.getPoint(tS)
+            , otherFirst, otherSecond);
+
         if (point != Vector2.zero()) {
           tempBorderLines.add(point);
         }
       }
       if (tempBorderLines.length == 2) {
-        Vector2 absLength = Vector2(tempBorderLines[0].x - tempBorderLines[1].x,
-            tempBorderLines[0].y - tempBorderLines[1].y);
-        absLength = Vector2(absLength.x.abs(), absLength.y.abs()) / 2;
-        entity.obstacleIntersects.add(Vector2(
-            absLength.x + math.min(tempBorderLines[0].x, tempBorderLines[1].x),
-            absLength.y + math.min(tempBorderLines[0].y, tempBorderLines[1].y)));
+        entity.obstacleIntersects.add((tempBorderLines[0] + tempBorderLines[1]) / 2);
       }else if(tempBorderLines.length == 1){
         Vector2 absVec;
         if(insidePoints.contains(tFirst)){
           absVec = tempBorderLines[0] + otherFirst;
-        }else if(insidePoints.contains(tSecond)){
-          absVec = tempBorderLines[0] + otherSecond;
         }else{
-            if (otherFirst.x <= entity
-                .getMaxVector()
-                .x && otherFirst.x >= entity
-                .getMinVector()
-                .x
-                && otherFirst.y <= entity
-                    .getMaxVector()
-                    .y && otherFirst.y >= entity
-                .getMinVector()
-                .y) {
-              insidePoints.add(tFirst);
-              absVec = tempBorderLines[0] + otherFirst;
-            }else{
-              insidePoints.add(tSecond);
-              absVec = tempBorderLines[0] + otherSecond;
-            }
+          absVec = tempBorderLines[0] + otherSecond;
         }
         absVec /= 2;
         entity.obstacleIntersects.add(absVec);

@@ -9,13 +9,10 @@ import 'dart:math' as math;
 
 class WSword extends PlayerWeapon
 {
-  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game})
-  {
-    transformPoint = vertices[0];
-  }
+  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
 
   double _activeSecs = 0;
-  final double _maxLength = 15;
+  final double _maxLength = 9;
   int _hitVariant = 0;
   late SpriteAnimation _animShort, _animLong;
   bool _isGrow = true;
@@ -43,19 +40,20 @@ class WSword extends PlayerWeapon
   Future<void> hit() async
   {
     if(game.playerData.energy.value < energyCost || game.gameMap.orthoPlayer!.animation == game.gameMap.orthoPlayer!.animHurt
-    || game.gameMap.orthoPlayer!.animation == game.gameMap.orthoPlayer!.animDeath){
+        || game.gameMap.orthoPlayer!.animation == game.gameMap.orthoPlayer!.animDeath){
       return;
     }
     if(collisionType == DCollisionType.inactive) {
+      transformPoint = vertices[0];
       currentCoolDown = coolDown;
       onStartWeaponHit.call();
-      int rand = math.Random().nextInt(2);
+      int rand = 0;//math.Random().nextInt(2);
       late SpriteAnimationTicker tick;
       if(rand == 0){
         latencyBefore = -0.14;
         _diffAngle = 0;
         angle = _startAngle;
-        scale = Vector2(3,0.2);
+        scale = Vector2(2,0.2);
         tick = SpriteAnimationTicker(_animShort);
         game.gameMap.orthoPlayer?.animation = _animShort;
       }else{
@@ -76,6 +74,7 @@ class WSword extends PlayerWeapon
         _isGrow = true;
         game.playerData.isLockEnergy = false;
         onEndWeaponHit.call();
+        // transformPoint = rawCenter;
         // print('end hit');
       });
     }
@@ -87,19 +86,17 @@ class WSword extends PlayerWeapon
     if(latencyBefore < 0){
       latencyBefore += dt;
     }
-    if(latencyBefore >= 0){
-      if(collisionType == DCollisionType.active){
-        if(_hitVariant == 0){
-          if(angle < 8.360913459421951 * 10) {
-            _diffAngle += (_activeSecs / 2) * sectorInRadian * 4 * dt * 900;
-            angle = _startAngle + _diffAngle;
-          }
-        }else{
-          if(_isGrow && scale.x > _maxLength / 2){
-            _isGrow = false;
-          }
-          _isGrow ? scale = Vector2(scale.x + dt/_activeSecs * _maxLength, scale.y) : scale = Vector2(scale.x - dt/_activeSecs * _maxLength, scale.y);
+    if(latencyBefore >= 0 && collisionType == DCollisionType.active){
+      if(_hitVariant == 0){
+        if(angle < 8.360913459421951*15) {
+          _diffAngle += (_activeSecs / 2) * sectorInRadian * 4 * dt * 900;
+          angle = _startAngle + _diffAngle;
         }
+      }else{
+        if(_isGrow && scale.x > _maxLength / 2){
+          _isGrow = false;
+        }
+        _isGrow ? scale = Vector2(scale.x + dt/_activeSecs * _maxLength, scale.y) : scale = Vector2(scale.x - dt/_activeSecs * _maxLength, scale.y);
       }
     }
     super.update(dt);

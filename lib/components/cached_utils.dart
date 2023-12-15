@@ -31,7 +31,6 @@ Future loadObjs() async
   objResponseReceivePort.close();
   objsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
-  print(timer.elapsed.inMilliseconds);
   timer.stop();
 }
 
@@ -88,7 +87,6 @@ Future loadAnimsHigh() async
   animsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
   timer.stop();
-  print(timer.elapsed.inMilliseconds);
 }
 
 void _loadAnimsHigh(SendPort mySendPort) async

@@ -8,6 +8,7 @@ class EWBody extends EnemyWeapon
 {
   bool _isActive = false;
   bool _isGrow = true;
+  final double _maxLength = 3;
 
   EWBody(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
 
@@ -32,7 +33,6 @@ class EWBody extends EnemyWeapon
       _isActive = false;
       scale = Vector2(1,1);
     });
-
   }
 
   @override
@@ -42,10 +42,12 @@ class EWBody extends EnemyWeapon
       latencyBefore += dt;
     }
     if(latencyBefore >= 0 && _isActive){
-      if(_isGrow && scale.x > 2){
+      if(_isGrow && scale.x > _maxLength/3){
         _isGrow = false;
       }
-      _isGrow ? scale = Vector2(math.max(1,(scale.x + dt/activeSecs * 4)), scale.y) : scale = Vector2(math.max(1, scale.x - dt/activeSecs * 4), scale.y);
+      _isGrow ? scale = Vector2(math.max(1,(scale.x + dt/activeSecs * _maxLength)), scale.y) : scale = Vector2(math.max(1, scale.x - dt/activeSecs * _maxLength), scale.y);
+    }else{
+      scale = Vector2(1,1);
     }
     super.update(dt);
   }
