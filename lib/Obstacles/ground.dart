@@ -23,9 +23,4 @@ class Ground extends MapObstacle
     // TODO: implement onCollisionStart
   }
 
-  @override
-  void update(double dt) {
-    // doDebug();
-    super.update(dt);
-  }
 }
