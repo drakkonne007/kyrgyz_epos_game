@@ -6,6 +6,7 @@ import 'package:game_flame/overlays/dialog_overlay.dart';
 import 'package:game_flame/overlays/game_hud.dart';
 import 'package:game_flame/overlays/game_pause.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/overlays/inventar_overlay.dart';
 import 'package:game_flame/overlays/language.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
@@ -34,6 +35,7 @@ main()
                     LanguageChooser.id: (context, KyrgyzGame game) => LanguageChooser(game),
                     GameHud.id: (context, KyrgyzGame game) => GameHud(game),
                     DialogOverlay.id: (context, KyrgyzGame game) => DialogOverlay(game),
+                    InventoryOverlay.id: (context, KyrgyzGame game) => InventoryOverlay(game),
                   },
                 )
             ),

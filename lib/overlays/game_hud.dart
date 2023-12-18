@@ -40,7 +40,8 @@ class GameHud extends StatelessWidget
                     children:[
                       ElevatedButton(
                         onPressed: (){
-                          _game.gameMap.orthoPlayer?.startHit();
+                          _game.doInventoryHud();
+                          // _game.gameMap.orthoPlayer?.startHit();
                         },
                         child: const Icon(Icons.sports_handball_outlined),
                       ),

@@ -12,6 +12,7 @@ import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/dialog_overlay.dart';
 import 'package:game_flame/overlays/game_hud.dart';
 import 'package:game_flame/overlays/game_pause.dart';
+import 'package:game_flame/overlays/inventar_overlay.dart';
 import 'package:game_flame/overlays/language.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -67,6 +68,12 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   {
     pauseEngine();
     _showOverlay(overlayName: DialogOverlay.id,isHideOther: true);
+  }
+
+  void doInventoryHud()
+  {
+    pauseEngine();
+    _showOverlay(overlayName: InventoryOverlay.id,isHideOther: true);
   }
 
   @override

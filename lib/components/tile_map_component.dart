@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flame/components.dart';
-import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
@@ -58,7 +57,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     // await firstCachedIntoInternal();
     loadObjs();
     loadAnimsHigh();
-    loadAnimsDown();
+    await loadAnimsDown();
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
