@@ -97,7 +97,7 @@ class MapNode
                   column: colRow.column,
                   row: colRow.row);
               custMap.allEls[colRow]!.add(ground);
-              custMap.add(ground);
+              // custMap.add(ground);
             }
             break;
           default:

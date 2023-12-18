@@ -56,9 +56,9 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
     // await firstCachedIntoInternal();
-    loadObjs().ignore();
-    loadAnimsHigh().ignore();
-    loadAnimsDown().ignore();
+    loadObjs();
+    loadAnimsHigh();
+    loadAnimsDown();
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
@@ -138,6 +138,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
           dd.removeFromParent();
         }
       }
+      collisionProcessor.removeStaticCollEntity(node);
       allEls.remove(node);
     }
     orthoPlayer?.priority = GamePriority.player-1;
@@ -170,7 +171,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
     gameRef.doGameHud();
     gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,GameConsts.lengthOfTileSquare.x*GameConsts.maxColumn,GameConsts.lengthOfTileSquare.y*GameConsts.maxRow));
-    gameRef.camera.zoom = 1.3;
+    gameRef.camera.zoom = 1.35;
     isFirstLoad = true;
   }
 

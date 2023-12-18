@@ -300,7 +300,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     double maxDown = 0;
 
     for(final point in points){
-      gameRef.add(PointCust(position: point,color: BasicPalette.black.color));
       double leftDiffX  = point.x - _groundBox!.getMinVector().x;
       double rightDiffX = point.x - _groundBox!.getMaxVector().x;
       double upDiffY = point.y - _groundBox!.getPoint(0).y;

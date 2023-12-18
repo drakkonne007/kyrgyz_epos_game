@@ -151,6 +151,12 @@ void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMa
 {
   Set<int> insidePoints = {};
   if(isMapObstacle) { //Если у вас все обекты столкновения с препятсвием с землёй квадратные, иначе делать что ближе от центра твоего тела
+    if(other.getMaxVector().x < entity.getMinVector().x
+        || other.getMinVector().x > entity.getMaxVector().x
+        || other.getMaxVector().y < entity.getMinVector().y
+        || other.getMinVector().y > entity.getMaxVector().y){
+      return;
+    }
     for (int i = 0; i < other.getVerticesCount(); i++) {
       Vector2 otherFirst = other.getPoint(i);
       if(otherFirst.x <= entity.getMaxVector().x

@@ -28,10 +28,8 @@ class WSword extends PlayerWeapon
     debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     final spriteSheet = SpriteSheet(image: spriteImage, srcSize: Vector2(144,96));
-    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11);
-    _animShort.loop = false;
-    _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16);
-    _animLong.loop = false;
+    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11,loop: false);
+    _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16,loop: false);
     collisionType = DCollisionType.inactive;
     coolDown = 1;
   }
@@ -53,7 +51,7 @@ class WSword extends PlayerWeapon
         latencyBefore = -0.14;
         _diffAngle = 0;
         angle = _startAngle;
-        scale = Vector2(2,0.2);
+        scale = Vector2(3.5,0.2);
         tick = SpriteAnimationTicker(_animShort);
         game.gameMap.orthoPlayer?.animation = _animShort;
       }else{
@@ -83,6 +81,7 @@ class WSword extends PlayerWeapon
   @override
   void update(double dt)
   {
+    // doDebug();
     if(latencyBefore < 0){
       latencyBefore += dt;
     }

@@ -32,12 +32,14 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   Moose(this._startPos, this._mooseVariant,{super.priority});
   Vector2 _startPos;
   MooseVariant _mooseVariant;
-  late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
+  late SpriteAnimation animMove, animIdle, animAttack, animHurt, animDeath;
   final Vector2 _spriteSheetSize = Vector2(347,192);
   Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 50;
   double _rigidSec = 4;
   EWBody? _body;
+  EWMooseHummer? _hummer;
+
   Timer? _timer;
 
   @override
@@ -72,13 +74,13 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
         flipHorizontally();
       }
       _speed = Vector2(posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX,posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY);
-      if(animation != _animMove){
-        animation = _animMove;
+      if(animation != animMove){
+        animation = animMove;
       }
     }else{
-      if(animation != _animIdle){
+      if(animation != animIdle){
         _speed = Vector2(0,0);
-        animation = _animIdle;
+        animation = animIdle;
       }
     }
   }
@@ -100,43 +102,43 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
     if(_mooseVariant == MooseVariant.Purple){
-      _animIdle =
+      animIdle =
           spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-      _animMove =
+      animMove =
           spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 8, to: 16);
-      _animAttack = spriteSheet.createAnimation(
+      animAttack = spriteSheet.createAnimation(
           row: 0, stepTime: 0.08, from: 16,to: 46, loop: false);
-      _animHurt = spriteSheet.createAnimation(row: 0,
+      animHurt = spriteSheet.createAnimation(row: 0,
           stepTime: 0.07,
           from: 46,
           to: 52,
           loop: false);
-      _animDeath = spriteSheet.createAnimation(row: 0,
+      animDeath = spriteSheet.createAnimation(row: 0,
           stepTime: 0.1,
           from: 52,
           loop: false);
     }else {
-      _animIdle =
+      animIdle =
           spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-      _animMove =
+      animMove =
           spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
-      _animAttack = spriteSheet.createAnimation(
+      animAttack = spriteSheet.createAnimation(
           row: 2, stepTime: 0.08, from: 0, loop: false);
-      _animHurt = spriteSheet.createAnimation(row: 3,
+      animHurt = spriteSheet.createAnimation(row: 3,
           stepTime: 0.07,
           from: 0,
           to: 6,
           loop: false);
-      _animDeath = spriteSheet.createAnimation(row: 4,
+      animDeath = spriteSheet.createAnimation(row: 4,
           stepTime: 0.1,
           from: 0,
           to: 15,
           loop: false);
     }
-    _timer = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: selectBehaviour,repeat: false);
+    _timer = Timer(animHurt.ticker().totalDuration(),autoStart: false,onTick: selectBehaviour,repeat: false);
 
     position = _startPos;
-    animation = _animIdle;
+    animation = animIdle;
     size = _spriteSheetSize;
     const double percentOfWidth = 158/347;
     Vector2 staticConstAnchor = Vector2(size.x * percentOfWidth,size.y/2);
@@ -144,26 +146,30 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
 
     Vector2 tSize = Vector2(28,54);
 
-    var _hitbox = EnemyHitbox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
+    var hitbox = EnemyHitbox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
         ,collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
-    add(_hitbox);
-    var _groundBox = GroundHitBox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
+    add(hitbox);
+    var groundBox = GroundHitBox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
         ,obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_groundBox);
+    add(groundBox);
     _body = EWBody(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
         ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
-    _body?.activeSecs = _animAttack.ticker().totalDuration();
+    _body?.activeSecs = animAttack.ticker().totalDuration();
     add(_body!);
     var ground = Ground(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
         , collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     ground.onlyForPlayer = true;
     add(ground);
+    List<Vector2> list = [Vector2(-21,-9), Vector2(-38,-46), Vector2(-52,-44), Vector2(-60,-60), Vector2(-32, -74), Vector2(-21,-53), Vector2(-33,-49), Vector2(-15,-11)];
+    _hummer = EWMooseHummer(list,collisionType: DCollisionType.inactive,isSolid: true,isStatic: false,
+        isLoop: false, game: gameRef, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit);
+    add(_hummer!);
   }
 
   void onStartHit()
   {
-    animation = _animAttack;
+    // animation = animAttack;
   }
 
   void onEndHit()
@@ -177,7 +183,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(pl.hitBox == null){
       return false;
     }
-    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width/2 + 100){
+    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width/2 + 150){
       return false;
     }
     if(pl.hitBox!.getPoint(0).y > _body!.getPoint(1).y || pl.hitBox!.getPoint(1).y < _body!.getPoint(0).y){
@@ -208,12 +214,23 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(diffCol > 1 || diffRow > 1){
       return;
     }
-    if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
+    if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
       return;
     }
     if(_rigidSec <= 1){
       if(isNearPlayer()){
-        _body?.hit();
+        var pl = gameRef.gameMap.orthoPlayer!;
+        if(pl.hitBox!.getCenter().x > _body!.getCenter().x){
+          if(isFlippedHorizontally){
+            flipHorizontally();
+          }
+        }
+        if(pl.hitBox!.getCenter().x < _body!.getCenter().x){
+          if(!isFlippedHorizontally){
+            flipHorizontally();
+          }
+        }
+        _hummer?.hit();
       }
     }
     if(_rigidSec <= 0){
@@ -242,16 +259,16 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
           gameRef.gameMap.add(temp);
         }
       }
-      animation = _animDeath;
+      animation = animDeath;
       removeAll(children);
-      add(OpacityEffect.by(-0.95,EffectController(duration: _animDeath.ticker().totalDuration()),onComplete: (){
+      add(OpacityEffect.by(-0.95,EffectController(duration: animDeath.ticker().totalDuration()),onComplete: (){
         gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
       }));
     }else{
       animation = null;
-      _animHurt.ticker().reset();
-      animation = _animHurt;
+      animHurt.ticker().reset();
+      animation = animHurt;
       _timer?.start();
     }
   }

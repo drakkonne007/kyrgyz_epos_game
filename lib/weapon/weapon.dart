@@ -39,6 +39,7 @@ abstract class EnemyWeapon extends DCollisionEntity
     required this.onEndWeaponHit, required super.isLoop, required super.game});
 
   Function() onStartWeaponHit;
+  final double sectorInRadian = 0.383972 * 2;
   Function() onEndWeaponHit;
   double damage = 0;
   double permanentDamage = 0;
@@ -82,7 +83,7 @@ abstract class EnemyWeapon extends DCollisionEntity
     if(currentCoolDown < coolDown){
       currentCoolDown += dt;
     }
-    super.update(dt);
+    // super.update(dt);
   }
 }
 

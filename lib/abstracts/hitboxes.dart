@@ -182,6 +182,7 @@ abstract class DCollisionEntity extends Component
       }
       if(temp.isFlippedHorizontally){
         point.x += -transformPoint!.x;
+        point.x -= (temp.width/2 - temp.anchor.x*temp.width);
       }
       return point + posAnchor;
     }
