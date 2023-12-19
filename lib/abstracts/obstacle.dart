@@ -31,36 +31,3 @@ abstract class MapObstacleForPlayer extends DCollisionEntity
     return false;
   }
 }
-
-class MapWarp extends DCollisionEntity
-{
-  String to;
-
-  MapWarp(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.to, required super.isLoop, required super.game});
-
-  @override
-  bool onComponentTypeCheck(DCollisionEntity other) {
-    if(other is GroundHitBox && other.parent is OrthoPlayer) {
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
-    if(other is GroundHitBox && other.parent is OrthoPlayer){
-      // other.position = Vector2.all(-150);
-      game.loadNewMap(to);
-    }
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
-    // TODO: implement onCollision
-  }
-
-  @override
-  void onCollisionEnd(DCollisionEntity other) {
-    // TODO: implement onCollisionEnd
-  }
-}

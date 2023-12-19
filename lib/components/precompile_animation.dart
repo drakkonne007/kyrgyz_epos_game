@@ -6,6 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
+import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
 enum RenderCompileMode{
@@ -172,18 +173,18 @@ class MySuperAnimCompiler {
     _allSpriteMap = {};
   }
 
-  Future<void> compile(String path) async
+  Future<void> compile(String path, GameWorldData worldData) async
   {
     print('start compile! $path');
     final nullImage = await Flame.images.load('null_image-352px.png');
-    for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
-      for (int rows = 0; rows < GameConsts.maxRow; rows++) {
+    for (int cols = 0; cols < worldData.gameConsts.maxColumn!; cols++) {
+      for (int rows = 0; rows < worldData.gameConsts.maxRow!; rows++) {
         bool isWas = false;
-        var position = Vector2(cols * GameConsts.lengthOfTileSquare.x,
-            rows * GameConsts.lengthOfTileSquare.y);
+        var position = Vector2(cols * worldData.gameConsts.lengthOfTileSquare.x,
+            rows * worldData.gameConsts.lengthOfTileSquare.y);
         Rectangle rec = Rectangle.fromPoints(position, Vector2(
-            position.x + GameConsts.lengthOfTileSquare.x,
-            position.y + GameConsts.lengthOfTileSquare.y));
+            position.x + worldData.gameConsts.lengthOfTileSquare.x,
+            position.y + worldData.gameConsts.lengthOfTileSquare.y));
         final composition = ImageCompositionExt();
         for (int i = 0; i < _mapsSprite.length; i++) {
           var currentSprites = _mapsSprite[i];
@@ -206,18 +207,18 @@ class MySuperAnimCompiler {
           final composedImage = composition.compose();
           var byteData = await composedImage.toByteData(
               format: ImageByteFormat.png);
-          File file = File('assets/metaData/$cols-${rows}_$path.png');
+          File file = File('assets/metaData/${worldData.nameForGame}/$cols-${rows}_$path.png');
           file.writeAsBytesSync(byteData!.buffer.asUint8List());
         }
       }
     }
-    for (int cols = 0; cols < GameConsts.maxColumn; cols++) {
-      for (int rows = 0; rows < GameConsts.maxRow; rows++) {
-        var position = Vector2(cols * GameConsts.lengthOfTileSquare.x,
-            rows * GameConsts.lengthOfTileSquare.y);
+    for (int cols = 0; cols < worldData.gameConsts.maxColumn!; cols++) {
+      for (int rows = 0; rows < worldData.gameConsts.maxRow!; rows++) {
+        var position = Vector2(cols * worldData.gameConsts.lengthOfTileSquare.x,
+            rows * worldData.gameConsts.lengthOfTileSquare.y);
         Rectangle rec = Rectangle.fromPoints(position, Vector2(
-            position.x + GameConsts.lengthOfTileSquare.x,
-            position.y + GameConsts.lengthOfTileSquare.y));
+            position.x + worldData.gameConsts.lengthOfTileSquare.x,
+            position.y + worldData.gameConsts.lengthOfTileSquare.y));
         bool isStartFile = false;
         for (final anim in _animations.keys) {
           String animText = '';
@@ -238,7 +239,7 @@ class MySuperAnimCompiler {
             '<ps x="${point.x}" y="${point.y}"/>\n';
           }
           if (animText != '') {
-            File file = File('assets/metaData/$cols-${rows}_$path.anim');
+            File file = File('assets/metaData/${worldData.nameForGame}/$cols-${rows}_$path.anim');
             if(!isStartFile){
               isStartFile = true;
               file.writeAsStringSync('<p>\n', mode: FileMode.append);
@@ -248,7 +249,7 @@ class MySuperAnimCompiler {
           }
         }
         if (isStartFile) {
-          File file = File('assets/metaData/$cols-${rows}_$path.anim');
+          File file = File('assets/metaData/${worldData.nameForGame}/$cols-${rows}_$path.anim');
           file.writeAsStringSync('</p>\n', mode: FileMode.append);
         }
       }

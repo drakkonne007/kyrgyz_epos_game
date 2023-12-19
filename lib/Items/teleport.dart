@@ -31,7 +31,9 @@ class Teleport extends PositionComponent with HasGameRef<KyrgyzGame>
           gameRef.gameMap.orthoPlayer?.add(OpacityEffect.to(1, EffectController(duration: 0.35),onComplete: (){
             gameRef.playerData.isLockMove = false;
             gameRef.camera.resetMovement();
-            gameRef.camera.followComponent(gameRef.gameMap.orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,GameConsts.lengthOfTileSquare.x*GameConsts.maxColumn,GameConsts.lengthOfTileSquare.y*GameConsts.maxRow));
+            gameRef.camera.followComponent(gameRef.gameMap.orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,
+                game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x*game.playerData.playerBigMap.gameConsts.maxColumn!,
+                game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y*game.playerData.playerBigMap.gameConsts.maxRow!));
           }));
         }
     );

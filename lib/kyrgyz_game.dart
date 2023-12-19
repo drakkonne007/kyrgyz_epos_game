@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
@@ -5,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
+import 'package:game_flame/abstracts/compiller.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/main.dart';
@@ -53,8 +56,9 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     playerData.setStartValues();
     add(gameMap);
     await gameMap.loaded;
-    if(!isMapCompile) {
-      gameMap.preloadAnimAndObj();
+    if(isMapCompile){
+      await precompileAll();
+      exit(0);
     }
   }
 
@@ -126,10 +130,9 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     prefs.remove('${saveId}_secsInGame');
   }
 
-  Future loadNewMap(String filePath) async
+  Future loadNewMap() async
   {
-    gameMap.removeAll(gameMap.children);
-    gameMap.loadNewMap(Vector2(3392,2245));
+    gameMap.loadNewMap();
   }
 
   @override

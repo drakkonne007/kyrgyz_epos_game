@@ -203,8 +203,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     super.update(dt);
     _rigidSec -= dt;
     _timer?.update(dt);
-    column = position.x ~/ GameConsts.lengthOfTileSquare.x;
-    row =    position.y ~/ GameConsts.lengthOfTileSquare.y;
+    column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+    row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:mutex/mutex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,18 +11,18 @@ import 'package:xml/xml.dart';
 
 final mutex = Mutex();
 
-Future loadObjs() async
+Future loadObjs(GameWorldData worldData) async
 {
-  var timer = Stopwatch();
-  timer.start();
   var dir = await getApplicationCacheDirectory();
   ReceivePort objsReceivePort = ReceivePort();
   var isol = await  Isolate.spawn<SendPort>(_loadObjs, objsReceivePort.sendPort,errorsAreFatal: false);
   SendPort objsSendPort = await objsReceivePort.first;
   ReceivePort objResponseReceivePort = ReceivePort();
   objsSendPort.send([
-    objResponseReceivePort.sendPort
-    ,dir.path
+    objResponseReceivePort.sendPort,
+    '${dir.path}/${worldData.nameForGame}',
+    worldData.gameConsts.maxColumn!,
+    worldData.gameConsts.maxRow!
   ]);
 
   final objsResponse = await objResponseReceivePort.first;
@@ -34,7 +34,6 @@ Future loadObjs() async
   objResponseReceivePort.close();
   objsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
-  timer.stop();
 }
 
 void _loadObjs(SendPort mySendPort) async
@@ -47,8 +46,10 @@ void _loadObjs(SendPort mySendPort) async
       final SendPort mikeResponseSendPort = message[0];
       Map<String,Iterable<XmlElement>> objXmls = {};
       String path = message[1];
-      for(int cl = 0; cl < GameConsts.maxColumn; cl++) {
-        for (int rw = 0; rw < GameConsts.maxRow; rw++) {
+      int column = message[2];
+      int row = message[3];
+      for(int cl = 0; cl < column; cl++) {
+        for (int rw = 0; rw < row; rw++) {
           try {
             var file = File('$path/$cl-$rw.objXml').readAsStringSync();
             objXmls['$cl-$rw.objXml'] = XmlDocument.parse(file).findAllElements('o');
@@ -62,18 +63,18 @@ void _loadObjs(SendPort mySendPort) async
   }
 }
 
-Future loadAnimsHigh() async
+Future loadAnimsHigh(GameWorldData worldData) async
 {
-  var timer = Stopwatch();
-  timer.start();
   var dir = await getApplicationCacheDirectory();
   ReceivePort animsReceivePort = ReceivePort();
   var isol = await Isolate.spawn<SendPort>(_loadAnimsHigh, animsReceivePort.sendPort,errorsAreFatal: false);
   SendPort animsSendPort = await animsReceivePort.first;
   ReceivePort animsResponseReceivePort = ReceivePort();
   animsSendPort.send([
-    animsResponseReceivePort.sendPort
-    ,dir.path
+    animsResponseReceivePort.sendPort,
+    '${dir.path}/${worldData.nameForGame}',
+    worldData.gameConsts.maxColumn!,
+    worldData.gameConsts.maxRow!
   ]);
 
   final animPngsResponse = await animsResponseReceivePort.first;
@@ -92,7 +93,6 @@ Future loadAnimsHigh() async
   animsResponseReceivePort.close();
   animsReceivePort.close();
   isol.kill(priority: Isolate.immediate);
-  timer.stop();
 }
 
 void _loadAnimsHigh(SendPort mySendPort) async
@@ -105,8 +105,10 @@ void _loadAnimsHigh(SendPort mySendPort) async
       final SendPort mikeResponseSendPort = message[0];
       Map<String, Iterable<XmlElement>> anims = {};
       String path = message[1];
-      for (int cl = 0; cl < GameConsts.maxColumn; cl++) {
-        for (int rw = 0; rw < GameConsts.maxRow; rw++) {
+      int column = message[2];
+      int row = message[3];
+      for (int cl = 0; cl < column; cl++) {
+        for (int rw = 0; rw < row; rw++) {
           try {
             var file = File('$path/$cl-${rw}_high.anim').readAsStringSync();
             anims['$cl-${rw}_high.anim'] = XmlDocument.parse(file).findAllElements('an');
@@ -120,7 +122,7 @@ void _loadAnimsHigh(SendPort mySendPort) async
   }
 }
 
-Future loadAnimsDown() async
+Future loadAnimsDown(GameWorldData worldData) async
 {
   var dir = await getApplicationCacheDirectory();
   ReceivePort animsReceivePort = ReceivePort();
@@ -128,8 +130,10 @@ Future loadAnimsDown() async
   SendPort animsSendPort = await animsReceivePort.first;
   ReceivePort animsResponseReceivePort = ReceivePort();
   animsSendPort.send([
-    animsResponseReceivePort.sendPort
-    ,dir.path
+    animsResponseReceivePort.sendPort,
+    '${dir.path}/${worldData.nameForGame}',
+    worldData.gameConsts.maxColumn!,
+    worldData.gameConsts.maxRow!
   ]);
 
   final animPngsResponse = await animsResponseReceivePort.first;
@@ -160,8 +164,10 @@ void _loadAnimsDown(SendPort mySendPort) async
       final SendPort mikeResponseSendPort = message[0];
       Map<String, Iterable<XmlElement>> anims = {};
       String path = message[1];
-      for (int cl = 0; cl < GameConsts.maxColumn; cl++) {
-        for (int rw = 0; rw < GameConsts.maxRow; rw++) {
+      int column = message[2];
+      int row = message[3];
+      for (int cl = 0; cl < column; cl++) {
+        for (int rw = 0; rw < row; rw++) {
           try {
             var file = File('$path/$cl-${rw}_down.anim').readAsStringSync();
             anims['$cl-${rw}_down.anim'] = XmlDocument.parse(file).findAllElements('an');
@@ -179,55 +185,66 @@ Future firstCachedIntoInternal() async
 {
   print('start');
   var dir = await getApplicationCacheDirectory();
-  dir.listSync().forEach((element) {element.deleteSync(recursive: true);});
-  for (int cl = 0; cl < GameConsts.maxColumn; cl++) {
-    for (int rw = 0; rw < GameConsts.maxRow; rw++) {
-      try{
+  dir.listSync().forEach((element) {
+    element.deleteSync(recursive: true);
+  });
+
+  for(final bigWorlds in fullMaps) {
+    Directory dirdsds = Directory('${dir.path}/${bigWorlds.nameForGame}');
+    dirdsds.createSync(recursive: true);
+  }
+
+
+  for(final world in  fullMaps){
+  for (int cl = 0; cl < world.gameConsts.maxColumn!; cl++) {
+    for (int rw = 0; rw < world.gameConsts.maxRow!; rw++) {
+      try {
         var temp = await rootBundle.loadString(
-            'assets/metaData/$cl-$rw.objXml', cache: false);
-        File file = File('${dir.path}/$cl-$rw.objXml');
+            'assets/metaData/${world.nameForGame}/$cl-$rw.objXml', cache: false);
+        File file = File('${dir.path}/${world.nameForGame}/$cl-$rw.objXml');
         file.writeAsStringSync(temp);
-      }catch(e){
+      } catch (e) {
         e;
       }
       try {
         var temp1 = await rootBundle.loadString(
-            'assets/metaData/$cl-${rw}_high.anim', cache: false);
-        File file = File('${dir.path}/$cl-${rw}_high.anim');
+            'assets/metaData/${world.nameForGame}/$cl-${rw}_high.anim', cache: false);
+        File file = File('${dir.path}/${world.nameForGame}/$cl-${rw}_high.anim');
         file.writeAsStringSync(temp1);
         var objects = XmlDocument.parse(temp1.toString()).findAllElements(
             'an');
         for (final obj in objects) {
           var path = obj.getAttribute('src')!.split('/');
           path.removeLast();
-          Directory dirSs = Directory('${dir.path}/${path.join('/')}');
-          dirSs.createSync(recursive: true);
-          File file = File('${dir.path}/${obj.getAttribute('src')!}');
-          var temp = await rootBundle.load('assets/${obj.getAttribute('src')!}');
+          File file = File('${dir.path}/${world.nameForGame}/${obj.getAttribute('src')!}');
+          var temp = await rootBundle.load(
+              'assets/${obj.getAttribute('src')!}');
           file.writeAsBytesSync(temp.buffer.asUint8List());
         }
-      }catch(e){
+      } catch (e) {
         e;
       }
       try {
         var temp3 = await rootBundle.loadString(
-            'assets/metaData/$cl-${rw}_down.anim', cache: false);
-        File file = File('${dir.path}/$cl-${rw}_down.anim');
+            'assets/metaData/${world.nameForGame}/$cl-${rw}_down.anim', cache: false);
+        File file = File('${dir.path}/${world.nameForGame}/$cl-${rw}_down.anim');
         file.writeAsStringSync(temp3);
         var objects = XmlDocument.parse(temp3.toString()).findAllElements('an');
         for (final obj in objects) {
           var path = obj.getAttribute('src')!.split('/');
           path.removeLast();
-          Directory dirSs = Directory('${dir.path}/${path.join('/')}');
-          dirSs.createSync(recursive: true);
-          File file = File('${dir.path}/${obj.getAttribute('src')!}');
-          var temp = await rootBundle.load('assets/${obj.getAttribute('src')!}');
+          File file = File('${dir.path}/${world.nameForGame}/${obj.getAttribute('src')!}');
+          var temp = await rootBundle.load(
+              'assets/${obj.getAttribute('src')!}');
           file.writeAsBytesSync(temp.buffer.asUint8List());
         }
-      }catch(e){
+      } catch (e) {
         e;
       }
     }
   }
+
+
+}
   print('end copy to internal');
 }

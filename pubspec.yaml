@@ -72,6 +72,8 @@ flutter:
 
   assets:
     - assets/metaData/
+    - assets/metaData/topLeft/
+    - assets/metaData/topLeftVillage/
     - assets/
     - assets/images/
     - assets/images/flags/
@@ -95,6 +97,7 @@ flutter:
     - assets/tiles/map/grassLand/Tilesets/
     - assets/tiles/map/ancientLand/Characters/NPC merchant/with animated items/
     - assets/tiles/sprites/dialogIcons/
+    - assets/tiles/map/grassLand/Characters/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -9,6 +9,7 @@ import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 
 class DCollisionProcessor
 {
@@ -16,7 +17,8 @@ class DCollisionProcessor
   final Map<LoadedColumnRow,List<DCollisionEntity>> _staticCollEntity = {};
   Map<LoadedColumnRow, List<DCollisionEntity>> _potentialActiveEntity = {};
   Set<LoadedColumnRow> _contactNests = {};
-
+  KyrgyzGame game;
+  DCollisionProcessor(this.game);
 
   void addActiveCollEntity(DCollisionEntity entity)
   {
@@ -58,6 +60,11 @@ class DCollisionProcessor
     // }
     // print('count: $count');
     _potentialActiveEntity.clear();
+    // int count = 0;
+    // for(var lcr in _staticCollEntity.keys){
+    //   count += _staticCollEntity[lcr]!.length;
+    // }
+    // print(count);
     for(DCollisionEntity entity in _activeCollEntity){
       entity.obstacleIntersects = {};
       if(entity.collisionType == DCollisionType.inactive) {
@@ -70,16 +77,16 @@ class DCollisionProcessor
       int maxRow = 0;
       for(int i=0;i<entity.getVerticesCount();i++){
         if(i==0){
-          minCol = entity.getPoint(i).x ~/ GameConsts.lengthOfTileSquare.x;
-          maxCol = entity.getPoint(i).x ~/ GameConsts.lengthOfTileSquare.x;
-          minRow = entity.getPoint(i).y ~/ GameConsts.lengthOfTileSquare.y;
-          maxRow = entity.getPoint(i).y ~/ GameConsts.lengthOfTileSquare.y;
+          minCol = entity.getPoint(i).x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+          maxCol = entity.getPoint(i).x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+          minRow = entity.getPoint(i).y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+          maxRow = entity.getPoint(i).y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
           continue;
         }
-        minCol = math.min(minCol, entity.getPoint(i).x ~/ GameConsts.lengthOfTileSquare.x);
-        maxCol = math.max(maxCol, entity.getPoint(i).x ~/ GameConsts.lengthOfTileSquare.x);
-        minRow = math.min(minRow, entity.getPoint(i).y ~/ GameConsts.lengthOfTileSquare.y);
-        maxRow = math.max(maxRow, entity.getPoint(i).y ~/ GameConsts.lengthOfTileSquare.y);
+        minCol = math.min(minCol, entity.getPoint(i).x ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x);
+        maxCol = math.max(maxCol, entity.getPoint(i).x ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x);
+        minRow = math.min(minRow, entity.getPoint(i).y ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y);
+        maxRow = math.max(maxRow, entity.getPoint(i).y ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y);
       }
 
       for(int col = minCol; col <= maxCol; col++){

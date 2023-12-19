@@ -64,6 +64,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
+  void reInsertFullActiveHitBoxes()
+  {
+    hitBox!.reInsertIntoCollisionProcessor();
+    _groundBox!.reInsertIntoCollisionProcessor();
+    _weapon!.reInsertIntoCollisionProcessor();
+  }
+
   void refreshMoves()
   {
     _velocity *= 0;

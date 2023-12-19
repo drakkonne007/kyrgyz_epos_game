@@ -22,7 +22,7 @@ class DeathMenu extends StatelessWidget
               children: [
                 ElevatedButton(
                   onPressed: (){
-                    _game.loadNewMap('tiles/map/firstMap2.tmx');
+                    _game.loadNewMap();
                     // _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     // _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();

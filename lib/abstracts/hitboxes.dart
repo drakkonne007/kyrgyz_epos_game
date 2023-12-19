@@ -5,7 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -74,13 +73,13 @@ abstract class DCollisionEntity extends Component
         , required this.isLoop, required this.game, this.column, this.row, this.transformPoint})
   {
     if (isStatic) {
-      int currCol = column ?? vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
-      int currRow = row ?? vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
+      int currCol = column ?? vertices[0].x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+      int currRow = row ?? vertices[0].y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
       _myCoords = LoadedColumnRow(currCol, currRow);
-      game.gameMap.collisionProcessor.addStaticCollEntity(
+      game.gameMap.collisionProcessor!.addStaticCollEntity(
           LoadedColumnRow(currCol, currRow), this);
     } else {
-      game.gameMap.collisionProcessor.addActiveCollEntity(this);
+      game.gameMap.collisionProcessor!.addActiveCollEntity(this);
     }
     for (int i = 0; i < vertices.length; i++) {
       if (vertices[i].x < _minCoords.x) {
@@ -100,6 +99,11 @@ abstract class DCollisionEntity extends Component
     height = _maxCoords.y - _minCoords.y;
     _center = (_maxCoords + _minCoords) / 2;
     transformPoint ??= _center;
+  }
+
+  void reInsertIntoCollisionProcessor()
+  {
+    game.gameMap.collisionProcessor!.addActiveCollEntity(this);
   }
 
   Vector2 getMinVector()
@@ -148,7 +152,7 @@ abstract class DCollisionEntity extends Component
   @override
   void onRemove() {
     if (!isStatic) {
-      game.gameMap.collisionProcessor.removeActiveCollEntity(this);
+      game.gameMap.collisionProcessor!.removeActiveCollEntity(this);
     } else {
       // game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords);
     }

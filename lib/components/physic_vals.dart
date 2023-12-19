@@ -1,7 +1,9 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/components/game_worlds.dart';
 
 class MetaEnemyData
 {
@@ -23,19 +25,20 @@ enum PlayerDirectionMove{
   RightDown,
 }
 
-
 class GameConsts
-{
-  //9504 тайла
-  static final Vector2 lengthOfTileSquare = Vector2(32*11,32*9);
-  static const maxColumn = 27;
-  static const maxRow = 33;
-
+{  //9504 тайла
+  GameConsts({this.maxColumn, this.maxRow})
+  {
+    maxColumn ??= 27;
+    maxRow ??= 33;
+  }
+  final Vector2 lengthOfTileSquare = Vector2(32*11,32*9);
+  int? maxColumn;
+  int? maxRow;
 }
 
 class PlayerData
 {
-
   ValueNotifier<double> health = ValueNotifier<double>(0);
   ValueNotifier<double> energy = ValueNotifier<double>(0);
   ValueNotifier<double> armor =ValueNotifier<double>(0);
@@ -52,45 +55,45 @@ class PlayerData
   Vector2 curPosition = Vector2(-1,-1);
   double gameTime = 720;
   double milisecsInGame = 0;
+  GameWorldData playerBigMap = BigTopLeft();
+  Vector2 startLocation = Vector2(3392,2245);
 
 
-  void setStartValues({double? curHp,double? maxHp,double? curEnergy,double? maxEnergy
-    ,Set<int>?killedBosses
-    ,List<int>?inventoryItems, int? money, int? curWeapon,List<int>? curDress,Vector2? location
-    , Vector2? curPosition,double? gameTime,double? milisecsInGame})
+  void setStartValues()
   {
-    maxHealth.value = maxHp ?? 100;
-    this.maxEnergy.value = maxEnergy ?? 9999999;
-    health.value = curHp ?? maxHealth.value;
-    energy.value = curEnergy ?? this.maxEnergy.value;
+    // playerBigMap = BigTopLeft();
+    maxHealth.value = 100;
+    this.maxEnergy.value = 9999999;
+    health.value = maxHealth.value;
+    energy.value = this.maxEnergy.value;
     this.killedBosses = killedBosses ?? {};
     this.money = money ?? 0;
     this.curWeapon = curWeapon ?? -1;
 
-    this.location = location ?? PhysicVals.startLocation;
+    this.location = location ?? Vector2(10,10);
     this.curPosition = curPosition ?? Vector2.all(-1);
     this.gameTime = gameTime ?? 720;
     this.milisecsInGame = milisecsInGame ?? 0;
-
-    if(curDress == null){
-      this.curDress = [];
-    }else{
-      for(int i=0;i<curDress.length;i++){
-        var item = itemFromId(curDress[i]);
-        this.curDress.add(item);
-        armor.value += item.armor;
-        maxHealth.value += item.hp;
-        this.maxEnergy.value += item.energy;
-      }
-    }
-    if(inventoryItems == null){
-      this.inventoryItems = [];
-    }else{
-      for(int i=0;i<inventoryItems.length;i++){
-        var item = itemFromId(inventoryItems[i]);
-        this.inventoryItems.add(item);
-      }
-    }
+    //
+    // if(curDress == null){
+    //   this.curDress = [];
+    // }else{
+    //   for(int i=0;i<curDress.length;i++){
+    //     var item = itemFromId(curDress[i]);
+    //     this.curDress.add(item);
+    //     armor.value += item.armor;
+    //     maxHealth.value += item.hp;
+    //     this.maxEnergy.value += item.energy;
+    //   }
+    // }
+    // if(inventoryItems == null){
+    //   this.inventoryItems = [];
+    // }else{
+    //   for(int i=0;i<inventoryItems.length;i++){
+    //     var item = itemFromId(inventoryItems[i]);
+    //     this.inventoryItems.add(item);
+    //   }
+    // }
   }
 
 
@@ -105,7 +108,6 @@ class PlayerData
 
 class PhysicVals
 {
-  static Vector2 startLocation = Vector2(10, 10);
   static double maxSpeed = 130;
   static double startSpeed = 400;
   static double runCoef = 1.3;

@@ -9,7 +9,7 @@ class GamePause extends StatelessWidget
   static const id = 'GamePause';
   final KyrgyzGame _game;
   GamePause(this._game, {super.key});
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class GamePause extends StatelessWidget
           ElevatedButton(
             onPressed: (){
               _game.overlays.remove(id);
-              _game.loadNewMap('tiles/map/firstMap2.tmx');
+              _game.loadNewMap();
               _game.resumeEngine();
             },
             child: const Text('Загрузить'),
