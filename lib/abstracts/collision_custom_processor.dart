@@ -51,6 +51,12 @@ class DCollisionProcessor
 
   void updateCollisions()
   {
+    // var temp = _staticCollEntity.values.toList(growable: false);
+    // int count = 0;
+    // for(var lcr in temp){
+    //   count += lcr.length;
+    // }
+    // print('count: $count');
     _potentialActiveEntity.clear();
     for(DCollisionEntity entity in _activeCollEntity){
       entity.obstacleIntersects = {};

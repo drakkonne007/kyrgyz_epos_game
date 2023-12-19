@@ -145,6 +145,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void movePlayer(PlayerDirectionMove direct, bool isRun)
   {
+    if(gameRef.playerData.isLockMove){
+      return;
+    }
     if(animation == animIdle  || animation == animMove) {
       switch (direct) {
         case PlayerDirectionMove.Right:

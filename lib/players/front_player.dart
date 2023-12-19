@@ -91,9 +91,9 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         position.y = other.y - height / 2;
         return;
       }
-      if(_isNeedColl) {
-        gameRef.add(TimePoint(point));
-      }
+      // if(_isNeedColl) {
+      //   gameRef.add(TimePoint(point));
+      // }
       if (point.y.round() >= other.y.round() && point.y.round() <= other.y.round() + 5) {
         if(point.x.round() > other.x.round() + 5 && point.x.round() < (other.x + other.width - 5).round()){
           if(_speedY > 0) {

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
@@ -11,6 +12,9 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
 import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
+import 'package:mutex/mutex.dart';
+
+
 
 
 class LoadedColumnRow
@@ -39,6 +43,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   bool isFirstLoad = false;
   Set<Vector2> loadedLivesObjs = {};
   Map<LoadedColumnRow,List<Component>> allEls = {};
+  final List<Ground> grounds = [];
   final DCollisionProcessor collisionProcessor = DCollisionProcessor();
 
   @override
@@ -57,15 +62,17 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     // await firstCachedIntoInternal();
     loadObjs();
     loadAnimsHigh();
-    await loadAnimsDown();
+    loadAnimsDown();
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
       return path.startsWith('assets/metaData/') && path.toLowerCase().endsWith('.png');
     }).map((path) => path.replaceFirst('assets/metaData/', ''));
-    for(final path in imagePaths) {
-      KyrgyzGame.cachedMapPngs.add(path);
-    }
+    await mutex.protect(() async  {
+      for(final path in imagePaths) {
+        KyrgyzGame.cachedMapPngs.add(path);
+      }
+    });
     isMapCached.value++;
   }
 
@@ -137,7 +144,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
           dd.removeFromParent();
         }
       }
-      collisionProcessor.removeStaticCollEntity(node);
+      // collisionProcessor.removeStaticCollEntity(node);
       allEls.remove(node);
     }
     orthoPlayer?.priority = GamePriority.player-1;
@@ -162,6 +169,40 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
         mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
       }
     }
+    grounds.clear();
+    for(int i=0;i<GameConsts.maxColumn;i++){
+      for(int j=0;j<GameConsts.maxRow;j++){
+        if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
+          var objects = KyrgyzGame.cachedObjXmls['$i-$j.objXml']!;
+          for(final obj in objects){
+            String? name = obj.getAttribute('nm');
+            if(name == ''){
+              var points = obj.getAttribute('p')!;
+              var pointsList = points.split(' ');
+              List<Vector2> temp = [];
+              for (final sources in pointsList) {
+                if (sources == '') {
+                  continue;
+                }
+                temp.add(Vector2(double.parse(sources.split(',')[0]),
+                    double.parse(sources.split(',')[1])));
+              }
+              if (temp.isNotEmpty) {
+                var ground = Ground(temp, collisionType: DCollisionType.passive,
+                    isSolid: false,
+                    isStatic: true,
+                    isLoop: obj.getAttribute('lp')! == '1',
+                    game: gameRef,
+                    column: i,
+                    row: j);
+                grounds.add(ground);
+              }
+            }
+          }
+        }
+      }
+    }
+    print('total ground ${grounds.length}');
     orthoPlayer = null;
     orthoPlayer = OrthoPlayer();
     await add(orthoPlayer!);

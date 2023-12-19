@@ -150,7 +150,7 @@ abstract class DCollisionEntity extends Component
     if (!isStatic) {
       game.gameMap.collisionProcessor.removeActiveCollEntity(this);
     } else {
-      game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords);
+      // game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords);
     }
   }
 

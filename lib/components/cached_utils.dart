@@ -5,9 +5,11 @@ import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:mutex/mutex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:xml/xml.dart';
 
+final mutex = Mutex();
 
 Future loadObjs() async
 {
@@ -77,12 +79,14 @@ Future loadAnimsHigh() async
   final animPngsResponse = await animsResponseReceivePort.first;
   if(animPngsResponse is Map<String,Iterable<XmlElement>>){
     print('animPngsResponse');
-    KyrgyzGame.cachedAnims.addAll(animPngsResponse);
-    for(final key in KyrgyzGame.cachedAnims.keys){
-      for(final anim in KyrgyzGame.cachedAnims[key]!){
-        KyrgyzGame.cachedImgs[anim.getAttribute('src')!] = await Flame.images.load(anim.getAttribute('src')!);
+    await mutex.protect(() async {
+      KyrgyzGame.cachedAnims.addAll(animPngsResponse);
+      for(final key in KyrgyzGame.cachedAnims.keys){
+        for(final anim in KyrgyzGame.cachedAnims[key]!){
+          KyrgyzGame.cachedImgs[anim.getAttribute('src')!] = await Flame.images.load(anim.getAttribute('src')!);
+        }
       }
-    }
+    });
     isMapCached.value++;
   }
   animsResponseReceivePort.close();
@@ -131,12 +135,14 @@ Future loadAnimsDown() async
   final animPngsResponse = await animsResponseReceivePort.first;
   if(animPngsResponse is Map<String,Iterable<XmlElement>>){
     print('animPngsResponse');
-    KyrgyzGame.cachedAnims.addAll(animPngsResponse);
-    for(final key in KyrgyzGame.cachedAnims.keys){
-      for(final anim in KyrgyzGame.cachedAnims[key]!){
-        KyrgyzGame.cachedImgs[anim.getAttribute('src')!] = await Flame.images.load(anim.getAttribute('src')!);
+    await mutex.protect(() async{
+      KyrgyzGame.cachedAnims.addAll(animPngsResponse);
+      for(final key in KyrgyzGame.cachedAnims.keys){
+        for(final anim in KyrgyzGame.cachedAnims[key]!){
+          KyrgyzGame.cachedImgs[anim.getAttribute('src')!] = await Flame.images.load(anim.getAttribute('src')!);
+        }
       }
-    }
+    });
     isMapCached.value++;
   }
   animsResponseReceivePort.close();
