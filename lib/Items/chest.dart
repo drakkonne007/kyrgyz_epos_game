@@ -22,7 +22,7 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
   super.angle,
   super.nativeAngle,
   super.anchor = Anchor.center,
-  super.priority = GamePriority.player-2}){
+  super.priority}){
   _startPosition = position;
 }
   Set<int>? nedeedKilledBosses;

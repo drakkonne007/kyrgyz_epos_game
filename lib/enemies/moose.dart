@@ -88,7 +88,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   Future<void> onLoad() async
   {
-    priority = GamePriority.player;
     Image? spriteImage;
     switch(_mooseVariant)
     {

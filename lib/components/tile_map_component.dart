@@ -30,7 +30,7 @@ class LoadedColumnRow
   int get hashCode => column.hashCode ^ row.hashCode;
 }
 
-class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
+class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
 {
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
   static int countId = 0;
@@ -44,7 +44,21 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
   DCollisionProcessor? collisionProcessor;
   GameWorldData? _currentGameWorldData;
   bool _isLoad = false;
+  final Component priorityHigh = Component(priority: GamePriority.high);
+  final Component priorityHighMinus1 = Component(priority: GamePriority.high - 1);
+  final Component priorityGroundPlus1 = Component(priority: GamePriority.ground + 1);
+  final Component enemyComponent = Component(priority: GamePriority.player - 2);
+  final Component playerLayout = Component(priority: GamePriority.player);
 
+  @override
+  Future onLoad() async
+  {
+    await add(priorityHigh);
+    await add(priorityHighMinus1);
+    await add(priorityGroundPlus1);
+    await add(enemyComponent);
+    await add(playerLayout);
+  }
 
 
   int column()
@@ -138,9 +152,9 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
     print('total ground ${grounds.length}');
     if(orthoPlayer == null){
       orthoPlayer= OrthoPlayer();
-      await add(orthoPlayer!);
+      await playerLayout.add(orthoPlayer!);
     }
-    orthoPlayer?.priority = GamePriority.player;
+    // orthoPlayer?.priority = GamePriority.player;
     gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
     orthoPlayer?.position = gameRef.playerData.startLocation;
     gameRef.doGameHud();
@@ -264,7 +278,7 @@ class CustomTileMap extends PositionComponent with HasGameRef<KyrgyzGame>
       // collisionProcessor.removeStaticCollEntity(node);
       allEls.remove(node);
     }
-    orthoPlayer?.priority = GamePriority.player-1;
-    orthoPlayer?.priority = GamePriority.player;
+    // orthoPlayer?.priority = GamePriority.player-1;
+    // orthoPlayer?.priority = GamePriority.player;
   }
 }

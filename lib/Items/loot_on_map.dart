@@ -19,7 +19,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
         super.nativeAngle,
         super.anchor = Anchor.center,
         super.children,
-        super.priority = GamePriority.items}){
+        super.priority}){
     _startPosition = position;
   }
   Vector2? _startPosition;
