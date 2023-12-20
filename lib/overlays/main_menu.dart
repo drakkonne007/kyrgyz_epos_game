@@ -47,6 +47,7 @@ class MainMenu extends StatelessWidget
                     child:ElevatedButton(
                         clipBehavior: Clip.antiAlias,
                         onPressed: (){
+                          isNeedCopyInternal = true;
                           _game.overlays.remove(id);
                           _game.loadNewMap();
                         },
@@ -60,7 +61,7 @@ class MainMenu extends StatelessWidget
                               image: AssetImage('assets/images/gui/wood_button.png'),
                               fit: BoxFit.fill,
                             ),
-                            Text('Продолжить',softWrap: false,style: textStyle),
+                            Text('С ПРЕЛОАДОМ',softWrap: false,style: textStyle),
                           ],
                         )
                     ),
@@ -84,7 +85,7 @@ class MainMenu extends StatelessWidget
                               image: AssetImage('assets/images/gui/wood_button.png'),
                               fit: BoxFit.fill,
                             ),
-                            Text(context.t.newGame,style: textStyle),
+                            Text('БЕЗ ПРЕЛОАДА',style: textStyle),
                           ],
                         )
                     ),
