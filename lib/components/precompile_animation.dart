@@ -7,7 +7,6 @@ import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
-import 'package:game_flame/components/physic_vals.dart';
 
 enum RenderCompileMode{
   Background,

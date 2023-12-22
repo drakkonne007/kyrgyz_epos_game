@@ -55,8 +55,8 @@ class PlayerData
   Vector2 curPosition = Vector2(-1,-1);
   double gameTime = 720;
   double milisecsInGame = 0;
-  GameWorldData playerBigMap = BigTopLeft();
-  Vector2 startLocation = Vector2(3392,2245);
+  GameWorldData playerBigMap = YurtaInTopLeftVillage1();
+  Vector2 startLocation = Vector2(90,321);
 
 
   void setStartValues()
@@ -115,6 +115,12 @@ class PhysicVals
   static double gravity = 20;
   static double rigidy = 0.5;
   static double stopSpeed = 800;
+}
+
+class PhysicFrontVals
+{
+  static const double gravity = 100;
+  static Vector2 maxSpeeds = Vector2(PhysicVals.maxSpeed,gravity*500);
 }
 
 class GamePriority

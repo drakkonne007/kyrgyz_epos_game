@@ -38,6 +38,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool _isPlayerRun = false;
   PlayerWeapon? _weapon;
   Timer? _timerHurt;
+  bool gameHide = false;
 
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
@@ -394,6 +395,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     // _groundBox?.doDebug(BasicPalette.red.color);
     super.update(dt);
+    if(gameHide){
+      return;
+    }
     _timerHurt!.update(dt);
     if(animation != animMove){
       return;

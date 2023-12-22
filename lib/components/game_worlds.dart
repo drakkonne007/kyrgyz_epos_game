@@ -4,7 +4,14 @@ List<GameWorldData> fullMaps =
 [
   TopLeftVillage(),
   BigTopLeft(),
+  YurtaInTopLeftVillage1(),
 ];
+
+enum OrientatinType
+{
+  orthogonal,
+  front
+}
 
 GameWorldData getWorldFromName(String name)
 {
@@ -12,42 +19,49 @@ GameWorldData getWorldFromName(String name)
   switch(name){
     case 'topLeftVillage': return TopLeftVillage();
     case 'topLeft': return BigTopLeft();
-    default: return BigTopLeft();
+    case 'yurtaInTopLeftVillage1': return YurtaInTopLeftVillage1();
+    default: print('error name of World!'); return BigTopLeft();
   }
 }
-
 
 
 abstract class GameWorldData
 {
   String source = '';
   String nameForGame = '';
-  final GameConsts gameConsts = GameConsts();
-}
-
-
-class BigTopLeft implements GameWorldData
-{
-  @override
-  String nameForGame = 'topLeft';//'top_left_bottom-slice.tmx';
-
-  @override
-  String source = 'top_left_bottom-slice.tmx';
-
-  @override
   GameConsts gameConsts = GameConsts();
-
+  OrientatinType orientation = OrientatinType.orthogonal;
 }
 
-class TopLeftVillage implements GameWorldData {
-  @override
-  String nameForGame = 'topLeftVillage';
 
-  @override
-  String source = 'top_left_village.tmx';//'topLeftVillage';
+class BigTopLeft extends GameWorldData
+{
+  BigTopLeft()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'topLeft';
+    source = 'top_left_bottom-slice.tmx';
+  }
+}
 
-  @override
-  GameConsts gameConsts = GameConsts(maxColumn: 10, maxRow:11);
+class TopLeftVillage extends GameWorldData {
+  TopLeftVillage()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'topLeftVillage';
+    source = 'top_left_village.tmx';
+    gameConsts = GameConsts(maxColumn: 10, maxRow:11);
+  }
+}
+
+class YurtaInTopLeftVillage1 extends GameWorldData {
+  YurtaInTopLeftVillage1()
+  {
+    orientation = OrientatinType.front;
+    nameForGame = 'yurtaInTopLeftVillage1';
+    source = 'yurtaInTopLeftVillage1.tmx';
+    gameConsts = GameConsts(maxColumn: 3, maxRow:3);
+  }
 }
 
 

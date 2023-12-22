@@ -74,6 +74,10 @@ flutter:
     - assets/metaData/
     - assets/metaData/topLeft/
     - assets/metaData/topLeftVillage/
+    - assets/metaData/yurtaInTopLeftVillage1/
+
+
+
     - assets/
     - assets/images/
     - assets/images/flags/

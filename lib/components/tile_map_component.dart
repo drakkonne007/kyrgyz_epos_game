@@ -35,7 +35,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
   static int countId = 0;
   OrthoPlayer? orthoPlayer;
-  late FrontPlayer frontPlayer = FrontPlayer(Vector2.all(1));
+  FrontPlayer? frontPlayer;
   int _column=0, _row=0;
   MapNode? mapNode;
   Set<Vector2> loadedLivesObjs = {};
@@ -83,10 +83,11 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
   Future<void> loadNewMap() async
   {
     _isLoad = false;
+    orthoPlayer?.gameHide = true;
+    frontPlayer?.gameHide = true;
     collisionProcessor ??= DCollisionProcessor(gameRef);
     collisionProcessor?.clearActiveCollEntity();
     collisionProcessor?.clearStaticCollEntity();
-    orthoPlayer?.reInsertFullActiveHitBoxes();
     mapNode ??= MapNode(gameRef);
     var tempList = allEls.values.toList(growable: false);
     for(final temp in tempList){
@@ -104,6 +105,15 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     // }
     _currentGameWorldData = gameRef.playerData.playerBigMap;
     print(_currentGameWorldData?.nameForGame);
+
+    if(_currentGameWorldData == null) return;
+    if(_currentGameWorldData!.orientation == OrientatinType.orthogonal){
+      orthoPlayer?.reInsertFullActiveHitBoxes();
+      orthoPlayer?.gameHide = false;
+    }else{
+      frontPlayer?.reInsertFullActiveHitBoxes();
+      frontPlayer?.gameHide = false;
+    }
     await _preloadAnimAndObj();
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
@@ -150,18 +160,30 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
     }
     print('total ground ${grounds.length}');
-    if(orthoPlayer == null){
-      orthoPlayer= OrthoPlayer();
-      await playerLayout.add(orthoPlayer!);
+    if(_currentGameWorldData!.orientation == OrientatinType.orthogonal){
+      if(orthoPlayer == null){
+        orthoPlayer= OrthoPlayer();
+        await playerLayout.add(orthoPlayer!);
+      }
+      // orthoPlayer?.priority = GamePriority.player;
+      orthoPlayer?.position = gameRef.playerData.startLocation;
+      gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,_currentGameWorldData!.gameConsts.lengthOfTileSquare.x
+          *_currentGameWorldData!.gameConsts.maxColumn!,
+          _currentGameWorldData!.gameConsts.lengthOfTileSquare.y
+              *_currentGameWorldData!.gameConsts.maxRow!));
+    }else{
+      if(frontPlayer == null){
+        frontPlayer = FrontPlayer();
+        await playerLayout.add(frontPlayer!);
+      }
+      frontPlayer?.position = gameRef.playerData.startLocation;
+      gameRef.camera.followComponent(frontPlayer!, worldBounds: Rect.fromLTRB(0,0,_currentGameWorldData!.gameConsts.lengthOfTileSquare.x
+          *_currentGameWorldData!.gameConsts.maxColumn!,
+          _currentGameWorldData!.gameConsts.lengthOfTileSquare.y
+              *_currentGameWorldData!.gameConsts.maxRow!));
     }
-    // orthoPlayer?.priority = GamePriority.player;
     gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
-    orthoPlayer?.position = gameRef.playerData.startLocation;
     gameRef.doGameHud();
-    gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,_currentGameWorldData!.gameConsts.lengthOfTileSquare.x
-        *_currentGameWorldData!.gameConsts.maxColumn!,
-        _currentGameWorldData!.gameConsts.lengthOfTileSquare.y
-            *_currentGameWorldData!.gameConsts.maxRow!));
     gameRef.camera.zoom = 1.35;
     _isLoad = true;
   }

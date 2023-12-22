@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="28" nextobjectid="1264">
+ <properties>
+  <property name="AutomappingRadius" type="int" value="4"/>
+ </properties>
+ <tileset firstgid="1" source="Terrain - Ancient Ruins.tsx"/>
+ <tileset firstgid="2210" source="Ancient Ruins-Tileset - wall 1.tsx"/>
+ <tileset firstgid="2450" source="Ancient Ruins-Tileset - wall 3.tsx"/>
+ <tileset firstgid="2690" source="Ancient Ruins-Tileset - wall 4.tsx"/>
+ <tileset firstgid="2930" source="Ancient Ruins-Tileset - wall 5.tsx"/>
+ <tileset firstgid="3170" source="Ancient Ruins-Tileset - wall 6.tsx"/>
+ <tileset firstgid="3410" source="Ancient Ruins-Tileset - wall 7.tsx"/>
+ <tileset firstgid="3650" source="Ancient Ruins-Tileset - wall 8.tsx"/>
+ <tileset firstgid="3890" source="Ancient Ruins-Animated Terrains-16 frames.tsx"/>
+ <tileset firstgid="6230" source="Ancient Ruins-Animated Terrains-16 frames-with transparency.tsx"/>
+ <tileset firstgid="8570" source="Ancient Ruins-Animated Terrains-8 frames.tsx"/>
+ <tileset firstgid="9527" source="Ancient Ruins-Animated Terrains-8 frames-with transparency.tsx"/>
+ <tileset firstgid="10484" source="Ancient Ruins-Animated Terrains2-16 frames.tsx"/>
+ <tileset firstgid="12824" source="Ancient Ruins-Animated Terrains2-8 frames.tsx"/>
+ <tileset firstgid="13781" source="Ancient Ruins-Animated Terrains2-8 frames-with transparency.tsx"/>
+ <tileset firstgid="14738" source="Ancient Ruins-Animated Terrains2-16 frames-with transparency.tsx"/>
+ <tileset firstgid="17078" source="Ancient Ruins-Tileset-Terrain2.tsx"/>
+ <tileset firstgid="21108" source="Ancient Ruins-Tileset - wall 2.tsx"/>
+ <tileset firstgid="21428" source="tiles/map/grassLand/TiledMap/Terrain.tsx"/>
+ <tileset firstgid="23768" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2496" columns="39">
+  <image source="tiles/map/grassLand/Props/Atlas-Props.png" width="1248" height="2048"/>
+  <tile id="809" type="high"/>
+  <tile id="810" type="high"/>
+  <tile id="811" type="high"/>
+  <tile id="812" type="high"/>
+  <tile id="813" type="high"/>
+  <tile id="814" type="high"/>
+  <tile id="815" type="high"/>
+  <tile id="816" type="high"/>
+  <tile id="817" type="high"/>
+  <tile id="1189" type="high"/>
+  <tile id="1190" type="high"/>
+  <tile id="1191" type="high"/>
+  <tile id="1192" type="high"/>
+  <tile id="1193" type="high"/>
+  <tile id="1194" type="high"/>
+  <tile id="1195" type="high"/>
+  <tile id="1196" type="high"/>
+  <tile id="1197" type="high"/>
+  <tile id="1198" type="high"/>
+  <tile id="1199" type="high"/>
+  <tile id="1200" type="high"/>
+  <tile id="1201" type="high"/>
+  <tile id="1236" type="high"/>
+  <tile id="1237" type="high"/>
+  <tile id="1238" type="high"/>
+  <tile id="1239" type="high"/>
+  <tile id="1240" type="high"/>
+  <tile id="1425" type="high"/>
+  <tile id="1426" type="high"/>
+  <tile id="1427" type="high"/>
+  <tile id="1428" type="high"/>
+  <tile id="1429" type="high"/>
+  <tile id="1430" type="high"/>
+ </tileset>
+ <tileset firstgid="26264" name="Yurts" tilewidth="32" tileheight="32" tilecount="2205" columns="63">
+  <image source="tiles/Yurts.png" width="2029" height="1126"/>
+ </tileset>
+ <tileset firstgid="28469" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2500" columns="50">
+  <image source="tiles/map/ancientLand/Props/Atlas-Props.png" width="1600" height="1600"/>
+ </tileset>
+ <tileset firstgid="30969" name="warrior-single swing 3" tilewidth="32" tileheight="32" tilecount="216" columns="72">
+  <image source="tiles/map/grassLand/Characters/warrior-single swing 3.png" width="2304" height="96"/>
+ </tileset>
+ <tileset firstgid="31185" name="Kyrgyz_Yurts" tilewidth="32" tileheight="32" tilecount="2223" columns="57">
+  <image source="tiles/Kyrgyz_Yurts.png" width="1846" height="1276"/>
+ </tileset>
+ <tileset firstgid="33408" name="Animated Tree1" tilewidth="32" tileheight="32" tilecount="192" columns="32">
+  <image source="tiles/map/grassLand/Props/Animated Tree1.png" width="1024" height="192"/>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="5" duration="200"/>
+    <frame tileid="9" duration="200"/>
+    <frame tileid="13" duration="200"/>
+    <frame tileid="17" duration="200"/>
+    <frame tileid="21" duration="200"/>
+    <frame tileid="25" duration="200"/>
+    <frame tileid="29" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="2">
+   <animation>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="6" duration="200"/>
+    <frame tileid="10" duration="200"/>
+    <frame tileid="14" duration="200"/>
+    <frame tileid="18" duration="200"/>
+    <frame tileid="22" duration="200"/>
+    <frame tileid="26" duration="200"/>
+    <frame tileid="30" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="33">
+   <animation>
+    <frame tileid="33" duration="200"/>
+    <frame tileid="37" duration="200"/>
+    <frame tileid="41" duration="200"/>
+    <frame tileid="45" duration="200"/>
+    <frame tileid="49" duration="200"/>
+    <frame tileid="53" duration="200"/>
+    <frame tileid="57" duration="200"/>
+    <frame tileid="61" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="34">
+   <animation>
+    <frame tileid="34" duration="200"/>
+    <frame tileid="38" duration="200"/>
+    <frame tileid="42" duration="200"/>
+    <frame tileid="46" duration="200"/>
+    <frame tileid="50" duration="200"/>
+    <frame tileid="54" duration="200"/>
+    <frame tileid="58" duration="200"/>
+    <frame tileid="62" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="64">
+   <animation>
+    <frame tileid="64" duration="200"/>
+    <frame tileid="68" duration="200"/>
+    <frame tileid="72" duration="200"/>
+    <frame tileid="76" duration="200"/>
+    <frame tileid="80" duration="200"/>
+    <frame tileid="84" duration="200"/>
+    <frame tileid="88" duration="200"/>
+    <frame tileid="92" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="65">
+   <animation>
+    <frame tileid="65" duration="200"/>
+    <frame tileid="69" duration="200"/>
+    <frame tileid="73" duration="200"/>
+    <frame tileid="77" duration="200"/>
+    <frame tileid="81" duration="200"/>
+    <frame tileid="85" duration="200"/>
+    <frame tileid="89" duration="200"/>
+    <frame tileid="93" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="66">
+   <animation>
+    <frame tileid="66" duration="200"/>
+    <frame tileid="70" duration="200"/>
+    <frame tileid="74" duration="200"/>
+    <frame tileid="78" duration="200"/>
+    <frame tileid="82" duration="200"/>
+    <frame tileid="86" duration="200"/>
+    <frame tileid="90" duration="200"/>
+    <frame tileid="94" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="67">
+   <animation>
+    <frame tileid="67" duration="200"/>
+    <frame tileid="71" duration="200"/>
+    <frame tileid="75" duration="200"/>
+    <frame tileid="79" duration="200"/>
+    <frame tileid="83" duration="200"/>
+    <frame tileid="87" duration="200"/>
+    <frame tileid="91" duration="200"/>
+    <frame tileid="95" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="96">
+   <animation>
+    <frame tileid="96" duration="200"/>
+    <frame tileid="100" duration="200"/>
+    <frame tileid="104" duration="200"/>
+    <frame tileid="108" duration="200"/>
+    <frame tileid="112" duration="200"/>
+    <frame tileid="116" duration="200"/>
+    <frame tileid="120" duration="200"/>
+    <frame tileid="124" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="97">
+   <animation>
+    <frame tileid="97" duration="200"/>
+    <frame tileid="101" duration="200"/>
+    <frame tileid="105" duration="200"/>
+    <frame tileid="109" duration="200"/>
+    <frame tileid="113" duration="200"/>
+    <frame tileid="117" duration="200"/>
+    <frame tileid="121" duration="200"/>
+    <frame tileid="125" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="98">
+   <animation>
+    <frame tileid="98" duration="200"/>
+    <frame tileid="102" duration="200"/>
+    <frame tileid="106" duration="200"/>
+    <frame tileid="110" duration="200"/>
+    <frame tileid="114" duration="200"/>
+    <frame tileid="118" duration="200"/>
+    <frame tileid="122" duration="200"/>
+    <frame tileid="126" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="99">
+   <animation>
+    <frame tileid="99" duration="200"/>
+    <frame tileid="103" duration="200"/>
+    <frame tileid="107" duration="200"/>
+    <frame tileid="111" duration="200"/>
+    <frame tileid="115" duration="200"/>
+    <frame tileid="119" duration="200"/>
+    <frame tileid="123" duration="200"/>
+    <frame tileid="127" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="33600" source="Animated Tree2.tsx"/>
+ <tileset firstgid="33792" name="shrine2-available-no grass" tilewidth="32" tileheight="32" tilecount="84" columns="28">
+  <image source="tiles/map/grassLand/Props/shrine2-available-no grass.png" width="896" height="99"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="2" duration="100"/>
+    <frame tileid="4" duration="100"/>
+    <frame tileid="6" duration="100"/>
+    <frame tileid="8" duration="100"/>
+    <frame tileid="10" duration="100"/>
+    <frame tileid="12" duration="100"/>
+    <frame tileid="14" duration="100"/>
+    <frame tileid="16" duration="100"/>
+    <frame tileid="18" duration="100"/>
+    <frame tileid="20" duration="100"/>
+    <frame tileid="22" duration="100"/>
+    <frame tileid="24" duration="100"/>
+    <frame tileid="26" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="3" duration="100"/>
+    <frame tileid="5" duration="100"/>
+    <frame tileid="7" duration="100"/>
+    <frame tileid="9" duration="100"/>
+    <frame tileid="11" duration="100"/>
+    <frame tileid="13" duration="100"/>
+    <frame tileid="15" duration="100"/>
+    <frame tileid="17" duration="100"/>
+    <frame tileid="19" duration="100"/>
+    <frame tileid="21" duration="100"/>
+    <frame tileid="23" duration="100"/>
+    <frame tileid="25" duration="100"/>
+    <frame tileid="27" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="28">
+   <animation>
+    <frame tileid="28" duration="100"/>
+    <frame tileid="30" duration="100"/>
+    <frame tileid="32" duration="100"/>
+    <frame tileid="34" duration="100"/>
+    <frame tileid="36" duration="100"/>
+    <frame tileid="38" duration="100"/>
+    <frame tileid="40" duration="100"/>
+    <frame tileid="42" duration="100"/>
+    <frame tileid="44" duration="100"/>
+    <frame tileid="46" duration="100"/>
+    <frame tileid="48" duration="100"/>
+    <frame tileid="50" duration="100"/>
+    <frame tileid="52" duration="100"/>
+    <frame tileid="54" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="29">
+   <animation>
+    <frame tileid="29" duration="100"/>
+    <frame tileid="31" duration="100"/>
+    <frame tileid="33" duration="100"/>
+    <frame tileid="35" duration="100"/>
+    <frame tileid="37" duration="100"/>
+    <frame tileid="39" duration="100"/>
+    <frame tileid="41" duration="100"/>
+    <frame tileid="43" duration="100"/>
+    <frame tileid="45" duration="100"/>
+    <frame tileid="47" duration="100"/>
+    <frame tileid="49" duration="100"/>
+    <frame tileid="51" duration="100"/>
+    <frame tileid="53" duration="100"/>
+    <frame tileid="55" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="56">
+   <animation>
+    <frame tileid="56" duration="100"/>
+    <frame tileid="58" duration="100"/>
+    <frame tileid="60" duration="100"/>
+    <frame tileid="62" duration="100"/>
+    <frame tileid="64" duration="100"/>
+    <frame tileid="66" duration="100"/>
+    <frame tileid="68" duration="100"/>
+    <frame tileid="70" duration="100"/>
+    <frame tileid="72" duration="100"/>
+    <frame tileid="74" duration="100"/>
+    <frame tileid="76" duration="100"/>
+    <frame tileid="78" duration="100"/>
+    <frame tileid="80" duration="100"/>
+    <frame tileid="82" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="57">
+   <animation>
+    <frame tileid="57" duration="100"/>
+    <frame tileid="59" duration="100"/>
+    <frame tileid="61" duration="100"/>
+    <frame tileid="63" duration="100"/>
+    <frame tileid="65" duration="100"/>
+    <frame tileid="67" duration="100"/>
+    <frame tileid="69" duration="100"/>
+    <frame tileid="71" duration="100"/>
+    <frame tileid="73" duration="100"/>
+    <frame tileid="75" duration="100"/>
+    <frame tileid="77" duration="100"/>
+    <frame tileid="79" duration="100"/>
+    <frame tileid="81" duration="100"/>
+    <frame tileid="83" duration="100"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="33876" name="sword sharpener-2" tilewidth="32" tileheight="32" tilecount="8" columns="8">
+  <image source="tiles/map/grassLand/Props/sword sharpener-2.png" width="256" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="4" duration="200"/>
+    <frame tileid="6" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="3" duration="200"/>
+    <frame tileid="5" duration="200"/>
+    <frame tileid="7" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="33884" name="water deposit for the blacksmith-water anim" tilewidth="32" tileheight="32" tilecount="16" columns="16">
+  <image source="tiles/map/grassLand/Props/water deposit for the blacksmith-water anim.png" width="512" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="4" duration="200"/>
+    <frame tileid="6" duration="200"/>
+    <frame tileid="8" duration="200"/>
+    <frame tileid="10" duration="200"/>
+    <frame tileid="12" duration="200"/>
+    <frame tileid="14" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="3" duration="200"/>
+    <frame tileid="5" duration="200"/>
+    <frame tileid="7" duration="200"/>
+    <frame tileid="9" duration="200"/>
+    <frame tileid="11" duration="200"/>
+    <frame tileid="13" duration="200"/>
+    <frame tileid="15" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="33900" name="blacksmith sign- swinging sign anim" tilewidth="32" tileheight="32" tilecount="16" columns="16">
+  <image source="tiles/map/grassLand/Props/blacksmith sign- swinging sign anim.png" width="512" height="36"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="2" duration="100"/>
+    <frame tileid="3" duration="100"/>
+    <frame tileid="4" duration="100"/>
+    <frame tileid="5" duration="100"/>
+    <frame tileid="6" duration="100"/>
+    <frame tileid="7" duration="100"/>
+    <frame tileid="8" duration="100"/>
+    <frame tileid="9" duration="100"/>
+    <frame tileid="10" duration="100"/>
+    <frame tileid="11" duration="100"/>
+    <frame tileid="12" duration="100"/>
+    <frame tileid="13" duration="100"/>
+    <frame tileid="14" duration="100"/>
+    <frame tileid="15" duration="100"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="33916" name="campfire 1-3" tilewidth="32" tileheight="32" tilecount="128" columns="32">
+  <image source="tiles/map/grassLand/Props/campfire 1-3.png" width="1024" height="128"/>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="150"/>
+    <frame tileid="5" duration="150"/>
+    <frame tileid="9" duration="150"/>
+    <frame tileid="13" duration="150"/>
+    <frame tileid="17" duration="150"/>
+    <frame tileid="21" duration="150"/>
+    <frame tileid="25" duration="150"/>
+    <frame tileid="29" duration="150"/>
+   </animation>
+  </tile>
+  <tile id="2">
+   <animation>
+    <frame tileid="2" duration="150"/>
+    <frame tileid="6" duration="150"/>
+    <frame tileid="10" duration="150"/>
+    <frame tileid="14" duration="150"/>
+    <frame tileid="18" duration="150"/>
+    <frame tileid="22" duration="150"/>
+    <frame tileid="26" duration="150"/>
+    <frame tileid="30" duration="150"/>
+   </animation>
+  </tile>
+  <tile id="33">
+   <animation>
+    <frame tileid="33" duration="150"/>
+    <frame tileid="37" duration="150"/>
+    <frame tileid="41" duration="150"/>
+    <frame tileid="45" duration="150"/>
+    <frame tileid="49" duration="150"/>
+    <frame tileid="53" duration="150"/>
+    <frame tileid="57" duration="150"/>
+    <frame tileid="61" duration="150"/>
+   </animation>
+  </tile>
+  <tile id="34">
+   <animation>
+    <frame tileid="34" duration="150"/>
+    <frame tileid="38" duration="150"/>
+    <frame tileid="42" duration="150"/>
+    <frame tileid="46" duration="150"/>
+    <frame tileid="50" duration="150"/>
+    <frame tileid="54" duration="150"/>
+    <frame tileid="58" duration="150"/>
+    <frame tileid="62" duration="150"/>
+   </animation>
+  </tile>
+  <tile id="65">
+   <animation>
+    <frame tileid="65" duration="150"/>
+    <frame tileid="69" duration="150"/>
+    <frame tileid="73" duration="150"/>
+    <frame tileid="77" duration="150"/>
+    <frame tileid="81" duration="150"/>
+    <frame tileid="85" duration="150"/>
+    <frame tileid="89" duration="150"/>
+    <frame tileid="93" duration="150"/>
+   </animation>
+  </tile>
+  <tile id="66">
+   <animation>
+    <frame tileid="66" duration="150"/>
+    <frame tileid="70" duration="150"/>
+    <frame tileid="74" duration="150"/>
+    <frame tileid="78" duration="150"/>
+    <frame tileid="82" duration="150"/>
+    <frame tileid="86" duration="150"/>
+    <frame tileid="90" duration="150"/>
+    <frame tileid="94" duration="150"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="34044" name="animated grass-1" tilewidth="16" tileheight="16" tilecount="32" columns="16">
+  <image source="tiles/map/grassLand/Props/animated grass-1.png" width="256" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="3" duration="200"/>
+    <frame tileid="4" duration="200"/>
+    <frame tileid="5" duration="200"/>
+    <frame tileid="6" duration="200"/>
+    <frame tileid="7" duration="200"/>
+    <frame tileid="8" duration="200"/>
+    <frame tileid="9" duration="200"/>
+    <frame tileid="10" duration="200"/>
+    <frame tileid="11" duration="200"/>
+    <frame tileid="12" duration="200"/>
+    <frame tileid="13" duration="200"/>
+    <frame tileid="14" duration="200"/>
+    <frame tileid="15" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="34076" name="animated grass-2" tilewidth="16" tileheight="16" tilecount="32" columns="16">
+  <image source="tiles/map/grassLand/Props/animated grass-2.png" width="256" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="3" duration="200"/>
+    <frame tileid="4" duration="200"/>
+    <frame tileid="5" duration="200"/>
+    <frame tileid="6" duration="200"/>
+    <frame tileid="7" duration="200"/>
+    <frame tileid="8" duration="200"/>
+    <frame tileid="9" duration="200"/>
+    <frame tileid="10" duration="200"/>
+    <frame tileid="11" duration="200"/>
+    <frame tileid="12" duration="200"/>
+    <frame tileid="13" duration="200"/>
+    <frame tileid="14" duration="200"/>
+    <frame tileid="15" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="34108" name="animated grass-3" tilewidth="16" tileheight="16" tilecount="32" columns="16">
+  <image source="tiles/map/grassLand/Props/animated grass-3.png" width="256" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="3" duration="200"/>
+    <frame tileid="4" duration="200"/>
+    <frame tileid="5" duration="200"/>
+    <frame tileid="6" duration="200"/>
+    <frame tileid="7" duration="200"/>
+    <frame tileid="8" duration="200"/>
+    <frame tileid="9" duration="200"/>
+    <frame tileid="10" duration="200"/>
+    <frame tileid="11" duration="200"/>
+    <frame tileid="12" duration="200"/>
+    <frame tileid="13" duration="200"/>
+    <frame tileid="14" duration="200"/>
+    <frame tileid="15" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="34140" name="smokes" tilewidth="32" tileheight="32" tilecount="168" columns="42">
+  <image source="tiles/smokes.png" width="1344" height="128"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="4" duration="200"/>
+    <frame tileid="6" duration="200"/>
+    <frame tileid="8" duration="200"/>
+    <frame tileid="10" duration="200"/>
+    <frame tileid="12" duration="200"/>
+    <frame tileid="14" duration="200"/>
+    <frame tileid="16" duration="200"/>
+    <frame tileid="18" duration="200"/>
+    <frame tileid="20" duration="200"/>
+    <frame tileid="22" duration="200"/>
+    <frame tileid="26" duration="200"/>
+    <frame tileid="30" duration="200"/>
+    <frame tileid="34" duration="200"/>
+    <frame tileid="36" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="34308" name="generic nature particles96x96" tilewidth="32" tileheight="32" tilecount="144" columns="48">
+  <image source="tiles/map/grassLand/Props/generic nature particles96x96.png" width="1536" height="96"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="3" duration="200"/>
+    <frame tileid="6" duration="200"/>
+    <frame tileid="9" duration="200"/>
+    <frame tileid="12" duration="200"/>
+    <frame tileid="15" duration="200"/>
+    <frame tileid="18" duration="200"/>
+    <frame tileid="21" duration="200"/>
+    <frame tileid="24" duration="200"/>
+    <frame tileid="27" duration="200"/>
+    <frame tileid="30" duration="200"/>
+    <frame tileid="33" duration="200"/>
+    <frame tileid="36" duration="200"/>
+    <frame tileid="39" duration="200"/>
+    <frame tileid="42" duration="200"/>
+    <frame tileid="45" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="200"/>
+    <frame tileid="4" duration="200"/>
+    <frame tileid="7" duration="200"/>
+    <frame tileid="10" duration="200"/>
+    <frame tileid="13" duration="200"/>
+    <frame tileid="16" duration="200"/>
+    <frame tileid="19" duration="200"/>
+    <frame tileid="22" duration="200"/>
+    <frame tileid="25" duration="200"/>
+    <frame tileid="28" duration="200"/>
+    <frame tileid="31" duration="200"/>
+    <frame tileid="34" duration="200"/>
+    <frame tileid="37" duration="200"/>
+    <frame tileid="40" duration="200"/>
+    <frame tileid="43" duration="200"/>
+    <frame tileid="46" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="2">
+   <animation>
+    <frame tileid="2" duration="200"/>
+    <frame tileid="5" duration="200"/>
+    <frame tileid="8" duration="200"/>
+    <frame tileid="11" duration="200"/>
+    <frame tileid="14" duration="200"/>
+    <frame tileid="17" duration="200"/>
+    <frame tileid="20" duration="200"/>
+    <frame tileid="23" duration="200"/>
+    <frame tileid="26" duration="200"/>
+    <frame tileid="29" duration="200"/>
+    <frame tileid="32" duration="200"/>
+    <frame tileid="35" duration="200"/>
+    <frame tileid="38" duration="200"/>
+    <frame tileid="41" duration="200"/>
+    <frame tileid="44" duration="200"/>
+    <frame tileid="47" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="48">
+   <animation>
+    <frame tileid="48" duration="200"/>
+    <frame tileid="51" duration="200"/>
+    <frame tileid="54" duration="200"/>
+    <frame tileid="57" duration="200"/>
+    <frame tileid="60" duration="200"/>
+    <frame tileid="63" duration="200"/>
+    <frame tileid="66" duration="200"/>
+    <frame tileid="69" duration="200"/>
+    <frame tileid="72" duration="200"/>
+    <frame tileid="75" duration="200"/>
+    <frame tileid="78" duration="200"/>
+    <frame tileid="81" duration="200"/>
+    <frame tileid="84" duration="200"/>
+    <frame tileid="87" duration="200"/>
+    <frame tileid="90" duration="200"/>
+    <frame tileid="93" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="49">
+   <animation>
+    <frame tileid="49" duration="200"/>
+    <frame tileid="52" duration="200"/>
+    <frame tileid="55" duration="200"/>
+    <frame tileid="58" duration="200"/>
+    <frame tileid="61" duration="200"/>
+    <frame tileid="64" duration="200"/>
+    <frame tileid="67" duration="200"/>
+    <frame tileid="70" duration="200"/>
+    <frame tileid="73" duration="200"/>
+    <frame tileid="76" duration="200"/>
+    <frame tileid="79" duration="200"/>
+    <frame tileid="82" duration="200"/>
+    <frame tileid="85" duration="200"/>
+    <frame tileid="88" duration="200"/>
+    <frame tileid="91" duration="200"/>
+    <frame tileid="94" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="50">
+   <animation>
+    <frame tileid="50" duration="200"/>
+    <frame tileid="53" duration="200"/>
+    <frame tileid="56" duration="200"/>
+    <frame tileid="59" duration="200"/>
+    <frame tileid="62" duration="200"/>
+    <frame tileid="65" duration="200"/>
+    <frame tileid="68" duration="200"/>
+    <frame tileid="71" duration="200"/>
+    <frame tileid="74" duration="200"/>
+    <frame tileid="77" duration="200"/>
+    <frame tileid="80" duration="200"/>
+    <frame tileid="83" duration="200"/>
+    <frame tileid="86" duration="200"/>
+    <frame tileid="89" duration="200"/>
+    <frame tileid="92" duration="200"/>
+    <frame tileid="95" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="96">
+   <animation>
+    <frame tileid="96" duration="200"/>
+    <frame tileid="99" duration="200"/>
+    <frame tileid="102" duration="200"/>
+    <frame tileid="105" duration="200"/>
+    <frame tileid="108" duration="200"/>
+    <frame tileid="111" duration="200"/>
+    <frame tileid="114" duration="200"/>
+    <frame tileid="117" duration="200"/>
+    <frame tileid="120" duration="200"/>
+    <frame tileid="123" duration="200"/>
+    <frame tileid="126" duration="200"/>
+    <frame tileid="129" duration="200"/>
+    <frame tileid="132" duration="200"/>
+    <frame tileid="135" duration="200"/>
+    <frame tileid="138" duration="200"/>
+    <frame tileid="141" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="97">
+   <animation>
+    <frame tileid="97" duration="200"/>
+    <frame tileid="100" duration="200"/>
+    <frame tileid="103" duration="200"/>
+    <frame tileid="106" duration="200"/>
+    <frame tileid="109" duration="200"/>
+    <frame tileid="112" duration="200"/>
+    <frame tileid="115" duration="200"/>
+    <frame tileid="118" duration="200"/>
+    <frame tileid="121" duration="200"/>
+    <frame tileid="124" duration="200"/>
+    <frame tileid="127" duration="200"/>
+    <frame tileid="130" duration="200"/>
+    <frame tileid="133" duration="200"/>
+    <frame tileid="136" duration="200"/>
+    <frame tileid="139" duration="200"/>
+    <frame tileid="142" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="98">
+   <animation>
+    <frame tileid="98" duration="200"/>
+    <frame tileid="101" duration="200"/>
+    <frame tileid="104" duration="200"/>
+    <frame tileid="107" duration="200"/>
+    <frame tileid="110" duration="200"/>
+    <frame tileid="113" duration="200"/>
+    <frame tileid="116" duration="200"/>
+    <frame tileid="119" duration="200"/>
+    <frame tileid="122" duration="200"/>
+    <frame tileid="125" duration="200"/>
+    <frame tileid="128" duration="200"/>
+    <frame tileid="131" duration="200"/>
+    <frame tileid="134" duration="200"/>
+    <frame tileid="137" duration="200"/>
+    <frame tileid="140" duration="200"/>
+    <frame tileid="143" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="34452" name="groundsThings" tilewidth="32" tileheight="32" tilecount="4096" columns="64">
+  <image source="tiles/map/ground/groundsThings.png" width="2048" height="2048"/>
+ </tileset>
+ <layer id="13" name="ground" width="33" height="27">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2740,2740,2740,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2740,2740,2740,2740,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2740,2740,2740,2740,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2740,2740,2740,2740,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,2740,2740,2740,2740,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,2740,2740,2740,2740,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740,2740
+</data>
+ </layer>
+ <objectgroup id="16" name="objects">
+  <object id="1255" x="0" y="832" width="1056" height="32"/>
+  <object id="1257" x="160" y="768" width="128" height="32"/>
+  <object id="1258" x="320" y="704" width="128" height="32"/>
+  <object id="1259" x="480" y="640" width="128" height="32"/>
+  <object id="1260" x="640" y="576" width="128" height="32"/>
+  <object id="1261" x="800" y="512" width="128" height="32"/>
+  <object id="1262" x="960" y="448" width="96" height="32"/>
+ </objectgroup>
+</map>
