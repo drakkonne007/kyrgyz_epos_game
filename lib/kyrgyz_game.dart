@@ -111,6 +111,13 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     _showOverlay(overlayName: GamePause.id,isHideOther: true);
   }
 
+  void doLoadingMapHud()
+  {
+    pauseEngine();
+    var temp = overlays.activeOverlays.toList();
+    overlays.removeAll(temp);
+  }
+
   void createNewGame(int saveId)
   {
     prefs.remove('${saveId}_maxHp');

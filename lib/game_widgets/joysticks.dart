@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -79,27 +80,34 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
       _left.value = dx - _size/8;
       _top.value = dy - _size/8;
     }
+    PlayerDirectionMove dir = PlayerDirectionMove.NoMove;
     if(ugol >= right1 && ugol < right2){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Right,isRun);
+      dir = PlayerDirectionMove.Right;
     }else if(ugol < rightUp1 && ugol >= right2){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.RightUp,isRun);
+      dir = PlayerDirectionMove.RightUp;
     }else if(ugol < -rightUp1 || ugol >= rightUp1){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Up,isRun);
+      dir = PlayerDirectionMove.Up;
     }else if(ugol >= -rightUp1 && ugol < -right2){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.LeftUp,isRun);
+      dir = PlayerDirectionMove.LeftUp;
     }else if(ugol >= -right2 && ugol < -right1){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Left,isRun);
+      dir = PlayerDirectionMove.Left;
     }else if(ugol >= -right1 && ugol < -left1){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.LeftDown,isRun);
+      dir = PlayerDirectionMove.LeftDown;
     }else if(ugol >= -left1 && ugol < left1){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.Down,isRun);
+      dir = PlayerDirectionMove.Down;
     }else if(ugol > left1 && ugol < right1){
-      widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.RightDown,isRun);
+      dir = PlayerDirectionMove.RightDown;
     }
+    widget.game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+    widget.game.gameMap.orthoPlayer?.movePlayer(dir,isRun):
+    widget.game.gameMap.frontPlayer?.movePlayer(dir,isRun);
+    print(widget.game.gameMap.currentGameWorldData!.orientation);
   }
 
   void stopMove(){
-    widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.NoMove,false);
+    widget.game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+    widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.NoMove,false):
+    widget.game.gameMap.frontPlayer?.movePlayer(PlayerDirectionMove.NoMove,false);
     _left.value = _size/2 - _size/8;
     _top.value = _size/2 - _size/8;
   }

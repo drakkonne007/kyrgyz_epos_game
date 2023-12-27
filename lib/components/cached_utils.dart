@@ -194,7 +194,6 @@ Future firstCachedIntoInternal() async
     dirdsds.createSync(recursive: true);
   }
 
-
   for(final world in  fullMaps){
   for (int cl = 0; cl < world.gameConsts.maxColumn!; cl++) {
     for (int rw = 0; rw < world.gameConsts.maxRow!; rw++) {

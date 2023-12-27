@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/game_widgets/joysticks.dart';
 import 'package:game_flame/game_widgets/pause_button.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -41,7 +42,8 @@ class GameHud extends StatelessWidget
                       ElevatedButton(
                         onPressed: (){
                           // _game.doInventoryHud();
-                          _game.gameMap.orthoPlayer?.startHit();
+                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                          _game.gameMap.orthoPlayer?.startHit() : _game.gameMap.frontPlayer?.startHit();
                         },
                         child: const Icon(Icons.sports_handball_outlined),
                       ),
@@ -49,7 +51,8 @@ class GameHud extends StatelessWidget
                       ValueListenableBuilder(valueListenable: _game.gameMap.currentObject, builder: (_,val,__) {
                         return val == null ? const SizedBox(width: 30,height: 30,) : ElevatedButton(
                           onPressed: (){
-                            _game.gameMap.orthoPlayer?.makeAction();
+                            _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                            _game.gameMap.orthoPlayer?.makeAction() : _game.gameMap.frontPlayer?.makeAction();
                           },
                           child: const Icon(Icons.waving_hand),
                         );

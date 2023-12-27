@@ -5,6 +5,15 @@ List<GameWorldData> fullMaps =
   TopLeftVillage(),
   BigTopLeft(),
   YurtaInTopLeftVillage1(),
+  TopLeftTempleDungeon(),
+];
+
+List<GameWorldData> fullMapsForPreCompille =
+[
+  TopLeftVillage(),
+  BigTopLeft(),
+  YurtaInTopLeftVillage1(),
+  TopLeftTempleDungeon(),
 ];
 
 enum OrientatinType
@@ -20,6 +29,7 @@ GameWorldData getWorldFromName(String name)
     case 'topLeftVillage': return TopLeftVillage();
     case 'topLeft': return BigTopLeft();
     case 'yurtaInTopLeftVillage1': return YurtaInTopLeftVillage1();
+    case 'topLeftTempleDungeon': return TopLeftTempleDungeon();
     default: print('error name of World!'); return BigTopLeft();
   }
 }
@@ -54,13 +64,23 @@ class TopLeftVillage extends GameWorldData {
   }
 }
 
+class TopLeftTempleDungeon extends GameWorldData {
+  TopLeftTempleDungeon()
+  {
+    orientation = OrientatinType.front;
+    nameForGame = 'topLeftTempleDungeon';
+    source = 'topLeftTempleDungeon.tmx';
+    gameConsts = GameConsts(maxColumn: 10, maxRow:11);
+  }
+}
+
 class YurtaInTopLeftVillage1 extends GameWorldData {
   YurtaInTopLeftVillage1()
   {
     orientation = OrientatinType.front;
     nameForGame = 'yurtaInTopLeftVillage1';
     source = 'yurtaInTopLeftVillage1.tmx';
-    gameConsts = GameConsts(maxColumn: 3, maxRow:3);
+    gameConsts = GameConsts(maxColumn: 3, maxRow:2);
   }
 }
 

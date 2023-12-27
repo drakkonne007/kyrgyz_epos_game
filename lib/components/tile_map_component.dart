@@ -42,13 +42,14 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
   Map<LoadedColumnRow,List<Component>> allEls = {};
   final List<Ground> grounds = [];
   DCollisionProcessor? collisionProcessor;
-  GameWorldData? _currentGameWorldData;
+  GameWorldData? currentGameWorldData;
   bool _isLoad = false;
   final Component priorityHigh = Component(priority: GamePriority.high);
   final Component priorityHighMinus1 = Component(priority: GamePriority.high - 1);
   final Component priorityGroundPlus1 = Component(priority: GamePriority.ground + 1);
   final Component enemyComponent = Component(priority: GamePriority.player - 2);
   final Component playerLayout = Component(priority: GamePriority.player);
+
 
   @override
   Future onLoad() async
@@ -82,6 +83,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap() async
   {
+    game.doLoadingMapHud();
     _isLoad = false;
     orthoPlayer?.gameHide = true;
     frontPlayer?.gameHide = true;
@@ -103,11 +105,11 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     //   smallRestart();
     //   return;
     // }
-    _currentGameWorldData = gameRef.playerData.playerBigMap;
-    print(_currentGameWorldData?.nameForGame);
+    currentGameWorldData = gameRef.playerData.playerBigMap;
+    print('gameWorld:  ${currentGameWorldData?.nameForGame}');
 
-    if(_currentGameWorldData == null) return;
-    if(_currentGameWorldData!.orientation == OrientatinType.orthogonal){
+    if(currentGameWorldData == null) return;
+    if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       orthoPlayer?.reInsertFullActiveHitBoxes();
       orthoPlayer?.gameHide = false;
     }else{
@@ -118,17 +120,16 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
     }
-    print(isMapCached.value);
-    _column = gameRef.playerData.startLocation.x ~/ (_currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    _row = gameRef.playerData.startLocation.y ~/ (_currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     for(int i=0;i<3;i++) {
       for(int j=0;j<3;j++) {
         mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
       }
     }
     grounds.clear();
-    for(int i=0;i<_currentGameWorldData!.gameConsts.maxColumn!;i++){
-      for(int j=0;j<_currentGameWorldData!.gameConsts.maxRow!;j++){
+    for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
+      for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
         if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
           var objects = KyrgyzGame.cachedObjXmls['$i-$j.objXml']!;
           for(final obj in objects){
@@ -160,27 +161,27 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       }
     }
     print('total ground ${grounds.length}');
-    if(_currentGameWorldData!.orientation == OrientatinType.orthogonal){
+    if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
         orthoPlayer= OrthoPlayer();
         await playerLayout.add(orthoPlayer!);
       }
       // orthoPlayer?.priority = GamePriority.player;
       orthoPlayer?.position = gameRef.playerData.startLocation;
-      gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,_currentGameWorldData!.gameConsts.lengthOfTileSquare.x
-          *_currentGameWorldData!.gameConsts.maxColumn!,
-          _currentGameWorldData!.gameConsts.lengthOfTileSquare.y
-              *_currentGameWorldData!.gameConsts.maxRow!));
+      gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.lengthOfTileSquare.x
+          *currentGameWorldData!.gameConsts.maxColumn!,
+          currentGameWorldData!.gameConsts.lengthOfTileSquare.y
+              *currentGameWorldData!.gameConsts.maxRow!));
     }else{
       if(frontPlayer == null){
         frontPlayer = FrontPlayer();
         await playerLayout.add(frontPlayer!);
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
-      gameRef.camera.followComponent(frontPlayer!, worldBounds: Rect.fromLTRB(0,0,_currentGameWorldData!.gameConsts.lengthOfTileSquare.x
-          *_currentGameWorldData!.gameConsts.maxColumn!,
-          _currentGameWorldData!.gameConsts.lengthOfTileSquare.y
-              *_currentGameWorldData!.gameConsts.maxRow!));
+      gameRef.camera.followComponent(frontPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.lengthOfTileSquare.x
+          *currentGameWorldData!.gameConsts.maxColumn!,
+          currentGameWorldData!.gameConsts.lengthOfTileSquare.y
+              *currentGameWorldData!.gameConsts.maxRow!));
     }
     gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
     gameRef.doGameHud();
@@ -199,14 +200,14 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       isNeedCopyInternal = false;
       await firstCachedIntoInternal();
     }
-    loadObjs(_currentGameWorldData!);
-    loadAnimsHigh(_currentGameWorldData!);
-    loadAnimsDown(_currentGameWorldData!);
+    loadObjs(currentGameWorldData!);
+    loadAnimsHigh(currentGameWorldData!);
+    loadAnimsDown(currentGameWorldData!);
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
-      return path.startsWith('assets/metaData/${_currentGameWorldData!.nameForGame}/') && path.toLowerCase().endsWith('.png');
-    }).map((path) => path.replaceFirst('assets/metaData/${_currentGameWorldData!.nameForGame}/', ''));
+      return path.startsWith('assets/metaData/${currentGameWorldData!.nameForGame}/') && path.toLowerCase().endsWith('.png');
+    }).map((path) => path.replaceFirst('assets/metaData/${currentGameWorldData!.nameForGame}/', ''));
     await mutex.protect(() async  {
       for(final path in imagePaths) {
         KyrgyzGame.cachedMapPngs.add(path);
@@ -235,8 +236,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     }
     collisionProcessor?.updateCollisions();
     if(orthoPlayer != null) {
-      int col = orthoPlayer!.position.x ~/ (_currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-      int row = orthoPlayer!.position.y ~/ (_currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+      int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+      int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
       if (col != _column || row != _row) {
         reloadWorld(col, row);
       }

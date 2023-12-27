@@ -148,38 +148,50 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void movePlayer(List<PlayerDirectionMove> directs, bool isRun)
+  void movePlayer(PlayerDirectionMove direct, bool isRun)
   {
     if(gameRef.playerData.isLockMove){
       return;
     }
     if(animation == animIdle  || animation == animMove) {
       Vector2 velocity = Vector2.zero();
-      for(var direct in directs){
-        switch (direct) {
-          case PlayerDirectionMove.Right:
-            {
-              velocity.x = PhysicVals.startSpeed;
-              animation = animMove;
-            }
-            break;
-          case PlayerDirectionMove.Up:
-            {
-              if (_onGround) {
-                // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-                _speed.y = -400;
-              }
-              animation = animMove;
-            }
-            break;
-          case PlayerDirectionMove.Left:
-            {
-              velocity.x = -PhysicVals.startSpeed;
-              animation = animMove;
-            }
-            break;
-          default: break;
-        }
+      switch (direct) {
+        case PlayerDirectionMove.Right:
+        case PlayerDirectionMove.RightDown:
+          velocity.x = PhysicVals.startSpeed;
+          animation = animMove;
+          break;
+        case PlayerDirectionMove.Up:
+          if (_onGround) {
+            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
+            _speed.y = -400;
+          }
+          animation = animMove;
+          break;
+        case PlayerDirectionMove.Left:
+        case PlayerDirectionMove.LeftDown:
+          velocity.x = -PhysicVals.startSpeed;
+          animation = animMove;
+          break;
+        case PlayerDirectionMove.RightUp:
+          velocity.x = PhysicVals.startSpeed;
+          animation = animMove;
+          if (_onGround) {
+            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
+            _speed.y = -400;
+          }
+          break;
+        case PlayerDirectionMove.LeftUp:
+          velocity.x = -PhysicVals.startSpeed;
+          animation = animMove;
+          if (_onGround) {
+            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
+            _speed.y = -400;
+          }
+          break;
+        case PlayerDirectionMove.NoMove:
+          _velocity.x = 0;
+          break;
       }
       if(velocity.x > 0 && isFlippedHorizontally){
         flipHorizontally();
@@ -187,7 +199,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         flipHorizontally();
       }
       // if (direct != PlayerDirectionMove.NoMove) {
-        // _direction = direct;
+      // _direction = direct;
       // }
       if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
         PhysicVals.runCoef = 1.3;
@@ -205,7 +217,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed)
   {
     bool isRun = false;
-    List<PlayerDirectionMove> list = [];
+    Vector2 velo = Vector2.zero();
     if(event.isKeyPressed(LogicalKeyboardKey.keyO)){
       position=Vector2(0,0);
     }
@@ -213,22 +225,48 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water));
     }
     if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) || event.isKeyPressed(const LogicalKeyboardKey(0x00000057)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000077))) {
-      list.add(PlayerDirectionMove.Up);
+      velo.y = -PhysicVals.startSpeed;
     }
     if(event.isKeyPressed(LogicalKeyboardKey.arrowDown) || event.isKeyPressed(const LogicalKeyboardKey(0x00000073)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000053))) {
-      list.add(PlayerDirectionMove.Down);
+      velo.y = PhysicVals.startSpeed;
     }
     if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)  || event.isKeyPressed(const LogicalKeyboardKey(0x00000061)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000041))) {
-      list.add(PlayerDirectionMove.Left);
+      velo.x = -PhysicVals.startSpeed;
     }
     if(event.isKeyPressed(LogicalKeyboardKey.arrowRight) || event.isKeyPressed(const LogicalKeyboardKey(0x00000064)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000044))) {
-      list.add(PlayerDirectionMove.Right);
+      velo.x = PhysicVals.startSpeed;
     }
-    if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
-      isRun = true;
+    if(velo.x == 0 && velo.y == 0){
+      _velocity *= 0;
+      PhysicVals.runCoef = 1;
+    }else{
+      if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
+        isRun = true;
+      }
+      doMoveFromVector2(velo, isRun);
     }
-    movePlayer(list, isRun);
     return true;
+  }
+
+  void doMoveFromVector2(Vector2 vel, bool isRun)
+  {
+    if(vel.x > 0 && vel.y == 0){
+      movePlayer(PlayerDirectionMove.Right,isRun);
+    }else if(vel.x < 0 && vel.y == 0){
+      movePlayer(PlayerDirectionMove.Left,isRun);
+    }else if(vel.x > 0 && vel.y > 0){
+      movePlayer(PlayerDirectionMove.RightDown,isRun);
+    }else if(vel.x > 0 && vel.y < 0){
+      movePlayer(PlayerDirectionMove.RightUp,isRun);
+    }else if(vel.x < 0 && vel.y < 0){
+      movePlayer(PlayerDirectionMove.LeftUp,isRun);
+    }else if(vel.x < 0 && vel.y > 0){
+      movePlayer(PlayerDirectionMove.LeftDown,isRun);
+    }else if(vel.x == 0 && vel.y > 0){
+      movePlayer(PlayerDirectionMove.Down,isRun);
+    }else if(vel.x == 0 && vel.y < 0){
+      movePlayer(PlayerDirectionMove.Up,isRun);
+    }
   }
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
@@ -352,7 +390,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(_groundTimer < 1000) {
       _groundTimer += dt;
     }
-    if(_groundTimer > 0.010){
+    if(_groundTimer > 0.2){
       _onGround = false;
     }
     if(gameHide){
