@@ -717,7 +717,7 @@
  <tileset firstgid="25314" name="vendor-tent" tilewidth="32" tileheight="32" tilecount="84" columns="12">
   <image source="tiles/map/grassLand/Props/vendor-tent.png" width="384" height="224"/>
  </tileset>
- <tileset firstgid="25398" source="tiles/map/grassLand/TiledMap/Terrain.tsx"/>
+ <tileset firstgid="25398" source="Terrain.tsx"/>
  <tileset firstgid="27936" name="shrine2-available-no grass" tilewidth="32" tileheight="32" tilecount="84" columns="28">
   <image source="tiles/map/grassLand/Props/shrine2-available-no grass.png" width="896" height="99"/>
   <tile id="0">

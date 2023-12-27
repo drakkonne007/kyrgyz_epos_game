@@ -21,8 +21,8 @@
  <tileset firstgid="14738" source="Ancient Ruins-Animated Terrains2-16 frames-with transparency.tsx"/>
  <tileset firstgid="17078" source="Ancient Ruins-Tileset-Terrain2.tsx"/>
  <tileset firstgid="21108" source="Ancient Ruins-Tileset - wall 2.tsx"/>
- <tileset firstgid="21428" source="tiles/map/grassLand/TiledMap/Terrain.tsx"/>
- <tileset firstgid="23768" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2496" columns="39">
+ <tileset firstgid="21428" source="Terrain.tsx"/>
+ <tileset firstgid="23966" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2496" columns="39">
   <image source="tiles/map/grassLand/Props/Atlas-Props.png" width="1248" height="2048"/>
   <tile id="809" type="high"/>
   <tile id="810" type="high"/>
@@ -58,19 +58,19 @@
   <tile id="1429" type="high"/>
   <tile id="1430" type="high"/>
  </tileset>
- <tileset firstgid="26264" name="Yurts" tilewidth="32" tileheight="32" tilecount="2205" columns="63">
+ <tileset firstgid="26462" name="Yurts" tilewidth="32" tileheight="32" tilecount="2205" columns="63">
   <image source="tiles/Yurts.png" width="2029" height="1126"/>
  </tileset>
- <tileset firstgid="28469" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2500" columns="50">
+ <tileset firstgid="28667" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2500" columns="50">
   <image source="tiles/map/ancientLand/Props/Atlas-Props.png" width="1600" height="1600"/>
  </tileset>
- <tileset firstgid="30969" name="warrior-single swing 3" tilewidth="32" tileheight="32" tilecount="216" columns="72">
+ <tileset firstgid="31167" name="warrior-single swing 3" tilewidth="32" tileheight="32" tilecount="216" columns="72">
   <image source="tiles/map/grassLand/Characters/warrior-single swing 3.png" width="2304" height="96"/>
  </tileset>
- <tileset firstgid="31185" name="Kyrgyz_Yurts" tilewidth="32" tileheight="32" tilecount="2223" columns="57">
+ <tileset firstgid="31383" name="Kyrgyz_Yurts" tilewidth="32" tileheight="32" tilecount="2223" columns="57">
   <image source="tiles/Kyrgyz_Yurts.png" width="1846" height="1276"/>
  </tileset>
- <tileset firstgid="33408" name="Animated Tree1" tilewidth="32" tileheight="32" tilecount="192" columns="32">
+ <tileset firstgid="33606" name="Animated Tree1" tilewidth="32" tileheight="32" tilecount="192" columns="32">
   <image source="tiles/map/grassLand/Props/Animated Tree1.png" width="1024" height="192"/>
   <tile id="1">
    <animation>
@@ -217,8 +217,8 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="33600" source="Animated Tree2.tsx"/>
- <tileset firstgid="33792" name="shrine2-available-no grass" tilewidth="32" tileheight="32" tilecount="84" columns="28">
+ <tileset firstgid="33798" source="Animated Tree2.tsx"/>
+ <tileset firstgid="33990" name="shrine2-available-no grass" tilewidth="32" tileheight="32" tilecount="84" columns="28">
   <image source="tiles/map/grassLand/Props/shrine2-available-no grass.png" width="896" height="99"/>
   <tile id="0">
    <animation>
@@ -329,7 +329,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="33876" name="sword sharpener-2" tilewidth="32" tileheight="32" tilecount="8" columns="8">
+ <tileset firstgid="34074" name="sword sharpener-2" tilewidth="32" tileheight="32" tilecount="8" columns="8">
   <image source="tiles/map/grassLand/Props/sword sharpener-2.png" width="256" height="32"/>
   <tile id="0">
    <animation>
@@ -348,7 +348,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="33884" name="water deposit for the blacksmith-water anim" tilewidth="32" tileheight="32" tilecount="16" columns="16">
+ <tileset firstgid="34082" name="water deposit for the blacksmith-water anim" tilewidth="32" tileheight="32" tilecount="16" columns="16">
   <image source="tiles/map/grassLand/Props/water deposit for the blacksmith-water anim.png" width="512" height="32"/>
   <tile id="0">
    <animation>
@@ -377,7 +377,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="33900" name="blacksmith sign- swinging sign anim" tilewidth="32" tileheight="32" tilecount="16" columns="16">
+ <tileset firstgid="34098" name="blacksmith sign- swinging sign anim" tilewidth="32" tileheight="32" tilecount="16" columns="16">
   <image source="tiles/map/grassLand/Props/blacksmith sign- swinging sign anim.png" width="512" height="36"/>
   <tile id="0">
    <animation>
@@ -400,7 +400,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="33916" name="campfire 1-3" tilewidth="32" tileheight="32" tilecount="128" columns="32">
+ <tileset firstgid="34114" name="campfire 1-3" tilewidth="32" tileheight="32" tilecount="128" columns="32">
   <image source="tiles/map/grassLand/Props/campfire 1-3.png" width="1024" height="128"/>
   <tile id="1">
    <animation>
@@ -475,7 +475,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="34044" name="animated grass-1" tilewidth="16" tileheight="16" tilecount="32" columns="16">
+ <tileset firstgid="34242" name="animated grass-1" tilewidth="16" tileheight="16" tilecount="32" columns="16">
   <image source="tiles/map/grassLand/Props/animated grass-1.png" width="256" height="32"/>
   <tile id="0">
    <animation>
@@ -498,7 +498,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="34076" name="animated grass-2" tilewidth="16" tileheight="16" tilecount="32" columns="16">
+ <tileset firstgid="34274" name="animated grass-2" tilewidth="16" tileheight="16" tilecount="32" columns="16">
   <image source="tiles/map/grassLand/Props/animated grass-2.png" width="256" height="32"/>
   <tile id="0">
    <animation>
@@ -521,7 +521,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="34108" name="animated grass-3" tilewidth="16" tileheight="16" tilecount="32" columns="16">
+ <tileset firstgid="34306" name="animated grass-3" tilewidth="16" tileheight="16" tilecount="32" columns="16">
   <image source="tiles/map/grassLand/Props/animated grass-3.png" width="256" height="32"/>
   <tile id="0">
    <animation>
@@ -544,7 +544,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="34140" name="smokes" tilewidth="32" tileheight="32" tilecount="168" columns="42">
+ <tileset firstgid="34338" name="smokes" tilewidth="32" tileheight="32" tilecount="168" columns="42">
   <image source="tiles/smokes.png" width="1344" height="128"/>
   <tile id="0">
    <animation>
@@ -567,7 +567,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="34308" name="generic nature particles96x96" tilewidth="32" tileheight="32" tilecount="144" columns="48">
+ <tileset firstgid="34506" name="generic nature particles96x96" tilewidth="32" tileheight="32" tilecount="144" columns="48">
   <image source="tiles/map/grassLand/Props/generic nature particles96x96.png" width="1536" height="96"/>
   <tile id="0">
    <animation>
@@ -750,7 +750,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="34452" name="groundsThings" tilewidth="32" tileheight="32" tilecount="4096" columns="64">
+ <tileset firstgid="34650" name="groundsThings" tilewidth="32" tileheight="32" tilecount="4096" columns="64">
   <image source="tiles/map/ground/groundsThings.png" width="2048" height="2048"/>
  </tileset>
  <layer id="13" name="ground" width="33" height="27">

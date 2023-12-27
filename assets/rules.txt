@@ -1,33 +1,55 @@
-wall-1-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-1-rule1-places all tiles.tmx
-wall-1-rule2-applies variations.tmx
+defaultRules/wall-1-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-1-rule1-places all tiles.tmx
+defaultRules/wall-1-rule2-applies variations.tmx
 
-wall-2-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-2-rule1-places all tiles.tmx
-wall-2-rule2-applies variations.tmx
+defaultRules/wall-2-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-2-rule1-places all tiles.tmx
+defaultRules/wall-2-rule2-applies variations.tmx
 
-wall-3-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-3-rule1-places all tiles.tmx
-wall-3-rule2-applies variations.tmx
+defaultRules/wall-3-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-3-rule1-places all tiles.tmx
+defaultRules/wall-3-rule2-applies variations.tmx
 
-wall-4-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-4-rule1-places all tiles.tmx
-wall-4-rule2-applies variations.tmx
+defaultRules/wall-4-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-4-rule1-places all tiles.tmx
+defaultRules/wall-4-rule2-applies variations.tmx
 
-wall-5-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-5-rule1-places all tiles.tmx
-wall-5-rule2-applies variations.tmx
+defaultRules/wall-5-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-5-rule1-places all tiles.tmx
+defaultRules/wall-5-rule2-applies variations.tmx
 
-wall-6-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-6-rule1-places all tiles.tmx
-wall-6-rule2-applies variations.tmx
+defaultRules/wall-6-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-6-rule1-places all tiles.tmx
+defaultRules/wall-6-rule2-applies variations.tmx
 
-wall-7-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-7-rule1-places all tiles.tmx
-wall-7-rule2-applies variations.tmx
+defaultRules/wall-7-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-7-rule1-places all tiles.tmx
+defaultRules/wall-7-rule2-applies variations.tmx
 
-wall-8-rule0-erases all generated tiles and resets them to their initial state.tmx
-wall-8-rule1-places all tiles.tmx
-wall-8-rule2-applies variations.tmx
+defaultRules/wall-8-rule0-erases all generated tiles and resets them to their initial state.tmx
+defaultRules/wall-8-rule1-places all tiles.tmx
+defaultRules/wall-8-rule2-applies variations.tmx
 
-wood_rules.tmx
+defaultRules/wood_rules.tmx
+
+defaultRules/Grass Land - cliff-grass_platform_rule.tmx
+
+grass2Rules\wall-1-rule0-erases all generated tiles and resets them to their initial state.tmx
+grass2Rules\wall-1-rule1-places all tiles.tmx
+grass2Rules\wall-1-rule2-applies variations.tmx
+
+grass2Rules\wall-1-transparency-rule0-erases all generated tiles and resets them to their initial state.tmx
+grass2Rules\wall-1-transparency-rule1-places all tiles.tmx
+grass2Rules\wall-1-transparency-rule2-applies variations.tmx
+
+grass2Rules\hole-1-rule0-erases all generated tiles and resets them to their initial state.tmx
+grass2Rules\hole-1-rule1-places all tiles.tmx
+grass2Rules\hole-1-rule2-applies variations.tmx
+
+grass2Rules\hole-2-rule0-erases all generated tiles and resets them to their initial state.tmx
+grass2Rules\hole-2-rule1-places all tiles.tmx
+grass2Rules\hole-2-rule2-applies variations.tmx
+
+grass2Rules\hole-3-transparency-rule0-erases all generated tiles and resets them to their initial state.tmx
+grass2Rules\hole-3-transparency-rule1-places all tiles.tmx
+grass2Rules\hole-3-transparency-rule2-applies variations.tmx

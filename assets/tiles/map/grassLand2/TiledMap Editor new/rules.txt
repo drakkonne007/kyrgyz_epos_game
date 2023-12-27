@@ -1,0 +1,19 @@
+grassRules2\wall-1-rule0-erases all generated tiles and resets them to their initial state.tmx
+grassRules2\wall-1-rule1-places all tiles.tmx
+grassRules2\wall-1-rule2-applies variations.tmx
+
+grassRules2\wall-1-transparency-rule0-erases all generated tiles and resets them to their initial state.tmx
+grassRules2\wall-1-transparency-rule1-places all tiles.tmx
+grassRules2\wall-1-transparency-rule2-applies variations.tmx
+
+grassRules2\hole-1-rule0-erases all generated tiles and resets them to their initial state.tmx
+grassRules2\hole-1-rule1-places all tiles.tmx
+grassRules2\hole-1-rule2-applies variations.tmx
+
+grassRules2\hole-2-rule0-erases all generated tiles and resets them to their initial state.tmx
+grassRules2\hole-2-rule1-places all tiles.tmx
+grassRules2\hole-2-rule2-applies variations.tmx
+
+grassRules2\hole-3-transparency-rule0-erases all generated tiles and resets them to their initial state.tmx
+grassRules2\hole-3-transparency-rule1-places all tiles.tmx
+grassRules2\hole-3-transparency-rule2-applies variations.tmx
