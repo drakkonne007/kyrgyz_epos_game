@@ -53,3 +53,15 @@ grass2Rules\hole-2-rule2-applies variations.tmx
 grass2Rules\hole-3-transparency-rule0-erases all generated tiles and resets them to their initial state.tmx
 grass2Rules\hole-3-transparency-rule1-places all tiles.tmx
 grass2Rules\hole-3-transparency-rule2-applies variations.tmx
+
+prisonRules\wall-1-rule0-erases all generated tiles and resets them to their initial state.tmx
+prisonRules\wall-1-rule1-places all tiles.tmx
+prisonRules\wall-1-rule2-applies variations.tmx
+
+prisonRules\wall-2-rule0-erases all generated tiles and resets them to their initial state.tmx
+prisonRules\wall-2-rule1-places all tiles.tmx
+prisonRules\wall-2-rule2-applies variations.tmx
+
+prisonRules\Prison Cells-rule0-erases all generated tiles and resets them to their initial state.tmx
+prisonRules\Prison Cells-rule1-places all tiles.tmx
+prisonRules\Prison Cells-rule2-applies variations.tmx

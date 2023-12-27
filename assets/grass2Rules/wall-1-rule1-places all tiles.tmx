@@ -4,7 +4,7 @@
   <property name="MatchInOrder" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" source=":/automap-tiles.tsx"/>
- <tileset firstgid="6" source="../tiles/map/grassLand2/Tilesets/Tileset - wall1.tsx"/>
+ <tileset firstgid="6" source="../Tileset - wall1.tsx"/>
  <layer id="2" name="input_wall" width="80" height="50" opacity="0.56">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

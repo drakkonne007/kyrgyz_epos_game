@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="70" height="70" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="2">
- <tileset firstgid="1" source="../Tilesets/Tileset - wall 2.tsx"/>
+ <tileset firstgid="1" source="../Tileset - wall 2.tsx"/>
  <tileset firstgid="241" source=":/automap-tiles.tsx"/>
- <tileset firstgid="246" source="../Tilesets/Tileset-Terrain-old prison.tsx"/>
+ <tileset firstgid="246" source="../Tileset-Terrain-old prison.tsx"/>
  <layer id="1" name="input_prison cells" width="70" height="70">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

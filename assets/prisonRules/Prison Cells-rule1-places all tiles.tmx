@@ -3,9 +3,9 @@
  <properties>
   <property name="MatchInOrder" type="bool" value="false"/>
  </properties>
- <tileset firstgid="1" source="../Tilesets/Tileset - wall 2.tsx"/>
+ <tileset firstgid="1" source="../Tileset - wall 2.tsx"/>
  <tileset firstgid="241" source=":/automap-tiles.tsx"/>
- <tileset firstgid="246" source="../Tilesets/Tileset-Terrain-old prison.tsx"/>
+ <tileset firstgid="246" source="../Tileset-Terrain-old prison.tsx"/>
  <layer id="2" name="input_prison cells" width="33" height="33" opacity="0.39">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

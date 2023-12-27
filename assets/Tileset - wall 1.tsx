@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.9" tiledversion="1.9.2" name="Tileset - wall 1" tilewidth="32" tileheight="32" tilecount="368" columns="16">
- <image source="../../Tilesets/wall-1- 3 tiles tall.png" width="512" height="736"/>
+ <image source="tiles/map/prisonSet/Tilesets/wall-1- 3 tiles tall.png" width="512" height="736"/>
  <tile id="1" probability="0">
   <objectgroup>
    <object id="1" x="0" y="0" width="12" height="32"/>

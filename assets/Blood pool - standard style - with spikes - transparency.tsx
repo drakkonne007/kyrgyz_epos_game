@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="blood pool - standard style - with spikes" tilewidth="32" tileheight="32" tilecount="310" columns="31">
- <image source="../../Tilesets/blood pool-standard style - with spikes.png" width="992" height="320"/>
+<tileset version="1.9" tiledversion="1.9.2" name="blood pool - standard style - with spikes - transparency" tilewidth="32" tileheight="32" tilecount="310" columns="31">
+ <image source="tiles/map/prisonSet/Tilesets/blood pool-standard style - with spikes.png" width="992" height="320"/>
  <tile id="33">
   <objectgroup draworder="index" id="2">
    <object id="1" x="12" y="8" width="20" height="24"/>
@@ -269,7 +269,7 @@
  </tile>
  <tile id="94">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="12" y="0" width="20" height="32"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
   <animation>
    <frame tileid="94" duration="100"/>
@@ -463,7 +463,7 @@
   </animation>
  </tile>
  <tile id="129">
-  <objectgroup draworder="index" id="2">
+  <objectgroup>
    <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
   <animation>
@@ -671,79 +671,79 @@
  </tile>
  <tile id="193">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="194">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="195">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="196">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="197">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="198">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="199">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="201">
   <objectgroup>
-   <object id="1" x="12" y="0" width="20" height="32"/>
-   <object id="2" x="0" y="8" width="12" height="24"/>
+   <object id="1" x="0" y="8" width="12" height="24"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="202">
   <objectgroup>
-   <object id="1" x="12" y="0" width="20" height="32"/>
-   <object id="2" x="0" y="8" width="12" height="24"/>
+   <object id="1" x="0" y="8" width="12" height="24"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="203">
   <objectgroup>
-   <object id="1" x="12" y="0" width="20" height="32"/>
-   <object id="2" x="0" y="8" width="12" height="24"/>
+   <object id="1" x="0" y="8" width="12" height="24"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="204">
   <objectgroup>
-   <object id="1" x="12" y="0" width="20" height="32"/>
-   <object id="2" x="0" y="8" width="12" height="24"/>
+   <object id="1" x="0" y="8" width="12" height="24"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="205">
   <objectgroup>
-   <object id="1" x="12" y="0" width="20" height="32"/>
-   <object id="2" x="0" y="8" width="12" height="24"/>
+   <object id="1" x="0" y="8" width="12" height="24"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="206">
   <objectgroup>
-   <object id="1" x="12" y="0" width="20" height="32"/>
-   <object id="2" x="0" y="8" width="12" height="24"/>
+   <object id="1" x="0" y="8" width="12" height="24"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="207">
   <objectgroup>
-   <object id="1" x="12" y="0" width="20" height="32"/>
-   <object id="2" x="0" y="8" width="12" height="24"/>
+   <object id="1" x="0" y="8" width="12" height="24"/>
+   <object id="2" x="12" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="209">
@@ -825,37 +825,37 @@
  </tile>
  <tile id="255">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="256">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="257">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="258">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="259">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="260">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="261">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="20"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="286">
@@ -894,7 +894,7 @@
   </objectgroup>
  </tile>
  <wangsets>
-  <wangset name="blood pool - standard style - with spikes" type="corner" tile="96">
+  <wangset name="blood pool - standard style - with spikes - transparency" type="corner" tile="96">
    <wangcolor name="" color="#ff0000" tile="96" probability="1"/>
    <wangtile tileid="33" wangid="0,0,0,1,0,0,0,0"/>
    <wangtile tileid="34" wangid="0,0,0,1,0,1,0,0"/>

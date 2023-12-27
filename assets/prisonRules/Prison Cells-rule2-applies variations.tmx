@@ -3,8 +3,8 @@
  <properties>
   <property name="MatchInOrder" type="bool" value="true"/>
  </properties>
- <tileset firstgid="1" source="../Tilesets/Tileset - wall 2.tsx"/>
- <tileset firstgid="241" source="../Tilesets/Tileset-Terrain-old prison.tsx"/>
+ <tileset firstgid="1" source="../Tileset - wall 2.tsx"/>
+ <tileset firstgid="241" source="../Tileset-Terrain-old prison.tsx"/>
  <tileset firstgid="4726" source=":/automap-tiles.tsx"/>
  <layer id="1" name="input_prison cells" width="60" height="60" opacity="0.58">
   <data encoding="csv">

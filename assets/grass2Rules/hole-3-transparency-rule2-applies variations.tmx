@@ -3,7 +3,7 @@
  <properties>
   <property name="MatchInOrder" type="bool" value="true"/>
  </properties>
- <tileset firstgid="1" source="../tiles/map/grassLand2/Tilesets/hole3.tsx"/>
+ <tileset firstgid="1" source="../hole3.tsx"/>
  <layer id="1" name="input_holes" width="40" height="30" opacity="0.73">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

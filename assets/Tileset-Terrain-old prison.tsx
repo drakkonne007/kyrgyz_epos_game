@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.9" tiledversion="1.9.2" name="Tileset-Terrain-old prison" tilewidth="32" tileheight="32" tilecount="4485" columns="65">
- <image source="../../Tilesets/Tileset-Terrain-old prison.png" width="2080" height="2208"/>
+ <image source="tiles/map/prisonSet/Tilesets/Tileset-Terrain-old prison.png" width="2080" height="2208"/>
  <tile id="111">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="8" width="12" height="24"/>

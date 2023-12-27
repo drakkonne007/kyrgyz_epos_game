@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
  <tileset firstgid="1" source=":/automap-tiles.tsx"/>
- <tileset firstgid="6" source="../tiles/map/grassLand2/Tilesets/Tileset - wall1.tsx"/>
+ <tileset firstgid="6" source="../Tileset - wall1.tsx"/>
  <layer id="1" name="input_wall" width="40" height="40" opacity="0.71">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

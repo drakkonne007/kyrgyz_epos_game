@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="blood pool - standard style - with spikes - transparency" tilewidth="32" tileheight="32" tilecount="310" columns="31">
- <image source="../../Tilesets/blood pool-standard style - with spikes.png" width="992" height="320"/>
+<tileset version="1.9" tiledversion="1.9.2" name="blood pool - style2 - with spikes - transparency" tilewidth="32" tileheight="32" tilecount="310" columns="31">
+ <image source="tiles/map/prisonSet/Tilesets/blood pool - style2 - with spikes-transparency.png" width="992" height="320"/>
  <tile id="33">
   <objectgroup draworder="index" id="2">
    <object id="1" x="12" y="8" width="20" height="24"/>
@@ -147,16 +147,16 @@
    <frame tileid="207" duration="100"/>
   </animation>
  </tile>
- <tile id="65">
+ <tile id="65" probability="0.5">
   <animation>
    <frame tileid="65" duration="100"/>
-   <frame tileid="100" duration="100"/>
-   <frame tileid="101" duration="100"/>
-   <frame tileid="102" duration="100"/>
-   <frame tileid="103" duration="100"/>
-   <frame tileid="104" duration="100"/>
-   <frame tileid="105" duration="100"/>
-   <frame tileid="106" duration="100"/>
+   <frame tileid="69" duration="100"/>
+   <frame tileid="70" duration="100"/>
+   <frame tileid="71" duration="100"/>
+   <frame tileid="72" duration="100"/>
+   <frame tileid="73" duration="100"/>
+   <frame tileid="74" duration="100"/>
+   <frame tileid="75" duration="100"/>
   </animation>
  </tile>
  <tile id="66">
@@ -269,7 +269,7 @@
  </tile>
  <tile id="94">
   <objectgroup draworder="index" id="2">
-   <object id="2" x="12" y="0" width="20" height="32"/>
+   <object id="1" x="12" y="0" width="20" height="32"/>
   </objectgroup>
   <animation>
    <frame tileid="94" duration="100"/>
@@ -282,21 +282,9 @@
    <frame tileid="91" duration="100"/>
   </animation>
  </tile>
- <tile id="95">
+ <tile id="95" probability="0.5">
   <animation>
    <frame tileid="95" duration="100"/>
-   <frame tileid="69" duration="100"/>
-   <frame tileid="70" duration="100"/>
-   <frame tileid="71" duration="100"/>
-   <frame tileid="72" duration="100"/>
-   <frame tileid="73" duration="100"/>
-   <frame tileid="74" duration="100"/>
-   <frame tileid="75" duration="100"/>
-  </animation>
- </tile>
- <tile id="96">
-  <animation>
-   <frame tileid="96" duration="100"/>
    <frame tileid="38" duration="100"/>
    <frame tileid="39" duration="100"/>
    <frame tileid="40" duration="100"/>
@@ -306,16 +294,28 @@
    <frame tileid="44" duration="100"/>
   </animation>
  </tile>
- <tile id="97">
+ <tile id="96">
+  <animation>
+   <frame tileid="96" duration="100"/>
+   <frame tileid="7" duration="100"/>
+   <frame tileid="8" duration="100"/>
+   <frame tileid="9" duration="100"/>
+   <frame tileid="10" duration="100"/>
+   <frame tileid="11" duration="100"/>
+   <frame tileid="12" duration="100"/>
+   <frame tileid="13" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="97" probability="0.5">
   <animation>
    <frame tileid="97" duration="100"/>
-   <frame tileid="131" duration="100"/>
-   <frame tileid="132" duration="100"/>
-   <frame tileid="133" duration="100"/>
-   <frame tileid="134" duration="100"/>
-   <frame tileid="135" duration="100"/>
-   <frame tileid="136" duration="100"/>
-   <frame tileid="137" duration="100"/>
+   <frame tileid="100" duration="100"/>
+   <frame tileid="101" duration="100"/>
+   <frame tileid="102" duration="100"/>
+   <frame tileid="103" duration="100"/>
+   <frame tileid="104" duration="100"/>
+   <frame tileid="105" duration="100"/>
+   <frame tileid="106" duration="100"/>
   </animation>
  </tile>
  <tile id="98">
@@ -324,13 +324,13 @@
   </objectgroup>
   <animation>
    <frame tileid="98" duration="100"/>
-   <frame tileid="286" duration="100"/>
-   <frame tileid="287" duration="100"/>
-   <frame tileid="288" duration="100"/>
-   <frame tileid="289" duration="100"/>
-   <frame tileid="290" duration="100"/>
-   <frame tileid="291" duration="100"/>
-   <frame tileid="292" duration="100"/>
+   <frame tileid="255" duration="100"/>
+   <frame tileid="256" duration="100"/>
+   <frame tileid="257" duration="100"/>
+   <frame tileid="258" duration="100"/>
+   <frame tileid="259" duration="100"/>
+   <frame tileid="260" duration="100"/>
+   <frame tileid="261" duration="100"/>
   </animation>
  </tile>
  <tile id="108">
@@ -434,16 +434,16 @@
    <frame tileid="153" duration="100"/>
   </animation>
  </tile>
- <tile id="127">
+ <tile id="127" probability="0.5">
   <animation>
    <frame tileid="127" duration="100"/>
-   <frame tileid="162" duration="100"/>
-   <frame tileid="163" duration="100"/>
-   <frame tileid="164" duration="100"/>
-   <frame tileid="165" duration="100"/>
-   <frame tileid="166" duration="100"/>
-   <frame tileid="167" duration="100"/>
-   <frame tileid="168" duration="100"/>
+   <frame tileid="131" duration="100"/>
+   <frame tileid="132" duration="100"/>
+   <frame tileid="133" duration="100"/>
+   <frame tileid="134" duration="100"/>
+   <frame tileid="135" duration="100"/>
+   <frame tileid="136" duration="100"/>
+   <frame tileid="137" duration="100"/>
   </animation>
  </tile>
  <tile id="128">
@@ -453,6 +453,21 @@
   </objectgroup>
   <animation>
    <frame tileid="128" duration="100"/>
+   <frame tileid="193" duration="100"/>
+   <frame tileid="194" duration="100"/>
+   <frame tileid="195" duration="100"/>
+   <frame tileid="196" duration="100"/>
+   <frame tileid="197" duration="100"/>
+   <frame tileid="198" duration="100"/>
+   <frame tileid="199" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="129">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
+  <animation>
+   <frame tileid="129" duration="100"/>
    <frame tileid="224" duration="100"/>
    <frame tileid="225" duration="100"/>
    <frame tileid="226" duration="100"/>
@@ -460,21 +475,6 @@
    <frame tileid="228" duration="100"/>
    <frame tileid="229" duration="100"/>
    <frame tileid="230" duration="100"/>
-  </animation>
- </tile>
- <tile id="129">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
-  </objectgroup>
-  <animation>
-   <frame tileid="129" duration="100"/>
-   <frame tileid="255" duration="100"/>
-   <frame tileid="256" duration="100"/>
-   <frame tileid="257" duration="100"/>
-   <frame tileid="258" duration="100"/>
-   <frame tileid="259" duration="100"/>
-   <frame tileid="260" duration="100"/>
-   <frame tileid="261" duration="100"/>
   </animation>
  </tile>
  <tile id="139">
@@ -590,14 +590,49 @@
   </objectgroup>
   <animation>
    <frame tileid="159" duration="100"/>
-   <frame tileid="193" duration="100"/>
-   <frame tileid="194" duration="100"/>
-   <frame tileid="195" duration="100"/>
-   <frame tileid="196" duration="100"/>
-   <frame tileid="197" duration="100"/>
-   <frame tileid="198" duration="100"/>
-   <frame tileid="199" duration="100"/>
+   <frame tileid="162" duration="100"/>
+   <frame tileid="163" duration="100"/>
+   <frame tileid="164" duration="100"/>
+   <frame tileid="165" duration="100"/>
+   <frame tileid="166" duration="100"/>
+   <frame tileid="167" duration="100"/>
+   <frame tileid="168" duration="100"/>
   </animation>
+ </tile>
+ <tile id="162">
+  <objectgroup>
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
+ </tile>
+ <tile id="163">
+  <objectgroup>
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
+ </tile>
+ <tile id="164">
+  <objectgroup>
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
+ </tile>
+ <tile id="165">
+  <objectgroup>
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
+ </tile>
+ <tile id="166">
+  <objectgroup>
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
+ </tile>
+ <tile id="167">
+  <objectgroup>
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
+ </tile>
+ <tile id="168">
+  <objectgroup>
+   <object id="1" x="0" y="0" width="20" height="22"/>
+  </objectgroup>
  </tile>
  <tile id="170">
   <objectgroup>
@@ -671,37 +706,44 @@
  </tile>
  <tile id="193">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="32" height="22"/>
+   <object id="2" x="0" y="22" width="20" height="10"/>
   </objectgroup>
  </tile>
  <tile id="194">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="32" height="22"/>
+   <object id="2" x="0" y="22" width="20" height="10"/>
   </objectgroup>
  </tile>
  <tile id="195">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="32" height="22"/>
+   <object id="2" x="0" y="22" width="20" height="10"/>
   </objectgroup>
  </tile>
  <tile id="196">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="32" height="22"/>
+   <object id="2" x="0" y="22" width="20" height="10"/>
   </objectgroup>
  </tile>
  <tile id="197">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="32" height="22"/>
+   <object id="2" x="0" y="22" width="20" height="10"/>
   </objectgroup>
  </tile>
  <tile id="198">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="32" height="22"/>
+   <object id="2" x="0" y="22" width="20" height="10"/>
   </objectgroup>
  </tile>
  <tile id="199">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="32" height="22"/>
+   <object id="2" x="0" y="22" width="20" height="10"/>
   </objectgroup>
  </tile>
  <tile id="201">
@@ -783,118 +825,76 @@
  </tile>
  <tile id="224">
   <objectgroup>
-   <object id="1" x="0" y="0" width="32" height="22"/>
-   <object id="2" x="0" y="22" width="20" height="10"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="225">
   <objectgroup>
-   <object id="1" x="0" y="0" width="32" height="22"/>
-   <object id="2" x="0" y="22" width="20" height="10"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="226">
   <objectgroup>
-   <object id="1" x="0" y="0" width="32" height="22"/>
-   <object id="2" x="0" y="22" width="20" height="10"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="227">
   <objectgroup>
-   <object id="1" x="0" y="0" width="32" height="22"/>
-   <object id="2" x="0" y="22" width="20" height="10"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="228">
   <objectgroup>
-   <object id="1" x="0" y="0" width="32" height="22"/>
-   <object id="2" x="0" y="22" width="20" height="10"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="229">
   <objectgroup>
-   <object id="1" x="0" y="0" width="32" height="22"/>
-   <object id="2" x="0" y="22" width="20" height="10"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="230">
   <objectgroup>
-   <object id="1" x="0" y="0" width="32" height="22"/>
-   <object id="2" x="0" y="22" width="20" height="10"/>
+   <object id="1" x="0" y="0" width="20" height="22"/>
   </objectgroup>
  </tile>
  <tile id="255">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="256">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="257">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="258">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="259">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="260">
   <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
+   <object id="1" x="0" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <tile id="261">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="22"/>
-  </objectgroup>
- </tile>
- <tile id="286">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="287">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="288">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="289">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="290">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="291">
-  <objectgroup>
-   <object id="1" x="0" y="0" width="20" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="292">
   <objectgroup>
    <object id="1" x="0" y="0" width="20" height="32"/>
   </objectgroup>
  </tile>
  <wangsets>
-  <wangset name="blood pool - standard style - with spikes - transparency" type="corner" tile="96">
+  <wangset name="Blood pool - style 2 - with spikes - transparency" type="corner" tile="96">
    <wangcolor name="" color="#ff0000" tile="96" probability="1"/>
    <wangtile tileid="33" wangid="0,0,0,1,0,0,0,0"/>
    <wangtile tileid="34" wangid="0,0,0,1,0,1,0,0"/>

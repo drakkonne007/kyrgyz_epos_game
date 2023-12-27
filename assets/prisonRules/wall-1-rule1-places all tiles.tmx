@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="1">
- <tileset firstgid="1" source="../Tilesets/Tileset - wall 1.tsx"/>
+ <tileset firstgid="1" source="../Tileset - wall 1.tsx"/>
  <tileset firstgid="369" source=":/automap-tiles.tsx"/>
  <layer id="2" name="input_wall-1" width="80" height="50" opacity="0.39">
   <data encoding="csv">
