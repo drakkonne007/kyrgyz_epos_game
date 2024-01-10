@@ -13,7 +13,7 @@ final mutex = Mutex();
 
 Future loadObjs(GameWorldData worldData) async
 {
-  var dir = await getApplicationCacheDirectory();
+  var dir = await getApplicationSupportDirectory();
   ReceivePort objsReceivePort = ReceivePort();
   var isol = await  Isolate.spawn<SendPort>(_loadObjs, objsReceivePort.sendPort,errorsAreFatal: false);
   SendPort objsSendPort = await objsReceivePort.first;
@@ -65,7 +65,7 @@ void _loadObjs(SendPort mySendPort) async
 
 Future loadAnimsHigh(GameWorldData worldData) async
 {
-  var dir = await getApplicationCacheDirectory();
+  var dir = await getApplicationSupportDirectory();
   ReceivePort animsReceivePort = ReceivePort();
   var isol = await Isolate.spawn<SendPort>(_loadAnimsHigh, animsReceivePort.sendPort,errorsAreFatal: false);
   SendPort animsSendPort = await animsReceivePort.first;
@@ -124,7 +124,7 @@ void _loadAnimsHigh(SendPort mySendPort) async
 
 Future loadAnimsDown(GameWorldData worldData) async
 {
-  var dir = await getApplicationCacheDirectory();
+  var dir = await getApplicationSupportDirectory();
   ReceivePort animsReceivePort = ReceivePort();
   var isol = await Isolate.spawn<SendPort>(_loadAnimsDown, animsReceivePort.sendPort,errorsAreFatal: false);
   SendPort animsSendPort = await animsReceivePort.first;
@@ -184,13 +184,17 @@ void _loadAnimsDown(SendPort mySendPort) async
 Future firstCachedIntoInternal() async
 {
   print('start');
-  var dir = await getApplicationCacheDirectory();
-  dir.listSync().forEach((element) {
-    element.deleteSync(recursive: true);
-  });
+  // var dir = await getApplicationCacheDirectory();
+  var dir = await getApplicationSupportDirectory();
+  // dir.listSync().forEach((element) {
+  //   element.deleteSync(recursive: true);
+  // });
 
   for(final bigWorlds in fullMaps) {
     Directory dirdsds = Directory('${dir.path}/${bigWorlds.nameForGame}');
+    if(dirdsds.existsSync()){
+      dirdsds.deleteSync(recursive: true);
+    }
     dirdsds.createSync(recursive: true);
   }
 

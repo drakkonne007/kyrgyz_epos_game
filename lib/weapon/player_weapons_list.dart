@@ -9,7 +9,7 @@ import 'dart:math' as math;
 
 class WSword extends PlayerWeapon
 {
-  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game});
+  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game, super.isCircle, super.radius});
 
   double _activeSecs = 0;
   final double _maxLength = 9;

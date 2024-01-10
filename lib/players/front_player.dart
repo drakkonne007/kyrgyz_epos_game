@@ -57,8 +57,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
 
-    Vector2 tPos = positionOfAnchor(anchor) - Vector2(25,25); Vector2(49,27);
-    Vector2 tSize = Vector2(50,50);
+    Vector2 tPos = positionOfAnchor(anchor) - Vector2(13,20);
+    Vector2 tSize = Vector2(26,40);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive,isSolid: true,
         isStatic: false, isLoop: true, game: gameRef);
@@ -106,6 +106,11 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     hitBox!.reInsertIntoCollisionProcessor();
     _groundBox!.reInsertIntoCollisionProcessor();
     _weapon!.reInsertIntoCollisionProcessor();
+    _speed = Vector2.all(0);
+    _velocity = Vector2.all(0);
+    _isPlayerRun = false;
+    _onGround = false;
+    _groundTimer = 1000;
   }
 
   void refreshMoves()
@@ -161,24 +166,12 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
           velocity.x = PhysicVals.startSpeed;
           animation = animMove;
           break;
-        case PlayerDirectionMove.Up:
-          if (_onGround) {
-            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-            _speed.y = -400;
-          }
-          animation = animMove;
-          break;
-        case PlayerDirectionMove.Left:
-        case PlayerDirectionMove.LeftDown:
-          velocity.x = -PhysicVals.startSpeed;
-          animation = animMove;
-          break;
         case PlayerDirectionMove.RightUp:
           velocity.x = PhysicVals.startSpeed;
           animation = animMove;
           if (_onGround) {
             // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-            _speed.y = -400;
+            _speed.y = -300;
           }
           break;
         case PlayerDirectionMove.LeftUp:
@@ -186,8 +179,20 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
           animation = animMove;
           if (_onGround) {
             // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-            _speed.y = -400;
+            _speed.y = -300;
           }
+          break;
+        case PlayerDirectionMove.Up:
+          if (_onGround) {
+            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
+            _speed.y = -300;
+          }
+          animation = animMove;
+          break;
+        case PlayerDirectionMove.Left:
+        case PlayerDirectionMove.LeftDown:
+          velocity.x = -PhysicVals.startSpeed;
+          animation = animMove;
           break;
         case PlayerDirectionMove.NoMove:
           _velocity.x = 0;
@@ -323,6 +328,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(minDiff == upDiffY.abs()){
         isUp = true;
         maxUp = max(maxUp,minDiff);
+        _velocity.y = 0;
+        _speed.y = 0;
       }
       if(minDiff == downDiffY.abs()){
         _onGround = true;

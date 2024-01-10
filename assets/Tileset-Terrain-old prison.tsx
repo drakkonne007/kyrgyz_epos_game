@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="Tileset-Terrain-old prison" tilewidth="32" tileheight="32" tilecount="4485" columns="65">
+<tileset version="1.10" tiledversion="1.10.2" name="Tileset-Terrain-old prison" tilewidth="32" tileheight="32" tilecount="4485" columns="65">
  <image source="tiles/map/prisonSet/Tilesets/Tileset-Terrain-old prison.png" width="2080" height="2208"/>
  <tile id="111">
   <objectgroup draworder="index" id="2">
@@ -485,13 +485,34 @@
    <object id="1" x="8" y="0" width="15" height="32"/>
   </objectgroup>
  </tile>
- <tile id="929" probability="0.2"/>
- <tile id="930" probability="0.2"/>
- <tile id="931" probability="0.2"/>
- <tile id="932" probability="0.2"/>
- <tile id="933" probability="0.2"/>
- <tile id="934" probability="0.2"/>
- <tile id="935" probability="0.2"/>
+ <tile id="927" type="high"/>
+ <tile id="928" type="high"/>
+ <tile id="929" type="high" probability="0.2"/>
+ <tile id="930" type="high" probability="0.2"/>
+ <tile id="931" type="high" probability="0.2"/>
+ <tile id="932" type="high" probability="0.2"/>
+ <tile id="933" type="high" probability="0.2"/>
+ <tile id="934" type="high" probability="0.2"/>
+ <tile id="935" type="high" probability="0.2"/>
+ <tile id="936" type="high"/>
+ <tile id="937" type="high"/>
+ <tile id="938" type="high"/>
+ <tile id="939" type="high"/>
+ <tile id="940" type="high"/>
+ <tile id="941" type="high"/>
+ <tile id="942" type="high"/>
+ <tile id="943" type="high"/>
+ <tile id="944" type="high"/>
+ <tile id="945" type="high"/>
+ <tile id="946" type="high"/>
+ <tile id="947" type="high"/>
+ <tile id="948" type="high"/>
+ <tile id="949" type="high"/>
+ <tile id="950" type="high"/>
+ <tile id="951" type="high"/>
+ <tile id="952" type="high"/>
+ <tile id="953" type="high"/>
+ <tile id="954" type="high"/>
  <tile id="957">
   <objectgroup>
    <object id="1" x="0" y="16" width="32" height="12"/>
@@ -746,6 +767,17 @@
    <object id="1" x="0" y="16" width="32" height="12"/>
   </objectgroup>
  </tile>
+ <tile id="1124" type="high"/>
+ <tile id="1125" type="high"/>
+ <tile id="1126" type="high"/>
+ <tile id="1127" type="high"/>
+ <tile id="1128" type="high"/>
+ <tile id="1129" type="high"/>
+ <tile id="1130" type="high"/>
+ <tile id="1131" type="high"/>
+ <tile id="1132" type="high"/>
+ <tile id="1133" type="high"/>
+ <tile id="1134" type="high"/>
  <tile id="1135">
   <objectgroup draworder="index" id="2">
    <object id="1" x="6" y="0" width="19" height="32"/>
@@ -756,11 +788,23 @@
    <object id="1" x="6" y="0" width="19" height="32"/>
   </objectgroup>
  </tile>
+ <tile id="1137" type="high"/>
+ <tile id="1138" type="high"/>
+ <tile id="1139" type="high"/>
+ <tile id="1140" type="high"/>
+ <tile id="1141" type="high"/>
+ <tile id="1142" type="high"/>
  <tile id="1143">
   <objectgroup>
    <object id="1" x="6" y="0" width="19" height="32"/>
   </objectgroup>
  </tile>
+ <tile id="1144" type="high"/>
+ <tile id="1145" type="high"/>
+ <tile id="1146" type="high"/>
+ <tile id="1147" type="high"/>
+ <tile id="1148" type="high"/>
+ <tile id="1149" type="high"/>
  <tile id="1150">
   <objectgroup>
    <object id="1" x="6" y="0" width="19" height="32"/>
@@ -951,11 +995,27 @@
    <object id="1" x="0" y="11" width="32" height="17"/>
   </objectgroup>
  </tile>
+ <tile id="1324" type="high"/>
+ <tile id="1325" type="high"/>
+ <tile id="1326" type="high"/>
+ <tile id="1327" type="high"/>
+ <tile id="1328" type="high"/>
+ <tile id="1329" type="high"/>
  <tile id="1330">
   <objectgroup>
    <object id="1" x="6" y="0" width="19" height="32"/>
   </objectgroup>
  </tile>
+ <tile id="1332" type="high"/>
+ <tile id="1333" type="high"/>
+ <tile id="1334" type="high"/>
+ <tile id="1335" type="high"/>
+ <tile id="1336" type="high"/>
+ <tile id="1337" type="high"/>
+ <tile id="1339" type="high"/>
+ <tile id="1340" type="high"/>
+ <tile id="1343" type="high"/>
+ <tile id="1344" type="high"/>
  <tile id="1395">
   <objectgroup>
    <object id="1" x="6" y="0" width="19" height="32"/>
@@ -1158,6 +1218,31 @@
    <object id="1" x="12" y="0" width="8" height="32"/>
   </objectgroup>
  </tile>
+ <tile id="1537" type="high"/>
+ <tile id="1538" type="high"/>
+ <tile id="1539" type="high"/>
+ <tile id="1540" type="high"/>
+ <tile id="1580" type="high"/>
+ <tile id="1581" type="high"/>
+ <tile id="1582" type="high"/>
+ <tile id="1583" type="high"/>
+ <tile id="1584" type="high"/>
+ <tile id="1585" type="high"/>
+ <tile id="1586" type="high"/>
+ <tile id="1587" type="high"/>
+ <tile id="1588" type="high"/>
+ <tile id="1589" type="high"/>
+ <tile id="1590" type="high"/>
+ <tile id="1591" type="high"/>
+ <tile id="1592" type="high"/>
+ <tile id="1593" type="high"/>
+ <tile id="1594" type="high"/>
+ <tile id="1595" type="high"/>
+ <tile id="1596" type="high"/>
+ <tile id="1597" type="high"/>
+ <tile id="1598" type="high"/>
+ <tile id="1599" type="high"/>
+ <tile id="1600" type="high"/>
  <tile id="1608">
   <objectgroup>
    <object id="1" x="8" y="0" width="15" height="32"/>
@@ -1399,6 +1484,10 @@
    </object>
   </objectgroup>
  </tile>
+ <tile id="1732" type="high"/>
+ <tile id="1733" type="high"/>
+ <tile id="1734" type="high"/>
+ <tile id="1735" type="high"/>
  <tile id="1759">
   <objectgroup>
    <object id="1" x="0" y="0" width="32" height="18"/>
@@ -1446,6 +1535,28 @@
    <object id="1" x="0" y="0" width="28" height="18"/>
   </objectgroup>
  </tile>
+ <tile id="1775" type="high"/>
+ <tile id="1776" type="high"/>
+ <tile id="1777" type="high"/>
+ <tile id="1778" type="high"/>
+ <tile id="1779" type="high"/>
+ <tile id="1780" type="high"/>
+ <tile id="1781" type="high"/>
+ <tile id="1782" type="high"/>
+ <tile id="1783" type="high"/>
+ <tile id="1784" type="high"/>
+ <tile id="1785" type="high"/>
+ <tile id="1786" type="high"/>
+ <tile id="1787" type="high"/>
+ <tile id="1788" type="high"/>
+ <tile id="1789" type="high"/>
+ <tile id="1790" type="high"/>
+ <tile id="1791" type="high"/>
+ <tile id="1792" type="high"/>
+ <tile id="1793" type="high"/>
+ <tile id="1794" type="high"/>
+ <tile id="1795" type="high"/>
+ <tile id="1796" type="high"/>
  <tile id="1826">
   <objectgroup>
    <object id="1" x="4" y="0" width="28" height="32"/>
@@ -1696,6 +1807,10 @@
    <object id="2" x="1" y="5" width="30" height="22"/>
   </objectgroup>
  </tile>
+ <tile id="1927" type="high"/>
+ <tile id="1928" type="high"/>
+ <tile id="1929" type="high"/>
+ <tile id="1930" type="high"/>
  <tile id="1956">
   <objectgroup>
    <object id="1" x="4" y="0" width="28" height="32"/>
@@ -1801,6 +1916,8 @@
    <object id="1" x="4" y="0" width="24" height="18"/>
   </objectgroup>
  </tile>
+ <tile id="2122" type="high"/>
+ <tile id="2125" type="high"/>
  <tile id="2227">
   <objectgroup>
    <object id="1" x="0" y="0" width="32" height="18"/>

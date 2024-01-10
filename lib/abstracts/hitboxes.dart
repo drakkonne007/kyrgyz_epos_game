@@ -24,7 +24,6 @@ List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size)
 class PointCust extends PositionComponent
 {
   PointCust({required super.position,this.color});
-  final ShapeHitbox hitbox = CircleHitbox();
   Color? color;
 
   @override
@@ -32,10 +31,11 @@ class PointCust extends PositionComponent
   {
     priority = 800;
     size = Vector2(5, 5);
+    anchor = Anchor.center;
+    CircleHitbox hitbox = CircleHitbox(radius: 2);
     hitbox.paint.color = color ?? BasicPalette.green.color;
     hitbox.renderShape = true;
     add(hitbox);
-
     Future.delayed(const Duration(milliseconds: 30),(){
       removeFromParent();
     });
@@ -53,7 +53,6 @@ abstract class DCollisionEntity extends Component
   Vector2 scale = Vector2(1, 1);
   Vector2 _center = Vector2(0, 0);
   Set<Vector2> obstacleIntersects = {};
-  LoadedColumnRow? _myCoords;
   KyrgyzGame game;
   int? column;
   int? row;
@@ -63,6 +62,8 @@ abstract class DCollisionEntity extends Component
   final Vector2 _minCoords = Vector2(0, 0);
   final Vector2 _maxCoords = Vector2(0, 0);
   Vector2? transformPoint;
+  bool isCircle = false;
+  double radius = 0;
 
   List<Vector2> get vertices => _vertices;
   Vector2 get rawCenter => _center;
@@ -70,34 +71,43 @@ abstract class DCollisionEntity extends Component
 
   DCollisionEntity(this._vertices,
       {required this.collisionType, required this.isSolid, required this.isStatic
-        , required this.isLoop, required this.game, this.column, this.row, this.transformPoint})
+        , required this.isLoop, required this.game, this.column, this.row, this.transformPoint, this.isCircle = false, this.radius = 0})
   {
     if (isStatic) {
       int currCol = column ?? vertices[0].x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
       int currRow = row ?? vertices[0].y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-      _myCoords = LoadedColumnRow(currCol, currRow);
       game.gameMap.collisionProcessor!.addStaticCollEntity(
           LoadedColumnRow(currCol, currRow), this);
     } else {
       game.gameMap.collisionProcessor!.addActiveCollEntity(this);
     }
-    for (int i = 0; i < vertices.length; i++) {
-      if (vertices[i].x < _minCoords.x) {
-        _minCoords.x = vertices[i].x;
+    if(!isCircle) {
+      for (int i = 0; i < vertices.length; i++) {
+        if (vertices[i].x < _minCoords.x) {
+          _minCoords.x = vertices[i].x;
+        }
+        if (vertices[i].x > _maxCoords.x) {
+          _maxCoords.x = vertices[i].x;
+        }
+        if (vertices[i].y < _minCoords.y) {
+          _minCoords.y = vertices[i].y;
+        }
+        if (vertices[i].y > _maxCoords.y) {
+          _maxCoords.y = vertices[i].y;
+        }
       }
-      if (vertices[i].x > _maxCoords.x) {
-        _maxCoords.x = vertices[i].x;
-      }
-      if (vertices[i].y < _minCoords.y) {
-        _minCoords.y = vertices[i].y;
-      }
-      if (vertices[i].y > _maxCoords.y) {
-        _maxCoords.y = vertices[i].y;
-      }
+      width = _maxCoords.x - _minCoords.x;
+      height = _maxCoords.y - _minCoords.y;
+      _center = (_maxCoords + _minCoords) / 2;
+    }else{
+      width = radius*2;
+      height = radius*2;
+      _center = _vertices[0];
+      _minCoords.y = _vertices[0].y - radius;
+      _maxCoords.y = _vertices[0].y + radius;
+      _minCoords.x = _vertices[0].x - radius;
+      _maxCoords.x = _vertices[0].x + radius;
     }
-    width = _maxCoords.x - _minCoords.x;
-    height = _maxCoords.y - _minCoords.y;
-    _center = (_maxCoords + _minCoords) / 2;
     transformPoint ??= _center;
   }
 
@@ -132,29 +142,44 @@ abstract class DCollisionEntity extends Component
     }
   }
 
-  doDebug({Color? color}) {
-    for (int i = 0; i < vertices.length; i++) {
-      if(parent == null){
-        return;
-      }
-      Color color;
-      if(i == 0){
-        color = BasicPalette.red.color;
-      }else{
-        color = BasicPalette.green.color;
-      }
+  doDebug({Color? color})
+  {
+    if(isCircle){
       PointCust p = PointCust(
-          position: getPoint(i), color: color);
+          position: getPoint(0) - Vector2(radius,0), color: color);
       game.gameMap.add(p);
+      p = PointCust(
+          position: getPoint(0) + Vector2(radius,0), color: color);
+      game.gameMap.add(p);
+      p = PointCust(
+          position: getPoint(0) - Vector2(0,radius), color: color);
+      game.gameMap.add(p);
+      p = PointCust(
+          position: getPoint(0) + Vector2(0,radius), color: color);
+      game.gameMap.add(p);
+    }else {
+      for (int i = 0; i < vertices.length; i++) {
+        if (parent == null) {
+          return;
+        }
+        Color color;
+        if (i == 0) {
+          color = BasicPalette.red.color;
+        } else {
+          color = BasicPalette.green.color;
+        }
+        PointCust p = PointCust(
+            position: getPoint(i), color: color);
+        game.gameMap.add(p);
+      }
     }
   }
 
   @override
-  void onRemove() {
+  void onRemove()
+  {
     if (!isStatic) {
       game.gameMap.collisionProcessor!.removeActiveCollEntity(this);
-    } else {
-      // game.gameMap.collisionProcessor.removeStaticCollEntity(_myCoords);
     }
   }
 
@@ -217,7 +242,7 @@ abstract class DCollisionEntity extends Component
 class ObjectHitbox extends DCollisionEntity
 {
 
-  ObjectHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop, required super.game});
+  ObjectHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop, required super.game, super.isCircle, super.radius});
 
   late int id = game.gameMap.getNewId();
   bool autoTrigger;
@@ -278,7 +303,7 @@ class ObjectHitbox extends DCollisionEntity
 
 class PlayerHitbox extends DCollisionEntity
 {
-  PlayerHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game});
+  PlayerHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game, super.isCircle, super.radius});
 
 
   @override
@@ -307,7 +332,7 @@ class PlayerHitbox extends DCollisionEntity
 
 class EnemyHitbox extends DCollisionEntity
 {
-  EnemyHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game});
+  EnemyHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game,  super.isCircle,  super.radius});
 
 
   @override
@@ -345,7 +370,7 @@ class GroundHitBox extends DCollisionEntity
 
   Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
 
-  GroundHitBox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiurStart, required super.isLoop, required super.game});
+  GroundHitBox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiurStart, required super.isLoop, required super.game,  super.isCircle,  super.radius});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {

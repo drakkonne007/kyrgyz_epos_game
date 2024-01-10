@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="Tileset - wall 2" tilewidth="32" tileheight="32" tilecount="240" columns="16">
+<tileset version="1.10" tiledversion="1.10.2" name="Tileset - wall 2" tilewidth="32" tileheight="32" tilecount="240" columns="16">
  <image source="tiles/map/prisonSet/Tilesets/wall-2- 3 tiles tall.png" width="512" height="480"/>
- <tile id="1" probability="0">
+ <tile id="1" type="high" probability="0">
   <objectgroup draworder="index" id="2">
    <object id="2" x="7" y="9" width="25" height="23"/>
   </objectgroup>
  </tile>
- <tile id="2">
+ <tile id="2" type="high">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="3" probability="0">
+ <tile id="3" type="high" probability="0">
   <objectgroup>
    <object id="1" x="0" y="9" width="25" height="23"/>
   </objectgroup>
@@ -38,7 +38,7 @@
    <object id="1" x="4" y="0" width="28" height="32"/>
   </objectgroup>
  </tile>
- <tile id="16">
+ <tile id="16" type="high">
   <objectgroup draworder="index" id="2">
    <object id="1" x="7" y="9" width="25" height="23"/>
   </objectgroup>
@@ -55,7 +55,7 @@
    <object id="2" x="0" y="0" width="28" height="9"/>
   </objectgroup>
  </tile>
- <tile id="20">
+ <tile id="20" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="25" height="23"/>
   </objectgroup>

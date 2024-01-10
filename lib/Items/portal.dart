@@ -29,9 +29,9 @@ class Portal extends PositionComponent with HasGameRef<KyrgyzGame> {
         game: gameRef));
   }
 
-  void portal() {
+  void portal() async{
     gameRef.playerData.playerBigMap = getWorldFromName(toWorld);
     gameRef.playerData.startLocation = targetPos;
-    gameRef.loadNewMap();
+    await gameRef.loadNewMap();
   }
 }

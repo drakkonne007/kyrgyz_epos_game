@@ -21,8 +21,8 @@ class DeathMenu extends StatelessWidget
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: (){
-                    _game.loadNewMap();
+                  onPressed: () async {
+                    await _game.loadNewMap();
                     // _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
                     // _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();

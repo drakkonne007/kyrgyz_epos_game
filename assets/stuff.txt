@@ -1,0 +1,2 @@
+Get-ChildItem -Recurse | ?{ $_.PSIsContainer } | Select-Object FullName
+-Это выделить все папки в проекте

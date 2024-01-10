@@ -116,6 +116,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       frontPlayer?.reInsertFullActiveHitBoxes();
       frontPlayer?.gameHide = false;
     }
+    isMapCached.value = 0;
     await _preloadAnimAndObj();
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
@@ -163,8 +164,9 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     print('total ground ${grounds.length}');
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
-        orthoPlayer= OrthoPlayer();
+        orthoPlayer = OrthoPlayer();
         await playerLayout.add(orthoPlayer!);
+        await orthoPlayer!.loaded;
       }
       // orthoPlayer?.priority = GamePriority.player;
       orthoPlayer?.position = gameRef.playerData.startLocation;
@@ -176,6 +178,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       if(frontPlayer == null){
         frontPlayer = FrontPlayer();
         await playerLayout.add(frontPlayer!);
+        await frontPlayer!.loaded;
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
       gameRef.camera.followComponent(frontPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.lengthOfTileSquare.x
@@ -235,9 +238,15 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
       return;
     }
     collisionProcessor?.updateCollisions();
-    if(orthoPlayer != null) {
+    if(orthoPlayer != null && !orthoPlayer!.gameHide){
       int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
       int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+      if (col != _column || row != _row) {
+        reloadWorld(col, row);
+      }
+    }else if(frontPlayer != null && !frontPlayer!.gameHide){
+      int col = frontPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+      int row = frontPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
       if (col != _column || row != _row) {
         reloadWorld(col, row);
       }

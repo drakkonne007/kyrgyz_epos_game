@@ -70,6 +70,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     hitBox!.reInsertIntoCollisionProcessor();
     _groundBox!.reInsertIntoCollisionProcessor();
     _weapon!.reInsertIntoCollisionProcessor();
+    _velocity = Vector2.all(0);
+    _speed = Vector2.all(0);
+    _isPlayerRun = false;
+    animation = animIdle;
   }
 
   void refreshMoves()
@@ -98,8 +102,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
 
-    Vector2 tPos = positionOfAnchor(anchor) - Vector2(25,25); Vector2(49,27);
-    Vector2 tSize = Vector2(50,50);
+    Vector2 tPos = positionOfAnchor(anchor) - Vector2(13,20);
+    Vector2 tSize = Vector2(26,40);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive,isSolid: true,
         isStatic: false, isLoop: true, game: gameRef);
@@ -395,6 +399,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     // _groundBox?.doDebug(BasicPalette.red.color);
     super.update(dt);
+    // hitBox!.doDebug();
     if(gameHide){
       return;
     }

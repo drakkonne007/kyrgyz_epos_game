@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
@@ -10,19 +9,14 @@ import 'package:game_flame/Items/teleport.dart';
 import 'package:game_flame/Obstacles/flying_obelisk.dart';
 import 'package:game_flame/Obstacles/stand_obelisk.dart';
 import 'package:game_flame/abstracts/item.dart';
-import 'package:game_flame/abstracts/utils.dart';
-import 'package:game_flame/components/game_worlds.dart';
-import 'package:game_flame/components/precompile_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame_tiled/flame_tiled.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/enemies/moose.dart';
+import 'package:game_flame/enemies/spin_blade.dart';
 import 'package:game_flame/enemies/strange_merchant.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
-import 'package:game_flame/main.dart';
 import 'package:xml/xml.dart';
 
 const int currentMaps = 0;
@@ -46,9 +40,9 @@ class MapNode {
 
   Future<void> generateMap(LoadedColumnRow colRow) async
   {
-    int maxRow = myGame.playerData.playerBigMap.gameConsts.maxRow!;
-    int maxColumn = myGame.playerData.playerBigMap.gameConsts.maxColumn!;
-    Vector2 lengthOfTileSquare = myGame.playerData.playerBigMap.gameConsts
+    int maxRow = myGame.gameMap.currentGameWorldData!.gameConsts.maxRow!;
+    int maxColumn = myGame.gameMap.currentGameWorldData!.gameConsts.maxColumn!;
+    Vector2 lengthOfTileSquare = myGame.gameMap.currentGameWorldData!.gameConsts
         .lengthOfTileSquare;
     if (colRow.column >= maxColumn || colRow.row >= maxRow) {
       return;
@@ -347,6 +341,19 @@ class MapNode {
             toWorld: world);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.add(temp);
+        break;
+      case 'spinBlade':
+        var targetPos = obj.getAttribute('tar')?.split(',');
+        Vector2? target;
+        if (targetPos == null) {
+
+        }else {
+          target = Vector2(
+              double.parse(targetPos[0]), double.parse(targetPos[1]));
+        }
+        SpinBlade spinBl = SpinBlade(position, target);
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.enemyComponent.add(spinBl);
         break;
     }
   }

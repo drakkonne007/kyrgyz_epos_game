@@ -46,10 +46,10 @@ class MainMenu extends StatelessWidget
                   Expanded(
                     child:ElevatedButton(
                         clipBehavior: Clip.antiAlias,
-                        onPressed: (){
+                        onPressed: ()async {
                           isNeedCopyInternal = true;
                           _game.overlays.remove(id);
-                          _game.loadNewMap();
+                          await _game.loadNewMap();
                         },
                         style: bStyle,
                         child:
@@ -71,9 +71,9 @@ class MainMenu extends StatelessWidget
                     child:
                     ElevatedButton(
                         clipBehavior: Clip.antiAlias,
-                        onPressed: (){
+                        onPressed: () async{
                             _game.overlays.remove(id);
-                            _game.loadNewMap();
+                            await _game.loadNewMap();
                         },
                         style: bStyle,
                         child:

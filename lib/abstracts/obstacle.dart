@@ -6,7 +6,7 @@ import 'package:game_flame/players/ortho_player.dart';
 
 abstract class MapObstacle extends DCollisionEntity
 {
-  MapObstacle(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game,super.column, super.row});
+  MapObstacle(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game,super.column, super.row,  super.isCircle,  super.radius});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other)
@@ -20,7 +20,7 @@ abstract class MapObstacle extends DCollisionEntity
 
 abstract class MapObstacleForPlayer extends DCollisionEntity
 {
-  MapObstacleForPlayer(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game,super.column, super.row});
+  MapObstacleForPlayer(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game,super.column, super.row, super.isCircle, super.radius});
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other)

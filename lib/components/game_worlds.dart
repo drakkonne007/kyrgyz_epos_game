@@ -10,10 +10,10 @@ List<GameWorldData> fullMaps =
 
 List<GameWorldData> fullMapsForPreCompille =
 [
-  TopLeftVillage(),
-  BigTopLeft(),
+  // TopLeftVillage(),
+  // BigTopLeft(),
   YurtaInTopLeftVillage1(),
-  TopLeftTempleDungeon(),
+  // TopLeftTempleDungeon(),
 ];
 
 enum OrientatinType
@@ -67,10 +67,9 @@ class TopLeftVillage extends GameWorldData {
 class TopLeftTempleDungeon extends GameWorldData {
   TopLeftTempleDungeon()
   {
-    orientation = OrientatinType.front;
+    orientation = OrientatinType.orthogonal;
     nameForGame = 'topLeftTempleDungeon';
     source = 'topLeftTempleDungeon.tmx';
-    gameConsts = GameConsts(maxColumn: 10, maxRow:11);
   }
 }
 

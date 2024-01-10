@@ -137,7 +137,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   Future loadNewMap() async
   {
-    gameMap.loadNewMap();
+    await gameMap.loadNewMap();
   }
 
   @override

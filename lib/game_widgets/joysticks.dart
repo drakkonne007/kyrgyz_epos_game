@@ -101,7 +101,6 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
     widget.game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
     widget.game.gameMap.orthoPlayer?.movePlayer(dir,isRun):
     widget.game.gameMap.frontPlayer?.movePlayer(dir,isRun);
-    print(widget.game.gameMap.currentGameWorldData!.orientation);
   }
 
   void stopMove(){
