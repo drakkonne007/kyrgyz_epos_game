@@ -49,7 +49,6 @@ Future precompileAll() async
             layersToLoad: [a.layer.name]);
         compilerAnimation.addLayer();
       }
-      print('start compile!');
       await compilerAnimation.compile('high',bigWorld);
       await compilerAnimationBack.compile('down',bigWorld);
     }
@@ -99,7 +98,6 @@ Future precompileAll() async
             }
           }
         }
-        print('END OF OBJS COMPILE');
         print('start grounds compile');
         if (objs != null && true) {
           Map<LoadedColumnRow, List<GroundSource>> objsMap = {};

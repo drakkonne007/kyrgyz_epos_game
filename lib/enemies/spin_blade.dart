@@ -12,14 +12,14 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   SpinBlade(this._startPos, this._endPos,{super.priority});
   Vector2 _startPos;
   Vector2? _endPos;
-  double _maxSpeed = 30;
+  double _maxSpeed = 150;
   Vector2 _speed = Vector2(0,0);
   bool isWasEnd = false;
 
   @override
   void onLoad() async
   {
-    anchor = Anchor.center;
+    anchor = const Anchor(72/128,79/128);
     position = _startPos;
     var spriteSheet = SpriteSheet(
       image: await Flame.images.load('tiles/map/prisonSet/Props/'
@@ -27,8 +27,9 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       srcSize: Vector2(128,128),
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
-    DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(5,0)],collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: false
+    DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(0,-18)],collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: false
         , game: gameRef,isCircle: true,radius: 32, onStartWeaponHit: () {}, onEndWeaponHit: () {});
+    weapon.coolDown = _endPos == null ? 1 : 0.5;
     add(weapon);
     if(_endPos != null) {
       double posX = _endPos!.x - _startPos.x;

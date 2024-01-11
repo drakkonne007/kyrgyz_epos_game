@@ -54,11 +54,11 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
   @override
   Future onLoad() async
   {
-    await add(priorityHigh);
-    await add(priorityHighMinus1);
-    await add(priorityGroundPlus1);
-    await add(enemyComponent);
     await add(playerLayout);
+    await add(enemyComponent);
+    await add(priorityGroundPlus1);
+    await add(priorityHighMinus1);
+    await add(priorityHigh);
   }
 
 
@@ -86,7 +86,9 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     game.doLoadingMapHud();
     _isLoad = false;
     orthoPlayer?.gameHide = true;
+    orthoPlayer?.opacity = 0;
     frontPlayer?.gameHide = true;
+    frontPlayer?.opacity = 0;
     collisionProcessor ??= DCollisionProcessor(gameRef);
     collisionProcessor?.clearActiveCollEntity();
     collisionProcessor?.clearStaticCollEntity();
@@ -106,15 +108,16 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     //   return;
     // }
     currentGameWorldData = gameRef.playerData.playerBigMap;
-    print('gameWorld:  ${currentGameWorldData?.nameForGame}');
 
     if(currentGameWorldData == null) return;
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       orthoPlayer?.reInsertFullActiveHitBoxes();
       orthoPlayer?.gameHide = false;
+      orthoPlayer?.opacity = 1;
     }else{
       frontPlayer?.reInsertFullActiveHitBoxes();
       frontPlayer?.gameHide = false;
+      frontPlayer?.opacity = 1;
     }
     isMapCached.value = 0;
     await _preloadAnimAndObj();
@@ -161,7 +164,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
         }
       }
     }
-    print('total ground ${grounds.length}');
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
         orthoPlayer = OrthoPlayer();

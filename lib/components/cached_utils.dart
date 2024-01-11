@@ -27,7 +27,6 @@ Future loadObjs(GameWorldData worldData) async
 
   final objsResponse = await objResponseReceivePort.first;
   if(objsResponse is Map<String,Iterable<XmlElement>>){
-    print('objsResponse');
     KyrgyzGame.cachedObjXmls = objsResponse;
     isMapCached.value++;
   }
@@ -42,7 +41,6 @@ void _loadObjs(SendPort mySendPort) async
   mySendPort.send(mikeReceivePort.sendPort);
   await for (final message in mikeReceivePort) {
     if (message is List) {
-      print('start _loadObjs');
       final SendPort mikeResponseSendPort = message[0];
       Map<String,Iterable<XmlElement>> objXmls = {};
       String path = message[1];
@@ -79,7 +77,6 @@ Future loadAnimsHigh(GameWorldData worldData) async
 
   final animPngsResponse = await animsResponseReceivePort.first;
   if(animPngsResponse is Map<String,Iterable<XmlElement>>){
-    print('animPngsResponse');
     await mutex.protect(() async {
       KyrgyzGame.cachedAnims.addAll(animPngsResponse);
       for(final key in KyrgyzGame.cachedAnims.keys){
@@ -101,7 +98,6 @@ void _loadAnimsHigh(SendPort mySendPort) async
   mySendPort.send(mikeReceivePort.sendPort);
   await for (final message in mikeReceivePort) {
     if (message is List) {
-      print('start _loadAnimsHigh');
       final SendPort mikeResponseSendPort = message[0];
       Map<String, Iterable<XmlElement>> anims = {};
       String path = message[1];
@@ -138,7 +134,6 @@ Future loadAnimsDown(GameWorldData worldData) async
 
   final animPngsResponse = await animsResponseReceivePort.first;
   if(animPngsResponse is Map<String,Iterable<XmlElement>>){
-    print('animPngsResponse');
     await mutex.protect(() async{
       KyrgyzGame.cachedAnims.addAll(animPngsResponse);
       for(final key in KyrgyzGame.cachedAnims.keys){
@@ -160,7 +155,6 @@ void _loadAnimsDown(SendPort mySendPort) async
   mySendPort.send(mikeReceivePort.sendPort);
   await for (final message in mikeReceivePort) {
     if (message is List) {
-      print('start _loadAnimsDown');
       final SendPort mikeResponseSendPort = message[0];
       Map<String, Iterable<XmlElement>> anims = {};
       String path = message[1];
@@ -183,7 +177,6 @@ void _loadAnimsDown(SendPort mySendPort) async
 
 Future firstCachedIntoInternal() async
 {
-  print('start');
   // var dir = await getApplicationCacheDirectory();
   var dir = await getApplicationSupportDirectory();
   // dir.listSync().forEach((element) {
@@ -249,5 +242,4 @@ Future firstCachedIntoInternal() async
 
 
 }
-  print('end copy to internal');
 }

@@ -29,7 +29,6 @@ class PointCust extends PositionComponent
   @override
   void onLoad()
   {
-    priority = 800;
     size = Vector2(5, 5);
     anchor = Anchor.center;
     CircleHitbox hitbox = CircleHitbox(radius: 2);
@@ -147,16 +146,16 @@ abstract class DCollisionEntity extends Component
     if(isCircle){
       PointCust p = PointCust(
           position: getPoint(0) - Vector2(radius,0), color: color);
-      game.gameMap.add(p);
+      game.gameMap.priorityHigh.add(p);
       p = PointCust(
           position: getPoint(0) + Vector2(radius,0), color: color);
-      game.gameMap.add(p);
+      game.gameMap.priorityHigh.add(p);
       p = PointCust(
           position: getPoint(0) - Vector2(0,radius), color: color);
-      game.gameMap.add(p);
+      game.gameMap.priorityHigh.add(p);
       p = PointCust(
           position: getPoint(0) + Vector2(0,radius), color: color);
-      game.gameMap.add(p);
+      game.gameMap.priorityHigh.add(p);
     }else {
       for (int i = 0; i < vertices.length; i++) {
         if (parent == null) {
@@ -170,7 +169,7 @@ abstract class DCollisionEntity extends Component
         }
         PointCust p = PointCust(
             position: getPoint(i), color: color);
-        game.gameMap.add(p);
+        game.gameMap.priorityHigh.add(p);
       }
     }
   }

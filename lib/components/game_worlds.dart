@@ -10,10 +10,10 @@ List<GameWorldData> fullMaps =
 
 List<GameWorldData> fullMapsForPreCompille =
 [
-  // TopLeftVillage(),
-  // BigTopLeft(),
+  TopLeftVillage(),
+  BigTopLeft(),
   YurtaInTopLeftVillage1(),
-  // TopLeftTempleDungeon(),
+  TopLeftTempleDungeon(),
 ];
 
 enum OrientatinType

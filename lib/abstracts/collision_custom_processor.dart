@@ -7,7 +7,6 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/abstracts/utils.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -64,20 +63,26 @@ class DCollisionProcessor
       int maxCol = 0;
       int minRow = 0;
       int maxRow = 0;
-      for(int i=0;i<entity.getVerticesCount();i++){
-        if(i==0){
-          minCol = entity.getPoint(i).x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-          maxCol = entity.getPoint(i).x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-          minRow = entity.getPoint(i).y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-          maxRow = entity.getPoint(i).y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-          continue;
+      if(entity.angle == 0 && entity.scale == Vector2(1, 1)){
+        minCol = entity.getMinVector().x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+        maxCol = entity.getMaxVector().x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+        minRow = entity.getMinVector().y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+        maxRow = entity.getMaxVector().y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+      }else{
+        for(int i=0;i<entity.getVerticesCount();i++){
+          if(i==0){
+            minCol = entity.getPoint(i).x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+            maxCol = entity.getPoint(i).x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+            minRow = entity.getPoint(i).y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+            maxRow = entity.getPoint(i).y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+            continue;
+          }
+          minCol = math.min(minCol, entity.getPoint(i).x ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x);
+          maxCol = math.max(maxCol, entity.getPoint(i).x ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x);
+          minRow = math.min(minRow, entity.getPoint(i).y ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y);
+          maxRow = math.max(maxRow, entity.getPoint(i).y ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y);
         }
-        minCol = math.min(minCol, entity.getPoint(i).x ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x);
-        maxCol = math.max(maxCol, entity.getPoint(i).x ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x);
-        minRow = math.min(minRow, entity.getPoint(i).y ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y);
-        maxRow = math.max(maxRow, entity.getPoint(i).y ~/game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y);
       }
-
       for(int col = minCol; col <= maxCol; col++){
         for(int row = minRow; row <= maxRow; row++){
           var lcr = LoadedColumnRow(col, row);
@@ -150,11 +155,30 @@ class DCollisionProcessor
 
 void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
-  if(other.getMaxVector().x < entity.getMinVector().x
-      || other.getMinVector().x > entity.getMaxVector().x
-      || other.getMaxVector().y < entity.getMinVector().y
-      || other.getMinVector().y > entity.getMaxVector().y){
-    return;
+  if(other.scale == Vector2.all(1) && other.angle == 0
+  && entity.scale == Vector2.all(1) && entity.angle == 0) {
+    if (other
+        .getMaxVector()
+        .x < entity
+        .getMinVector()
+        .x
+        || other
+            .getMinVector()
+            .x > entity
+            .getMaxVector()
+            .x
+        || other
+            .getMaxVector()
+            .y < entity
+            .getMinVector()
+            .y
+        || other
+            .getMinVector()
+            .y > entity
+            .getMaxVector()
+            .y) {
+      return;
+    }
   }
   Set<int> insidePoints = {};
   if(isMapObstacle) { //Если у вас все обекты столкновения с препятсвием с землёй квадратные, иначе делать что ближе от центра твоего тела
@@ -178,7 +202,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
     double b = -2 * other.getPoint(0).y - entity.getPoint(0).y;
     double c = math.pow(other.getPoint(0).x,2).toDouble() + math.pow(other.getPoint(0).y,2)
         + math.pow(entity.radius,2) - math.pow(other.radius,2);
-    var list = f_intersectLineFunctionWithCircle(entity.radius, a, b, c, entity.getPoint(0));
+    var list = f_intersectLineFunctionWithCircle(entity.radius, a, b, c, entity.getPoint(0)); //TODO ООООООООЧЕНЬ под вопросом
     if(list.isNotEmpty){
       if(!isMapObstacle){
         if (entity.onComponentTypeCheck(other)) {

@@ -34,7 +34,16 @@ List<Vector2> f_intersectLineWithCircle(List<Vector2> line, Vector2 circlePos, d
   a /= norm;
   b /= norm;
   double c = (a * startL.x + b * startL.y) * -1;
-  return f_intersectLineFunctionWithCircle(radius, a, b, c, circlePos);
+  var points = f_intersectLineFunctionWithCircle(radius, a, b, c, circlePos);
+  if(points.length == 2){
+    var control = f_pointOfIntersect(points.first, points.last, line.first, line.last);
+    if(control != Vector2.zero()){
+      return points;
+    }else{
+      return [];
+    }
+  }
+  return points;
 }
 
 List<Vector2> f_intersectLineFunctionWithCircle(double r,double a,double b,double c, Vector2 circlePos)

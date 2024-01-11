@@ -71,6 +71,11 @@ abstract class EnemyWeapon extends DCollisionEntity
       }
       currentCoolDown = 0;
       var temp = other.parent as MainPlayer;
+      for(final Vector2 point in intersectionPoints){
+        PointCust p = PointCust(
+            position: point);
+        game.gameMap.add(p);
+      }
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }
   }
