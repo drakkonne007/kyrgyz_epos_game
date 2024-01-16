@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="wall-7" tilewidth="32" tileheight="32" tilecount="240" columns="16">
+<tileset version="1.10" tiledversion="1.10.2" name="wall-7" tilewidth="32" tileheight="32" tilecount="240" columns="16">
  <image source="tiles/map/ancientLand/Tilesets/wall-7 - 2 tiles tall.png" width="512" height="480"/>
- <tile id="1" probability="0"/>
- <tile id="3" probability="0"/>
+ <tile id="1" type="high" probability="0"/>
+ <tile id="2" type="high"/>
+ <tile id="3" type="high" probability="0"/>
  <tile id="9" probability="0"/>
  <tile id="10" probability="0"/>
+ <tile id="16" type="high"/>
+ <tile id="17" type="high"/>
+ <tile id="19" type="high"/>
+ <tile id="20" type="high"/>
  <tile id="32">
   <objectgroup draworder="index" id="2">
    <object id="1" x="16" y="0.076555" width="16" height="32"/>
@@ -43,12 +48,12 @@
  <tile id="177" probability="0"/>
  <tile id="178" probability="0"/>
  <tile id="179" probability="0"/>
- <tile id="180" probability="0"/>
+ <tile id="180" type="high" probability="0"/>
  <tile id="192" probability="0"/>
  <tile id="193" probability="0"/>
  <tile id="194" probability="0"/>
  <tile id="195" probability="0"/>
- <tile id="196" probability="0"/>
+ <tile id="196" type="high" probability="0"/>
  <tile id="197" probability="0"/>
  <tile id="198" probability="0"/>
  <tile id="199" probability="0"/>
@@ -61,12 +66,12 @@
  <tile id="209" probability="0"/>
  <tile id="210" probability="0"/>
  <tile id="211" probability="0"/>
- <tile id="212" probability="0"/>
+ <tile id="212" type="high" probability="0"/>
  <tile id="224" probability="0"/>
  <tile id="225" probability="0"/>
  <tile id="226" probability="0"/>
  <tile id="227" probability="0"/>
- <tile id="228" probability="0"/>
+ <tile id="228" type="high" probability="0"/>
  <wangsets>
   <wangset name="wall-7" type="corner" tile="66">
    <wangcolor name="" color="#ff0000" tile="66" probability="1"/>

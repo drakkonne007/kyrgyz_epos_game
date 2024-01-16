@@ -225,7 +225,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
   if(entity.isCircle) {
     Set<int> insideCircles = {};
     for (int i = 0; i < other.getVerticesCount(); i++) {
-      if (entity.getPoint(0).distanceTo(other.getPoint(i)) < entity.radius) {
+      if (entity.getPoint(0).distanceToSquared(other.getPoint(i)) < entity.radius * entity.radius) {
         if (!isMapObstacle) {
           if (entity.onComponentTypeCheck(other)) {
             entity.onCollisionStart({other.getPoint(i)}, other);

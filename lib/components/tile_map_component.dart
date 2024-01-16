@@ -85,10 +85,10 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
   {
     game.doLoadingMapHud();
     _isLoad = false;
-    orthoPlayer?.gameHide = true;
-    orthoPlayer?.opacity = 0;
-    frontPlayer?.gameHide = true;
-    frontPlayer?.opacity = 0;
+    orthoPlayer?.removeFromParent();
+    orthoPlayer=null;
+    frontPlayer?.removeFromParent();
+    frontPlayer=null;
     collisionProcessor ??= DCollisionProcessor(gameRef);
     collisionProcessor?.clearActiveCollEntity();
     collisionProcessor?.clearStaticCollEntity();
@@ -110,15 +110,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     currentGameWorldData = gameRef.playerData.playerBigMap;
 
     if(currentGameWorldData == null) return;
-    if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
-      orthoPlayer?.reInsertFullActiveHitBoxes();
-      orthoPlayer?.gameHide = false;
-      orthoPlayer?.opacity = 1;
-    }else{
-      frontPlayer?.reInsertFullActiveHitBoxes();
-      frontPlayer?.gameHide = false;
-      frontPlayer?.opacity = 1;
-    }
     isMapCached.value = 0;
     await _preloadAnimAndObj();
     while(isMapCached.value < 4){

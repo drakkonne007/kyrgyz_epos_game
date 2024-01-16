@@ -142,7 +142,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(pl.hitBox == null){
       return false;
     }
-    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width/2 + 50){
+    if(_body!.getCenter().distanceToSquared(pl.hitBox!.getCenter()) > _body!.width * 0.5 + 50){
       return false;
     }
     if(pl.hitBox!.getPoint(0).y > _body!.getPoint(1).y || pl.hitBox!.getPoint(1).y < _body!.getPoint(0).y){

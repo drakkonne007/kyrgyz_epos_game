@@ -242,8 +242,8 @@ Future precompileAll() async
                     //Записываем всё что есть
                   }
                   if (!isFirst && !isSecond && tempCoord.length == 2) {
-                    if (points[tF].distanceTo(tempCoord.first) >
-                        points[tF].distanceTo(tempCoord.last)) {
+                    if (points[tF].distanceToSquared(tempCoord.first) >
+                        points[tF].distanceToSquared(tempCoord.last)) {
                       coord.clear();
                       coord.add(tempCoord.last);
                       coord.add(tempCoord.first);

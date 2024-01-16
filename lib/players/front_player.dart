@@ -293,16 +293,16 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
     for(final point in points){
 
-      if(Vector2(_groundBox!.getMinVector().x,_groundBox!.getMinVector().y).distanceTo(point) < 2){
+      if(Vector2(_groundBox!.getMinVector().x,_groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(_groundBox!.getMinVector().x,_groundBox!.getMaxVector().y).distanceTo(point) < 2){
+      if(Vector2(_groundBox!.getMinVector().x,_groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(_groundBox!.getMaxVector().x,_groundBox!.getMaxVector().y).distanceTo(point) < 2){
+      if(Vector2(_groundBox!.getMaxVector().x,_groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(_groundBox!.getMaxVector().x,_groundBox!.getMinVector().y).distanceTo(point) < 2){
+      if(Vector2(_groundBox!.getMaxVector().x,_groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
 

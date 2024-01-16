@@ -12,7 +12,7 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   SpinBlade(this._startPos, this._endPos,{super.priority});
   Vector2 _startPos;
   Vector2? _endPos;
-  double _maxSpeed = 150;
+  double _maxSpeed = 170;
   Vector2 _speed = Vector2(0,0);
   bool isWasEnd = false;
 
@@ -28,7 +28,7 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
     DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(0,-18)],collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: false
-        , game: gameRef,isCircle: true,radius: 32, onStartWeaponHit: () {}, onEndWeaponHit: () {});
+        , game: gameRef,isCircle: true,radius: 34, onStartWeaponHit: () {}, onEndWeaponHit: () {});
     weapon.coolDown = _endPos == null ? 1 : 0.5;
     add(weapon);
     if(_endPos != null) {
@@ -53,22 +53,35 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     if(_endPos != null) {
       position += _speed * dt;
-      if (position.distanceTo(_endPos!) < 1 && !isWasEnd) {
+      if (position.distanceToSquared(_endPos!) < 1 && !isWasEnd) {
         _speed *= -1;
         isWasEnd = true;
       }
-      if (isWasEnd && position.distanceTo(_startPos) < 1) {
+      if (isWasEnd && position.distanceToSquared(_startPos) < 1) {
         isWasEnd = false;
         _speed *= -1;
       }
     }
-    int column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    int row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+
+
+
+    int column = _startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+    int row =    _startPos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
+
     if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-      removeFromParent();
+      if(_endPos != null){
+        int secDiff = (_endPos!.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x - gameRef.gameMap.column()).abs();
+        int secDiffRow = (_endPos!.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y - gameRef.gameMap.row()).abs();
+        if(secDiff > 2 || secDiffRow > 2){
+          gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+          removeFromParent();
+        }
+      }else{
+        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        removeFromParent();
+      }
     }
     super.update(dt);
   }
