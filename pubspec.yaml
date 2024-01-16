@@ -85,7 +85,18 @@ flutter:
     - assets/metaData/topLeft/
     - assets/metaData/topLeftTempleDungeon/
     - assets/metaData/topLeftVillage/
+    - assets/metaData/yurtaInTopLeftVillage0/
     - assets/metaData/yurtaInTopLeftVillage1/
+    - assets/metaData/yurtaInTopLeftVillage2/
+    - assets/metaData/yurtaInTopLeftVillage3/
+    - assets/metaData/yurtaInTopLeftVillage4/
+    - assets/metaData/yurtaInTopLeftVillage5/
+    - assets/metaData/yurtaInTopLeftVillage6/
+    - assets/metaData/yurtaInTopLeftVillage7/
+    - assets/metaData/yurtaInTopLeftVillage8/
+    - assets/metaData/yurtaInTopLeftVillage9/
+    - assets/metaData/yurtaInTopLeftVillage10/
+    - assets/metaData/yurtaInTopLeftVillage11/
     - assets/tiles/bars/
     - assets/tiles/buttons/
     - assets/tiles/map/

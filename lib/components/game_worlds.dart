@@ -1,20 +1,24 @@
 import 'package:game_flame/components/physic_vals.dart';
 
-List<GameWorldData> fullMaps =
-[
-  TopLeftVillage(),
-  BigTopLeft(),
-  YurtaInTopLeftVillage1(),
-  TopLeftTempleDungeon(),
-];
+List<GameWorldData> fullMaps()
+{
+  List<GameWorldData> list = [];
+  list.add(TopLeftVillage());
+  list.add(BigTopLeft());
+  list.addAll(getVillages());
+  list.add(TopLeftTempleDungeon());
+  return list;
+}
 
-List<GameWorldData> fullMapsForPreCompille =
-[
-  TopLeftVillage(),
-  BigTopLeft(),
-  YurtaInTopLeftVillage1(),
-  TopLeftTempleDungeon(),
-];
+List<GameWorldData> fullMapsForPreCompille()
+{
+  List<GameWorldData> list = [];
+  list.add(TopLeftVillage());
+  // list.add(BigTopLeft());
+  // list.addAll(getVillages());
+  // list.add(TopLeftTempleDungeon());
+  return list;
+}
 
 enum OrientatinType
 {
@@ -25,10 +29,15 @@ enum OrientatinType
 GameWorldData getWorldFromName(String name)
 {
   print('name $name');
+  if(name.startsWith('yurtaInTopLeftVillage')){
+    print('HOHOHO');
+    final int id = int.parse(name.split('yurtaInTopLeftVillage')[1]);
+    print(id);
+    return YurtaInTopLeftVillage(id);
+  }
   switch(name){
     case 'topLeftVillage': return TopLeftVillage();
     case 'topLeft': return BigTopLeft();
-    case 'yurtaInTopLeftVillage1': return YurtaInTopLeftVillage1();
     case 'topLeftTempleDungeon': return TopLeftTempleDungeon();
     default: print('error name of World!'); return BigTopLeft();
   }
@@ -73,14 +82,27 @@ class TopLeftTempleDungeon extends GameWorldData {
   }
 }
 
-class YurtaInTopLeftVillage1 extends GameWorldData {
-  YurtaInTopLeftVillage1()
+List<GameWorldData> getVillages({List<int>? numbers})
+{
+  List<GameWorldData> list = [];
+  if(numbers != null){
+    for(final num in numbers){
+      list.add(YurtaInTopLeftVillage(num));
+    }
+  }else{
+    for(int i=0;i<12;i++){
+      list.add(YurtaInTopLeftVillage(i));
+    }
+  }
+  return list;
+}
+
+class YurtaInTopLeftVillage extends GameWorldData {
+  YurtaInTopLeftVillage(int number)
   {
     orientation = OrientatinType.front;
-    nameForGame = 'yurtaInTopLeftVillage1';
-    source = 'yurtaInTopLeftVillage1.tmx';
+    nameForGame = 'yurtaInTopLeftVillage$number';
+    source = 'yurtaInTopLeftVillage$number.tmx';
     gameConsts = GameConsts(maxColumn: 3, maxRow:2);
   }
 }
-
-

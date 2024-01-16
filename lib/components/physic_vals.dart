@@ -55,8 +55,8 @@ class PlayerData
   Vector2 curPosition = Vector2(-1,-1);
   double gameTime = 720;
   double milisecsInGame = 0;
-  GameWorldData playerBigMap = YurtaInTopLeftVillage1();
-  Vector2 startLocation = Vector2(19,320);
+  GameWorldData playerBigMap = TopLeftVillage();
+  Vector2 startLocation = Vector2(1773,3118);
 
 
   void setStartValues()

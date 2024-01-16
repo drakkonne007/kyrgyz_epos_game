@@ -108,7 +108,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     //   return;
     // }
     currentGameWorldData = gameRef.playerData.playerBigMap;
-
+    print(currentGameWorldData?.nameForGame);
     if(currentGameWorldData == null) return;
     isMapCached.value = 0;
     await _preloadAnimAndObj();
@@ -155,6 +155,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
         }
       }
     }
+    print(grounds.length);
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
         orthoPlayer = OrthoPlayer();

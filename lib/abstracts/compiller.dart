@@ -12,14 +12,15 @@ import 'package:game_flame/components/tile_map_component.dart';
 
 Future precompileAll() async
 {
-  for(final bigWorlds in fullMapsForPreCompille) {
+  final listOfFullMaps = fullMapsForPreCompille();
+  for(final bigWorlds in listOfFullMaps) {
     Directory dir = Directory('assets/metaData/${bigWorlds.nameForGame}');
     if(dir.existsSync()){
       dir.deleteSync(recursive: true);
     }
     dir.createSync(recursive: true);
   }
-  for (final bigWorld in fullMapsForPreCompille) {
+  for (final bigWorld in listOfFullMaps) {
     var fileName = bigWorld.source; //'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(320));
     var layersLists = tiled.tileMap.renderableLayers;

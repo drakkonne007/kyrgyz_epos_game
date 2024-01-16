@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="28" nextobjectid="1302">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="28" nextobjectid="1313">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -1874,10 +1874,10 @@
     <property name="wrld" value="topLeft"/>
    </properties>
   </object>
-  <object id="1254" name="portal" x="2710.83" y="2578.25" width="92.333" height="31.5">
+  <object id="1254" name="portal" x="2710.83" y="2578.25" width="92.333" height="21.375">
    <properties>
-    <property name="tar" value="90,380"/>
-    <property name="wrld" value="yurtaInTopLeftVillage1"/>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage0"/>
    </properties>
   </object>
   <object id="1255" name="portal" x="2341" y="2479" width="91" height="28.5">
@@ -1999,6 +1999,72 @@
   </object>
   <object id="1301" x="1209" y="2934">
    <polyline points="0,0 0.5,208 411.5,206.5 412.5,238"/>
+  </object>
+  <object id="1302" name="portal" x="458.902" y="2250.85" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage1"/>
+   </properties>
+  </object>
+  <object id="1303" name="portal" x="1186.79" y="1957.58" width="92.333" height="19.0455">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage2"/>
+   </properties>
+  </object>
+  <object id="1304" name="portal" x="2067.83" y="1931.3" width="92.333" height="18.5">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage3"/>
+   </properties>
+  </object>
+  <object id="1305" name="portal" x="775.47" y="1399.52" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage4"/>
+   </properties>
+  </object>
+  <object id="1306" name="portal" x="435.834" y="932.795" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage7"/>
+   </properties>
+  </object>
+  <object id="1307" name="portal" x="1334.33" y="820.523" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage8"/>
+   </properties>
+  </object>
+  <object id="1308" name="portal" x="2055.58" y="1120.52" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage6"/>
+   </properties>
+  </object>
+  <object id="1309" name="portal" x="2686.33" y="1335.52" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage5"/>
+   </properties>
+  </object>
+  <object id="1310" name="portal" x="2723.83" y="486.023" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage9"/>
+   </properties>
+  </object>
+  <object id="1311" name="portal" x="1575.83" y="407.523" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage10"/>
+   </properties>
+  </object>
+  <object id="1312" name="portal" x="436.709" y="396.898" width="92.333" height="20.9545">
+   <properties>
+    <property name="tar" value="90,512"/>
+    <property name="wrld" value="yurtaInTopLeftVillage11"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

@@ -182,8 +182,8 @@ Future firstCachedIntoInternal() async
   // dir.listSync().forEach((element) {
   //   element.deleteSync(recursive: true);
   // });
-
-  for(final bigWorlds in fullMaps) {
+  final allFullMaps = fullMaps();
+  for(final bigWorlds in allFullMaps) {
     Directory dirdsds = Directory('${dir.path}/${bigWorlds.nameForGame}');
     if(dirdsds.existsSync()){
       dirdsds.deleteSync(recursive: true);
@@ -191,55 +191,58 @@ Future firstCachedIntoInternal() async
     dirdsds.createSync(recursive: true);
   }
 
-  for(final world in  fullMaps){
-  for (int cl = 0; cl < world.gameConsts.maxColumn!; cl++) {
-    for (int rw = 0; rw < world.gameConsts.maxRow!; rw++) {
-      try {
-        var temp = await rootBundle.loadString(
-            'assets/metaData/${world.nameForGame}/$cl-$rw.objXml', cache: false);
-        File file = File('${dir.path}/${world.nameForGame}/$cl-$rw.objXml');
-        file.writeAsStringSync(temp);
-      } catch (e) {
-        e;
-      }
-      try {
-        var temp1 = await rootBundle.loadString(
-            'assets/metaData/${world.nameForGame}/$cl-${rw}_high.anim', cache: false);
-        File file = File('${dir.path}/${world.nameForGame}/$cl-${rw}_high.anim');
-        file.writeAsStringSync(temp1);
-        var objects = XmlDocument.parse(temp1.toString()).findAllElements(
-            'an');
-        for (final obj in objects) {
-          var path = obj.getAttribute('src')!.split('/');
-          path.removeLast();
-          File file = File('${dir.path}/${world.nameForGame}/${obj.getAttribute('src')!}');
-          var temp = await rootBundle.load(
-              'assets/${obj.getAttribute('src')!}');
-          file.writeAsBytesSync(temp.buffer.asUint8List());
+  for(final world in allFullMaps){
+    print(world.nameForGame);
+    for (int cl = 0; cl < world.gameConsts.maxColumn!; cl++) {
+      for (int rw = 0; rw < world.gameConsts.maxRow!; rw++) {
+        print('$cl-$rw');
+
+        try {
+          var temp = await rootBundle.loadString(
+              'assets/metaData/${world.nameForGame}/$cl-$rw.objXml', cache: false);
+          File file = File('${dir.path}/${world.nameForGame}/$cl-$rw.objXml');
+          file.writeAsStringSync(temp);
+          print('${world.nameForGame} success');
+        } catch (e) {
+          e;
         }
-      } catch (e) {
-        e;
-      }
-      try {
-        var temp3 = await rootBundle.loadString(
-            'assets/metaData/${world.nameForGame}/$cl-${rw}_down.anim', cache: false);
-        File file = File('${dir.path}/${world.nameForGame}/$cl-${rw}_down.anim');
-        file.writeAsStringSync(temp3);
-        var objects = XmlDocument.parse(temp3.toString()).findAllElements('an');
-        for (final obj in objects) {
-          var path = obj.getAttribute('src')!.split('/');
-          path.removeLast();
-          File file = File('${dir.path}/${world.nameForGame}/${obj.getAttribute('src')!}');
-          var temp = await rootBundle.load(
-              'assets/${obj.getAttribute('src')!}');
-          file.writeAsBytesSync(temp.buffer.asUint8List());
+        try {
+          var temp1 = await rootBundle.loadString(
+              'assets/metaData/${world.nameForGame}/$cl-${rw}_high.anim', cache: false);
+          File file = File('${dir.path}/${world.nameForGame}/$cl-${rw}_high.anim');
+          file.writeAsStringSync(temp1);
+          var objects = XmlDocument.parse(temp1.toString()).findAllElements(
+              'an');
+          for (final obj in objects) {
+            var path = obj.getAttribute('src')!.split('/');
+            path.removeLast();
+            File file = File('${dir.path}/${world.nameForGame}/${obj.getAttribute('src')!}');
+            var temp = await rootBundle.load(
+                'assets/${obj.getAttribute('src')!}');
+            file.writeAsBytesSync(temp.buffer.asUint8List());
+          }
+        } catch (e) {
+          e;
         }
-      } catch (e) {
-        e;
+        try {
+          var temp3 = await rootBundle.loadString(
+              'assets/metaData/${world.nameForGame}/$cl-${rw}_down.anim', cache: false);
+          File file = File('${dir.path}/${world.nameForGame}/$cl-${rw}_down.anim');
+          file.writeAsStringSync(temp3);
+          var objects = XmlDocument.parse(temp3.toString()).findAllElements('an');
+          for (final obj in objects) {
+            var path = obj.getAttribute('src')!.split('/');
+            path.removeLast();
+            File file = File('${dir.path}/${world.nameForGame}/${obj.getAttribute('src')!}');
+            var temp = await rootBundle.load(
+                'assets/${obj.getAttribute('src')!}');
+            file.writeAsBytesSync(temp.buffer.asUint8List());
+          }
+        } catch (e) {
+          e;
+        }
       }
     }
+
   }
-
-
-}
 }
