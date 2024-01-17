@@ -99,6 +99,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
         el.removeFromParent();
       }
     }
+    priorityHigh.removeAll(priorityHigh.children);
+    priorityHighMinus1.removeAll(priorityHighMinus1.children);
+    priorityGroundPlus1.removeAll(priorityGroundPlus1.children);
+    enemyComponent.removeAll(enemyComponent.children);
+    playerLayout.removeAll(playerLayout.children);
+
     allEls.clear();
     grounds.clear();
     loadedLivesObjs.clear();
@@ -108,7 +114,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
     //   return;
     // }
     currentGameWorldData = gameRef.playerData.playerBigMap;
-    print(currentGameWorldData?.nameForGame);
     if(currentGameWorldData == null) return;
     isMapCached.value = 0;
     await _preloadAnimAndObj();

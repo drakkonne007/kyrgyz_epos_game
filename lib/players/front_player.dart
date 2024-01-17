@@ -431,7 +431,14 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       } else if (_speed.x < 0) {
         _speed.x += PhysicVals.stopSpeed * dt;
       } else {
-        countZero++;
+        setIdleAnimation();
+        _isPlayerRun = false;
+        if(!gameRef.playerData.isLockEnergy) {
+          gameRef.playerData.energy.value += dt;
+        }
+        if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
+          gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
+        }
       }
     }
     // if(_velocity.y == 0){
@@ -443,16 +450,6 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     //     countZero++;
     //   }
     // }
-    if(countZero == 2){
-      setIdleAnimation();
-      _isPlayerRun = false;
-      if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.energy.value += dt;
-      }
-      if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
-        gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
-      }
-    }
     if(!_onGround){
       _speed.y += 1000*dt;
     }

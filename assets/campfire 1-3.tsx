@@ -2,7 +2,7 @@
 <tileset version="1.10" tiledversion="1.10.2" name="campfire 1-3" tilewidth="32" tileheight="32" tilecount="128" columns="32">
  <image source="tiles/map/grassLand/Props/campfire 1-3.png" width="1024" height="128"/>
  <tile id="0" type="high"/>
- <tile id="1" type="high">
+ <tile id="1">
   <animation>
    <frame tileid="1" duration="150"/>
    <frame tileid="5" duration="150"/>
@@ -14,7 +14,7 @@
    <frame tileid="29" duration="150"/>
   </animation>
  </tile>
- <tile id="2" type="high">
+ <tile id="2">
   <animation>
    <frame tileid="2" duration="150"/>
    <frame tileid="6" duration="150"/>
@@ -27,7 +27,7 @@
   </animation>
  </tile>
  <tile id="32" type="high"/>
- <tile id="33" type="high">
+ <tile id="33">
   <animation>
    <frame tileid="33" duration="150"/>
    <frame tileid="37" duration="150"/>
@@ -39,7 +39,7 @@
    <frame tileid="61" duration="150"/>
   </animation>
  </tile>
- <tile id="34" type="high">
+ <tile id="34">
   <animation>
    <frame tileid="34" duration="150"/>
    <frame tileid="38" duration="150"/>
@@ -52,7 +52,7 @@
   </animation>
  </tile>
  <tile id="64" type="high"/>
- <tile id="65" type="high">
+ <tile id="65">
   <animation>
    <frame tileid="65" duration="150"/>
    <frame tileid="69" duration="150"/>
@@ -64,7 +64,7 @@
    <frame tileid="93" duration="150"/>
   </animation>
  </tile>
- <tile id="66" type="high">
+ <tile id="66">
   <animation>
    <frame tileid="66" duration="150"/>
    <frame tileid="70" duration="150"/>

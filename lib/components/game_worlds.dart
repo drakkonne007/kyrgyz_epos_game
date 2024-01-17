@@ -14,8 +14,8 @@ List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
   list.add(TopLeftVillage());
-  // list.add(BigTopLeft());
-  // list.addAll(getVillages());
+  list.add(BigTopLeft());
+  list.addAll(getVillages());
   // list.add(TopLeftTempleDungeon());
   return list;
 }
@@ -28,11 +28,8 @@ enum OrientatinType
 
 GameWorldData getWorldFromName(String name)
 {
-  print('name $name');
   if(name.startsWith('yurtaInTopLeftVillage')){
-    print('HOHOHO');
     final int id = int.parse(name.split('yurtaInTopLeftVillage')[1]);
-    print(id);
     return YurtaInTopLeftVillage(id);
   }
   switch(name){

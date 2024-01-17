@@ -58,15 +58,6 @@
  <tile id="521" type="high"/>
  <tile id="522" type="high"/>
  <tile id="523" type="high"/>
- <tile id="524" type="high"/>
- <tile id="525" type="high"/>
- <tile id="526" type="high"/>
- <tile id="527" type="high"/>
- <tile id="528" type="high"/>
- <tile id="529" type="high"/>
- <tile id="530" type="high"/>
- <tile id="531" type="high"/>
- <tile id="532" type="high"/>
  <tile id="550" type="high"/>
  <tile id="551" type="high"/>
  <tile id="552" type="high"/>

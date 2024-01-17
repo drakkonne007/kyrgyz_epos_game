@@ -12,6 +12,10 @@ import 'package:game_flame/abstracts/item.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/enemies/mini_creatures/fly.dart';
+import 'package:game_flame/enemies/mini_creatures/nature_particals.dart';
+import 'package:game_flame/enemies/mini_creatures/nature_particle_lower.dart';
+import 'package:game_flame/enemies/mini_creatures/windblow.dart';
 import 'package:game_flame/enemies/moose.dart';
 import 'package:game_flame/enemies/spin_blade.dart';
 import 'package:game_flame/enemies/strange_merchant.dart';
@@ -87,10 +91,10 @@ class MapNode {
             spriteList, stepTimes: stepTimes);
         for (final anim in obj.findAllElements('ps')) {
           var ss = SpriteAnimationComponent(animation: sprAnim,
-              position: Vector2(double.parse(anim.getAttribute('x')!),
-                  double.parse(anim.getAttribute('y')!)),
-              size: Vector2(srcSize.x + 1, srcSize.y + 1),
-              // priority: GamePriority.high
+            position: Vector2(double.parse(anim.getAttribute('x')!),
+                double.parse(anim.getAttribute('y')!)),
+            size: Vector2(srcSize.x + 1, srcSize.y + 1),
+            // priority: GamePriority.high
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
           myGame.gameMap.priorityHigh.add(ss);
@@ -134,10 +138,10 @@ class MapNode {
             spriteList, stepTimes: stepTimes);
         for (final anim in obj.findAllElements('ps')) {
           var ss = SpriteAnimationComponent(animation: sprAnim,
-              position: Vector2(double.parse(anim.getAttribute('x')!),
-                  double.parse(anim.getAttribute('y')!)),
-              size: Vector2(sourceSize.x + 1, sourceSize.y + 1),
-              // priority: GamePriority.ground + 1
+            position: Vector2(double.parse(anim.getAttribute('x')!),
+                double.parse(anim.getAttribute('y')!)),
+            size: Vector2(sourceSize.x + 1, sourceSize.y + 1),
+            // priority: GamePriority.ground + 1
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
           myGame.gameMap.priorityGroundPlus1.add(ss);
@@ -174,15 +178,15 @@ class MapNode {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(
-            position, GolemVariant.Grass,
-            // priority: GamePriority.player - 2
+          position, GolemVariant.Grass,
+          // priority: GamePriority.player - 2
         ));
         break;
       case 'wgolem':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(
-            position, GolemVariant.Water,
-            // priority: GamePriority.player - 2
+          position, GolemVariant.Water,
+          // priority: GamePriority.player - 2
         ));
         break;
       case 'gold':
@@ -193,8 +197,8 @@ class MapNode {
       case 'moose':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(
-            position, GolemVariant.Water,
-            // priority: GamePriority.player - 2
+          position, GolemVariant.Water,
+          // priority: GamePriority.player - 2
         ));
         break;
       case 'chest':
@@ -205,27 +209,27 @@ class MapNode {
         break;
       case 'fObelisk':
         var temp = FlyingHighObelisk(
-            position, colRow.column, colRow.row,
-            // priority: GamePriority.high - 1
+          position, colRow.column, colRow.row,
+          // priority: GamePriority.high - 1
         );
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.priorityHighMinus1.add(temp);
         var temp2 = FlyingDownObelisk(
-            position, colRow.column, colRow.row,
-            // priority: GamePriority.player - 2
+          position, colRow.column, colRow.row,
+          // priority: GamePriority.player - 2
         );
         myGame.gameMap.allEls[colRow]!.add(temp2);
         myGame.gameMap.enemyComponent.add(temp2);
         break;
       case 'sObelisk':
         var temp = StandHighObelisk(position,
-            // priority: GamePriority.high - 1
+          // priority: GamePriority.high - 1
         );
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.priorityHighMinus1.add(temp);
         var temp2 = StandDownObelisk(
-            position,
-            // priority: GamePriority.player - 2
+          position,
+          // priority: GamePriority.player - 2
         );
         myGame.gameMap.allEls[colRow]!.add(temp2);
         myGame.gameMap.enemyComponent.add(temp2);
@@ -248,29 +252,34 @@ class MapNode {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(
-            position, GolemVariant.Grass,
-            // priority: GamePriority.player - 2
+          position, GolemVariant.Grass,
+          // priority: GamePriority.player - 2
         ));
         break;
       case 'enemy':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(
-            position, GolemVariant.Grass,
-            // priority: GamePriority.player - 2
+          position, GolemVariant.Grass,
+          // priority: GamePriority.player - 2
         ));
         break;
       case 'wgolem':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(
-            position, GolemVariant.Water,
-            // priority: GamePriority.player - 2
+          position, GolemVariant.Water,
+          // priority: GamePriority.player - 2
         ));
+        break;
+      case 'windb':
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.priorityHigh.add(Windblow(
+          position));
         break;
       case 'moose':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(Moose(
-            position, MooseVariant.Blue,
-            // priority: GamePriority.player - 2
+          position, MooseVariant.Blue,
+          // priority: GamePriority.player - 2
         ));
         break;
       case 'gold':
@@ -278,9 +287,24 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.enemyComponent.add(temp);
         break;
+      case 'fly':
+        var fly = Fly(position);
+        myGame.gameMap.allEls[colRow]!.add(fly);
+        myGame.gameMap.priorityHigh.add(fly);
+        break;
+      case 'npart':
+        var natParticals = NaturePartical(position);
+        myGame.gameMap.allEls[colRow]!.add(natParticals);
+        myGame.gameMap.priorityHigh.add(natParticals);
+        break;
+      case 'npartL':
+        var natParticals = NatureParticalLower(position);
+        myGame.gameMap.allEls[colRow]!.add(natParticals);
+        myGame.gameMap.priorityHigh.add(natParticals);
+        break;
       case 'strange_merchant':
         var temp = StrangeMerchant(position, StrangeMerchantVariant.black,
-            // priority: GamePriority.player - 2
+          // priority: GamePriority.player - 2
         );
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.enemyComponent.add(temp);
@@ -292,27 +316,27 @@ class MapNode {
         break;
       case 'fObelisk':
         var temp = FlyingHighObelisk(
-            position, colRow.column, colRow.row,
-            // priority: GamePriority.high - 1
+          position, colRow.column, colRow.row,
+          // priority: GamePriority.high - 1
         );
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.priorityHighMinus1.add(temp);
         var temp2 = FlyingDownObelisk(
-            position, colRow.column, colRow.row,
-            // priority: GamePriority.player - 2
+          position, colRow.column, colRow.row,
+          // priority: GamePriority.player - 2
         );
         myGame.gameMap.allEls[colRow]!.add(temp2);
         myGame.gameMap.enemyComponent.add(temp2);
         break;
       case 'sObelisk':
         var temp = StandHighObelisk(position,
-            // priority: GamePriority.high - 1
+          // priority: GamePriority.high - 1
         );
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.priorityHighMinus1.add(temp);
         var temp2 = StandDownObelisk(
-            position,
-            // priority: GamePriority.player - 2
+          position,
+          // priority: GamePriority.player - 2
         );
         myGame.gameMap.allEls[colRow]!.add(temp2);
         myGame.gameMap.enemyComponent.add(temp2);

@@ -192,17 +192,13 @@ Future firstCachedIntoInternal() async
   }
 
   for(final world in allFullMaps){
-    print(world.nameForGame);
     for (int cl = 0; cl < world.gameConsts.maxColumn!; cl++) {
       for (int rw = 0; rw < world.gameConsts.maxRow!; rw++) {
-        print('$cl-$rw');
-
         try {
           var temp = await rootBundle.loadString(
               'assets/metaData/${world.nameForGame}/$cl-$rw.objXml', cache: false);
           File file = File('${dir.path}/${world.nameForGame}/$cl-$rw.objXml');
           file.writeAsStringSync(temp);
-          print('${world.nameForGame} success');
         } catch (e) {
           e;
         }
