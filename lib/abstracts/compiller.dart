@@ -22,7 +22,7 @@ Future precompileAll() async
   }
   for (final bigWorld in listOfFullMaps) {
     var fileName = bigWorld.source; //'top_left_bottom-slice.tmx';
-    var tiled = await TiledComponent.load(fileName, Vector2.all(320));
+    var tiled = await TiledComponent.load(fileName, Vector2.all(32));
     var layersLists = tiled.tileMap.renderableLayers;
     if (true) {
       MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();

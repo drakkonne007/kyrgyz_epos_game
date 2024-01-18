@@ -8,7 +8,8 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
 
-enum RenderCompileMode{
+enum RenderCompileMode
+{
   Background,
   Foreground,
   All
@@ -93,7 +94,6 @@ class IntPoint
 
   @override
   int get hashCode => x.hashCode + y.hashCode;
-
 }
 
 class AnimationPos
@@ -191,7 +191,7 @@ class MySuperAnimCompiler {
               continue;
             }
             for (final pos in currentSprites[spr]!) {
-              if (!rec.containsPoint(pos + Vector2.all(1))) {
+              if (!rec.containsPoint(pos)) {
                 continue;
               }
               composition.add(spr.image, pos - position, source: spr.src);
