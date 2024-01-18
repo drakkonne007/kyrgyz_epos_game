@@ -188,10 +188,8 @@ class MySuperAnimCompiler {
               continue;
             }
             for (final pos in currentSprites[spr]!) {
-              print(pos);
               int column = pos.x ~/ worldData.gameConsts.lengthOfTileSquare.x;
               int row =    pos.y ~/ worldData.gameConsts.lengthOfTileSquare.y;
-              print('$pos - pos, $column, $row');
               if (column != cols || row != rows) {
                 continue;
               }
