@@ -180,9 +180,6 @@ class MySuperAnimCompiler {
         bool isWas = false;
         var position = Vector2(cols * worldData.gameConsts.lengthOfTileSquare.x,
             rows * worldData.gameConsts.lengthOfTileSquare.y);
-        Rectangle rec = Rectangle.fromPoints(position, Vector2(
-            position.x + worldData.gameConsts.lengthOfTileSquare.x,
-            position.y + worldData.gameConsts.lengthOfTileSquare.y));
         final composition = ImageCompositionExt();
         for (int i = 0; i < _mapsSprite.length; i++) {
           var currentSprites = _mapsSprite[i];
@@ -191,7 +188,11 @@ class MySuperAnimCompiler {
               continue;
             }
             for (final pos in currentSprites[spr]!) {
-              if (!rec.containsPoint(pos)) {
+              print(pos);
+              int column = pos.x ~/ worldData.gameConsts.lengthOfTileSquare.x;
+              int row =    pos.y ~/ worldData.gameConsts.lengthOfTileSquare.y;
+              print('$pos - pos, $column, $row');
+              if (column != cols || row != rows) {
                 continue;
               }
               composition.add(spr.image, pos - position, source: spr.src);
@@ -212,17 +213,14 @@ class MySuperAnimCompiler {
     }
     for (int cols = 0; cols < worldData.gameConsts.maxColumn!; cols++) {
       for (int rows = 0; rows < worldData.gameConsts.maxRow!; rows++) {
-        var position = Vector2(cols * worldData.gameConsts.lengthOfTileSquare.x,
-            rows * worldData.gameConsts.lengthOfTileSquare.y);
-        Rectangle rec = Rectangle.fromPoints(position, Vector2(
-            position.x + worldData.gameConsts.lengthOfTileSquare.x,
-            position.y + worldData.gameConsts.lengthOfTileSquare.y));
         bool isStartFile = false;
         for (final anim in _animations.keys) {
           String animText = '';
           List<Vector2> currentPoints = _animations[anim]!;
           for (final point in currentPoints) {
-            if (!rec.containsPoint(point + Vector2.all(1))) {
+            int column = point.x ~/ worldData.gameConsts.lengthOfTileSquare.x;
+            int row =    point.y ~/ worldData.gameConsts.lengthOfTileSquare.y;
+            if (column != cols || row != rows) {
               continue;
             }
             if (animText == '') {
