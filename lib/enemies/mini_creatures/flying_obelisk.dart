@@ -25,7 +25,7 @@ class FlyingHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
     for(int i=0;i<16;i++){
       sprites.add(Sprite(img,srcSize: _spriteSheetSize,srcPosition: Vector2(_spriteSheetSize.x * i,0)));
     }
-    animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
+    animation = SpriteAnimation.spriteList(sprites,stepTime: 0.1);
   }
 
   @override
@@ -65,7 +65,7 @@ class FlyingDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
     for(int i=0;i<16;i++){
       sprites.add(Sprite(img,srcSize: _spriteSheetSize,srcPosition: Vector2(_spriteSheetSize.x * i,70)));
     }
-    animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
+    animation = SpriteAnimation.spriteList(sprites,stepTime: 0.1);
     Vector2 tSize = Vector2(28, 52);
     Vector2 tPos = Vector2(22, 0);
     _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true, game: gameRef);

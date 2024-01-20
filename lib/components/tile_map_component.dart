@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/Obstacles/ground.dart';
@@ -84,6 +85,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
   Future<void> loadNewMap() async
   {
     game.doLoadingMapHud();
+    Flame.assets.clearCache();
+    Flame.images.clearCache();
     _isLoad = false;
     orthoPlayer?.removeFromParent();
     orthoPlayer=null;

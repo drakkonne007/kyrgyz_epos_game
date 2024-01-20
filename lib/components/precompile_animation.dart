@@ -193,14 +193,14 @@ class MySuperAnimCompiler {
               if (column != cols || row != rows) {
                 continue;
               }
-              composition.add(spr.image, pos - position, source: spr.src);
+              composition.add(spr.image, pos - position, source: spr.src, isAntiAlias: true);
               isWas = true;
             }
           }
         }
         if (isWas) {
           composition.add(
-              nullImage, Vector2.all(0), source: nullImage.getBoundingRect());
+              nullImage, Vector2.all(0), source: nullImage.getBoundingRect(),isAntiAlias: true);
           final composedImage = composition.compose();
           var byteData = await composedImage.toByteData(
               format: ImageByteFormat.png);

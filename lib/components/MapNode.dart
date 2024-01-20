@@ -6,8 +6,9 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/teleport.dart';
-import 'package:game_flame/Obstacles/flying_obelisk.dart';
-import 'package:game_flame/Obstacles/stand_obelisk.dart';
+import 'package:game_flame/enemies/mini_creatures/bigFlyingObelisk.dart';
+import 'package:game_flame/enemies/mini_creatures/flying_obelisk.dart';
+import 'package:game_flame/enemies/mini_creatures/stand_obelisk.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -206,6 +207,11 @@ class MapNode {
         var temp = Chest(level, myItems: [itemFromId(2)], position: position);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.add(temp);
+        break;
+      case 'bfObelisk':
+        var temp = BigFlyingObelisk(position);
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.priorityHighMinus1.add(temp);
         break;
       case 'fObelisk':
         var temp = FlyingHighObelisk(

@@ -10,9 +10,9 @@ import 'dart:math' as math;
 class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   SpinBlade(this._startPos, this._endPos,{super.priority});
-  Vector2 _startPos;
-  Vector2? _endPos;
-  double _maxSpeed = 170;
+  final Vector2 _startPos;
+  final Vector2? _endPos;
+  final double _maxSpeed = 170;
   Vector2 _speed = Vector2(0,0);
   bool isWasEnd = false;
 
@@ -45,7 +45,6 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }else{
       _speed = Vector2(0,0);
     }
-    super.onLoad();
   }
 
   @override

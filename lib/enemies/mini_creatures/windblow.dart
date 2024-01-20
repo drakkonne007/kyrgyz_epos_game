@@ -4,10 +4,12 @@ import 'package:flame/sprite.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
-  Windblow(this._startPos, {super.priority});
+  Windblow(this._startPos);
 
   Vector2 _startPos;
-  @override onLoad() async
+
+  @override
+  void onLoad() async
   {
     anchor = const Anchor(0.5, 0.5);
     position = _startPos;
