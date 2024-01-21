@@ -41,7 +41,7 @@ class GamePause extends StatelessWidget
           ),
           ElevatedButton(
             onPressed: (){
-              _game.gameMap.mapNode!.createCheatElement(_controller.text);
+              _game.gameMap.mapNode!.createLiveObj(null,null,null,cheatName: _controller.text);
             },
             child: const Text('Создать'),
           ),

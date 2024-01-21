@@ -11,10 +11,12 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
 {
   VerticaBigRollingWood(this._startPos, this._endPos);
   final Vector2 _startPos;
-  final Vector2 _endPos;
+  final double _endPos;
   final Vector2 _speed = Vector2.all(0);
-  final double _maxSpeed = 85;
-  bool isDeleted = false;
+  final double _maxSpeed = 130;
+  bool _isDeleted = false;
+  bool _isStarted = false;
+  late SpriteAnimationComponent _player;
 
   @override
   void onLoad() async
@@ -24,7 +26,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
     int rand = Random().nextInt(2);
     String name = '';
     if(rand == 0){
-      name = 'wood-color scheme 2/vertical-rolling wood trunk with metal skewers-style2-bumpy.png';
+      name = 'wood-color scheme 2/vertical-rolling wood trunk with metal skewers-style1-bumpy.png';
     }else{
       name = 'wood-color scheme 1/vertical-rolling wood trunk with metal skewers-style1-bumpy.png';
     }
@@ -34,21 +36,23 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
       srcSize: Vector2(96, 160),
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0);
-    if(_endPos.x < _startPos.x){
+    if(_endPos < _startPos.x){
       _speed.x = -_maxSpeed;
     }else{
       _speed.x = _maxSpeed;
     }
 
-    DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(47,14)-positionOfAnchor(anchor)
-      ,Vector2(32,35)-positionOfAnchor(anchor)
-      ,Vector2(32,96)-positionOfAnchor(anchor)
-      ,Vector2(48,123)-positionOfAnchor(anchor)
-      ,Vector2(63,96)-positionOfAnchor(anchor)
-      ,Vector2(63,37)-positionOfAnchor(anchor)],collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: false
+    DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(47-47,14-68)
+      ,Vector2(32-47,35-68)
+      ,Vector2(32-47,96-68)
+      ,Vector2(48-47,123-68)
+      ,Vector2(63-47,96-68)
+      ,Vector2(63-47,37-68)],collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
     weapon.coolDown = 0.5;
     add(weapon);
+
+    _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;
   }
 
   void perfectRemove()
@@ -62,13 +66,22 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
   @override
   void update(double dt)
   {
+    super.update(dt);
+    if(!_isStarted){
+      if(_player.absolutePositionOfAnchor(_player.anchor).y < absoluteTopLeftPosition.y + height
+          && _player.absolutePositionOfAnchor(_player.anchor).y > absoluteTopLeftPosition.y){
+        _isStarted = true;
+      }
+    }
+    if(!_isStarted){
+      return;
+    }
     position = position + _speed * dt;
-    if((_speed.x < 0 && position.x < _endPos.x || _speed.x > 0 && position.x > _endPos.x) && !isDeleted){
+    if((_speed.x < 0 && position.x < _endPos || _speed.x > 0 && position.x > _endPos) && !_isDeleted){
       perfectRemove();
-      isDeleted = true;
+      _isDeleted = true;
       _speed.x = 0;
     }
-    super.update(dt);
   }
 }
 

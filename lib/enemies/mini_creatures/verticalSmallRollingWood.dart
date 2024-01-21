@@ -11,10 +11,12 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
 {
   VerticalSmallRollingWood(this._startPos, this._endPos);
   final Vector2 _startPos;
-  final Vector2 _endPos;
+  final double _endPos;
   final Vector2 _speed = Vector2.all(0);
-  final double _maxSpeed = 85;
-  bool isDeleted = false;
+  final double _maxSpeed = 130;
+  bool _isDeleted = false;
+  bool _isStarted = false;
+  late SpriteAnimationComponent _player;
 
   @override
   void onLoad() async
@@ -34,16 +36,17 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
       srcSize: Vector2(96, 160),
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0);
-    if(_endPos.x < _startPos.x){
+    if(_endPos < _startPos.x){
       _speed.x = -_maxSpeed;
     }else{
       _speed.x = _maxSpeed;
     }
 
-    DefaultEnemyWeapon weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: false
+    DefaultEnemyWeapon weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
     weapon.coolDown = 0.5;
     add(weapon);
+    _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;
   }
 
   void perfectRemove()
@@ -57,13 +60,22 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
   @override
   void update(double dt)
   {
+    super.update(dt);
+    if(!_isStarted){
+      if(_player.absolutePositionOfAnchor(_player.anchor).y < absoluteTopLeftPosition.y + height
+          && _player.absolutePositionOfAnchor(_player.anchor).y > absoluteTopLeftPosition.y){
+        _isStarted = true;
+      }
+    }
+    if(!_isStarted){
+      return;
+    }
     position = position + _speed * dt;
-    if((_speed.x < 0 && position.x < _endPos.x || _speed.x > 0 && position.x > _endPos.x) && !isDeleted){
+    if((_speed.x < 0 && position.x < _endPos || _speed.x > 0 && position.x > _endPos) && !_isDeleted){
       perfectRemove();
-      isDeleted = true;
+      _isDeleted = true;
       _speed.x = 0;
     }
-    super.update(dt);
   }
 }
 

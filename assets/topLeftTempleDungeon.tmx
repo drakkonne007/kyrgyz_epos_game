@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="39" nextobjectid="1288">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="39" nextobjectid="1293">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -3488,6 +3488,27 @@
    <point/>
   </object>
   <object id="1287" name="fObelisk" x="3978" y="2176">
+   <point/>
+  </object>
+  <object id="1288" name="sObelisk" x="4076" y="7753.33">
+   <point/>
+  </object>
+  <object id="1289" name="bfObelisk" x="4696" y="7686.67">
+   <point/>
+  </object>
+  <object id="1290" name="fObelisk" x="4132" y="7422.67">
+   <point/>
+  </object>
+  <object id="1291" name="vertBRW" x="4602.67" y="7168">
+   <properties>
+    <property name="tar" value="4196"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1292" name="vertRW" x="3913.33" y="6980">
+   <properties>
+    <property name="tar" value="4736"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

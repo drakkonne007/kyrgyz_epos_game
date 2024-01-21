@@ -9,14 +9,14 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class StandHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  StandHighObelisk(this._startPos,{super.priority});
+  StandHighObelisk(this._startPos);
   final Vector2 _startPos;
   final Vector2 _spriteSheetSize = Vector2(100,75);
 
   @override
   Future onLoad() async
   {
-    position = _startPos;
+    position = _startPos - Vector2(0,74);
     size = _spriteSheetSize;
     List<Sprite> sprites = [];
     Image img = await Flame.images.load('tiles/map/ancientLand/Props/Obelisk5-animation2-activated-100x150.png');
@@ -29,10 +29,11 @@ class StandHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
 
 class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  StandDownObelisk(this._startPos,{super.priority});
+  StandDownObelisk(this._startPos,this._highObelisk);
   final Vector2 _startPos;
   late Ground _groundBox;
   final Vector2 _spriteSheetSize = Vector2(100,75);
+  StandHighObelisk _highObelisk;
 
   @override
   Future onLoad() async
