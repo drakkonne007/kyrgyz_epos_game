@@ -6,7 +6,7 @@ abstract class KyrgyzEnemy
 {
   KyrgyzEnemy()
   {
-    math.Random rand = math.Random();
+    math.Random rand = math.Random(DateTime.now().microsecondsSinceEpoch);
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
       if(chance >= chanceOfLoot){
