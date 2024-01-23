@@ -240,6 +240,4 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     position += _speed * dt;
     super.update(dt);
   }
-
-
 }
