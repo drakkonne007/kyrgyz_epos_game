@@ -45,7 +45,7 @@ class WSword extends PlayerWeapon
       transformPoint = vertices[0];
       currentCoolDown = coolDown;
       onStartWeaponHit.call();
-      int rand = math.Random().nextInt(2);
+      int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
       late SpriteAnimationTicker tick;
       if(rand == 0){
         latencyBefore = -0.14;

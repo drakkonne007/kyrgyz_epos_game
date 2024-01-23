@@ -1,9 +1,7 @@
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
@@ -11,8 +9,6 @@ import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
-import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'dart:math' as math;
@@ -40,7 +36,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   EWBody? _body;
   EWMooseHummer? _hummer;
 
-  Timer? _timer;
 
   @override
   double armor = 0;//5;
@@ -55,35 +50,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   int maxLoots = 2;
 
-  void selectBehaviour()
-  {
-    if(gameRef.gameMap.orthoPlayer == null){
-      return;
-    }
-    _rigidSec = 3;
-    int random = math.Random().nextInt(4);
-    if(random != 0){
-      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
-      double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
-      double percent = math.min(posX.abs(),posY.abs()) / math.max(posX.abs(),posY.abs());
-      double isY = posY.isNegative ? -1 : 1;
-      double isX = posX.isNegative ? -1 : 1;
-      if(posX.isNegative && !isFlippedHorizontally){
-        flipHorizontally();
-      }else if(!posX.isNegative && isFlippedHorizontally){
-        flipHorizontally();
-      }
-      _speed = Vector2(posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX,posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY);
-      if(animation != animMove){
-        animation = animMove;
-      }
-    }else{
-      if(animation != animIdle){
-        _speed = Vector2(0,0);
-        animation = animIdle;
-      }
-    }
-  }
+  bool _isRefresh = true;
 
   @override
   Future<void> onLoad() async
@@ -134,8 +101,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
           to: 15,
           loop: false);
     }
-    _timer = Timer(animHurt.ticker().totalDuration(),autoStart: false,onTick: selectBehaviour,repeat: false);
-
     position = _startPos;
     animation = animIdle;
     size = _spriteSheetSize;
@@ -164,7 +129,40 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     _hummer = EWMooseHummer(list,collisionType: DCollisionType.inactive,isSolid: true,isStatic: false,
         isLoop: false, game: gameRef, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit);
     add(_hummer!);
+    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
+    add(timer);
+    selectBehaviour();
   }
+
+  void selectBehaviour()
+  {
+    if(gameRef.gameMap.orthoPlayer == null){
+      return;
+    }
+    _rigidSec = 3;
+    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
+    if(random != 0){
+      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
+      double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
+      double percent = math.min(posX.abs(),posY.abs()) / math.max(posX.abs(),posY.abs());
+      double isY = posY.isNegative ? -1 : 1;
+      double isX = posX.isNegative ? -1 : 1;
+      if(posX.isNegative && !isFlippedHorizontally){
+        flipHorizontally();
+      }else if(!posX.isNegative && isFlippedHorizontally){
+        flipHorizontally();
+      }
+      _speed = Vector2(posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX,posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY);
+      animation = animMove;
+    }else{
+      if(animation != animIdle){
+        _speed = Vector2(0,0);
+        animation = animIdle;
+      }
+    }
+  }
+
+
 
   void onStartHit()
   {
@@ -174,6 +172,23 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   void onEndHit()
   {
     selectBehaviour();
+  }
+
+  void checkIsNeedSelfRemove()
+  {
+    column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+    row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+    int diffCol = (column - gameRef.gameMap.column()).abs();
+    int diffRow = (row - gameRef.gameMap.row()).abs();
+    if(diffCol > 2 || diffRow > 2){
+      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      removeFromParent();
+    }
+    if(diffCol > 1 || diffRow > 1){
+      _isRefresh = false;
+    }else{
+      _isRefresh = true;
+    }
   }
 
   bool isNearPlayer()
@@ -201,16 +216,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   {
     super.update(dt);
     _rigidSec -= dt;
-    _timer?.update(dt);
-    column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-    int diffCol = (column - gameRef.gameMap.column()).abs();
-    int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-      removeFromParent();
-    }
-    if(diffCol > 1 || diffRow > 1){
+    if(!_isRefresh){
       return;
     }
     if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
@@ -241,7 +247,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
-    _timer?.stop();
     if(inArmor){
       health -= math.max(hurt - armor, 0);
     }else{
@@ -266,9 +271,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       }));
     }else{
       animation = null;
-      animHurt.ticker().reset();
       animation = animHurt;
-      _timer?.start();
+      animationTicker?.onComplete = selectBehaviour;
     }
   }
 

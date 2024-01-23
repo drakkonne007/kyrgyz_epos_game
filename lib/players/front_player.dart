@@ -6,6 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
@@ -15,15 +16,6 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
-class AxesDiff
-{
-  AxesDiff(this.leftDiff, this.rightDiff, this.upDiff, this.downDiff);
-  double leftDiff = 0;
-  double rightDiff = 0;
-  double upDiff = 0;
-  double downDiff = 0;
-}
-
 class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
   PlayerDirectionMove _direction = PlayerDirectionMove.Down;
@@ -32,7 +24,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   Vector2 _speed = Vector2.all(0);
   Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
-  GroundHitBox? _groundBox;
+  GroundHitBox? groundBox;
   bool _isPlayerRun = false;
   PlayerWeapon? _weapon;
   Timer? _timerHurt;
@@ -63,10 +55,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         collisionType: DCollisionType.passive,isSolid: true,
         isStatic: false, isLoop: true, game: gameRef);
     await add(hitBox!);
-    _groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
+    groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    await add(_groundBox!);
+    await add(groundBox!);
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
     _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: true,
@@ -104,7 +96,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void reInsertFullActiveHitBoxes()
   {
     hitBox!.reInsertIntoCollisionProcessor();
-    _groundBox!.reInsertIntoCollisionProcessor();
+    groundBox!.reInsertIntoCollisionProcessor();
     _weapon!.reInsertIntoCollisionProcessor();
     _speed = Vector2.all(0);
     _velocity = Vector2.all(0);
@@ -276,7 +268,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
   {
-    if(_groundBox == null){
+    if(groundBox == null){
       return;
     }
     Map<Vector2,AxesDiff> diffs = {};
@@ -293,23 +285,23 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
     for(final point in points){
 
-      if(Vector2(_groundBox!.getMinVector().x,_groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(_groundBox!.getMinVector().x,_groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(_groundBox!.getMaxVector().x,_groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(_groundBox!.getMaxVector().x,_groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
 
-      double leftDiffX  = point.x - _groundBox!.getMinVector().x;
-      double rightDiffX = point.x - _groundBox!.getMaxVector().x;
-      double upDiffY = point.y - _groundBox!.getPoint(0).y;
-      double downDiffY = point.y - _groundBox!.getPoint(1).y;
+      double leftDiffX  = point.x - groundBox!.getMinVector().x;
+      double rightDiffX = point.x - groundBox!.getMaxVector().x;
+      double upDiffY = point.y - groundBox!.getPoint(0).y;
+      double downDiffY = point.y - groundBox!.getPoint(1).y;
 
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 

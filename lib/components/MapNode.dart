@@ -7,7 +7,10 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/teleport.dart';
 import 'package:game_flame/enemies/mini_creatures/bigFlyingObelisk.dart';
+import 'package:game_flame/enemies/mini_creatures/bird.dart';
+import 'package:game_flame/enemies/mini_creatures/campfireSmoke.dart';
 import 'package:game_flame/enemies/mini_creatures/flying_obelisk.dart';
+import 'package:game_flame/enemies/mini_creatures/frog.dart';
 import 'package:game_flame/enemies/mini_creatures/stand_obelisk.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:flame/components.dart';
@@ -58,21 +61,6 @@ class MapNode {
       return;
     }
     myGame.gameMap.allEls.putIfAbsent(colRow, () => []);
-    if (KyrgyzGame.cachedObjXmls.containsKey(
-        '${colRow.column}-${colRow.row}.objXml')) {
-      var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow
-          .row}.objXml']!;
-      for (final obj in objects) {
-        String? name = obj.getAttribute('nm');
-        switch (name) {
-          case '':
-            break;
-          default:
-            createLiveObj(obj, name, colRow);
-            break;
-        }
-      }
-    }
     if (KyrgyzGame.cachedAnims.containsKey(
         '${colRow.column}-${colRow.row}_high.anim')) {
       var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow
@@ -100,7 +88,7 @@ class MapNode {
             // priority: GamePriority.high
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
-          myGame.gameMap.priorityHigh.add(ss);
+          myGame.gameMap.priorityHighMinus1.add(ss);
         }
       }
     }
@@ -167,6 +155,22 @@ class MapNode {
       myGame.gameMap.allEls[colRow]!.add(spriteDown);
       myGame.gameMap.add(spriteDown);
     }
+
+    if (KyrgyzGame.cachedObjXmls.containsKey(
+        '${colRow.column}-${colRow.row}.objXml')) {
+      var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow
+          .row}.objXml']!;
+      for (final obj in objects) {
+        String? name = obj.getAttribute('nm');
+        switch (name) {
+          case '':
+            break;
+          default:
+            createLiveObj(obj, name, colRow);
+            break;
+        }
+      }
+    }
   }
 
   Future createLiveObj(XmlElement? obj, String? name,
@@ -205,7 +209,7 @@ class MapNode {
       case 'windb':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.priorityHigh.add(Windblow(
-          position));
+            position));
         break;
       case 'moose':
         myGame.gameMap.loadedLivesObjs.add(position);
@@ -223,6 +227,11 @@ class MapNode {
         var fly = Fly(position);
         myGame.gameMap.allEls[colRow]!.add(fly);
         myGame.gameMap.priorityHigh.add(fly);
+        break;
+      case 'campS':
+        var campS = CampfireSmoke(position);
+        myGame.gameMap.allEls[colRow]!.add(campS);
+        myGame.gameMap.priorityHigh.add(campS);
         break;
       case 'npart':
         var natParticals = NaturePartical(position);
@@ -300,12 +309,28 @@ class MapNode {
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(spinBl);
         break;
-        case 'vertBRW':
-          String targetPos = obj!.getAttribute('tar')!;
-          var verticalBigRollWood = VerticaBigRollingWood(position, double.parse(targetPos));
-          myGame.gameMap.loadedLivesObjs.add(position);
-          myGame.gameMap.enemyComponent.add(verticalBigRollWood);
-          break;
+      case 'frog':
+        Frog frog = Frog(position);
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.enemyComponent.add(frog);
+        break;
+      case 'bird':
+        var targetPos = obj?.getAttribute('tar')?.split(';');
+        List<Vector2> target = [];
+        for(int i=0;i<targetPos!.length;i++){
+            var source = targetPos[i].split(',');
+            target.add(Vector2(double.parse(source[0]), double.parse(source[1])));
+        }
+        Bird bird = Bird(position, target);
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.priorityHigh.add(bird);
+        break;
+      case 'vertBRW':
+        String targetPos = obj!.getAttribute('tar')!;
+        var verticalBigRollWood = VerticaBigRollingWood(position, double.parse(targetPos));
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.enemyComponent.add(verticalBigRollWood);
+        break;
       case 'vertRW':
         String targetPos = obj!.getAttribute('tar')!;
         var verticalBigRollWood = VerticalSmallRollingWood(position, double.parse(targetPos));

@@ -69,10 +69,18 @@ List<Vector2> f_intersectLineFunctionWithCircle(double r,double a,double b,doubl
   return points;
 }
 
-
 class GroundSource
 {
   bool isLoop = false;
   Set<Vector2> points = {};
+}
+
+class AxesDiff
+{
+  AxesDiff(this.leftDiff, this.rightDiff, this.upDiff, this.downDiff);
+  double leftDiff = 0;
+  double rightDiff = 0;
+  double upDiff = 0;
+  double downDiff = 0;
 }
 

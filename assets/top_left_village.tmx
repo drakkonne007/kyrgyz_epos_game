@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1392">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1414">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -2074,11 +2074,8 @@
   <object id="1299" name="vegAlert" x="1676.5" y="913.5">
    <polyline points="0,0 71.5,-98 72.5,-188.5 156,-324.5 266,-430 338,-461 402.5,-472 480,-509.5 625.5,-517 600.5,-447.5 476,-408.5 405.5,-370.5 324.5,-355 275,-309.5 194,-160.5 155.5,-22 93,78"/>
   </object>
-  <object id="1300" x="2183.33" y="2933.33">
-   <polyline points="0,0 -0.0639218,210.04 -253,205.25 -253.083,235.167"/>
-  </object>
   <object id="1301" x="1209" y="2934">
-   <polyline points="0,0 0.5,208 411.5,206.5 412.5,238"/>
+   <polyline points="0,0 0.5,208 411.5,206.5 411.5,230.667 720,230.333 720.091,204.182 733.182,204.182 733.727,208.182 973.909,208.364 974.455,1.09091"/>
   </object>
   <object id="1302" name="portal" x="458.902" y="2250.85" width="92.333" height="20.9545">
    <properties>
@@ -2226,7 +2223,7 @@
   <object id="1361" name="fly" x="1714" y="2004">
    <point/>
   </object>
-  <object id="1366" name="fly" x="2600.48" y="1692.36">
+  <object id="1366" name="fly" x="2259.48" y="1837.36">
    <point/>
   </object>
   <object id="1367" name="fly" x="2450" y="1180">
@@ -2235,10 +2232,10 @@
   <object id="1368" name="fly" x="1688" y="605">
    <point/>
   </object>
-  <object id="1372" name="fly" x="2206" y="1592">
+  <object id="1372" name="fly" x="1930" y="1468">
    <point/>
   </object>
-  <object id="1374" name="fly" x="1388" y="1710">
+  <object id="1374" name="fly" x="1493" y="1668">
    <point/>
   </object>
   <object id="1376" name="fly" x="1844" y="921.333">
@@ -2281,6 +2278,36 @@
    <point/>
   </object>
   <object id="1391" name="npart" x="2448" y="270.75">
+   <point/>
+  </object>
+  <object id="1392" name="bird" x="2482" y="2795.34">
+   <properties>
+    <property name="tar" value="2390,2366;2716,2456"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1396" name="bird" x="290.667" y="2414.67">
+   <properties>
+    <property name="tar" value="294,2874;768,2687;918,2426;1185,3045"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="1404" name="fly" x="1661" y="2587">
+   <point/>
+  </object>
+  <object id="1405" name="fly" x="1513.33" y="3007.33">
+   <point/>
+  </object>
+  <object id="1406" name="npart" x="1666" y="2967.33">
+   <point/>
+  </object>
+  <object id="1411" name="windb" x="1308" y="1118.67">
+   <point/>
+  </object>
+  <object id="1412" name="windb" x="1973.33" y="640">
+   <point/>
+  </object>
+  <object id="1413" name="frog" x="402.667" y="2640">
    <point/>
   </object>
  </objectgroup>

@@ -1,30 +1,20 @@
 
 import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/enemies/grass_golem.dart';
-import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
-
-class AxesDiff
-{
-  AxesDiff(this.leftDiff, this.rightDiff, this.upDiff, this.downDiff);
-  double leftDiff = 0;
-  double rightDiff = 0;
-  double upDiff = 0;
-  double downDiff = 0;
-}
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
@@ -34,11 +24,50 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   Vector2 _speed = Vector2.all(0);
   Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
-  GroundHitBox? _groundBox;
+  GroundHitBox? groundBox;
   bool _isPlayerRun = false;
   PlayerWeapon? _weapon;
   Timer? _timerHurt;
   bool gameHide = false;
+
+  @override
+  Future<void> onLoad() async
+  {
+    Image? spriteImg;
+    spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
+    final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
+    animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0,to: 6);
+    animHurt.loop = false;
+    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19);
+    animDeath.loop = false;
+    animation = animIdle;
+    _timerHurt = Timer(animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
+    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
+    anchor = const Anchor(0.5, 0.5);
+
+    Vector2 tPos = positionOfAnchor(anchor) - Vector2(15,20);
+    Vector2 tSize = Vector2(22,45);
+    hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
+        collisionType: DCollisionType.passive,isSolid: true,
+        isStatic: false, isLoop: true, game: gameRef);
+    await add(hitBox!);
+
+    tPos = positionOfAnchor(anchor) - Vector2(11,-10);
+    tSize = Vector2(20,16);
+    groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
+        obstacleBehavoiurStart: groundCalcLines,
+        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+    await add(groundBox!);
+    tPos = positionOfAnchor(anchor) - Vector2(10,10);
+    tSize = Vector2(20,20);
+    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: true,
+        isStatic: false, isLoop: true,
+        onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = animIdle;}, game: gameRef);
+    //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
+    await add(_weapon!);
+  }
 
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
@@ -68,7 +97,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void reInsertFullActiveHitBoxes()
   {
     hitBox!.reInsertIntoCollisionProcessor();
-    _groundBox!.reInsertIntoCollisionProcessor();
+    groundBox!.reInsertIntoCollisionProcessor();
     _weapon!.reInsertIntoCollisionProcessor();
     _velocity = Vector2.all(0);
     _speed = Vector2.all(0);
@@ -85,44 +114,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  @override
-  Future<void> onLoad() async
-  {
-    Image? spriteImg;
-    spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
-    final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
-    animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0,to: 6);
-    animHurt.loop = false;
-    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19);
-    animDeath.loop = false;
-    animation = animIdle;
-    _timerHurt = Timer(animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
-    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    anchor = const Anchor(0.5, 0.5);
 
-    Vector2 tPos = positionOfAnchor(anchor) - Vector2(15,20);
-    Vector2 tSize = Vector2(22,45);
-    hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
-        collisionType: DCollisionType.passive,isSolid: true,
-        isStatic: false, isLoop: true, game: gameRef);
-    await add(hitBox!);
-
-    tPos = positionOfAnchor(anchor) - Vector2(11,-10);
-    tSize = Vector2(20,16);
-    _groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
-        obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    await add(_groundBox!);
-    tPos = positionOfAnchor(anchor) - Vector2(10,10);
-    tSize = Vector2(20,20);
-    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: true,
-        isStatic: false, isLoop: true,
-        onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = animIdle;}, game: gameRef);
-    //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
-    await add(_weapon!);
-  }
 
   void onStartHit()
   {
@@ -301,7 +293,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
   {
-    if(_groundBox == null){
+    if(groundBox == null){
       return;
     }
     Map<Vector2,AxesDiff> diffs = {};
@@ -315,10 +307,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     double maxDown = 0;
 
     for(final point in points){
-      double leftDiffX  = point.x - _groundBox!.getMinVector().x;
-      double rightDiffX = point.x - _groundBox!.getMaxVector().x;
-      double upDiffY = point.y - _groundBox!.getPoint(0).y;
-      double downDiffY = point.y - _groundBox!.getPoint(1).y;
+      double leftDiffX  = point.x - groundBox!.getMinVector().x;
+      double rightDiffX = point.x - groundBox!.getMaxVector().x;
+      double upDiffY = point.y - groundBox!.getPoint(0).y;
+      double downDiffY = point.y - groundBox!.getPoint(1).y;
 
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 

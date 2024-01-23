@@ -45,25 +45,12 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }else{
       _speed = Vector2(0,0);
     }
+    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
+    add(timer);
   }
 
-  @override
-  void update(double dt)
+  void checkIsNeedSelfRemove()
   {
-    if(_endPos != null) {
-      position += _speed * dt;
-      if (position.distanceToSquared(_endPos!) < 1 && !isWasEnd) {
-        _speed *= -1;
-        isWasEnd = true;
-      }
-      if (isWasEnd && position.distanceToSquared(_startPos) < 1) {
-        isWasEnd = false;
-        _speed *= -1;
-      }
-    }
-
-
-
     int column = _startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
     int row =    _startPos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
@@ -80,6 +67,22 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }else{
         gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
+      }
+    }
+  }
+
+  @override
+  void update(double dt)
+  {
+    if(_endPos != null) {
+      position += _speed * dt;
+      if (position.distanceToSquared(_endPos!) < 1 && !isWasEnd) {
+        _speed *= -1;
+        isWasEnd = true;
+      }
+      if (isWasEnd && position.distanceToSquared(_startPos) < 1) {
+        isWasEnd = false;
+        _speed *= -1;
       }
     }
     super.update(dt);

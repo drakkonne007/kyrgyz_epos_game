@@ -13,7 +13,7 @@ class Fly extends SpriteAnimationComponent
   {
     anchor = const Anchor(0.5,0.5);
     position = _startPos;
-    int rand = math.Random().nextInt(10);
+    int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(10);
     String name = '';
     switch(rand){
       case 0: name = 'Insects-butterfly1-flying-4 frames-150x106.png'; break;

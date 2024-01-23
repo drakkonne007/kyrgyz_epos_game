@@ -12,8 +12,7 @@ class Portal extends PositionComponent with HasGameRef<KyrgyzGame> {
   Vector2 targetPos;
   String toWorld;
 
-  Portal(
-      {required super.size, required super.position, required this.targetPos, required this.toWorld});
+  Portal({required super.size, required super.position, required this.targetPos, required this.toWorld});
 
   @override
   Future<void> onLoad() async
@@ -29,7 +28,8 @@ class Portal extends PositionComponent with HasGameRef<KyrgyzGame> {
         game: gameRef));
   }
 
-  void portal() async{
+  void portal() async
+  {
     gameRef.playerData.playerBigMap = getWorldFromName(toWorld);
     gameRef.playerData.startLocation = targetPos;
     await gameRef.loadNewMap();

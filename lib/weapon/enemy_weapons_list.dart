@@ -118,14 +118,17 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
       _diffAngle = 0;
       angle = -10;
       var temp = parent as Moose;
-      tick = SpriteAnimationTicker(temp.animAttack);
       temp.animation = temp.animAttack;
-      _activeSecs = tick.totalDuration() + latencyBefore;
+      _activeSecs = temp.animationTicker!.totalDuration() + latencyBefore;
       collisionType = DCollisionType.active;
+      temp.animationTicker?.onFrame = (index){
+        if(index == 15){
+          collisionType = DCollisionType.inactive;
+        }
+      };
       // print('start hit');
       await Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
         collisionType = DCollisionType.inactive;
-        game.playerData.isLockEnergy = false;
         onEndWeaponHit.call();
       });
     }

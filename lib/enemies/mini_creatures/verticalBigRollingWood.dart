@@ -23,7 +23,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
   {
     anchor = const Anchor(47/96, 68/160);
     position = _startPos;
-    int rand = Random().nextInt(2);
+    int rand = Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     String name = '';
     if(rand == 0){
       name = 'wood-color scheme 2/vertical-rolling wood trunk with metal skewers-style1-bumpy.png';
@@ -40,6 +40,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
       _speed.x = -_maxSpeed;
     }else{
       _speed.x = _maxSpeed;
+      flipHorizontally();
     }
 
     DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(47-47,14-68)

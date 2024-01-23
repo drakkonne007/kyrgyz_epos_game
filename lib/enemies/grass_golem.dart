@@ -36,7 +36,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   GolemVariant spriteVariant;
   double _rigidSec = 2;
   EWBody? _body;
-  Timer? _timer;
 
   @override
   int column=0;
@@ -52,36 +51,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   List<Item> loots = [];
   @override
   double health = 3;
-
-  void selectBehaviour()
-  {
-    if(gameRef.gameMap.orthoPlayer == null){
-      return;
-    }
-    _rigidSec = 2;
-    int random = math.Random().nextInt(4);
-    if(random != 0){
-      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
-      double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
-      double percent = math.min(posX.abs(),posY.abs()) / math.max(posX.abs(),posY.abs());
-      double isY = posY.isNegative ? -1 : 1;
-      double isX = posX.isNegative ? -1 : 1;
-      if(posX.isNegative && !isFlippedHorizontally){
-        flipHorizontally();
-      }else if(!posX.isNegative && isFlippedHorizontally){
-        flipHorizontally();
-      }
-      _speed = Vector2(posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX,posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY);
-      if(animation != _animMove){
-        animation = _animMove;
-      }
-    }else{
-      if(animation != _animIdle){
-        _speed = Vector2(0,0);
-        animation = _animIdle;
-      }
-    }
-  }
+  bool _isRefresh = true;
 
   @override
   Future<void> onLoad() async
@@ -98,14 +68,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         srcSize: _spriteSheetSize);
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
-    _animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0);
-    _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 12);
-    _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13);
-    _animAttack.loop = false;
-    _animHurt.loop = false;
-    _timer = Timer(_animHurt.ticker().totalDuration(),autoStart: false,onTick: selectBehaviour,repeat: false);
+    _animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
+    _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 12,loop: false);
+    _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13,loop: false);
     anchor = Anchor.center;
-    animation = _animMove;
+    animation = _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
     Vector2 tSize = Vector2(69,71);
@@ -124,6 +91,37 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _ground = Ground(getPointsForActivs(-tSize/2, tSize), collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
+    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
+    add(timer);
+    selectBehaviour();
+  }
+
+  void selectBehaviour()
+  {
+    if(gameRef.gameMap.orthoPlayer == null){
+      return;
+    }
+    _rigidSec = 2;
+    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
+    if(random != 0){
+      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
+      double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
+      double percent = math.min(posX.abs(),posY.abs()) / math.max(posX.abs(),posY.abs());
+      double isY = posY.isNegative ? -1 : 1;
+      double isX = posX.isNegative ? -1 : 1;
+      if(posX.isNegative && !isFlippedHorizontally){
+        flipHorizontally();
+      }else if(!posX.isNegative && isFlippedHorizontally){
+        flipHorizontally();
+      }
+      _speed = Vector2(posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX,posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY);
+      animation = _animMove;
+    }else{
+      if(animation != _animIdle){
+        _speed = Vector2(0,0);
+        animation = _animIdle;
+      }
+    }
   }
 
   void onStartHit()
@@ -134,6 +132,23 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   void onEndHit()
   {
     selectBehaviour();
+  }
+
+  void checkIsNeedSelfRemove()
+  {
+    column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+    row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+    int diffCol = (column - gameRef.gameMap.column()).abs();
+    int diffRow = (row - gameRef.gameMap.row()).abs();
+    if(diffCol > 2 || diffRow > 2){
+      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      removeFromParent();
+    }
+    if(diffCol > 1 || diffRow > 1){
+      _isRefresh = false;
+    }else{
+      _isRefresh = true;
+    }
   }
 
   bool isNearPlayer()
@@ -157,19 +172,42 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   }
 
   @override
+  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  {
+    if(inArmor){
+      health -= math.max(hurt - armor, 0);
+    }else{
+      health -= hurt;
+    }
+    if(health <1){
+      _speed = Vector2.all(0);
+      if(loots.isNotEmpty) {
+        if(loots.length > 1){
+          var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
+          gameRef.gameMap.add(temp);
+        }else{
+          var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
+          gameRef.gameMap.add(temp);
+        }
+      }
+      animation = _animDeath;
+      removeAll(children);
+      add(OpacityEffect.by(-0.95,EffectController(duration: _animDeath.ticker().totalDuration()),onComplete: (){
+        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        removeFromParent();
+      }));
+    }else{
+      animation = null;
+      animation = _animHurt;
+      animationTicker?.onComplete = selectBehaviour;
+    }
+  }
+
+  @override
   void update(double dt)
   {
     super.update(dt);
-    _timer?.update(dt);
-    column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-    int diffCol = (column - gameRef.gameMap.column()).abs();
-    int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-      removeFromParent();
-    }
-    if(diffCol > 1 || diffRow > 1){
+    if(!_isRefresh){
       return;
     }
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
@@ -195,39 +233,5 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       selectBehaviour();
     }
     position += _speed * dt;
-  }
-
-  @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
-  {
-    _timer!.stop();
-    if(inArmor){
-      health -= math.max(hurt - armor, 0);
-    }else{
-      health -= hurt;
-    }
-    if(health <1){
-      _speed = Vector2.all(0);
-      if(loots.isNotEmpty) {
-        if(loots.length > 1){
-          var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.add(temp);
-        }else{
-          var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.add(temp);
-        }
-      }
-      animation = _animDeath;
-      removeAll(children);
-      add(OpacityEffect.by(-0.95,EffectController(duration: _animDeath.ticker().totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-        removeFromParent();
-      }));
-    }else{
-      animation = null;
-      _animHurt.ticker().reset();
-      animation = _animHurt;
-      _timer!.start();
-    }
   }
 }

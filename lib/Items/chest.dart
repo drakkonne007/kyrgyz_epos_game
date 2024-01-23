@@ -13,18 +13,18 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myItems
-  ,Sprite? sprite,
-  bool? autoResize,
-  required super.position,
-  Vector2? size,
-  super.scale,
-  super.angle,
-  super.nativeAngle,
-  super.anchor = Anchor.center,
-  super.priority}){
-  _startPosition = position;
-}
+  Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myItems
+    ,Sprite? sprite,
+    bool? autoResize,
+    required super.position,
+    Vector2? size,
+    super.scale,
+    super.angle,
+    super.nativeAngle,
+    super.anchor = Anchor.center,
+    super.priority}){
+    _startPosition = position;
+  }
   Set<int>? nedeedKilledBosses;
   Vector2? _startPosition;
   Set<int>? neededItems;
@@ -35,6 +35,28 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
 
+  @override
+  Future onLoad() async
+  {
+    switch(_level){
+      case 0: _spriteImg = await Flame.images.load(
+          'tiles/map/grassLand/Props/treasure chest lvl 1-opening animation-standard style.png'); break;
+      case 1: _spriteImg = await Flame.images.load(
+          'tiles/map/grassLand/Props/treasure chest lvl 2-opening animation-standard style.png'); break;
+      case 2: _spriteImg = await Flame.images.load(
+          'tiles/map/grassLand/Props/treasure chest lvl 3-opening animation-standard style.png'); break;
+    }
+    _spriteSheet = SpriteSheet(image: _spriteImg,
+        srcSize: _spriteSheetSize);
+    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
+    size = Vector2.all(70);
+    anchor = Anchor.center;
+    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2.all(-35), size),
+        collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
+        autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
+    // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
+    await add(_objectHitbox!);
+  }
 
   void checkIsIOpen()
   {
@@ -72,26 +94,5 @@ Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myIt
     }));
   }
 
-  @override
-  Future<void> onLoad() async
-  {
-    switch(_level){
-      case 0: _spriteImg = await Flame.images.load(
-          'tiles/map/grassLand/Props/treasure chest lvl 1-opening animation-standard style.png'); break;
-      case 1: _spriteImg = await Flame.images.load(
-          'tiles/map/grassLand/Props/treasure chest lvl 2-opening animation-standard style.png'); break;
-      case 2: _spriteImg = await Flame.images.load(
-          'tiles/map/grassLand/Props/treasure chest lvl 3-opening animation-standard style.png'); break;
-    }
-    _spriteSheet = SpriteSheet(image: _spriteImg,
-        srcSize: _spriteSheetSize);
-    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
-    size = Vector2.all(70);
-    anchor = Anchor.center;
-    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2.all(-35), size),
-        collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
-        autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
-    // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
-    await add(_objectHitbox!);
-  }
+
 }

@@ -3,7 +3,8 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
+class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+{
   Windblow(this._startPos);
 
   Vector2 _startPos;
@@ -20,10 +21,11 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
       srcSize: Vector2(288, 64),
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0);
+    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
+    add(timer);
   }
 
-  @override
-  void update(double dt)
+  void checkIsNeedSelfRemove()
   {
     int column = _startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
     int row =    _startPos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
@@ -35,6 +37,5 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();
     }
-    super.update(dt);
   }
 }

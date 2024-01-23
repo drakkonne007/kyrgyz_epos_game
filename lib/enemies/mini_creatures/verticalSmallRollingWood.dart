@@ -23,7 +23,7 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
   {
     anchor = const Anchor(46/96, 68/160);
     position = _startPos;
-    int rand = Random().nextInt(2);
+    int rand = Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     String name = '';
     if(rand == 0){
       name = 'wood-color scheme 2/vertical-rolling wood trunk with metal skewers-style2-bumpy.png';
@@ -40,6 +40,7 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
       _speed.x = -_maxSpeed;
     }else{
       _speed.x = _maxSpeed;
+      flipHorizontally();
     }
 
     DefaultEnemyWeapon weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true
