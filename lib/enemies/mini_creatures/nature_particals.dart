@@ -5,12 +5,12 @@ import 'package:flame/sprite.dart';
 class NaturePartical extends SpriteAnimationComponent
 {
 
-  NaturePartical(this._startPos, {super.priority});
-  Vector2 _startPos;
+  NaturePartical(this._startPos);
+  final Vector2 _startPos;
 
   @override onLoad() async
   {
-    anchor = const Anchor(0.5,0.5);
+    anchor = const Anchor(1,0.5);
     position = _startPos;
     String name = 'generic nature particles96x96.png';
     var spriteSheet = SpriteSheet(

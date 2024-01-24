@@ -8,6 +8,7 @@ import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/teleport.dart';
 import 'package:game_flame/enemies/mini_creatures/bigFlyingObelisk.dart';
 import 'package:game_flame/enemies/mini_creatures/bird.dart';
+import 'package:game_flame/enemies/mini_creatures/campPortal.dart';
 import 'package:game_flame/enemies/mini_creatures/campfireSmoke.dart';
 import 'package:game_flame/enemies/mini_creatures/flying_obelisk.dart';
 import 'package:game_flame/enemies/mini_creatures/frog.dart';
@@ -61,6 +62,22 @@ class MapNode {
       return;
     }
     myGame.gameMap.allEls.putIfAbsent(colRow, () => []);
+    if (KyrgyzGame.cachedMapPngs.contains(
+        '${colRow.column}-${colRow.row}_high.png')) {
+      Image _imageHigh = await Flame.images.load(
+          'metaData/${myGame.playerData.playerBigMap.nameForGame}/${colRow
+              .column}-${colRow
+              .row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
+      var spriteHigh = SpriteComponent(
+        sprite: Sprite(_imageHigh),
+        position: Vector2(colRow.column * lengthOfTileSquare.x,
+            colRow.row * lengthOfTileSquare.y),
+        // priority: GamePriority.high - 1,
+        size: lengthOfTileSquare + Vector2.all(1),
+      );
+      myGame.gameMap.allEls[colRow]!.add(spriteHigh);
+      myGame.gameMap.priorityHighMinus1.add(spriteHigh);
+    }
     if (KyrgyzGame.cachedAnims.containsKey(
         '${colRow.column}-${colRow.row}_high.anim')) {
       var objects = KyrgyzGame.cachedAnims['${colRow.column}-${colRow
@@ -93,20 +110,20 @@ class MapNode {
       }
     }
     if (KyrgyzGame.cachedMapPngs.contains(
-        '${colRow.column}-${colRow.row}_high.png')) {
-      Image _imageHigh = await Flame.images.load(
+        '${colRow.column}-${colRow.row}_down.png')) {
+      Image _imageDown = await Flame.images.load(
           'metaData/${myGame.playerData.playerBigMap.nameForGame}/${colRow
               .column}-${colRow
-              .row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
-      var spriteHigh = SpriteComponent(
-        sprite: Sprite(_imageHigh),
+              .row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
+      var spriteDown = SpriteComponent(
+        sprite: Sprite(_imageDown),
         position: Vector2(colRow.column * lengthOfTileSquare.x,
             colRow.row * lengthOfTileSquare.y),
-        // priority: GamePriority.high - 1,
         size: lengthOfTileSquare + Vector2.all(1),
+        // priority: 0,
       );
-      myGame.gameMap.allEls[colRow]!.add(spriteHigh);
-      myGame.gameMap.priorityHighMinus1.add(spriteHigh);
+      myGame.gameMap.allEls[colRow]!.add(spriteDown);
+      myGame.gameMap.add(spriteDown);
     }
     if (KyrgyzGame.cachedAnims.containsKey(
         '${colRow.column}-${colRow.row}_down.anim')) {
@@ -139,23 +156,6 @@ class MapNode {
         }
       }
     }
-    if (KyrgyzGame.cachedMapPngs.contains(
-        '${colRow.column}-${colRow.row}_down.png')) {
-      Image _imageDown = await Flame.images.load(
-          'metaData/${myGame.playerData.playerBigMap.nameForGame}/${colRow
-              .column}-${colRow
-              .row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
-      var spriteDown = SpriteComponent(
-        sprite: Sprite(_imageDown),
-        position: Vector2(colRow.column * lengthOfTileSquare.x,
-            colRow.row * lengthOfTileSquare.y),
-        size: lengthOfTileSquare + Vector2.all(1),
-        // priority: 0,
-      );
-      myGame.gameMap.allEls[colRow]!.add(spriteDown);
-      myGame.gameMap.add(spriteDown);
-    }
-
     if (KyrgyzGame.cachedObjXmls.containsKey(
         '${colRow.column}-${colRow.row}.objXml')) {
       var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow
@@ -313,6 +313,14 @@ class MapNode {
         Frog frog = Frog(position);
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(frog);
+        break;
+      case 'campPort':
+        CampPortalDown campPort = CampPortalDown(position);
+        myGame.gameMap.allEls[colRow]!.add(campPort);
+        myGame.gameMap.enemyComponent.add(campPort);
+        CampPortalUp campPortUp = CampPortalUp(position);
+        myGame.gameMap.allEls[colRow]!.add(campPortUp);
+        myGame.gameMap.priorityHighMinus1.add(campPortUp);
         break;
       case 'bird':
         var targetPos = obj?.getAttribute('tar')?.split(';');

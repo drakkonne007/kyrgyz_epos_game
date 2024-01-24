@@ -136,10 +136,10 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
 
   void selectBehaviour()
   {
-    if(gameRef.gameMap.orthoPlayer == null){
+    _rigidSec = 3;
+    if(gameRef.gameMap.orthoPlayer == null || isNearPlayer()){
       return;
     }
-    _rigidSec = 3;
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
     if(random != 0){
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;

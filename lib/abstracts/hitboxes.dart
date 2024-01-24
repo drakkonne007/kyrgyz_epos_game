@@ -241,7 +241,8 @@ abstract class DCollisionEntity extends Component
 class ObjectHitbox extends DCollisionEntity
 {
 
-  ObjectHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop, required super.game, super.isCircle, super.radius});
+  ObjectHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic
+    , required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop, required super.game, super.isCircle, super.radius});
 
   late int id = game.gameMap.getNewId();
   bool autoTrigger;

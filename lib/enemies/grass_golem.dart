@@ -98,11 +98,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
 
   void selectBehaviour()
   {
-    if(gameRef.gameMap.orthoPlayer == null){
+    _rigidSec = 2;
+    if(gameRef.gameMap.orthoPlayer == null || isNearPlayer()){
       return;
     }
-    _rigidSec = 2;
-    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
+    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
     if(random != 0){
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;

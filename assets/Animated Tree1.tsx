@@ -2,18 +2,7 @@
 <tileset version="1.10" tiledversion="1.10.2" name="Animated Tree1" tilewidth="32" tileheight="32" tilecount="192" columns="32">
  <image source="tiles/map/grassLand/Props/Animated Tree1.png" width="1024" height="192"/>
  <tile id="0" type="high"/>
- <tile id="1" type="high">
-  <animation>
-   <frame tileid="1" duration="200"/>
-   <frame tileid="5" duration="200"/>
-   <frame tileid="9" duration="200"/>
-   <frame tileid="13" duration="200"/>
-   <frame tileid="17" duration="200"/>
-   <frame tileid="21" duration="200"/>
-   <frame tileid="25" duration="200"/>
-   <frame tileid="29" duration="200"/>
-  </animation>
- </tile>
+ <tile id="1" type="high"/>
  <tile id="2" type="high">
   <animation>
    <frame tileid="2" duration="200"/>
@@ -56,18 +45,7 @@
  <tile id="30" type="high"/>
  <tile id="31" type="high"/>
  <tile id="32" type="high"/>
- <tile id="33" type="high">
-  <animation>
-   <frame tileid="33" duration="200"/>
-   <frame tileid="37" duration="200"/>
-   <frame tileid="41" duration="200"/>
-   <frame tileid="45" duration="200"/>
-   <frame tileid="49" duration="200"/>
-   <frame tileid="53" duration="200"/>
-   <frame tileid="57" duration="200"/>
-   <frame tileid="61" duration="200"/>
-  </animation>
- </tile>
+ <tile id="33" type="high"/>
  <tile id="34" type="high">
   <animation>
    <frame tileid="34" duration="200"/>
@@ -109,30 +87,8 @@
  <tile id="61" type="high"/>
  <tile id="62" type="high"/>
  <tile id="63" type="high"/>
- <tile id="64" type="high">
-  <animation>
-   <frame tileid="64" duration="200"/>
-   <frame tileid="68" duration="200"/>
-   <frame tileid="72" duration="200"/>
-   <frame tileid="76" duration="200"/>
-   <frame tileid="80" duration="200"/>
-   <frame tileid="84" duration="200"/>
-   <frame tileid="88" duration="200"/>
-   <frame tileid="92" duration="200"/>
-  </animation>
- </tile>
- <tile id="65" type="high">
-  <animation>
-   <frame tileid="65" duration="200"/>
-   <frame tileid="69" duration="200"/>
-   <frame tileid="73" duration="200"/>
-   <frame tileid="77" duration="200"/>
-   <frame tileid="81" duration="200"/>
-   <frame tileid="85" duration="200"/>
-   <frame tileid="89" duration="200"/>
-   <frame tileid="93" duration="200"/>
-  </animation>
- </tile>
+ <tile id="64" type="high"/>
+ <tile id="65" type="high"/>
  <tile id="66" type="high">
   <animation>
    <frame tileid="66" duration="200"/>
@@ -145,18 +101,7 @@
    <frame tileid="94" duration="200"/>
   </animation>
  </tile>
- <tile id="67" type="high">
-  <animation>
-   <frame tileid="67" duration="200"/>
-   <frame tileid="71" duration="200"/>
-   <frame tileid="75" duration="200"/>
-   <frame tileid="79" duration="200"/>
-   <frame tileid="83" duration="200"/>
-   <frame tileid="87" duration="200"/>
-   <frame tileid="91" duration="200"/>
-   <frame tileid="95" duration="200"/>
-  </animation>
- </tile>
+ <tile id="67" type="high"/>
  <tile id="68" type="high"/>
  <tile id="69" type="high"/>
  <tile id="70" type="high"/>
@@ -185,30 +130,8 @@
  <tile id="93" type="high"/>
  <tile id="94" type="high"/>
  <tile id="95" type="high"/>
- <tile id="96" type="high">
-  <animation>
-   <frame tileid="96" duration="200"/>
-   <frame tileid="100" duration="200"/>
-   <frame tileid="104" duration="200"/>
-   <frame tileid="108" duration="200"/>
-   <frame tileid="112" duration="200"/>
-   <frame tileid="116" duration="200"/>
-   <frame tileid="120" duration="200"/>
-   <frame tileid="124" duration="200"/>
-  </animation>
- </tile>
- <tile id="97" type="high">
-  <animation>
-   <frame tileid="97" duration="200"/>
-   <frame tileid="101" duration="200"/>
-   <frame tileid="105" duration="200"/>
-   <frame tileid="109" duration="200"/>
-   <frame tileid="113" duration="200"/>
-   <frame tileid="117" duration="200"/>
-   <frame tileid="121" duration="200"/>
-   <frame tileid="125" duration="200"/>
-  </animation>
- </tile>
+ <tile id="96" type="high"/>
+ <tile id="97" type="high"/>
  <tile id="98" type="high">
   <animation>
    <frame tileid="98" duration="200"/>
@@ -221,18 +144,7 @@
    <frame tileid="126" duration="200"/>
   </animation>
  </tile>
- <tile id="99" type="high">
-  <animation>
-   <frame tileid="99" duration="200"/>
-   <frame tileid="103" duration="200"/>
-   <frame tileid="107" duration="200"/>
-   <frame tileid="111" duration="200"/>
-   <frame tileid="115" duration="200"/>
-   <frame tileid="119" duration="200"/>
-   <frame tileid="123" duration="200"/>
-   <frame tileid="127" duration="200"/>
-  </animation>
- </tile>
+ <tile id="99" type="high"/>
  <tile id="100" type="high"/>
  <tile id="101" type="high"/>
  <tile id="102" type="high"/>
