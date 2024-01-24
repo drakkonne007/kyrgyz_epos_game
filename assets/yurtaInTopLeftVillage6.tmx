@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="18" tilewidth="32" tileheight="32" infinite="0" nextlayerid="30" nextobjectid="1273">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="18" tilewidth="32" tileheight="32" infinite="0" nextlayerid="30" nextobjectid="1268">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -543,7 +543,7 @@
 42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841,42841
 </data>
  </layer>
- <layer id="29" name="12" width="33" height="18">
+ <layer id="29" name="123" width="33" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -574,33 +574,12 @@
   <object id="1262" x="960" y="160" width="96" height="32"/>
   <object id="1264" name="portal" x="0" y="530.75" width="128" height="13.25">
    <properties>
-    <property name="tar" value="2759,2596"/>
+    <property name="tar" value="2105,1160"/>
     <property name="wrld" value="topLeftVillage"/>
    </properties>
   </object>
-  <object id="1265" name="gold" x="222" y="452">
-   <point/>
-  </object>
-  <object id="1266" name="gold" x="385" y="397">
-   <point/>
-  </object>
-  <object id="1267" name="gold" x="543" y="334">
-   <point/>
-  </object>
-  <object id="1268" name="gold" x="706" y="268">
-   <point/>
-  </object>
-  <object id="1269" name="gold" x="866" y="204">
-   <point/>
-  </object>
-  <object id="1270" name="gold" x="1013" y="143">
-   <point/>
-  </object>
-  <object id="1271" x="0" y="0">
-   <polyline points="0,0 0,544 1056,544"/>
-  </object>
-  <object id="1272" x="1052.04" y="3.70715">
-   <polyline points="0,0 0,539.5"/>
+  <object id="1267" x="0" y="0">
+   <polyline points="0,0 0.590909,550.455 1055,548.909 1054.5,0.1875"/>
   </object>
  </objectgroup>
 </map>

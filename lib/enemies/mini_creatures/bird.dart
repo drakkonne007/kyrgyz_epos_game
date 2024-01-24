@@ -15,8 +15,9 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool _isFlying = false;
   double _totalAirDuration = 0;
   double _angle = 0;
-  bool _onStart = true;
   int _flying = 0;
+  int _currentPlace = 0;
+
 
   late SpriteAnimation _animIdle,_animIdle2,_animLanding,_animLiftOff,_animFlying;
   final List<SpriteAnimation> _idleList = [];
@@ -26,6 +27,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     TimerComponent timer = TimerComponent(onTick: _checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
     add(timer);
     _endPos.add(_startPos);
+    _currentPlace = _endPos.length-1;
     anchor = const Anchor(0.5,0.5);
     position = _startPos;
     size = Vector2.all(70);
@@ -60,7 +62,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       srcSize: Vector2(96,96),
     );
     _animFlying = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: true);
-    _totalAirDuration = _animFlying.ticker().totalDuration() * 6 + _animLanding.ticker().totalDuration() + _animLiftOff.ticker().totalDuration();
+    _totalAirDuration = _animFlying.ticker().totalDuration() * 6;
     _idleList.add(_animIdle);
     _idleList.add(_animIdle2);
     changeMoves();
@@ -72,6 +74,16 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     if(isGround == 0) {
       _flying = 0;
       isGround = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(_endPos.length);
+      if(isGround == _currentPlace){
+        if(isGround == 0){
+          isGround++;
+        }else if(isGround == _endPos.length-1){
+          isGround--;
+        }else{
+          isGround++;
+        }
+      }
+      _currentPlace = isGround;
       _angle = math.atan2(_endPos[isGround].y - position.y,_endPos[isGround].x - position.x);
       _speed = position.distanceTo(_endPos[isGround]) / _totalAirDuration;
       if(math.cos(_angle) > 0 && isFlippedHorizontally){
@@ -80,9 +92,9 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       if(math.cos(_angle) < 0 && !isFlippedHorizontally){
         flipHorizontally();
       }
-      _isFlying = true;
       animation = _animLiftOff;
       animationTicker?.onComplete = () {
+        _isFlying = true;
         animation = _animFlying;
         animationTicker?.onFrame = (index) {
           if (index == 0) {
@@ -90,9 +102,8 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           }
           if (_flying == 7) {
             animation = _animLanding;
+            _isFlying = false;
             animationTicker?.onComplete = () {
-              _isFlying = false;
-              _onStart = !_onStart;
               changeMoves();
             };
           };
@@ -135,27 +146,6 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       position.x += _speed * dt * math.cos(_angle);
       position.y += _speed * dt * math.sin(_angle);
     }
-    // }else{
-    //   if(_onStart){
-    //     if(position.distanceToSquared(_startPos) > 30*30){
-    //       _angle = math.atan2(_startPos.x - _endPos.x, _startPos.y - _endPos.y);
-    //       position.x += 30 * dt * math.cos(_angle);
-    //       position.y += 30 * dt * math.sin(_angle);
-    //     }else{
-    //       position.x += (math.Random(DateTime.now().microsecondsSinceEpoch).nextDouble() * 30 - 15) * dt;
-    //       position.y += (math.Random(DateTime.now().microsecondsSinceEpoch).nextDouble() * 30 - 15) * dt;
-    //     }
-    //   }else{
-    //     if(position.distanceToSquared(_endPos) > 30*30){
-    //       _angle = math.atan2(_startPos.x - _endPos.x, _startPos.y - _endPos.y);
-    //       position.x += 30 * dt * math.cos(_angle);
-    //       position.y += 30 * dt * math.sin(_angle);
-    //     }else{
-    //       position.x += (math.Random(DateTime.now().microsecondsSinceEpoch).nextDouble() * 30 - 15) * dt;
-    //       position.y += (math.Random(DateTime.now().microsecondsSinceEpoch).nextDouble() * 30 - 15) * dt;
-    //     }
-    //   }
-    // }
     super.update(dt);
   }
 }
