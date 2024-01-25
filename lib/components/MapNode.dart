@@ -243,7 +243,7 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(natParticals);
         myGame.gameMap.priorityHigh.add(natParticals);
         break;
-      case 'strange_merchant':
+      case 'strMerchant':
         var temp = StrangeMerchant(position, StrangeMerchantVariant.black);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.enemyComponent.add(temp);
@@ -270,7 +270,7 @@ class MapNode {
         var temp = StandHighObelisk(position);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.priorityHighMinus1.add(temp);
-        var temp2 = StandDownObelisk(position,temp);
+        var temp2 = StandDownObelisk(position);
         myGame.gameMap.allEls[colRow]!.add(temp2);
         myGame.gameMap.enemyComponent.add(temp2);
         break;

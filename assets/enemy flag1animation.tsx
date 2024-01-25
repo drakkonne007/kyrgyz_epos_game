@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="enemy flag1animation" tilewidth="32" tileheight="32" tilecount="180" columns="45">
  <image source="tiles/map/grassLand2/Props/Animated props/enemy flag1animation.png" width="1440" height="128"/>
- <tile id="45">
-  <animation>
-   <frame tileid="45" duration="150"/>
-   <frame tileid="48" duration="150"/>
-   <frame tileid="51" duration="150"/>
-   <frame tileid="54" duration="150"/>
-   <frame tileid="57" duration="150"/>
-   <frame tileid="60" duration="150"/>
-   <frame tileid="63" duration="150"/>
-   <frame tileid="66" duration="150"/>
-   <frame tileid="69" duration="150"/>
-   <frame tileid="72" duration="150"/>
-   <frame tileid="75" duration="150"/>
-   <frame tileid="78" duration="150"/>
-   <frame tileid="81" duration="150"/>
-   <frame tileid="84" duration="150"/>
-   <frame tileid="87" duration="150"/>
-  </animation>
- </tile>
  <tile id="46">
   <animation>
    <frame tileid="46" duration="150"/>

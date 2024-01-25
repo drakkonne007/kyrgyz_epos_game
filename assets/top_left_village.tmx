@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1415">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1429">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -2305,6 +2305,48 @@
    <point/>
   </object>
   <object id="1413" name="frog" x="402.667" y="2640">
+   <point/>
+  </object>
+  <object id="1415" name="strMerchant" x="633.417" y="2296.67">
+   <point/>
+  </object>
+  <object id="1416" name="strMerchant" x="1138" y="2002.25">
+   <point/>
+  </object>
+  <object id="1417" name="strMerchant" x="994" y="2498">
+   <point/>
+  </object>
+  <object id="1418" name="strMerchant" x="2662.67" y="2623.33">
+   <point/>
+  </object>
+  <object id="1419" name="strMerchant" x="2200" y="1991.33">
+   <point/>
+  </object>
+  <object id="1420" name="strMerchant" x="2700" y="1800">
+   <point/>
+  </object>
+  <object id="1421" name="strMerchant" x="2418" y="808">
+   <point/>
+  </object>
+  <object id="1422" name="strMerchant" x="2794" y="696">
+   <point/>
+  </object>
+  <object id="1423" name="strMerchant" x="2098" y="854">
+   <point/>
+  </object>
+  <object id="1424" name="strMerchant" x="918" y="1451.33">
+   <point/>
+  </object>
+  <object id="1425" name="strMerchant" x="968" y="368">
+   <point/>
+  </object>
+  <object id="1426" name="strMerchant" x="784" y="698">
+   <point/>
+  </object>
+  <object id="1427" name="strMerchant" x="1214" y="358">
+   <point/>
+  </object>
+  <object id="1428" name="strMerchant" x="1124" y="950">
    <point/>
   </object>
  </objectgroup>

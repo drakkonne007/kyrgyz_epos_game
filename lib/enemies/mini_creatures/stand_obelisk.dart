@@ -16,6 +16,7 @@ class StandHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
   @override
   Future onLoad() async
   {
+    anchor = const Anchor(0.5,0.8);
     position = _startPos - Vector2(0,74);
     size = _spriteSheetSize;
     List<Sprite> sprites = [];
@@ -29,15 +30,15 @@ class StandHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
 
 class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  StandDownObelisk(this._startPos,this._highObelisk);
+  StandDownObelisk(this._startPos);
   final Vector2 _startPos;
   late Ground _groundBox;
   final Vector2 _spriteSheetSize = Vector2(100,75);
-  StandHighObelisk _highObelisk;
 
   @override
   Future onLoad() async
   {
+    anchor = const Anchor(0.5,0.8);
     position = _startPos;
     size = _spriteSheetSize;
     List<Sprite> sprites = [];
@@ -47,7 +48,7 @@ class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     }
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
     Vector2 tSize = Vector2(43, 67);
-    Vector2 tPos = Vector2(26, 0);
+    Vector2 tPos = Vector2(-24, -60);
     _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true, game: gameRef);
     add(_groundBox);
   }
