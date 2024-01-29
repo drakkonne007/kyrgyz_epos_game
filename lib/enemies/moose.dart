@@ -140,13 +140,13 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
-    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
+    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(random != 0){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
-        shift = -70;
+        shift = -100;
       }else{
-        shift = 70;
+        shift = 100;
       }
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
@@ -205,7 +205,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(pl.hitBox == null){
       return false;
     }
-    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width * 0.5 + 150){
+    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width * 0.5 + 120){
       return false;
     }
     if(pl.hitBox!.getPoint(0).y > _body!.getPoint(1).y || pl.hitBox!.getPoint(1).y < _body!.getPoint(0).y){

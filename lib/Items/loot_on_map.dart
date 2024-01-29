@@ -40,7 +40,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
         collisionType: DCollisionType.active, isSolid: true,
         isStatic: false, obstacleBehavoiur: getItemToPlayer,
         autoTrigger: true, isLoop: true, game: gameRef);//ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);
-    await add(_objectHitbox);
+    add(_objectHitbox);
   }
 
   void getItemToPlayer()

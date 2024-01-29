@@ -14,15 +14,9 @@ import 'package:game_flame/abstracts/item.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
-enum GolemVariant
+class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  Water,
-  Grass
-}
-
-class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
-{
-  GrassGolem(this._startPos,this.spriteVariant,{super.priority});
+  Skeleton(this._startPos,this._withShield,{super.priority});
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
@@ -31,7 +25,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 30;
-  final GolemVariant spriteVariant;
+  final bool _withShield;
   double _rigidSec = 2;
   EWBody? _body;
 

@@ -110,7 +110,6 @@ flutter:
     - assets/tiles/map/prisonSet/
     - assets/tiles/map/yurta/
     - assets/tiles/map/ancientLand/Characters/
-    - assets/tiles/map/ancientLand/Mockups/
     - assets/tiles/map/ancientLand/Props/
     - assets/tiles/map/ancientLand/TiledMap/
     - assets/tiles/map/ancientLand/Tilesets/
@@ -124,13 +123,11 @@ flutter:
     - assets/tiles/map/ancientLand/TiledMap/TilesetsGame/
     - assets/tiles/map/ancientLand/Tilesets/The same tiles but with transparency instead of flat color grass//
     - assets/tiles/map/grassLand/Characters/
-    - assets/tiles/map/grassLand/Mockups/
     - assets/tiles/map/grassLand/Props/
     - assets/tiles/map/grassLand/Tilesets/
     - assets/tiles/map/grassLand/UI/
     - assets/tiles/map/grassLand/UI/UI-elements-32x32-separated sprites/
     - assets/tiles/map/grassLand2/Characters/
-    - assets/tiles/map/grassLand2/Mockups/
     - assets/tiles/map/grassLand2/Props/
     - assets/tiles/map/grassLand2/TiledMap Editor new/
     - assets/tiles/map/grassLand2/Tilesets/
@@ -180,7 +177,6 @@ flutter:
     - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass(transparency)- sprites/
     - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass2 - river orientation - sprites/
     - assets/tiles/map/prisonSet/Characters/
-    - assets/tiles/map/prisonSet/Mockups/
     - assets/tiles/map/prisonSet/Props/
     - assets/tiles/map/prisonSet/TiledMap Editor New/
     - assets/tiles/map/prisonSet/Tilesets/

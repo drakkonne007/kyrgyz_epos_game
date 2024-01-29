@@ -52,7 +52,7 @@ class EWBody extends EnemyWeapon
     _isActive = true;
     latencyBefore = -activeSecs/3;
     scale = Vector2(1,1);
-    await Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
+    Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
       transformPoint = rawCenter;
       _isGrow = true;
       onEndWeaponHit.call();
@@ -127,7 +127,7 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
         }
       };
       // print('start hit');
-      await Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
+      Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
         collisionType = DCollisionType.inactive;
         onEndWeaponHit.call();
       });

@@ -55,7 +55,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
-    await add(_objectHitbox!);
+    add(_objectHitbox!);
   }
 
   void checkIsIOpen()

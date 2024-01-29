@@ -67,7 +67,7 @@ class WSword extends PlayerWeapon
       game.playerData.isLockEnergy = true;
       collisionType = DCollisionType.active;
       // print('start hit');
-      await Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
+      Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
         collisionType = DCollisionType.inactive;
         _isGrow = true;
         game.playerData.isLockEnergy = false;
