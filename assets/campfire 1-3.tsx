@@ -2,30 +2,6 @@
 <tileset version="1.10" tiledversion="1.10.2" name="campfire 1-3" tilewidth="32" tileheight="32" tilecount="128" columns="32">
  <image source="tiles/map/grassLand/Props/campfire 1-3.png" width="1024" height="128"/>
  <tile id="0" type="high"/>
- <tile id="1">
-  <animation>
-   <frame tileid="1" duration="150"/>
-   <frame tileid="5" duration="150"/>
-   <frame tileid="9" duration="150"/>
-   <frame tileid="13" duration="150"/>
-   <frame tileid="17" duration="150"/>
-   <frame tileid="21" duration="150"/>
-   <frame tileid="25" duration="150"/>
-   <frame tileid="29" duration="150"/>
-  </animation>
- </tile>
- <tile id="2">
-  <animation>
-   <frame tileid="2" duration="150"/>
-   <frame tileid="6" duration="150"/>
-   <frame tileid="10" duration="150"/>
-   <frame tileid="14" duration="150"/>
-   <frame tileid="18" duration="150"/>
-   <frame tileid="22" duration="150"/>
-   <frame tileid="26" duration="150"/>
-   <frame tileid="30" duration="150"/>
-  </animation>
- </tile>
  <tile id="32" type="high"/>
  <tile id="33">
   <animation>

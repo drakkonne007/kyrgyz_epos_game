@@ -1,95 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="Atlas-PropsGrass2_2" tilewidth="32" tileheight="32" tilecount="3520" columns="44">
- <image source="tiles/map/grassLand2/Props/Static props/Atlas-Props-sheet2.png" width="1408" height="2560"/>
- <tile id="38" type="high"/>
- <tile id="39" type="high"/>
- <tile id="40" type="high"/>
- <tile id="41" type="high"/>
- <tile id="42" type="high"/>
- <tile id="43" type="high"/>
- <tile id="88" type="high"/>
- <tile id="89" type="high"/>
- <tile id="90" type="high"/>
- <tile id="91" type="high"/>
- <tile id="92" type="high"/>
- <tile id="137" type="high"/>
- <tile id="138" type="high"/>
- <tile id="139" type="high"/>
- <tile id="140" type="high"/>
- <tile id="141" type="high"/>
- <tile id="142" type="high"/>
- <tile id="143" type="high"/>
- <tile id="144" type="high"/>
- <tile id="145" type="high"/>
- <tile id="146" type="high"/>
- <tile id="147" type="high"/>
- <tile id="148" type="high"/>
- <tile id="149" type="high"/>
- <tile id="150" type="high"/>
- <tile id="151" type="high"/>
- <tile id="152" type="high"/>
- <tile id="153" type="high"/>
- <tile id="154" type="high"/>
- <tile id="155" type="high"/>
- <tile id="156" type="high"/>
- <tile id="157" type="high"/>
- <tile id="158" type="high"/>
- <tile id="159" type="high"/>
- <tile id="160" type="high"/>
- <tile id="161" type="high"/>
- <tile id="162" type="high"/>
- <tile id="163" type="high"/>
- <tile id="164" type="high"/>
- <tile id="165" type="high"/>
- <tile id="166" type="high"/>
- <tile id="167" type="high"/>
- <tile id="168" type="high"/>
- <tile id="169" type="high"/>
- <tile id="170" type="high"/>
- <tile id="171" type="high"/>
- <tile id="172" type="high"/>
- <tile id="173" type="high"/>
- <tile id="174" type="high"/>
- <tile id="175" type="high"/>
- <tile id="269" type="high"/>
- <tile id="270" type="high"/>
- <tile id="271" type="high"/>
- <tile id="272" type="high"/>
- <tile id="273" type="high"/>
- <tile id="274" type="high"/>
- <tile id="275" type="high"/>
- <tile id="276" type="high"/>
- <tile id="277" type="high"/>
- <tile id="278" type="high"/>
- <tile id="279" type="high"/>
- <tile id="280" type="high"/>
- <tile id="281" type="high"/>
- <tile id="282" type="high"/>
- <tile id="283" type="high"/>
- <tile id="284" type="high"/>
- <tile id="285" type="high"/>
- <tile id="286" type="high"/>
- <tile id="287" type="high"/>
- <tile id="288" type="high"/>
- <tile id="289" type="high"/>
- <tile id="290" type="high"/>
- <tile id="291" type="high"/>
- <tile id="292" type="high"/>
- <tile id="293" type="high"/>
- <tile id="294" type="high"/>
- <tile id="295" type="high"/>
- <tile id="296" type="high"/>
- <tile id="297" type="high"/>
- <tile id="298" type="high"/>
- <tile id="299" type="high"/>
- <tile id="300" type="high"/>
- <tile id="301" type="high"/>
- <tile id="302" type="high"/>
- <tile id="303" type="high"/>
- <tile id="304" type="high"/>
- <tile id="305" type="high"/>
- <tile id="306" type="high"/>
- <tile id="307" type="high"/>
+<tileset version="1.10" tiledversion="1.10.2" name="Atlas-Props-sheet2dark" tilewidth="32" tileheight="32" tilecount="3520" columns="44">
+ <image source="tiles/map/grassLand2/Props/Static props/Atlas-Props-sheet2dark.png" width="1408" height="2560"/>
+ <tile id="396" type="high"/>
+ <tile id="397" type="high"/>
  <tile id="398" type="high"/>
  <tile id="399" type="high"/>
  <tile id="400" type="high"/>
@@ -119,6 +32,8 @@
  <tile id="424" type="high"/>
  <tile id="425" type="high"/>
  <tile id="426" type="high"/>
+ <tile id="440" type="high"/>
+ <tile id="441" type="high"/>
  <tile id="442" type="high"/>
  <tile id="443" type="high"/>
  <tile id="444" type="high"/>
@@ -175,7 +90,6 @@
  <tile id="742" type="high"/>
  <tile id="743" type="high"/>
  <tile id="744" type="high"/>
- <tile id="745" type="high"/>
  <tile id="780" type="high"/>
  <tile id="781" type="high"/>
  <tile id="782" type="high"/>
@@ -185,7 +99,7 @@
  <tile id="786" type="high"/>
  <tile id="787" type="high"/>
  <tile id="788" type="high"/>
- <tile id="789" type="high"/>
+ <tile id="792" type="high"/>
  <tile id="793" type="high"/>
  <tile id="794" type="high"/>
  <tile id="795" type="high"/>
@@ -216,6 +130,7 @@
  <tile id="820" type="high"/>
  <tile id="821" type="high"/>
  <tile id="822" type="high"/>
+ <tile id="836" type="high"/>
  <tile id="837" type="high"/>
  <tile id="838" type="high"/>
  <tile id="839" type="high"/>
@@ -246,6 +161,20 @@
  <tile id="864" type="high"/>
  <tile id="865" type="high"/>
  <tile id="866" type="high"/>
+ <tile id="961" type="high"/>
+ <tile id="962" type="high"/>
+ <tile id="963" type="high"/>
+ <tile id="964" type="high"/>
+ <tile id="965" type="high"/>
+ <tile id="966" type="high"/>
+ <tile id="1004" type="high"/>
+ <tile id="1005" type="high"/>
+ <tile id="1006" type="high"/>
+ <tile id="1007" type="high"/>
+ <tile id="1008" type="high"/>
+ <tile id="1009" type="high"/>
+ <tile id="1010" type="high"/>
+ <tile id="1011" type="high"/>
  <tile id="1165" type="high"/>
  <tile id="1166" type="high"/>
  <tile id="1167" type="high"/>
@@ -260,14 +189,26 @@
  <tile id="1181" type="high"/>
  <tile id="1182" type="high"/>
  <tile id="1183" type="high"/>
+ <tile id="1188" type="high"/>
+ <tile id="1189" type="high"/>
+ <tile id="1190" type="high"/>
+ <tile id="1191" type="high"/>
+ <tile id="1192" type="high"/>
+ <tile id="1193" type="high"/>
  <tile id="1194" type="high"/>
  <tile id="1195" type="high"/>
  <tile id="1196" type="high"/>
  <tile id="1197" type="high"/>
+ <tile id="1198" type="high"/>
  <tile id="1199" type="high"/>
  <tile id="1200" type="high"/>
  <tile id="1201" type="high"/>
  <tile id="1202" type="high"/>
+ <tile id="1203" type="high"/>
+ <tile id="1204" type="high"/>
+ <tile id="1205" type="high"/>
+ <tile id="1206" type="high"/>
+ <tile id="1207" type="high"/>
  <tile id="1209" type="high"/>
  <tile id="1210" type="high"/>
  <tile id="1211" type="high"/>
@@ -290,6 +231,7 @@
  <tile id="1233" type="high"/>
  <tile id="1234" type="high"/>
  <tile id="1235" type="high"/>
+ <tile id="1236" type="high"/>
  <tile id="1237" type="high"/>
  <tile id="1238" type="high"/>
  <tile id="1239" type="high"/>
@@ -300,11 +242,11 @@
  <tile id="1244" type="high"/>
  <tile id="1245" type="high"/>
  <tile id="1246" type="high"/>
+ <tile id="1247" type="high"/>
  <tile id="1248" type="high"/>
  <tile id="1249" type="high"/>
  <tile id="1250" type="high"/>
  <tile id="1251" type="high"/>
- <tile id="1252" type="high"/>
  <tile id="1260" type="high"/>
  <tile id="1261" type="high"/>
  <tile id="1262" type="high"/>
@@ -323,13 +265,29 @@
  <tile id="1388" type="high"/>
  <tile id="1389" type="high"/>
  <tile id="1390" type="high"/>
+ <tile id="1392" type="high"/>
+ <tile id="1393" type="high"/>
+ <tile id="1394" type="high"/>
+ <tile id="1395" type="high"/>
+ <tile id="1409" type="high"/>
+ <tile id="1410" type="high"/>
+ <tile id="1411" type="high"/>
+ <tile id="1412" type="high"/>
+ <tile id="1413" type="high"/>
  <tile id="1414" type="high"/>
  <tile id="1415" type="high"/>
  <tile id="1416" type="high"/>
  <tile id="1417" type="high"/>
+ <tile id="1418" type="high"/>
+ <tile id="1419" type="high"/>
  <tile id="1420" type="high"/>
  <tile id="1421" type="high"/>
- <tile id="1452" type="high"/>
+ <tile id="1422" type="high"/>
+ <tile id="1423" type="high"/>
+ <tile id="1424" type="high"/>
+ <tile id="1425" type="high"/>
+ <tile id="1426" type="high"/>
+ <tile id="1427" type="high"/>
  <tile id="1453" type="high"/>
  <tile id="1454" type="high"/>
  <tile id="1455" type="high"/>
@@ -357,12 +315,22 @@
  <tile id="1701" type="high"/>
  <tile id="1702" type="high"/>
  <tile id="1703" type="high"/>
+ <tile id="1705" type="high"/>
+ <tile id="1706" type="high"/>
  <tile id="1744" type="high"/>
  <tile id="1745" type="high"/>
  <tile id="1746" type="high"/>
  <tile id="1747" type="high"/>
+ <tile id="1749" type="high"/>
+ <tile id="1750" type="high"/>
  <tile id="1788" type="high"/>
  <tile id="1789" type="high"/>
  <tile id="1790" type="high"/>
  <tile id="1791" type="high"/>
+ <tile id="1832" type="high"/>
+ <tile id="1833" type="high"/>
+ <tile id="1834" type="high"/>
+ <tile id="1835" type="high"/>
+ <tile id="1964" type="high"/>
+ <tile id="1965" type="high"/>
 </tileset>

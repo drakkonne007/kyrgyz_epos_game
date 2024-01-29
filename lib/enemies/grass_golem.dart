@@ -12,7 +12,6 @@ import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -30,10 +29,10 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   late GroundHitBox _groundBox;
   late Ground _ground;
   final Vector2 _spriteSheetSize = Vector2(224,192);
-  Vector2 _startPos;
-  Vector2 _speed = Vector2(0,0);
-  double _maxSpeed = 30;
-  GolemVariant spriteVariant;
+  final Vector2 _startPos;
+  final Vector2 _speed = Vector2(0,0);
+  final double _maxSpeed = 30;
+  final GolemVariant spriteVariant;
   double _rigidSec = 2;
   EWBody? _body;
 
@@ -99,12 +98,18 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   void selectBehaviour()
   {
     _rigidSec = 2;
-    if(gameRef.gameMap.orthoPlayer == null || isNearPlayer()){
+    if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
     if(random != 0){
-      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
+      int shift = 0;
+      if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
+        shift = -30;
+      }else{
+        shift = 30;
+      }
+      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
       double percent = math.min(posX.abs(),posY.abs()) / math.max(posX.abs(),posY.abs());
       double isY = posY.isNegative ? -1 : 1;
@@ -114,11 +119,13 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       }else if(!posX.isNegative && isFlippedHorizontally){
         flipHorizontally();
       }
-      _speed = Vector2(posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX,posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY);
+      _speed.x = posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX;
+      _speed.y = posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY;
       animation = _animMove;
     }else{
       if(animation != _animIdle){
-        _speed = Vector2(0,0);
+        _speed.x = 0;
+        _speed.y = 0;
         animation = _animIdle;
       }
     }
@@ -168,7 +175,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    _speed *= -1;
+    _speed.x = 0;
+    _speed.y = 0;
   }
 
   @override
@@ -180,7 +188,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       health -= hurt;
     }
     if(health <1){
-      _speed = Vector2.all(0);
+      _speed.x = 0;
+      _speed.y = 0;
       if(loots.isNotEmpty) {
         if(loots.length > 1){
           var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
@@ -199,7 +208,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     }else{
       animation = null;
       animation = _animHurt;
-      animationTicker?.onComplete = selectBehaviour;
+      animationTicker!.onComplete = selectBehaviour;
     }
   }
 

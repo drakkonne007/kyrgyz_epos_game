@@ -18,8 +18,8 @@ enum StrangeMerchantVariant
 class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   StrangeMerchant(this._startPos,this.spriteVariant,{super.priority});
-  late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
-  Vector2 _startPos;
+  late SpriteAnimation _animIdle;
+  final Vector2 _startPos;
   StrangeMerchantVariant spriteVariant;
 
   @override
@@ -31,9 +31,20 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
         srcSize:  Vector2(110,110));
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
     animation = _animIdle;
-    add(Ground(getPointsForActivs(Vector2(-15,-40), Vector2(30,80)),collisionType: DCollisionType.passive,isSolid: true,
+    size *= 1.15;
+    final List<Vector2> points = [
+      (Vector2(38,36) - Vector2(55,55)) * 1.15,
+      (Vector2(38,50) - Vector2(55,55)) * 1.15,
+      (Vector2(42,66) - Vector2(55,55)) * 1.15,
+      (Vector2(52,79) - Vector2(55,55)) * 1.15,
+      (Vector2(70,79) - Vector2(55,55)) * 1.15,
+      (Vector2(73,75) - Vector2(55,55)) * 1.15,
+      (Vector2(73,34) - Vector2(55,55)) * 1.15,
+    ];
+
+    add(Ground(points,collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef));
-    add(ObjectHitbox(getPointsForActivs(Vector2(-25,-55), Vector2(50,110)),collisionType: DCollisionType.active,
+    add(ObjectHitbox(getPointsForActivs(Vector2(-10,0), Vector2(20,50)),collisionType: DCollisionType.active,
         isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
     position = _startPos;
     super.onLoad();

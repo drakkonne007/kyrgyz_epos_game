@@ -62,7 +62,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       srcSize: Vector2(96,96),
     );
     _animFlying = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: true);
-    _totalAirDuration = _animFlying.ticker().totalDuration() * 6;
+    _totalAirDuration = _animFlying.ticker().totalDuration() * 8;
     _idleList.add(_animIdle);
     _idleList.add(_animIdle2);
     changeMoves();
@@ -100,7 +100,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           if (index == 0) {
             _flying++;
           }
-          if (_flying == 7) {
+          if (_flying == 9) {
             animation = _animLanding;
             _isFlying = false;
             animationTicker?.onComplete = () {
@@ -129,7 +129,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       int row =    pos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
       int diffCol = (column - gameRef.gameMap.column()).abs();
       int diffRow = (row - gameRef.gameMap.row()).abs();
-      if(diffCol > 2 || diffRow > 2){
+      if(diffCol > 1 || diffRow > 1){
         countOfMimo++;
       }
     }

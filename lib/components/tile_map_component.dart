@@ -31,7 +31,7 @@ class LoadedColumnRow
   int get hashCode => column.hashCode ^ row.hashCode;
 }
 
-class CustomTileMap extends Component with HasGameRef<KyrgyzGame>
+class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
 {
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
   static int countId = 0;

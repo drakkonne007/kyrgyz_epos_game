@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/rendering.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -11,7 +12,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
 
-  Frog(this._startPos);
+  Frog(this._startPos,);
   final Vector2 _startPos;
   final List<SpriteAnimation> _idles = [];
   late SpriteAnimation _idle1, _idle2, _idle3, _idle4, _idle5, _idle6, _walkForward, _walkBack, _wolkSide;
@@ -33,6 +34,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       image: await Flame.images.load('$start/small animals - frog-frog- idle - sideview.png'),
       srcSize: Vector2(96,96),
     );
+    // decorator = PaintDecorator.grayscale();
     _idle1 = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: false);
     spriteSheet = SpriteSheet(
       image: await Flame.images.load('$start/small animals - frog-frog - idle 1 - frontview.png'),
@@ -94,7 +96,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 2 || diffRow > 2){
+    if(diffCol > 1 || diffRow > 1){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();
     }

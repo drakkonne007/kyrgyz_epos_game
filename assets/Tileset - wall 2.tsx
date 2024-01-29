@@ -43,13 +43,13 @@
    <object id="1" x="7" y="9" width="25" height="23"/>
   </objectgroup>
  </tile>
- <tile id="17">
+ <tile id="17" type="high">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="9" width="32" height="23"/>
    <object id="2" x="4" y="0" width="28" height="9"/>
   </objectgroup>
  </tile>
- <tile id="19">
+ <tile id="19" type="high">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="9" width="32" height="23"/>
    <object id="2" x="0" y="0" width="28" height="9"/>
@@ -96,12 +96,12 @@
    <object id="2" x="0" y="0" width="7" height="18"/>
   </objectgroup>
  </tile>
- <tile id="30">
+ <tile id="30" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="31">
+ <tile id="31" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
@@ -258,22 +258,22 @@
    <object id="1" x="0" y="0" width="28" height="32"/>
   </objectgroup>
  </tile>
- <tile id="69">
+ <tile id="69" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="70">
+ <tile id="70" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="71">
+ <tile id="71" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="72">
+ <tile id="72" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
@@ -342,22 +342,22 @@
    <object id="1" x="0" y="0" width="28" height="18"/>
   </objectgroup>
  </tile>
- <tile id="85">
+ <tile id="85" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="86">
+ <tile id="86" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="87">
+ <tile id="87" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
  </tile>
- <tile id="88">
+ <tile id="88" type="high">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
@@ -553,7 +553,7 @@
    <object id="1" x="0" y="0" width="28" height="32"/>
   </objectgroup>
  </tile>
- <tile id="196" probability="0">
+ <tile id="196" type="high" probability="0">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>
@@ -594,7 +594,7 @@
    <object id="1" x="0" y="0" width="28" height="32"/>
   </objectgroup>
  </tile>
- <tile id="212" probability="0">
+ <tile id="212" type="high" probability="0">
   <objectgroup>
    <object id="1" x="0" y="9" width="32" height="23"/>
   </objectgroup>

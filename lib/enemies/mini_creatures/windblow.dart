@@ -33,7 +33,7 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     int diffCol2 = (column2 - gameRef.gameMap.column()).abs();
-    if((diffCol > 2 && diffCol2 > 2) || diffRow > 2){
+    if((diffCol > 1 && diffCol2 > 1) || diffRow > 1){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();
     }

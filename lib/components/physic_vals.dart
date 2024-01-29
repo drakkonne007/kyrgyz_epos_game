@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/game_worlds.dart';
+import 'dart:math' as math;
 
 class MetaEnemyData
 {
@@ -115,6 +115,11 @@ class PhysicVals
   static double gravity = 20;
   static double rigidy = 0.5;
   static double stopSpeed = 800;
+  static const double right1 = math.pi/3;
+  static const double right2 = math.pi * 2/3;
+  static const double rightUp1 = 5 * math.pi/6;
+  static const double up1 = -5 * math.pi/6;
+  static const double left1 = math.pi / 6;
 }
 
 class PhysicFrontVals

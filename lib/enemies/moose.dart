@@ -26,11 +26,11 @@ enum MooseVariant
 class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy {
 
   Moose(this._startPos, this._mooseVariant,{super.priority});
-  Vector2 _startPos;
-  MooseVariant _mooseVariant;
+  final Vector2 _startPos;
+  final MooseVariant _mooseVariant;
   late SpriteAnimation animMove, animIdle, animAttack, animHurt, animDeath;
   final Vector2 _spriteSheetSize = Vector2(347,192);
-  Vector2 _speed = Vector2(0,0);
+  final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 50;
   double _rigidSec = 4;
   EWBody? _body;
@@ -137,12 +137,18 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   void selectBehaviour()
   {
     _rigidSec = 3;
-    if(gameRef.gameMap.orthoPlayer == null || isNearPlayer()){
+    if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
     if(random != 0){
-      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
+      int shift = 0;
+      if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
+        shift = -70;
+      }else{
+        shift = 70;
+      }
+      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
       double percent = math.min(posX.abs(),posY.abs()) / math.max(posX.abs(),posY.abs());
       double isY = posY.isNegative ? -1 : 1;
@@ -152,11 +158,13 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       }else if(!posX.isNegative && isFlippedHorizontally){
         flipHorizontally();
       }
-      _speed = Vector2(posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX,posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY);
+      _speed.x = posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX;
+      _speed.y = posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY;
       animation = animMove;
     }else{
       if(animation != animIdle){
-        _speed = Vector2(0,0);
+        _speed.x = 0;
+        _speed.y = 0;
         animation = animIdle;
       }
     }
@@ -208,7 +216,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    _speed *= -1;
+    _speed.x = 0;
+    _speed.y = 0;
   }
 
   @override
@@ -253,7 +262,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       health -= hurt;
     }
     if(health <1){
-      _speed = Vector2.all(0);
+      _speed.x = 0;
+      _speed.y = 0;
       if(loots.isNotEmpty) {
         if(loots.length > 1){
           var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));

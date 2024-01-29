@@ -55,11 +55,7 @@ class OrthoJoystick extends StatefulWidget
 class _OrthoJoystickState extends State<OrthoJoystick> {
   late double _size;
   final ValueNotifier<double> _left = ValueNotifier<double>(0), _top = ValueNotifier<double>(0);
-  final double right1 = math.pi/3;
-  final double right2 = math.pi * 2/3;
-  final double rightUp1 = 5 * math.pi/6;
-  final double up1 = -5 * math.pi/6;
-  final double left1 = math.pi / 6;
+
 
   @override
   void initState() {
@@ -71,42 +67,42 @@ class _OrthoJoystickState extends State<OrthoJoystick> {
 
   void doMove(double dx, double dy){
     bool isRun = false;
-    var ugol = math.atan2(dx - _size/2, dy - _size / 2);
+    var angle = math.atan2(dx - _size/2, dy - _size / 2);
     if(math.sqrt(math.pow(dx- _size / 2,2) + math.pow(dy- _size / 2, 2)) >= _size / 2 - _size/8){
-      _left.value = math.sin(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
-      _top.value = math.cos(ugol) * (_size / 2 - _size/8) - _size/8 + _size/2;
+      _left.value = math.sin(angle) * (_size / 2 - _size/8) - _size/8 + _size/2;
+      _top.value = math.cos(angle) * (_size / 2 - _size/8) - _size/8 + _size/2;
       isRun = true;
     }else {
       _left.value = dx - _size/8;
       _top.value = dy - _size/8;
     }
-    PlayerDirectionMove dir = PlayerDirectionMove.NoMove;
-    if(ugol >= right1 && ugol < right2){
-      dir = PlayerDirectionMove.Right;
-    }else if(ugol < rightUp1 && ugol >= right2){
-      dir = PlayerDirectionMove.RightUp;
-    }else if(ugol < -rightUp1 || ugol >= rightUp1){
-      dir = PlayerDirectionMove.Up;
-    }else if(ugol >= -rightUp1 && ugol < -right2){
-      dir = PlayerDirectionMove.LeftUp;
-    }else if(ugol >= -right2 && ugol < -right1){
-      dir = PlayerDirectionMove.Left;
-    }else if(ugol >= -right1 && ugol < -left1){
-      dir = PlayerDirectionMove.LeftDown;
-    }else if(ugol >= -left1 && ugol < left1){
-      dir = PlayerDirectionMove.Down;
-    }else if(ugol > left1 && ugol < right1){
-      dir = PlayerDirectionMove.RightDown;
-    }
+    // PlayerDirectionMove dir = PlayerDirectionMove.NoMove;
+    // if(angle >= right1 && angle < right2){
+    //   dir = PlayerDirectionMove.Right;
+    // }else if(angle < rightUp1 && angle >= right2){
+    //   dir = PlayerDirectionMove.RightUp;
+    // }else if(angle < -rightUp1 || angle >= rightUp1){
+    //   dir = PlayerDirectionMove.Up;
+    // }else if(angle >= -rightUp1 && angle < -right2){
+    //   dir = PlayerDirectionMove.LeftUp;
+    // }else if(angle >= -right2 && angle < -right1){
+    //   dir = PlayerDirectionMove.Left;
+    // }else if(angle >= -right1 && angle < -left1){
+    //   dir = PlayerDirectionMove.LeftDown;
+    // }else if(angle >= -left1 && angle < left1){
+    //   dir = PlayerDirectionMove.Down;
+    // }else if(angle > left1 && angle < right1){
+    //   dir = PlayerDirectionMove.RightDown;
+    // }
     widget.game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-    widget.game.gameMap.orthoPlayer?.movePlayer(dir,isRun):
-    widget.game.gameMap.frontPlayer?.movePlayer(dir,isRun);
+    widget.game.gameMap.orthoPlayer?.movePlayer(angle,isRun):
+    widget.game.gameMap.frontPlayer?.movePlayer(angle,isRun);
   }
 
   void stopMove(){
     widget.game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-    widget.game.gameMap.orthoPlayer?.movePlayer(PlayerDirectionMove.NoMove,false):
-    widget.game.gameMap.frontPlayer?.movePlayer(PlayerDirectionMove.NoMove,false);
+    widget.game.gameMap.orthoPlayer?.stopMove():
+    widget.game.gameMap.frontPlayer?.stopMove();
     _left.value = _size/2 - _size/8;
     _top.value = _size/2 - _size/8;
   }

@@ -1220,6 +1220,10 @@
    <object id="1" x="0" y="11" width="32" height="17"/>
   </objectgroup>
  </tile>
+ <tile id="1500" type="high"/>
+ <tile id="1501" type="high"/>
+ <tile id="1502" type="high"/>
+ <tile id="1503" type="high"/>
  <tile id="1512">
   <objectgroup draworder="index" id="2">
    <object id="1" x="12" y="0" width="8" height="32"/>

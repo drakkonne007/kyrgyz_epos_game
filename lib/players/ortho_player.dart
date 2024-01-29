@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/rendering.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -18,17 +19,17 @@ import 'dart:math' as math;
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
-  PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
   late SpriteAnimation animMove, animIdle, animHurt, animDeath;
-  Vector2 _speed = Vector2.all(0);
-  Vector2 _velocity = Vector2.all(0);
+  final Vector2 _speed = Vector2.all(0);
+  final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
   GroundHitBox? groundBox;
   bool _isPlayerRun = false;
   PlayerWeapon? _weapon;
   Timer? _timerHurt;
   bool gameHide = false;
+  final Vector2 _maxSpeeds = Vector2.all(0);
 
   @override
   Future<void> onLoad() async
@@ -73,8 +74,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
     _weapon?.stopHit();
-    _velocity *= 0;
-    _speed *= 0;
+    _velocity.x = 0;
+    _velocity.y = 0;
+    _speed.x = 0;
+    _speed.y = 0;
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
@@ -99,16 +102,20 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     hitBox!.reInsertIntoCollisionProcessor();
     groundBox!.reInsertIntoCollisionProcessor();
     _weapon!.reInsertIntoCollisionProcessor();
-    _velocity = Vector2.all(0);
-    _speed = Vector2.all(0);
+    _velocity.x = 0;
+    _velocity.y = 0;
+    _speed.x = 0;
+    _speed.y = 0;
     _isPlayerRun = false;
     animation = animIdle;
   }
 
   void refreshMoves()
   {
-    _velocity *= 0;
-    _speed *= 0;
+    _velocity.x = 0;
+    _velocity.y = 0;
+    _speed.x = 0;
+    _speed.y = 0;
     if(animation != null){
       animation!.ticker().reset();
     }
@@ -118,8 +125,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void onStartHit()
   {
-    _velocity = Vector2.all(0);
-    _speed = Vector2.all(0);
+    _velocity.x = 0;
+    _velocity.y = 0;
+    _speed.x = 0;
+    _speed.y = 0;
   }
 
   void startHit()
@@ -147,83 +156,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void movePlayer(PlayerDirectionMove direct, bool isRun)
+  void movePlayer(double angle, bool isRun)
   {
     if(gameRef.playerData.isLockMove){
       return;
     }
     if(animation == animIdle  || animation == animMove) {
-      switch (direct) {
-        case PlayerDirectionMove.Right:
-          {
-            _velocity.x = PhysicVals.startSpeed;
-            _velocity.y = 0;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.Up:
-          {
-            _velocity.y = -PhysicVals.startSpeed;
-            _velocity.x = 0;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.Left:
-          {
-            _velocity.x = -PhysicVals.startSpeed;
-            _velocity.y = 0;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.Down:
-          {
-            _velocity.y = PhysicVals.startSpeed;
-            _velocity.x = 0;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.RightUp:
-          {
-            _velocity.y = -PhysicVals.startSpeed / 2;
-            _velocity.x = PhysicVals.startSpeed / 2;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.RightDown:
-          {
-            _velocity.y = PhysicVals.startSpeed / 2;
-            _velocity.x = PhysicVals.startSpeed / 2;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.LeftUp:
-          {
-            _velocity.y = -PhysicVals.startSpeed / 2;
-            _velocity.x = -PhysicVals.startSpeed / 2;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.LeftDown:
-          {
-            _velocity.y = PhysicVals.startSpeed / 2;
-            _velocity.x = -PhysicVals.startSpeed / 2;
-            animation = animMove;
-          }
-          break;
-        case PlayerDirectionMove.NoMove:
-          {
-            _velocity *= 0;
-          }
-          break;
-      }
-      if(_velocity.x > 0 && isFlippedHorizontally){
-        flipHorizontally();
-      }else if (_velocity.x < 0 && !isFlippedHorizontally){
-        flipHorizontally();
-      }
-      if (direct != PlayerDirectionMove.NoMove) {
-        _direction = direct;
-      }
       if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
         PhysicVals.runCoef = 1.3;
         _isPlayerRun = true;
@@ -231,7 +169,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         PhysicVals.runCoef = 1;
         _isPlayerRun = false;
       }
-      _velocity *= PhysicVals.runCoef;
+      angle += math.pi/2;
+      _velocity.x = -cos(angle) * PhysicVals.startSpeed * PhysicVals.runCoef;
+      _velocity.y = sin(angle) * PhysicVals.startSpeed * PhysicVals.runCoef;
+      _maxSpeeds.x = -cos(angle) * PhysicVals.maxSpeed;
+      _maxSpeeds.y = sin(angle) * PhysicVals.maxSpeed;
+      if (_velocity.x > 0 && isFlippedHorizontally) {
+        flipHorizontally();
+      } else if (_velocity.x < 0 && !isFlippedHorizontally) {
+        flipHorizontally();
+      }
+      animation = animMove;
     }
   }
 
@@ -239,10 +187,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed)
   {
     bool isRun = false;
-    Vector2 velo = Vector2.all(0);
     if(event.isKeyPressed(LogicalKeyboardKey.keyO)){
       position=Vector2(0,0);
     }
+    Vector2 velo = Vector2.zero();
     if(event.isKeyPressed(LogicalKeyboardKey.keyE)){
       gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water));
     }
@@ -259,36 +207,21 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       velo.x = PhysicVals.startSpeed;
     }
     if(velo.x == 0 && velo.y == 0){
-      _velocity *= 0;
-      PhysicVals.runCoef = 1;
+      stopMove();
     }else{
       if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
         isRun = true;
       }
-      doMoveFromVector2(velo, isRun);
+      movePlayer(atan2(velo.x,velo.y), isRun);
     }
     return true;
   }
 
-  void doMoveFromVector2(Vector2 vel, bool isRun)
+  void stopMove()
   {
-    if(vel.x > 0 && vel.y == 0){
-      movePlayer(PlayerDirectionMove.Right,isRun);
-    }else if(vel.x < 0 && vel.y == 0){
-      movePlayer(PlayerDirectionMove.Left,isRun);
-    }else if(vel.x > 0 && vel.y > 0){
-      movePlayer(PlayerDirectionMove.RightDown,isRun);
-    }else if(vel.x > 0 && vel.y < 0){
-      movePlayer(PlayerDirectionMove.RightUp,isRun);
-    }else if(vel.x < 0 && vel.y < 0){
-      movePlayer(PlayerDirectionMove.LeftUp,isRun);
-    }else if(vel.x < 0 && vel.y > 0){
-      movePlayer(PlayerDirectionMove.LeftDown,isRun);
-    }else if(vel.x == 0 && vel.y > 0){
-      movePlayer(PlayerDirectionMove.Down,isRun);
-    }else if(vel.x == 0 && vel.y < 0){
-      movePlayer(PlayerDirectionMove.Up,isRun);
-    }
+    _velocity.x = 0;
+    _velocity.y = 0;
+    PhysicVals.runCoef = 1;
   }
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
@@ -415,8 +348,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
       }
     }
-    _speed.x = math.max(-PhysicVals.maxSpeed * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,PhysicVals.maxSpeed * PhysicVals.runCoef));
-    _speed.y = math.max(-PhysicVals.maxSpeed * PhysicVals.runCoef,math.min(_speed.y + dt * _velocity.y,PhysicVals.maxSpeed * PhysicVals.runCoef));
+    _speed.x = math.max(-_maxSpeeds.x.abs() * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeeds.x.abs() * PhysicVals.runCoef));
+    _speed.y = math.max(-_maxSpeeds.y.abs() * PhysicVals.runCoef,math.min(_speed.y + dt * _velocity.y,_maxSpeeds.y.abs() * PhysicVals.runCoef));
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;

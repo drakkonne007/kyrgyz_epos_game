@@ -1,6 +1,5 @@
 
 import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -18,11 +17,10 @@ import 'dart:math' as math;
 
 class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
-  PlayerDirectionMove _direction = PlayerDirectionMove.Down;
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
   late SpriteAnimation animMove, animIdle, animHurt, animDeath;
-  Vector2 _speed = Vector2.all(0);
-  Vector2 _velocity = Vector2.all(0);
+  final Vector2 _speed = Vector2.all(0);
+  final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
   GroundHitBox? groundBox;
   bool _isPlayerRun = false;
@@ -72,8 +70,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
     _weapon?.stopHit();
-    _velocity *= 0;
-    _speed *= 0;
+    _velocity.x = 0;
+    _velocity.y = 0;
+    _speed.x = 0;
+    _speed.y = 0;
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
@@ -98,8 +98,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     hitBox!.reInsertIntoCollisionProcessor();
     groundBox!.reInsertIntoCollisionProcessor();
     _weapon!.reInsertIntoCollisionProcessor();
-    _speed = Vector2.all(0);
-    _velocity = Vector2.all(0);
+    _velocity.x = 0;
+    _velocity.y = 0;
+    _speed.x = 0;
+    _speed.y = 0;
     _isPlayerRun = false;
     _onGround = false;
     _groundTimer = 1000;
@@ -107,8 +109,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void refreshMoves()
   {
-    _velocity *= 0;
-    _speed *= 0;
+    _velocity.x = 0;
+    _velocity.y = 0;
+    _speed.x = 0;
+    _speed.y = 0;
     if(animation != null){
       animation!.ticker().reset();
     }
@@ -145,69 +149,92 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void movePlayer(PlayerDirectionMove direct, bool isRun)
+  void movePlayer(double angle, bool isRun)
   {
     if(gameRef.playerData.isLockMove){
       return;
     }
-    if(animation == animIdle  || animation == animMove) {
-      Vector2 velocity = Vector2.zero();
-      switch (direct) {
-        case PlayerDirectionMove.Right:
-        case PlayerDirectionMove.RightDown:
-          velocity.x = PhysicVals.startSpeed;
-          animation = animMove;
-          break;
-        case PlayerDirectionMove.RightUp:
-          velocity.x = PhysicVals.startSpeed;
-          animation = animMove;
-          if (_onGround) {
-            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-            _speed.y = -300;
-          }
-          break;
-        case PlayerDirectionMove.LeftUp:
-          velocity.x = -PhysicVals.startSpeed;
-          animation = animMove;
-          if (_onGround) {
-            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-            _speed.y = -300;
-          }
-          break;
-        case PlayerDirectionMove.Up:
-          if (_onGround) {
-            // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-            _speed.y = -300;
-          }
-          animation = animMove;
-          break;
-        case PlayerDirectionMove.Left:
-        case PlayerDirectionMove.LeftDown:
-          velocity.x = -PhysicVals.startSpeed;
-          animation = animMove;
-          break;
-        case PlayerDirectionMove.NoMove:
-          _velocity.x = 0;
-          break;
-      }
-      if(velocity.x > 0 && isFlippedHorizontally){
-        flipHorizontally();
-      }else if (velocity.x < 0 && !isFlippedHorizontally){
-        flipHorizontally();
-      }
-      // if (direct != PlayerDirectionMove.NoMove) {
-      // _direction = direct;
-      // }
-      if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
-        PhysicVals.runCoef = 1.3;
-        _isPlayerRun = true;
-      } else {
-        PhysicVals.runCoef = 1;
-        _isPlayerRun = false;
-      }
-      velocity.x *= PhysicVals.runCoef;
-      _velocity = velocity;
+    if(animation != animIdle  && animation != animMove) {
+      return;
     }
+    if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
+      PhysicVals.runCoef = 1.3;
+      _isPlayerRun = true;
+    } else {
+      PhysicVals.runCoef = 1;
+      _isPlayerRun = false;
+    }
+    // angle += math.pi/2;
+    PlayerDirectionMove dir = PlayerDirectionMove.NoMove;
+    if(angle >= PhysicVals.right1 && angle < PhysicVals.right2){
+      dir = PlayerDirectionMove.Right;
+    }else if(angle < PhysicVals.rightUp1 && angle >= PhysicVals.right2){
+      dir = PlayerDirectionMove.RightUp;
+    }else if(angle < -PhysicVals.rightUp1 || angle >= PhysicVals.rightUp1){
+      dir = PlayerDirectionMove.Up;
+    }else if(angle >= -PhysicVals.rightUp1 && angle < -PhysicVals.right2){
+      dir = PlayerDirectionMove.LeftUp;
+    }else if(angle >= -PhysicVals.right2 && angle < -PhysicVals.right1){
+      dir = PlayerDirectionMove.Left;
+    }else if(angle >= -PhysicVals.right1 && angle < -PhysicVals.left1){
+      dir = PlayerDirectionMove.LeftDown;
+    }else if(angle >= -PhysicVals.left1 && angle < PhysicVals.left1){
+      dir = PlayerDirectionMove.Down;
+    }else if(angle > PhysicVals.left1 && angle < PhysicVals.right1){
+      dir = PlayerDirectionMove.RightDown;
+    }
+    switch (dir) {
+      case PlayerDirectionMove.Right:
+      case PlayerDirectionMove.RightDown:
+        _velocity.x = PhysicVals.startSpeed * PhysicVals.runCoef;;
+        animation = animMove;
+        break;
+      case PlayerDirectionMove.RightUp:
+        _velocity.x = PhysicVals.startSpeed * PhysicVals.runCoef;;
+        animation = animMove;
+        if (_onGround) {
+          // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
+          _speed.y = -300;
+        }
+        break;
+      case PlayerDirectionMove.LeftUp:
+        _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef;;
+        animation = animMove;
+        if (_onGround) {
+          // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
+          _speed.y = -300;
+        }
+        break;
+      case PlayerDirectionMove.Up:
+        if (_onGround) {
+          // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
+          _speed.y = -300;
+        }
+        animation = animMove;
+        break;
+      case PlayerDirectionMove.Left:
+      case PlayerDirectionMove.LeftDown:
+      _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef;;
+        animation = animMove;
+        break;
+      case PlayerDirectionMove.NoMove:
+        stopMove();
+        break;
+      case PlayerDirectionMove.Down:
+        break;
+    }
+    if(_velocity.x > 0 && isFlippedHorizontally){
+      flipHorizontally();
+    }else if (_velocity.x < 0 && !isFlippedHorizontally){
+      flipHorizontally();
+    }
+  }
+
+  void stopMove()
+  {
+    _velocity.x = 0;
+    _isPlayerRun = false;
+    PhysicVals.runCoef = 1;
   }
 
   @override
@@ -234,36 +261,14 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       velo.x = PhysicVals.startSpeed;
     }
     if(velo.x == 0 && velo.y == 0){
-      _velocity *= 0;
-      PhysicVals.runCoef = 1;
+      stopMove();
     }else{
       if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
         isRun = true;
       }
-      doMoveFromVector2(velo, isRun);
+      movePlayer(math.atan2(velo.x, velo.y), isRun);
     }
     return true;
-  }
-
-  void doMoveFromVector2(Vector2 vel, bool isRun)
-  {
-    if(vel.x > 0 && vel.y == 0){
-      movePlayer(PlayerDirectionMove.Right,isRun);
-    }else if(vel.x < 0 && vel.y == 0){
-      movePlayer(PlayerDirectionMove.Left,isRun);
-    }else if(vel.x > 0 && vel.y > 0){
-      movePlayer(PlayerDirectionMove.RightDown,isRun);
-    }else if(vel.x > 0 && vel.y < 0){
-      movePlayer(PlayerDirectionMove.RightUp,isRun);
-    }else if(vel.x < 0 && vel.y < 0){
-      movePlayer(PlayerDirectionMove.LeftUp,isRun);
-    }else if(vel.x < 0 && vel.y > 0){
-      movePlayer(PlayerDirectionMove.LeftDown,isRun);
-    }else if(vel.x == 0 && vel.y > 0){
-      movePlayer(PlayerDirectionMove.Down,isRun);
-    }else if(vel.x == 0 && vel.y < 0){
-      movePlayer(PlayerDirectionMove.Up,isRun);
-    }
   }
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
