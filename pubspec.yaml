@@ -98,6 +98,7 @@ flutter:
     - assets/metaData/yurtaInTopLeftVillage9/
     - assets/metaData/yurtaInTopLeftVillage10/
     - assets/metaData/yurtaInTopLeftVillage11/
+    - assets/metaData/testMap/
     - assets/tiles/bars/
     - assets/tiles/buttons/
     - assets/tiles/map/

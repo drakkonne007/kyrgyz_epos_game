@@ -7,15 +7,17 @@ List<GameWorldData> fullMaps()
   list.add(BigTopLeft());
   list.addAll(getVillages());
   list.add(TopLeftTempleDungeon());
+  list.add(TestMap());
   return list;
 }
 
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
+  list.add(TestMap());
   list.add(TopLeftVillage());
   list.add(BigTopLeft());
-  // list.addAll(getVillages());
+  list.addAll(getVillages());
   list.add(TopLeftTempleDungeon());
   return list;
 }
@@ -49,6 +51,15 @@ abstract class GameWorldData
   OrientatinType orientation = OrientatinType.orthogonal;
 }
 
+class TestMap extends GameWorldData {
+  TestMap()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'testMap';
+    source = 'testMap.tmx';
+    gameConsts = GameConsts(maxColumn: 3, maxRow:3);
+  }
+}
 
 class BigTopLeft extends GameWorldData
 {

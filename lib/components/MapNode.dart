@@ -23,6 +23,7 @@ import 'package:game_flame/enemies/mini_creatures/verticalBigRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/verticalSmallRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/windblow.dart';
 import 'package:game_flame/enemies/moose.dart';
+import 'package:game_flame/enemies/skeleton.dart';
 import 'package:game_flame/enemies/spin_blade.dart';
 import 'package:game_flame/enemies/strange_merchant.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -186,36 +187,27 @@ class MapNode {
     switch (cheatName ?? name) {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(position);
-        myGame.gameMap.enemyComponent.add(GrassGolem(
-          position, GolemVariant.Grass,
-          // priority: GamePriority.player - 2
-        ));
+        myGame.gameMap.enemyComponent.add(GrassGolem(position, GolemVariant.Grass));
         break;
       case 'enemy':
         myGame.gameMap.loadedLivesObjs.add(position);
-        myGame.gameMap.enemyComponent.add(GrassGolem(
-          position, GolemVariant.Grass,
-          // priority: GamePriority.player - 2
-        ));
+        myGame.gameMap.enemyComponent.add(GrassGolem(position, GolemVariant.Grass));
         break;
       case 'wgolem':
         myGame.gameMap.loadedLivesObjs.add(position);
-        myGame.gameMap.enemyComponent.add(GrassGolem(
-          position, GolemVariant.Water,
-          // priority: GamePriority.player - 2
-        ));
+        myGame.gameMap.enemyComponent.add(GrassGolem(position, GolemVariant.Water));
         break;
       case 'windb':
         myGame.gameMap.loadedLivesObjs.add(position);
-        myGame.gameMap.priorityHigh.add(Windblow(
-            position));
+        myGame.gameMap.priorityHigh.add(Windblow(position));
         break;
       case 'moose':
         myGame.gameMap.loadedLivesObjs.add(position);
-        myGame.gameMap.enemyComponent.add(Moose(
-          position, MooseVariant.Blue,
-          // priority: GamePriority.player - 2
-        ));
+        myGame.gameMap.enemyComponent.add(Moose(position, MooseVariant.PurpleWithGreenHair));
+        break;
+      case 'scelet':
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.enemyComponent.add(Skeleton(position));
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);

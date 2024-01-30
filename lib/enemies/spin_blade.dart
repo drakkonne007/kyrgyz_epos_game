@@ -27,7 +27,7 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
     DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(0,-18)],collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: false
-        , game: gameRef,isCircle: true,radius: 34, onStartWeaponHit: () {}, onEndWeaponHit: () {});
+        , game: gameRef, radius: 34, onStartWeaponHit: () {}, onEndWeaponHit: () {});
     weapon.coolDown = _endPos == null ? 1 : 0.5;
     add(weapon);
     if(_endPos != null) {

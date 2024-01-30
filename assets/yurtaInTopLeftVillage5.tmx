@@ -496,7 +496,7 @@
   <image source="tiles/map/ground/groundsThings.png" width="2048" height="2048"/>
  </tileset>
  <tileset firstgid="38474" source="hole2.tsx"/>
- <tileset firstgid="38714" source="Atlas-Props-sheet2.tsx"/>
+ <tileset firstgid="38714" source="Atlas-PropsGrass2_2.tsx"/>
  <tileset firstgid="42234" source="Tileset-Terrain-new grass.tsx"/>
  <tileset firstgid="46194" source="Tileset-Terrain-old prison.tsx"/>
  <layer id="28" name="wall" width="33" height="18">

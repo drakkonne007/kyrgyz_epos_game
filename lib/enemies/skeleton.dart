@@ -16,18 +16,20 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  Skeleton(this._startPos,this._withShield,{super.priority});
-  late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
+  Skeleton(this._startPos);
+  late SpriteAnimation _animMove, _animIdle, _animAttack,_animAttack2, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
   late Ground _ground;
-  final Vector2 _spriteSheetSize = Vector2(224,192);
+  final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 30;
-  final bool _withShield;
-  double _rigidSec = 2;
+  final double _maxSpeed = 70;
+  double _rigidSec = 1;
   EWBody? _body;
+  bool _wasHit = false;
+  late DefaultEnemyWeapon _defWeapon;
+  int _variantOfHit = 0;
 
   @override
   int column=0;
@@ -45,57 +47,110 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   double health = 3;
   bool _isRefresh = true;
 
+  List<Vector2> attack1PointsOnStart = [
+    Vector2(501 - 550,573 - 550),
+    Vector2(532 - 550,581 - 550),
+    Vector2(771 - 770,551 - 550),
+    Vector2(748 - 770,527 - 550),
+  ];
+
+  List<Vector2> attack1PointsOnEnd = [
+    Vector2(995 - 990,531 - 550),
+    Vector2(1032 - 990,581 - 550),
+    Vector2(1059 - 990,585 - 550),
+    Vector2(1053 - 990,561 - 550),
+    Vector2(1033 - 990,541 - 550),
+  ];
+
+  void chooseHit()
+  {
+    _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(_variantOfHit == 0){
+      animation = _animAttack;
+    }else{
+      animation = _animAttack2;
+    }
+    animationTicker?.onComplete = selectBehaviour;
+    animationTicker?.onFrame = changeVertsInWeapon;
+  }
+
+  void changeVertsInWeapon(int index)
+  {
+    if(_variantOfHit == 0){
+      if(index == 2 || index == 3){
+        _defWeapon.changeVertices(attack1PointsOnStart,isLoop: true);
+        _defWeapon.collisionType = DCollisionType.active;
+      }else if(index == 4 || index == 5){
+        _defWeapon.changeVertices(attack1PointsOnEnd,isLoop: true);
+      }else{
+        _defWeapon.collisionType = DCollisionType.inactive;
+      }
+    }else{
+      if(index == 2 || index == 3){
+        _defWeapon.changeVertices(attack1PointsOnStart,isLoop: true);
+        _defWeapon.collisionType = DCollisionType.active;
+      }else if(index == 4 || index == 5){
+        _defWeapon.changeVertices(attack1PointsOnEnd,isLoop: true);
+      }else{
+        _defWeapon.collisionType = DCollisionType.inactive;
+      }
+    }
+  }
+
   @override
   Future<void> onLoad() async
   {
     Image? spriteImage;
-    if(spriteVariant == GolemVariant.Water){
-      spriteImage = await Flame.images.load(
-          'tiles/sprites/players/Stone-224x192.png');
+    int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(rand == 0){
+      spriteImage = await Flame.images.load('tiles/map/prisonSet/Characters/Skeleton 1/no shield/Skeleton 1 - all animations.png');
     }else{
       spriteImage = await Flame.images.load(
-          'tiles/sprites/players/Stone2-224x192.png');
+          'tiles/map/prisonSet/Characters/Skeleton 1/no shield/rusty sword/Skeleton - all animations-with rusty sword.png');
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
     _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
     _animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
-    _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 12,loop: false);
-    _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13,loop: false);
+    _animAttack2 = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 13, loop: false);
+    _animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0, to: 8,loop: false);
+    _animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0, to: 13,loop: false);
     anchor = Anchor.center;
     animation = _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
     Vector2 tSize = Vector2(69,71);
-    _hitbox = EnemyHitbox(getPointsForActivs(-tSize/2, tSize),
-        collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
-    add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(-tSize/2, tSize),obstacleBehavoiurStart: obstacleBehaviour,
-        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_groundBox);
-    _groundBox.debugColor = BasicPalette.red.color;
+    // _hitbox = EnemyHitbox(getPointsForActivs(-tSize/2, tSize),
+    //     collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
+    // add(_hitbox);
+    // _groundBox = GroundHitBox(getPointsForActivs(-tSize/2, tSize),obstacleBehavoiurStart: obstacleBehaviour,
+    //     collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+    // add(_groundBox);
+    // _groundBox.debugColor = BasicPalette.red.color;
     _body = EWBody(getPointsForActivs(-tSize/2, tSize)
-        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+        ,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
     _body?.activeSecs = _animAttack.ticker().totalDuration();
     add(_body!);
-    tSize = Vector2(66,78);
-    _ground = Ground(getPointsForActivs(-tSize/2, tSize), collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
-    _ground.onlyForPlayer = true;
-    add(_ground);
+    // tSize = Vector2(66,78);
+    // _ground = Ground(getPointsForActivs(-tSize/2, tSize), collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+    // _ground.onlyForPlayer = true;
+    // add(_ground);
     TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
     add(timer);
     selectBehaviour();
+    _defWeapon = DefaultEnemyWeapon(attack1PointsOnStart,collisionType: DCollisionType.inactive,isStatic: false,isLoop:true,game: gameRef
+    ,isSolid: false,onStartWeaponHit: onStartHit,onEndWeaponHit: onEndHit);
+    add(_defWeapon);
   }
 
   void selectBehaviour()
   {
-    _rigidSec = 2;
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(random != 0){
+    if(random != 0 || _wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
         shift = -50;
@@ -126,6 +181,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
 
   void onStartHit()
   {
+    _wasHit = true;
     animation = _animAttack;
   }
 
@@ -209,30 +265,32 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   void update(double dt)
   {
     super.update(dt);
+    _rigidSec -= dt;
     if(!_isRefresh){
       return;
     }
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    _rigidSec -= dt;
-    if(_rigidSec <= 1 && isNearPlayer()){
-      _body?.currentCoolDown = _body?.coolDown ?? 0;
-      var pl = gameRef.gameMap.orthoPlayer!;
-      if(pl.hitBox!.getCenter().x > _body!.getCenter().x){
-        if(isFlippedHorizontally){
-          flipHorizontally();
-        }
-      }
-      if(pl.hitBox!.getCenter().x < _body!.getCenter().x){
-        if(!isFlippedHorizontally){
-          flipHorizontally();
-        }
-      }
-      _body?.hit();
-    }
     if(_rigidSec <= 0){
-      selectBehaviour();
+      _rigidSec = 1;
+      if(isNearPlayer()){
+        _defWeapon.currentCoolDown = _defWeapon.coolDown;
+        var pl = gameRef.gameMap.orthoPlayer!;
+        if(pl.hitBox!.getCenter().x > _body!.getCenter().x){
+          if(isFlippedHorizontally){
+            flipHorizontally();
+          }
+        }
+        if(pl.hitBox!.getCenter().x < _body!.getCenter().x){
+          if(!isFlippedHorizontally){
+            flipHorizontally();
+          }
+        }
+        chooseHit();
+      }else{
+        selectBehaviour();
+      }
     }
     position += _speed * dt;
   }

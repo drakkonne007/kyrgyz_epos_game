@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1429">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1430">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -2344,6 +2344,12 @@
   </object>
   <object id="1428" name="strMerchant" x="1124" y="950">
    <point/>
+  </object>
+  <object id="1429" name="portal" x="1538.17" y="2995.58" width="26.6666" height="119.5">
+   <properties>
+    <property name="tar" value="733,799"/>
+    <property name="wrld" value="testMap"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

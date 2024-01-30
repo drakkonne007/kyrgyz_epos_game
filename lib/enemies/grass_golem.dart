@@ -8,6 +8,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
+import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -22,7 +23,7 @@ enum GolemVariant
 
 class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  GrassGolem(this._startPos,this.spriteVariant,{super.priority});
+  GrassGolem(this._startPos,this.spriteVariant);
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
@@ -34,6 +35,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   final GolemVariant spriteVariant;
   double _rigidSec = 2;
   EWBody? _body;
+  ObstacleWhere _whereObstacle = ObstacleWhere.none;
+  bool _wasHit = false;
 
   @override
   int column=0;
@@ -96,12 +99,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
 
   void selectBehaviour()
   {
-    _rigidSec = 2;
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(random != 0){
+    if(random != 0 || _wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
         shift = -50;
@@ -110,16 +112,21 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       }
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
-      double percent = math.min(posX.abs(),posY.abs()) / math.max(posX.abs(),posY.abs());
-      double isY = posY.isNegative ? -1 : 1;
-      double isX = posX.isNegative ? -1 : 1;
-      if(posX.isNegative && !isFlippedHorizontally){
+      if(_whereObstacle == ObstacleWhere.side){
+        posX = 0;
+      }
+      if(_whereObstacle == ObstacleWhere.upDown){
+        posY = 0;
+      }
+      _whereObstacle = ObstacleWhere.none;
+      double angle = math.atan2(posY,posX);
+      _speed.x = math.cos(angle) * _maxSpeed;
+      _speed.y = math.sin(angle) * _maxSpeed;
+      if(_speed.x < 0 && !isFlippedHorizontally){
         flipHorizontally();
-      }else if(!posX.isNegative && isFlippedHorizontally){
+      }else if(_speed.x > 0 && isFlippedHorizontally){
         flipHorizontally();
       }
-      _speed.x = posX.abs() > posY.abs() ? _maxSpeed * isX : _maxSpeed * percent * isX;
-      _speed.y = posY.abs() > posX.abs() ? _maxSpeed * isY: _maxSpeed * percent * isY;
       animation = _animMove;
     }else{
       if(animation != _animIdle){
@@ -133,6 +140,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   void onStartHit()
   {
     animation = _animAttack;
+    _wasHit = true;
   }
 
   void onEndHit()
@@ -174,8 +182,97 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
 
   void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    _speed.x = 0;
-    _speed.y = 0;
+    Map<Vector2,AxesDiff> diffs = {};
+    bool isUp = false;
+    bool isDown = false;
+    bool isLeft = false;
+    bool isRight = false;
+    double maxLeft = 0;
+    double maxRight = 0;
+    double maxUp = 0;
+    double maxDown = 0;
+
+    for(final point in intersectionPoints){
+      double leftDiffX  = point.x - _groundBox.getMinVector().x;
+      double rightDiffX = point.x - _groundBox.getMaxVector().x;
+      double upDiffY = point.y - _groundBox.getPoint(0).y;
+      double downDiffY = point.y - _groundBox.getPoint(1).y;
+
+      // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
+
+      diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
+      double minDiff = math.min(leftDiffX.abs(),rightDiffX.abs());
+      minDiff = math.min(minDiff,upDiffY.abs());
+      minDiff = math.min(minDiff,downDiffY.abs());
+      if(minDiff == leftDiffX.abs()){
+        isLeft = true;
+        maxLeft = math.max(maxLeft,minDiff);
+      }
+      if(minDiff == rightDiffX.abs()){
+        isRight = true;
+        maxRight = math.max(maxRight,minDiff);
+      }
+      if(minDiff == upDiffY.abs()){
+        isUp = true;
+        maxUp = math.max(maxUp,minDiff);
+      }
+      if(minDiff == downDiffY.abs()){
+        isDown = true;
+        maxDown = math.max(maxDown,minDiff);
+      }
+    }
+
+    if(isDown && isUp && isLeft && isRight){
+      print('What is??');
+      return;
+    }
+
+    if(isDown && isUp){
+      double maxLeft = 1000000000;
+      double maxRight = 1000000000;
+      for(final diff in diffs.values){
+        maxLeft = math.min(maxLeft,diff.leftDiff.abs());
+        maxRight = math.min(maxRight,diff.rightDiff.abs());
+      }
+      if(maxLeft > maxRight){
+        position -= Vector2(maxRight,0);
+      }else{
+        position += Vector2(maxLeft,0);
+      }
+      return;
+    }
+    if(isLeft && isRight){
+      double maxUp = 100000000;
+      double maxDown = 100000000;
+      for(final diff in diffs.values){
+        maxUp = math.min(maxUp,diff.upDiff.abs());
+        maxDown = math.min(maxDown,diff.downDiff.abs());
+      }
+      if(maxUp > maxDown){
+        position -= Vector2(0,maxDown);
+      }else{
+        position += Vector2(0,maxUp);
+      }
+      return;
+    }
+    // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
+
+    if(isLeft){
+      _whereObstacle = ObstacleWhere.side;
+      position +=  Vector2(maxLeft,0);
+    }
+    if(isRight){
+      _whereObstacle = ObstacleWhere.side;
+      position -=  Vector2(maxRight,0);
+    }
+    if(isUp){
+      _whereObstacle = ObstacleWhere.upDown;
+      position +=  Vector2(0,maxUp);
+    }
+    if(isDown){
+      _whereObstacle = ObstacleWhere.upDown;
+      position -=  Vector2(0,maxDown);
+    }
   }
 
   @override
@@ -215,30 +312,32 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   void update(double dt)
   {
     super.update(dt);
+    _rigidSec -= dt;
     if(!_isRefresh){
       return;
     }
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    _rigidSec -= dt;
-    if(_rigidSec <= 1 && isNearPlayer()){
-      _body?.currentCoolDown = _body?.coolDown ?? 0;
-      var pl = gameRef.gameMap.orthoPlayer!;
-      if(pl.hitBox!.getCenter().x > _body!.getCenter().x){
-        if(isFlippedHorizontally){
-          flipHorizontally();
+    if(_rigidSec <= 0) {
+      _rigidSec = 1;
+      if (isNearPlayer()) {
+        _body?.currentCoolDown = _body?.coolDown ?? 0;
+        var pl = gameRef.gameMap.orthoPlayer!;
+        if (pl.hitBox!.getCenter().x > _body!.getCenter().x) {
+          if (isFlippedHorizontally) {
+            flipHorizontally();
+          }
         }
-      }
-      if(pl.hitBox!.getCenter().x < _body!.getCenter().x){
-        if(!isFlippedHorizontally){
-          flipHorizontally();
+        if (pl.hitBox!.getCenter().x < _body!.getCenter().x) {
+          if (!isFlippedHorizontally) {
+            flipHorizontally();
+          }
         }
+        _body?.hit();
+      }else{
+        selectBehaviour();
       }
-      _body?.hit();
-    }
-    if(_rigidSec <= 0){
-      selectBehaviour();
     }
     position += _speed * dt;
   }

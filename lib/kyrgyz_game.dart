@@ -156,4 +156,13 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
       }
     }
   }
+
+  @override
+  void update(double dt)
+  {
+    if(dt > 0.02){
+      return;
+    }
+    super.update(dt);
+  }
 }

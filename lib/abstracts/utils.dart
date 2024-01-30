@@ -84,3 +84,9 @@ class AxesDiff
   double downDiff = 0;
 }
 
+enum ObstacleWhere
+{
+  none,
+  side,
+  upDown
+}
