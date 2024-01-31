@@ -23,6 +23,7 @@ import 'package:game_flame/enemies/mini_creatures/verticalBigRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/verticalSmallRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/windblow.dart';
 import 'package:game_flame/enemies/moose.dart';
+import 'package:game_flame/enemies/sekeletonWithShield.dart';
 import 'package:game_flame/enemies/skeleton.dart';
 import 'package:game_flame/enemies/spin_blade.dart';
 import 'package:game_flame/enemies/strange_merchant.dart';
@@ -183,7 +184,9 @@ class MapNode {
     if (myGame.gameMap.loadedLivesObjs.contains(position) && cheatName == null) {
       return;
     }
-
+    if(cheatName != null){
+      position -= Vector2(0,200);
+    }
     switch (cheatName ?? name) {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(position);
@@ -207,7 +210,7 @@ class MapNode {
         break;
       case 'scelet':
         myGame.gameMap.loadedLivesObjs.add(position);
-        myGame.gameMap.enemyComponent.add(Skeleton(position));
+        myGame.gameMap.enemyComponent.add(SkeletonWithShield(position));
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);

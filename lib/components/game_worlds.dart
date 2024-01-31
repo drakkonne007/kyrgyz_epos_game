@@ -14,10 +14,10 @@ List<GameWorldData> fullMaps()
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
-  list.add(TestMap());
-  list.add(TopLeftVillage());
-  list.add(BigTopLeft());
-  list.addAll(getVillages());
+  // list.add(TestMap());
+  // list.add(TopLeftVillage());
+  // list.add(BigTopLeft());
+  // list.addAll(getVillages());
   list.add(TopLeftTempleDungeon());
   return list;
 }
@@ -38,6 +38,7 @@ GameWorldData getWorldFromName(String name)
     case 'topLeftVillage': return TopLeftVillage();
     case 'topLeft': return BigTopLeft();
     case 'topLeftTempleDungeon': return TopLeftTempleDungeon();
+    case 'testMap': return TestMap();
     default: print('error name of World!'); return BigTopLeft();
   }
 }

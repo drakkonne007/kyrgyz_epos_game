@@ -21,6 +21,47 @@ enum GolemVariant
   Grass
 }
 
+final List<Vector2> _ind1 = [ //вторая колонка
+  Vector2(309 - 224 - 112,503 - 192 * 2 - 192 * 0.5),
+  Vector2(304 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
+  Vector2(299 - 224 - 112,477 - 192 * 2 - 192 * 0.5),
+  Vector2(364 - 224 - 112,469 - 192 * 2 - 192 * 0.5),
+  Vector2(370 - 224 - 112,484 - 192 * 2 - 192 * 0.5),
+  Vector2(374 - 224 - 112,489 - 192 * 2 - 192 * 0.5),
+  Vector2(369 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
+  Vector2(359 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
+  Vector2(356 - 224 - 112,485 - 192 * 2 - 192 * 0.5)
+];
+
+final List<Vector2> _ind2 = [ //пятая
+  Vector2(972  - 224 * 4 - 112,493 - 192 * 2 - 192 * 0.5),
+  Vector2(968  - 224 * 4 - 112,483 - 192 * 2 - 192 * 0.5),
+  Vector2(971  - 224 * 4 - 112,468 - 192 * 2 - 192 * 0.5),
+  Vector2(1032 - 224 * 4 - 112,466 - 192 * 2 - 192 * 0.5),
+  Vector2(1043 - 224 * 4 - 112,477 - 192 * 2 - 192 * 0.5),
+  Vector2(1042 - 224 * 4 - 112,489 - 192 * 2 - 192 * 0.5)
+];
+
+final List<Vector2> _ind3 = [ //восьмая
+  Vector2(2135 - 224 * 9 - 112, 530 - 192 * 2 - 96),
+  Vector2(2107 - 224 * 9 - 112, 505 - 192 * 2 - 96),
+  Vector2(2103 - 224 * 9 - 112, 487 - 192 * 2 - 96),
+  Vector2(2158 - 224 * 9 - 112, 442 - 192 * 2 - 96),
+  Vector2(2174 - 224 * 9 - 112, 448 - 192 * 2 - 96),
+  Vector2(2196 - 224 * 9 - 112, 480 - 192 * 2 - 96),
+  Vector2(2196 - 224 * 9 - 112, 487 - 192 * 2 - 96),
+  Vector2(2146 - 224 * 9 - 112, 530 - 192 * 2 - 96),
+];
+
+final List<Vector2> _hitBoxPoint = [
+  Vector2(96  - 112,57  - 96),
+  Vector2(88  - 112,66  - 96),
+  Vector2(94  - 112,125 - 96),
+  Vector2(125 - 112,124 - 96),
+  Vector2(133 - 112,76  - 96),
+  Vector2(101 - 112,56  - 96),
+];
+
 class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
   GrassGolem(this._startPos,this.spriteVariant);
@@ -34,7 +75,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   final double _maxSpeed = 30;
   final GolemVariant spriteVariant;
   double _rigidSec = 2;
-  EWBody? _body;
+  late DefaultEnemyWeapon _weapon;
   ObstacleWhere _whereObstacle = ObstacleWhere.none;
   bool _wasHit = false;
 
@@ -76,25 +117,42 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     animation = _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
-    Vector2 tSize = Vector2(69,71);
-    _hitbox = EnemyHitbox(getPointsForActivs(-tSize/2, tSize),
+    _hitbox = EnemyHitbox(_hitBoxPoint,
         collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(-tSize/2, tSize),obstacleBehavoiurStart: obstacleBehaviour,
-        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+    _groundBox = GroundHitBox(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38)),obstacleBehavoiurStart: obstacleBehaviour,
+        collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
-    _groundBox.debugColor = BasicPalette.red.color;
-    _body = EWBody(getPointsForActivs(-tSize/2, tSize)
-        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
-    _body?.activeSecs = _animAttack.ticker().totalDuration();
-    add(_body!);
-    tSize = Vector2(66,78);
-    _ground = Ground(getPointsForActivs(-tSize/2, tSize), collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+    _weapon = DefaultEnemyWeapon(
+        _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+    add(_weapon);
+    _weapon.damage = 3;
+    _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
+        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
+    var defWep = DefaultEnemyWeapon(_hitBoxPoint, collisionType: DCollisionType.active, isSolid: false, isStatic: false
+        , onStartWeaponHit: null, onEndWeaponHit: null, isLoop: true, game: game);
+    add(defWep);
+    defWep.damage = 3;
     TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
     add(timer);
     selectBehaviour();
+  }
+
+  void changeAttackVerts(int index)
+  {
+    if(index == 1){
+      _weapon.changeVertices(_ind1);
+      _weapon.collisionType = DCollisionType.active;
+    }else if(index == 2){
+      _weapon.changeVertices(_ind2,isLoop: true);
+    }else if(index == 8){
+      _weapon.changeVertices(_ind3,isLoop: true);
+    }else if(index == 12){
+      _weapon.collisionType = DCollisionType.inactive;
+      _weapon.changeVertices(_ind1,isLoop: true);
+    }
   }
 
   void selectBehaviour()
@@ -106,9 +164,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(random != 0 || _wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
-        shift = -50;
+        shift = -65;
       }else{
-        shift = 50;
+        shift = 65;
       }
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
@@ -139,7 +197,12 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
 
   void onStartHit()
   {
+    _speed.x = 0;
+    _speed.y = 0;
+    animation = null;
     animation = _animAttack;
+    animationTicker?.onFrame = changeAttackVerts;
+    animationTicker?.onComplete = onEndHit;
     _wasHit = true;
   }
 
@@ -171,10 +234,10 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(pl.hitBox == null){
       return false;
     }
-    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width * 0.5 + 60){
+    if(pl.hitBox!.getMinVector().y > _weapon.getMaxVector().y || pl.hitBox!.getMaxVector().y < _weapon.getMinVector().y){
       return false;
     }
-    if(pl.hitBox!.getPoint(0).y > _body!.getPoint(1).y || pl.hitBox!.getPoint(1).y < _body!.getPoint(0).y){
+    if(position.distanceToSquared(pl.position) > 75 * 75){
       return false;
     }
     return true;
@@ -195,8 +258,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     for(final point in intersectionPoints){
       double leftDiffX  = point.x - _groundBox.getMinVector().x;
       double rightDiffX = point.x - _groundBox.getMaxVector().x;
-      double upDiffY = point.y - _groundBox.getPoint(0).y;
-      double downDiffY = point.y - _groundBox.getPoint(1).y;
+      double upDiffY = point.y - _groundBox.getMinVector().y;
+      double downDiffY = point.y - _groundBox.getMaxVector().y;
 
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 
@@ -278,12 +341,15 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
+    _weapon.collisionType = DCollisionType.inactive;
+    animation = null;
     if(inArmor){
       health -= math.max(hurt - armor, 0);
     }else{
       health -= hurt;
     }
     if(health <1){
+      _isRefresh = false;
       _speed.x = 0;
       _speed.y = 0;
       if(loots.isNotEmpty) {
@@ -302,7 +368,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         removeFromParent();
       }));
     }else{
-      animation = null;
       animation = _animHurt;
       animationTicker!.onComplete = selectBehaviour;
     }
@@ -322,19 +387,19 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(_rigidSec <= 0) {
       _rigidSec = 1;
       if (isNearPlayer()) {
-        _body?.currentCoolDown = _body?.coolDown ?? 0;
+        _weapon.currentCoolDown = _weapon.coolDown ?? 0;
         var pl = gameRef.gameMap.orthoPlayer!;
-        if (pl.hitBox!.getCenter().x > _body!.getCenter().x) {
+        if (pl.position.x > position.x) {
           if (isFlippedHorizontally) {
             flipHorizontally();
           }
         }
-        if (pl.hitBox!.getCenter().x < _body!.getCenter().x) {
+        if (pl.position.x < position.x) {
           if (!isFlippedHorizontally) {
             flipHorizontally();
           }
         }
-        _body?.hit();
+        _weapon.hit();
       }else{
         selectBehaviour();
       }

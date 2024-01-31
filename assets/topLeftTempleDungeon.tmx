@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="45" nextobjectid="1447">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="45" nextobjectid="1483">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -5195,6 +5195,114 @@
   </object>
   <object id="1446" x="1311.75" y="4992.25">
    <polygon points="0.272727,-5.27273 42.875,31.625 42.625,331.75 19.5,345 -779.875,344.625 -779.813,373.688 -817.813,373.75 -818,343.932 -1166.5,346 -1194.75,332.75 -1194.3,30.8409 -1152.39,-4.61364"/>
+  </object>
+  <object id="1447" name="scelet" x="2141.33" y="5375.33">
+   <point/>
+  </object>
+  <object id="1448" name="scelet" x="1122" y="5371.33">
+   <point/>
+  </object>
+  <object id="1449" name="scelet" x="740.667" y="5366.67">
+   <point/>
+  </object>
+  <object id="1450" name="scelet" x="301.333" y="5372.67">
+   <point/>
+  </object>
+  <object id="1451" name="scelet" x="126.667" y="5374">
+   <point/>
+  </object>
+  <object id="1452" name="scelet" x="93.3333" y="5234">
+   <point/>
+  </object>
+  <object id="1453" name="scelet" x="98" y="5098.67">
+   <point/>
+  </object>
+  <object id="1454" name="scelet" x="102.667" y="4966">
+   <point/>
+  </object>
+  <object id="1455" name="scelet" x="310.667" y="4954.67">
+   <point/>
+  </object>
+  <object id="1456" name="scelet" x="522" y="4955.33">
+   <point/>
+  </object>
+  <object id="1457" name="scelet" x="726" y="4948.67">
+   <point/>
+  </object>
+  <object id="1458" name="scelet" x="958" y="4948.67">
+   <point/>
+  </object>
+  <object id="1459" name="scelet" x="1189.33" y="4948.67">
+   <point/>
+  </object>
+  <object id="1460" name="scelet" x="1392.67" y="4952">
+   <point/>
+  </object>
+  <object id="1461" name="scelet" x="1378.67" y="5180">
+   <point/>
+  </object>
+  <object id="1462" name="scelet" x="98" y="4610.67">
+   <point/>
+  </object>
+  <object id="1463" name="scelet" x="95.3333" y="4771.33">
+   <point/>
+  </object>
+  <object id="1464" name="scelet" x="313.333" y="4604">
+   <point/>
+  </object>
+  <object id="1465" name="scelet" x="598.667" y="4590">
+   <point/>
+  </object>
+  <object id="1466" name="scelet" x="898.667" y="4600">
+   <point/>
+  </object>
+  <object id="1467" name="scelet" x="1238" y="4599.33">
+   <point/>
+  </object>
+  <object id="1468" name="scelet" x="1026" y="4406">
+   <point/>
+  </object>
+  <object id="1469" name="scelet" x="1269.33" y="4406.67">
+   <point/>
+  </object>
+  <object id="1470" name="scelet" x="1892.67" y="4405.33">
+   <point/>
+  </object>
+  <object id="1471" name="scelet" x="1664.67" y="4406">
+   <point/>
+  </object>
+  <object id="1472" name="scelet" x="1886" y="4602">
+   <point/>
+  </object>
+  <object id="1473" name="scelet" x="4106" y="7810">
+   <point/>
+  </object>
+  <object id="1474" name="scelet" x="3710" y="7891">
+   <point/>
+  </object>
+  <object id="1475" name="scelet" x="4600" y="7879">
+   <point/>
+  </object>
+  <object id="1476" name="scelet" x="4549" y="8674">
+   <point/>
+  </object>
+  <object id="1477" name="scelet" x="6448" y="8560">
+   <point/>
+  </object>
+  <object id="1478" name="scelet" x="5790" y="7604">
+   <point/>
+  </object>
+  <object id="1479" name="scelet" x="8053" y="8241">
+   <point/>
+  </object>
+  <object id="1480" name="scelet" x="8299" y="7379">
+   <point/>
+  </object>
+  <object id="1481" name="scelet" x="8795" y="8013">
+   <point/>
+  </object>
+  <object id="1482" name="scelet" x="4789" y="7281">
+   <point/>
   </object>
  </objectgroup>
  <objectgroup id="32" name="items">

@@ -55,11 +55,11 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     add(hitBox!);
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.active, isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(groundBox!);
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
-    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: true,
+    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = animIdle;}, game: gameRef);
     //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
@@ -305,8 +305,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
       double leftDiffX  = point.x - groundBox!.getMinVector().x;
       double rightDiffX = point.x - groundBox!.getMaxVector().x;
-      double upDiffY = point.y - groundBox!.getPoint(0).y;
-      double downDiffY = point.y - groundBox!.getPoint(1).y;
+      double upDiffY = point.y - groundBox!.getMinVector().y;
+      double downDiffY = point.y - groundBox!.getMaxVector().y;
 
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 

@@ -41,7 +41,6 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
       (Vector2(73,75) - Vector2(55,55)) * 1.15,
       (Vector2(73,34) - Vector2(55,55)) * 1.15,
     ];
-
     add(Ground(points,collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef));
     add(ObjectHitbox(getPointsForActivs(Vector2(-10,0), Vector2(20,50)),collisionType: DCollisionType.active,

@@ -23,12 +23,12 @@ Future precompileAll() async
   for (final bigWorld in listOfFullMaps) {
     var fileName = bigWorld.source; //'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(32));
-    var layersLists = tiled.tileMap.renderableLayers;
+    var layersLists = tiled.tileMap.map.layers;
     if (true) {
       MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
       MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
       for (var a in layersLists) {
-        if (a.layer.type != LayerType.tileLayer) {
+        if (a.type != LayerType.tileLayer) {
           continue;
         }
         await processTileType(
@@ -38,7 +38,7 @@ Future precompileAll() async
             addTiles: (tile, position, size) async {
               compilerAnimationBack.addTile(position, tile);
             },
-            layersToLoad: [a.layer.name]);
+            layersToLoad: [a.name]);
         compilerAnimationBack.addLayer();
         await processTileType(
             clear: false,
@@ -47,7 +47,7 @@ Future precompileAll() async
             addTiles: (tile, position, size) async {
               compilerAnimation.addTile(position, tile);
             },
-            layersToLoad: [a.layer.name]);
+            layersToLoad: [a.name]);
         compilerAnimation.addLayer();
       }
       await compilerAnimation.compile('high',bigWorld);
@@ -56,8 +56,8 @@ Future precompileAll() async
     // tiled = await TiledComponent.load(fileName, Vector2.all(320));
     Set<String> loadedFiles = {};
     for (var layer in layersLists) {
-      if (layer.layer.type == LayerType.objectGroup) {
-        var objs = tiled.tileMap.getLayer<ObjectGroup>(layer.layer.name);
+      if (layer.type == LayerType.objectGroup) {
+        var objs = tiled.tileMap.getLayer<ObjectGroup>(layer.name);
         if (objs != null && true) {
           for (int cols = 0; cols < bigWorld.gameConsts.maxColumn!; cols++) {
             for (int rows = 0; rows < bigWorld.gameConsts.maxRow!; rows++) {

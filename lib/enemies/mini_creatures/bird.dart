@@ -7,7 +7,6 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-
   Bird(this._startPos, this._endPos);
   Vector2 _startPos;
   List<Vector2> _endPos;

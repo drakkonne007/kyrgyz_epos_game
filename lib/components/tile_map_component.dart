@@ -234,7 +234,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   }
 
   @override
-  Future<void> update(double dt) async
+  void update(double dt)
   {
     if(!_isLoad){
       return;
@@ -255,7 +255,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     }
   }
 
-  Future<void> reloadWorld(int newColumn, int newRow) async
+  void reloadWorld(int newColumn, int newRow)
   {
     var tempColumn = _column;
     var tempRow = _row;

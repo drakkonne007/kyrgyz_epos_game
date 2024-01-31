@@ -12,7 +12,9 @@ class DefaultEnemyWeapon extends EnemyWeapon
     required super.onStartWeaponHit,required super.onEndWeaponHit,required super.isLoop,required super.game,super.radius});
 
   @override
-  Future<void> hit() async {}
+  Future<void> hit() async {
+    onStartWeaponHit?.call();
+  }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {}
@@ -49,14 +51,14 @@ class EWBody extends EnemyWeapon
   {
     transformPoint = vertices[0];
     currentCoolDown = coolDown;
-    onStartWeaponHit.call();
+    onStartWeaponHit?.call();
     _isActive = true;
     latencyBefore = -activeSecs/3;
     scale = Vector2(1,1);
     Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
       transformPoint = rawCenter;
       _isGrow = true;
-      onEndWeaponHit.call();
+      onEndWeaponHit?.call();
       _isActive = false;
       scale = Vector2(1,1);
     });
@@ -114,7 +116,7 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
   {
     if(collisionType == DCollisionType.inactive){
       currentCoolDown = coolDown;
-      onStartWeaponHit.call();
+      onStartWeaponHit?.call();
       late SpriteAnimationTicker tick;
       latencyBefore = -0.28;
       _diffAngle = 0;
@@ -131,7 +133,7 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
       // print('start hit');
       Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
         collisionType = DCollisionType.inactive;
-        onEndWeaponHit.call();
+        onEndWeaponHit?.call();
       });
     }
   }

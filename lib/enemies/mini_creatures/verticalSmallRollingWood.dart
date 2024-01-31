@@ -43,7 +43,7 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
       flipHorizontally();
     }
 
-    DefaultEnemyWeapon weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true
+    DefaultEnemyWeapon weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
     weapon.coolDown = 0.5;
     add(weapon);

@@ -55,8 +55,8 @@ class PlayerData
   Vector2 curPosition = Vector2(-1,-1);
   double gameTime = 720;
   double milisecsInGame = 0;
-  GameWorldData playerBigMap = TopLeftVillage();
-  Vector2 startLocation = Vector2(1773,3118);
+  GameWorldData playerBigMap = TopLeftTempleDungeon();
+  Vector2 startLocation = Vector2(1376,5536);
 
 
   void setStartValues()

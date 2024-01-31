@@ -93,6 +93,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
 
   void startDeathMenu()
   {
+    pauseEngine();
     _showOverlay(overlayName: DeathMenu.id,isHideOther: true);
   }
 
@@ -160,7 +161,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   @override
   void update(double dt)
   {
-    if(dt > 0.02){
+    if(dt > 0.041){
       return;
     }
     super.update(dt);

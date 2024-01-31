@@ -48,7 +48,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
       ,Vector2(32-47,96-68)
       ,Vector2(48-47,123-68)
       ,Vector2(63-47,96-68)
-      ,Vector2(63-47,37-68)],collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true
+      ,Vector2(63-47,37-68)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
     weapon.coolDown = 0.5;
     add(weapon);

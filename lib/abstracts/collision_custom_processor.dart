@@ -119,6 +119,10 @@ class DCollisionProcessor
           if(i == j || removeList.contains(j)){
             continue;
           }
+          if(listOfList[key][i].parent != null && listOfList[key][j].parent != null
+              && listOfList[key][i].parent == listOfList[key][j].parent){
+            continue;
+          }
           if(listOfList[key][i].collisionType == DCollisionType.passive && listOfList[key][j].collisionType == DCollisionType.passive){
             continue;
           }
@@ -156,7 +160,7 @@ class DCollisionProcessor
 void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
   if(other.scale == Vector2.all(1) && other.angle == 0
-  && entity.scale == Vector2.all(1) && entity.angle == 0) {
+      && entity.scale == Vector2.all(1) && entity.angle == 0) {
     if (other
         .getMaxVector()
         .x < entity

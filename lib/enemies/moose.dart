@@ -24,6 +24,63 @@ enum MooseVariant
   PurpleWithGreenHair,
 }
 
+final List<Vector2> ind1 = [ //3 индекс и по 7
+  Vector2(1105 - 3 * 347 - 158,446 - 192*2 - 96),
+  Vector2(1115 - 3 * 347 - 158,423 - 192*2 - 96),
+  Vector2(1129 - 3 * 347 - 158,420 - 192*2 - 96),
+  Vector2(1143 - 3 * 347 - 158,429 - 192*2 - 96),
+  Vector2(1140 - 3 * 347 - 158,442 - 192*2 - 96),
+  Vector2(1174 - 3 * 347 - 158,460 - 192*2 - 96),
+  Vector2(1173 - 3 * 347 - 158,464 - 192*2 - 96),
+  Vector2(1135 - 3 * 347 - 158,446 - 192*2 - 96),
+  Vector2(1132 - 3 * 347 - 158,451 - 192*2 - 96),
+  Vector2(1121 - 3 * 347 - 158,454 - 192*2 - 96),
+];
+
+final List<Vector2> ind2 = [ //3 индекс и по 7
+  Vector2(2510 - 7 * 347 - 158,445 - 192*2 - 96),
+  Vector2(2501 - 7 * 347 - 158,440 - 192*2 - 96),
+  Vector2(2526 - 7 * 347 - 158,409 - 192*2 - 96),
+  Vector2(2545 - 7 * 347 - 158,396 - 192*2 - 96),
+  Vector2(2553 - 7 * 347 - 158,396 - 192*2 - 96),
+  Vector2(2564 - 7 * 347 - 158,414 - 192*2 - 96),
+  Vector2(2557 - 7 * 347 - 158,420 - 192*2 - 96),
+  Vector2(2551 - 7 * 347 - 158,421 - 192*2 - 96),
+  Vector2(2570 - 7 * 347 - 158,460 - 192*2 - 96),
+  Vector2(2566 - 7 * 347 - 158,462 - 192*2 - 96),
+  Vector2(2547 - 7 * 347 - 158,423 - 192*2 - 96),
+  Vector2(2533 - 7 * 347 - 158,431 - 192*2 - 96),
+  Vector2(2521 - 7 * 347 - 158,445 - 192*2 - 96),
+];
+
+final List<Vector2> ind3 = [ //до 9-го
+  Vector2(3271 - 9 * 347 - 158,417 - 192*2 - 96),
+  Vector2(3306 - 9 * 347 - 158,417 - 192*2 - 96),
+  Vector2(3337 - 9 * 347 - 158,429 - 192*2 - 96),
+  Vector2(3364 - 9 * 347 - 158,460 - 192*2 - 96),
+  Vector2(3373 - 9 * 347 - 158,479 - 192*2 - 96),
+  Vector2(3374 - 9 * 347 - 158,507 - 192*2 - 96),
+  Vector2(3397 - 9 * 347 - 158,507 - 192*2 - 96),
+  Vector2(3398 - 9 * 347 - 158,479 - 192*2 - 96),
+  Vector2(3384 - 9 * 347 - 158,446 - 192*2 - 96),
+  Vector2(3351 - 9 * 347 - 158,419 - 192*2 - 96),
+  Vector2(3319 - 9 * 347 - 158,410 - 192*2 - 96),
+  Vector2(3292 - 9 * 347 - 158,409 - 192*2 - 96),
+];
+
+final List<Vector2> rad = [ //до 9-го
+  Vector2(3733 - 10 * 347 - 158, 492 - 192*2 - 96),
+];
+
+final List<Vector2> hitBoxPoint = [
+  Vector2(152 - 158,70  - 96),
+  Vector2(146 - 158,89  - 96),
+  Vector2(153 - 158,112 - 96),
+  Vector2(160 - 158,112 - 96),
+  Vector2(167 - 158,97  - 96),
+  Vector2(163 - 158,70  - 96),
+];
+
 class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy {
 
   Moose(this._startPos, this._mooseVariant);
@@ -34,9 +91,9 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 50;
   late GroundHitBox _groundBox;
+  late EnemyHitbox _hitBox;
   double _rigidSec = 2;
-  EWBody? _body;
-  EWMooseHummer? _hummer;
+  DefaultEnemyWeapon? _weapon;
   ObstacleWhere _whereObstacle = ObstacleWhere.none;
   bool _wasHit = false;
 
@@ -116,28 +173,21 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     const double percentOfWidth = 158/347;
     Vector2 staticConstAnchor = Vector2(size.x * percentOfWidth,size.y/2);
     anchor = const Anchor(percentOfWidth, 0.5);
-
-    Vector2 tSize = Vector2(28,54);
-
-    var hitbox = EnemyHitbox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
-        ,collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
-    add(hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
+    _hitBox = EnemyHitbox(hitBoxPoint,collisionType: DCollisionType.passive
+        ,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+    add(_hitBox);
+    _groundBox = GroundHitBox(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
         ,obstacleBehavoiurStart: obstacleBehaviour,
-        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
-    _body = EWBody(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
-        ,collisionType: DCollisionType.active, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
-    _body?.activeSecs = animAttack.ticker().totalDuration();
-    add(_body!);
-    var ground = Ground(getPointsForActivs(Vector2(143,68) - staticConstAnchor, tSize)
-        , collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+    var ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
+        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     ground.onlyForPlayer = true;
     add(ground);
-    List<Vector2> list = [Vector2(-21,-9), Vector2(-38,-46), Vector2(-52,-44), Vector2(-60,-60), Vector2(-32, -74), Vector2(-21,-53), Vector2(-33,-49), Vector2(-15,-11)];
-    _hummer = EWMooseHummer(list,collisionType: DCollisionType.inactive,isSolid: true,isStatic: false,
-        isLoop: false, game: gameRef, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit);
-    add(_hummer!);
+    _weapon = DefaultEnemyWeapon(ind1, collisionType: DCollisionType.inactive, isSolid: false, isStatic: false
+        , onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isLoop: true, game: game);
+    add(_weapon!);
+    _weapon!.damage = 3;
     TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
     add(timer);
     selectBehaviour();
@@ -185,9 +235,29 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
 
   void onStartHit()
   {
-    _wasHit = true;
     _speed.x = 0;
     _speed.y = 0;
+    animation = null;
+    animation = animAttack;
+    animationTicker?.onFrame = changeAttackVerts;
+    animationTicker?.onComplete = onEndHit;
+    _wasHit = true;
+  }
+
+  void changeAttackVerts(int index)
+  {
+    if(index == 3) {
+      _weapon?.collisionType = DCollisionType.active;
+      _weapon?.changeVertices(ind1,isLoop: true);
+    }else if(index == 7){
+      _weapon?.changeVertices(ind2,isLoop: true);
+    }else if(index == 9){
+      _weapon?.changeVertices(ind3,isLoop: true);
+    }else if(index == 10){
+      _weapon?.changeVertices(rad,isLoop: true,radius: 55);
+    }else if(index == 17){
+      _weapon?.collisionType = DCollisionType.inactive;
+    }
   }
 
   void onEndHit()
@@ -218,10 +288,10 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     if(pl.hitBox == null){
       return false;
     }
-    if(_body!.getCenter().distanceTo(pl.hitBox!.getCenter()) > _body!.width * 0.5 + 120){
+    if(position.distanceToSquared(pl.position) > 10000){
       return false;
     }
-    if(pl.hitBox!.getPoint(0).y > _body!.getPoint(1).y || pl.hitBox!.getPoint(1).y < _body!.getPoint(0).y){
+    if(pl.hitBox!.getMinVector().y > _hitBox.getMaxVector().y || pl.hitBox!.getMaxVector().y < _hitBox.getMinVector().y){
       return false;
     }
     return true;
@@ -242,8 +312,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     for(final point in intersectionPoints){
       double leftDiffX  = point.x - _groundBox.getMinVector().x;
       double rightDiffX = point.x - _groundBox.getMaxVector().x;
-      double upDiffY = point.y - _groundBox.getPoint(0).y;
-      double downDiffY = point.y - _groundBox.getPoint(1).y;
+      double upDiffY = point.y - _groundBox.getMinVector().y;
+      double downDiffY = point.y - _groundBox.getMaxVector().y;
 
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 
@@ -328,12 +398,15 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
+    animation = null;
+    _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
       health -= math.max(hurt - armor, 0);
     }else{
       health -= hurt;
     }
     if(health <1){
+      _isRefresh = false;
       _speed.x = 0;
       _speed.y = 0;
       if(loots.isNotEmpty) {
@@ -352,7 +425,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
         removeFromParent();
       }));
     }else{
-      animation = null;
       animation = _animHurt;
       animationTicker?.onComplete = selectBehaviour;
     }
@@ -373,17 +445,17 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       _rigidSec = 1;
       if(isNearPlayer()){
         var pl = gameRef.gameMap.orthoPlayer!;
-        if(pl.hitBox!.getCenter().x > _body!.getCenter().x){
+        if(pl.position.x > position.x){
           if(isFlippedHorizontally){
             flipHorizontally();
           }
         }
-        if(pl.hitBox!.getCenter().x < _body!.getCenter().x){
+        if(pl.position.x < position.x){
           if(!isFlippedHorizontally){
             flipHorizontally();
           }
         }
-        _hummer?.hit();
+        _weapon?.hit();
       }else{
         selectBehaviour();
       }

@@ -11,14 +11,14 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-
   Frog(this._startPos,);
   final Vector2 _startPos;
   final List<SpriteAnimation> _idles = [];
   late SpriteAnimation _idle1, _idle2, _idle3, _idle4, _idle5, _idle6, _walkForward, _walkBack, _wolkSide;
   final Vector2 _speed = Vector2.all(0);
-  final double _velocity = 30;
+  final double _velocity = 70;
   late GroundHitBox _groundHitBox;
+  bool _isMove = false;
 
   @override onLoad() async
   {
@@ -35,32 +35,32 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       srcSize: Vector2(96,96),
     );
     // decorator = PaintDecorator.grayscale();
-    _idle1 = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: false);
+    _idle1 = spriteSheet.createAnimation(row: 0, stepTime: 0.15,from: 0,loop: false);
     spriteSheet = SpriteSheet(
       image: await Flame.images.load('$start/small animals - frog-frog - idle 1 - frontview.png'),
       srcSize: Vector2(96,96),
     );
-    _idle2 = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: false);
+    _idle2 = spriteSheet.createAnimation(row: 0, stepTime: 0.15,from: 0,loop: false);
     spriteSheet = SpriteSheet(
       image: await Flame.images.load('$start/small animals - frog-frog - idle 2 - frontview.png'),
       srcSize: Vector2(96,96),
     );
-    _idle3 = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: false);
+    _idle3 = spriteSheet.createAnimation(row: 0, stepTime: 0.15,from: 0,loop: false);
     spriteSheet = SpriteSheet(
       image: await Flame.images.load('$start/small animals - frog-frog - idle 2 - sideview.png'),
       srcSize: Vector2(96,96),
     );
-    _idle4 = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: false);
+    _idle4 = spriteSheet.createAnimation(row: 0, stepTime: 0.15,from: 0,loop: false);
     spriteSheet = SpriteSheet(
       image: await Flame.images.load('$start/small animals - frog-frog - idle 3 - frontview.png'),
       srcSize: Vector2(96,96),
     );
-    _idle5 = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: false);
+    _idle5 = spriteSheet.createAnimation(row: 0, stepTime: 0.15,from: 0,loop: false);
     spriteSheet = SpriteSheet(
       image: await Flame.images.load('$start/small animals - frog-frog - idle 3 - sideview.png'),
       srcSize: Vector2(96,96),
     );
-    _idle6 = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: false);
+    _idle6 = spriteSheet.createAnimation(row: 0, stepTime: 0.15,from: 0,loop: false);
     spriteSheet = SpriteSheet(
       image: await Flame.images.load('$start/small animals - frog-frog - walk - frontview.png'),
       srcSize: Vector2(96,96),
@@ -86,8 +86,17 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     chooseMove();
 
     _groundHitBox = GroundHitBox(getPointsForActivs(Vector2.all(-7), Vector2.all(15)),collisionType: DCollisionType.active
-        ,isSolid: false,isStatic: false,isLoop: true,obstacleBehavoiurStart: _obstacle, game: gameRef);
+        ,isSolid: true,isStatic: false,isLoop: true,obstacleBehavoiurStart: _obstacle, game: gameRef);
     add(_groundHitBox);
+  }
+
+  void regulMove(int index)
+  {
+    if(index == 2){
+      _isMove = true;
+    }else if(index == 7){
+      _isMove = false;
+    }
   }
 
   void _checkIsNeedSelfRemove()
@@ -117,8 +126,8 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     for(final point in intersectionPoints){
       double leftDiffX  = point.x - _groundHitBox.getMinVector().x;
       double rightDiffX = point.x - _groundHitBox.getMaxVector().x;
-      double upDiffY = point.y - _groundHitBox.getPoint(0).y;
-      double downDiffY = point.y - _groundHitBox.getPoint(1).y;
+      double upDiffY = point.y - _groundHitBox.getMinVector().y;
+      double downDiffY = point.y - _groundHitBox.getMaxVector().y;
 
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 
@@ -226,6 +235,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           _speed.setValues(_velocity, 0);
         }
       }
+      animationTicker?.onFrame = regulMove;
     }else{
       int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(_idles.length);
       animation = _idles[rand];
@@ -239,7 +249,9 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   @override
   void update(double dt) {
-    position += _speed * dt;
     super.update(dt);
+    if(_isMove) {
+      position += _speed * dt;
+    }
   }
 }

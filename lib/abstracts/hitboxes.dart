@@ -96,6 +96,10 @@ abstract class DCollisionEntity extends Component
 
   void calcVertices()
   {
+    _minCoords.x = 99999;
+    _minCoords.y = 99999;
+    _maxCoords.x = -99999;
+    _maxCoords.y = -99999;
     if(radius == 0) {
       for (int i = 0; i < vertices.length; i++) {
         if (vertices[i].x < _minCoords.x) {
@@ -123,7 +127,7 @@ abstract class DCollisionEntity extends Component
       _minCoords.x = _vertices[0].x - radius;
       _maxCoords.x = _vertices[0].x + radius;
     }
-    transformPoint ??= _center;
+    transformPoint ??= Vector2.zero();
   }
 
   void reInsertIntoCollisionProcessor()
@@ -213,7 +217,6 @@ abstract class DCollisionEntity extends Component
       return rawPoint;
     }else {
       var temp = parent as PositionComponent;
-      Vector2 posAnchor = temp.positionOfAnchor(temp.anchor);
       Vector2 point = rawPoint - transformPoint!;
       if(temp.isFlippedHorizontally){
         point.x *= -1;
@@ -228,7 +231,7 @@ abstract class DCollisionEntity extends Component
         point.x += -transformPoint!.x;
         point.x -= (temp.width/2 - temp.anchor.x*temp.width);
       }
-      return point + posAnchor;
+      return point + temp.position;
     }
   }
 

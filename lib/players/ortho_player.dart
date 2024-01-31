@@ -3,10 +3,9 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/palette.dart';
-import 'package:flame/rendering.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -20,14 +19,12 @@ import 'dart:math' as math;
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
-  late SpriteAnimation animMove, animIdle, animHurt, animDeath;
+  late SpriteAnimation animMove, animMoveFast, animIdle, animHurt, animDeath;
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
   GroundHitBox? groundBox;
-  bool _isPlayerRun = false;
   PlayerWeapon? _weapon;
-  Timer? _timerHurt;
   bool gameHide = false;
   final Vector2 _maxSpeeds = Vector2.all(0);
 
@@ -38,13 +35,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.15, from: 0,to: 8);
-    animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0,to: 6);
-    animHurt.loop = false;
-    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19);
-    animDeath.loop = false;
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
+    animMoveFast = spriteSheet.createAnimation(row: 1, stepTime: 0.1, from: 0,to: 8);
+    animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
+    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19, loop: false);
     animation = animIdle;
-    _timerHurt = Timer(animHurt.ticker().totalDuration(),autoStart: false,onTick: setIdleAnimation,repeat: false);
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
 
@@ -59,11 +54,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     tSize = Vector2(20,16);
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.active, isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(groundBox!);
+    add(Ground(getPointsForActivs(tPos,tSize),
+        collisionType: DCollisionType.passive, isSolid: false,isStatic: false, isLoop: true, game: gameRef));
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
-    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: true,
+    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = animIdle;}, game: gameRef);
     //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
@@ -73,6 +70,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
+    animation = null;
     _weapon?.stopHit();
     _velocity.x = 0;
     _velocity.y = 0;
@@ -85,15 +83,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       gameRef.playerData.health.value -= hurt;
     }
     if(gameRef.playerData.health.value <1){
-      gameRef.pauseEngine();
-      _isPlayerRun = false;
+      animation = animDeath;
       gameRef.startDeathMenu();
     }else{
-      animation = null;
       animation = animHurt;
-      animation!.ticker().reset();
-      _timerHurt!.stop();
-      _timerHurt!.start();
+      animationTicker?.onComplete = setIdleAnimation;
     }
   }
 
@@ -106,7 +100,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
-    _isPlayerRun = false;
     animation = animIdle;
   }
 
@@ -120,8 +113,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       animation!.ticker().reset();
     }
   }
-
-
 
   void onStartHit()
   {
@@ -151,7 +142,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setIdleAnimation()
   {
-    if(animation == animMove || animation == animHurt){
+    if(animation == animMove || animation == animHurt || animation == animMoveFast){
       animation = animIdle;
     }
   }
@@ -161,13 +152,25 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.isLockMove){
       return;
     }
-    if(animation == animIdle  || animation == animMove) {
+    if(animation == animIdle  || animation == animMove || animation == animMoveFast) {
       if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
         PhysicVals.runCoef = 1.3;
-        _isPlayerRun = true;
+        if(animation == animMove){
+          int temp = animationTicker!.currentIndex;
+          animation = animMoveFast;
+          animationTicker!.currentIndex = temp;
+        }else {
+          animation = animMoveFast;
+        }
       } else {
         PhysicVals.runCoef = 1;
-        _isPlayerRun = false;
+        if(animation == animMoveFast){
+          int temp = animationTicker!.currentIndex;
+          animation = animMove;
+          animationTicker!.currentIndex = temp;
+        }else {
+          animation = animMove;
+        }
       }
       angle += math.pi/2;
       _velocity.x = -cos(angle) * PhysicVals.startSpeed * PhysicVals.runCoef;
@@ -179,7 +182,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       } else if (_velocity.x < 0 && !isFlippedHorizontally) {
         flipHorizontally();
       }
-      animation = animMove;
     }
   }
 
@@ -242,8 +244,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     for(final point in points){
       double leftDiffX  = point.x - groundBox!.getMinVector().x;
       double rightDiffX = point.x - groundBox!.getMaxVector().x;
-      double upDiffY = point.y - groundBox!.getPoint(0).y;
-      double downDiffY = point.y - groundBox!.getPoint(1).y;
+      double upDiffY = point.y - groundBox!.getMinVector().y;
+      double downDiffY = point.y - groundBox!.getMaxVector().y;
 
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 
@@ -328,11 +330,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameHide){
       return;
     }
-    _timerHurt!.update(dt);
-    if(animation != animMove){
+    if(animation != animMove && animation != animMoveFast){
       return;
     }
-    if(_isPlayerRun){
+    if(animation == animMoveFast){
       gameRef.playerData.energy.value -= dt * 2;
       if(gameRef.playerData.energy.value < 0){
         PhysicVals.runCoef = 1;
@@ -373,7 +374,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if(countZero == 2){
       setIdleAnimation();
-      _isPlayerRun = false;
       if(!gameRef.playerData.isLockEnergy) {
         gameRef.playerData.energy.value += dt;
       }
@@ -392,7 +392,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if(countZero == 2){
       setIdleAnimation();
-      _isPlayerRun = false;
     }
     position += _speed * dt;
   }
