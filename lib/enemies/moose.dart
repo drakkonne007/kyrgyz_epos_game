@@ -108,7 +108,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   int row = 0;
   @override
-  double health = 1;//10;
+  double health = 4;//10;
   @override
   int maxLoots = 2;
 
@@ -178,7 +178,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     add(_hitBox);
     _groundBox = GroundHitBox(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
         ,obstacleBehavoiurStart: obstacleBehaviour,
-        collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     var ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
@@ -276,6 +276,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){
+      animation = _animIdle;
       _isRefresh = false;
     }else{
       _isRefresh = true;
@@ -406,7 +407,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       health -= hurt;
     }
     if(health <1){
-      _isRefresh = false;
       _speed.x = 0;
       _speed.y = 0;
       if(loots.isNotEmpty) {
@@ -433,11 +433,11 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   void update(double dt)
   {
-    super.update(dt);
-    _rigidSec -= dt;
     if(!_isRefresh){
       return;
     }
+    super.update(dt);
+    _rigidSec -= dt;
     if(animation == _animHurt || animation == animAttack || animation == _animDeath || animation == null){
       return;
     }

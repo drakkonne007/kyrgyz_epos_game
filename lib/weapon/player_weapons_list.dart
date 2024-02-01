@@ -1,4 +1,3 @@
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
@@ -7,10 +6,34 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'dart:math' as math;
 
+class DefaultPlayerWeapon extends PlayerWeapon
+{
+  DefaultPlayerWeapon(super._vertices, {required super.collisionType,super.isSolid,required super.isStatic,
+    required super.onStartWeaponHit,required super.onEndWeaponHit,super.isLoop,required super.game,super.radius, super.isOnlyForStatic, });
+
+  @override
+  Future<void> hit() async {
+    onStartWeaponHit?.call();
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {}
+
+  @override
+  void onCollisionEnd(DCollisionEntity other){}
+
+  @override
+  void update(double dt)
+  {
+    // doDebug();
+    super.update(dt);
+  }
+}
+
 class WSword extends PlayerWeapon
 {
-  WSword(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit
-    , required super.onEndWeaponHit, required super.isLoop, required super.game, super.radius});
+  WSword(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic, required super.onStartWeaponHit
+    , required super.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic, });
 
   double _activeSecs = 0;
   final double _maxLength = 9;
@@ -45,7 +68,7 @@ class WSword extends PlayerWeapon
     if(collisionType == DCollisionType.inactive){
       transformPoint = vertices[0];
       currentCoolDown = coolDown;
-      onStartWeaponHit.call();
+      onStartWeaponHit?.call();
       int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
       late SpriteAnimationTicker tick;
       if(rand == 0){
@@ -72,7 +95,7 @@ class WSword extends PlayerWeapon
         collisionType = DCollisionType.inactive;
         _isGrow = true;
         game.playerData.isLockEnergy = false;
-        onEndWeaponHit.call();
+        onEndWeaponHit?.call();
         // transformPoint = rawCenter;
         // print('end hit');
       });

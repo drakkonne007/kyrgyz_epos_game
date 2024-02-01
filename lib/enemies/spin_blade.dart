@@ -1,9 +1,10 @@
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
+import 'package:game_flame/weapon/player_weapons_list.dart';
+import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/weapon/enemy_weapons_list.dart';
+import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
+import 'package:flame/flame.dart';
 import 'dart:math' as math;
 
 class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
@@ -27,10 +28,15 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
     DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(0,-18)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: false
-        , game: gameRef, radius: 34, onStartWeaponHit: () {}, onEndWeaponHit: () {});
+        , game: gameRef, radius: 34, onStartWeaponHit: null, onEndWeaponHit: null);
     weapon.damage = 3;
     weapon.coolDown = _endPos == null ? 1 : 0.5;
     add(weapon);
+    DefaultPlayerWeapon weaponPlayer = DefaultPlayerWeapon([Vector2(0,-18)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: false
+        , game: gameRef, radius: 34, onStartWeaponHit:null, onEndWeaponHit: null);
+    weaponPlayer.damage = 0;
+    weaponPlayer.coolDown = _endPos == null ? 1 : 0.5;
+    add(weaponPlayer);
     if(_endPos != null) {
       double posX = _endPos!.x - _startPos.x;
       double posY = _endPos!.y - _startPos.y;

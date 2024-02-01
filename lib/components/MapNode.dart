@@ -24,7 +24,6 @@ import 'package:game_flame/enemies/mini_creatures/verticalSmallRollingWood.dart'
 import 'package:game_flame/enemies/mini_creatures/windblow.dart';
 import 'package:game_flame/enemies/moose.dart';
 import 'package:game_flame/enemies/sekeletonWithShield.dart';
-import 'package:game_flame/enemies/skeleton.dart';
 import 'package:game_flame/enemies/spin_blade.dart';
 import 'package:game_flame/enemies/strange_merchant.dart';
 import 'package:game_flame/kyrgyz_game.dart';

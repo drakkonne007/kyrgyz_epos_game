@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
@@ -118,7 +117,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     size = _spriteSheetSize;
     position = _startPos;
     _hitbox = EnemyHitbox(_hitBoxPoint,
-        collisionType: DCollisionType.passive,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     _groundBox = GroundHitBox(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38)),obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
@@ -222,6 +221,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){
+      animation = _animIdle;
       _isRefresh = false;
     }else{
       _isRefresh = true;
@@ -349,7 +349,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       health -= hurt;
     }
     if(health <1){
-      _isRefresh = false;
       _speed.x = 0;
       _speed.y = 0;
       if(loots.isNotEmpty) {
@@ -376,11 +375,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void update(double dt)
   {
-    super.update(dt);
-    _rigidSec -= dt;
     if(!_isRefresh){
       return;
     }
+    super.update(dt);
+    _rigidSec -= dt;
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }

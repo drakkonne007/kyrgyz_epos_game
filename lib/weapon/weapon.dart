@@ -35,8 +35,8 @@ double radiansOfPlayerDirect(PlayerDirectionMove direct)
 
 abstract class EnemyWeapon extends DCollisionEntity
 {
-  EnemyWeapon(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic,required this.onStartWeaponHit,
-    required this.onEndWeaponHit, required super.isLoop, required super.game, super.radius});
+  EnemyWeapon(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic,required this.onStartWeaponHit,
+    required this.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic});
 
   Function()? onStartWeaponHit;
   final double sectorInRadian = 0.383972 * 2;
@@ -89,11 +89,11 @@ abstract class EnemyWeapon extends DCollisionEntity
 
 abstract class PlayerWeapon extends DCollisionEntity
 {
-  PlayerWeapon(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic,required this.onStartWeaponHit,
-    required this.onEndWeaponHit, required super.isLoop, required super.game, super.radius,});
+  PlayerWeapon(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic,required this.onStartWeaponHit,
+    required this.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic});
 
-  Function() onStartWeaponHit;
-  Function() onEndWeaponHit;
+  Function()? onStartWeaponHit;
+  Function()? onEndWeaponHit;
   final double sectorInRadian = 0.383972 * 2;
   double damage = 0;
   double permanentDamage = 0;
@@ -103,8 +103,27 @@ abstract class PlayerWeapon extends DCollisionEntity
   double coolDown = 1;
   double currentCoolDown = 0;
   double latencyBefore = 0;
+  Map<EnemyHitbox,int> _myHitboxes= {};
 
   Future<void> hit();
+
+  @override
+  void onLoad()
+  {
+    TimerComponent timer = TimerComponent(period: 60, repeat: true,onTick: cleanHash);
+    add(timer);
+  }
+
+  void cleanHash()
+  {
+    var listKeys = _myHitboxes.keys.toList(growable: false);
+    var listValues = _myHitboxes.values.toList(growable: false);
+    for(int i = 0; i < listValues.length; i++){
+      if(listValues[i] - DateTime.now().millisecondsSinceEpoch < - -30 * 1000){
+        _myHitboxes.remove(listKeys[i]);
+      }
+    }
+  }
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {
@@ -123,10 +142,19 @@ abstract class PlayerWeapon extends DCollisionEntity
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is EnemyHitbox){
-      if(currentCoolDown < coolDown){
-        return;
+      if(_myHitboxes.containsKey(other)){
+        if(DateTime.now().millisecondsSinceEpoch - _myHitboxes[other]! < coolDown * 1000){
+          return;
+        } else{
+          _myHitboxes[other] = DateTime.now().millisecondsSinceEpoch;
+        }
+      }else{
+        _myHitboxes[other] = DateTime.now().millisecondsSinceEpoch;
       }
-      currentCoolDown = 0;
+      // if(currentCoolDown < coolDown){
+      //   return;
+      // }
+      // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }

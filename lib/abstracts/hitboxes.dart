@@ -62,15 +62,18 @@ abstract class DCollisionEntity extends Component
   final Vector2 _maxCoords = Vector2(0, 0);
   Vector2? transformPoint;
   double radius = 0;
+  bool isOnlyForStatic;
+  bool _isTrueRect = false;
 
+  bool get isTrueRect => _isTrueRect && angle == 0;
   List<Vector2> get vertices => _vertices;
   Vector2 get rawCenter => _center;
   bool get isCircle => radius != 0;
 
 
   DCollisionEntity(this._vertices,
-      {required this.collisionType, required this.isSolid, required this.isStatic
-        , required this.isLoop, required this.game, this.column, this.row, this.transformPoint, this.radius = 0})
+      {required this.collisionType, this.isSolid = false, required this.isStatic
+        ,this.isLoop = true, required this.game, this.column, this.row, this.transformPoint, this.radius = 0, this.isOnlyForStatic = false})
   {
     if (isStatic) {
       int currCol = column ?? vertices[0].x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
@@ -101,7 +104,13 @@ abstract class DCollisionEntity extends Component
     _maxCoords.x = -99999;
     _maxCoords.y = -99999;
     if(radius == 0) {
+      Set<double>? check;
+      if(vertices.length == 4 && !isStatic && isLoop){
+        check = {};
+      }
       for (int i = 0; i < vertices.length; i++) {
+        check?.add(vertices[i].x);
+        check?.add(vertices[i].y);
         if (vertices[i].x < _minCoords.x) {
           _minCoords.x = vertices[i].x;
         }
@@ -114,6 +123,9 @@ abstract class DCollisionEntity extends Component
         if (vertices[i].y > _maxCoords.y) {
           _maxCoords.y = vertices[i].y;
         }
+      }
+      if(check != null && check.length == 4){
+        _isTrueRect = true;
       }
       width = _maxCoords.x - _minCoords.x;
       height = _maxCoords.y - _minCoords.y;
@@ -260,8 +272,8 @@ abstract class DCollisionEntity extends Component
 class ObjectHitbox extends DCollisionEntity
 {
 
-  ObjectHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic
-    , required this.obstacleBehavoiur, required this.autoTrigger, required super.isLoop, required super.game, super.radius});
+  ObjectHitbox(super.vertices, {required super.collisionType, super.isSolid, required super.isStatic
+    , required this.obstacleBehavoiur, required this.autoTrigger, super.isLoop, required super.game, super.radius, super.isOnlyForStatic});
 
   late int id = game.gameMap.getNewId();
   bool autoTrigger;
@@ -322,7 +334,8 @@ class ObjectHitbox extends DCollisionEntity
 
 class PlayerHitbox extends DCollisionEntity
 {
-  PlayerHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game, super.radius});
+  PlayerHitbox(super.vertices, {required super.collisionType, super.isSolid
+    , required super.isStatic, super.isLoop, required super.game, super.radius, super.isOnlyForStatic, });
 
 
   @override
@@ -351,7 +364,8 @@ class PlayerHitbox extends DCollisionEntity
 
 class EnemyHitbox extends DCollisionEntity
 {
-  EnemyHitbox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.isLoop, required super.game,   super.radius});
+  EnemyHitbox(super.vertices, {required super.collisionType, super.isSolid
+    , required super.isStatic, super.isLoop, required super.game,   super.radius, super.isOnlyForStatic, });
 
 
   @override
@@ -389,8 +403,9 @@ class GroundHitBox extends DCollisionEntity
 
   Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
 
-  GroundHitBox(super.vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required this.obstacleBehavoiurStart, required super.isLoop, required super.game
-    ,  super.radius});
+  GroundHitBox(super.vertices, {required super.collisionType, super.isSolid
+    , required super.isStatic, required this.obstacleBehavoiurStart, super.isLoop, required super.game
+    ,  super.radius, super.isOnlyForStatic, });
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {

@@ -8,8 +8,8 @@ import 'dart:math' as math;
 
 class DefaultEnemyWeapon extends EnemyWeapon
 {
-  DefaultEnemyWeapon(super._vertices, {required super.collisionType,required super.isSolid,required super.isStatic,
-    required super.onStartWeaponHit,required super.onEndWeaponHit,required super.isLoop,required super.game,super.radius});
+  DefaultEnemyWeapon(super._vertices, {required super.collisionType,super.isSolid,required super.isStatic,
+    required super.onStartWeaponHit,required super.onEndWeaponHit,super.isLoop,required super.game,super.radius, super.isOnlyForStatic, });
 
   @override
   Future<void> hit() async {
@@ -36,8 +36,8 @@ class EWBody extends EnemyWeapon
   bool _isGrow = true;
   final double _maxLength = 3;
 
-  EWBody(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic
-    , required super.onStartWeaponHit, required super.onEndWeaponHit, required super.isLoop, required super.game, super.radius});
+  EWBody(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic
+    , required super.onStartWeaponHit, required super.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic, });
 
   @override
   Future onLoad() async
@@ -97,8 +97,8 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
   double _diffAngle = 0;
   double _activeSecs = 0;
 
-  EWMooseHummer(super._vertices, {required super.collisionType, required super.isSolid, required super.isStatic, required super.onStartWeaponHit
-    , required super.onEndWeaponHit, required super.isLoop, required super.game, super.radius})
+  EWMooseHummer(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic, required super.onStartWeaponHit
+    , required super.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic, })
   {
     transformPoint = Vector2(15,0);
   }

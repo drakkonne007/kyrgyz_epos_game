@@ -46,7 +46,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Vector2 tPos = positionOfAnchor(anchor) - Vector2(15,20);
     Vector2 tSize = Vector2(22,45);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
-        collisionType: DCollisionType.passive,isSolid: true,
+        collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
 
@@ -54,7 +54,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     tSize = Vector2(20,16);
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: true,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(groundBox!);
     add(Ground(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive, isSolid: false,isStatic: false, isLoop: true, game: gameRef));
@@ -70,12 +70,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
-    animation = null;
     _weapon?.stopHit();
-    _velocity.x = 0;
-    _velocity.y = 0;
-    _speed.x = 0;
-    _speed.y = 0;
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
@@ -84,8 +79,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if(gameRef.playerData.health.value <1){
       animation = animDeath;
-      gameRef.startDeathMenu();
+      animationTicker?.onComplete = gameRef.startDeathMenu;
     }else{
+      if(animation == animHurt){
+        return;
+      }
+      _velocity.x = 0;
+      _velocity.y = 0;
+      _speed.x = 0;
+      _speed.y = 0;
+      animation = null;
       animation = animHurt;
       animationTicker?.onComplete = setIdleAnimation;
     }

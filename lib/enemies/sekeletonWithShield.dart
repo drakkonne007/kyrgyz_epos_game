@@ -152,7 +152,7 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
     add(_groundBox);
     // _groundBox.debugColor = BasicPalette.red.color;
     _ground = Ground(getPointsForActivs(Vector2(101-115,127-110), Vector2(22,21))
-        , collisionType: DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true, game: gameRef);
+        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
     TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
@@ -256,6 +256,7 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){
+      animation = _withShieldNow ? _animIdleShield : _animIdle;
       _isRefresh = false;
     }else{
       _isRefresh = true;
@@ -396,7 +397,6 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
     if(health <1){
       _speed.x = 0;
       _speed.y = 0;
-      _isRefresh = false;
       removeAll(children);
       if(loots.isNotEmpty) {
         if(loots.length > 1){
@@ -440,11 +440,11 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
 
   @override
   void update(double dt) {
-    super.update(dt);
-    _rigidSec -= dt;
     if (!_isRefresh) {
       return;
     }
+    super.update(dt);
+    _rigidSec -= dt;
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
       if (_rigidSec <= 0) {

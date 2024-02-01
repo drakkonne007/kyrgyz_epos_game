@@ -58,6 +58,9 @@ class DCollisionProcessor
       if(entity.collisionType == DCollisionType.inactive) {
         continue;
       }
+      if(entity.parent == null){
+        continue;
+      }
       _contactNests.clear();
       int minCol = 0;
       int maxCol = 0;
@@ -86,8 +89,10 @@ class DCollisionProcessor
       for(int col = minCol; col <= maxCol; col++){
         for(int row = minRow; row <= maxRow; row++){
           var lcr = LoadedColumnRow(col, row);
-          _potentialActiveEntity.putIfAbsent(lcr, () => []);
-          _potentialActiveEntity[lcr]!.add(entity);
+          if(!entity.isOnlyForStatic) {
+            _potentialActiveEntity.putIfAbsent(lcr, () => []);
+            _potentialActiveEntity[lcr]!.add(entity);
+          }
           _contactNests.add(lcr);
         }
       }
@@ -156,31 +161,15 @@ class DCollisionProcessor
     }
   }
 }
-
+//Грубая проверка - мгут ли вообще они потенциально как-то скреститься. Солид или нет - это потом
 void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
   if(other.scale == Vector2.all(1) && other.angle == 0
       && entity.scale == Vector2.all(1) && entity.angle == 0) {
-    if (other
-        .getMaxVector()
-        .x < entity
-        .getMinVector()
-        .x
-        || other
-            .getMinVector()
-            .x > entity
-            .getMaxVector()
-            .x
-        || other
-            .getMaxVector()
-            .y < entity
-            .getMinVector()
-            .y
-        || other
-            .getMinVector()
-            .y > entity
-            .getMaxVector()
-            .y) {
+    if (other.getMaxVector().x < entity.getMinVector().x
+        || other.getMinVector().x > entity.getMaxVector().x
+        || other.getMaxVector().y < entity.getMinVector().y
+        || other.getMinVector().y > entity.getMaxVector().y) {
       return;
     }
   }
@@ -202,17 +191,26 @@ void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMa
 void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> insidePoints, bool isMapObstacle)
 {
   if(entity.isCircle && other.isCircle){
+    bool otherTrig = false;
+    bool entityTrig = false;
+    if(entity.radius + other.radius > math.sqrt(math.pow(entity.getPoint(0).x - other.getPoint(0).x,2)
+        + math.pow(entity.getPoint(0).y - other.getPoint(0).y,2))){
+      return;
+    }
+
     double a = -2 * other.getPoint(0).x - entity.getPoint(0).x;
     double b = -2 * other.getPoint(0).y - entity.getPoint(0).y;
     double c = math.pow(other.getPoint(0).x,2).toDouble() + math.pow(other.getPoint(0).y,2)
         + math.pow(entity.radius,2) - math.pow(other.radius,2);
-    var list = f_intersectLineFunctionWithCircle(entity.radius, a, b, c, entity.getPoint(0)); //TODO ООООООООЧЕНЬ под вопросом
+    var list = f_intersectLineFunctionWithCircle(entity.radius, a, b, c, entity.getPoint(0));
     if(list.isNotEmpty){
       if(!isMapObstacle){
-        if (entity.onComponentTypeCheck(other)) {
+        if (entity.onComponentTypeCheck(other) && !entityTrig) {
+          entityTrig = true;
           entity.onCollisionStart({list.first}, other);
         }
-        if (other.onComponentTypeCheck(entity)) {
+        if (other.onComponentTypeCheck(entity) && !otherTrig) {
+          otherTrig = true;
           other.onCollisionStart({list.first}, entity);
         }
       }else{
@@ -223,25 +221,64 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
         }
       }
     }
+    if(entityTrig || otherTrig){
+      return;
+    }
+    if(!isMapObstacle){
+      if(other.isSolid && other.radius > entity.radius){
+        if(other.onComponentTypeCheck(entity)) {
+          other.onCollisionStart({Vector2.zero()}, entity);
+        }
+      }
+      if(entity.isSolid && entity.radius > other.radius){
+        if(entity.onComponentTypeCheck(other)) {
+          entity.onCollisionStart({Vector2.zero()}, other);
+        }
+      }
+    }
     return;
   }
 
+  if(!entity.isCircle && other.isCircle){ //При условии, что нет круглых обстаклов)
+    var temp = entity;
+    entity = other;
+    other = temp;
+  }
+
   if(entity.isCircle) {
+    bool otherTrig = false;
+    bool entityTrig = false;
     Set<int> insideCircles = {};
+    int countOfinside = 0;
     for (int i = 0; i < other.getVerticesCount(); i++) {
       if (entity.getPoint(0).distanceToSquared(other.getPoint(i)) < entity.radius * entity.radius) {
+        countOfinside++;
         if (!isMapObstacle) {
-          if (entity.onComponentTypeCheck(other)) {
-            entity.onCollisionStart({other.getPoint(i)}, other);
+          if(entity.isSolid) {
+            if (entity.onComponentTypeCheck(other) && !entityTrig) {
+              entity.onCollisionStart({other.getPoint(i)}, other);
+              entityTrig = true;
+            }
           }
-          if (other.onComponentTypeCheck(entity)) {
-            other.onCollisionStart({other.getPoint(i)}, entity);
-          }
-          return;
         } else {
           insideCircles.add(i);
         }
+      }else{
+        if(!isMapObstacle && countOfinside != 0) {
+          if (entity.onComponentTypeCheck(other) && !entityTrig) {
+            entity.onCollisionStart({other.getPoint(i)}, other);
+            entityTrig = true;
+          }
+          if(other.onComponentTypeCheck(entity) && !otherTrig){
+            otherTrig = true;
+            other.onCollisionStart({entity.getPoint(0)}, entity);
+          }
+          return;
+        }
       }
+    }
+    if(countOfinside == other.getVerticesCount()){
+      return;
     }
     for (int i = -1; i < other.getVerticesCount() - 1; i++) {
       if (!other.isLoop && i == -1) {
@@ -260,11 +297,13 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
           [otherFirst, otherSecond], entity.getPoint(0), entity.radius);
       if (list.isNotEmpty) {
         if (!isMapObstacle) {
-          if (entity.onComponentTypeCheck(other)) {
+          if (entity.onComponentTypeCheck(other) && !entityTrig) {
             entity.onCollisionStart({list.first}, other);
+            entityTrig = true;
           }
-          if (other.onComponentTypeCheck(entity)) {
+          if (other.onComponentTypeCheck(entity) && !otherTrig) {
             other.onCollisionStart({list.first}, entity);
+            otherTrig = true;
           }
           return;
         } else {
@@ -283,38 +322,18 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
         }
       }
     }
-    return;
-  }
-
-  if(other.isCircle) {
-    for(int i=-1; i<entity.getVerticesCount() - 1; i++) {
-      if (!entity.isLoop && i == -1) {
-        continue;
-      }
-      int tF, tS;
-      if (i == -1) {
-        tF = entity.getVerticesCount() - 1;
-      } else {
-        tF = i;
-      }
-      tS = i + 1;
-      var list = f_intersectLineWithCircle([entity.getPoint(tF),entity.getPoint(tS)], other.getPoint(0), other.radius);
-      if(list.isNotEmpty){
-        if(!isMapObstacle){
-          if(entity.onComponentTypeCheck(other)){
-            entity.onCollisionStart({list.first}, other);
-          }
-          if(other.onComponentTypeCheck(entity)){
-            other.onCollisionStart({list.first}, entity);
-          }
-          return;
-        }else{
-          //TODO сделать обсчёт точек по нахождению нормали от круга и поиску точки этой линии, которая будет по лбому внутри entity
+    if(!isMapObstacle){
+      if(other.isSolid){
+        if(other.onComponentTypeCheck(entity) && !otherTrig){
+          other.onCollisionStart({Vector2.zero()}, entity);
+          otherTrig = true;
         }
       }
     }
     return;
   }
+
+  //Если тупо два квадрата
 
   for (int i = -1; i < other.getVerticesCount() - 1; i++) {
     if (!other.isLoop && i == -1) {
@@ -335,7 +354,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
         continue;
       }
       List<Vector2> tempBorderLines = [];
-      for(int i= - 1; i<entity.getVerticesCount() - 1; i++){
+      for(int i = - 1; i<entity.getVerticesCount() - 1; i++){
         if (!entity.isLoop && i == -1) {
           continue;
         }
@@ -387,6 +406,22 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
             other.onCollisionStart({otherFirst}, entity);
           }
           return;
+        }
+      }
+    }
+  }
+  if(!isMapObstacle){
+    if(entity.isSolid && other.isTrueRect){
+      if(entity.getMinVector().x < other.getMinVector().x){
+        if (entity.onComponentTypeCheck(other)) {
+          entity.onCollisionStart({Vector2.zero()}, other);
+        }
+      }
+    }
+    if(other.isSolid && entity.isTrueRect){
+      if(other.getMinVector().x < entity.getMinVector().x){
+        if (other.onComponentTypeCheck(entity)) {
+          other.onCollisionStart({Vector2.zero()}, entity);
         }
       }
     }

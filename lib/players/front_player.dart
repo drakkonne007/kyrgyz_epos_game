@@ -50,12 +50,12 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Vector2 tPos = positionOfAnchor(anchor) - Vector2(13,20);
     Vector2 tSize = Vector2(26,40);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
-        collisionType: DCollisionType.passive,isSolid: true,
+        collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: true,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(groundBox!);
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
