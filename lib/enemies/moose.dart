@@ -115,7 +115,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   bool _isRefresh = true;
 
   @override
-  Future<void> onLoad() async
+  Future<void> onMount() async
   {
     Image? spriteImage;
     switch(_mooseVariant)
@@ -437,6 +437,11 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       return;
     }
     super.update(dt);
+    if(_groundBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
+      parent = gameRef.gameMap.enemyOnPlayer;
+    }else{
+      parent = gameRef.gameMap.enemyComponent;
+    }
     _rigidSec -= dt;
     if(animation == _animHurt || animation == animAttack || animation == _animDeath || animation == null){
       return;

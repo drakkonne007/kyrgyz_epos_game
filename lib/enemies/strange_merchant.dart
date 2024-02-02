@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 enum StrangeMerchantVariant
@@ -21,9 +22,11 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
   late SpriteAnimation _animIdle;
   final Vector2 _startPos;
   StrangeMerchantVariant spriteVariant;
+  late Ground _myBottomPoint;
+  late GroundHitBox _playerGround;
 
   @override
-  void onLoad() async
+  void onMount() async
   {
     anchor = Anchor.center;
     SpriteSheet spriteSheet = SpriteSheet(
@@ -41,16 +44,29 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
       (Vector2(73,75) - Vector2(55,55)) * 1.15,
       (Vector2(73,34) - Vector2(55,55)) * 1.15,
     ];
-    add(Ground(points,collisionType: DCollisionType.passive,isSolid: false,
-        isStatic: false, isLoop: true, game: gameRef));
+    _myBottomPoint = Ground(points,collisionType: DCollisionType.passive,isSolid: false,
+        isStatic: false, isLoop: true, game: gameRef);
+    add(_myBottomPoint);
     add(ObjectHitbox(getPointsForActivs(Vector2(-30,-30), Vector2(60,60)),collisionType: DCollisionType.active,
         isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
     position = _startPos;
     super.onLoad();
+    _playerGround = gameRef.gameMap.orthoPlayer?.groundBox ?? gameRef.gameMap.frontPlayer!.groundBox!;
   }
 
   void getBuyMenu()
   {
     gameRef.doDialogHud();
+  }
+
+  @override
+  void update(double dt)
+  {
+    super.update(dt);
+    if(_myBottomPoint.getMaxVector().y > _playerGround.getMaxVector().y){
+      parent = gameRef.gameMap.enemyOnPlayer;
+    }else{
+      parent = gameRef.gameMap.enemyComponent;
+    }
   }
 }

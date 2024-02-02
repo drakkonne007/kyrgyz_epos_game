@@ -50,6 +50,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   final Component priorityGroundPlus1 = Component(priority: GamePriority.ground + 1);
   final Component enemyComponent = Component(priority: GamePriority.player - 2);
   final Component playerLayout = Component(priority: GamePriority.player);
+  final Component enemyOnPlayer = Component(priority: GamePriority.player +2);
 
 
   @override
@@ -57,6 +58,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   {
     await add(playerLayout);
     await add(enemyComponent);
+    await add(enemyOnPlayer);
     await add(priorityGroundPlus1);
     await add(priorityHighMinus1);
     await add(priorityHigh);
@@ -107,6 +109,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     priorityGroundPlus1.removeAll(priorityGroundPlus1.children);
     enemyComponent.removeAll(enemyComponent.children);
     playerLayout.removeAll(playerLayout.children);
+    enemyOnPlayer.removeAll(enemyOnPlayer.children);
 
     allEls.clear();
     grounds.clear();
@@ -172,6 +175,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
       }
       // orthoPlayer?.priority = GamePriority.player;
       orthoPlayer?.position = gameRef.playerData.startLocation;
+      gameRef.camera.handleResize(Vector2(600,300));
       gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.lengthOfTileSquare.x
           *currentGameWorldData!.gameConsts.maxColumn!,
           currentGameWorldData!.gameConsts.lengthOfTileSquare.y
@@ -190,7 +194,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     }
     gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
     gameRef.doGameHud();
-    gameRef.camera.zoom = 1.35;
+    // gameRef.camera.zoom = 1.35;
     _isLoad = true;
   }
 

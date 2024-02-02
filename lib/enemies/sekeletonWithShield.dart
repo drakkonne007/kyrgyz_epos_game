@@ -8,6 +8,7 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -94,9 +95,8 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
   ];
 
   @override
-  Future<void> onLoad() async
+  Future<void> onMount() async
   {
-
     anchor = const Anchor(115/220,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;
@@ -444,6 +444,11 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
       return;
     }
     super.update(dt);
+    if(_groundBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
+      parent = gameRef.gameMap.enemyOnPlayer;
+    }else{
+      parent = gameRef.gameMap.enemyComponent;
+    }
     _rigidSec -= dt;
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
