@@ -35,13 +35,14 @@ double radiansOfPlayerDirect(PlayerDirectionMove direct)
 
 abstract class EnemyWeapon extends DCollisionEntity
 {
-  EnemyWeapon(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic,required this.onStartWeaponHit,
-    required this.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic});
+  EnemyWeapon(super._vertices, {this.onObstacle, required super.collisionType, super.isSolid, required super.isStatic,this.onStartWeaponHit,
+    this.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic});
 
   Function()? onStartWeaponHit;
+  Function()? onObstacle;
   final double sectorInRadian = 0.383972 * 2;
   Function()? onEndWeaponHit;
-  double damage = 0;
+  double damage = 1;
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;
@@ -62,6 +63,7 @@ abstract class EnemyWeapon extends DCollisionEntity
     return false;
   }
 
+  @mustCallSuper
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
@@ -69,6 +71,7 @@ abstract class EnemyWeapon extends DCollisionEntity
       if(currentCoolDown < coolDown){
         return;
       }
+      onObstacle?.call();
       currentCoolDown = 0;
       var temp = other.parent as MainPlayer;
       temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
@@ -95,7 +98,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   Function()? onStartWeaponHit;
   Function()? onEndWeaponHit;
   final double sectorInRadian = 0.383972 * 2;
-  double damage = 0;
+  double damage = 1;
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;

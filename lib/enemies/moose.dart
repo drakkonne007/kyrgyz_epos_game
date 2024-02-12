@@ -115,7 +115,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   bool _isRefresh = true;
 
   @override
-  Future<void> onMount() async
+  Future<void> onLoad() async
   {
     Image? spriteImage;
     switch(_mooseVariant)
@@ -188,8 +188,11 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
         , onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isLoop: true, game: game);
     add(_weapon!);
     _weapon!.damage = 3;
-    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
-    add(timer);
+    add(TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,period: 1));
+    int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(rand == 0){
+      flipHorizontally();
+    }
     selectBehaviour();
   }
 
@@ -399,6 +402,9 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
+    if(animation == _animDeath){
+      return;
+    }
     animation = null;
     _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
@@ -419,11 +425,15 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
         }
       }
       animation = _animDeath;
-      removeAll(children);
-      add(OpacityEffect.by(-0.95,EffectController(duration: _animDeath.ticker().totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-        removeFromParent();
-      }));
+      _hitBox.removeFromParent();
+      _groundBox.collisionType = DCollisionType.inactive;
+      // removeAll(children);
+      animationTicker?.onComplete = () {
+        add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+          gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+          removeFromParent();
+        }));
+      };
     }else{
       animation = _animHurt;
       animationTicker?.onComplete = selectBehaviour;

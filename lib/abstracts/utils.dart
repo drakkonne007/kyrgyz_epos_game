@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/geometry.dart';
 
 Vector2 f_pointOfIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
 {
@@ -36,11 +37,14 @@ List<Vector2> f_intersectLineWithCircle(List<Vector2> line, Vector2 circlePos, d
   double c = (a * startL.x + b * startL.y) * -1;
   var points = f_intersectLineFunctionWithCircle(radius, a, b, c, circlePos);
   if(points.length == 2){
-    var control = f_pointOfIntersect(points.first, points.last, line.first, line.last);
-    if(control != Vector2.zero()){
-      return points;
-    }else{
+    var distOfLine = line.first.distanceToSquared(line.last);
+    if(line.first.distanceToSquared(points.first) > distOfLine
+    || line.first.distanceToSquared(points.last) > distOfLine
+    || line.last.distanceToSquared(points.first) > distOfLine
+    || line.last.distanceToSquared(points.last) > distOfLine){
       return [];
+    }else{
+      return points;
     }
   }
   return points;

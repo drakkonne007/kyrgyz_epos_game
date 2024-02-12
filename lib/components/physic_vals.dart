@@ -27,14 +27,16 @@ enum PlayerDirectionMove{
 
 class GameConsts
 {  //9504 тайла
-  GameConsts({this.maxColumn, this.maxRow})
+  GameConsts({this.maxColumn, this.maxRow, this.visibleBounds})
   {
-    maxColumn ??= 27;
-    maxRow ??= 33;
+    maxColumn ??= 25;
+    maxRow ??= 43;
+    visibleBounds ??= Vector2.all(297);
   }
-  final Vector2 lengthOfTileSquare = Vector2(32*11,32*9);
+  final Vector2 lengthOfTileSquare = Vector2(32*12,32*7);
   int? maxColumn;
   int? maxRow;
+  Vector2? visibleBounds;
 }
 
 class PlayerData
@@ -55,8 +57,8 @@ class PlayerData
   Vector2 curPosition = Vector2(-1,-1);
   double gameTime = 720;
   double milisecsInGame = 0;
-  GameWorldData playerBigMap = TopLeftTempleDungeon();
-  Vector2 startLocation = Vector2(1376,5536);
+  GameWorldData playerBigMap = TopLeftVillage();
+  Vector2 startLocation = Vector2(1772,3067);
 
 
   void setStartValues()

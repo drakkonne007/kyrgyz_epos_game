@@ -80,8 +80,6 @@ abstract class DCollisionEntity extends Component
       int currRow = row ?? vertices[0].y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
       game.gameMap.collisionProcessor!.addStaticCollEntity(
           LoadedColumnRow(currCol, currRow), this);
-    } else {
-      game.gameMap.collisionProcessor!.addActiveCollEntity(this);
     }
     calcVertices();
   }
@@ -203,6 +201,14 @@ abstract class DCollisionEntity extends Component
             position: getPoint(i), color: color);
         game.gameMap.priorityHigh.add(p);
       }
+    }
+  }
+
+  @override
+  void onMount()
+  {
+    if (!isStatic) {
+      game.gameMap.collisionProcessor!.addActiveCollEntity(this);
     }
   }
 

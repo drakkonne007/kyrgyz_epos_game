@@ -21,6 +21,7 @@ Future precompileAll() async
     dir.createSync(recursive: true);
   }
   for (final bigWorld in listOfFullMaps) {
+    print('start compile ${bigWorld.nameForGame}');
     var fileName = bigWorld.source; //'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(32));
     var layersLists = tiled.tileMap.map.layers;
@@ -99,7 +100,6 @@ Future precompileAll() async
             }
           }
         }
-        print('start grounds compile');
         if (objs != null && true) {
           Map<LoadedColumnRow, List<GroundSource>> objsMap = {};
           for (final obj in objs.objects) {

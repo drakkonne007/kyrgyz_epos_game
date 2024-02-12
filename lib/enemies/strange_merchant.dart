@@ -1,5 +1,7 @@
 //d:\kyrgyz_epos_game\assets\tiles\map\ancientLand\Characters\NPC merchant\with animated items\NPC Merchant-interaction-entry
 
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
@@ -26,7 +28,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
   late GroundHitBox _playerGround;
 
   @override
-  void onMount() async
+  void onLoad() async
   {
     anchor = Anchor.center;
     SpriteSheet spriteSheet = SpriteSheet(
@@ -52,6 +54,10 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     position = _startPos;
     super.onLoad();
     _playerGround = gameRef.gameMap.orthoPlayer?.groundBox ?? gameRef.gameMap.frontPlayer!.groundBox!;
+    int rand = Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(rand == 0){
+      flipHorizontally();
+    }
   }
 
   void getBuyMenu()

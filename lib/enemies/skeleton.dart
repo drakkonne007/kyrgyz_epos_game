@@ -8,16 +8,15 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/utils.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
-class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
+class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
-  SkeletonWithShield(this._startPos);
+  Skeleton(this._startPos);
   late SpriteAnimation _animMove, _animIdle, _animAttack,_animAttack2, _animHurt, _animDeath;
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackShield, _animAttack2Shield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
   late EnemyHitbox _hitbox;
@@ -50,7 +49,7 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
   double health = 3;
   bool _isRefresh = true;
 
-  final List<Vector2> _hitBox = [
+  final List<Vector2> _hitBoxPoints = [
     Vector2(115-115,100-110),
     Vector2(109-115,104-110),
     Vector2(110-115,112-110),
@@ -95,7 +94,7 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
   ];
 
   @override
-  Future<void> onMount() async
+  Future<void> onLoad() async
   {
     anchor = const Anchor(115/220,0.5);
     Image? spriteImage;
@@ -144,7 +143,7 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
     animation = _withShieldNow ? _animIdleShield : _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
-    _hitbox = EnemyHitbox(_hitBox,
+    _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     _groundBox = GroundHitBox(getPointsForActivs(Vector2(101-115,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: obstacleBehaviour,
@@ -161,6 +160,10 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
         ,isSolid: false,onStartWeaponHit: null,onEndWeaponHit: null);
     _defWeapon.damage = 3;
     add(_defWeapon);
+    rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(rand == 0){
+      flipHorizontally();
+    }
     selectBehaviour();
   }
 
@@ -269,7 +272,7 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
     if(pl.hitBox == null){
       return false;
     }
-    if(_hitbox.getCenter().distanceToSquared(pl.hitBox!.getCenter()) > math.pow(_hitbox.width * 0.5 + 60,2)){
+    if(position.distanceToSquared(pl.position) > math.pow(_hitbox.width * 0.5 + 60,2)){
       return false;
     }
     if(pl.hitBox!.getMinVector().y > _hitbox.getMaxVector().y || pl.hitBox!.getMaxVector().y < _hitbox.getMinVector().y){
@@ -376,6 +379,9 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
+    if(animation == _animDeath || animation == _animDeathShield){
+      return;
+    }
     animation = null;
     _defWeapon.collisionType = DCollisionType.inactive;
     if(inArmor){
@@ -397,21 +403,27 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
     if(health <1){
       _speed.x = 0;
       _speed.y = 0;
-      removeAll(children);
+      _hitbox.removeFromParent();
+      _groundBox.collisionType = DCollisionType.inactive;
+      // removeAll(children);
       if(loots.isNotEmpty) {
-        if(loots.length > 1){
-          var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
+        if (loots.length > 1) {
+          var temp = Chest(
+              0, myItems: loots, position: positionOfAnchor(Anchor.center));
           gameRef.gameMap.add(temp);
-        }else{
-          var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
+        } else {
+          var temp = LootOnMap(
+              loots.first, position: positionOfAnchor(Anchor.center));
           gameRef.gameMap.add(temp);
         }
       }
       animation = _withShieldNow ? _animDeathShield : _animDeath;
-      add(OpacityEffect.by(-0.95,EffectController(duration: _animDeath.ticker().totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-        removeFromParent();
-      }));
+      animationTicker?.onComplete = () {
+        add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+          gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+          removeFromParent();
+        }));
+      };
     }else{
       if(_withShieldNow){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
@@ -433,13 +445,14 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
   void dropShield(int index)
   {
     if(index == 4){
-      DroppedShield droppedShield = DroppedShield(position);
+      DroppedShield droppedShield = DroppedShield(position,isFlippedHorizontally);
       gameRef.gameMap.enemyComponent.add(droppedShield);
     }
   }
 
   @override
   void update(double dt) {
+    _hitbox.doDebug();
     if (!_isRefresh) {
       return;
     }
@@ -481,7 +494,8 @@ class SkeletonWithShield extends SpriteAnimationComponent with HasGameRef<Kyrgyz
 class DroppedShield extends SpriteAnimationComponent
 {
   final Vector2 pos;
-  DroppedShield(this.pos) : super(position: pos);
+  bool isFlipped;
+  DroppedShield(this.pos,this.isFlipped) : super(position: pos);
 
   @override
   void onLoad() async
@@ -490,6 +504,10 @@ class DroppedShield extends SpriteAnimationComponent
     final spriteSheetWithShield = SpriteSheet(image: img,
         srcSize: Vector2(96,64));
     animation = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.1,loop: false);
+    add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration())));
     animationTicker?.onComplete = removeFromParent;
+    if(isFlipped){
+      flipHorizontally();
+    }
   }
 }

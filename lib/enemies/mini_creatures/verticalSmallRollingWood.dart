@@ -6,6 +6,7 @@ import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
+import 'package:game_flame/weapon/weapon.dart';
 
 class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
@@ -17,6 +18,7 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
   bool _isDeleted = false;
   bool _isStarted = false;
   late SpriteAnimationComponent _player;
+  late EnemyWeapon _defWeapon;
 
   @override
   void onLoad() async
@@ -43,15 +45,18 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
       flipHorizontally();
     }
 
-    DefaultEnemyWeapon weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
-        , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
-    weapon.coolDown = 0.5;
-    add(weapon);
+    _defWeapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
+        , game: gameRef,onStartWeaponHit: null, onEndWeaponHit: null);
+    _defWeapon.coolDown = 0.5;
+    _defWeapon.damage = 5;
+    add(_defWeapon);
     _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;
   }
 
   void perfectRemove()
   {
+    _defWeapon.collisionType = DCollisionType.inactive;
+    animation?.loop = false;
     add(OpacityEffect.by(-0.95,EffectController(duration: 0.7),onComplete: (){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();

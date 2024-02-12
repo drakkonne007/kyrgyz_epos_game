@@ -5,6 +5,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/teleport.dart';
+import 'package:game_flame/enemies/mini_creatures/arrowSpawn.dart';
 import 'package:game_flame/enemies/mini_creatures/bigFlyingObelisk.dart';
 import 'package:game_flame/enemies/mini_creatures/bird.dart';
 import 'package:game_flame/enemies/mini_creatures/campPortal.dart';
@@ -23,7 +24,8 @@ import 'package:game_flame/enemies/mini_creatures/verticalBigRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/verticalSmallRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/windblow.dart';
 import 'package:game_flame/enemies/moose.dart';
-import 'package:game_flame/enemies/sekeletonWithShield.dart';
+import 'package:game_flame/enemies/skeleton.dart';
+import 'package:game_flame/enemies/skeletonMage.dart';
 import 'package:game_flame/enemies/spin_blade.dart';
 import 'package:game_flame/enemies/strange_merchant.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -191,6 +193,15 @@ class MapNode {
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(position, GolemVariant.Grass));
         break;
+      case 'sceletM':
+        myGame.gameMap.loadedLivesObjs.add(position);
+        var isHigh = obj?.getAttribute('high');
+        if(isHigh!=null){
+          myGame.gameMap.priorityHigh.add(SkeletonMage(position,isHigh: true));
+        }else{
+          myGame.gameMap.enemyComponent.add(SkeletonMage(position));
+        }
+        break;
       case 'enemy':
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(GrassGolem(position, GolemVariant.Grass));
@@ -209,7 +220,7 @@ class MapNode {
         break;
       case 'scelet':
         myGame.gameMap.loadedLivesObjs.add(position);
-        myGame.gameMap.enemyComponent.add(SkeletonWithShield(position));
+        myGame.gameMap.enemyComponent.add(Skeleton(position));
         break;
       case 'gold':
         var temp = LootOnMap(itemFromId(2), position: position);
@@ -273,7 +284,7 @@ class MapNode {
             double.parse(targetPos[0]), double.parse(targetPos[1]));
         Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!),
             double.parse(obj.getAttribute('h')!));
-        var temp = Teleport(
+        var temp = Teleport(kyrGame: myGame,
             size: telSize, position: position, targetPos: target);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.add(temp);
@@ -338,6 +349,11 @@ class MapNode {
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(verticalBigRollWood);
         break;
+      case 'arrow':
+        String targetPos = obj!.getAttribute('dir')!;
+        ArrowSpawn spawn = ArrowSpawn(position, targetPos);
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.enemyComponent.add(spawn);
     }
   }
 }

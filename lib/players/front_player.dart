@@ -124,7 +124,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _speed.x = 0;
   }
 
-  void startHit()
+  void startHit(bool isLong)
   {
     // gameRef.doDialogHud();
     // return;

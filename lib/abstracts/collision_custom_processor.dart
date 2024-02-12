@@ -278,6 +278,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
       }
     }
     if(countOfinside == other.getVerticesCount()){
+
       return;
     }
     for (int i = -1; i < other.getVerticesCount() - 1; i++) {

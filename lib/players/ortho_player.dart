@@ -16,10 +16,35 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
+final List<Vector2> _attack1ind1 = [
+  Vector2(336,242) - Vector2(144*2 + 77,96*2 + 48),
+  Vector2(361,224) - Vector2(144*2 + 77,96*2 + 48),
+  Vector2(381,227) - Vector2(144*2 + 77,96*2 + 48),
+  Vector2(402,234) - Vector2(144*2 + 77,96*2 + 48),
+  Vector2(409,246) - Vector2(144*2 + 77,96*2 + 48),
+  Vector2(401,262) - Vector2(144*2 + 77,96*2 + 48),
+  Vector2(377,272) - Vector2(144*2 + 77,96*2 + 48),
+  Vector2(343,272) - Vector2(144*2 + 77,96*2 + 48),
+];
+
+final List<Vector2> _attack2ind1 = [
+  Vector2(0, -1),
+  Vector2(19,-1),
+  Vector2(19,2),
+  Vector2(0,2),
+];
+
+final List<Vector2> _attack2ind2 = [
+  Vector2(20, -1),
+  Vector2(69,-1),
+  Vector2(69,2),
+  Vector2(20,2),
+];
+
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
-  late SpriteAnimation animMove, animMoveFast, animIdle, animHurt, animDeath;
+  late SpriteAnimation animMove, animMoveFast, animIdle, animHurt, animDeath, _animShort,_animLong;
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
@@ -27,6 +52,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   PlayerWeapon? _weapon;
   bool gameHide = false;
   final Vector2 _maxSpeeds = Vector2.all(0);
+  bool _isLongAttack = false;
 
   @override
   Future<void> onLoad() async
@@ -38,7 +64,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
     animMoveFast = spriteSheet.createAnimation(row: 1, stepTime: 0.1, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
-    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.15, from: 0,to: 19, loop: false);
+    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
+    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 8,loop: false);
+    _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false);
     animation = animIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
@@ -60,17 +88,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         collisionType: DCollisionType.passive, isSolid: false,isStatic: false, isLoop: true, game: gameRef));
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
-    _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
+    _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
-        onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = animIdle;}, game: gameRef);
-    //_weapon = WSword(position: Vector2(width/2,height/2), onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = _animIdle;});
+        onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
+    _weapon?.damage = 1;
     add(_weapon!);
   }
 
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
-    _weapon?.stopHit();
+    _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
       hurt -= gameRef.playerData.armor.value;
       gameRef.playerData.health.value -= math.max(hurt, 0);
@@ -113,26 +141,25 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _speed.x = 0;
     _speed.y = 0;
     if(animation != null){
-      animation!.ticker().reset();
+      animationTicker?.reset();
     }
   }
 
-  void onStartHit()
+  void startHit(bool isLong)
   {
+    if(animation != animIdle && animation != animMoveFast && animation != animMove){
+      return;
+    }
+    _isLongAttack = isLong;
+    animation = _isLongAttack ? _animLong : _animShort;
     _velocity.x = 0;
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
-  }
-
-  void startHit()
-  {
-    // gameRef.doDialogHud();
-    // return;
-    if(animation == animHurt || animation == animDeath){
-      return;
-    }
-    _weapon?.hit();
+    animationTicker?.onFrame = onFrameWeapon;
+    animationTicker?.onComplete = (){
+      animation = animIdle;
+    };
   }
 
   void makeAction()
@@ -227,6 +254,28 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity.x = 0;
     _velocity.y = 0;
     PhysicVals.runCoef = 1;
+  }
+
+  void onFrameWeapon(int index)
+  {
+    if(_isLongAttack){
+      if(index == 6){
+        _weapon?.collisionType = DCollisionType.active;
+        _weapon?.changeVertices(_attack2ind1,isLoop: true);
+      }
+      else if(index == 7){
+        _weapon?.changeVertices(_attack2ind2,isLoop: true);
+      }else if(index == 11){
+        _weapon?.collisionType = DCollisionType.inactive;
+      }
+    }else{
+      if(index == 2){
+        _weapon?.collisionType = DCollisionType.active;
+        _weapon?.changeVertices(_attack1ind1);
+      }else if(index == 5){
+        _weapon?.collisionType = DCollisionType.inactive;
+      }
+    }
   }
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
@@ -328,11 +377,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void update(double dt)
   {
     // _groundBox?.doDebug(color: BasicPalette.red.color);
-    // hitBox?.doDebug();
     super.update(dt);
     if(gameHide){
       return;
     }
+    _weapon?.doDebug();
     if(animation != animMove && animation != animMoveFast){
       return;
     }

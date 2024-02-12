@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
 List<GameWorldData> fullMaps()
@@ -58,7 +59,7 @@ class TestMap extends GameWorldData {
     orientation = OrientatinType.orthogonal;
     nameForGame = 'testMap';
     source = 'testMap.tmx';
-    gameConsts = GameConsts(maxColumn: 3, maxRow:3);
+    gameConsts = GameConsts(maxColumn: 3, maxRow:4, visibleBounds: Vector2(33,27));
   }
 }
 
@@ -78,7 +79,7 @@ class TopLeftVillage extends GameWorldData {
     orientation = OrientatinType.orthogonal;
     nameForGame = 'topLeftVillage';
     source = 'top_left_village.tmx';
-    gameConsts = GameConsts(maxColumn: 10, maxRow:11);
+    gameConsts = GameConsts(maxColumn: 10, maxRow:15,visibleBounds: Vector2(110,99));
   }
 }
 
@@ -112,6 +113,6 @@ class YurtaInTopLeftVillage extends GameWorldData {
     orientation = OrientatinType.front;
     nameForGame = 'yurtaInTopLeftVillage$number';
     source = 'yurtaInTopLeftVillage$number.tmx';
-    gameConsts = GameConsts(maxColumn: 3, maxRow:2);
+    gameConsts = GameConsts(maxColumn: 3, maxRow:3, visibleBounds: Vector2(33,18));
   }
 }

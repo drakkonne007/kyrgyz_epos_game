@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:math';
+import 'dart:ui';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -33,6 +35,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   static Map<String,ext.Image> cachedImgs = {};
   static Set<String> cachedMapPngs = {};
   Database? database;
+  late FragmentProgram telepShaderProgramm;
 
   @override
   Future onLoad() async
@@ -41,6 +44,8 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
+    Flame.images.prefix = 'assets/';
+    telepShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
     prefs = await SharedPreferences.getInstance();
     prefs.remove('locale');
     var loc = prefs.getString('locale');
@@ -58,6 +63,15 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
       await precompileAll();
       exit(0);
     }
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    double xZoom = size.x / 768;
+    double yZoom = size.y / 448;
+    camera.zoom = max(xZoom, yZoom);
+    // print(size);
+    super.onGameResize(size);
   }
 
   void doGameHud()

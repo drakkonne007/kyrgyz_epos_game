@@ -8,8 +8,8 @@ import 'dart:math' as math;
 
 class DefaultEnemyWeapon extends EnemyWeapon
 {
-  DefaultEnemyWeapon(super._vertices, {required super.collisionType,super.isSolid,required super.isStatic,
-    required super.onStartWeaponHit,required super.onEndWeaponHit,super.isLoop,required super.game,super.radius, super.isOnlyForStatic, });
+  DefaultEnemyWeapon(super._vertices, {super.onObstacle,required super.collisionType,super.isSolid,required super.isStatic,
+    super.onStartWeaponHit,super.onEndWeaponHit,super.isLoop,required super.game,super.radius, super.isOnlyForStatic, });
 
   @override
   Future<void> hit() async {
@@ -17,10 +17,14 @@ class DefaultEnemyWeapon extends EnemyWeapon
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {}
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+
+  }
 
   @override
-  void onCollisionEnd(DCollisionEntity other){}
+  void onCollisionEnd(DCollisionEntity other){
+
+  }
 
   @override
   void update(double dt)

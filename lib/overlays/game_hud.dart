@@ -40,10 +40,14 @@ class GameHud extends StatelessWidget
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children:[
                       ElevatedButton(
+                        onLongPress: (){
+                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                          _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
+                        },
                         onPressed: (){
                           // _game.doInventoryHud();
                           _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startHit() : _game.gameMap.frontPlayer?.startHit();
+                          _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
                         },
                         child: const Icon(Icons.sports_handball_outlined),
                       ),

@@ -137,6 +137,10 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     defWep.damage = 3;
     TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
     add(timer);
+    int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(rand == 0){
+      flipHorizontally();
+    }
     selectBehaviour();
   }
 
@@ -342,6 +346,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
   {
+    if(animation == _animDeath){
+      return;
+    }
     _weapon.collisionType = DCollisionType.inactive;
     animation = null;
     if(inArmor){
@@ -362,11 +369,16 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
         }
       }
       animation = _animDeath;
-      removeAll(children);
-      add(OpacityEffect.by(-0.95,EffectController(duration: _animDeath.ticker().totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-        removeFromParent();
-      }));
+      _hitbox.removeFromParent();
+      _groundBox.collisionType = DCollisionType.inactive;
+
+      // removeAll(children);
+      animationTicker?.onComplete = () {
+        add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+          gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+          removeFromParent();
+        }));
+      };
     }else{
       animation = _animHurt;
       animationTicker!.onComplete = selectBehaviour;

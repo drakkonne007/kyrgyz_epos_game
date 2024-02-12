@@ -87,9 +87,11 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   Future<void> loadNewMap() async
   {
     game.doLoadingMapHud();
+    _isLoad = false;
+    _column = -100;
+    _row = -100;
     Flame.assets.clearCache();
     Flame.images.clearCache();
-    _isLoad = false;
     orthoPlayer?.removeFromParent();
     orthoPlayer=null;
     frontPlayer?.removeFromParent();
@@ -125,13 +127,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     await _preloadAnimAndObj();
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
-    }
-    _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    for(int i=0;i<3;i++) {
-      for(int j=0;j<3;j++) {
-        mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
-      }
     }
     grounds.clear();
     for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
@@ -173,13 +168,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
         await playerLayout.add(orthoPlayer!);
         await orthoPlayer!.loaded;
       }
-      // orthoPlayer?.priority = GamePriority.player;
       orthoPlayer?.position = gameRef.playerData.startLocation;
-      gameRef.camera.handleResize(Vector2(600,300));
-      gameRef.camera.followComponent(orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.lengthOfTileSquare.x
-          *currentGameWorldData!.gameConsts.maxColumn!,
-          currentGameWorldData!.gameConsts.lengthOfTileSquare.y
-              *currentGameWorldData!.gameConsts.maxRow!));
     }else{
       if(frontPlayer == null){
         frontPlayer = FrontPlayer();
@@ -187,14 +176,21 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
         await frontPlayer!.loaded;
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
-      gameRef.camera.followComponent(frontPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.lengthOfTileSquare.x
-          *currentGameWorldData!.gameConsts.maxColumn!,
-          currentGameWorldData!.gameConsts.lengthOfTileSquare.y
-              *currentGameWorldData!.gameConsts.maxRow!));
     }
+    gameRef.camera.followComponent(frontPlayer ?? orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.visibleBounds!.x
+        *32,
+        currentGameWorldData!.gameConsts.visibleBounds!.y
+            *32));
     gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
     gameRef.doGameHud();
-    // gameRef.camera.zoom = 1.35;
+    // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    // _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    // for(int i=0;i<3;i++) {
+    //   for(int j=0;j<3;j++) {
+    //     mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
+    //   }
+    // }
+    // // gameRef.camera.zoom = 1.35;
     _isLoad = true;
   }
 
@@ -244,6 +240,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
       return;
     }
     collisionProcessor?.updateCollisions();
+    int col = (gameRef.camera.position.x + gameRef.camera.canvasSize.x/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    int row = (gameRef.camera.position.y + gameRef.camera.canvasSize.y/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    if (col != _column || row != _row) {
+      reloadWorld(col, row);
+    }
+    return;
     if(orthoPlayer != null && !orthoPlayer!.gameHide){
       int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
       int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
@@ -261,62 +263,26 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
 
   void reloadWorld(int newColumn, int newRow)
   {
-    var tempColumn = _column;
-    var tempRow = _row;
     _column = newColumn;
     _row = newRow;
-    List<LoadedColumnRow> toRemove = [];
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
-    if(newColumn < tempColumn){
-      for(final node in allEllsSet) {
-        if (node.column == newColumn + 2) {
-          toRemove.add(node);
+    for(final els in allEllsSet){
+      if((els.row - _row).abs() >= 2 || (els.column - _column).abs() >= 2){
+        if(allEls.containsKey(els)){
+          for(final dd in allEls[els]!){
+            dd.removeFromParent();
+          }
         }
-      }
-      for(int i=0;i<3;i++) {
-        mapNode?.generateMap(LoadedColumnRow(newColumn - 1, newRow + i - 1));
+        allEls.remove(els);
       }
     }
-    if(newColumn > tempColumn){
-      for(final node in allEllsSet) {
-        if (node.column == newColumn - 2) {
-          toRemove.add(node);
+    for(int i=-1;i<2;i++) {
+      for(int j=-1;j<2;j++) {
+        if(allEls.containsKey(LoadedColumnRow(_column + i, _row + j))){
+          continue;
         }
-      }
-      for(int i=0;i<3;i++) {
-        mapNode?.generateMap(LoadedColumnRow(newColumn + 1, newRow + i - 1));
+        mapNode?.generateMap(LoadedColumnRow(_column + i, _row + j));
       }
     }
-    if(newRow < tempRow){
-      for(final node in allEllsSet) {
-        if (node.row == newRow + 2) {
-          toRemove.add(node);
-        }
-      }
-      for(int i=0;i<3;i++) {
-        mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow - 1));
-      }
-    }
-    if(newRow > tempRow){
-      for(final node in allEllsSet) {
-        if (node.row == newRow - 2) {
-          toRemove.add(node);
-        }
-      }
-      for(int i=0;i<3;i++) {
-        mapNode?.generateMap(LoadedColumnRow(newColumn + i - 1, newRow + 1));
-      }
-    }
-    for(final node in toRemove) {
-      if(allEls.containsKey(node)){
-        for(final dd in allEls[node]!){
-          dd.removeFromParent();
-        }
-      }
-      // collisionProcessor.removeStaticCollEntity(node);
-      allEls.remove(node);
-    }
-    // orthoPlayer?.priority = GamePriority.player-1;
-    // orthoPlayer?.priority = GamePriority.player;
   }
 }
