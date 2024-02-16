@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/game_widgets/LootInventar.dart';
+import 'package:game_flame/game_widgets/typeInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
@@ -18,13 +21,11 @@ AutoSizeText getAnswer(String text)
   );
 }
 
-
 class InventoryOverlay extends StatefulWidget
 {
   static const String id = 'InventoryOverlay';
   final KyrgyzGame game;
-  InventoryOverlay(this.game, {super.key});
-
+  const InventoryOverlay(this.game, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -32,123 +33,115 @@ class InventoryOverlay extends StatefulWidget
   }
 }
 
-List<Widget> getCells(KyrgyzGame game,double width,int rowNumber)
-{
-  List<Widget> list = [];
-  String? temp;
-  switch(rowNumber){
-    case 1:
-      temp = 'assets/images/dressIcon.png'; break;
-    case 2: temp = 'assets/images/swordIcon.png'; break;
-    case 3: temp = 'assets/images/poisonIcon.png'; break;
-    case 4: temp = 'assets/images/bagIcon.png'; break;
-    case 5: temp = 'assets/images/settingsIcon.png'; break;
-  }
-  for(int i = 0; i < 9; i++){
-    if(i == 0){
-      list.add(cellForTable(game,width,imgPath: temp));
-    }else{
-      list.add(cellForTable(game,width));
-    }
-  }
-  return list;
-}
-
-Widget firstRow(double height, KyrgyzGame game)
-{
-  return Stack(
-      alignment: Alignment.center,
-      fit: StackFit.passthrough,
-      children:[
-        Image.asset('assets/images/inventar3.png',
-          fit: BoxFit.fill,
-          centerSlice: Rect.fromPoints(const Offset(15,15),const Offset(45, 45)),
-          isAntiAlias: true,
-          filterQuality: FilterQuality.high,
-          height: height,
-          width: height * 9,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const Icon(Icons.heart_broken, color: Colors.red,size: 35,
-              shadows: [
-                BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1), blurStyle: BlurStyle.normal)
-              ],),
-            getAnswer(game.playerData.health.value.toString()),
-            const Icon(Icons.shield_sharp, color: Colors.green,size: 35,
-              shadows: [
-                BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1),spreadRadius: 1, blurStyle: BlurStyle.normal)
-              ],),
-            getAnswer(game.playerData.armor.value.toString()),
-            const Icon(Icons.attach_money, color: Colors.yellow,size: 35,
-              shadows: [
-                BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1),blurStyle: BlurStyle.normal)
-              ]
-            ),
-            getAnswer(game.playerData.money.toString()),
-            Image.asset('assets/images/dressIcon.png',),
-            getAnswer(game.playerData.money.toString()),
-          ]
-        )
-      ]
-  );
-}
-
 class InventoryOverlayState extends State<InventoryOverlay>
 {
+
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context)
   {
     return LayoutBuilder(builder: (context,constraints){
-      return Center(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      return Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                firstRow(min(constraints.maxWidth/10, constraints.maxHeight/7),widget.game),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children:getCells(widget.game,min(constraints.maxWidth/10, constraints.maxHeight/7),1)),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children:getCells(widget.game,min(constraints.maxWidth/10, constraints.maxHeight/7),2)),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children:getCells(widget.game,min(constraints.maxWidth/10, constraints.maxHeight/7),3)),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children:getCells(widget.game,min(constraints.maxWidth/10, constraints.maxHeight/7),4)),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children:getCells(widget.game,min(constraints.maxWidth/10, constraints.maxHeight/7),5)),
+              mainAxisSize: MainAxisSize.max,
+              children:[
+                const Spacer(),
+                Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: getUpTabs((constraints.maxWidth * 0.75)/11,(constraints.maxHeight * 0.75)/7)
+                ),
+                Stack(
+                    alignment: Alignment.center,
+                    fit: StackFit.passthrough,
+                    clipBehavior: Clip.none,
+                    children:[
+                      Image.asset('assets/images/inventar/UI-9-sliced object-31.png',
+                        fit: BoxFit.fill,
+                        centerSlice: const Rect.fromLTWH(8,9,9,10),
+                        isAntiAlias: true,
+                        filterQuality: FilterQuality.high,
+                        width: constraints.maxWidth * 0.75,
+                        height: constraints.maxHeight * 0.75,
+                      ),
+                      TypeInventar(widget.game,getVariant(currentIndex), Size(constraints.maxWidth * 0.75,constraints.maxHeight * 0.75))
+                    ]
+                ),
+                const Spacer()
               ]
-          )
       );
     })  ;
   }
-}
-//
-// Image getImg(int row)
-// {
-//   return Image.asset(imgPath,
-//       fit: BoxFit.fill,
-//       centerSlice: Rect.fromPoints(const Offset(15,15),const Offset(45, 45)),
-//       width: width,
-//       height: height,
-//       isAntiAlias: true,
-//       filterQuality: FilterQuality.high
-//   );
-// }
 
-Widget cellForTable(KyrgyzGame game, double width, {String? imgPath})
-{
-  return Stack(
-      alignment: Alignment.center,
-      fit: StackFit.passthrough,
-      children:[
-        Image.asset('assets/images/inventar3.png',
-          fit: BoxFit.fill,
-          centerSlice: Rect.fromPoints(const Offset(15,15),const Offset(45, 45)),
-          isAntiAlias: true,
-          filterQuality: FilterQuality.high,
-          width: width,
-          height: width,
-        ),
-        imgPath == null ? Container() :
-        IconButton(onPressed: game.doGameHud, icon: Image.asset(imgPath))// (Image.asset(imgPath ?? 'assets/images/inventar2.png',)),
-      ]
-  );
-}
+  LootVariant getVariant(int index)
+  {
+    switch(index){
+      case 0: return LootVariant.weapon;
+      case 1: return LootVariant.armor;
+      case 2: return LootVariant.flask;
+      case 3: return LootVariant.item;
+    }
+    return LootVariant.weapon;
+  }
 
+  String getImage(int index)
+  {
+    String source = '';
+    switch(index){
+      case 0: index == currentIndex ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png'; break;
+      case 1: index == currentIndex ? source = 'shieldYark.png' : source = 'shield.png'; break;
+      case 2: index == currentIndex ? source = 'manaYark.png' : source = 'mana.png'; break;
+      case 3: index == currentIndex ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png'; break;
+      case 4: index == currentIndex ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png'; break;
+      case 5: index == currentIndex ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png'; break;
+    }
+    return 'assets/images/inventar/$source';
+  }
+
+  List<Widget> getUpTabs(double width, double height)
+  {
+    List<Widget> temp = [SizedBox(width: width*2,)];
+    for(int i=0;i<6;i++){
+      String asset = 'assets/images/inventar/UI-9-sliced object-35.png';
+      if(currentIndex == i) {
+        asset = 'assets/images/inventar/UI-9-sliced object-34.png';
+      }
+      temp.add(
+          ElevatedButton(
+              onPressed: (){
+                setState(() {
+                  currentIndex = i;
+                });
+              },
+              style: defaultNoneButtonStyle.copyWith(
+                maximumSize: MaterialStateProperty.all<Size>(Size(width,height + 5)),
+                minimumSize: MaterialStateProperty.all<Size>(Size(width,height + 5)),
+                alignment: Alignment.bottomCenter
+              ),
+              child:
+              Stack(
+                  fit: StackFit.passthrough,
+                  alignment: Alignment.center,
+                  children:
+                  [
+                    Image.asset(asset,
+                      fit: BoxFit.fill,
+                      centerSlice: const Rect.fromLTWH(4,4,17,19),
+                      isAntiAlias: true,
+                      filterQuality: FilterQuality.high,
+                      width: width,
+                      height: i == currentIndex ? height + 5 : height,
+                    ),
+                    Image.asset(getImage(i),
+                      width: width,
+                      height: height,)
+                  ]
+              )
+          )
+      );
+    }
+    return temp;
+  }
+}

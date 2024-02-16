@@ -38,9 +38,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
   @override
   int row=0;
   @override
-  int maxLoots = 2;
+  int maxLoots = 1;
   @override
-  double chanceOfLoot = 0.8;
+  double chanceOfLoot = 0.2;
   @override
   double armor = 0;
   @override

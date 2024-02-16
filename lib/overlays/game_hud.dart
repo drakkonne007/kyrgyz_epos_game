@@ -39,26 +39,65 @@ class GameHud extends StatelessWidget
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children:[
-                      ElevatedButton(
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          surfaceTintColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          elevation: MaterialStateProperty.all<double>(0),
+                          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+                        ),
+                        onLongPress: (){
+                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                          _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
+                        },
+                        onPressed: (){
+                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                          _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
+                        },
+                        child: Image.asset('assets/images/inventar/UI-9-sliced object-209.png',width: 40,height: 40,
+                        fit: BoxFit.cover,),
+                      ),
+                      TextButton(
                         onLongPress: (){
                           _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
                           _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
                         },
                         onPressed: (){
-                          // _game.doInventoryHud();
                           _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
+                          _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
                         },
-                        child: const Icon(Icons.sports_handball_outlined),
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          surfaceTintColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                          elevation: MaterialStateProperty.all<double>(0),
+                          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+                        ),
+                        child: Image.asset('assets/images/inventar/UI-9-sliced object-223.png',width: 40,height: 40,
+                        fit: BoxFit.cover,),
                       ),
-
                       ValueListenableBuilder(valueListenable: _game.gameMap.currentObject, builder: (_,val,__) {
-                        return val == null ? const SizedBox(width: 30,height: 30,) : ElevatedButton(
+                        return val == null ? const SizedBox(width: 40,height: 44,) : ElevatedButton(
                           onPressed: (){
                             _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
                             _game.gameMap.orthoPlayer?.makeAction() : _game.gameMap.frontPlayer?.makeAction();
                           },
-                          child: const Icon(Icons.waving_hand),
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                            overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                            shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                            surfaceTintColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                            elevation: MaterialStateProperty.all<double>(0),
+                            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+                          ),
+                          child: Image.asset('assets/images/inventar/UI-9-sliced object-89.png',width: 40,height: 40
+                            ,fit: BoxFit.cover,),
                         );
                       }),
                     ]

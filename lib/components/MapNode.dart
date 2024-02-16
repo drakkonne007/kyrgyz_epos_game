@@ -223,7 +223,7 @@ class MapNode {
         myGame.gameMap.enemyComponent.add(Skeleton(position));
         break;
       case 'gold':
-        var temp = LootOnMap(itemFromId(2), position: position);
+        var temp = LootOnMap(itemFromName('gold'), position: position);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.enemyComponent.add(temp);
         break;
@@ -253,7 +253,7 @@ class MapNode {
         myGame.gameMap.enemyComponent.add(temp);
         break;
       case 'chest':
-        var temp = Chest(1, myItems: [itemFromId(2)], position: position);
+        var temp = Chest(1, myItems: [itemFromName('gold')], position: position);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.enemyComponent.add(temp);
         break;

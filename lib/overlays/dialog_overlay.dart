@@ -144,7 +144,7 @@ class _DialogAnswersState extends State<DialogAnswers> {
                               borderRadius: BorderRadius.zero,
                             )
                         ),
-                        child: getAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
+                        child: getPrettyAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
                       ),
                     ),
                     Container(
@@ -164,7 +164,7 @@ class _DialogAnswersState extends State<DialogAnswers> {
                                 borderRadius: BorderRadius.zero,
                               )
                           ),
-                          child: getAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
+                          child: getPrettyAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
                         )
                     ),
                     Container(
@@ -184,7 +184,7 @@ class _DialogAnswersState extends State<DialogAnswers> {
                                 borderRadius: BorderRadius.zero,
                               )
                           ),
-                          child: getAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
+                          child: getPrettyAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
                         )
                     ),
                   ])
@@ -194,7 +194,7 @@ class _DialogAnswersState extends State<DialogAnswers> {
   }
 }
 
-AutoSizeText getAnswer(String text)
+AutoSizeText getPrettyAnswer(String text)
 {
   return AutoSizeText(
     text,

@@ -40,7 +40,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   @override
   int maxLoots = 2;
   @override
-  double chanceOfLoot = 0.8;
+  double chanceOfLoot = 0.5;
   @override
   double armor = 0;
   @override
@@ -452,7 +452,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
 
   @override
   void update(double dt) {
-    _hitbox.doDebug();
+    // _hitbox.doDebug();
     if (!_isRefresh) {
       return;
     }

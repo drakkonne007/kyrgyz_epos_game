@@ -1,4 +1,5 @@
 
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -57,15 +58,15 @@ class Teleport extends PositionComponent with HasGameRef<KyrgyzGame>
   {
     var shader = gameRef.telepShaderProgramm.fragmentShader();
     shader.setFloat(0,_iTime);
-    shader.setFloat(1,30);
-    shader.setFloat(2,30);
+    shader.setFloat(1,max(size.x,30));
+    shader.setFloat(2,max(size.y,30));
     final paint = Paint()..shader = shader;
     canvas.drawRect(
       Rect.fromLTWH(
-        size.x/2 - 15,
-        size.y/2 - 15,
-        30,
-        30,
+        0,
+        0,
+        max(size.x,30),
+        max(size.y,30),
       ),
       paint,
     );

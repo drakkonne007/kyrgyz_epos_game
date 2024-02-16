@@ -53,6 +53,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool gameHide = false;
   final Vector2 _maxSpeeds = Vector2.all(0);
   bool _isLongAttack = false;
+  bool _isMinusEnergy = false;
+  bool _isRun = false;
 
   @override
   Future<void> onLoad() async
@@ -65,7 +67,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animMoveFast = spriteSheet.createAnimation(row: 1, stepTime: 0.1, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
-    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 8,loop: false);
+    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 11,loop: false);
     _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false);
     animation = animIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
@@ -92,6 +94,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         isStatic: false, isLoop: true,
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
     _weapon?.damage = 1;
+    _weapon?.energyCost = 2;
     add(_weapon!);
   }
 
@@ -150,12 +153,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation != animIdle && animation != animMoveFast && animation != animMove){
       return;
     }
+    if(game.playerData.energy.value < _weapon!.energyCost){
+      return;
+    }
+    game.playerData.energy.value -= _weapon!.energyCost;
     _isLongAttack = isLong;
     animation = _isLongAttack ? _animLong : _animShort;
     _velocity.x = 0;
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
+    _weapon?.cleanHashes();
     animationTicker?.onFrame = onFrameWeapon;
     animationTicker?.onComplete = (){
       animation = animIdle;
@@ -183,7 +191,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     if(animation == animIdle  || animation == animMove || animation == animMoveFast) {
-      if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
+      _isRun = isRun;
+      if (isRun && gameRef.playerData.energy.value > 0 && !_isMinusEnergy) {
         PhysicVals.runCoef = 1.3;
         if(animation == animMove){
           int temp = animationTicker!.currentIndex;
@@ -381,24 +390,41 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameHide){
       return;
     }
-    _weapon?.doDebug();
+    if(gameRef.playerData.energy.value > 1){
+      _isMinusEnergy = false;
+    }
+    if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
+      gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
+    }
+    // _weapon?.doDebug();
     if(animation != animMove && animation != animMoveFast){
+      gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
+      gameRef.playerData.energy.value += dt * 1.5;
       return;
     }
-    if(animation == animMoveFast){
-      gameRef.playerData.energy.value -= dt * 2;
+    if(_isRun && !_isMinusEnergy){
       if(gameRef.playerData.energy.value < 0){
+        _isMinusEnergy = true;
+        if(animation == animMoveFast){
+          var index = animationTicker?.currentIndex;
+          animation = animMove;
+          animationTicker?.currentIndex = index ?? 0;
+        }
         PhysicVals.runCoef = 1;
-        gameRef.playerData.energy.value = 0;
       }else{
+        if(animation != animMoveFast){
+          int? index = animationTicker?.currentIndex;
+          animation = animMoveFast;
+          animationTicker?.currentIndex = index ?? 0;
+        }
         PhysicVals.runCoef = 1.3;
       }
+      gameRef.playerData.energy.value -= dt * 2;
     }else{
+      PhysicVals.runCoef = 1;
       if(!gameRef.playerData.isLockEnergy) {
+        gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
         gameRef.playerData.energy.value += dt;
-      }
-      if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
-        gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
       }
     }
     _speed.x = math.max(-_maxSpeeds.x.abs() * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeeds.x.abs() * PhysicVals.runCoef));
@@ -427,10 +453,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(countZero == 2){
       setIdleAnimation();
       if(!gameRef.playerData.isLockEnergy) {
+        gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
         gameRef.playerData.energy.value += dt;
-      }
-      if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
-        gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
       }
       return;
     }

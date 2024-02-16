@@ -51,7 +51,12 @@ class PlayerData
   Set<int> killedBosses = {};
   int money = 0;
   int curWeapon = -1;
-  List<Item> inventoryItems = [];
+  Map<String,int> weaponInventar = {'gold':10};
+  Map<String,int> armorInventar = {'gold':22};
+  Map<String,int> flaskInventar = {'gold':31};
+  Map<String,int> itemInventar = {'gold':13};
+
+
   List<Item> curDress = [];
   Vector2 location = Vector2(-1,-1);
   Vector2 curPosition = Vector2(-1,-1);
@@ -65,7 +70,7 @@ class PlayerData
   {
     // playerBigMap = BigTopLeft();
     maxHealth.value = 100;
-    this.maxEnergy.value = 9999999;
+    this.maxEnergy.value = 15;
     health.value = maxHealth.value;
     energy.value = this.maxEnergy.value;
     this.killedBosses = killedBosses ?? {};
@@ -113,7 +118,7 @@ class PhysicVals
   static double maxSpeed = 130;
   static double startSpeed = 400;
   static double runCoef = 1.3;
-  static double runMinimum = 0.2;
+  static double runMinimum = 1;
   static double gravity = 20;
   static double rigidy = 0.5;
   static double stopSpeed = 800;

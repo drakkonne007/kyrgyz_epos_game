@@ -84,6 +84,11 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     removeWhere((component) => component is! OrthoPlayer || component is! FrontPlayer);
   }
 
+  void startFromSave()
+  {
+    gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
+  }
+
   Future<void> loadNewMap() async
   {
     game.doLoadingMapHud();
@@ -181,7 +186,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
         *32,
         currentGameWorldData!.gameConsts.visibleBounds!.y
             *32));
-    gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
     gameRef.doGameHud();
     // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
     // _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
@@ -192,6 +196,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     // }
     // // gameRef.camera.zoom = 1.35;
     _isLoad = true;
+    startFromSave();
   }
 
   Future _preloadAnimAndObj() async

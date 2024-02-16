@@ -80,6 +80,7 @@ flutter:
     - assets/fonts/
     - assets/grass2Rules/
     - assets/images/
+    - assets/images/inventar/
     - assets/locale/
     - assets/metaData/
     - assets/prisonRules/

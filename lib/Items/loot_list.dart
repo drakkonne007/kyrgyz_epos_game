@@ -11,6 +11,7 @@ class Gold extends Item
     gold = 10;
     enabled = true;
     source = 'tiles/map/loot/loot.png';
+    sourceForInventar = 'images/poisonIcon.png';
     srcSize = Vector2.all(24);
   }
 
@@ -19,6 +20,22 @@ class Gold extends Item
   {
       game.playerData.money += gold;
   }
+
+  @override
+  void gerEffectFromInventar(KyrgyzGame game)
+  {
+    game.playerData.health.value += 1;
+    game.playerData.money += 1;
+    if(game.playerData.itemInventar.containsKey(id)){
+      int curr = game.playerData.itemInventar[id]!;
+      curr--;
+      if(curr == 0){
+        game.playerData.itemInventar.remove(id);
+      }else{
+        game.playerData.itemInventar[id] = curr;
+      }
+    }
+  }
 }
 
 class PureHat extends Item
@@ -26,6 +43,7 @@ class PureHat extends Item
   PureHat(super.id)
   {
     source = 'tiles/map/loot/loot.png';
+    sourceForInventar = 'assets/images/inventar/UI-9-sliced object-63.png';
     column = 1;
     row = 0;
     armor = 1;

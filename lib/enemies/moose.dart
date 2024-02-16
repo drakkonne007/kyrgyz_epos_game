@@ -102,7 +102,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   double armor = 0;//5;
   @override
-  double chanceOfLoot = 10;
+  double chanceOfLoot = 0.3;
   @override
   int column = 0;
   @override

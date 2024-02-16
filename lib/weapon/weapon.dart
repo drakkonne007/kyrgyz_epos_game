@@ -136,6 +136,11 @@ abstract class PlayerWeapon extends DCollisionEntity
     return false;
   }
 
+  void cleanHashes()
+  {
+    _myHitboxes.clear();
+  }
+
   void stopHit()
   {
     collisionType = DCollisionType.inactive;

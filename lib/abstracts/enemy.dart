@@ -10,11 +10,12 @@ abstract class KyrgyzEnemy
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
       if(chance >= chanceOfLoot){
-        var item = itemFromId(2);
+        var item = itemFromName('gold');
         loots.add(item);
       }
     }
   }
+
   double health = 0;
   double armor = 0;
   int maxLoots = 0;

@@ -27,7 +27,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   }
   Set<int>? nedeedKilledBosses;
   Vector2? _startPosition;
-  Set<int>? neededItems;
+  Set<String>? neededItems;
   List<Item> myItems;
   int _level;
   final Vector2 _spriteSheetSize = Vector2(64,64);
@@ -69,8 +69,8 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     if(neededItems != null){
       for(final myNeeded in neededItems!) {
         bool isNeed = true;
-        for(final playerHas in gameRef.playerData.inventoryItems){
-          if(playerHas.id == myNeeded){
+        for(final playerHas in gameRef.playerData.itemInventar.keys){
+          if(playerHas == myNeeded){
             isNeed = false;
             break;
           }
