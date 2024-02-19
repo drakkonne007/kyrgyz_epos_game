@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
@@ -90,7 +88,16 @@ class _LootInvantarState extends State<LootInventar>
                   child:  null,
                 ),
               ),
-              Expanded(flex: 10, child: getLootInventar(temp,_curPage, widget.mySize,widget.game)),
+              Expanded(flex: 10,
+                  child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        getLootInventar(temp),
+                        const SizedBox(height: 4,),
+                        getPageHolderOfInventar(temp)
+                      ]
+                  )),
               Expanded(
                 child: ElevatedButton(
                   onPressed: (){
@@ -118,29 +125,24 @@ class _LootInvantarState extends State<LootInventar>
                   child:  null,
                 ),
               ),
-              Expanded(
-                  child: ElevatedButton(onPressed: widget.game.doGameHud,
-                      // style: defaultNoneButtonStyle,
-                      child: const AutoSizeText('ИГРАТЬ'))
-              )
             ],
           )
       );
   }
 
-  Widget getLootInventar(Map<String,int> hash, int page,Size size, KyrgyzGame game)
+  Widget getLootInventar(Map<String,int> hash)
   {
     var list = hash.keys.toList(growable: false);
-    double minSize = min(size.height - 40, size.width * 0.5) / 4;
+    double minSize = min(widget.mySize.height - 40, widget.mySize.width * 0.5) / 4.5;
     List<Widget> buttonsList = [];
-    for(int i = page * 16;i<page * 16 + 16;i++){
+    for(int i = _curPage * 16;i<_curPage * 16 + 16;i++){
       if(i < list.length){
         Item item = itemFromName(list[i]);
         buttonsList.add(
             ElevatedButton(
                 onPressed: (){
                   setState(() {
-                    item.gerEffectFromInventar(game);
+                    item.gerEffectFromInventar(widget.game);
                   });
                 },
                 style: defaultNoneButtonStyle.copyWith(
@@ -151,16 +153,17 @@ class _LootInvantarState extends State<LootInventar>
                         alignment: Alignment.center,
                         children: [
                           Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
-                            centerSlice: const Rect.fromLTWH(6, 6, 20, 20),
+                            // centerSlice: const Rect.fromLTWH(6, 6, 20, 20),
                             fit: BoxFit.contain,
+                            semanticLabel: 'sadsadasd',
+                            excludeFromSemantics: true,
+
                           ),
-                          Image.asset('assets/${item.sourceForInventar!}',
+                          Image.asset('assets/${item.source}',
                             fit: BoxFit.contain,
                             width: minSize/2,
                             height: minSize/2,),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: AutoSizeText(hash[list[i]]!.toString(),style: defaultTextStyle,))
+                          AutoSizeText(hash[list[i]]!.toString(),style: defaultTextStyle)
                         ]
                     );
                   }),
@@ -173,11 +176,10 @@ class _LootInvantarState extends State<LootInventar>
             ElevatedButton(
                 onPressed: null,
                 style: defaultNoneButtonStyle.copyWith(
-                    padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(60)),
                     maximumSize: MaterialStateProperty.all<Size>(Size(minSize,minSize)),
                     backgroundBuilder: ((context, state, child){
                       return Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
-                        centerSlice: const Rect.fromLTWH(6, 6, 20, 20),
+                        // centerSlice: const Rect.fromLTWH(6, 6, 20, 20),
                         fit: BoxFit.contain,);
                     })
                 ),
@@ -201,6 +203,37 @@ class _LootInvantarState extends State<LootInventar>
               children: [buttonsList[12],buttonsList[13],buttonsList[14],buttonsList[15]]
           )
         ]
+    );
+  }
+
+  Widget getPageHolderOfInventar(Map<String,int> hash)
+  {
+    List<Widget> list = [];
+    for(int i=0;i<hash.length % 16;i++){
+      Image? img;
+      if(i == _curPage){
+        img = Image.asset('assets/images/inventar/activePageBall.png',
+        width: 17,
+        height: 17,
+        fit: BoxFit.contain,);
+
+      }else{
+        img = Image.asset('assets/images/inventar/passivePageBall.png',
+          width: 17,
+          height: 17,
+          fit: BoxFit.contain,);
+      }
+      list.add(img);
+    }
+    if(list.isEmpty){
+      list.add(Image.asset('assets/images/inventar/activePageBall.png',
+        width: 17,
+        height: 17,
+        fit: BoxFit.contain,));
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: list,
     );
   }
 }

@@ -410,11 +410,11 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
         if (loots.length > 1) {
           var temp = Chest(
               0, myItems: loots, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.add(temp);
+          gameRef.gameMap.enemyComponent.add(temp);
         } else {
           var temp = LootOnMap(
               loots.first, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.add(temp);
+          gameRef.gameMap.enemyComponent.add(temp);
         }
       }
       animation = _withShieldNow ? _animDeathShield : _animDeath;

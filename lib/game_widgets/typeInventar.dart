@@ -27,17 +27,19 @@ class TypeInventar extends StatelessWidget
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/inventar/UI-9-sliced object-68.png'),
-                    AutoSizeText(game.playerData.money.toString(), style: defaultTextStyle),
+                    Image.asset('assets/images/inventar/UI-9-sliced object-68.png',
+                    fit: BoxFit.contain,
+                    height: 50,),
+                    ValueListenableBuilder(valueListenable: game.playerData.money, builder: (context, value, __) => AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 20,)),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    PlayerStats(game ,size),
-                    LootInventar(game, lootVariant,size)
-                  ],)
+                    PlayerStats(game ,Size(size.width, size.height)),
+                    LootInventar(game, lootVariant,Size(size.width, size.height - 20)),
+                  ],),
               ]
           )
       ),
@@ -99,10 +101,10 @@ class PlayerStats extends StatelessWidget
                         children:[
                           const Spacer(),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-64.png', fit: BoxFit.fill,width: newWidth/1.1)),
-                          Expanded(child: AutoSizeText(game.playerData.health.value.toInt().toString(), style: defaultTextStyle)),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.health, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20,))),
                           // Expanded(child: const SizedBox(width: 20,),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-67.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: AutoSizeText(game.playerData.energy.value.toInt().toString(), style: defaultTextStyle)),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.energy, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           const Spacer(),
                         ]
                     ),
@@ -113,10 +115,10 @@ class PlayerStats extends StatelessWidget
                         children:[
                           const Spacer(),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-66.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: AutoSizeText(game.playerData.armor.value.toInt().toString(), style: defaultTextStyle)),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.armor, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           // const SizedBox(width: 20,),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-65.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: AutoSizeText(game.playerData.energy.value.toInt().toString(), style: defaultTextStyle)),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.energy, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           const Spacer(),
                         ]
                     )

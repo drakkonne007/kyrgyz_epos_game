@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/Items/flasks.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -9,6 +10,7 @@ Item itemFromName(String id)
     case 'pureHat':   return PureHat('pureHat');
     case 'strongHat':   return StrongHat('strongHat');
     case 'gold':   return Gold('gold');
+    case 'hpSmall':   return HpSmall('hpSmall');
     default: return PureHat('gold');
   }
 }
@@ -33,9 +35,10 @@ abstract class Item
   }
   void gerEffectFromInventar(KyrgyzGame game)
   {
-
+    throw 'Not override catch item from inventar';
   }
-  bool hideAfterUse = true;
+
+  bool isStaticObject = false;
   double hp = 0;
   double energy = 0;
   double armor = 0;
@@ -44,10 +47,7 @@ abstract class Item
   bool isDress = false;
   bool isAnimated = false;
   String source = '';
-  String? sourceForInventar;
   int cost = 0;
-  int column = 0;
-  int row = 0;
   Vector2 srcSize = Vector2.all(0);
   int countOfUses = 0;
 

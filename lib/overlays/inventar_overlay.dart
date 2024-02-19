@@ -113,6 +113,9 @@ class InventoryOverlayState extends State<InventoryOverlay>
               onPressed: (){
                 setState(() {
                   currentIndex = i;
+                  if(i == 5){
+                    widget.game.doGameHud();
+                  }
                 });
               },
               style: defaultNoneButtonStyle.copyWith(

@@ -5,7 +5,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
@@ -33,7 +32,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
           _item.source);
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _item.srcSize);
-    sprite = spriteSheet.getSprite(_item.row, _item.column);
+    sprite = spriteSheet.getSprite(0, 0);
     size = Vector2.all(30);
     anchor = Anchor.center;
     _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2(-15,-15), Vector2.all(30)),
@@ -50,11 +49,11 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     double dur = 0.5;
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));
     add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){
-      if(_item.hideAfterUse) {
+      if(_item.isStaticObject) {
         gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
-        removeFromParent();
       }
       _item.getEffect(gameRef);
+      removeFromParent();
     }));
   }
 

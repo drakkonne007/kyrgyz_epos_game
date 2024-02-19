@@ -43,13 +43,13 @@ class PlayerData
 {
   ValueNotifier<double> health = ValueNotifier<double>(0);
   ValueNotifier<double> energy = ValueNotifier<double>(0);
-  ValueNotifier<double> armor =ValueNotifier<double>(0);
+  ValueNotifier<double> armor = ValueNotifier<double>(0);
   ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
   ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
   bool isLockEnergy = false;
   bool isLockMove = false;
   Set<int> killedBosses = {};
-  int money = 0;
+  ValueNotifier<int> money = ValueNotifier<int>(0);
   int curWeapon = -1;
   Map<String,int> weaponInventar = {'gold':10};
   Map<String,int> armorInventar = {'gold':22};
@@ -74,7 +74,6 @@ class PlayerData
     health.value = maxHealth.value;
     energy.value = this.maxEnergy.value;
     this.killedBosses = killedBosses ?? {};
-    this.money = money ?? 0;
     this.curWeapon = curWeapon ?? -1;
 
     this.location = location ?? Vector2(10,10);
