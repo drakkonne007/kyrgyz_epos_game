@@ -75,11 +75,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _speed.x = 0;
     _speed.y = 0;
     if(inArmor){
-      hurt -= gameRef.playerData.armor.value;
-      gameRef.playerData.health.value -= math.max(hurt, 0);
-    }else{
-      gameRef.playerData.health.value -= hurt;
+      hurt -= gameRef.playerData.getCurrentArmor();
+      hurt = math.max(hurt, 0);
     }
+    gameRef.playerData.health.value -= hurt;
     if(gameRef.playerData.health.value <1){
       gameRef.pauseEngine();
       _isPlayerRun = false;
@@ -214,7 +213,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         break;
       case PlayerDirectionMove.Left:
       case PlayerDirectionMove.LeftDown:
-      _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef;;
+        _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef;;
         animation = animMove;
         break;
       case PlayerDirectionMove.NoMove:
@@ -402,7 +401,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     _timerHurt!.update(dt);
     if(_isPlayerRun){
-      gameRef.playerData.energy.value -= dt * 2;
+      gameRef.playerData.addEnergy(dt * -2);
       if(gameRef.playerData.energy.value < 0){
         PhysicVals.runCoef = 1;
         gameRef.playerData.energy.value = 0;
@@ -411,10 +410,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
     }else{
       if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.energy.value += dt;
-      }
-      if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
-        gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
+        gameRef.playerData.addEnergy(dt);
       }
     }
     _speed.x = math.max(-PhysicFrontVals.maxSpeeds.x * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,PhysicFrontVals.maxSpeeds.x * PhysicVals.runCoef));
@@ -431,10 +427,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         setIdleAnimation();
         _isPlayerRun = false;
         if(!gameRef.playerData.isLockEnergy) {
-          gameRef.playerData.energy.value += dt;
-        }
-        if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
-          gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
+          gameRef.playerData.addEnergy(dt);
         }
       }
     }

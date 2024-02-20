@@ -31,7 +31,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     Image spriteImage = await Flame.images.load(
           _item.source);
     final spriteSheet = SpriteSheet(image: spriteImage,
-        srcSize: _item.srcSize);
+        srcSize: spriteImage.size);
     sprite = spriteSheet.getSprite(0, 0);
     size = Vector2.all(30);
     anchor = Anchor.center;

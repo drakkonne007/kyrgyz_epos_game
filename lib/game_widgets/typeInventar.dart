@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:game_flame/game_widgets/LootInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
@@ -27,9 +28,9 @@ class TypeInventar extends StatelessWidget
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/inventar/UI-9-sliced object-68.png',
-                    fit: BoxFit.contain,
-                    height: 50,),
+                    Image.asset('assets/images/inventar/gold.png',
+                      fit: BoxFit.contain,
+                      height: 50,),
                     ValueListenableBuilder(valueListenable: game.playerData.money, builder: (context, value, __) => AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 20,)),
                   ],
                 ),
@@ -80,18 +81,72 @@ class PlayerStats extends StatelessWidget
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children:[
-                          Image.asset('assets/images/inventar/UI-9-sliced object-58.png', fit: BoxFit.fill,width: newWidth,),
-                          Image.asset('assets/images/inventar/UI-9-sliced object-59.png', fit: BoxFit.fill,width: newWidth,),
-                          Image.asset('assets/images/inventar/UI-9-sliced object-60.png', fit: BoxFit.fill,width: newWidth,),
+                          ValueListenableBuilder (
+                            valueListenable: game.playerData.helmetDress,
+                            builder: (BuildContext context, value, Widget? child) => Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset('assets/images/inventar/UI-9-sliced object-58.png', fit: BoxFit.fill,width: newWidth,),
+                                Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                              ])
+                          ),
+                          ValueListenableBuilder (
+                              valueListenable: game.playerData.armorDress,
+                              builder: (BuildContext context, value, Widget? child) => Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset('assets/images/inventar/UI-9-sliced object-59.png', fit: BoxFit.fill,width: newWidth,),
+                                Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                              ])
+                          ),
+                          ValueListenableBuilder (
+                              valueListenable: game.playerData.glovesDress,
+                              builder: (BuildContext context, value, Widget? child) => Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset('assets/images/inventar/UI-9-sliced object-60.png', fit: BoxFit.fill,width: newWidth,),
+                                Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                              ])
+                          ),
                         ]
                     ),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children:[
-                          Image.asset('assets/images/inventar/UI-9-sliced object-61.png', fit: BoxFit.fill,width: newWidth,),
-                          Image.asset('assets/images/inventar/UI-9-sliced object-62.png', fit: BoxFit.fill,width: newWidth,),
-                          Image.asset('assets/images/inventar/UI-9-sliced object-63.png', fit: BoxFit.fill,width: newWidth,),
+                          ValueListenableBuilder (
+                              valueListenable: game.playerData.swordDress,
+                              builder: (BuildContext context, value, Widget? child) => Stack(
+                                  fit: StackFit.passthrough,
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset('assets/images/inventar/UI-9-sliced object-61.png', fit: BoxFit.fill,width: newWidth,),
+                                    Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                                  ])
+                          ),
+                          ValueListenableBuilder (
+                              valueListenable: game.playerData.ringDress,
+                              builder: (BuildContext context, value, Widget? child) => Stack(
+                                  fit: StackFit.passthrough,
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset('assets/images/inventar/UI-9-sliced object-63.png', fit: BoxFit.fill,width: newWidth,),
+                                    Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                                  ])
+                          ),
+                          ValueListenableBuilder (
+                              valueListenable: game.playerData.bootsDress,
+                              builder: (BuildContext context, value, Widget? child) => Stack(
+                                  fit: StackFit.passthrough,
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset('assets/images/inventar/UI-9-sliced object-60.png', fit: BoxFit.fill,width: newWidth,),
+                                    Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                                  ])
+                          ),
                         ]
                     ),
                     Row(
@@ -104,7 +159,7 @@ class PlayerStats extends StatelessWidget
                           Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.health, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20,))),
                           // Expanded(child: const SizedBox(width: 20,),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-67.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.energy, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.extraHurtMiss, builder: (context, value, __) => AutoSizeText(game.playerData.getHurtMiss().toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           const Spacer(),
                         ]
                     ),
@@ -115,10 +170,10 @@ class PlayerStats extends StatelessWidget
                         children:[
                           const Spacer(),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-66.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.armor, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.extraArmor, builder: (context, value, __) => AutoSizeText(game.playerData.getCurrentArmor().toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           // const SizedBox(width: 20,),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-65.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.energy, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.extraDamage, builder: (context, value, __) => AutoSizeText(game.playerData.getDamage().toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           const Spacer(),
                         ]
                     )

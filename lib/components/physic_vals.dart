@@ -1,9 +1,14 @@
+import 'dart:ffi';
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
+
+
 
 class MetaEnemyData
 {
@@ -41,20 +46,126 @@ class GameConsts
 
 class PlayerData
 {
-  ValueNotifier<double> health = ValueNotifier<double>(0);
-  ValueNotifier<double> energy = ValueNotifier<double>(0);
-  ValueNotifier<double> armor = ValueNotifier<double>(0);
-  ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
-  ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
+
+  void setDress(Item item)
+  {
+    switch(item.dressType){
+      case DressType.helmet: helmetDress.value = item; break;
+      case DressType.armor: armorDress.value = item; break;
+      case DressType.gloves: glovesDress.value = item; break;
+      case DressType.sword: swordDress.value = item; break;
+      case DressType.ring: ringDress.value = item; break;
+      case DressType.boots: bootsDress.value = item; break;
+      case DressType.none: throw 'DressType none';
+    }
+  }
+
+
+  double getCurrentArmor()
+  {
+    return armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
+  }
+
+  double getMaxHealth()
+  {
+    return armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _maxHealth.value + (_maxHealth.value * playerLevel.value) / 100;
+  }
+
+  double getMaxEnergy()
+  {
+    return armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _maxEnergy.value + (_maxEnergy.value * playerLevel.value) / 100;
+  }
+
+  double getHurtMiss()
+  {
+    return armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;
+  }
+
+  double getDamage()
+  {
+    return armorDress.value.damage + helmetDress.value.damage + glovesDress.value.damage + swordDress.value.damage + ringDress.value.damage + bootsDress.value.damage + extraDamage.value + _maxDamage.value + (_maxDamage.value * playerLevel.value) / 100;
+  }
+
+  void addEnergy(double val, {bool extra = false, bool full = false})
+  {
+    if(full){
+      energy.value = math.max(_maxEnergy.value, energy.value);
+      return;
+    }
+    if(extra){
+        energy.value += val;
+    }else if(energy.value < _maxEnergy.value && val > 0) {
+      energy.value += val;
+      energy.value = math.min(energy.value, _maxEnergy.value);
+    }else if(val < 0){
+      energy.value += val;
+    }
+    energy.value = math.max(0, energy.value);
+  }
+
+  void addHealth(double val, {bool extra = false, bool full = false})
+  {
+    if(full){
+      health.value = math.max(_maxHealth.value, health.value);
+      return;
+    }
+    if(extra){
+      health.value += val;
+    }else if(health.value < _maxHealth.value && val > 0) {
+      health.value += val;
+      health.value = math.min(health.value, _maxHealth.value);
+    }else if(val < 0){
+      health.value += val;
+    }
+    health.value = math.max(0, health.value);
+  }
+
+  final ValueNotifier<int> playerLevel = ValueNotifier<int>(1);
+  final ValueNotifier<double> health = ValueNotifier<double>(0);
+  final ValueNotifier<double> energy = ValueNotifier<double>(0);
+  final double extraArmor = 0;
+  final double extraHurtMiss = 0;
+  final double extraDamage = 0;
+  final ValueNotifier<double> _maxHealth = ValueNotifier<double>(0);
+  final ValueNotifier<double> _maxEnergy = ValueNotifier<double>(0);
+  final ValueNotifier<double> _maxDamage = ValueNotifier<double>(1);
+  final ValueNotifier<Item> helmetDress = ValueNotifier<Item>(NullItem());
+  final ValueNotifier<Item> armorDress = ValueNotifier<Item>(NullItem());
+  final ValueNotifier<Item> glovesDress = ValueNotifier<Item>(NullItem());
+  final ValueNotifier<Item> swordDress = ValueNotifier<Item>(NullItem());
+  final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
+  final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
+
+  void addToInventar(Map<String,int> hash, Item item)
+  {
+    if(hash.containsKey(item.id)){
+      int val = hash[item.id]!;
+      hash[item.id] = val + 1;
+      hash[item.id] = val;
+    }else{
+      hash[item.id] = 1;
+    }
+  }
+
+
   bool isLockEnergy = false;
   bool isLockMove = false;
   Set<int> killedBosses = {};
   ValueNotifier<int> money = ValueNotifier<int>(0);
   int curWeapon = -1;
-  Map<String,int> weaponInventar = {'gold':10};
-  Map<String,int> armorInventar = {'gold':22};
-  Map<String,int> flaskInventar = {'gold':31};
-  Map<String,int> itemInventar = {'gold':13};
+  Map<String,int> weaponInventar = {};
+  Map<String,int> armorInventar = {};
+  Map<String,int> flaskInventar = {};
+  Map<String,int> itemInventar = {
+    'hpSmall':10,
+    'hpMedium':10,
+    'hpBig':10,
+    'hpFull':10,
+    'energySmall':10,
+    'energyMedium':10,
+    'energyBig':10,
+    'energyFull':10
+  };
 
 
   List<Item> curDress = [];
@@ -69,17 +180,17 @@ class PlayerData
   void setStartValues()
   {
     // playerBigMap = BigTopLeft();
-    maxHealth.value = 100;
-    this.maxEnergy.value = 15;
-    health.value = maxHealth.value;
-    energy.value = this.maxEnergy.value;
-    this.killedBosses = killedBosses ?? {};
-    this.curWeapon = curWeapon ?? -1;
+    _maxHealth.value = 100;
+    _maxEnergy.value = 15;
+    health.value = _maxHealth.value;
+    energy.value = _maxEnergy.value;
+    killedBosses = killedBosses ?? {};
+    curWeapon = curWeapon ?? -1;
 
-    this.location = location ?? Vector2(10,10);
-    this.curPosition = curPosition ?? Vector2.all(-1);
-    this.gameTime = gameTime ?? 720;
-    this.milisecsInGame = milisecsInGame ?? 0;
+    location = location ?? Vector2(10,10);
+    curPosition = curPosition ?? Vector2.all(-1);
+    gameTime = gameTime ?? 720;
+    milisecsInGame = milisecsInGame ?? 0;
     //
     // if(curDress == null){
     //   this.curDress = [];

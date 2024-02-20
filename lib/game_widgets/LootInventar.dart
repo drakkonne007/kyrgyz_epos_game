@@ -142,7 +142,7 @@ class _LootInvantarState extends State<LootInventar>
             ElevatedButton(
                 onPressed: (){
                   setState(() {
-                    item.gerEffectFromInventar(widget.game);
+                    item.getEffectFromInventar(widget.game);
                   });
                 },
                 style: defaultNoneButtonStyle.copyWith(
@@ -209,7 +209,7 @@ class _LootInvantarState extends State<LootInventar>
   Widget getPageHolderOfInventar(Map<String,int> hash)
   {
     List<Widget> list = [];
-    for(int i=0;i<hash.length % 16;i++){
+    for(int i=0;i<hash.length / 16;i++){
       Image? img;
       if(i == _curPage){
         img = Image.asset('assets/images/inventar/activePageBall.png',

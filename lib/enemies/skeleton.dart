@@ -96,6 +96,14 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   @override
   Future<void> onLoad() async
   {
+    math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
+    for(int i=0;i<maxLoots;i++){
+      double chance = rand2.nextDouble();
+      if(chance >= chanceOfLoot){
+        var item = itemFromName('gold');
+        loots.add(item);
+      }
+    }
     anchor = const Anchor(115/220,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;

@@ -47,7 +47,6 @@ class WSword extends PlayerWeapon
   @override
   Future<void> onLoad() async
   {
-    damage = 1;
     energyCost = 1;
     debugMode = true;
     final spriteImage = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');

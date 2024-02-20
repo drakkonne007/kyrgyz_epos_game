@@ -98,7 +98,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   Function()? onStartWeaponHit;
   Function()? onEndWeaponHit;
   final double sectorInRadian = 0.383972 * 2;
-  double damage = 1;
+  double? damage;
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;
@@ -164,7 +164,7 @@ abstract class PlayerWeapon extends DCollisionEntity
       // }
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
-      temp.doHurt(hurt: damage,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
+      temp.doHurt(hurt: damage ?? game.playerData.getDamage(),inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }
   }
 

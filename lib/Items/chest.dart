@@ -34,6 +34,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
+  bool isStatic = false;
 
   @override
   Future onLoad() async
@@ -83,15 +84,28 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     remove(_objectHitbox!);
     game.gameMap.currentObject.value = null;
-    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 15, loop: false);
+    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     double dur = animation!.ticker().totalDuration();
     for(final myItem in myItems){
       myItem.getEffect(gameRef);
     }
     add(OpacityEffect.by(-0.95,EffectController(duration: dur + 0.3),onComplete: (){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
+      if(isStatic) {
+        gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
+      }
       removeFromParent();
     }));
+  }
+
+  @override
+  void update(double dt)
+  {
+    super.update(dt);
+    if(position.y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
+      parent = gameRef.gameMap.enemyOnPlayer;
+    }else{
+      parent = gameRef.gameMap.enemyComponent;
+    }
   }
 
 

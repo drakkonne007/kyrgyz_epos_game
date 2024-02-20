@@ -1,5 +1,6 @@
 
 import 'dart:math';
+import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -93,7 +94,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
-    _weapon?.damage = 1;
     _weapon?.energyCost = 2;
     add(_weapon!);
   }
@@ -103,11 +103,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
-      hurt -= gameRef.playerData.armor.value;
-      gameRef.playerData.health.value -= math.max(hurt, 0);
-    }else{
-      gameRef.playerData.health.value -= hurt;
+      hurt -= gameRef.playerData.getCurrentArmor();
+      hurt = math.max(hurt, 0);
     }
+    gameRef.playerData.health.value -= hurt;
     if(gameRef.playerData.health.value <1){
       animation = animDeath;
       animationTicker?.onComplete = gameRef.startDeathMenu;
@@ -393,17 +392,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.energy.value > 1){
       _isMinusEnergy = false;
     }
-    if(gameRef.playerData.energy.value > gameRef.playerData.maxEnergy.value){
-      gameRef.playerData.energy.value = gameRef.playerData.maxEnergy.value;
-    }
     // _weapon?.doDebug();
     if(animation != animMove && animation != animMoveFast){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
-      gameRef.playerData.energy.value += dt * 1.5;
+      gameRef.playerData.addEnergy(dt * 1.5);
       return;
     }
     if(_isRun && !_isMinusEnergy){
-      if(gameRef.playerData.energy.value < 0){
+      if(gameRef.playerData.energy.value <= 0){
         _isMinusEnergy = true;
         if(animation == animMoveFast){
           var index = animationTicker?.currentIndex;
@@ -419,12 +415,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
         PhysicVals.runCoef = 1.3;
       }
-      gameRef.playerData.energy.value -= dt * 2;
+      gameRef.playerData.addEnergy(dt * -2);
     }else{
       PhysicVals.runCoef = 1;
       if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
-        gameRef.playerData.energy.value += dt;
+        gameRef.playerData.addEnergy(dt);
       }
     }
     _speed.x = math.max(-_maxSpeeds.x.abs() * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeeds.x.abs() * PhysicVals.runCoef));
@@ -453,8 +448,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(countZero == 2){
       setIdleAnimation();
       if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
-        gameRef.playerData.energy.value += dt;
+        gameRef.playerData.addEnergy(dt);
       }
       return;
     }
@@ -471,4 +465,24 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     position += _speed * dt;
   }
+  //
+  // @override
+  // void render(Canvas canvas)
+  // {
+  //   var shader = gameRef.telepShaderProgramm.fragmentShader();
+  //   shader.setFloat(0,0);
+  //   shader.setFloat(1,max(size.x,30));
+  //   shader.setFloat(2,max(size.y,30));
+  //   final paint = Paint()..shader = shader;
+  //   canvas.drawRect(
+  //     Rect.fromLTWH(
+  //       0,
+  //       0,
+  //       max(size.x,30),
+  //       max(size.y,30),
+  //     ),
+  //     paint,
+  //   );
+  //   super.render(canvas);
+  // }
 }

@@ -86,7 +86,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
 
   void startFromSave()
   {
-    gameRef.playerData.health.value = gameRef.playerData.maxHealth.value;
+    gameRef.playerData.health.value = gameRef.playerData.getMaxHealth();
   }
 
   Future<void> loadNewMap() async

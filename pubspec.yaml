@@ -81,6 +81,10 @@ flutter:
     - assets/grass2Rules/
     - assets/images/
     - assets/images/inventar/
+    - assets/images/inventar/armor/
+    - assets/images/inventar/weapon/
+    - assets/images/inventar/item/
+    - assets/images/inventar/flask/
     - assets/locale/
     - assets/metaData/
     - assets/prisonRules/

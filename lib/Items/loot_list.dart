@@ -1,73 +1,30 @@
-import 'package:flame/components.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
+class NullItem extends Item
+{
+  NullItem()
+  {
+    id = 'nullItem';
+    source = 'images/inventar/nullImage.png';
+  }
+}
+
 class Gold extends Item
 {
-  Gold(super.id)
+  Gold()
   {
-    gold = 10;
+    id = 'gold';
+    cost = 10;
     enabled = true;
-    source = 'tiles/map/loot/loot.png';
-    srcSize = Vector2.all(24);
+    source = 'images/inventar/item/mapGold.png';
   }
 
   @override
   void getEffect(KyrgyzGame game)
   {
-      game.playerData.money.value += gold;
+      game.playerData.money.value += cost;
   }
 
-  @override
-  void gerEffectFromInventar(KyrgyzGame game)
-  {
-    game.playerData.health.value += 1;
-    game.playerData.money.value += 1;
-    if(game.playerData.itemInventar.containsKey(id)){
-      int curr = game.playerData.itemInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.itemInventar.remove(id);
-      }else{
-        game.playerData.itemInventar[id] = curr;
-      }
-    }
-  }
 }
 
-class PureHat extends Item
-{
-  PureHat(super.id)
-  {
-    source = 'tiles/map/loot/loot.png';
-    armor = 1;
-    cost = 100;
-    isDress = true;
-    countOfUses = 100;
-  }
-
-  @override
-  void getEffect(KyrgyzGame game)
-  {
-
-  }
-}
-
-class StrongHat extends Item
-{
-  StrongHat(super.id)
-  {
-    srcSize = Vector2.all(24);
-    source = 'tiles/map/loot/loot.png';
-    armor = 1.5;
-    cost = 100;
-    isDress = true;
-    countOfUses = 200;
-  }
-
-  @override
-  void getEffect(KyrgyzGame game)
-  {
-
-  }
-}

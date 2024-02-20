@@ -84,9 +84,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   int row=0;
   @override
-  int maxLoots = 2;
+  int maxLoots = 4;
   @override
-  double chanceOfLoot = 0.8;
+  double chanceOfLoot = 0;
   @override
   double armor = 0;
   @override
@@ -142,6 +142,14 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       flipHorizontally();
     }
     selectBehaviour();
+    math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
+    for(int i=0;i<maxLoots;i++){
+      double chance = rand2.nextDouble();
+      if(chance >= chanceOfLoot){
+        var item = itemFromName('gold');
+        loots.add(item);
+      }
+    }
   }
 
   void changeAttackVerts(int index)
@@ -360,6 +368,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       _speed.x = 0;
       _speed.y = 0;
       if(loots.isNotEmpty) {
+        print(loots.length);
         if(loots.length > 1){
           var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
           gameRef.gameMap.enemyComponent.add(temp);

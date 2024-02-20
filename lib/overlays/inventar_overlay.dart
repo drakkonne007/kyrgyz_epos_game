@@ -92,7 +92,7 @@ class InventoryOverlayState extends State<InventoryOverlay>
     switch(index){
       case 0: index == currentIndex ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png'; break;
       case 1: index == currentIndex ? source = 'shieldYark.png' : source = 'shield.png'; break;
-      case 2: index == currentIndex ? source = 'manaYark.png' : source = 'mana.png'; break;
+      case 2: index == currentIndex ? source = 'manaBright.png' : source = 'manaDark.png'; break;
       case 3: index == currentIndex ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png'; break;
       case 4: index == currentIndex ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png'; break;
       case 5: index == currentIndex ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png'; break;

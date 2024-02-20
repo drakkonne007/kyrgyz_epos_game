@@ -78,28 +78,29 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
     switch(direction){
       case ArrowDirection.left:
         angle = math.pi/2;
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.all(3) - Vector2(size.y,size.x)/2, size - Vector2.all(6)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.x = -PhysicVals.maxSpeed - 20;
         break;
       case ArrowDirection.right:
         angle = -math.pi/2;
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.all(3) - Vector2(size.y,size.x)/2, size - Vector2.all(6)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.x = PhysicVals.maxSpeed + 20;
         break;
       case ArrowDirection.down:
         flipVertically();
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.all(3) - size/2, size - Vector2.all(6)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.y = PhysicVals.maxSpeed + 20;
         break;
       default:
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.all(3) - size/2, size - Vector2.all(6)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.y = -PhysicVals.maxSpeed - 20;
         break;
     }
+    _grBox.isOnlyForStatic = true;
     add(_grBox);
     add(_weapon);
     _weapon.damage = 5;
