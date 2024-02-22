@@ -85,6 +85,9 @@ flutter:
     - assets/images/inventar/weapon/
     - assets/images/inventar/item/
     - assets/images/inventar/flask/
+    - assets/images/inventar/boots/
+    - assets/images/inventar/helmet/
+    - assets/images/inventar/gloves/
     - assets/locale/
     - assets/metaData/
     - assets/prisonRules/

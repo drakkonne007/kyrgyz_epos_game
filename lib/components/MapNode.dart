@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/teleport.dart';
@@ -223,7 +224,7 @@ class MapNode {
         myGame.gameMap.enemyComponent.add(Skeleton(position));
         break;
       case 'gold':
-        var temp = LootOnMap(itemFromName('gold')..isStaticObject = true, position: position);
+        var temp = LootOnMap(Gold()..isStaticObject = true, position: position);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.enemyComponent.add(temp);
         break;
@@ -253,7 +254,7 @@ class MapNode {
         myGame.gameMap.enemyComponent.add(temp);
         break;
       case 'chest':
-        var temp = Chest(1, myItems: [itemFromName('gold')], position: position);
+        var temp = Chest(1, myItems: [Gold()], position: position);
         temp.isStatic = true;
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.enemyComponent.add(temp);

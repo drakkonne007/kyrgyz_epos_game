@@ -159,7 +159,7 @@ class PlayerStats extends StatelessWidget
                           Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.health, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20,))),
                           // Expanded(child: const SizedBox(width: 20,),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-67.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.extraHurtMiss, builder: (context, value, __) => AutoSizeText(game.playerData.getHurtMiss().toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.hurtMiss, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           const Spacer(),
                         ]
                     ),
@@ -170,10 +170,10 @@ class PlayerStats extends StatelessWidget
                         children:[
                           const Spacer(),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-66.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.extraArmor, builder: (context, value, __) => AutoSizeText(game.playerData.getCurrentArmor().toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.armor, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           // const SizedBox(width: 20,),
                           Expanded(child: Image.asset('assets/images/inventar/UI-9-sliced object-65.png', fit: BoxFit.fill,width: newWidth/1.1,)),
-                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.extraDamage, builder: (context, value, __) => AutoSizeText(game.playerData.getDamage().toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
+                          Expanded(child: ValueListenableBuilder(valueListenable: game.playerData.damage, builder: (context, value, __) => AutoSizeText(value.toInt().toString(), style: defaultTextStyle, minFontSize: 20))),
                           const Spacer(),
                         ]
                     )

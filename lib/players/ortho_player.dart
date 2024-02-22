@@ -45,7 +45,7 @@ final List<Vector2> _attack2ind2 = [
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
 {
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
-  late SpriteAnimation animMove, animMoveFast, animIdle, animHurt, animDeath, _animShort,_animLong;
+  late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong;
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
@@ -65,7 +65,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
-    animMoveFast = spriteSheet.createAnimation(row: 1, stepTime: 0.1, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
     _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 11,loop: false);
@@ -94,8 +93,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
-    _weapon?.energyCost = 2;
     add(_weapon!);
+    gameRef.playerData.attackSpeed.addListener(setNewEnergyCostForWeapon);
+  }
+
+  void setNewEnergyCostForWeapon()
+  {
+    _animShort.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
+    _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
 
   @override
@@ -103,7 +108,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
-      hurt -= gameRef.playerData.getCurrentArmor();
+      hurt -= gameRef.playerData.armor.value;
       hurt = math.max(hurt, 0);
     }
     gameRef.playerData.health.value -= hurt;
@@ -149,9 +154,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void startHit(bool isLong)
   {
-    if(animation != animIdle && animation != animMoveFast && animation != animMove){
+    if(animation != animIdle && animation != animMove){
       return;
     }
+    _weapon?.energyCost = _isLongAttack ? _animLong.ticker().totalDuration() * 2 : _animShort.ticker().totalDuration() * 2;
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
@@ -179,7 +185,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setIdleAnimation()
   {
-    if(animation == animMove || animation == animHurt || animation == animMoveFast){
+    if(animation == animMove || animation == animHurt){
       animation = animIdle;
     }
   }
@@ -189,26 +195,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.isLockMove){
       return;
     }
-    if(animation == animIdle  || animation == animMove || animation == animMoveFast) {
+    if(animation == animIdle  || animation == animMove) {
       _isRun = isRun;
       if (isRun && gameRef.playerData.energy.value > 0 && !_isMinusEnergy) {
         PhysicVals.runCoef = 1.3;
-        if(animation == animMove){
-          int temp = animationTicker!.currentIndex;
-          animation = animMoveFast;
-          animationTicker!.currentIndex = temp;
-        }else {
-          animation = animMoveFast;
-        }
+        animation = animMove;
+        animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
       } else {
         PhysicVals.runCoef = 1;
-        if(animation == animMoveFast){
-          int temp = animationTicker!.currentIndex;
-          animation = animMove;
-          animationTicker!.currentIndex = temp;
-        }else {
-          animation = animMove;
-        }
+        animMove.stepTime = 0.12;
+        animation = animMove;
+        animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
       }
       angle += math.pi/2;
       _velocity.x = -cos(angle) * PhysicVals.startSpeed * PhysicVals.runCoef;
@@ -393,7 +390,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       _isMinusEnergy = false;
     }
     // _weapon?.doDebug();
-    if(animation != animMove && animation != animMoveFast){
+    if(animation != animMove){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
       gameRef.playerData.addEnergy(dt * 1.5);
       return;
@@ -401,18 +398,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(_isRun && !_isMinusEnergy){
       if(gameRef.playerData.energy.value <= 0){
         _isMinusEnergy = true;
-        if(animation == animMoveFast){
-          var index = animationTicker?.currentIndex;
-          animation = animMove;
-          animationTicker?.currentIndex = index ?? 0;
-        }
+        animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
         PhysicVals.runCoef = 1;
       }else{
-        if(animation != animMoveFast){
-          int? index = animationTicker?.currentIndex;
-          animation = animMoveFast;
-          animationTicker?.currentIndex = index ?? 0;
-        }
+        animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
         PhysicVals.runCoef = 1.3;
       }
       gameRef.playerData.addEnergy(dt * -2);
@@ -465,24 +454,24 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     position += _speed * dt;
   }
-  //
-  // @override
-  // void render(Canvas canvas)
-  // {
-  //   var shader = gameRef.telepShaderProgramm.fragmentShader();
-  //   shader.setFloat(0,0);
-  //   shader.setFloat(1,max(size.x,30));
-  //   shader.setFloat(2,max(size.y,30));
-  //   final paint = Paint()..shader = shader;
-  //   canvas.drawRect(
-  //     Rect.fromLTWH(
-  //       0,
-  //       0,
-  //       max(size.x,30),
-  //       max(size.y,30),
-  //     ),
-  //     paint,
-  //   );
-  //   super.render(canvas);
-  // }
+//
+// @override
+// void render(Canvas canvas)
+// {
+//   var shader = gameRef.telepShaderProgramm.fragmentShader();
+//   shader.setFloat(0,0);
+//   shader.setFloat(1,max(size.x,30));
+//   shader.setFloat(2,max(size.y,30));
+//   final paint = Paint()..shader = shader;
+//   canvas.drawRect(
+//     Rect.fromLTWH(
+//       0,
+//       0,
+//       max(size.x,30),
+//       max(size.y,30),
+//     ),
+//     paint,
+//   );
+//   super.render(canvas);
+// }
 }

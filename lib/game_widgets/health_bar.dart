@@ -48,7 +48,7 @@ class HealthBar extends StatelessWidget
                               height: 42,
                               child:
                               CustomPaint(
-                                painter: ArcGradientPainter(color: Colors.red, currentProc: val / game.playerData.getMaxHealth()),
+                                painter: ArcGradientPainter(color: Colors.red, currentProc: val / game.playerData.maxHealth.value),
                                 child:const Icon(Icons.heart_broken, color: Colors.red,size: 35,
                                   shadows: [
                                     BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1), blurStyle: BlurStyle.normal)
@@ -74,7 +74,7 @@ class HealthBar extends StatelessWidget
                               width: 42,
                               height: 42,
                               child: CustomPaint(
-                                painter: ArcGradientPainter(color: Colors.blue, currentProc: val / game.playerData.getMaxEnergy()),
+                                painter: ArcGradientPainter(color: Colors.blue, currentProc: val / game.playerData.maxEnergy.value),
                                 child:const Icon(Icons.directions_run, color: Colors.blue,size: 35,
                                   shadows: [
                                     BoxShadow(color: Colors.black,blurRadius: 2,offset: Offset(0,0),spreadRadius: 1, blurStyle: BlurStyle.normal)

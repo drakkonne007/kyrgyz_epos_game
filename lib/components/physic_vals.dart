@@ -5,6 +5,7 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
 
@@ -47,6 +48,22 @@ class GameConsts
 class PlayerData
 {
 
+  PlayerData()
+  {
+    playerLevel.addListener(_recalcAfterChangeDress);
+    extraArmor.addListener(_recalcAfterChangeDress);
+    extraHurtMiss.addListener(_recalcAfterChangeDress);
+    extraDamage.addListener(_recalcAfterChangeDress);
+    extraChanceOfLoot.addListener(_recalcAfterChangeDress);
+    extraAttackSpeed.addListener(_recalcAfterChangeDress);
+    helmetDress.addListener(_recalcAfterChangeDress);
+    armorDress.addListener(_recalcAfterChangeDress);
+    glovesDress.addListener(_recalcAfterChangeDress);
+    swordDress.addListener(_recalcAfterChangeDress);
+    ringDress.addListener(_recalcAfterChangeDress);
+    bootsDress.addListener(_recalcAfterChangeDress);
+  }
+
   void setDress(Item item)
   {
     switch(item.dressType){
@@ -60,43 +77,34 @@ class PlayerData
     }
   }
 
-
-  double getCurrentArmor()
+  void _recalcAfterChangeDress()
   {
-    return armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
-  }
-
-  double getMaxHealth()
-  {
-    return armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _maxHealth.value + (_maxHealth.value * playerLevel.value) / 100;
-  }
-
-  double getMaxEnergy()
-  {
-    return armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _maxEnergy.value + (_maxEnergy.value * playerLevel.value) / 100;
-  }
-
-  double getHurtMiss()
-  {
-    return armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;
-  }
-
-  double getDamage()
-  {
-    return armorDress.value.damage + helmetDress.value.damage + glovesDress.value.damage + swordDress.value.damage + ringDress.value.damage + bootsDress.value.damage + extraDamage.value + _maxDamage.value + (_maxDamage.value * playerLevel.value) / 100;
+    double procentOfHealth = health.value / maxHealth.value;
+    double procentOfEnergy = energy.value / maxEnergy.value;
+    maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / 100;
+    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy+ (_beginEnergy * playerLevel.value) / 100;
+    armor.value = armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
+    chanceOfLoot.value = armorDress.value.chanceOfLoot + helmetDress.value.chanceOfLoot + glovesDress.value.chanceOfLoot + swordDress.value.chanceOfLoot + ringDress.value.chanceOfLoot + bootsDress.value.chanceOfLoot + extraChanceOfLoot.value;
+    hurtMiss.value = armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;
+    damage.value = armorDress.value.damage + helmetDress.value.damage + glovesDress.value.damage + swordDress.value.damage + ringDress.value.damage + bootsDress.value.damage + extraDamage.value;
+    attackSpeed.value = armorDress.value.attackSpeed + helmetDress.value.attackSpeed + glovesDress.value.attackSpeed + swordDress.value.attackSpeed + ringDress.value.attackSpeed + bootsDress.value.attackSpeed + extraAttackSpeed.value;
+    permanentDamage.value = swordDress.value.permanentDamage;
+    magicDamage.value = swordDress.value.magicDamage ?? MagicDamage.none;
+    health.value = procentOfHealth * maxHealth.value;
+    energy.value = procentOfEnergy * maxEnergy.value;
   }
 
   void addEnergy(double val, {bool extra = false, bool full = false})
   {
     if(full){
-      energy.value = math.max(_maxEnergy.value, energy.value);
+      energy.value = math.max(maxEnergy.value, energy.value);
       return;
     }
     if(extra){
         energy.value += val;
-    }else if(energy.value < _maxEnergy.value && val > 0) {
+    }else if(energy.value < maxEnergy.value && val > 0) {
       energy.value += val;
-      energy.value = math.min(energy.value, _maxEnergy.value);
+      energy.value = math.min(energy.value, maxEnergy.value);
     }else if(val < 0){
       energy.value += val;
     }
@@ -106,14 +114,14 @@ class PlayerData
   void addHealth(double val, {bool extra = false, bool full = false})
   {
     if(full){
-      health.value = math.max(_maxHealth.value, health.value);
+      health.value = math.max(maxHealth.value, health.value);
       return;
     }
     if(extra){
       health.value += val;
-    }else if(health.value < _maxHealth.value && val > 0) {
+    }else if(health.value < maxHealth.value && val > 0) {
       health.value += val;
-      health.value = math.min(health.value, _maxHealth.value);
+      health.value = math.min(health.value, maxHealth.value);
     }else if(val < 0){
       health.value += val;
     }
@@ -123,18 +131,31 @@ class PlayerData
   final ValueNotifier<int> playerLevel = ValueNotifier<int>(1);
   final ValueNotifier<double> health = ValueNotifier<double>(0);
   final ValueNotifier<double> energy = ValueNotifier<double>(0);
-  final double extraArmor = 0;
-  final double extraHurtMiss = 0;
-  final double extraDamage = 0;
-  final ValueNotifier<double> _maxHealth = ValueNotifier<double>(0);
-  final ValueNotifier<double> _maxEnergy = ValueNotifier<double>(0);
-  final ValueNotifier<double> _maxDamage = ValueNotifier<double>(1);
+  final ValueNotifier<double> armor = ValueNotifier<double>(0);
+  final ValueNotifier<double> chanceOfLoot = ValueNotifier<double>(0);
+  final ValueNotifier<double> hurtMiss = ValueNotifier<double>(0);
+  final ValueNotifier<double> damage = ValueNotifier<double>(0);
+  final ValueNotifier<double> attackSpeed = ValueNotifier<double>(0);
+  final ValueNotifier<MagicDamage> magicDamage = ValueNotifier<MagicDamage>(MagicDamage.none);
+  final ValueNotifier<double> permanentDamage = ValueNotifier<double>(0);
+  final ValueNotifier<double> secsOfPermanentDamage = ValueNotifier<double>(0);
+
+  final ValueNotifier<double> extraArmor = ValueNotifier<double>(0);
+  final ValueNotifier<double> extraHurtMiss = ValueNotifier<double>(0);
+  final ValueNotifier<double> extraDamage = ValueNotifier<double>(0);
+  final ValueNotifier<double> extraChanceOfLoot = ValueNotifier<double>(0);
+  final ValueNotifier<double> extraAttackSpeed = ValueNotifier<double>(0);
+  final double _beginEnergy = 15;
+  final double _beginHealth = 30;
+  final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
+  final ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
   final ValueNotifier<Item> helmetDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> armorDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> glovesDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> swordDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
+  final List<CountTimer> effectTimer = [];
 
   void addToInventar(Map<String,int> hash, Item item)
   {
@@ -152,23 +173,11 @@ class PlayerData
   bool isLockMove = false;
   Set<int> killedBosses = {};
   ValueNotifier<int> money = ValueNotifier<int>(0);
-  int curWeapon = -1;
   Map<String,int> weaponInventar = {};
   Map<String,int> armorInventar = {};
   Map<String,int> flaskInventar = {};
-  Map<String,int> itemInventar = {
-    'hpSmall':10,
-    'hpMedium':10,
-    'hpBig':10,
-    'hpFull':10,
-    'energySmall':10,
-    'energyMedium':10,
-    'energyBig':10,
-    'energyFull':10
-  };
+  Map<String,int> itemInventar = {};
 
-
-  List<Item> curDress = [];
   Vector2 location = Vector2(-1,-1);
   Vector2 curPosition = Vector2(-1,-1);
   double gameTime = 720;
@@ -177,40 +186,28 @@ class PlayerData
   Vector2 startLocation = Vector2(1772,3067);
 
 
-  void setStartValues()
+  void setStartValues({Item? helmet, Item? armor, Item? gloves, Item? sword, Item? ring, Item? boots, int gold = 0, double energy = 0, double health = 0
+  ,double extraArmor = 0, double extraHurtMiss = 0, double extraDamage = 0, double extraChanceOfLoot = 0, double extraAttackSpeed = 0
+  ,Map<String,int>? weaponInventar, Map<String,int>? armorInventar, Map<String,int>? flaskInventar, Map<String,int>? itemInventar})
   {
-    // playerBigMap = BigTopLeft();
-    _maxHealth.value = 100;
-    _maxEnergy.value = 15;
-    health.value = _maxHealth.value;
-    energy.value = _maxEnergy.value;
-    killedBosses = killedBosses ?? {};
-    curWeapon = curWeapon ?? -1;
-
-    location = location ?? Vector2(10,10);
-    curPosition = curPosition ?? Vector2.all(-1);
-    gameTime = gameTime ?? 720;
-    milisecsInGame = milisecsInGame ?? 0;
-    //
-    // if(curDress == null){
-    //   this.curDress = [];
-    // }else{
-    //   for(int i=0;i<curDress.length;i++){
-    //     var item = itemFromId(curDress[i]);
-    //     this.curDress.add(item);
-    //     armor.value += item.armor;
-    //     maxHealth.value += item.hp;
-    //     this.maxEnergy.value += item.energy;
-    //   }
-    // }
-    // if(inventoryItems == null){
-    //   this.inventoryItems = [];
-    // }else{
-    //   for(int i=0;i<inventoryItems.length;i++){
-    //     var item = itemFromId(inventoryItems[i]);
-    //     this.inventoryItems.add(item);
-    //   }
-    // }
+    helmetDress.value = helmet ?? NullItem();
+    armorDress.value = armor ?? NullItem();
+    glovesDress.value = gloves ?? NullItem();
+    swordDress.value = sword ?? NullItem();
+    ringDress.value = ring ?? NullItem();
+    bootsDress.value = boots ?? NullItem();
+    this.extraArmor.value = extraArmor;
+    this.extraHurtMiss.value = extraHurtMiss;
+    this.extraDamage.value = extraDamage;
+    this.extraChanceOfLoot.value = extraChanceOfLoot;
+    this.extraAttackSpeed.value = extraAttackSpeed;
+    money.value = gold;
+    this.weaponInventar = weaponInventar ?? {};
+    this.armorInventar = armorInventar ?? {};
+    this.flaskInventar = flaskInventar ?? {};
+    this.itemInventar = itemInventar ?? {};
+    this.energy.value = energy == 0 ? maxEnergy.value : energy;
+    this.health.value = health == 0 ? maxHealth.value : health;
   }
 
 

@@ -7,6 +7,9 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
+import 'package:game_flame/Items/armorDress.dart';
+import 'package:game_flame/Items/helmetDress.dart';
+import 'package:game_flame/Items/swordDress.dart';
 import 'package:game_flame/abstracts/compiller.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
@@ -56,9 +59,25 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
       overlays.add(MainMenu.id);
     }
     WidgetsBinding.instance.addObserver(this);
-    playerData.setStartValues();
+    playerData.setStartValues(
+      helmet: StartHelmet(),
+      armor: ArmorStart(),
+      sword: SwordStart(),
+      weaponInventar: {'swordStart': 1, 'sword36' : 1},
+      armorInventar: {'armorStart': 1, 'startHelmet': 1},
+      flaskInventar: {
+        'hpSmall':10,
+        'hpMedium':10,
+        'hpBig':10,
+        'hpFull':10,
+        'energySmall':10,
+        'energyMedium':10,
+        'energyBig':10,
+        'energyFull':10},
+    );
     add(gameMap);
     await gameMap.loaded;
+    //TODO добавить сохранённые бутылочки в gameMap;
     if(isMapCompile){
       await precompileAll();
       exit(0);

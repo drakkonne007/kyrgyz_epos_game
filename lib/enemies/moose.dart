@@ -4,6 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -91,6 +92,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 50;
   late GroundHitBox _groundBox;
+  late Ground _ground;
   late EnemyHitbox _hitBox;
   double _rigidSec = 2;
   DefaultEnemyWeapon? _weapon;
@@ -121,7 +123,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     for(int i=0;i<maxLoots;i++){
       double chance = rand2.nextDouble();
       if(chance >= chanceOfLoot){
-        var item = itemFromName('gold');
+        var item = Gold();
         loots.add(item);
       }
     }
@@ -188,10 +190,10 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
         ,obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
-    var ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
+    _ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
-    ground.onlyForPlayer = true;
-    add(ground);
+    _ground.onlyForPlayer = true;
+    add(_ground);
     _weapon = DefaultEnemyWeapon(ind1, collisionType: DCollisionType.inactive, isSolid: false, isStatic: false
         , onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isLoop: true, game: game);
     add(_weapon!);
@@ -435,6 +437,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       animation = _animDeath;
       _hitBox.removeFromParent();
       _groundBox.collisionType = DCollisionType.inactive;
+      _ground.collisionType = DCollisionType.inactive;
       // removeAll(children);
       animationTicker?.onComplete = () {
         add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){

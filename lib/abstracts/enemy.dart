@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 
 abstract class KyrgyzEnemy
@@ -10,7 +11,7 @@ abstract class KyrgyzEnemy
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
       if(chance >= chanceOfLoot){
-        var item = itemFromName('gold');
+        var item = Gold();
         loots.add(item);
       }
     }

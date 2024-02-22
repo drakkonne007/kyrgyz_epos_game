@@ -164,7 +164,7 @@ abstract class PlayerWeapon extends DCollisionEntity
       // }
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
-      temp.doHurt(hurt: damage ?? game.playerData.getDamage(),inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
+      temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
     }
   }
 

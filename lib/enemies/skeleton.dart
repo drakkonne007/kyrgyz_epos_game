@@ -4,6 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -100,7 +101,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     for(int i=0;i<maxLoots;i++){
       double chance = rand2.nextDouble();
       if(chance >= chanceOfLoot){
-        var item = itemFromName('gold');
+        var item = Gold();
         loots.add(item);
       }
     }
@@ -413,6 +414,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       _speed.y = 0;
       _hitbox.removeFromParent();
       _groundBox.collisionType = DCollisionType.inactive;
+      _ground.collisionType = DCollisionType.inactive;
       // removeAll(children);
       if(loots.isNotEmpty) {
         if (loots.length > 1) {

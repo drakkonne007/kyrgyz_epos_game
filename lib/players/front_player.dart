@@ -75,7 +75,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _speed.x = 0;
     _speed.y = 0;
     if(inArmor){
-      hurt -= gameRef.playerData.getCurrentArmor();
+      hurt -= gameRef.playerData.armor.value;
       hurt = math.max(hurt, 0);
     }
     gameRef.playerData.health.value -= hurt;
