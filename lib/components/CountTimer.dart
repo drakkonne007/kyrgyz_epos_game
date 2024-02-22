@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 class CountTimer extends TimerComponent
 {
-  CountTimer({required super.period, super.autoStart, super.onTick, super.repeat, super.removeOnFinish, this.count = 0, this.onEndCount})
+  CountTimer({required super.period, super.autoStart = true, super.onTick, super.repeat = true, super.removeOnFinish = false, this.count = 0, this.onEndCount})
   {
     currentCount = count;
   }

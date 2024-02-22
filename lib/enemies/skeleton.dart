@@ -41,7 +41,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   @override
   int maxLoots = 2;
   @override
-  double chanceOfLoot = 0.5;
+  double chanceOfLoot = 0.07;
   @override
   double armor = 0;
   @override
@@ -49,6 +49,8 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   @override
   double health = 3;
   bool _isRefresh = true;
+  @override
+  Map<MagicDamage, int> magicDamages = {};
 
   final List<Vector2> _hitBoxPoints = [
     Vector2(115-115,100-110),
@@ -100,7 +102,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
     for(int i=0;i<maxLoots;i++){
       double chance = rand2.nextDouble();
-      if(chance >= chanceOfLoot){
+      if(chance <= chanceOfLoot){
         var item = Gold();
         loots.add(item);
       }
@@ -386,7 +388,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  void doHurt({required double hurt, bool inArmor = true})
   {
     if(animation == _animDeath || animation == _animDeathShield){
       return;
@@ -497,6 +499,11 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       }
       position += _speed * dt;
     }
+  }
+
+  @override
+  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
+    // TODO: implement doMagicHurt
   }
 }
 

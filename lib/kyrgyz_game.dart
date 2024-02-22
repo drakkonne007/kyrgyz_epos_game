@@ -63,7 +63,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
       helmet: StartHelmet(),
       armor: ArmorStart(),
       sword: SwordStart(),
-      weaponInventar: {'swordStart': 1, 'sword36' : 1},
+      weaponInventar: {'swordStart': 1, 'sword36' : 1, 'sword19' : 1},
       armorInventar: {'armorStart': 1, 'startHelmet': 1},
       flaskInventar: {
         'hpSmall':10,

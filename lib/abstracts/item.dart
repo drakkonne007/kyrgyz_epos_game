@@ -173,6 +173,7 @@ abstract class Item
   double hp = 0;
   double energy = 0;
   double armor = 0;
+  bool inArmor = true;
   double chanceOfLoot = 0;
   double hurtMiss = 0;
   double damage = 0;
@@ -184,7 +185,7 @@ abstract class Item
   int? countOfUses;
   MagicDamage? magicDamage;
   double permanentDamage = 0;
-  double secsOfPermDamage = 0;
+  int secsOfPermDamage = 0;
 
 
   @override

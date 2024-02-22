@@ -67,12 +67,12 @@ class PlayerData
   void setDress(Item item)
   {
     switch(item.dressType){
-      case DressType.helmet: helmetDress.value = item; break;
-      case DressType.armor: armorDress.value = item; break;
-      case DressType.gloves: glovesDress.value = item; break;
+      case DressType.helmet:  helmetDress.value == item ?  helmetDress.value = NullItem() : helmetDress.value = item; break;
+      case DressType.armor: armorDress.value == item ?  armorDress.value = NullItem() : armorDress.value = item; break;
+      case DressType.gloves: glovesDress.value == item ?  glovesDress.value = NullItem() : glovesDress.value = item; break;
       case DressType.sword: swordDress.value = item; break;
-      case DressType.ring: ringDress.value = item; break;
-      case DressType.boots: bootsDress.value = item; break;
+      case DressType.ring: ringDress.value == item ?  ringDress.value = NullItem() : ringDress.value = item; break;
+      case DressType.boots: bootsDress.value == item ?  bootsDress.value = NullItem() : bootsDress.value = item; break;
       case DressType.none: throw 'DressType none';
     }
   }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
@@ -155,14 +156,12 @@ class _LootInvantarState extends State<LootInventar>
                           Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
                             // centerSlice: const Rect.fromLTWH(6, 6, 20, 20),
                             fit: BoxFit.contain,
-                            semanticLabel: 'sadsadasd',
-                            excludeFromSemantics: true,
-
                           ),
                           Image.asset('assets/${item.source}',
                             fit: BoxFit.contain,
                             width: minSize/2,
                             height: minSize/2,),
+                          Image.asset(checkIfIsEquipNow(item),fit: BoxFit.contain,),
                           AutoSizeText(hash[list[i]]!.toString(),style: defaultTextStyle)
                         ]
                     );
@@ -206,6 +205,16 @@ class _LootInvantarState extends State<LootInventar>
     );
   }
 
+  String checkIfIsEquipNow(Item item)
+  {
+    if((item == widget.game.playerData.helmetDress.value || item == widget.game.playerData.armorDress.value || item == widget.game.playerData.bootsDress.value || item == widget.game.playerData.glovesDress.value
+        || item == widget.game.playerData.swordDress.value || item == widget.game.playerData.ringDress.value) && item.id != 'nullItem'){
+      return 'assets/images/inventar/UI-9-sliced object-12.png';
+    }else{
+      return 'assets/images/inventar/nullImage.png';
+    }
+  }
+
   Widget getPageHolderOfInventar(Map<String,int> hash)
   {
     List<Widget> list = [];
@@ -213,9 +222,9 @@ class _LootInvantarState extends State<LootInventar>
       Image? img;
       if(i == _curPage){
         img = Image.asset('assets/images/inventar/activePageBall.png',
-        width: 17,
-        height: 17,
-        fit: BoxFit.contain,);
+          width: 17,
+          height: 17,
+          fit: BoxFit.contain,);
 
       }else{
         img = Image.asset('assets/images/inventar/passivePageBall.png',

@@ -101,6 +101,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     _animShort.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
+    _weapon?.inArmor = gameRef.playerData.swordDress.value.inArmor;
+    _weapon?.permanentDamage = gameRef.playerData.swordDress.value.permanentDamage;
+    _weapon?.secsOfPermDamage = gameRef.playerData.swordDress.value.secsOfPermDamage;
+    _weapon?.magicDamage = gameRef.playerData.swordDress.value.magicDamage;
+    print(_weapon?.magicDamage);
   }
 
   @override

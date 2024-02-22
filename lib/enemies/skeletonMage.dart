@@ -39,9 +39,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
   @override
   int row=0;
   @override
-  int maxLoots = 1;
+  int maxLoots = 2;
   @override
-  double chanceOfLoot = 0.2;
+  double chanceOfLoot = 0.12;
   @override
   double armor = 0;
   @override
@@ -49,6 +49,8 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
   @override
   double health = 3;
   bool _isRefresh = true;
+  @override
+  Map<MagicDamage, int> magicDamages = {};
 
   final List<Vector2> _hitBoxPoints = [
     Vector2(113-115,103-110),
@@ -66,7 +68,8 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
     math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
     for(int i=0;i<maxLoots;i++){
       double chance = rand2.nextDouble();
-      if(chance >= chanceOfLoot){
+      if(chance <= chanceOfLoot){
+        print('HUHU');
         var item = Gold();
         loots.add(item);
       }
@@ -346,7 +349,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
   }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  void doHurt({required double hurt, bool inArmor = true})
   {
     if(animation == _animDeath || animation == _animDeathShield){
       return;
@@ -440,6 +443,11 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
       }
       position += _speed * dt;
     }
+  }
+
+  @override
+  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
+    // TODO: implement doMagicHurt
   }
 }
 

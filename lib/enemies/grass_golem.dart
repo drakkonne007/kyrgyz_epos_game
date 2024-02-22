@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
@@ -85,15 +87,15 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   @override
   int row=0;
   @override
-  int maxLoots = 4;
+  int maxLoots = 1;
   @override
-  double chanceOfLoot = 0;
+  double chanceOfLoot = 0.02;
   @override
   double armor = 0;
   @override
   List<Item> loots = [];
   @override
-  double health = 3;
+  double health = 20;
   bool _isRefresh = true;
 
   @override
@@ -146,7 +148,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
     for(int i=0;i<maxLoots;i++){
       double chance = rand2.nextDouble();
-      if(chance >= chanceOfLoot){
+      if(chance <= chanceOfLoot){
         var item = Gold();
         loots.add(item);
       }
@@ -353,7 +355,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  void doHurt({required double hurt, bool inArmor = true})
   {
     if(animation == _animDeath){
       return;
@@ -366,33 +368,38 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       health -= hurt;
     }
     if(health <1){
-      _speed.x = 0;
-      _speed.y = 0;
-      if(loots.isNotEmpty) {
-        print(loots.length);
-        if(loots.length > 1){
-          var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.enemyComponent.add(temp);
-        }else{
-          var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.enemyComponent.add(temp);
-        }
-      }
-      animation = _animDeath;
-      _hitbox.removeFromParent();
-      _groundBox.collisionType = DCollisionType.inactive;
-      _ground.collisionType = DCollisionType.inactive;
-      // removeAll(children);
-      animationTicker?.onComplete = () {
-        add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-          gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-          removeFromParent();
-        }));
-      };
+      death();
     }else{
       animation = _animHurt;
       animationTicker!.onComplete = selectBehaviour;
     }
+  }
+
+  void death()
+  {
+    _speed.x = 0;
+    _speed.y = 0;
+    if(loots.isNotEmpty) {
+      print(loots.length);
+      if(loots.length > 1){
+        var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
+        gameRef.gameMap.enemyComponent.add(temp);
+      }else{
+        var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
+        gameRef.gameMap.enemyComponent.add(temp);
+      }
+    }
+    animation = _animDeath;
+    _hitbox.removeFromParent();
+    _groundBox.collisionType = DCollisionType.inactive;
+    _ground.collisionType = DCollisionType.inactive;
+    // removeAll(children);
+    animationTicker?.onComplete = () {
+      add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        removeFromParent();
+      }));
+    };
   }
 
   @override
@@ -433,4 +440,37 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     }
     position += _speed * dt;
   }
+
+  @override
+  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
+    health -= hurt;
+    if(health < 1){
+      death();
+    }
+  }
+
+  @override
+  void render(Canvas canvas)
+  {
+    super.render(canvas);
+    if(magicDamages.isNotEmpty){
+      var shader = gameRef.telepShaderProgramm.fragmentShader();
+      shader.setFloat(0,0);
+      shader.setFloat(1,math.max(size.x,30));
+      shader.setFloat(2,math.max(size.y,30));
+      final paint = Paint()..shader = shader;
+      canvas.drawRect(
+        Rect.fromLTWH(
+          0,
+          0,
+          math.max(size.x,30),
+          math.max(size.y,30),
+        ),
+        paint,
+      );
+    }
+  }
+
+  @override
+  Map<MagicDamage, int> magicDamages = {};
 }

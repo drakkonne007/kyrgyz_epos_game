@@ -1,5 +1,6 @@
 
 
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -23,6 +24,6 @@ class ArmorStart extends Item
 
   @override void getEffectFromInventar(KyrgyzGame game)
   {
-    game.playerData.armorDress.value = this;
+      game.playerData.setDress(this);
   }
 }

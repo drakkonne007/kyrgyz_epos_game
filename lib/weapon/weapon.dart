@@ -5,7 +5,9 @@ import 'package:flame/palette.dart';
 import 'package:flutter/widgets.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/player.dart';
+import 'package:game_flame/components/CountTimer.dart';
 import 'dart:math' as math;
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -98,9 +100,10 @@ abstract class PlayerWeapon extends DCollisionEntity
   Function()? onStartWeaponHit;
   Function()? onEndWeaponHit;
   final double sectorInRadian = 0.383972 * 2;
+  MagicDamage? magicDamage;
   double? damage;
   double permanentDamage = 0;
-  double secsOfPermDamage = 0;
+  int secsOfPermDamage = 0;
   bool inArmor = true;
   double energyCost = 0;
   double coolDown = 1;
@@ -164,7 +167,26 @@ abstract class PlayerWeapon extends DCollisionEntity
       // }
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
-      temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: inArmor, permanentDamage: permanentDamage, secsOfPermDamage: secsOfPermDamage);
+      temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: inArmor);
+      if(secsOfPermDamage > 0 && permanentDamage > 0 && magicDamage != null){
+        if(temp.magicDamages.containsKey(magicDamage)){
+          int curr = temp.magicDamages[magicDamage]!;
+          curr++;
+          temp.magicDamages[magicDamage!] = curr;
+        }else{
+          temp.magicDamages[magicDamage!] = 1;
+        }
+        var tempComponent = other.parent as Component;
+        tempComponent.add(CountTimer(period: 0.5,onTick: (){temp.doMagicHurt(hurt: permanentDamage/2, magicDamage: magicDamage!);},count: secsOfPermDamage*2, onEndCount: (){
+          int curr = temp.magicDamages[magicDamage]!;
+          curr--;
+          if(curr == 0){
+            temp.magicDamages.remove(magicDamage);
+          }else{
+            temp.magicDamages[magicDamage!] = curr;
+          }
+        }));
+      }
     }
   }
 

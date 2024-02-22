@@ -21,6 +21,6 @@ class StartHelmet extends Item
 
   @override void getEffectFromInventar(KyrgyzGame game)
   {
-    game.playerData.helmetDress.value = this;
+    game.playerData.setDress(this);
   }
 }

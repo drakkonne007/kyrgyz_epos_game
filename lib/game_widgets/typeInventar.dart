@@ -82,34 +82,34 @@ class PlayerStats extends StatelessWidget
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children:[
                           ValueListenableBuilder (
-                            valueListenable: game.playerData.helmetDress,
-                            builder: (BuildContext context, value, Widget? child) => Stack(
-                              fit: StackFit.passthrough,
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset('assets/images/inventar/UI-9-sliced object-58.png', fit: BoxFit.fill,width: newWidth,),
-                                Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
-                              ])
+                              valueListenable: game.playerData.helmetDress,
+                              builder: (BuildContext context, value, Widget? child) => Stack(
+                                  fit: StackFit.passthrough,
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset('assets/images/inventar/UI-9-sliced object-58.png', fit: BoxFit.fill,width: newWidth,),
+                                    Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                                  ])
                           ),
                           ValueListenableBuilder (
                               valueListenable: game.playerData.armorDress,
                               builder: (BuildContext context, value, Widget? child) => Stack(
-                              fit: StackFit.passthrough,
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset('assets/images/inventar/UI-9-sliced object-59.png', fit: BoxFit.fill,width: newWidth,),
-                                Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
-                              ])
+                                  fit: StackFit.passthrough,
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset('assets/images/inventar/UI-9-sliced object-59.png', fit: BoxFit.fill,width: newWidth,),
+                                    Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                                  ])
                           ),
                           ValueListenableBuilder (
                               valueListenable: game.playerData.glovesDress,
                               builder: (BuildContext context, value, Widget? child) => Stack(
-                              fit: StackFit.passthrough,
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset('assets/images/inventar/UI-9-sliced object-60.png', fit: BoxFit.fill,width: newWidth,),
-                                Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
-                              ])
+                                  fit: StackFit.passthrough,
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset('assets/images/inventar/UI-9-sliced object-60.png', fit: BoxFit.fill,width: newWidth,),
+                                    Image.asset('assets/${value.source}', fit: BoxFit.fill,width: newWidth * 0.7,),
+                                  ])
                           ),
                         ]
                     ),

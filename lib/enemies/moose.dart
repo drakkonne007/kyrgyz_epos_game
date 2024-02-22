@@ -104,7 +104,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   @override
   double armor = 0;//5;
   @override
-  double chanceOfLoot = 0.3;
+  double chanceOfLoot = 0.08;
   @override
   int column = 0;
   @override
@@ -113,6 +113,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   double health = 4;//10;
   @override
   int maxLoots = 2;
+  @override
+  Map<MagicDamage, int> magicDamages = {};
 
   bool _isRefresh = true;
 
@@ -122,7 +124,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
     for(int i=0;i<maxLoots;i++){
       double chance = rand2.nextDouble();
-      if(chance >= chanceOfLoot){
+      if(chance <= chanceOfLoot){
         var item = Gold();
         loots.add(item);
       }
@@ -410,7 +412,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
 
 
   @override
-  void doHurt({required double hurt, bool inArmor = true, double permanentDamage = 0, double secsOfPermDamage = 0})
+  void doHurt({required double hurt, bool inArmor = true})
   {
     if(animation == _animDeath){
       return;
@@ -487,5 +489,10 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       }
     }
     position += _speed * dt;
+  }
+
+  @override
+  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
+    // TODO: implement doMagicHurt
   }
 }
