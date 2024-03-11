@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
@@ -11,7 +10,6 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/utils.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -77,7 +75,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 30;
   final GolemVariant spriteVariant;
-  double _rigidSec = 2;
+  double _rigidSec = math.Random().nextDouble() + 1;
   late DefaultEnemyWeapon _weapon;
   ObstacleWhere _whereObstacle = ObstacleWhere.none;
   bool _wasHit = false;
@@ -419,7 +417,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       return;
     }
     if(_rigidSec <= 0) {
-      _rigidSec = 1;
+      _rigidSec = math.Random().nextDouble() + 1;
       if (isNearPlayer()) {
         _weapon.currentCoolDown = _weapon.coolDown ?? 0;
         var pl = gameRef.gameMap.orthoPlayer!;
@@ -454,10 +452,13 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   {
     super.render(canvas);
     if(magicDamages.isNotEmpty){
-      var shader = gameRef.telepShaderProgramm.fragmentShader();
-      shader.setFloat(0,0);
-      shader.setFloat(1,math.max(size.x,30));
-      shader.setFloat(2,math.max(size.y,30));
+      var shader = gameRef.fireShader;
+      shader.setFloat(0,gameRef.gameMap.shaderTime);
+      shader.setFloat(1, 0.2); //scalse
+      shader.setFloat(2, 0); //offsetX
+      shader.setFloat(3, 0);
+      shader.setFloat(4,math.max(size.x,30)); //size
+      shader.setFloat(5,math.max(size.y,30));
       final paint = Paint()..shader = shader;
       canvas.drawRect(
         Rect.fromLTWH(

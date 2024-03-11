@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
@@ -217,7 +219,38 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     }
   }
 
+  @override
+  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
+    health -= hurt;
+    if(health < 1){
+      death();
+    }
+  }
 
+  @override
+  void render(Canvas canvas)
+  {
+    super.render(canvas);
+    if(magicDamages.isNotEmpty){
+      var shader = gameRef.iceShader;
+      shader.setFloat(0,gameRef.gameMap.shaderTime);
+      shader.setFloat(1, 0.2); //scalse
+      shader.setFloat(2, 0); //offsetX
+      shader.setFloat(3, 0);
+      shader.setFloat(4,math.max(size.x,30)); //size
+      shader.setFloat(5,math.max(size.y,30));
+      final paint = Paint()..shader = shader;
+      canvas.drawRect(
+        Rect.fromLTWH(
+          0,
+          0,
+          math.max(size.x,30),
+          math.max(size.y,30),
+        ),
+        paint,
+      );
+    }
+  }
 
   void selectBehaviour()
   {
@@ -412,30 +445,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       health -= hurt;
     }
     if(health <1){
-      _speed.x = 0;
-      _speed.y = 0;
-      _hitbox.removeFromParent();
-      _groundBox.collisionType = DCollisionType.inactive;
-      _ground.collisionType = DCollisionType.inactive;
-      // removeAll(children);
-      if(loots.isNotEmpty) {
-        if (loots.length > 1) {
-          var temp = Chest(
-              0, myItems: loots, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.enemyComponent.add(temp);
-        } else {
-          var temp = LootOnMap(
-              loots.first, position: positionOfAnchor(Anchor.center));
-          gameRef.gameMap.enemyComponent.add(temp);
-        }
-      }
-      animation = _withShieldNow ? _animDeathShield : _animDeath;
-      animationTicker?.onComplete = () {
-        add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-          gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-          removeFromParent();
-        }));
-      };
+        death();
     }else{
       if(_withShieldNow){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
@@ -452,6 +462,34 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       animation = _withShieldNow ? _animHurtShield : _animHurt;
       animationTicker?.onComplete = selectBehaviour;
     }
+  }
+
+  void death()
+  {
+    _speed.x = 0;
+    _speed.y = 0;
+    _hitbox.removeFromParent();
+    _groundBox.collisionType = DCollisionType.inactive;
+    _ground.collisionType = DCollisionType.inactive;
+    // removeAll(children);
+    if(loots.isNotEmpty) {
+      if (loots.length > 1) {
+        var temp = Chest(
+            0, myItems: loots, position: positionOfAnchor(Anchor.center));
+        gameRef.gameMap.enemyComponent.add(temp);
+      } else {
+        var temp = LootOnMap(
+            loots.first, position: positionOfAnchor(Anchor.center));
+        gameRef.gameMap.enemyComponent.add(temp);
+      }
+    }
+    animation = _withShieldNow ? _animDeathShield : _animDeath;
+    animationTicker?.onComplete = () {
+      add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        removeFromParent();
+      }));
+    };
   }
 
   void dropShield(int index)
@@ -500,11 +538,6 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       position += _speed * dt;
     }
   }
-
-  @override
-  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
-    // TODO: implement doMagicHurt
-  }
 }
 
 
@@ -527,4 +560,6 @@ class DroppedShield extends SpriteAnimationComponent
       flipHorizontally();
     }
   }
+
+
 }

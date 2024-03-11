@@ -14,6 +14,8 @@ import 'package:game_flame/overlays/save_dialog.dart';
 bool isMapCompile = false; //Надо ли компилить просто карту
 bool isNeedCopyInternal = false;
 
+//TODO добавить пакет IMPELLER для IOS (прекомпил шейдеров)
+
 void main()
 {
   WidgetsFlutterBinding.ensureInitialized();

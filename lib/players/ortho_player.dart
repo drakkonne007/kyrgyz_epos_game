@@ -94,18 +94,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         isStatic: false, isLoop: true,
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
     add(_weapon!);
-    gameRef.playerData.attackSpeed.addListener(setNewEnergyCostForWeapon);
+    gameRef.playerData.statChangeTrigger.addListener(setNewEnergyCostForWeapon);
   }
 
   void setNewEnergyCostForWeapon()
   {
+    print('change sword');
     _animShort.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
-    _weapon?.inArmor = gameRef.playerData.swordDress.value.inArmor;
-    _weapon?.permanentDamage = gameRef.playerData.swordDress.value.permanentDamage;
-    _weapon?.secsOfPermDamage = gameRef.playerData.swordDress.value.secsOfPermDamage;
-    _weapon?.magicDamage = gameRef.playerData.swordDress.value.magicDamage;
-    print(_weapon?.magicDamage);
   }
 
   @override
@@ -162,7 +158,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation != animIdle && animation != animMove){
       return;
     }
-    _weapon?.energyCost = _isLongAttack ? _animLong.ticker().totalDuration() * 2 : _animShort.ticker().totalDuration() * 2;
+    _weapon?.energyCost = _isLongAttack ? _animLong.ticker().totalDuration() * 2.6 : _animShort.ticker().totalDuration() * 2.6;
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }

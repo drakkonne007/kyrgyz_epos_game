@@ -45,6 +45,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   DCollisionProcessor? collisionProcessor;
   GameWorldData? currentGameWorldData;
   bool _isLoad = false;
+  double shaderTime = 0;
   final Component priorityHigh = Component(priority: GamePriority.high);
   final Component priorityHighMinus1 = Component(priority: GamePriority.high - 1);
   final Component priorityGroundPlus1 = Component(priority: GamePriority.ground + 1);
@@ -235,6 +236,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   @override
   void update(double dt)
   {
+    shaderTime += dt;
     if(!_isLoad){
       return;
     }

@@ -16,34 +16,18 @@ class TypeInventar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Center(
-      child:
-      SizedBox(
+        child:
+        SizedBox(
           width: size.width - 15,
           height: size.height - 5,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children:[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/inventar/gold.png',
-                      fit: BoxFit.contain,
-                      height: 50,),
-                    ValueListenableBuilder(valueListenable: game.playerData.money, builder: (context, value, __) => AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 20,)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    PlayerStats(game ,Size(size.width, size.height)),
-                    LootInventar(game, lootVariant,Size(size.width, size.height - 20)),
-                  ],),
-              ]
-          )
-      ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              PlayerStats(game ,Size(size.width, size.height)),
+              LootInventar(game, lootVariant,Size(size.width, size.height - 20)),
+            ],),
+        )
     );
   }
 }
@@ -60,7 +44,7 @@ class PlayerStats extends StatelessWidget
     return
       SizedBox(
         width: size.width / 3,
-        height: size.height - 60,
+        height: size.height - 20,
         child: Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.topCenter,

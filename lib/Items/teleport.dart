@@ -16,7 +16,6 @@ class Teleport extends PositionComponent with HasGameRef<KyrgyzGame>
   Vector2 targetPos;
   KyrgyzGame kyrGame;
   Teleport({required super.size, required super.position, required this.targetPos, required this.kyrGame});
-  double _iTime = 0;
 
   @override
   Future<void> onLoad() async
@@ -48,25 +47,22 @@ class Teleport extends PositionComponent with HasGameRef<KyrgyzGame>
   }
 
   @override
-  void update(double dt)
-  {
-    _iTime += dt;
-  }
-
-  @override
   void render(Canvas canvas) async
   {
-    var shader = gameRef.telepShaderProgramm.fragmentShader();
-    shader.setFloat(0,_iTime);
-    shader.setFloat(1,max(size.x,30));
-    shader.setFloat(2,max(size.y,30));
+    var shader = gameRef.telepShader;
+    shader.setFloat(0,gameRef.gameMap.shaderTime);
+    shader.setFloat(1, 1); //scalse
+    shader.setFloat(2, 0); //offsetX
+    shader.setFloat(3, 0);
+    shader.setFloat(4,math.max(size.x,30)); //size
+    shader.setFloat(5,math.max(size.y,30));
     final paint = Paint()..shader = shader;
     canvas.drawRect(
       Rect.fromLTWH(
         0,
         0,
-        max(size.x,30),
-        max(size.y,30),
+        math.max(size.x,30),
+        math.max(size.y,30),
       ),
       paint,
     );

@@ -7,6 +7,8 @@ precision lowp float;
 out vec4 fragColor;
 
 uniform float iTime;
+uniform float iScale;
+uniform vec2 iOffset;
 uniform vec2 iResolution;
 
 
@@ -37,7 +39,10 @@ float ring(vec2 st, vec2 center, float radius) {
 }
 
 void main() {
+
     vec2 st = (2.*gl_FragCoord.xy - iResolution.xy)/ min(iResolution.y,iResolution.x);
+	st /= iScale;
+	st -= iOffset;
     vec3 color = vec3(0.,0.,1.);
     
     float r = 0.67,

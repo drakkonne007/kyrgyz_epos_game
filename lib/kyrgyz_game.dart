@@ -38,7 +38,16 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   static Map<String,ext.Image> cachedImgs = {};
   static Set<String> cachedMapPngs = {};
   Database? database;
-  late FragmentProgram telepShaderProgramm;
+  late FragmentProgram _telepShaderProgramm;
+  late FragmentProgram _fireShaderProgramm;
+  late FragmentProgram _iceShaderProgramm;
+  late FragmentProgram _poisonShaderProgramm;
+  late FragmentProgram _lightningShaderProgramm;
+  late FragmentShader telepShader;
+  late FragmentShader fireShader;
+  late FragmentShader iceShader;
+  late FragmentShader poisonShader;
+  late FragmentShader lightningShader;
 
   @override
   Future onLoad() async
@@ -48,7 +57,16 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';
-    telepShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
+    _telepShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
+    _fireShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/fire.frag');
+    _iceShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/ice.frag');
+    _poisonShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/poison.frag');
+    _lightningShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/lightning.frag');
+    telepShader = _telepShaderProgramm.fragmentShader();
+    fireShader = _fireShaderProgramm.fragmentShader();
+    iceShader = _iceShaderProgramm.fragmentShader();
+    poisonShader = _poisonShaderProgramm.fragmentShader();
+    lightningShader = _lightningShaderProgramm.fragmentShader();
     prefs = await SharedPreferences.getInstance();
     prefs.remove('locale');
     var loc = prefs.getString('locale');

@@ -59,82 +59,97 @@ class _LootInvantarState extends State<LootInventar>
     return
       SizedBox(
           width: widget.mySize.width * 0.62,
-          height: widget.mySize.height - 40,
-          child: Row(
-            children: [
-              Expanded(
-                child:ElevatedButton(
-                  onPressed: (){
-                    if(_curPage > 0){
-                      setState(() {
-                        _curPage--;
-                      });
-                    }
-                  },
-                  style: defaultNoneButtonStyle.copyWith(
-                    foregroundBuilder: ((context, state, child)
-                    {
-                      if(state.contains(MaterialState.focused)
-                          || state.contains(MaterialState.hovered)
-                          || state.contains(MaterialState.pressed)){
-                        return Image.asset('assets/images/inventar/leftActiveButton.png',
-                          fit: BoxFit.fitHeight,
-                          height: 50,);
-                      }
-                      return Image.asset('assets/images/inventar/leftPassiveButton.png',
-                        fit: BoxFit.fitHeight,
-                        height: 50,);
-                    }),
-                  ),
-                  child:  null,
-                ),
+          height: widget.mySize.height,
+          child:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/inventar/gold.png',
+                    fit: BoxFit.contain,
+                    height: 25,),
+                  ValueListenableBuilder(valueListenable: widget.game.playerData.money, builder: (context, value, __) => AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 20,)),
+                ],
               ),
-              Expanded(flex: 10,
-                  child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        getLootInventar(temp),
-                        const SizedBox(height: 4,),
-                        getPageHolderOfInventar(temp)
-                      ]
-                  )),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: (){
-                    if(_curPage * 16 + 16 < temp.length){
-                      setState(() {
-                        _curPage++;
-                      });
-                    }
-                  },
-                  style: defaultNoneButtonStyle.copyWith(
-                    foregroundBuilder: ((context, state, child)
-                    {
-                      if(state.contains(MaterialState.focused)
-                          || state.contains(MaterialState.hovered)
-                          || state.contains(MaterialState.pressed)){
-                        return Image.asset('assets/images/inventar/rightActiveButton.png',
-                          fit: BoxFit.fitHeight,
-                          height: 50,);
-                      }
-                      return Image.asset('assets/images/inventar/rightPassiveButton.png',
-                        fit: BoxFit.fitHeight,
-                        height: 50,);
-                    }),
-                  ),
-                  child:  null,
-                ),
-              ),
-            ],
-          )
+                SizedBox(height: 5,),
+                Row(
+                  children: [
+                    Expanded(
+                      child:ElevatedButton(
+                        onPressed: (){
+                          if(_curPage > 0){
+                            setState(() {
+                              _curPage--;
+                            });
+                          }
+                        },
+                        style: defaultNoneButtonStyle.copyWith(
+                          foregroundBuilder: ((context, state, child)
+                          {
+                            if(state.contains(MaterialState.focused)
+                                || state.contains(MaterialState.hovered)
+                                || state.contains(MaterialState.pressed)){
+                              return Image.asset('assets/images/inventar/leftActiveButton.png',
+                                fit: BoxFit.fitHeight,
+                                height: 50,);
+                            }
+                            return Image.asset('assets/images/inventar/leftPassiveButton.png',
+                              fit: BoxFit.fitHeight,
+                              height: 50,);
+                          }),
+                        ),
+                        child:  null,
+                      ),
+                    ),
+                    Expanded(flex: 10,
+                        child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:[
+                              getLootInventar(temp),
+                              const SizedBox(height: 3,),
+                              getPageHolderOfInventar(temp)
+                            ]
+                        )),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: (){
+                          if(_curPage * 16 + 16 < temp.length){
+                            setState(() {
+                              _curPage++;
+                            });
+                          }
+                        },
+                        style: defaultNoneButtonStyle.copyWith(
+                          foregroundBuilder: ((context, state, child)
+                          {
+                            if(state.contains(MaterialState.focused)
+                                || state.contains(MaterialState.hovered)
+                                || state.contains(MaterialState.pressed)){
+                              return Image.asset('assets/images/inventar/rightActiveButton.png',
+                                fit: BoxFit.fitHeight,
+                                height: 50,);
+                            }
+                            return Image.asset('assets/images/inventar/rightPassiveButton.png',
+                              fit: BoxFit.fitHeight,
+                              height: 50,);
+                          }),
+                        ),
+                        child:  null,
+                      ),
+                    ),
+                  ],
+                )
+              ])
       );
   }
 
   Widget getLootInventar(Map<String,int> hash)
   {
     var list = hash.keys.toList(growable: false);
-    double minSize = min(widget.mySize.height - 40, widget.mySize.width * 0.5) / 4.5;
+    double minSize = min(widget.mySize.height - 50, widget.mySize.width * 0.5) / 4.5;
     List<Widget> buttonsList = [];
     for(int i = _curPage * 16;i<_curPage * 16 + 16;i++){
       if(i < list.length){
@@ -222,22 +237,22 @@ class _LootInvantarState extends State<LootInventar>
       Image? img;
       if(i == _curPage){
         img = Image.asset('assets/images/inventar/activePageBall.png',
-          width: 17,
-          height: 17,
+          width: 14,
+          height: 14,
           fit: BoxFit.contain,);
 
       }else{
         img = Image.asset('assets/images/inventar/passivePageBall.png',
-          width: 17,
-          height: 17,
+          width: 14,
+          height: 14,
           fit: BoxFit.contain,);
       }
       list.add(img);
     }
     if(list.isEmpty){
       list.add(Image.asset('assets/images/inventar/activePageBall.png',
-        width: 17,
-        height: 17,
+        width: 14,
+        height: 14,
         fit: BoxFit.contain,));
     }
     return Row(

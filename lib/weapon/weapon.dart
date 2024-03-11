@@ -167,23 +167,29 @@ abstract class PlayerWeapon extends DCollisionEntity
       // }
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
-      temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: inArmor);
-      if(secsOfPermDamage > 0 && permanentDamage > 0 && magicDamage != null){
-        if(temp.magicDamages.containsKey(magicDamage)){
-          int curr = temp.magicDamages[magicDamage]!;
+      temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: game.playerData.swordDress.value.inArmor);
+      if(game.playerData.swordDress.value.secsOfPermDamage > 0
+          && game.playerData.swordDress.value.permanentDamage > 0
+          && game.playerData.swordDress.value.magicDamage != null){
+        if(temp.magicDamages.containsKey(game.playerData.swordDress.value.magicDamage)){
+          int curr = temp.magicDamages[game.playerData.swordDress.value.magicDamage]!;
           curr++;
-          temp.magicDamages[magicDamage!] = curr;
+          temp.magicDamages[game.playerData.swordDress.value.magicDamage!] = curr;
         }else{
-          temp.magicDamages[magicDamage!] = 1;
+          temp.magicDamages[game.playerData.swordDress.value.magicDamage!] = 1;
         }
         var tempComponent = other.parent as Component;
-        tempComponent.add(CountTimer(period: 0.5,onTick: (){temp.doMagicHurt(hurt: permanentDamage/2, magicDamage: magicDamage!);},count: secsOfPermDamage*2, onEndCount: (){
-          int curr = temp.magicDamages[magicDamage]!;
+        double damage = game.playerData.swordDress.value.permanentDamage/2;
+        int count = game.playerData.swordDress.value.secsOfPermDamage*2;
+        MagicDamage magic = game.playerData.swordDress.value.magicDamage!;
+        tempComponent.add(CountTimer(period: 0.5,onTick: (){
+          temp.doMagicHurt(hurt: damage, magicDamage: magic);},count: count, onEndCount: (){
+          int curr = temp.magicDamages[magic]!;
           curr--;
           if(curr == 0){
-            temp.magicDamages.remove(magicDamage);
+            temp.magicDamages.remove(magic);
           }else{
-            temp.magicDamages[magicDamage!] = curr;
+            temp.magicDamages[magic] = curr;
           }
         }));
       }

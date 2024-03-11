@@ -92,6 +92,7 @@ class PlayerData
     magicDamage.value = swordDress.value.magicDamage ?? MagicDamage.none;
     health.value = procentOfHealth * maxHealth.value;
     energy.value = procentOfEnergy * maxEnergy.value;
+    statChangeTrigger.notifyListeners();
   }
 
   void addEnergy(double val, {bool extra = false, bool full = false})
@@ -127,6 +128,9 @@ class PlayerData
     }
     health.value = math.max(0, health.value);
   }
+
+
+  final ValueNotifier<int> statChangeTrigger = ValueNotifier<int>(0);
 
   final ValueNotifier<int> playerLevel = ValueNotifier<int>(1);
   final ValueNotifier<double> health = ValueNotifier<double>(0);
