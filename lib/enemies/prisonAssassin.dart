@@ -31,10 +31,23 @@ final List<Vector2> _groundBoxPoints = [ //вторая колонка
   Vector2(103 - 110,75 - 48),
 ];
 
+final List<Vector2> _weaponPoints = [ //вторая колонка
+  Vector2(746 - 110 - 220 * 3,350 - 48 - 96 * 3),
+  Vector2(755 - 110 - 220 * 3,355 - 48 - 96 * 3),
+  Vector2(770 - 110 - 220 * 3,361 - 48 - 96 * 3),
+  Vector2(789 - 110 - 220 * 3,362 - 48 - 96 * 3),
+  Vector2(798 - 110 - 220 * 3,358 - 48 - 96 * 3),
+  Vector2(804 - 110 - 220 * 3,352 - 48 - 96 * 3),
+  Vector2(804 - 110 - 220 * 3,348 - 48 - 96 * 3),
+  Vector2(803 - 110 - 220 * 3,346 - 48 - 96 * 3),
+  Vector2(796 - 110 - 220 * 3,341 - 48 - 96 * 3),
+  Vector2(787 - 110 - 220 * 3,341 - 48 - 96 * 3),
+];
+
 class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
 {
   PrisonAssassin(this._startPos);
-  late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
+  late SpriteAnimation _animMove, _animIdle,_animIdle2, _animAttack,_animAttack2, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   late GroundHitBox _groundBox;
   late Ground _ground;
@@ -71,27 +84,27 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
         'tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
-    _animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
-    _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 12,loop: false);
-    _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13,loop: false);
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 7);
+    _animIdle2 = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 10);
+    _animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 6);
+    _animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0,to: 9, loop: false);
+    _animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 7,loop: false);
+    _animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0,loop: false);
     anchor = Anchor.center;
     animation = _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
-    _hitbox = EnemyHitbox(_hitBoxPoint,
+    _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38)),obstacleBehavoiurStart: obstacleBehaviour,
+    _groundBox = GroundHitBox(_groundBoxPoints,obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     _weapon = DefaultEnemyWeapon(
-        _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+        _weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = 3;
-    _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
-        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+    _ground = Ground(_groundBoxPoints,collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
     var defWep = DefaultEnemyWeapon(_hitBoxPoint, collisionType: DCollisionType.active, isSolid: false, isStatic: false
@@ -113,6 +126,11 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
         loots.add(item);
       }
     }
+  }
+
+  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  {
+
   }
 
   @override
