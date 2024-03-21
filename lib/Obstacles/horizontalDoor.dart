@@ -1,9 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -38,10 +36,11 @@ final List<Vector2> _openedPoints = [
 ];
 
 
-class HorizontalDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  HorizontalDoor({this.nedeedKilledBosses, this.neededItems, required this.startPosition});
+  WoodenDoor({this.nedeedKilledBosses, this.neededItems, required this.startPosition, this.isVertical = false});
 
+  bool isVertical;
   Set<String>? nedeedKilledBosses;
   Vector2 startPosition;
   Set<String>? neededItems;
@@ -68,16 +67,17 @@ class HorizontalDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _animOpening = sprites.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     _animOpened = sprites.createAnimation(row: 0, stepTime: 0.08, from: 8, to: 9, loop: false);
     _animClosed = sprites.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
-    animation = _animClosed;
+    animation = isVertical ? _animOpened : _animClosed;
     anchor = Anchor.center;
     //18,43
     position = startPosition - Vector2(18 - 48,43 - 74);
-    _objectHitbox = ObjectHitbox(_objPoints,
+    _objectHitbox = ObjectHitbox(isVertical ? _objOpenedPoints : _objPoints,
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     add(_objectHitbox!);
-    ground = Ground(_groundPoints, collisionType: DCollisionType.passive,isSolid:false,isLoop:true,game:gameRef,isStatic:false);
+    ground = Ground(isVertical ? _openedPoints : _groundPoints, collisionType: DCollisionType.passive,isSolid:false,isLoop:true,game:gameRef,isStatic:false);
     add(ground!);
+    _isOpened = isVertical;
   }
 
   void checkIsIOpen()

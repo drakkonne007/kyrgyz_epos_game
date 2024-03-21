@@ -360,8 +360,15 @@ class MapNode {
       case 'hDoor':
         String? bosses = obj!.getAttribute('boss');
         String? items = obj.getAttribute('item');
-        var hDoor = HorizontalDoor(neededItems: items?.split(',').toSet()
+        var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
             ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position);
+        myGame.gameMap.allEls[colRow]!.add(hDoor);
+        myGame.gameMap.enemyComponent.add(hDoor);
+      case 'vDoor':
+        String? bosses = obj!.getAttribute('boss');
+        String? items = obj.getAttribute('item');
+        var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
+            ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position, isVertical: true);
         myGame.gameMap.allEls[colRow]!.add(hDoor);
         myGame.gameMap.enemyComponent.add(hDoor);
       case 'arrow':
