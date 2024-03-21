@@ -29,7 +29,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 70;
-  double _rigidSec = 1;
+  double _rigidSec = math.Random().nextDouble() + 1;
   bool _wasHit = false;
   late DefaultEnemyWeapon _defWeapon;
   int _variantOfHit = 0;
@@ -182,6 +182,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
 
   void chooseHit()
   {
+    _defWeapon.currentCoolDown = _defWeapon.coolDown;
     _wasHit = true;
     animation = null;
     _speed.x = 0;
@@ -270,7 +271,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       if(_whereObstacle == ObstacleWhere.side){
         posX = 0;
       }
-      if(_whereObstacle == ObstacleWhere.upDown){
+      if(_whereObstacle == ObstacleWhere.upDown && posY < 0){
         posY = 0;
       }
       _whereObstacle = ObstacleWhere.none;
@@ -430,7 +431,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     _defWeapon.collisionType = DCollisionType.inactive;
     if(inArmor){
       if(_withShieldNow && ((position.x < gameRef.gameMap.orthoPlayer!.position.x && !isFlippedHorizontally)
-      || (position.x > gameRef.gameMap.orthoPlayer!.position.x && isFlippedHorizontally))){
+          || (position.x > gameRef.gameMap.orthoPlayer!.position.x && isFlippedHorizontally))){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
         if(rand == 0){
           _speed.x = 0;
@@ -445,7 +446,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       health -= hurt;
     }
     if(health <1){
-        death();
+      death();
     }else{
       if(_withShieldNow){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
@@ -460,7 +461,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
         }
       }
       animation = _withShieldNow ? _animHurtShield : _animHurt;
-      animationTicker?.onComplete = selectBehaviour;
+      animationTicker!.onComplete = selectBehaviour;
     }
   }
 
@@ -516,7 +517,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
       if (_rigidSec <= 0) {
-        _rigidSec = 1;
+        _rigidSec = math.Random().nextDouble() + 1;
         if (isNearPlayer()) {
           _defWeapon.currentCoolDown = _defWeapon.coolDown;
           var pl = gameRef.gameMap.orthoPlayer!;

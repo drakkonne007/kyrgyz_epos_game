@@ -14,11 +14,12 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
   final Vector2 _startPos;
   final double _endPos;
   final Vector2 _speed = Vector2.all(0);
-  final double _maxSpeed = 130;
+  final double _maxSpeed = 160;
   bool _isDeleted = false;
   bool _isStarted = false;
   late SpriteAnimationComponent _player;
   late EnemyWeapon _defWeapon;
+  SpriteAnimation? _moveAnim, _stopAnim;
 
   @override
   void onLoad() async
@@ -37,7 +38,9 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
           'tiles/map/prisonSet/Props/trap - rolling trunk/$name'),
       srcSize: Vector2(96, 160),
     );
-    animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0);
+    _moveAnim = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0);
+    _stopAnim = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0, to: 1);
+    animation = _stopAnim;
     if(_endPos < _startPos.x){
       _speed.x = -_maxSpeed;
     }else{
@@ -77,6 +80,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
       if(_player.absolutePositionOfAnchor(_player.anchor).y < absoluteTopLeftPosition.y + height
           && _player.absolutePositionOfAnchor(_player.anchor).y > absoluteTopLeftPosition.y){
         _isStarted = true;
+        animation = _moveAnim;
       }
     }
     if(!_isStarted){
@@ -84,6 +88,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
     }
     position = position + _speed * dt;
     if((_speed.x < 0 && position.x < _endPos || _speed.x > 0 && position.x > _endPos) && !_isDeleted){
+      animation = _stopAnim;
       perfectRemove();
       _isDeleted = true;
       _speed.x = 0;

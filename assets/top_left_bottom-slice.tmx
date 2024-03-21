@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="40" nextobjectid="2226">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="40" nextobjectid="2231">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -5247,12 +5247,12 @@
   <object id="52" name="playerNewGame" x="7800" y="2296">
    <point/>
   </object>
-  <object id="56" name="telep" x="346.5" y="411.5" width="50" height="64.5">
+  <object id="56" name="telep" x="347" y="465.75" width="49.5" height="10.25">
    <properties>
     <property name="tar" value="371,317"/>
    </properties>
   </object>
-  <object id="57" name="telep" x="353" y="258.5" width="39" height="63">
+  <object id="57" name="telep" x="345.333" y="311.5" width="57.1667" height="10">
    <properties>
     <property name="tar" value="371,471"/>
    </properties>
@@ -6906,6 +6906,36 @@
    <point/>
   </object>
   <object id="2223" name="strMerchant" x="8400" y="909.333">
+   <point/>
+  </object>
+  <object id="2226" name="arrow" x="4071.64" y="543.992">
+   <properties>
+    <property name="dir" value="left"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2227" name="arrow" x="2955.75" y="1082">
+   <properties>
+    <property name="dir" value="up"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2228" name="arrow" x="3091.5" y="1081.75">
+   <properties>
+    <property name="dir" value="up"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2229" name="arrow" x="4614.73" y="908.281">
+   <properties>
+    <property name="dir" value="left"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2230" name="arrow" x="1852.36" y="1593.27">
+   <properties>
+    <property name="dir" value="up"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

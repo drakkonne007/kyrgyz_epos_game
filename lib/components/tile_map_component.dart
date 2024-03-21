@@ -247,19 +247,19 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
       reloadWorld(col, row);
     }
     return;
-    if(orthoPlayer != null && !orthoPlayer!.gameHide){
-      int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-      int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-      if (col != _column || row != _row) {
-        reloadWorld(col, row);
-      }
-    }else if(frontPlayer != null && !frontPlayer!.gameHide){
-      int col = frontPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-      int row = frontPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-      if (col != _column || row != _row) {
-        reloadWorld(col, row);
-      }
-    }
+    // if(orthoPlayer != null && !orthoPlayer!.gameHide){
+    //   int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    //   int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    //   if (col != _column || row != _row) {
+    //     reloadWorld(col, row);
+    //   }
+    // }else if(frontPlayer != null && !frontPlayer!.gameHide){
+    //   int col = frontPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    //   int row = frontPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    //   if (col != _column || row != _row) {
+    //     reloadWorld(col, row);
+    //   }
+    // }
   }
 
   void reloadWorld(int newColumn, int newRow)

@@ -1,0 +1,129 @@
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
+import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/kyrgyz_game.dart';
+import 'dart:math' as math;
+
+final List<Vector2> _groundPoints = [
+  Vector2(20 - 48,101 - 64),
+  Vector2(20 - 48,110 - 64),
+  Vector2(76 - 48,110 - 64),
+  Vector2(76 - 48,101 - 64),
+];
+
+final List<Vector2> _openedPoints = [
+  Vector2(788 - 48  - 96 * 8,58 - 64),
+  Vector2(793 - 48  - 96 * 8,58 - 64),
+  Vector2(793 - 48  - 96 * 8,110 - 64),
+  Vector2(788 - 48  - 96 * 8,110 - 64),
+];
+
+
+class HorizontalDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+{
+  HorizontalDoor({this.nedeedKilledBosses, this.neededItems, required this.startPosition});
+
+  Set<String>? nedeedKilledBosses;
+  Vector2 startPosition;
+  Set<String>? neededItems;
+  ObjectHitbox? _objectHitbox;
+  Ground? ground;
+  bool _isOpened = false;
+  late SpriteAnimation _animClosed, _animOpening, _animOpened;
+
+  @override
+  Future onLoad() async
+  {
+    String startName = 'tiles/map/prisonSet/Props/Wooden Doors/';
+    int rand = math.Random().nextInt(5);
+    switch(rand){
+      case 0: startName += 'Wooden door1/horizontal-wooden door - opening animation.png'; break;
+      case 1: startName += 'Wooden door1/horizontal-wooden door -variation2- opening animation.png'; break;
+      case 2: startName += 'Wooden door2/horizontal - wooden door2 - opening animation.png'; break;
+      case 3: startName += 'Wooden door2/horizontal - wooden door2 -variation2- opening animation.png'; break;
+      case 4: startName += 'Wooden door2/horizontal - wooden door2 -variation3- opening animation.png'; break;
+    }
+    var spriteImg = await Flame.images.load(startName);
+    var sprites = SpriteSheet(image: spriteImg,
+        srcSize: Vector2(96,128));
+    _animOpening = sprites.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+    _animOpened = sprites.createAnimation(row: 0, stepTime: 0.08, from: 8, to: 9, loop: false);
+    _animClosed = sprites.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
+    animation = _animClosed;
+    anchor = Anchor.center;
+    //18,43
+    position = startPosition - Vector2(18 - 48,43 - 74);
+    _objectHitbox = ObjectHitbox(_groundPoints,
+        collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
+        autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
+    add(_objectHitbox!);
+    ground = Ground(_groundPoints, collisionType: DCollisionType.passive,isSolid:false,isLoop:true,game:gameRef,isStatic:false);
+    add(ground!);
+  }
+
+  void checkIsIOpen()
+  {
+    if(animation != _animClosed && animation != _animOpened){
+      return;
+    }
+    if(nedeedKilledBosses != null){
+      if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
+        print('not kill needed boss');
+        return;
+      }
+    }
+    if(neededItems != null){
+      for(final myNeeded in neededItems!) {
+        bool isNeed = true;
+        for(final playerHas in gameRef.playerData.itemInventar.keys){
+          if(playerHas == myNeeded){
+            isNeed = false;
+            break;
+          }
+        }
+        if(isNeed){
+          print('not has nedeed item');
+          return;
+        }
+      }
+    }
+    if(!_isOpened){
+      animation = _animOpening;
+      animationTicker?.onComplete = changeHitboxes;
+    }else{
+      animation = _animOpening.reversed();
+      animationTicker?.onComplete = changeHitboxes;
+    }
+  }
+
+  void changeHitboxes()
+  {
+    if(_isOpened){
+      _isOpened = false;
+      ground?.changeVertices(_groundPoints);
+      _objectHitbox?.changeVertices(_groundPoints);
+      animation = _animClosed;
+    }else{
+      _isOpened = true;
+      ground?.changeVertices(_openedPoints);
+      _objectHitbox?.changeVertices(_openedPoints);
+      animation = _animOpened;
+    }
+  }
+
+  @override
+  void update(double dt)
+  {
+    _objectHitbox?.doDebug();
+    ground?.doDebug();
+    super.update(dt);
+    if(ground!.getMaxVector().y + 4 > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
+      parent = gameRef.gameMap.enemyOnPlayer;
+    }else{
+      parent = gameRef.gameMap.enemyComponent;
+    }
+  }
+}

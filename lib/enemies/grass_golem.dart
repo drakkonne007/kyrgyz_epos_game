@@ -186,7 +186,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
       if(_whereObstacle == ObstacleWhere.side){
         posX = 0;
       }
-      if(_whereObstacle == ObstacleWhere.upDown){
+      if(_whereObstacle == ObstacleWhere.upDown && posY < 0){
         posY = 0;
       }
       _whereObstacle = ObstacleWhere.none;
@@ -210,6 +210,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
 
   void onStartHit()
   {
+    _weapon.currentCoolDown = _weapon.coolDown;
     _speed.x = 0;
     _speed.y = 0;
     animation = null;
@@ -419,7 +420,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     if(_rigidSec <= 0) {
       _rigidSec = math.Random().nextDouble() + 1;
       if (isNearPlayer()) {
-        _weapon.currentCoolDown = _weapon.coolDown ?? 0;
+        _weapon.currentCoolDown = _weapon.coolDown;
         var pl = gameRef.gameMap.orthoPlayer!;
         if (pl.position.x > position.x) {
           if (isFlippedHorizontally) {

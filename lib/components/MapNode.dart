@@ -6,6 +6,7 @@ import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/teleport.dart';
+import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/enemies/mini_creatures/arrowSpawn.dart';
 import 'package:game_flame/enemies/mini_creatures/bigFlyingObelisk.dart';
 import 'package:game_flame/enemies/mini_creatures/bird.dart';
@@ -25,6 +26,7 @@ import 'package:game_flame/enemies/mini_creatures/verticalBigRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/verticalSmallRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/windblow.dart';
 import 'package:game_flame/enemies/moose.dart';
+import 'package:game_flame/enemies/prisonAssassin.dart';
 import 'package:game_flame/enemies/skeleton.dart';
 import 'package:game_flame/enemies/skeletonMage.dart';
 import 'package:game_flame/enemies/spin_blade.dart';
@@ -291,6 +293,10 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.add(temp);
         break;
+      case 'assassin':
+        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.enemyComponent.add(PrisonAssassin(position));
+        break;
       case 'portal':
         var targetPos = obj!.getAttribute('tar')!.split(',');
         var world = obj.getAttribute('wrld')!;
@@ -351,6 +357,13 @@ class MapNode {
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.enemyComponent.add(verticalBigRollWood);
         break;
+      case 'hDoor':
+        String? bosses = obj!.getAttribute('boss');
+        String? items = obj.getAttribute('item');
+        var hDoor = HorizontalDoor(neededItems: items?.split(',').toSet()
+            ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position);
+        myGame.gameMap.allEls[colRow]!.add(hDoor);
+        myGame.gameMap.enemyComponent.add(hDoor);
       case 'arrow':
         String targetPos = obj!.getAttribute('dir')!;
         ArrowSpawn spawn = ArrowSpawn(position, targetPos);

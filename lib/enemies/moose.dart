@@ -95,7 +95,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
   late GroundHitBox _groundBox;
   late Ground _ground;
   late EnemyHitbox _hitBox;
-  double _rigidSec = 2;
+  double _rigidSec = math.Random().nextDouble() + 1;
   DefaultEnemyWeapon? _weapon;
   ObstacleWhere _whereObstacle = ObstacleWhere.none;
   bool _wasHit = false;
@@ -227,7 +227,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       if(_whereObstacle == ObstacleWhere.side){
         posX = 0;
       }
-      if(_whereObstacle == ObstacleWhere.upDown){
+      if(_whereObstacle == ObstacleWhere.upDown && posY < 0){
         posY = 0;
       }
       _whereObstacle = ObstacleWhere.none;
@@ -251,6 +251,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
 
   void onStartHit()
   {
+    _weapon?.currentCoolDown = _weapon?.coolDown ?? 0;
     _speed.x = 0;
     _speed.y = 0;
     animation = null;
@@ -429,7 +430,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       death();
     }else{
       animation = _animHurt;
-      animationTicker?.onComplete = selectBehaviour;
+      animationTicker!.onComplete = selectBehaviour;
     }
   }
 
@@ -476,7 +477,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
       return;
     }
     if(_rigidSec <= 0){
-      _rigidSec = 1;
+      _rigidSec = math.Random().nextDouble() + 1;
       if(isNearPlayer()){
         var pl = gameRef.gameMap.orthoPlayer!;
         if(pl.position.x > position.x){

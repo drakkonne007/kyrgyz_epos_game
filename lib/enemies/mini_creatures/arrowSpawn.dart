@@ -72,32 +72,36 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   onLoad() async
   {
-    position = _startPos;
     anchor = Anchor.center;
     sprite = Sprite(await Flame.images.load('tiles/arrow.png'));
+    position = _startPos;
     switch(direction){
       case ArrowDirection.left:
-        angle = math.pi/2;
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
-        _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.x = -PhysicVals.maxSpeed - 20;
+        position.x -= size.x/2;
+        angle = -math.pi/2;
+        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
+        _speed.x = -PhysicVals.maxSpeed - 40;
         break;
       case ArrowDirection.right:
-        angle = -math.pi/2;
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
-        _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.x = PhysicVals.maxSpeed + 20;
+        position.x += size.x/2;
+        angle = math.pi/2;
+        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
+        _speed.x = PhysicVals.maxSpeed + 40;
         break;
       case ArrowDirection.down:
+        position.y += size.y/2;
         flipVertically();
         _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.y = PhysicVals.maxSpeed + 20;
+        _speed.y = PhysicVals.maxSpeed + 40;
         break;
       default:
+        position.y -= size.y/2;
         _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.y = -PhysicVals.maxSpeed - 20;
+        _speed.y = -PhysicVals.maxSpeed - 40;
         break;
     }
     _grBox.isOnlyForStatic = true;

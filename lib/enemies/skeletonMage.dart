@@ -31,7 +31,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 70;
   bool isHigh;
-  double _rigidSec = 1;
+  double _rigidSec = math.Random().nextDouble() + 1;
   int _variantOfHit = 0;
   ObstacleWhere _whereObstacle = ObstacleWhere.none;
   bool _withShieldNow = false;
@@ -228,7 +228,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
       if(_whereObstacle == ObstacleWhere.side){
         posX = 0;
       }
-      if(_whereObstacle == ObstacleWhere.upDown){
+      if(_whereObstacle == ObstacleWhere.upDown && posY < 0){
         posY = 0;
       }
       _whereObstacle = ObstacleWhere.none;
@@ -422,7 +422,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
         }
       }
       animation = _withShieldNow ? _animHurtShield : _animHurt;
-      animationTicker?.onComplete = selectBehaviour;
+      animationTicker!.onComplete = selectBehaviour;
     }
   }
 
@@ -478,7 +478,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
       if (_rigidSec <= 0) {
-        _rigidSec = 1.5;
+        _rigidSec = math.Random().nextDouble() + 1;
         selectBehaviour();
       }
       position += _speed * dt;
@@ -502,7 +502,7 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     anchor = const Anchor(0.5,35/64);
     _weapon = DefaultEnemyWeapon([Vector2.zero()], collisionType: DCollisionType.active, radius: 10
-        , isStatic: false, onObstacle: destroy, onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef,isSolid: true,);
+      , isStatic: false, onObstacle: destroy, onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef,isSolid: true,);
     add(_weapon);
     _weapon.damage = 1;
 

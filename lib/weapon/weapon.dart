@@ -2,6 +2,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
+import 'package:flame/particles.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -149,6 +151,8 @@ abstract class PlayerWeapon extends DCollisionEntity
     collisionType = DCollisionType.inactive;
   }
 
+  Vector2 randomVector2() => (Vector2.random() - Vector2.random()) * 200;
+
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
@@ -168,6 +172,23 @@ abstract class PlayerWeapon extends DCollisionEntity
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
       temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: game.playerData.swordDress.value.inArmor);
+      game.add(
+        ParticleSystemComponent(
+          position: intersectionPoints.last,
+          size: Vector2(5,5),
+          particle: Particle.generate(
+            count: 15,
+            generator: (i) => AcceleratedParticle(
+              lifespan: 0.3,
+              acceleration: randomVector2(),
+              child: CircleParticle(
+                radius: 0.6,
+                paint: Paint()..color = Colors.red,
+              ),
+            ),
+          ),
+        ),
+      );
       if(game.playerData.swordDress.value.secsOfPermDamage > 0
           && game.playerData.swordDress.value.permanentDamage > 0
           && game.playerData.swordDress.value.magicDamage != null){
