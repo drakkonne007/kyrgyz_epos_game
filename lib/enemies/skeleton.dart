@@ -233,9 +233,9 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   {
     super.render(canvas);
     if(magicDamages.isNotEmpty){
-      var shader = gameRef.iceShader;
+      var shader = gameRef.telepShader;
       shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 0.2); //scalse
+      shader.setFloat(1, 1); //scalse
       shader.setFloat(2, 0); //offsetX
       shader.setFloat(3, 0);
       shader.setFloat(4,math.max(size.x,30)); //size
@@ -486,7 +486,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     }
     animation = _withShieldNow ? _animDeathShield : _animDeath;
     animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
         gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
       }));
@@ -555,7 +555,7 @@ class DroppedShield extends SpriteAnimationComponent
     final spriteSheetWithShield = SpriteSheet(image: img,
         srcSize: Vector2(96,64));
     animation = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.1,loop: false);
-    add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration())));
+    add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration())));
     animationTicker?.onComplete = removeFromParent;
     if(isFlipped){
       flipHorizontally();

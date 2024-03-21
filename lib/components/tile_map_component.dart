@@ -162,7 +162,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
         }
       }
     }
-    print(grounds.length);
+    // print(grounds.length);
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
         orthoPlayer = OrthoPlayer();

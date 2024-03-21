@@ -189,6 +189,10 @@
  <tile id="1181" type="high"/>
  <tile id="1182" type="high"/>
  <tile id="1183" type="high"/>
+ <tile id="1184" type="high"/>
+ <tile id="1185" type="high"/>
+ <tile id="1186" type="high"/>
+ <tile id="1187" type="high"/>
  <tile id="1188" type="high"/>
  <tile id="1189" type="high"/>
  <tile id="1190" type="high"/>

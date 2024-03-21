@@ -356,7 +356,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _ground.collisionType = DCollisionType.inactive;
     // removeAll(children);
     animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
         gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
       }));
@@ -430,9 +430,9 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   {
     super.render(canvas);
     if(magicDamages.isNotEmpty){
-      var shader = gameRef.iceShader;
+      var shader = gameRef.telepShader;
       shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 0.2); //scalse
+      shader.setFloat(1, 1); //scalse
       shader.setFloat(2, 0); //offsetX
       shader.setFloat(3, 0);
       shader.setFloat(4,math.max(size.x,30)); //size

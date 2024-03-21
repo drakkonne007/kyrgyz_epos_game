@@ -328,10 +328,10 @@ class ObjectHitbox extends DCollisionEntity
 
   @override
   void update(double dt) {
-    if(_pastTime < 0.6) {
+    if(_pastTime < 0.2){
       _pastTime += dt;
     }
-    if(_pastTime > 0.5 && game.gameMap.currentObject.value == this){
+    if(_pastTime >= 0.1 && game.gameMap.currentObject.value == this){
       game.gameMap.currentObject.value = null;
     }
     super.update(dt);

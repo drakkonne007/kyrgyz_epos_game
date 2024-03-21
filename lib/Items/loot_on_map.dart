@@ -48,7 +48,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     remove(_objectHitbox);
     double dur = 0.5;
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));
-    add(OpacityEffect.by(-0.95,EffectController(duration: dur),onComplete: (){
+    add(OpacityEffect.by(-1,EffectController(duration: dur),onComplete: (){
       if(_item.isStaticObject) {
         gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
       }

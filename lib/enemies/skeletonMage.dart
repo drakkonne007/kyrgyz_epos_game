@@ -71,7 +71,6 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
     for(int i=0;i<maxLoots;i++){
       double chance = rand2.nextDouble();
       if(chance <= chanceOfLoot){
-        print('HUHU');
         var item = Gold();
         loots.add(item);
       }
@@ -158,9 +157,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
   {
     super.render(canvas);
     if(magicDamages.isNotEmpty){
-      var shader = gameRef.fireShader;
+      var shader = gameRef.telepShader;
       shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 0.2); //scalse
+      shader.setFloat(1, 1); //scalse
       shader.setFloat(2, 0); //offsetX
       shader.setFloat(3, 0);
       shader.setFloat(4,math.max(size.x,30)); //size
@@ -444,7 +443,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> 
     }
     animation = _withShieldNow ? _animDeathShield : _animDeath;
     animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
         gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
       }));

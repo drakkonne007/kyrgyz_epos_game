@@ -106,7 +106,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   void onGameResize(Vector2 size) {
     double xZoom = size.x / 768;
     double yZoom = size.y / 448;
-    camera.zoom = max(xZoom, yZoom);
+    camera.zoom = max(xZoom, yZoom) + 0.04;
     // print(size);
     super.onGameResize(size);
   }

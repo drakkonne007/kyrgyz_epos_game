@@ -99,7 +99,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setNewEnergyCostForWeapon()
   {
-    print('change sword');
     _animShort.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }

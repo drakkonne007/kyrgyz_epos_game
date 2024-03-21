@@ -2,14 +2,12 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-
+const double _heightOfChest = 52.5 - 35;
 
 class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
@@ -89,7 +87,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     for(final myItem in myItems){
       myItem.getEffect(gameRef);
     }
-    add(OpacityEffect.by(-0.95,EffectController(duration: dur + 0.3),onComplete: (){
+    add(OpacityEffect.by(-1,EffectController(duration: dur + 0.3),onComplete: (){
       if(isStatic) {
         gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
       }
@@ -101,7 +99,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void update(double dt)
   {
     super.update(dt);
-    if(position.y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
+    if(position.y + _heightOfChest > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
       parent = gameRef.gameMap.enemyOnPlayer;
     }else{
       parent = gameRef.gameMap.enemyComponent;

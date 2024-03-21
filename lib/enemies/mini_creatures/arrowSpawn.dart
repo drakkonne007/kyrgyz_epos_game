@@ -125,7 +125,7 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
     _speed.x = 0;
     _speed.y = 0;
     _grBox.collisionType = DCollisionType.inactive;
-    add(OpacityEffect.by(-0.95,EffectController(duration: 0.5),onComplete: (){
+    add(OpacityEffect.by(-1,EffectController(duration: 0.5),onComplete: (){
       removeFromParent();
     }));
   }

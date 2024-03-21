@@ -1,11 +1,27 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
+
+final List<Vector2> _objPoints = [
+  Vector2(45 - 48,85 - 64),
+  Vector2(45 - 48,110 - 64),
+  Vector2(55 - 48,110 - 64),
+  Vector2(55 - 48,85 - 64),
+];
+
+final List<Vector2> _objOpenedPoints = [
+  Vector2(770 - 48  - 96 * 8,40 - 64),
+  Vector2(810 - 48  - 96 * 8,40 - 64),
+  Vector2(810 - 48  - 96 * 8,60 - 64),
+  Vector2(770 - 48  - 96 * 8,60 - 64),
+];
 
 final List<Vector2> _groundPoints = [
   Vector2(20 - 48,101 - 64),
@@ -56,7 +72,7 @@ class HorizontalDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     anchor = Anchor.center;
     //18,43
     position = startPosition - Vector2(18 - 48,43 - 74);
-    _objectHitbox = ObjectHitbox(_groundPoints,
+    _objectHitbox = ObjectHitbox(_objPoints,
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     add(_objectHitbox!);
@@ -92,24 +108,23 @@ class HorizontalDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     }
     if(!_isOpened){
       animation = _animOpening;
-      animationTicker?.onComplete = changeHitboxes;
+      ground?.changeVertices(_openedPoints,isLoop: true);
+      _objectHitbox?.changeVertices(_objOpenedPoints,isLoop: true);
     }else{
       animation = _animOpening.reversed();
-      animationTicker?.onComplete = changeHitboxes;
+      ground?.changeVertices(_groundPoints,isLoop: true);
+      _objectHitbox?.changeVertices(_objPoints,isLoop: true);
     }
+    animationTicker?.onComplete = changeHitboxes;
   }
 
   void changeHitboxes()
   {
     if(_isOpened){
       _isOpened = false;
-      ground?.changeVertices(_groundPoints);
-      _objectHitbox?.changeVertices(_groundPoints);
       animation = _animClosed;
     }else{
       _isOpened = true;
-      ground?.changeVertices(_openedPoints);
-      _objectHitbox?.changeVertices(_openedPoints);
       animation = _animOpened;
     }
   }
@@ -117,10 +132,8 @@ class HorizontalDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   @override
   void update(double dt)
   {
-    _objectHitbox?.doDebug();
-    ground?.doDebug();
     super.update(dt);
-    if(ground!.getMaxVector().y + 4 > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
+    if(ground!.getMaxVector().y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
       parent = gameRef.gameMap.enemyOnPlayer;
     }else{
       parent = gameRef.gameMap.enemyComponent;

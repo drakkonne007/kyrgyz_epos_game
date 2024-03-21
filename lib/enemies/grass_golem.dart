@@ -379,7 +379,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _speed.x = 0;
     _speed.y = 0;
     if(loots.isNotEmpty) {
-      print(loots.length);
       if(loots.length > 1){
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
         gameRef.gameMap.enemyComponent.add(temp);
@@ -394,7 +393,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
     _ground.collisionType = DCollisionType.inactive;
     // removeAll(children);
     animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-0.95,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
+      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
         gameRef.gameMap.loadedLivesObjs.remove(_startPos);
         removeFromParent();
       }));
@@ -453,9 +452,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> im
   {
     super.render(canvas);
     if(magicDamages.isNotEmpty){
-      var shader = gameRef.fireShader;
+      var shader = gameRef.telepShader;
       shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 0.2); //scalse
+      shader.setFloat(1, 1); //scalse
       shader.setFloat(2, 0); //offsetX
       shader.setFloat(3, 0);
       shader.setFloat(4,math.max(size.x,30)); //size

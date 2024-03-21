@@ -60,7 +60,7 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
   {
     _defWeapon.collisionType = DCollisionType.inactive;
     animation?.loop = false;
-    add(OpacityEffect.by(-0.95,EffectController(duration: 0.7),onComplete: (){
+    add(OpacityEffect.by(-1,EffectController(duration: 0.7),onComplete: (){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();
     }));

@@ -151,7 +151,7 @@ abstract class PlayerWeapon extends DCollisionEntity
     collisionType = DCollisionType.inactive;
   }
 
-  Vector2 randomVector2() => (Vector2.random() - Vector2.random()) * 200;
+  Vector2 randomVector2() => (Vector2.random() - Vector2.random()) * 100;
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
@@ -174,7 +174,7 @@ abstract class PlayerWeapon extends DCollisionEntity
       temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: game.playerData.swordDress.value.inArmor);
       game.add(
         ParticleSystemComponent(
-          position: intersectionPoints.last,
+          position: other.getCenter(),
           size: Vector2(5,5),
           particle: Particle.generate(
             count: 15,
@@ -182,8 +182,8 @@ abstract class PlayerWeapon extends DCollisionEntity
               lifespan: 0.3,
               acceleration: randomVector2(),
               child: CircleParticle(
-                radius: 0.6,
-                paint: Paint()..color = Colors.red,
+                radius: 0.7,
+                paint: Paint()..color = Colors.red[900]!,
               ),
             ),
           ),
