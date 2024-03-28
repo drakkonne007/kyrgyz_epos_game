@@ -35,6 +35,13 @@ final List<Vector2> _openedPoints = [
   Vector2(788 - 48  - 96 * 8,110 - 64),
 ];
 
+final List<Vector2> _startOpenedPoints = [
+  Vector2(788 - 48  - 96 * 8,25 - 64),
+  Vector2(793 - 48  - 96 * 8,25 - 64),
+  Vector2(793 - 48  - 96 * 8,110 - 64),
+  Vector2(788 - 48  - 96 * 8,110 - 64),
+];
+
 
 class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
@@ -75,7 +82,7 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     add(_objectHitbox!);
-    ground = Ground(isVertical ? _openedPoints : _groundPoints, collisionType: DCollisionType.passive,isSolid:false,isLoop:true,game:gameRef,isStatic:false);
+    ground = Ground(isVertical ? _startOpenedPoints : _groundPoints, collisionType: DCollisionType.passive,isSolid:false,isLoop:true,game:gameRef,isStatic:false);
     add(ground!);
     _isOpened = isVertical;
   }
@@ -108,12 +115,12 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     if(!_isOpened){
       animation = _animOpening;
-      ground?.changeVertices(_openedPoints,isLoop: true);
-      _objectHitbox?.changeVertices(_objOpenedPoints,isLoop: true);
+      ground?.changeVertices(isVertical ? _startOpenedPoints : _openedPoints,isLoop: true, isSolid: true);
+      _objectHitbox?.changeVertices(_objOpenedPoints,isLoop: true, isSolid: true);
     }else{
       animation = _animOpening.reversed();
-      ground?.changeVertices(_groundPoints,isLoop: true);
-      _objectHitbox?.changeVertices(_objPoints,isLoop: true);
+      ground?.changeVertices(_groundPoints,isLoop: true, isSolid: true);
+      _objectHitbox?.changeVertices(_objPoints,isLoop: true, isSolid: true);
     }
     animationTicker?.onComplete = changeHitboxes;
   }
@@ -133,6 +140,7 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void update(double dt)
   {
     super.update(dt);
+    ground?.doDebug();
     if(ground!.getMaxVector().y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
       parent = gameRef.gameMap.enemyOnPlayer;
     }else{

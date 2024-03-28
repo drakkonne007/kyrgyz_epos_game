@@ -193,7 +193,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         animation = animMove;
         if (_onGround) {
           // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-          _speed.y = -300;
+          _speed.y = -400;
         }
         break;
       case PlayerDirectionMove.LeftUp:
@@ -201,13 +201,13 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         animation = animMove;
         if (_onGround) {
           // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-          _speed.y = -300;
+          _speed.y = -400;
         }
         break;
       case PlayerDirectionMove.Up:
         if (_onGround) {
           // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
-          _speed.y = -300;
+          _speed.y = -400;
         }
         animation = animMove;
         break;
@@ -393,7 +393,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(_groundTimer < 1000) {
       _groundTimer += dt;
     }
-    if(_groundTimer > 0.2){
+    if(_groundTimer > 0.08){
       _onGround = false;
     }
     if(gameHide){

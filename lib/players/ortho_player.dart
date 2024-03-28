@@ -299,6 +299,22 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     double maxDown = 0;
 
     for(final point in points){
+
+      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+
+
+
       double leftDiffX  = point.x - groundBox!.getMinVector().x;
       double rightDiffX = point.x - groundBox!.getMaxVector().x;
       double upDiffY = point.y - groundBox!.getMinVector().y;

@@ -328,6 +328,20 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impleme
     double maxDown = 0;
 
     for(final point in intersectionPoints){
+      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+
+
       double leftDiffX  = point.x - _groundBox.getMinVector().x;
       double rightDiffX = point.x - _groundBox.getMaxVector().x;
       double upDiffY = point.y - _groundBox.getMinVector().y;

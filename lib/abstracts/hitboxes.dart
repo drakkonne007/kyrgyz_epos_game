@@ -84,11 +84,12 @@ abstract class DCollisionEntity extends Component
     calcVertices();
   }
 
-  void changeVertices(List<Vector2> verts, {bool isLoop = false, double radius = 0})
+  void changeVertices(List<Vector2> verts, {bool isLoop = false, double radius = 0, bool isSolid = false})
   {
     if(isStatic){
       throw Exception("Cannot change vertices of static entity");
     }
+    this.isSolid = isSolid;
     _vertices = verts;
     this.isLoop = isLoop;
     this.radius = radius;

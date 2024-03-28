@@ -159,11 +159,11 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(101-115,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: obstacleBehaviour,
+    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: obstacleBehaviour,
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     // _groundBox.debugColor = BasicPalette.red.color;
-    _ground = Ground(getPointsForActivs(Vector2(101-115,127-110), Vector2(22,21))
+    _ground = Ground(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21))
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
@@ -339,6 +339,20 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     double maxDown = 0;
 
     for(final point in intersectionPoints){
+      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
+        continue;
+      }
+
+
       double leftDiffX  = point.x - _groundBox.getMinVector().x;
       double rightDiffX = point.x - _groundBox.getMaxVector().x;
       double upDiffY = point.y - _groundBox.getMinVector().y;
@@ -503,7 +517,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
 
   @override
   void update(double dt) {
-    // _hitbox.doDebug();
+    _ground.doDebug();
     if (!_isRefresh) {
       return;
     }
