@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2500" columns="50">
  <image source="tiles/map/ancientLand/Props/Atlas-Props.png" width="1600" height="1600"/>
+ <tile id="293">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="7.1875" y="9.875">
+    <polygon points="0,0 -1.25,3.75 4.08523,12.125 11.5398,17.7614 19.9034,-0.420455 17.7216,-5.14773 13.1761,-4.96591"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="294">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="8.27273" y="2.90909">
+    <polygon points="0,0 -2.54545,2.36364 -4.63636,14.7273 9.63636,18.9091 9.63636,24.9091 10.9091,25 11.6364,14.0909 16.9091,8.09091 15.8182,2.63636 8.54545,-1.09091"/>
+   </object>
+  </objectgroup>
+ </tile>
  <tile id="450" type="high"/>
  <tile id="451" type="high"/>
  <tile id="452" type="high"/>

@@ -17,7 +17,7 @@ import 'package:game_flame/abstracts/item.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
-class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
+class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,KyrgyzEnemy
 {
   Skeleton(this._startPos);
   late SpriteAnimation _animMove, _animIdle, _animAttack,_animAttack2, _animHurt, _animDeath;
@@ -33,26 +33,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   bool _wasHit = false;
   late DefaultEnemyWeapon _defWeapon;
   int _variantOfHit = 0;
-  ObstacleWhere _whereObstacle = ObstacleWhere.none;
   bool _withShieldNow = false;
-
-  @override
-  int column=0;
-  @override
-  int row=0;
-  @override
-  int maxLoots = 2;
-  @override
-  double chanceOfLoot = 0.07;
-  @override
-  double armor = 0;
-  @override
-  List<Item> loots = [];
-  @override
-  double health = 3;
-  bool _isRefresh = true;
-  @override
-  Map<MagicDamage, int> magicDamages = {};
 
   final List<Vector2> _hitBoxPoints = [
     Vector2(115-115,100-110),
@@ -101,14 +82,11 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   @override
   Future<void> onLoad() async
   {
-    math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
-    for(int i=0;i<maxLoots;i++){
-      double chance = rand2.nextDouble();
-      if(chance <= chanceOfLoot){
-        var item = Gold();
-        loots.add(item);
-      }
-    }
+    maxLoots = 2;
+    chanceOfLoot = 0.07;
+    health = 3;
+    setChance();
+
     anchor = const Anchor(115/220,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;
@@ -159,7 +137,9 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: obstacleBehaviour,
+    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
+      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
+    },
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     // _groundBox.debugColor = BasicPalette.red.color;
@@ -167,8 +147,15 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
-    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
-    add(timer);
+    add(TimerComponent(onTick: () {
+      if (!checkIsNeedSelfRemove(position.x ~/
+          gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
+          , position.y ~/
+              gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
+          , gameRef, _startPos, this)) {
+        animation = _withShieldNow ? _animIdleShield : _animIdle;
+      }
+    },repeat: true,period: 2));
     _defWeapon = DefaultEnemyWeapon(_attack1PointsOnStart,collisionType: DCollisionType.inactive,isStatic: false,isLoop:true,game: gameRef
         ,isSolid: false,onStartWeaponHit: null,onEndWeaponHit: null);
     _defWeapon.damage = 3;
@@ -268,13 +255,13 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       }
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
-      if(_whereObstacle == ObstacleWhere.side){
+      if(whereObstacle == ObstacleWhere.side){
         posX = 0;
       }
-      if(_whereObstacle == ObstacleWhere.upDown && posY < 0){
+      if(whereObstacle == ObstacleWhere.upDown && posY < 0){
         posY = 0;
       }
-      _whereObstacle = ObstacleWhere.none;
+      whereObstacle = ObstacleWhere.none;
       double angle = math.atan2(posY,posX);
       _speed.x = math.cos(angle) * _maxSpeed;
       _speed.y = math.sin(angle) * _maxSpeed;
@@ -293,24 +280,6 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
     }
   }
 
-  void checkIsNeedSelfRemove()
-  {
-    column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-    int diffCol = (column - gameRef.gameMap.column()).abs();
-    int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-      removeFromParent();
-    }
-    if(diffCol > 1 || diffRow > 1){
-      animation = _withShieldNow ? _animIdleShield : _animIdle;
-      _isRefresh = false;
-    }else{
-      _isRefresh = true;
-    }
-  }
-
   bool isNearPlayer()
   {
     var pl = gameRef.gameMap.orthoPlayer!;
@@ -324,115 +293,6 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
       return false;
     }
     return true;
-  }
-
-  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
-  {
-    Map<Vector2,AxesDiff> diffs = {};
-    bool isUp = false;
-    bool isDown = false;
-    bool isLeft = false;
-    bool isRight = false;
-    double maxLeft = 0;
-    double maxRight = 0;
-    double maxUp = 0;
-    double maxDown = 0;
-
-    for(final point in intersectionPoints){
-      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-
-
-      double leftDiffX  = point.x - _groundBox.getMinVector().x;
-      double rightDiffX = point.x - _groundBox.getMaxVector().x;
-      double upDiffY = point.y - _groundBox.getMinVector().y;
-      double downDiffY = point.y - _groundBox.getMaxVector().y;
-
-      // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
-
-      diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
-      double minDiff = math.min(leftDiffX.abs(),rightDiffX.abs());
-      minDiff = math.min(minDiff,upDiffY.abs());
-      minDiff = math.min(minDiff,downDiffY.abs());
-      if(minDiff == leftDiffX.abs()){
-        isLeft = true;
-        maxLeft = math.max(maxLeft,minDiff);
-      }
-      if(minDiff == rightDiffX.abs()){
-        isRight = true;
-        maxRight = math.max(maxRight,minDiff);
-      }
-      if(minDiff == upDiffY.abs()){
-        isUp = true;
-        maxUp = math.max(maxUp,minDiff);
-      }
-      if(minDiff == downDiffY.abs()){
-        isDown = true;
-        maxDown = math.max(maxDown,minDiff);
-      }
-    }
-
-    if(isDown && isUp && isLeft && isRight){
-      print('What is??');
-      return;
-    }
-
-    if(isDown && isUp){
-      double maxLeft = 1000000000;
-      double maxRight = 1000000000;
-      for(final diff in diffs.values){
-        maxLeft = math.min(maxLeft,diff.leftDiff.abs());
-        maxRight = math.min(maxRight,diff.rightDiff.abs());
-      }
-      if(maxLeft > maxRight){
-        position -= Vector2(maxRight,0);
-      }else{
-        position += Vector2(maxLeft,0);
-      }
-      return;
-    }
-    if(isLeft && isRight){
-      double maxUp = 100000000;
-      double maxDown = 100000000;
-      for(final diff in diffs.values){
-        maxUp = math.min(maxUp,diff.upDiff.abs());
-        maxDown = math.min(maxDown,diff.downDiff.abs());
-      }
-      if(maxUp > maxDown){
-        position -= Vector2(0,maxDown);
-      }else{
-        position += Vector2(0,maxUp);
-      }
-      return;
-    }
-    // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
-
-    if(isLeft){
-      _whereObstacle = ObstacleWhere.side;
-      position +=  Vector2(maxLeft,0);
-    }
-    if(isRight){
-      _whereObstacle = ObstacleWhere.side;
-      position -=  Vector2(maxRight,0);
-    }
-    if(isUp){
-      _whereObstacle = ObstacleWhere.upDown;
-      position +=  Vector2(0,maxUp);
-    }
-    if(isDown){
-      _whereObstacle = ObstacleWhere.upDown;
-      position -=  Vector2(0,maxDown);
-    }
   }
 
   @override
@@ -518,7 +378,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> impl
   @override
   void update(double dt) {
     _ground.doDebug();
-    if (!_isRefresh) {
+    if (!isRefresh) {
       return;
     }
     super.update(dt);

@@ -45,7 +45,7 @@ final List<Vector2> _weaponPoints = [ //вторая колонка
   Vector2(787 - 110 - 220 * 3,341 - 48 - 96 * 3) * 1.4,
 ];
 
-class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> implements KyrgyzEnemy
+class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
 {
   PrisonAssassin(this._startPos);
   late SpriteAnimation _animMove, _animIdle,_animIdle2, _animAttack,_animAttack2, _animHurt, _animDeath;
@@ -58,30 +58,16 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   final double _maxSpeed = 70;
   double _rigidSec = math.Random().nextDouble();
   late DefaultEnemyWeapon _weapon;
-  ObstacleWhere _whereObstacle = ObstacleWhere.none;
   bool _wasHit = false;
-  bool _isRefresh = true;
-
-  @override
-  double armor = 3;
-  @override
-  double chanceOfLoot = 0.02;
-  @override
-  int column = 0;
-  @override
-  double health = 1;
-  @override
-  List<Item> loots = [];
-  @override
-  Map<MagicDamage, int> magicDamages = {};
-  @override
-  int maxLoots = 3;
-  @override
-  int row = 0;
 
   @override
   Future<void> onLoad() async
   {
+    armor = 3;
+    chanceOfLoot = 0.02;
+    health = 10;
+    maxLoots = 3;
+    setChance();
     Image spriteImage = await Flame.images.load(
         'tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
@@ -100,7 +86,9 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(_groundBoxPoints,obstacleBehavoiurStart: obstacleBehaviour,
+    _groundBox = GroundHitBox(_groundBoxPoints,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
+      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
+    },
         collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     _weapon = DefaultEnemyWeapon(
@@ -110,130 +98,21 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _ground = Ground(_groundBoxPoints,collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
-    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
-    add(timer);
+    add(TimerComponent(onTick: () {
+      if (!checkIsNeedSelfRemove(position.x ~/
+          gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
+          , position.y ~/
+              gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
+          , gameRef, _startPos, this)) {
+        int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+        animation = rand.isOdd ? _animIdle : _animIdle2;
+      }
+    },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();
     }
     selectBehaviour();
-    math.Random rand2 = math.Random(DateTime.now().microsecondsSinceEpoch);
-    for(int i=0;i<maxLoots;i++){
-      double chance = rand2.nextDouble();
-      if(chance <= chanceOfLoot){
-        var item = Gold();
-        loots.add(item);
-      }
-    }
-  }
-
-  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other)
-  {
-    Map<Vector2,AxesDiff> diffs = {};
-    bool isUp = false;
-    bool isDown = false;
-    bool isLeft = false;
-    bool isRight = false;
-    double maxLeft = 0;
-    double maxRight = 0;
-    double maxUp = 0;
-    double maxDown = 0;
-
-    for(final point in intersectionPoints){
-      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(_groundBox.getMinVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(_groundBox.getMaxVector().x,_groundBox.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-
-
-      double leftDiffX  = point.x - _groundBox.getMinVector().x;
-      double rightDiffX = point.x - _groundBox.getMaxVector().x;
-      double upDiffY = point.y - _groundBox.getMinVector().y;
-      double downDiffY = point.y - _groundBox.getMaxVector().y;
-
-      // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
-
-      diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
-      double minDiff = math.min(leftDiffX.abs(),rightDiffX.abs());
-      minDiff = math.min(minDiff,upDiffY.abs());
-      minDiff = math.min(minDiff,downDiffY.abs());
-      if(minDiff == leftDiffX.abs()){
-        isLeft = true;
-        maxLeft = math.max(maxLeft,minDiff);
-      }
-      if(minDiff == rightDiffX.abs()){
-        isRight = true;
-        maxRight = math.max(maxRight,minDiff);
-      }
-      if(minDiff == upDiffY.abs()){
-        isUp = true;
-        maxUp = math.max(maxUp,minDiff);
-      }
-      if(minDiff == downDiffY.abs()){
-        isDown = true;
-        maxDown = math.max(maxDown,minDiff);
-      }
-    }
-    if(isDown && isUp && isLeft && isRight){
-      print('What is??');
-      return;
-    }
-    if(isDown && isUp){
-      double maxLeft = 1000000000;
-      double maxRight = 1000000000;
-      for(final diff in diffs.values){
-        maxLeft = math.min(maxLeft,diff.leftDiff.abs());
-        maxRight = math.min(maxRight,diff.rightDiff.abs());
-      }
-      if(maxLeft > maxRight){
-        position -= Vector2(maxRight,0);
-      }else{
-        position += Vector2(maxLeft,0);
-      }
-      return;
-    }
-    if(isLeft && isRight){
-      double maxUp = 100000000;
-      double maxDown = 100000000;
-      for(final diff in diffs.values){
-        maxUp = math.min(maxUp,diff.upDiff.abs());
-        maxDown = math.min(maxDown,diff.downDiff.abs());
-      }
-      if(maxUp > maxDown){
-        position -= Vector2(0,maxDown);
-      }else{
-        position += Vector2(0,maxUp);
-      }
-      return;
-    }
-    // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
-    if(isLeft){
-      _whereObstacle = ObstacleWhere.side;
-      position +=  Vector2(maxLeft,0);
-    }
-    if(isRight){
-      _whereObstacle = ObstacleWhere.side;
-      position -=  Vector2(maxRight,0);
-    }
-    if(isUp){
-      _whereObstacle = ObstacleWhere.upDown;
-      position +=  Vector2(0,maxUp);
-    }
-    if(isDown){
-      _whereObstacle = ObstacleWhere.upDown;
-      position -=  Vector2(0,maxDown);
-    }
-    // if(_wasHit) {
-    //   selectBehaviour();
-    // }
   }
 
   void selectBehaviour()
@@ -251,13 +130,13 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       }
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
-      if(_whereObstacle == ObstacleWhere.side){
+      if(whereObstacle == ObstacleWhere.side){
         posX = 0;
       }
-      if(_whereObstacle == ObstacleWhere.upDown && posY < 0){
+      if(whereObstacle == ObstacleWhere.upDown && posY < 0){
         posY = 0;
       }
-      _whereObstacle = ObstacleWhere.none;
+      whereObstacle = ObstacleWhere.none;
       double angle = math.atan2(posY,posX);
       _speed.x = math.cos(angle) * _maxSpeed;
       _speed.y = math.sin(angle) * _maxSpeed;
@@ -309,25 +188,6 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   void onEndHit()
   {
     selectBehaviour();
-  }
-
-  void checkIsNeedSelfRemove()
-  {
-    column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-    int diffCol = (column - gameRef.gameMap.column()).abs();
-    int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
-      removeFromParent();
-    }
-    if(diffCol > 1 || diffRow > 1){
-      int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-      animation = rand.isOdd ? _animIdle : _animIdle2;
-      _isRefresh = false;
-    }else{
-      _isRefresh = true;
-    }
   }
 
   @override
@@ -404,7 +264,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   @override
   void update(double dt)
   {
-    if(!_isRefresh){
+    if(isRefresh){
       return;
     }
     super.update(dt);
