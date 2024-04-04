@@ -80,9 +80,9 @@ flutter:
 
   assets:
     - assets/
-    - assets/defaultRules/
+#    - assets/defaultRules/
     - assets/fonts/
-    - assets/grass2Rules/
+#    - assets/grass2Rules/
     - assets/images/
     - assets/images/inventar/
     - assets/images/inventar/armor/
@@ -94,7 +94,7 @@ flutter:
     - assets/images/inventar/gloves/
     - assets/locale/
     - assets/metaData/
-    - assets/prisonRules/
+#    - assets/prisonRules/
     - assets/tiles/
     - assets/images/flags/
     - assets/images/gui/
@@ -127,7 +127,7 @@ flutter:
     - assets/tiles/map/yurta/
     - assets/tiles/map/ancientLand/Characters/
     - assets/tiles/map/ancientLand/Props/
-    - assets/tiles/map/ancientLand/TiledMap/
+#    - assets/tiles/map/ancientLand/TiledMap/
     - assets/tiles/map/ancientLand/Tilesets/
     - assets/tiles/map/ancientLand/Characters/Moose/
     - assets/tiles/map/ancientLand/Characters/NPC merchant/
@@ -135,9 +135,9 @@ flutter:
     - assets/tiles/map/ancientLand/Props/Ancient Temple/
     - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on flat surface/
     - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on grass/
-    - assets/tiles/map/ancientLand/TiledMap/Rules/
-    - assets/tiles/map/ancientLand/TiledMap/TilesetsGame/
-    - assets/tiles/map/ancientLand/Tilesets/The same tiles but with transparency instead of flat color grass//
+#    - assets/tiles/map/ancientLand/TiledMap/Rules/
+#    - assets/tiles/map/ancientLand/TiledMap/TilesetsGame/
+    - assets/tiles/map/ancientLand/Tilesets/The same tiles but with transparency instead of flat color grass/
     - assets/tiles/map/grassLand/Characters/
     - assets/tiles/map/grassLand/Props/
     - assets/tiles/map/grassLand/Tilesets/
@@ -145,7 +145,7 @@ flutter:
     - assets/tiles/map/grassLand/UI/UI-elements-32x32-separated sprites/
     - assets/tiles/map/grassLand2/Characters/
     - assets/tiles/map/grassLand2/Props/
-    - assets/tiles/map/grassLand2/TiledMap Editor new/
+#    - assets/tiles/map/grassLand2/TiledMap Editor new/
     - assets/tiles/map/grassLand2/Tilesets/
     - assets/tiles/map/grassLand2/Characters/orc mage/
     - assets/tiles/map/grassLand2/Characters/orc warrior/
@@ -177,7 +177,7 @@ flutter:
     - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet1 by individual sprites/
     - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet2 by individual sprites/
     - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet3 by individual sprites/
-    - assets/tiles/map/grassLand2/TiledMap Editor new/Rules/
+#    - assets/tiles/map/grassLand2/TiledMap Editor new/Rules/
     - assets/tiles/map/grassLand2/Tilesets/Beach/
     - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/
     - assets/tiles/map/grassLand2/Tilesets/Beach/standard - no thick foam - sprites/
@@ -194,7 +194,7 @@ flutter:
     - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass2 - river orientation - sprites/
     - assets/tiles/map/prisonSet/Characters/
     - assets/tiles/map/prisonSet/Props/
-    - assets/tiles/map/prisonSet/TiledMap Editor New/
+#    - assets/tiles/map/prisonSet/TiledMap Editor New/
     - assets/tiles/map/prisonSet/Tilesets/
     - assets/tiles/map/prisonSet/Characters/Assassin like enemy/
     - assets/tiles/map/prisonSet/Characters/Mage Skeleton/

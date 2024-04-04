@@ -5,7 +5,6 @@ import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -15,34 +14,36 @@ import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 
+const double zoomScale = 1.2;
+
 final List<Vector2> _hitBoxPoints = [ //вторая колонка
-  Vector2(110 - 110 ,35 - 48) * 1.4,
-  Vector2(100 - 110 ,46 - 48) * 1.4,
-  Vector2(102 - 110 ,74 - 48) * 1.4,
-  Vector2(118 - 110 ,74 - 48) * 1.4,
-  Vector2(123 - 110 ,48 - 48) * 1.4,
-  Vector2(117 - 110 ,44 - 48) * 1.4,
-  Vector2(117 - 110 ,36 - 48) * 1.4,
+  Vector2(110 - 110 ,35 - 48) * zoomScale,
+  Vector2(100 - 110 ,46 - 48) * zoomScale,
+  Vector2(102 - 110 ,74 - 48) * zoomScale,
+  Vector2(118 - 110 ,74 - 48) * zoomScale,
+  Vector2(123 - 110 ,48 - 48) * zoomScale,
+  Vector2(117 - 110 ,44 - 48) * zoomScale,
+  Vector2(117 - 110 ,36 - 48) * zoomScale,
 ];
 
 final List<Vector2> _groundBoxPoints = [ //вторая колонка
-  Vector2(103 - 110,65 - 48) * 1.4,
-  Vector2(117 - 110,65 - 48) * 1.4,
-  Vector2(117 - 110,75 - 48) * 1.4,
-  Vector2(103 - 110,75 - 48) * 1.4,
+  Vector2(103 - 110,65 - 48) * zoomScale,
+  Vector2(117 - 110,65 - 48) * zoomScale,
+  Vector2(117 - 110,75 - 48) * zoomScale,
+  Vector2(103 - 110,75 - 48) * zoomScale,
 ];
 
 final List<Vector2> _weaponPoints = [ //вторая колонка
-  Vector2(746 - 110 - 220 * 3,350 - 48 - 96 * 3) * 1.4,
-  Vector2(755 - 110 - 220 * 3,355 - 48 - 96 * 3) * 1.4,
-  Vector2(770 - 110 - 220 * 3,361 - 48 - 96 * 3) * 1.4,
-  Vector2(789 - 110 - 220 * 3,362 - 48 - 96 * 3) * 1.4,
-  Vector2(798 - 110 - 220 * 3,358 - 48 - 96 * 3) * 1.4,
-  Vector2(804 - 110 - 220 * 3,352 - 48 - 96 * 3) * 1.4,
-  Vector2(804 - 110 - 220 * 3,348 - 48 - 96 * 3) * 1.4,
-  Vector2(803 - 110 - 220 * 3,346 - 48 - 96 * 3) * 1.4,
-  Vector2(796 - 110 - 220 * 3,341 - 48 - 96 * 3) * 1.4,
-  Vector2(787 - 110 - 220 * 3,341 - 48 - 96 * 3) * 1.4,
+  Vector2(746 - 110 - 220 * 3,350 - 48 - 96 * 3) * zoomScale,
+  Vector2(755 - 110 - 220 * 3,355 - 48 - 96 * 3) * zoomScale,
+  Vector2(770 - 110 - 220 * 3,361 - 48 - 96 * 3) * zoomScale,
+  Vector2(789 - 110 - 220 * 3,362 - 48 - 96 * 3) * zoomScale,
+  Vector2(798 - 110 - 220 * 3,358 - 48 - 96 * 3) * zoomScale,
+  Vector2(804 - 110 - 220 * 3,352 - 48 - 96 * 3) * zoomScale,
+  Vector2(804 - 110 - 220 * 3,348 - 48 - 96 * 3) * zoomScale,
+  Vector2(803 - 110 - 220 * 3,346 - 48 - 96 * 3) * zoomScale,
+  Vector2(796 - 110 - 220 * 3,341 - 48 - 96 * 3) * zoomScale,
+  Vector2(787 - 110 - 220 * 3,341 - 48 - 96 * 3) * zoomScale,
 ];
 
 class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
@@ -81,7 +82,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0,loop: false);
     anchor = Anchor.center;
     animation = _animIdle;
-    size = _spriteSheetSize * 1.4;
+    size = _spriteSheetSize * zoomScale;
     position = _startPos;
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -264,7 +265,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   @override
   void update(double dt)
   {
-    if(isRefresh){
+    if(!isRefresh){
       return;
     }
     super.update(dt);

@@ -57,6 +57,13 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void checkIsNeedSelfRemove()
   {
+    int currColumn = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+    int currRow = position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+    int diffCurrx = (currColumn - gameRef.gameMap.column()).abs();
+    int diffCurrRow = (currRow - gameRef.gameMap.row()).abs();
+    if(diffCurrx < 1 && diffCurrRow < 1){
+      return;
+    }
     int column = _startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
     int row =    _startPos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();

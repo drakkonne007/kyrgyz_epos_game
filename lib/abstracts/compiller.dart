@@ -25,9 +25,9 @@ Future precompileAll() async
     var fileName = bigWorld.source; //'top_left_bottom-slice.tmx';
     var tiled = await TiledComponent.load(fileName, Vector2.all(32));
     var layersLists = tiled.tileMap.map.layers;
+    MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
+    MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
     if (true) {
-      MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
-      MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
       for (var a in layersLists) {
         if (a.type != LayerType.tileLayer) {
           continue;
@@ -54,6 +54,7 @@ Future precompileAll() async
       await compilerAnimation.compile('high',bigWorld);
       await compilerAnimationBack.compile('down',bigWorld);
     }
+    // internalHitBoxes = compilerAnimationBack.
     // tiled = await TiledComponent.load(fileName, Vector2.all(320));
     Set<String> loadedFiles = {};
     for (var layer in layersLists) {
@@ -284,6 +285,28 @@ Future precompileAll() async
               }
             }
           }
+          for(final keys in compilerAnimationBack.internalObjs.keys){
+            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+            GroundSource newPoints = GroundSource();
+            newPoints.isLoop = false;
+            newPoints.points = Set.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
+            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => []);
+            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          }
+          for(final keys in compilerAnimationBack.internalObjsLoop.keys){
+            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+            GroundSource newPoints = GroundSource();
+            newPoints.isLoop = true;
+            newPoints.points = Set.unmodifiable(compilerAnimationBack.internalObjsLoop[keys]!);
+            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => []);
+            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          }
+          compilerAnimationBack.internalObjs.clear();
+          compilerAnimationBack.internalObjsLoop.clear();
+
+
           for (final key in objsMap.keys) {
             File file = File(
                 'assets/metaData/${bigWorld.nameForGame}/${key.column}-${key.row}.objXml');

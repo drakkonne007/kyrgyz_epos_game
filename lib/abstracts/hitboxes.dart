@@ -174,6 +174,11 @@ abstract class DCollisionEntity extends Component
 
   doDebug({Color? color})
   {
+    if(isStatic) {
+      if ((game.gameMap.column() - column!).abs() > 1 || (game.gameMap.row() - row!).abs() > 1) {
+        return;
+      }
+    }
     if(radius != 0) {
       PointCust p = PointCust(
           position: getPoint(0) - Vector2(radius,0), color: color);
@@ -189,9 +194,6 @@ abstract class DCollisionEntity extends Component
       game.gameMap.priorityHigh.add(p);
     }else {
       for (int i = 0; i < vertices.length; i++) {
-        if (parent == null) {
-          return;
-        }
         Color color;
         if (i == 0) {
           color = BasicPalette.red.color;

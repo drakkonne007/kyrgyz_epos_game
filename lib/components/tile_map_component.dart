@@ -115,7 +115,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     enemyOnPlayer.removeAll(enemyOnPlayer.children);
 
     allEls.clear();
-    grounds.clear();
     loadedLivesObjs.clear();
     currentObject.value = null;
     // if(_currentGameWorldData != null && _currentGameWorldData!.nameForGame == gameRef.playerData.playerBigMap.nameForGame){
@@ -128,6 +127,9 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     await _preloadAnimAndObj();
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
+    }
+    for(final gg in grounds){
+      gg.removeFromParent();
     }
     grounds.clear();
     for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
@@ -156,6 +158,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
                     column: i,
                     row: j);
                 grounds.add(ground);
+                add(ground);
               }
             }
           }
