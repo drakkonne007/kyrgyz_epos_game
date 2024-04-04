@@ -158,7 +158,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
                     column: i,
                     row: j);
                 grounds.add(ground);
-                add(ground);
               }
             }
           }

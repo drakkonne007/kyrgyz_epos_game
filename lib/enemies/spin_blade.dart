@@ -61,7 +61,7 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int currRow = position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
     int diffCurrx = (currColumn - gameRef.gameMap.column()).abs();
     int diffCurrRow = (currRow - gameRef.gameMap.row()).abs();
-    if(diffCurrx < 1 && diffCurrRow < 1){
+    if(diffCurrx < 2 && diffCurrRow < 2){
       return;
     }
     int column = _startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;

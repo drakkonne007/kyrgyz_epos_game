@@ -72,7 +72,8 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
     super.update(dt);
     if(!_isStarted){
       if(_player.absolutePositionOfAnchor(_player.anchor).y < absoluteTopLeftPosition.y + height
-          && _player.absolutePositionOfAnchor(_player.anchor).y > absoluteTopLeftPosition.y){
+          && _player.absolutePositionOfAnchor(_player.anchor).y > absoluteTopLeftPosition.y && ((_endPos < _startPos.x && _player.absolutePositionOfAnchor(_player.anchor).x < _startPos.x)
+      || (_endPos > _startPos.x && _player.absolutePositionOfAnchor(_player.anchor).x > _startPos.x))){
         _isStarted = true;
         animation = _moveAnim;
       }

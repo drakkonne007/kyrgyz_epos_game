@@ -23,11 +23,4 @@ class Ground extends MapObstacle
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollisionStart
   }
-
-  @override
-  void update(double dt)
-  {
-    doDebug();
-  }
-
 }
