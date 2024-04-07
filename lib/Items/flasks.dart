@@ -67,9 +67,11 @@ class HpMedium extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game)
   {
-    var timer = CountTimer(period: 1,repeat: true,onTick: () => game.playerData.addHealth(2), count: 10, onEndCount: (){game.playerData.effectTimer.remove(this);});
+    var timer = TempEffect(period: 10, onUpdate: (dt){
+      game.playerData.addHealth(2.0 * dt);
+    });
     game.gameMap.add(timer);
-    game.playerData.effectTimer.add(timer);
+    game.playerData.tempEffects.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -107,10 +109,11 @@ class HpBig extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game)
   {
-    var timer = CountTimer(period: 0.5,repeat: true,onTick: () => game.playerData.addHealth(2.5), count: 30, onEndCount: (){game.playerData.effectTimer.remove(this);});
+    var timer = TempEffect(period: 15, onUpdate: (dt){
+      game.playerData.addHealth(2.5 * dt);
+    });
     game.gameMap.add(timer);
-    game.playerData.effectTimer.add(timer);
-    // game.playerData.addHealth(50);
+    game.playerData.tempEffects.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -225,9 +228,11 @@ class EnergyMedium extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game)
   {
-    var timer = CountTimer(period: 1,repeat: true,onTick: () => game.playerData.addEnergy(1.5), count: 10, onEndCount: (){game.playerData.effectTimer.remove(this);});
+    var timer = TempEffect(period: 10, onUpdate: (dt){
+      game.playerData.addEnergy(1.5 * dt);
+    });
     game.gameMap.add(timer);
-    game.playerData.effectTimer.add(timer);
+    game.playerData.tempEffects.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -265,9 +270,11 @@ class EnergyBig extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game)
   {
-    var timer = CountTimer(period: 0.5,repeat: true,onTick: () => game.playerData.addEnergy(2), count: 30, onEndCount: (){game.playerData.effectTimer.remove(this);});
+    var timer = TempEffect(period: 15, onUpdate: (dt){
+      game.playerData.addEnergy(2 * dt);
+    });
     game.gameMap.add(timer);
-    game.playerData.effectTimer.add(timer);
+    game.playerData.tempEffects.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;

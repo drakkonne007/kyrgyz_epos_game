@@ -95,7 +95,6 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
   late GroundHitBox _groundBox;
   late Ground _ground;
   late EnemyHitbox _hitBox;
-  double _rigidSec = math.Random().nextDouble() + 1;
   DefaultEnemyWeapon? _weapon;
   bool _wasHit = false;
 
@@ -122,9 +121,9 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
       final spriteSheet = SpriteSheet(image: spriteImage,
           srcSize: _spriteSheetSize);
       _animIdle =
-          spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
+          spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8, loop: false);
       _animMove =
-          spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 8, to: 16);
+          spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 8, to: 16, loop: false);
       animAttack = spriteSheet.createAnimation(
           row: 0, stepTime: 0.08, from: 16,to: 46, loop: false);
       _animHurt = spriteSheet.createAnimation(row: 0,
@@ -141,9 +140,9 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
       final spriteSheet = SpriteSheet(image: spriteImage,
           srcSize: _spriteSheetSize);
       _animIdle =
-          spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
+          spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8, loop: false);
       _animMove =
-          spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
+          spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8, loop: false);
       animAttack = spriteSheet.createAnimation(
           row: 2, stepTime: 0.08, from: 0, loop: false);
       _animHurt = spriteSheet.createAnimation(row: 3,
@@ -159,6 +158,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     }
     position = _startPos;
     animation = _animIdle;
+    animationTicker?.reset();
     size = _spriteSheetSize;
     const double percentOfWidth = 158/347;
     Vector2 staticConstAnchor = Vector2(size.x * percentOfWidth,size.y/2);
@@ -187,6 +187,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
           , gameRef, _startPos, this)) {
         animation = _animIdle;
+        animationTicker?.reset();
       }
     },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -199,6 +200,21 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
   void selectBehaviour()
   {
     if(gameRef.gameMap.orthoPlayer == null){
+      return;
+    }
+    if(isNearPlayer()) {
+      var pl = gameRef.gameMap.orthoPlayer!;
+      if (pl.position.x > position.x) {
+        if (isFlippedHorizontally) {
+          flipHorizontally();
+        }
+      }
+      if (pl.position.x < position.x) {
+        if (!isFlippedHorizontally) {
+          flipHorizontally();
+        }
+      }
+      _weapon?.hit();
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -234,6 +250,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
         animation = _animIdle;
       }
     }
+    animationTicker?.reset();
+    animationTicker?.onComplete = selectBehaviour;
   }
 
   void onStartHit()
@@ -243,6 +261,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     _speed.y = 0;
     animation = null;
     animation = animAttack;
+    animationTicker?.reset();
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
     _wasHit = true;
@@ -306,7 +325,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
       death();
     }else{
       animation = _animHurt;
-      animationTicker!.onComplete = selectBehaviour;
+      animationTicker?.reset();
+      animationTicker?.onComplete = selectBehaviour;
     }
   }
 
@@ -348,28 +368,8 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     }else{
       parent = gameRef.gameMap.enemyComponent;
     }
-    _rigidSec -= dt;
     if(animation == _animHurt || animation == animAttack || animation == _animDeath || animation == null){
       return;
-    }
-    if(_rigidSec <= 0){
-      _rigidSec = math.Random().nextDouble() + 1;
-      if(isNearPlayer()){
-        var pl = gameRef.gameMap.orthoPlayer!;
-        if(pl.position.x > position.x){
-          if(isFlippedHorizontally){
-            flipHorizontally();
-          }
-        }
-        if(pl.position.x < position.x){
-          if(!isFlippedHorizontally){
-            flipHorizontally();
-          }
-        }
-        _weapon?.hit();
-      }else{
-        selectBehaviour();
-      }
     }
     position += _speed * dt;
   }

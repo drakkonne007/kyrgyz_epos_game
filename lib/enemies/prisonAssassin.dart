@@ -57,7 +57,6 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 70;
-  double _rigidSec = math.Random().nextDouble();
   late DefaultEnemyWeapon _weapon;
   bool _wasHit = false;
 
@@ -73,9 +72,9 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
         'tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 7);
-    _animIdle2 = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 10);
-    _animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 6);
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 7, loop: false);
+    _animIdle2 = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 10, loop: false);
+    _animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 6, loop: false);
     _animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0,to: 9, loop: false);
     _animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.08, from: 0,to: 11, loop: false);
     _animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.05, from: 0, to: 7,loop: false);
@@ -107,6 +106,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
           , gameRef, _startPos, this)) {
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
         animation = rand.isOdd ? _animIdle : _animIdle2;
+        animationTicker?.reset();
       }
     },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -119,6 +119,21 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   void selectBehaviour()
   {
     if(gameRef.gameMap.orthoPlayer == null){
+      return;
+    }
+    if(isNearPlayer()){
+      var pl = gameRef.gameMap.orthoPlayer!;
+      if(pl.position.x > position.x){
+        if(isFlippedHorizontally){
+          flipHorizontally();
+        }
+      }
+      if(pl.position.x < position.x){
+        if(!isFlippedHorizontally){
+          flipHorizontally();
+        }
+      }
+      _weapon.hit();
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -155,6 +170,8 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
         animation = rand.isOdd ? _animIdle : _animIdle2;
       }
     }
+    animationTicker?.reset();
+    animationTicker?.onComplete = selectBehaviour;
   }
 
   void onStartHit()
@@ -164,6 +181,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _speed.y = 0;
     animation = null;
     math.Random().nextInt(2) == 0 ? animation = _animAttack : animation = _animAttack2;
+    animationTicker?.reset();
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
     _wasHit = true;
@@ -208,7 +226,8 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       death();
     }else{
       animation = _animHurt;
-      animationTicker!.onComplete = selectBehaviour;
+      animationTicker?.reset();
+      animationTicker?.onComplete = selectBehaviour;
     }
   }
 
@@ -274,28 +293,8 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     }else{
       parent = gameRef.gameMap.enemyComponent;
     }
-    _rigidSec -= dt;
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
-    }
-    if(_rigidSec <= 0){
-      _rigidSec = math.Random().nextDouble();
-      if(isNearPlayer()){
-        var pl = gameRef.gameMap.orthoPlayer!;
-        if(pl.position.x > position.x){
-          if(isFlippedHorizontally){
-            flipHorizontally();
-          }
-        }
-        if(pl.position.x < position.x){
-          if(!isFlippedHorizontally){
-            flipHorizontally();
-          }
-        }
-        _weapon.hit();
-      }else{
-        selectBehaviour();
-      }
     }
     position += _speed * dt;
   }

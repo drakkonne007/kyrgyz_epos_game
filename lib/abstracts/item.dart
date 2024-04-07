@@ -185,7 +185,7 @@ abstract class Item
   int? countOfUses;
   MagicDamage? magicDamage;
   double permanentDamage = 0;
-  int secsOfPermDamage = 0;
+  double secsOfPermDamage = 0;
 
 
   @override

@@ -99,6 +99,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setNewEnergyCostForWeapon()
   {
+    _weapon?.magicDamage = gameRef.playerData.magicDamage.value;
+    _weapon?.permanentDamage = gameRef.playerData.permanentDamage.value;
+    _weapon?.secsOfPermDamage = gameRef.playerData.secsOfPermanentDamage.value;
+    _weapon?.damage = gameRef.playerData.damage.value;
     _animShort.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
@@ -312,8 +316,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
-
-
 
       double leftDiffX  = point.x - groundBox!.getMinVector().x;
       double rightDiffX = point.x - groundBox!.getMaxVector().x;

@@ -75,7 +75,6 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 30;
   final GolemVariant spriteVariant;
-  double _rigidSec = math.Random().nextDouble() + 1;
   late DefaultEnemyWeapon _weapon;
   bool _wasHit = false;
 
@@ -96,8 +95,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
+    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
     _animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 12,loop: false);
     _animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13,loop: false);
@@ -132,6 +131,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
           , gameRef, _startPos, this)) {
         animation = _animIdle;
+        animationTicker?.reset();
       }
     },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -159,6 +159,22 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
   void selectBehaviour()
   {
     if(gameRef.gameMap.orthoPlayer == null){
+      return;
+    }
+    if (isNearPlayer()) {
+      _weapon.currentCoolDown = _weapon.coolDown;
+      var pl = gameRef.gameMap.orthoPlayer!;
+      if (pl.position.x > position.x) {
+        if (isFlippedHorizontally) {
+          flipHorizontally();
+        }
+      }
+      if (pl.position.x < position.x) {
+        if (!isFlippedHorizontally) {
+          flipHorizontally();
+        }
+      }
+      _weapon.hit();
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -194,6 +210,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
         animation = _animIdle;
       }
     }
+    animationTicker?.reset();
+    animationTicker?.onComplete = selectBehaviour;
   }
 
   void onStartHit()
@@ -203,6 +221,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     _speed.y = 0;
     animation = null;
     animation = _animAttack;
+    animationTicker?.reset();
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
     _wasHit = true;
@@ -245,7 +264,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
       death();
     }else{
       animation = _animHurt;
-      animationTicker!.onComplete = selectBehaviour;
+      animationTicker?.reset();
+      animationTicker?.onComplete = selectBehaviour;
     }
   }
 
@@ -287,29 +307,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     }else{
       parent = gameRef.gameMap.enemyComponent;
     }
-    _rigidSec -= dt;
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
-    }
-    if(_rigidSec <= 0) {
-      _rigidSec = math.Random().nextDouble() + 1;
-      if (isNearPlayer()) {
-        _weapon.currentCoolDown = _weapon.coolDown;
-        var pl = gameRef.gameMap.orthoPlayer!;
-        if (pl.position.x > position.x) {
-          if (isFlippedHorizontally) {
-            flipHorizontally();
-          }
-        }
-        if (pl.position.x < position.x) {
-          if (!isFlippedHorizontally) {
-            flipHorizontally();
-          }
-        }
-        _weapon.hit();
-      }else{
-        selectBehaviour();
-      }
     }
     position += _speed * dt;
   }

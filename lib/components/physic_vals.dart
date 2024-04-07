@@ -89,6 +89,7 @@ class PlayerData
     damage.value = armorDress.value.damage + helmetDress.value.damage + glovesDress.value.damage + swordDress.value.damage + ringDress.value.damage + bootsDress.value.damage + extraDamage.value;
     attackSpeed.value = armorDress.value.attackSpeed + helmetDress.value.attackSpeed + glovesDress.value.attackSpeed + swordDress.value.attackSpeed + ringDress.value.attackSpeed + bootsDress.value.attackSpeed + extraAttackSpeed.value;
     permanentDamage.value = swordDress.value.permanentDamage;
+    secsOfPermanentDamage.value = swordDress.value.secsOfPermDamage;
     magicDamage.value = swordDress.value.magicDamage ?? MagicDamage.none;
     health.value = procentOfHealth * maxHealth.value;
     energy.value = procentOfEnergy * maxEnergy.value;
@@ -160,6 +161,7 @@ class PlayerData
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
   final List<CountTimer> effectTimer = [];
+  final List<TempEffect> tempEffects = [];
 
   void addToInventar(Map<String,int> hash, Item item)
   {

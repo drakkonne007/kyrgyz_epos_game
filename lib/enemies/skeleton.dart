@@ -29,7 +29,6 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 70;
-  double _rigidSec = math.Random().nextDouble() + 1;
   bool _wasHit = false;
   late DefaultEnemyWeapon _defWeapon;
   int _variantOfHit = 0;
@@ -115,15 +114,15 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     final spriteSheetWithShield = SpriteSheet(image: spriteImageWithShield,
         srcSize: _spriteSheetSize);
 
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
+    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
     _animAttack2 = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 13, loop: false);
     _animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0, to: 8,loop: false);
     _animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0, to: 13,loop: false);
 
-    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
+    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
+    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttackShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
     _animAttack2Shield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 13, loop: false);
     _animBlock = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.07, from: 0, to: 8,loop: false);
@@ -154,6 +153,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
           , gameRef, _startPos, this)) {
         animation = _withShieldNow ? _animIdleShield : _animIdle;
+        animationTicker?.reset();
       }
     },repeat: true,period: 2));
     _defWeapon = DefaultEnemyWeapon(_attack1PointsOnStart,collisionType: DCollisionType.inactive,isStatic: false,isLoop:true,game: gameRef
@@ -177,8 +177,10 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(_variantOfHit == 0){
       animation = _withShieldNow ? _animAttackShield : _animAttack;
+      animationTicker?.reset();
     }else{
       animation = _withShieldNow ? _animAttack2Shield : _animAttack2;
+      animationTicker?.reset();
     }
     animationTicker?.onComplete = selectBehaviour;
     animationTicker?.onFrame = changeVertsInWeapon;
@@ -245,6 +247,22 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
+    if (isNearPlayer()) {
+      _defWeapon.currentCoolDown = _defWeapon.coolDown;
+      var pl = gameRef.gameMap.orthoPlayer!;
+      if (pl.position.x > position.x) {
+        if (isFlippedHorizontally) {
+          flipHorizontally();
+        }
+      }
+      if (pl.position.x < position.x) {
+        if (!isFlippedHorizontally) {
+          flipHorizontally();
+        }
+      }
+      chooseHit();
+      return;
+    }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(random != 0 || _wasHit){
       int shift = 0;
@@ -278,6 +296,8 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
         animation = _withShieldNow ? _animIdleShield : _animIdle;
       }
     }
+    animationTicker?.reset();
+    animationTicker?.onComplete = selectBehaviour;
   }
 
   bool isNearPlayer()
@@ -311,6 +331,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
           _speed.x = 0;
           _speed.y = 0;
           animation = _animBlock;
+          animationTicker?.reset();
           animationTicker?.onComplete = selectBehaviour;
           return;
         }
@@ -329,13 +350,15 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
           _speed.x = 0;
           _speed.y = 0;
           animation = _animThrowShield;
+          animationTicker?.reset();
           animationTicker?.onComplete = selectBehaviour;
           animationTicker?.onFrame = dropShield;
           return;
         }
       }
       animation = _withShieldNow ? _animHurtShield : _animHurt;
-      animationTicker!.onComplete = selectBehaviour;
+      animationTicker?.reset();
+      animationTicker?.onComplete = selectBehaviour;
     }
   }
 
@@ -387,29 +410,8 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     }else{
       parent = gameRef.gameMap.enemyComponent;
     }
-    _rigidSec -= dt;
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      if (_rigidSec <= 0) {
-        _rigidSec = math.Random().nextDouble() + 1;
-        if (isNearPlayer()) {
-          _defWeapon.currentCoolDown = _defWeapon.coolDown;
-          var pl = gameRef.gameMap.orthoPlayer!;
-          if (pl.position.x > position.x) {
-            if (isFlippedHorizontally) {
-              flipHorizontally();
-            }
-          }
-          if (pl.position.x < position.x) {
-            if (!isFlippedHorizontally) {
-              flipHorizontally();
-            }
-          }
-          chooseHit();
-        } else {
-          selectBehaviour();
-        }
-      }
       position += _speed * dt;
     }
   }

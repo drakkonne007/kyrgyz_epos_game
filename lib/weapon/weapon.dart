@@ -105,7 +105,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   MagicDamage? magicDamage;
   double? damage;
   double permanentDamage = 0;
-  int secsOfPermDamage = 0;
+  double secsOfPermDamage = 0;
   bool inArmor = true;
   double energyCost = 0;
   double coolDown = 1;
@@ -171,7 +171,7 @@ abstract class PlayerWeapon extends DCollisionEntity
       // }
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
-      temp.doHurt(hurt: damage ?? game.playerData.damage.value,inArmor: game.playerData.swordDress.value.inArmor);
+      temp.doHurt(hurt: damage ?? 0,inArmor: inArmor);
       game.add(
         ParticleSystemComponent(
           position: other.getCenter(),
@@ -189,22 +189,21 @@ abstract class PlayerWeapon extends DCollisionEntity
           ),
         ),
       );
-      if(game.playerData.swordDress.value.secsOfPermDamage > 0
-          && game.playerData.swordDress.value.permanentDamage > 0
-          && game.playerData.swordDress.value.magicDamage != null){
-        if(temp.magicDamages.containsKey(game.playerData.swordDress.value.magicDamage)){
-          int curr = temp.magicDamages[game.playerData.swordDress.value.magicDamage]!;
+      if(secsOfPermDamage > 0
+          && permanentDamage > 0
+          && magicDamage != null){
+        if(temp.magicDamages.containsKey(magicDamage)){
+          int curr = temp.magicDamages[magicDamage]!;
           curr++;
-          temp.magicDamages[game.playerData.swordDress.value.magicDamage!] = curr;
+          temp.magicDamages[magicDamage!] = curr;
         }else{
-          temp.magicDamages[game.playerData.swordDress.value.magicDamage!] = 1;
+          temp.magicDamages[magicDamage!] = 1;
         }
         var tempComponent = other.parent as Component;
-        double damage = game.playerData.swordDress.value.permanentDamage/2;
-        int count = game.playerData.swordDress.value.secsOfPermDamage*2;
-        MagicDamage magic = game.playerData.swordDress.value.magicDamage!;
-        tempComponent.add(CountTimer(period: 0.5,onTick: (){
-          temp.doMagicHurt(hurt: damage, magicDamage: magic);},count: count, onEndCount: (){
+        double damage = permanentDamage/2;
+        MagicDamage magic = magicDamage!;
+        tempComponent.add(TempEffect(period: secsOfPermDamage,onUpdate: (dt){
+          temp.doMagicHurt(hurt: damage * dt, magicDamage: magic);},onEndEffect: (){
           int curr = temp.magicDamages[magic]!;
           curr--;
           if(curr == 0){

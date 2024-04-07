@@ -28,3 +28,34 @@ class CountTimer extends TimerComponent
     }
   }
 }
+
+class TempEffect extends Component
+{
+  TempEffect({required this.period, this.autoStart = true, this.onEndEffect, this.onUpdate});
+
+  double period;
+  double _currTime = 0;
+  bool autoStart = true;
+  Function()? onEndEffect;
+  Function(double dt)? onUpdate;
+
+  void start()
+  {
+    autoStart = true;
+  }
+
+  @override
+  void update(double dt)
+  {
+    if(!autoStart){
+      return;
+    }
+    _currTime += dt;
+    if(_currTime >= period){
+      onEndEffect?.call();
+      removeFromParent();
+      return;
+    }
+    onUpdate?.call(dt);
+  }
+}

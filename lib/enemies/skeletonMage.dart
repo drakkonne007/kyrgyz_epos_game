@@ -31,7 +31,6 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   final Vector2 _speed = Vector2(0,0);
   final double _maxSpeed = 70;
   bool isHigh;
-  double _rigidSec = math.Random().nextDouble() + 1;
   int _variantOfHit = 0;
   bool _withShieldNow = false;
 
@@ -80,16 +79,16 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     final spriteSheetWithShield = SpriteSheet(image: spriteImageWithShield,
         srcSize: _spriteSheetSize);
 
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
+    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
     _animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
     _animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 8,loop: false);
     _animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
 
-    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8);
-    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8);
+    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
+    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttackStartShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
     _animAttackLongShield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttackEndShield = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
@@ -121,6 +120,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
           , gameRef, _startPos, this)) {
         animation = _withShieldNow ? _animIdleShield : _animIdle;
+        animationTicker?.reset();
       }
     },repeat: true,period: 2));
     rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -169,6 +169,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
     if(_variantOfHit == 0){
       animation = _withShieldNow ? _animAttackLongShield :  _animAttackLong;
+      animationTicker?.reset();
       animationTicker?.onFrame = longAttack;
       animationTicker?.onComplete = endHit;
     }else{
@@ -196,9 +197,8 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   void endHit()
   {
     animation = _withShieldNow ? _animAttackEndShield : _animAttackEnd;
-    animationTicker?.onComplete = () {
-      _withShieldNow ? animation = _animIdleShield : animation = _animIdle;
-    };
+    animationTicker?.reset();
+    animationTicker?.onComplete = selectBehaviour;
   }
 
   void selectBehaviour()
@@ -226,12 +226,15 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
         flipHorizontally();
       }
       animation = _withShieldNow ? _animMoveShield : _animMove;
+      animationTicker?.reset();
+      animationTicker?.onComplete = selectBehaviour;
       return;
     }
     _speed.x = 0;
     _speed.y = 0;
     if(isNearPlayer()){
       animation = _withShieldNow ? _animAttackStartShield : _animAttackStart;
+      animationTicker?.reset();
       animationTicker?.onComplete = chooseHit;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x && isFlippedHorizontally){
         flipHorizontally();
@@ -241,6 +244,8 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       return;
     }
     animation = _withShieldNow ? _animIdleShield : _animIdle;
+    animationTicker?.reset();
+    animationTicker?.onComplete = selectBehaviour;
   }
 
   bool isNearPlayer()
@@ -270,6 +275,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
           _speed.x = 0;
           _speed.y = 0;
           animation = _animBlock;
+          animationTicker?.reset();
           animationTicker?.onComplete = selectBehaviour;
           return;
         }
@@ -288,13 +294,15 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
           _speed.x = 0;
           _speed.y = 0;
           animation = _animThrowShield;
+          animationTicker?.reset();
           animationTicker?.onComplete = selectBehaviour;
           animationTicker?.onFrame = dropShield;
           return;
         }
       }
       animation = _withShieldNow ? _animHurtShield : _animHurt;
-      animationTicker!.onComplete = selectBehaviour;
+      animationTicker?.reset();
+      animationTicker?.onComplete = selectBehaviour;
     }
   }
 
@@ -346,13 +354,8 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
         parent = gameRef.gameMap.enemyComponent;
       }
     }
-    _rigidSec -= dt;
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      if (_rigidSec <= 0) {
-        _rigidSec = math.Random().nextDouble() + 1;
-        selectBehaviour();
-      }
       position += _speed * dt;
     }
   }

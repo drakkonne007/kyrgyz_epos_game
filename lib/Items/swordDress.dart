@@ -17,7 +17,8 @@ class SwordStart extends Item
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override
+  void getEffectFromInventar(KyrgyzGame game)
   {
     game.playerData.setDress(this);
   }
