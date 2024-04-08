@@ -5,6 +5,7 @@ import 'package:flame/rendering.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
@@ -105,7 +106,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 1 || diffRow > 1){
+    if(diffCol > GameConsts.visibleWorldWidth || diffRow > GameConsts.visibleWorldWidth){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();
     }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -270,7 +269,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     _row = newRow;
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     for(final els in allEllsSet){
-      if((els.row - _row).abs() >= 2 || (els.column - _column).abs() >= 2){
+      if((els.row - _row).abs() >= 4 || (els.column - _column).abs() >= 4){
         if(allEls.containsKey(els)){
           for(final dd in allEls[els]!){
             dd.removeFromParent();
@@ -279,8 +278,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
         allEls.remove(els);
       }
     }
-    for(int i=-1;i<2;i++) {
-      for(int j=-1;j<2;j++) {
+    for(int i=-2;i<4;i++) {
+      for(int j=-2;j<4;j++) {
         if(allEls.containsKey(LoadedColumnRow(_column + i, _row + j))){
           continue;
         }

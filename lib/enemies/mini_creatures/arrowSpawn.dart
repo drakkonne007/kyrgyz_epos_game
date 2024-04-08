@@ -49,7 +49,7 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
   {
     int diffCol = (_loadedColumnRow.column - gameRef.gameMap.column()).abs();
     int diffRow = (_loadedColumnRow.row - gameRef.gameMap.row()).abs();
-    if(diffCol > 2 || diffRow > 2){
+    if(diffCol > GameConsts.worldWidth || diffRow > GameConsts.worldWidth){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
       removeFromParent();
     }

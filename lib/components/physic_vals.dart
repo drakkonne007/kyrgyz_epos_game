@@ -35,14 +35,16 @@ class GameConsts
 {  //9504 тайла
   GameConsts({this.maxColumn, this.maxRow, this.visibleBounds})
   {
-    maxColumn ??= 25;
-    maxRow ??= 43;
+    maxColumn ??= 25 * 2;
+    maxRow ??= 43 * 2;
     visibleBounds ??= Vector2.all(297);
   }
-  final Vector2 lengthOfTileSquare = Vector2(32*12,32*7);
+  final Vector2 lengthOfTileSquare = Vector2(32*6,32*3);
   int? maxColumn;
   int? maxRow;
   Vector2? visibleBounds;
+  static const int worldWidth = 4;
+  static const int visibleWorldWidth = 2;
 }
 
 class PlayerData

@@ -5,6 +5,7 @@ import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 mixin KyrgyzEnemy
@@ -25,11 +26,11 @@ mixin KyrgyzEnemy
   {
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 2 || diffRow > 2){
+    if(diffCol > GameConsts.worldWidth || diffRow > GameConsts.worldWidth){
       gameRef.gameMap.loadedLivesObjs.remove(startPos);
       object.removeFromParent();
     }
-    if(diffCol > 1 || diffRow > 1){
+    if(diffCol > GameConsts.visibleWorldWidth || diffRow > GameConsts.visibleWorldWidth){
       isRefresh = false;
       return false;
     }else{

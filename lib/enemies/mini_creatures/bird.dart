@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
@@ -128,7 +129,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       int row =    pos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
       int diffCol = (column - gameRef.gameMap.column()).abs();
       int diffRow = (row - gameRef.gameMap.row()).abs();
-      if(diffCol > 1 || diffRow > 1){
+      if(diffCol > GameConsts.visibleWorldWidth || diffRow > GameConsts.visibleWorldWidth){
         countOfMimo++;
       }
     }
