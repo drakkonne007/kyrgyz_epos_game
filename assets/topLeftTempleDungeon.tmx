@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="45" nextobjectid="1568">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="45" nextobjectid="1569">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -5715,7 +5715,7 @@
    </properties>
    <point/>
   </object>
-  <object id="1545" name="hDoor" x="4384.15" y="7135.93">
+  <object id="1545" name="hDoor" x="4384.32" y="7136.32">
    <point/>
   </object>
   <object id="1547" name="vDoor" x="8704" y="8256">
@@ -5769,7 +5769,7 @@
   <object id="1563" name="spinBlade" x="4800" y="5582.67">
    <point/>
   </object>
-  <object id="1567" name="hDoor" x="4448.08" y="7616.11">
+  <object id="1568" name="hDoor" x="4448.4" y="7616.52">
    <point/>
   </object>
  </objectgroup>

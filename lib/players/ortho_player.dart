@@ -152,7 +152,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _speed.x = 0;
     _speed.y = 0;
     if(animation != null){
-      animationTicker?.reset();
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     }
   }
 

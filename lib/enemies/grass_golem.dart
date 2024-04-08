@@ -131,7 +131,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
           , gameRef, _startPos, this)) {
         animation = _animIdle;
-        animationTicker?.reset();
+        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
     },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -210,7 +210,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
         animation = _animIdle;
       }
     }
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onComplete = selectBehaviour;
   }
 
@@ -221,7 +221,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     _speed.y = 0;
     animation = null;
     animation = _animAttack;
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
     _wasHit = true;
@@ -264,7 +264,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
       death();
     }else{
       animation = _animHurt;
-      animationTicker?.reset();
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
   }

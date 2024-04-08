@@ -158,7 +158,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     }
     position = _startPos;
     animation = _animIdle;
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     size = _spriteSheetSize;
     const double percentOfWidth = 158/347;
     Vector2 staticConstAnchor = Vector2(size.x * percentOfWidth,size.y/2);
@@ -187,7 +187,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
           , gameRef, _startPos, this)) {
         animation = _animIdle;
-        animationTicker?.reset();
+        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
     },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -250,7 +250,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
         animation = _animIdle;
       }
     }
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onComplete = selectBehaviour;
   }
 
@@ -261,7 +261,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     _speed.y = 0;
     animation = null;
     animation = animAttack;
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
     _wasHit = true;
@@ -325,7 +325,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
       death();
     }else{
       animation = _animHurt;
-      animationTicker?.reset();
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
   }

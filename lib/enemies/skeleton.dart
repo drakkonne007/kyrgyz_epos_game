@@ -153,7 +153,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
           , gameRef, _startPos, this)) {
         animation = _withShieldNow ? _animIdleShield : _animIdle;
-        animationTicker?.reset();
+        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
     },repeat: true,period: 2));
     _defWeapon = DefaultEnemyWeapon(_attack1PointsOnStart,collisionType: DCollisionType.inactive,isStatic: false,isLoop:true,game: gameRef
@@ -177,10 +177,10 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(_variantOfHit == 0){
       animation = _withShieldNow ? _animAttackShield : _animAttack;
-      animationTicker?.reset();
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     }else{
       animation = _withShieldNow ? _animAttack2Shield : _animAttack2;
-      animationTicker?.reset();
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     }
     animationTicker?.onComplete = selectBehaviour;
     animationTicker?.onFrame = changeVertsInWeapon;
@@ -296,7 +296,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
         animation = _withShieldNow ? _animIdleShield : _animIdle;
       }
     }
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onComplete = selectBehaviour;
   }
 
@@ -331,7 +331,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
           _speed.x = 0;
           _speed.y = 0;
           animation = _animBlock;
-          animationTicker?.reset();
+          animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
           animationTicker?.onComplete = selectBehaviour;
           return;
         }
@@ -350,14 +350,14 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
           _speed.x = 0;
           _speed.y = 0;
           animation = _animThrowShield;
-          animationTicker?.reset();
+          animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
           animationTicker?.onComplete = selectBehaviour;
           animationTicker?.onFrame = dropShield;
           return;
         }
       }
       animation = _withShieldNow ? _animHurtShield : _animHurt;
-      animationTicker?.reset();
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
   }
@@ -400,7 +400,6 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
 
   @override
   void update(double dt) {
-    _ground.doDebug();
     if (!isRefresh) {
       return;
     }

@@ -106,7 +106,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
           , gameRef, _startPos, this)) {
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
         animation = rand.isOdd ? _animIdle : _animIdle2;
-        animationTicker?.reset();
+        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
     },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -170,7 +170,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
         animation = rand.isOdd ? _animIdle : _animIdle2;
       }
     }
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onComplete = selectBehaviour;
   }
 
@@ -181,7 +181,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _speed.y = 0;
     animation = null;
     math.Random().nextInt(2) == 0 ? animation = _animAttack : animation = _animAttack2;
-    animationTicker?.reset();
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
     _wasHit = true;
@@ -226,7 +226,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       death();
     }else{
       animation = _animHurt;
-      animationTicker?.reset();
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
   }
