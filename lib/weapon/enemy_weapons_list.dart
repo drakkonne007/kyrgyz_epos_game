@@ -1,6 +1,7 @@
 
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/enemies/moose.dart';
 import 'package:game_flame/weapon/weapon.dart';
@@ -17,7 +18,7 @@ class DefaultEnemyWeapon extends EnemyWeapon
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
 
   }
 
@@ -58,13 +59,13 @@ class EWBody extends EnemyWeapon
     onStartWeaponHit?.call();
     _isActive = true;
     latencyBefore = -activeSecs/3;
-    scale = Vector2(1,1);
+    scale = dVector2(1,1);
     Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
       transformPoint = rawCenter;
       _isGrow = true;
       onEndWeaponHit?.call();
       _isActive = false;
-      scale = Vector2(1,1);
+      scale = dVector2(1,1);
     });
   }
 
@@ -78,15 +79,15 @@ class EWBody extends EnemyWeapon
       if(_isGrow && scale.x > _maxLength/2){
         _isGrow = false;
       }
-      _isGrow ? scale = Vector2(math.max(1,(scale.x + dt/activeSecs * _maxLength)), scale.y) : scale = Vector2(math.max(1, scale.x - dt/activeSecs * _maxLength), scale.y);
+      _isGrow ? scale = dVector2(math.max(1,(scale.x + dt/activeSecs * _maxLength)), scale.y) : scale = dVector2(math.max(1, scale.x - dt/activeSecs * _maxLength), scale.y);
     }else{
-      scale = Vector2(1,1);
+      scale = dVector2(1,1);
     }
     super.update(dt);
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
   }
 
@@ -104,7 +105,7 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
   EWMooseHummer(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic, required super.onStartWeaponHit
     , required super.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic, })
   {
-    transformPoint = Vector2(15,0);
+    transformPoint = dVector2(15,0);
   }
 
   @override
@@ -159,7 +160,7 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
   }
 

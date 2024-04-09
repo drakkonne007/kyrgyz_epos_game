@@ -3,6 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -50,7 +51,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     size = Vector2.all(70);
     anchor = Anchor.center;
-    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2.all(-35), size),
+    _objectHitbox = ObjectHitbox(getPointsForActivs(dVector2.all(-35),  dVector2(size.x,size.y)),
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);

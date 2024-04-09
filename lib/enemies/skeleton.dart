@@ -9,6 +9,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
@@ -34,48 +35,48 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
   int _variantOfHit = 0;
   bool _withShieldNow = false;
 
-  final List<Vector2> _hitBoxPoints = [
-    Vector2(115-115,100-110),
-    Vector2(109-115,104-110),
-    Vector2(110-115,112-110),
-    Vector2(103-115,116-110),
-    Vector2(101-115,148-110),
-    Vector2(122-115,148-110),
-    Vector2(124-115,106-110)
+  final List<dVector2> _hitBoxPoints = [
+    dVector2(115-115,100-110),
+    dVector2(109-115,104-110),
+    dVector2(110-115,112-110),
+    dVector2(103-115,116-110),
+    dVector2(101-115,148-110),
+    dVector2(122-115,148-110),
+    dVector2(124-115,106-110)
   ];
 
-  final List<Vector2> _attack1PointsOnStart = [
-    Vector2(501 - 555,573 - 550),
-    Vector2(532 - 555,581 - 550),
-    Vector2(771 - 775,551 - 550),
-    Vector2(748 - 775,527 - 550),
+  final List<dVector2> _attack1PointsOnStart = [
+    dVector2(501 - 555,573 - 550),
+    dVector2(532 - 555,581 - 550),
+    dVector2(771 - 775,551 - 550),
+    dVector2(748 - 775,527 - 550),
   ];
 
-  final List<Vector2> _attack1PointsOnEnd = [
-    Vector2(995  - 995,531 - 550),
-    Vector2(1032 - 995,581 - 550),
-    Vector2(1059 - 995,585 - 550),
-    Vector2(1053 - 995,561 - 550),
-    Vector2(1033 - 995,541 - 550),
+  final List<dVector2> _attack1PointsOnEnd = [
+    dVector2(995  - 995,531 - 550),
+    dVector2(1032 - 995,581 - 550),
+    dVector2(1059 - 995,585 - 550),
+    dVector2(1053 - 995,561 - 550),
+    dVector2(1033 - 995,541 - 550),
   ];
 
-  final List<Vector2> _attack2PointsOnStart = [
-    Vector2(500 - 555,794 - 770),
-    Vector2(729 - 775,759 - 770),
-    Vector2(754 - 775,785 - 770),
-    Vector2(748 - 775,527 - 770),
+  final List<dVector2> _attack2PointsOnStart = [
+    dVector2(500 - 555,794 - 770),
+    dVector2(729 - 775,759 - 770),
+    dVector2(754 - 775,785 - 770),
+    dVector2(748 - 775,527 - 770),
   ];
 
-  final List<Vector2> _attack2PointsOnEnd = [
-    Vector2(965  - 220 * 4 - 115,777 - 770),
-    Vector2(987  - 220 * 4 - 115,797 - 770),
-    Vector2(1004 - 220 * 4 - 115,800 - 770),
-    Vector2(1042 - 220 * 4 - 115,785 - 770),
-    Vector2(1028 - 220 * 4 - 115,804 - 770),
-    Vector2(1016 - 220 * 4 - 115,809 - 770),
-    Vector2(994  - 220 * 4 - 115,808 - 770),
-    Vector2(977  - 220 * 4 - 115,801 - 770),
-    Vector2(967  - 220 * 4 - 115,787 - 770),
+  final List<dVector2> _attack2PointsOnEnd = [
+    dVector2(965  - 220 * 4 - 115,777 - 770),
+    dVector2(987  - 220 * 4 - 115,797 - 770),
+    dVector2(1004 - 220 * 4 - 115,800 - 770),
+    dVector2(1042 - 220 * 4 - 115,785 - 770),
+    dVector2(1028 - 220 * 4 - 115,804 - 770),
+    dVector2(1016 - 220 * 4 - 115,809 - 770),
+    dVector2(994  - 220 * 4 - 115,808 - 770),
+    dVector2(977  - 220 * 4 - 115,801 - 770),
+    dVector2(967  - 220 * 4 - 115,787 - 770),
   ];
 
   @override
@@ -136,13 +137,13 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
+    _groundBox = GroundHitBox(getPointsForActivs(dVector2(-11,127-110), dVector2(22,21)) ,obstacleBehavoiurStart: (Set<dVector2> intersectionPoints, DCollisionEntity other){
       obstacleBehaviour(intersectionPoints, other, _groundBox, this);
     },
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     // _groundBox.debugColor = BasicPalette.red.color;
-    _ground = Ground(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21))
+    _ground = Ground(getPointsForActivs(dVector2(-11,127-110), dVector2(22,21))
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);

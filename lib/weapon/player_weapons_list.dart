@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'dart:math' as math;
@@ -17,7 +18,7 @@ class DefaultPlayerWeapon extends PlayerWeapon
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {}
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {}
 
   @override
   void onCollisionEnd(DCollisionEntity other){}
@@ -74,14 +75,14 @@ class WSword extends PlayerWeapon
         latencyBefore = -0.14;
         _diffAngle = 0;
         angle = _startAngle;
-        scale = Vector2(3.5,0.2);
+        scale = dVector2(3.5,0.2);
         tick = SpriteAnimationTicker(_animShort);
         game.gameMap.orthoPlayer?.animation = _animShort;
       }else{
         latencyBefore = -0.3;
         tick = SpriteAnimationTicker(_animLong);
         game.gameMap.orthoPlayer?.animation = _animLong;
-        scale = Vector2(1,1);
+        scale = dVector2(1,1);
         angle = 0;
       }
       game.playerData.energy.value -= energyCost;
@@ -118,14 +119,14 @@ class WSword extends PlayerWeapon
         if(_isGrow && scale.x > _maxLength / 2){
           _isGrow = false;
         }
-        _isGrow ? scale = Vector2(scale.x + dt/_activeSecs * _maxLength, scale.y) : scale = Vector2(scale.x - dt/_activeSecs * _maxLength, scale.y);
+        _isGrow ? scale = dVector2(scale.x + dt/_activeSecs * _maxLength, scale.y) : scale = dVector2(scale.x - dt/_activeSecs * _maxLength, scale.y);
       }
     }
     super.update(dt);
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
   }
 

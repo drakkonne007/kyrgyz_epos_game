@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -18,7 +19,7 @@ class Portal extends PositionComponent with HasGameRef<KyrgyzGame> {
   @override
   Future<void> onLoad() async
   {
-    add(ObjectHitbox(getPointsForActivs(-size / 2, size),
+    add(ObjectHitbox(getPointsForActivs(dVector2(size.x,size.y) / -2, dVector2(size.x,size.y)),
         collisionType: DCollisionType.active,
         isSolid: true,
         isStatic: false,

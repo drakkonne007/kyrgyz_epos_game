@@ -7,6 +7,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -17,29 +18,29 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
-final List<Vector2> _attack1ind1 = [
-  Vector2(336,242) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(361,224) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(381,227) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(402,234) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(409,246) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(401,262) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(377,272) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(343,272) - Vector2(144*2 + 77,96*2 + 48),
+final List<dVector2> _attack1ind1 = [
+  dVector2(336,242) - Vector2(144*2 + 77,96*2 + 48),
+  dVector2(361,224) - Vector2(144*2 + 77,96*2 + 48),
+  dVector2(381,227) - Vector2(144*2 + 77,96*2 + 48),
+  dVector2(402,234) - Vector2(144*2 + 77,96*2 + 48),
+  dVector2(409,246) - Vector2(144*2 + 77,96*2 + 48),
+  dVector2(401,262) - Vector2(144*2 + 77,96*2 + 48),
+  dVector2(377,272) - Vector2(144*2 + 77,96*2 + 48),
+  dVector2(343,272) - Vector2(144*2 + 77,96*2 + 48),
 ];
 
-final List<Vector2> _attack2ind1 = [
-  Vector2(0, -1),
-  Vector2(19,-1),
-  Vector2(19,2),
-  Vector2(0,2),
+final List<dVector2> _attack2ind1 = [
+  dVector2(0, -1),
+  dVector2(19,-1),
+  dVector2(19,2),
+  dVector2(0,2),
 ];
 
-final List<Vector2> _attack2ind2 = [
-  Vector2(20, -1),
-  Vector2(69,-1),
-  Vector2(69,2),
-  Vector2(20,2),
+final List<dVector2> _attack2ind2 = [
+  dVector2(20, -1),
+  dVector2(69,-1),
+  dVector2(69,2),
+  dVector2(20,2),
 ];
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
@@ -73,23 +74,23 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
 
-    Vector2 tPos = positionOfAnchor(anchor) - Vector2(15,20);
-    Vector2 tSize = Vector2(22,45);
+    dVector2 tPos = dVector2(positionOfAnchor(anchor).x,positionOfAnchor(anchor).y) - dVector2(15,20);
+    dVector2 tSize = dVector2(22,45);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
 
-    tPos = positionOfAnchor(anchor) - Vector2(11,-10);
-    tSize = Vector2(20,16);
+    tPos = dVector2(positionOfAnchor(anchor).x,positionOfAnchor(anchor).y) - Vector2(11,-10);
+    tSize = dVector2(20,16);
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(groundBox!);
     add(Ground(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive, isSolid: false,isStatic: false, isLoop: true, game: gameRef));
-    tPos = positionOfAnchor(anchor) - Vector2(10,10);
-    tSize = Vector2(20,20);
+    tPos = dVector2(positionOfAnchor(anchor).x,positionOfAnchor(anchor).y) - dVector2(10,10);
+    tSize = dVector2(20,20);
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
@@ -287,12 +288,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
+  void groundCalcLines(Set<dVector2> points, DCollisionEntity other)
   {
     if(groundBox == null){
       return;
     }
-    Map<Vector2,AxesDiff> diffs = {};
+    Map<dVector2,AxesDiff> diffs = {};
     bool isUp = false;
     bool isDown = false;
     bool isLeft = false;
@@ -304,16 +305,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
     for(final point in points){
 
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
 

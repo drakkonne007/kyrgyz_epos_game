@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
@@ -20,7 +21,7 @@ class Teleport extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   Future<void> onLoad() async
   {
-    add(ObjectHitbox(getPointsForActivs(-size/2,size), collisionType: DCollisionType.active, isSolid: true, isStatic: false, obstacleBehavoiur: telep, autoTrigger: false, isLoop: true, game: gameRef));
+    add(ObjectHitbox(getPointsForActivs(dVector2(size.x,size.y) / -2, dVector2(size.x,size.y)), collisionType: DCollisionType.active, isSolid: true, isStatic: false, obstacleBehavoiur: telep, autoTrigger: false, isLoop: true, game: gameRef));
   }
 
   void telep()

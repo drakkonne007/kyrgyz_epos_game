@@ -9,6 +9,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/enemies/skeleton.dart';
@@ -34,14 +35,14 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   int _variantOfHit = 0;
   bool _withShieldNow = false;
 
-  final List<Vector2> _hitBoxPoints = [
-    Vector2(113-115,103-110),
-    Vector2(109-115,114-110),
-    Vector2(100-115,118-110),
-    Vector2(101-115,148-110),
-    Vector2(122-115,148-110),
-    Vector2(124-115,108-110),
-    Vector2(120-115,103-110)
+  final List<dVector2> _hitBoxPoints = [
+    dVector2(113-115,103-110),
+    dVector2(109-115,114-110),
+    dVector2(100-115,118-110),
+    dVector2(101-115,148-110),
+    dVector2(122-115,148-110),
+    dVector2(124-115,108-110),
+    dVector2(120-115,103-110)
   ];
 
   @override
@@ -103,13 +104,13 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16)) ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
+    _groundBox = GroundHitBox(getPointsForActivs(dVector2(100-115,132-110), dVector2(24,16)) ,obstacleBehavoiurStart: (Set<dVector2> intersectionPoints, DCollisionEntity other){
       obstacleBehaviour(intersectionPoints, other, _groundBox, this);
     },
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
     // _groundBox.debugColor = BasicPalette.red.color;
-    _ground = Ground(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16))
+    _ground = Ground(getPointsForActivs(dVector2(100-115,132-110), dVector2(24,16))
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
@@ -375,7 +376,7 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void onLoad() async
   {
     anchor = const Anchor(0.5,35/64);
-    _weapon = DefaultEnemyWeapon([Vector2.zero()], collisionType: DCollisionType.active, radius: 10
+    _weapon = DefaultEnemyWeapon([dVector2.zero()], collisionType: DCollisionType.active, radius: 10
       , isStatic: false, onObstacle: destroy, onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef,isSolid: true,);
     add(_weapon);
     _weapon.damage = 1;

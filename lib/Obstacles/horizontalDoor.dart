@@ -3,43 +3,44 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
-final List<Vector2> _objPoints = [
-  Vector2(45 - 48,85 - 64),
-  Vector2(45 - 48,110 - 64),
-  Vector2(55 - 48,110 - 64),
-  Vector2(55 - 48,85 - 64),
+final List<dVector2> _objPoints = [
+  dVector2(45 - 48,85 - 64),
+  dVector2(45 - 48,110 - 64),
+  dVector2(55 - 48,110 - 64),
+  dVector2(55 - 48,85 - 64),
 ];
 
-final List<Vector2> _objOpenedPoints = [
-  Vector2(770 - 48  - 96 * 8,40 - 64),
-  Vector2(810 - 48  - 96 * 8,40 - 64),
-  Vector2(810 - 48  - 96 * 8,60 - 64),
-  Vector2(770 - 48  - 96 * 8,60 - 64),
+final List<dVector2> _objOpenedPoints = [
+  dVector2(770 - 48  - 96 * 8,40 - 64),
+  dVector2(810 - 48  - 96 * 8,40 - 64),
+  dVector2(810 - 48  - 96 * 8,60 - 64),
+  dVector2(770 - 48  - 96 * 8,60 - 64),
 ];
 
-final List<Vector2> _groundPoints = [
-  Vector2(20 - 48,101 - 64),
-  Vector2(20 - 48,110 - 64),
-  Vector2(76 - 48,110 - 64),
-  Vector2(76 - 48,101 - 64),
+final List<dVector2> _groundPoints = [
+  dVector2(20 - 48,101 - 64),
+  dVector2(20 - 48,110 - 64),
+  dVector2(76 - 48,110 - 64),
+  dVector2(76 - 48,101 - 64),
 ];
 
-final List<Vector2> _openedPoints = [
-  Vector2(788 - 48  - 96 * 8,58 - 64),
-  Vector2(793 - 48  - 96 * 8,58 - 64),
-  Vector2(793 - 48  - 96 * 8,110 - 64),
-  Vector2(788 - 48  - 96 * 8,110 - 64),
+final List<dVector2> _openedPoints = [
+  dVector2(788 - 48  - 96 * 8,58 - 64),
+  dVector2(793 - 48  - 96 * 8,58 - 64),
+  dVector2(793 - 48  - 96 * 8,110 - 64),
+  dVector2(788 - 48  - 96 * 8,110 - 64),
 ];
 
-final List<Vector2> _startOpenedPoints = [
-  Vector2(788 - 48  - 96 * 8,25 - 64),
-  Vector2(793 - 48  - 96 * 8,25 - 64),
-  Vector2(793 - 48  - 96 * 8,110 - 64),
-  Vector2(788 - 48  - 96 * 8,110 - 64),
+final List<dVector2> _startOpenedPoints = [
+  dVector2(788 - 48  - 96 * 8,25 - 64),
+  dVector2(793 - 48  - 96 * 8,25 - 64),
+  dVector2(793 - 48  - 96 * 8,110 - 64),
+  dVector2(788 - 48  - 96 * 8,110 - 64),
 ];
 
 

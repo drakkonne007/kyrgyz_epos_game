@@ -58,7 +58,7 @@ class MapNode {
   {
     int maxRow = myGame.gameMap.currentGameWorldData!.gameConsts.maxRow!;
     int maxColumn = myGame.gameMap.currentGameWorldData!.gameConsts.maxColumn!;
-    Vector2 lengthOfTileSquare = myGame.gameMap.currentGameWorldData!.gameConsts
+    final Vector2 lengthOfTileSquare = myGame.gameMap.currentGameWorldData!.gameConsts
         .lengthOfTileSquare;
     if (colRow.column >= maxColumn || colRow.row >= maxRow) {
       return;

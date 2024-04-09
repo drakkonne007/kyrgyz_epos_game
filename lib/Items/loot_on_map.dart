@@ -3,6 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -35,7 +36,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     sprite = spriteSheet.getSprite(0, 0);
     size = Vector2.all(30);
     anchor = Anchor.center;
-    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2(-15,-15), Vector2.all(30)),
+    _objectHitbox = ObjectHitbox(getPointsForActivs(dVector2(-15,-15), dVector2.all(30)),
         collisionType: DCollisionType.active, isSolid: true,
         isStatic: false, obstacleBehavoiur: getItemToPlayer,
         autoTrigger: true, isLoop: true, game: gameRef);//ObjectHitbox(autoTrigger: true, obstacleBehavoiur: getItemToPlayer);

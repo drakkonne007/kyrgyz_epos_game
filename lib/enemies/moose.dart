@@ -8,6 +8,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -26,61 +27,61 @@ enum MooseVariant
   PurpleWithGreenHair,
 }
 
-final List<Vector2> ind1 = [ //3 индекс и по 7
-  Vector2(1105 - 3 * 347 - 158,446 - 192*2 - 96),
-  Vector2(1115 - 3 * 347 - 158,423 - 192*2 - 96),
-  Vector2(1129 - 3 * 347 - 158,420 - 192*2 - 96),
-  Vector2(1143 - 3 * 347 - 158,429 - 192*2 - 96),
-  Vector2(1140 - 3 * 347 - 158,442 - 192*2 - 96),
-  Vector2(1174 - 3 * 347 - 158,460 - 192*2 - 96),
-  Vector2(1173 - 3 * 347 - 158,464 - 192*2 - 96),
-  Vector2(1135 - 3 * 347 - 158,446 - 192*2 - 96),
-  Vector2(1132 - 3 * 347 - 158,451 - 192*2 - 96),
-  Vector2(1121 - 3 * 347 - 158,454 - 192*2 - 96),
+final List<dVector2> ind1 = [ //3 индекс и по 7
+  dVector2(1105 - 3 * 347 - 158,446 - 192*2 - 96),
+  dVector2(1115 - 3 * 347 - 158,423 - 192*2 - 96),
+  dVector2(1129 - 3 * 347 - 158,420 - 192*2 - 96),
+  dVector2(1143 - 3 * 347 - 158,429 - 192*2 - 96),
+  dVector2(1140 - 3 * 347 - 158,442 - 192*2 - 96),
+  dVector2(1174 - 3 * 347 - 158,460 - 192*2 - 96),
+  dVector2(1173 - 3 * 347 - 158,464 - 192*2 - 96),
+  dVector2(1135 - 3 * 347 - 158,446 - 192*2 - 96),
+  dVector2(1132 - 3 * 347 - 158,451 - 192*2 - 96),
+  dVector2(1121 - 3 * 347 - 158,454 - 192*2 - 96),
 ];
 
-final List<Vector2> ind2 = [ //3 индекс и по 7
-  Vector2(2510 - 7 * 347 - 158,445 - 192*2 - 96),
-  Vector2(2501 - 7 * 347 - 158,440 - 192*2 - 96),
-  Vector2(2526 - 7 * 347 - 158,409 - 192*2 - 96),
-  Vector2(2545 - 7 * 347 - 158,396 - 192*2 - 96),
-  Vector2(2553 - 7 * 347 - 158,396 - 192*2 - 96),
-  Vector2(2564 - 7 * 347 - 158,414 - 192*2 - 96),
-  Vector2(2557 - 7 * 347 - 158,420 - 192*2 - 96),
-  Vector2(2551 - 7 * 347 - 158,421 - 192*2 - 96),
-  Vector2(2570 - 7 * 347 - 158,460 - 192*2 - 96),
-  Vector2(2566 - 7 * 347 - 158,462 - 192*2 - 96),
-  Vector2(2547 - 7 * 347 - 158,423 - 192*2 - 96),
-  Vector2(2533 - 7 * 347 - 158,431 - 192*2 - 96),
-  Vector2(2521 - 7 * 347 - 158,445 - 192*2 - 96),
+final List<dVector2> ind2 = [ //3 индекс и по 7
+  dVector2(2510 - 7 * 347 - 158,445 - 192*2 - 96),
+  dVector2(2501 - 7 * 347 - 158,440 - 192*2 - 96),
+  dVector2(2526 - 7 * 347 - 158,409 - 192*2 - 96),
+  dVector2(2545 - 7 * 347 - 158,396 - 192*2 - 96),
+  dVector2(2553 - 7 * 347 - 158,396 - 192*2 - 96),
+  dVector2(2564 - 7 * 347 - 158,414 - 192*2 - 96),
+  dVector2(2557 - 7 * 347 - 158,420 - 192*2 - 96),
+  dVector2(2551 - 7 * 347 - 158,421 - 192*2 - 96),
+  dVector2(2570 - 7 * 347 - 158,460 - 192*2 - 96),
+  dVector2(2566 - 7 * 347 - 158,462 - 192*2 - 96),
+  dVector2(2547 - 7 * 347 - 158,423 - 192*2 - 96),
+  dVector2(2533 - 7 * 347 - 158,431 - 192*2 - 96),
+  dVector2(2521 - 7 * 347 - 158,445 - 192*2 - 96),
 ];
 
-final List<Vector2> ind3 = [ //до 9-го
-  Vector2(3271 - 9 * 347 - 158,417 - 192*2 - 96),
-  Vector2(3306 - 9 * 347 - 158,417 - 192*2 - 96),
-  Vector2(3337 - 9 * 347 - 158,429 - 192*2 - 96),
-  Vector2(3364 - 9 * 347 - 158,460 - 192*2 - 96),
-  Vector2(3373 - 9 * 347 - 158,479 - 192*2 - 96),
-  Vector2(3374 - 9 * 347 - 158,507 - 192*2 - 96),
-  Vector2(3397 - 9 * 347 - 158,507 - 192*2 - 96),
-  Vector2(3398 - 9 * 347 - 158,479 - 192*2 - 96),
-  Vector2(3384 - 9 * 347 - 158,446 - 192*2 - 96),
-  Vector2(3351 - 9 * 347 - 158,419 - 192*2 - 96),
-  Vector2(3319 - 9 * 347 - 158,410 - 192*2 - 96),
-  Vector2(3292 - 9 * 347 - 158,409 - 192*2 - 96),
+final List<dVector2> ind3 = [ //до 9-го
+  dVector2(3271 - 9 * 347 - 158,417 - 192*2 - 96),
+  dVector2(3306 - 9 * 347 - 158,417 - 192*2 - 96),
+  dVector2(3337 - 9 * 347 - 158,429 - 192*2 - 96),
+  dVector2(3364 - 9 * 347 - 158,460 - 192*2 - 96),
+  dVector2(3373 - 9 * 347 - 158,479 - 192*2 - 96),
+  dVector2(3374 - 9 * 347 - 158,507 - 192*2 - 96),
+  dVector2(3397 - 9 * 347 - 158,507 - 192*2 - 96),
+  dVector2(3398 - 9 * 347 - 158,479 - 192*2 - 96),
+  dVector2(3384 - 9 * 347 - 158,446 - 192*2 - 96),
+  dVector2(3351 - 9 * 347 - 158,419 - 192*2 - 96),
+  dVector2(3319 - 9 * 347 - 158,410 - 192*2 - 96),
+  dVector2(3292 - 9 * 347 - 158,409 - 192*2 - 96),
 ];
 
-final List<Vector2> rad = [ //до 9-го
-  Vector2(3733 - 10 * 347 - 158, 492 - 192*2 - 96),
+final List<dVector2> rad = [ //до 9-го
+  dVector2(3733 - 10 * 347 - 158, 492 - 192*2 - 96),
 ];
 
-final List<Vector2> hitBoxPoint = [
-  Vector2(152 - 158,70  - 96),
-  Vector2(146 - 158,89  - 96),
-  Vector2(153 - 158,112 - 96),
-  Vector2(160 - 158,112 - 96),
-  Vector2(167 - 158,97  - 96),
-  Vector2(163 - 158,70  - 96),
+final List<dVector2> hitBoxPoint = [
+  dVector2(152 - 158,70  - 96),
+  dVector2(146 - 158,89  - 96),
+  dVector2(153 - 158,112 - 96),
+  dVector2(160 - 158,112 - 96),
+  dVector2(167 - 158,97  - 96),
+  dVector2(163 - 158,70  - 96),
 ];
 
 class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy {
@@ -166,13 +167,13 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     _hitBox = EnemyHitbox(hitBoxPoint,collisionType: DCollisionType.passive
         ,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitBox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
-        ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
+    _groundBox = GroundHitBox(getPointsForActivs(dVector2(145,97) - staticConstAnchor, dVector2(24,25))
+        ,obstacleBehavoiurStart: (Set<dVector2> intersectionPoints, DCollisionEntity other){
           obstacleBehaviour(intersectionPoints, other, _groundBox, this);
         },
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
-    _ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
+    _ground = Ground(getPointsForActivs(dVector2(145,97) - staticConstAnchor, dVector2(24,25))
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);

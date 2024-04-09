@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flame/components.dart';
 import 'package:game_flame/Items/loot_list.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -39,9 +40,9 @@ mixin KyrgyzEnemy
     }
   }
 
-  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other, GroundHitBox groundBox, PositionComponent object)
+  void obstacleBehaviour(Set<dVector2> intersectionPoints, DCollisionEntity other, GroundHitBox groundBox, PositionComponent object)
   {
-    Map<Vector2,AxesDiff> diffs = {};
+    Map<dVector2,AxesDiff> diffs = {};
     bool isUp = false;
     bool isDown = false;
     bool isLeft = false;
@@ -52,16 +53,16 @@ mixin KyrgyzEnemy
     double maxDown = 0;
 
     for(final point in intersectionPoints){
-      if(Vector2(groundBox.getMinVector().x,groundBox.getMinVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox.getMinVector().x,groundBox.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox.getMinVector().x,groundBox.getMaxVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox.getMinVector().x,groundBox.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox.getMaxVector().x,groundBox.getMaxVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox.getMaxVector().x,groundBox.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox.getMaxVector().x,groundBox.getMinVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox.getMaxVector().x,groundBox.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
 

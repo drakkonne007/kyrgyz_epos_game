@@ -8,6 +8,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
@@ -22,45 +23,45 @@ enum GolemVariant
   Grass
 }
 
-final List<Vector2> _ind1 = [ //вторая колонка
-  Vector2(309 - 224 - 112,503 - 192 * 2 - 192 * 0.5),
-  Vector2(304 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
-  Vector2(299 - 224 - 112,477 - 192 * 2 - 192 * 0.5),
-  Vector2(364 - 224 - 112,469 - 192 * 2 - 192 * 0.5),
-  Vector2(370 - 224 - 112,484 - 192 * 2 - 192 * 0.5),
-  Vector2(374 - 224 - 112,489 - 192 * 2 - 192 * 0.5),
-  Vector2(369 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
-  Vector2(359 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
-  Vector2(356 - 224 - 112,485 - 192 * 2 - 192 * 0.5)
+final List<dVector2> _ind1 = [ //вторая колонка
+  dVector2(309 - 224 - 112,503 - 192 * 2 - 192 * 0.5),
+  dVector2(304 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
+  dVector2(299 - 224 - 112,477 - 192 * 2 - 192 * 0.5),
+  dVector2(364 - 224 - 112,469 - 192 * 2 - 192 * 0.5),
+  dVector2(370 - 224 - 112,484 - 192 * 2 - 192 * 0.5),
+  dVector2(374 - 224 - 112,489 - 192 * 2 - 192 * 0.5),
+  dVector2(369 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
+  dVector2(359 - 224 - 112,498 - 192 * 2 - 192 * 0.5),
+  dVector2(356 - 224 - 112,485 - 192 * 2 - 192 * 0.5)
 ];
 
-final List<Vector2> _ind2 = [ //пятая
-  Vector2(972  - 224 * 4 - 112,493 - 192 * 2 - 192 * 0.5),
-  Vector2(968  - 224 * 4 - 112,483 - 192 * 2 - 192 * 0.5),
-  Vector2(971  - 224 * 4 - 112,468 - 192 * 2 - 192 * 0.5),
-  Vector2(1032 - 224 * 4 - 112,466 - 192 * 2 - 192 * 0.5),
-  Vector2(1043 - 224 * 4 - 112,477 - 192 * 2 - 192 * 0.5),
-  Vector2(1042 - 224 * 4 - 112,489 - 192 * 2 - 192 * 0.5)
+final List<dVector2> _ind2 = [ //пятая
+  dVector2(972  - 224 * 4 - 112,493 - 192 * 2 - 192 * 0.5),
+  dVector2(968  - 224 * 4 - 112,483 - 192 * 2 - 192 * 0.5),
+  dVector2(971  - 224 * 4 - 112,468 - 192 * 2 - 192 * 0.5),
+  dVector2(1032 - 224 * 4 - 112,466 - 192 * 2 - 192 * 0.5),
+  dVector2(1043 - 224 * 4 - 112,477 - 192 * 2 - 192 * 0.5),
+  dVector2(1042 - 224 * 4 - 112,489 - 192 * 2 - 192 * 0.5)
 ];
 
-final List<Vector2> _ind3 = [ //восьмая
-  Vector2(2135 - 224 * 9 - 112, 530 - 192 * 2 - 96),
-  Vector2(2107 - 224 * 9 - 112, 505 - 192 * 2 - 96),
-  Vector2(2103 - 224 * 9 - 112, 487 - 192 * 2 - 96),
-  Vector2(2158 - 224 * 9 - 112, 442 - 192 * 2 - 96),
-  Vector2(2174 - 224 * 9 - 112, 448 - 192 * 2 - 96),
-  Vector2(2196 - 224 * 9 - 112, 480 - 192 * 2 - 96),
-  Vector2(2196 - 224 * 9 - 112, 487 - 192 * 2 - 96),
-  Vector2(2146 - 224 * 9 - 112, 530 - 192 * 2 - 96),
+final List<dVector2> _ind3 = [ //восьмая
+  dVector2(2135 - 224 * 9 - 112, 530 - 192 * 2 - 96),
+  dVector2(2107 - 224 * 9 - 112, 505 - 192 * 2 - 96),
+  dVector2(2103 - 224 * 9 - 112, 487 - 192 * 2 - 96),
+  dVector2(2158 - 224 * 9 - 112, 442 - 192 * 2 - 96),
+  dVector2(2174 - 224 * 9 - 112, 448 - 192 * 2 - 96),
+  dVector2(2196 - 224 * 9 - 112, 480 - 192 * 2 - 96),
+  dVector2(2196 - 224 * 9 - 112, 487 - 192 * 2 - 96),
+  dVector2(2146 - 224 * 9 - 112, 530 - 192 * 2 - 96),
 ];
 
-final List<Vector2> _hitBoxPoint = [
-  Vector2(96  - 112,57  - 96),
-  Vector2(88  - 112,66  - 96),
-  Vector2(94  - 112,125 - 96),
-  Vector2(125 - 112,124 - 96),
-  Vector2(133 - 112,76  - 96),
-  Vector2(101 - 112,56  - 96),
+final List<dVector2> _hitBoxPoint = [
+  dVector2(96  - 112,57  - 96),
+  dVector2(88  - 112,66  - 96),
+  dVector2(94  - 112,125 - 96),
+  dVector2(125 - 112,124 - 96),
+  dVector2(133 - 112,76  - 96),
+  dVector2(101 - 112,56  - 96),
 ];
 
 class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,KyrgyzEnemy
@@ -107,7 +108,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     _hitbox = EnemyHitbox(_hitBoxPoint,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38)),obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
+    _groundBox = GroundHitBox(getPointsForActivs(dVector2(90 - 112,87 - 96), dVector2(41,38)),obstacleBehavoiurStart: (Set<dVector2> intersectionPoints, DCollisionEntity other){
       obstacleBehaviour(intersectionPoints, other, _groundBox, this);
     },
         collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
@@ -116,7 +117,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
         _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = 3;
-    _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
+    _ground = Ground(getPointsForActivs(dVector2(90 - 112,87 - 96), dVector2(41,38))
         , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);

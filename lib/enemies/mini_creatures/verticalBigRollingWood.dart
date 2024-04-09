@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
@@ -48,12 +49,12 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
       flipHorizontally();
     }
 
-    _defWeapon = DefaultEnemyWeapon([Vector2(47-47,14-68)
-      ,Vector2(32-47,35-68)
-      ,Vector2(32-47,96-68)
-      ,Vector2(48-47,123-68)
-      ,Vector2(63-47,96-68)
-      ,Vector2(63-47,37-68)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
+    _defWeapon = DefaultEnemyWeapon([dVector2(47-47,14-68)
+      ,dVector2(32-47,35-68)
+      ,dVector2(32-47,96-68)
+      ,dVector2(48-47,123-68)
+      ,dVector2(63-47,96-68)
+      ,dVector2(63-47,37-68)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
     _defWeapon.coolDown = 0.5;
     _defWeapon.damage = 5;

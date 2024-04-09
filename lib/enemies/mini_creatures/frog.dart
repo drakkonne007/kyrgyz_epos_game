@@ -3,6 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -86,7 +87,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _idles.add(_idle6);
     chooseMove();
 
-    _groundHitBox = GroundHitBox(getPointsForActivs(Vector2.all(-7), Vector2.all(15)),collisionType: DCollisionType.active
+    _groundHitBox = GroundHitBox(getPointsForActivs(dVector2.all(-7), dVector2.all(15)),collisionType: DCollisionType.active
         ,isSolid: false,isStatic: false,isLoop: true,obstacleBehavoiurStart: _obstacle, game: gameRef, isOnlyForStatic: true);
     add(_groundHitBox);
   }
@@ -112,9 +113,9 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
   }
 
-  void _obstacle(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  void _obstacle(Set<dVector2> intersectionPoints, DCollisionEntity other)
   {
-    Map<Vector2,AxesDiff> diffs = {};
+    Map<dVector2,AxesDiff> diffs = {};
     bool isUp = false;
     bool isDown = false;
     bool isLeft = false;
@@ -209,8 +210,8 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _speed.setValues(0,0);
     animation = null;
     var box = gameRef.gameMap.orthoPlayer?.groundBox ?? gameRef.gameMap.frontPlayer!.groundBox;
-    if(position.distanceToSquared((box!.getMinVector() + box.getMaxVector()) / 2)  < 1000){
-      Vector2 vec = (box.getMinVector() + box.getMaxVector()) / 2;
+    if(position.distanceToSquared((box!.getMinVector() + box.getMaxVector()).toVector2() / 2)  < 1000){
+      dVector2 vec = (box.getMinVector() + box.getMaxVector()) / 2;
       double angle = math.atan2(vec.y - position.y, vec.x - position.x);
       double cos = math.cos(angle);
       double sin = math.sin(angle);

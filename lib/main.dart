@@ -11,7 +11,7 @@ import 'package:game_flame/overlays/language.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
 
-bool isMapCompile = true; //Надо ли компилить просто карту
+bool isMapCompile = false; //Надо ли компилить просто карту
 bool isNeedCopyInternal = false;
 
 //TODO добавить пакет IMPELLER для IOS (прекомпил шейдеров)

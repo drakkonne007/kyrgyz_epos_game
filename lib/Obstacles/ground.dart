@@ -1,4 +1,5 @@
 import 'package:flame/src/components/position_component.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -10,7 +11,7 @@ class Ground extends MapObstacle
 
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
   }
 
@@ -20,7 +21,7 @@ class Ground extends MapObstacle
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollisionStart(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollisionStart
   }
 }

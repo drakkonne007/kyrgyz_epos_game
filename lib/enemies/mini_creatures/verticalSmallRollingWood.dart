@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
@@ -48,7 +49,7 @@ class VerticalSmallRollingWood extends SpriteAnimationComponent with HasGameRef<
       flipHorizontally();
     }
 
-    _defWeapon = DefaultEnemyWeapon(getPointsForActivs(Vector2(-31/2,-87/2), Vector2(31,87)),collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
+    _defWeapon = DefaultEnemyWeapon(getPointsForActivs(dVector2(-31/2,-87/2), dVector2(31,87)),collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: null, onEndWeaponHit: null);
     _defWeapon.coolDown = 0.5;
     _defWeapon.damage = 5;

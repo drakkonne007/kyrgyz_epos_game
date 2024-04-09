@@ -5,6 +5,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -47,8 +48,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
 
-    Vector2 tPos = positionOfAnchor(anchor) - Vector2(13,20);
-    Vector2 tSize = Vector2(26,40);
+    dVector2 tPos = dVector2(positionOfAnchor(anchor).x,positionOfAnchor(anchor).y) - dVector2(13,20);
+    dVector2 tSize = dVector2(26,40);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
@@ -57,8 +58,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(groundBox!);
-    tPos = positionOfAnchor(anchor) - Vector2(10,10);
-    tSize = Vector2(20,20);
+    tPos = dVector2(positionOfAnchor(anchor).x,positionOfAnchor(anchor).y) - dVector2(10,10);
+    tSize = dVector2(20,20);
     _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: onStartHit, onEndWeaponHit: (){animation = animIdle;}, game: gameRef);
@@ -270,12 +271,12 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     return true;
   }
 
-  void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
+  void groundCalcLines(Set<dVector2> points, DCollisionEntity other)
   {
     if(groundBox == null){
       return;
     }
-    Map<Vector2,AxesDiff> diffs = {};
+    Map<dVector2,AxesDiff> diffs = {};
     bool isUp = false;
     bool isDown = false;
     bool isLeft = false;
@@ -289,16 +290,16 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
     for(final point in points){
 
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
         continue;
       }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+      if(dVector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
         continue;
       }
 

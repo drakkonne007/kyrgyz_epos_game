@@ -5,6 +5,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -69,7 +70,7 @@ abstract class EnemyWeapon extends DCollisionEntity
 
   @mustCallSuper
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  void onCollisionStart(Set<dVector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is PlayerHitbox){
       if(currentCoolDown < coolDown){
@@ -154,7 +155,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   Vector2 randomVector2() => (Vector2.random() - Vector2.random()) * 100;
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  void onCollisionStart(Set<dVector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is EnemyHitbox){
       if(_myHitboxes.containsKey(other)){
@@ -174,7 +175,7 @@ abstract class PlayerWeapon extends DCollisionEntity
       temp.doHurt(hurt: damage ?? 0,inArmor: inArmor);
       game.add(
         ParticleSystemComponent(
-          position: other.getCenter(),
+          position: other.getCenter().toVector2(),
           size: Vector2(5,5),
           particle: Particle.generate(
             count: 15,

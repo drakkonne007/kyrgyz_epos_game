@@ -3,6 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -47,9 +48,9 @@ class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
       sprites.add(Sprite(img,srcSize: _spriteSheetSize,srcPosition: Vector2(_spriteSheetSize.x * i,75)));
     }
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
-    Vector2 tSize = Vector2(43, 67);
-    Vector2 tPos = Vector2(-24, -60);
-    _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true, game: gameRef);
+    dVector2 tSize = dVector2(43, 67);
+    dVector2 tPos = dVector2(-24, -60);
+    _groundBox = Ground([tPos,tPos + dVector2(0,tSize.y), tPos + tSize, tPos + dVector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true, game: gameRef);
     add(_groundBox);
   }
 }

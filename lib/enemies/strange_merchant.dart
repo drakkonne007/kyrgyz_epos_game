@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -37,19 +38,19 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
     animation = _animIdle;
     size *= 1.15;
-    final List<Vector2> points = [
-      (Vector2(38,36) - Vector2(55,55)) * 1.15,
-      (Vector2(38,50) - Vector2(55,55)) * 1.15,
-      (Vector2(42,66) - Vector2(55,55)) * 1.15,
-      (Vector2(52,79) - Vector2(55,55)) * 1.15,
-      (Vector2(70,79) - Vector2(55,55)) * 1.15,
-      (Vector2(73,75) - Vector2(55,55)) * 1.15,
-      (Vector2(73,34) - Vector2(55,55)) * 1.15,
+    final List<dVector2> points = [
+      (dVector2(38,36) - dVector2(55,55)) * 1.15,
+      (dVector2(38,50) - dVector2(55,55)) * 1.15,
+      (dVector2(42,66) - dVector2(55,55)) * 1.15,
+      (dVector2(52,79) - dVector2(55,55)) * 1.15,
+      (dVector2(70,79) - dVector2(55,55)) * 1.15,
+      (dVector2(73,75) - dVector2(55,55)) * 1.15,
+      (dVector2(73,34) - dVector2(55,55)) * 1.15,
     ];
     _myBottomPoint = Ground(points,collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
     add(_myBottomPoint);
-    add(ObjectHitbox(getPointsForActivs(Vector2(-30,-30), Vector2(60,60)),collisionType: DCollisionType.active,
+    add(ObjectHitbox(getPointsForActivs(dVector2(-30,-30), dVector2(60,60)),collisionType: DCollisionType.active,
         isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
     position = _startPos;
     super.onLoad();
