@@ -6,6 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 
@@ -143,8 +144,8 @@ class MySuperAnimCompiler {
   List<Map<Sprite?, List<Vector2>>> _mapsSprite = [];
   Map<Sprite?, List<Vector2>> _allSpriteMap = {};
   Map<AnimationPos, List<Vector2>> _animations = {};
-  Map<Vector2, List<Vector2>> internalObjs = {};
-  Map<Vector2, List<Vector2>> internalObjsLoop = {};
+  Map<Vector2, List<dVector2>> internalObjs = {};
+  Map<Vector2, List<dVector2>> internalObjsLoop = {};
 
   Future addTile(Vector2 position, TileProcessor tileProcessor) async
   {
@@ -175,21 +176,21 @@ class MySuperAnimCompiler {
         if (obj.isPolygon) {
           internalObjsLoop.putIfAbsent(position, () => []);
           for (final point in obj.polygon) {
-            internalObjsLoop[position]?.add(Vector2(point.x + obj.x + position.x, point.y + obj.y + position.y));
+            internalObjsLoop[position]?.add(dVector2(point.x + obj.x + position.x, point.y + obj.y + position.y));
           }
         }
         if (obj.isPolyline) {
           internalObjs.putIfAbsent(position, () => []);
           for (final point in obj.polyline) {
-            internalObjs[position]?.add(Vector2(point.x + obj.x + position.x, point.y + obj.y + position.y));
+            internalObjs[position]?.add(dVector2(point.x + obj.x + position.x, point.y + obj.y + position.y));
           }
         }
         if (obj.isRectangle) {
           internalObjsLoop.putIfAbsent(position, () => []);
-          internalObjsLoop[position]?.add(Vector2(obj.x + position.x, obj.y + position.y));
-          internalObjsLoop[position]?.add(Vector2(obj.x + position.x, obj.y + obj.height + position.y));
-          internalObjsLoop[position]?.add(Vector2(obj.x + obj.width + position.x, obj.y + obj.height + position.y));
-          internalObjsLoop[position]?.add(Vector2(obj.x + obj.width + position.x, obj.y + position.y));
+          internalObjsLoop[position]?.add(dVector2(obj.x + position.x, obj.y + position.y));
+          internalObjsLoop[position]?.add(dVector2(obj.x + position.x, obj.y + obj.height + position.y));
+          internalObjsLoop[position]?.add(dVector2(obj.x + obj.width + position.x, obj.y + obj.height + position.y));
+          internalObjsLoop[position]?.add(dVector2(obj.x + obj.width + position.x, obj.y + position.y));
         }
       }
     }

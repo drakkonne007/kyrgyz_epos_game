@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/components/game_worlds.dart';
@@ -109,24 +110,24 @@ Future precompileAll() async
             }
             bool isLoop = false;
 
-            List<Vector2> points = [];
+            List<dVector2> points = [];
             if (obj.isPolygon) {
               isLoop = true;
               for (final point in obj.polygon) {
-                points.add(Vector2(point.x + obj.x, point.y + obj.y));
+                points.add(dVector2(point.x + obj.x, point.y + obj.y));
               }
             }
             if (obj.isPolyline) {
               for (final point in obj.polyline) {
-                points.add(Vector2(point.x + obj.x, point.y + obj.y));
+                points.add(dVector2(point.x + obj.x, point.y + obj.y));
               }
             }
             if (obj.isRectangle) {
               isLoop = true;
-              points.add(Vector2(obj.x, obj.y));
-              points.add(Vector2(obj.x, obj.y + obj.height));
-              points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
-              points.add(Vector2(obj.x + obj.width, obj.y));
+              points.add(dVector2(obj.x, obj.y));
+              points.add(dVector2(obj.x, obj.y + obj.height));
+              points.add(dVector2(obj.x + obj.width, obj.y + obj.height));
+              points.add(dVector2(obj.x + obj.width, obj.y));
             }
             int minCol = bigWorld.gameConsts.maxColumn!;
             int minRow = bigWorld.gameConsts.maxRow!;
@@ -152,20 +153,20 @@ Future precompileAll() async
                 maxCol; currColInCycle++) {
               for (int currRowInCycle = minRow; currRowInCycle <=
                   maxRow; currRowInCycle++) {
-                Vector2 topLeft = Vector2(
+                dVector2 topLeft = dVector2(
                     currColInCycle * bigWorld.gameConsts.lengthOfTileSquare.x,
                     currRowInCycle * bigWorld.gameConsts.lengthOfTileSquare.y);
-                Vector2 topRight = Vector2(
+                dVector2 topRight = dVector2(
                     (currColInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.x,
                     currRowInCycle * bigWorld.gameConsts.lengthOfTileSquare.y);
-                Vector2 bottomLeft = Vector2(
+                dVector2 bottomLeft = dVector2(
                     currColInCycle * bigWorld.gameConsts.lengthOfTileSquare.x,
                     (currRowInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.y);
-                Vector2 bottomRight = Vector2(
+                dVector2 bottomRight = dVector2(
                     (currColInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.x,
                     (currRowInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.y);
 
-                List<Vector2> coord = [];
+                List<dVector2> coord = [];
                 for (int i = -1; i < points.length - 1; i++) {
                   if (!isLoop && i == -1) {
                     continue;
@@ -195,8 +196,8 @@ Future precompileAll() async
                   if (isFirst && isSecond) {
                     continue;
                   }
-                  List<Vector2> tempCoord = [];
-                  Vector2 answer = f_pointOfIntersect(
+                  List<dVector2> tempCoord = [];
+                  dVector2 answer = f_pointOfIntersect(
                       topLeft, topRight, points[tF], points[tS]);
                   if (answer != Vector2.zero()) {
                     tempCoord.add(answer);
@@ -229,7 +230,7 @@ Future precompileAll() async
                     coord.clear();
                   }
                   if (isSecond && !isFirst) {
-                    Vector2 temp = coord.last;
+                    dVector2 temp = coord.last;
                     coord.last = tempCoord[0];
                     coord.add(temp);
                     GroundSource newPoints = GroundSource();

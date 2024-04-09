@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -61,25 +62,25 @@ class CampPortalDown extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     }
     animation = SpriteAnimation.spriteList(sprites, stepTime: 0.14);
 
-    final List<Vector2> points2 = [
-      (Vector2(168,178)  - Vector2(145,192)) / 1.5,
-      (Vector2(168,96)   - Vector2(145,192)) / 1.5,
-      (Vector2(229,96)   - Vector2(145,192)) / 1.5,
-      (Vector2(226,110)  - Vector2(145,192)) / 1.5,
-      (Vector2(244,129)  - Vector2(145,192)) / 1.5,
-      (Vector2(246,141)  - Vector2(145,192)) / 1.5,
-      (Vector2(266,148)  - Vector2(145,192)) / 1.5,
-      (Vector2(251,176)  - Vector2(145,192)) / 1.5,
+    final List<dVector2> points2 = [
+      (dVector2(168,178)  - dVector2(145,192)) / 1.5,
+      (dVector2(168,96)   - dVector2(145,192)) / 1.5,
+      (dVector2(229,96)   - dVector2(145,192)) / 1.5,
+      (dVector2(226,110)  - dVector2(145,192)) / 1.5,
+      (dVector2(244,129)  - dVector2(145,192)) / 1.5,
+      (dVector2(246,141)  - dVector2(145,192)) / 1.5,
+      (dVector2(266,148)  - dVector2(145,192)) / 1.5,
+      (dVector2(251,176)  - dVector2(145,192)) / 1.5,
     ];
 
-    final List<Vector2> points = [
-      (Vector2(127,178)   - Vector2(145,192) ) / 1.5,
-      (Vector2(127,96)    - Vector2(145,192) ) / 1.5,
-      (Vector2(67,96)     - Vector2(145,192) ) / 1.5,
-      (Vector2(28,163)    - Vector2(145,192) ) / 1.5,
+    final List<dVector2> points = [
+      (dVector2(127,178)   - dVector2(145,192) ) / 1.5,
+      (dVector2(127,96)    - dVector2(145,192) ) / 1.5,
+      (dVector2(67,96)     - dVector2(145,192) ) / 1.5,
+      (dVector2(28,163)    - dVector2(145,192) ) / 1.5,
     ];
     
-    ObjectHitbox obj = ObjectHitbox(getPointsForActivs(Vector2(-10,-70), Vector2(20,30)),
+    ObjectHitbox obj = ObjectHitbox(getPointsForActivs(dVector2(-10,-70), dVector2(20,30)),
     collisionType: DCollisionType.active,isSolid:true,isLoop:true,game:gameRef,isStatic:false, obstacleBehavoiur: openCampTeleportMenu
     ,autoTrigger: false);
     add(obj);

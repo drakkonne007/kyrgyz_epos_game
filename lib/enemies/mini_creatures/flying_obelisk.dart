@@ -3,6 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -52,8 +53,8 @@ class FlyingDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
       sprites.add(Sprite(img,srcSize: _spriteSheetSize,srcPosition: Vector2(_spriteSheetSize.x * i,70)));
     }
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.1);
-    Vector2 tSize = Vector2(28, 52);
-    Vector2 tPos = Vector2(22, 0);
+    dVector2 tSize = Vector2(28, 52);
+    dVector2 tPos = Vector2(22, 0);
     _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isStatic: false, isSolid: false, isLoop: true, game: gameRef);
     add(_groundBox);
     _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;

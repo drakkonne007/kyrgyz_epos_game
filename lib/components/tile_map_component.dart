@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/components/cached_utils.dart';
@@ -140,12 +141,12 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
             if(name == ''){
               var points = obj.getAttribute('p')!;
               var pointsList = points.split(' ');
-              List<Vector2> temp = [];
+              List<dVector2> temp = [];
               for (final sources in pointsList) {
                 if (sources == '') {
                   continue;
                 }
-                temp.add(Vector2(double.parse(sources.split(',')[0]),
+                temp.add(dVector2(double.parse(sources.split(',')[0]),
                     double.parse(sources.split(',')[1])));
               }
               if (temp.isNotEmpty) {

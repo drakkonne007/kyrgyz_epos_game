@@ -4,6 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/weapon.dart';
@@ -16,9 +17,9 @@ enum DCollisionType
   inactive
 }
 
-List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size)
+List<dVector2> getPointsForActivs(dVector2 pos, dVector2 size)
 {
-  return [pos, pos + Vector2(0,size.y), pos + size, pos + Vector2(size.x,0)];
+  return [pos, pos + dVector2(0,size.y), pos + size, pos + dVector2(size.x,0)];
 }
 
 class PointCust extends PositionComponent
@@ -43,31 +44,31 @@ class PointCust extends PositionComponent
 
 abstract class DCollisionEntity extends Component
 {
-  List<Vector2> _vertices;
+  List<dVector2> _vertices;
   DCollisionType collisionType;
   bool isSolid;
   bool isStatic;
   bool isLoop;
   double angle = 0;
-  Vector2 scale = Vector2(1, 1);
-  Vector2 _center = Vector2(0, 0);
-  Set<Vector2> obstacleIntersects = {};
+  dVector2 scale = dVector2(1, 1);
+  dVector2 _center = dVector2(0, 0);
+  Set<dVector2> obstacleIntersects = {};
   KyrgyzGame game;
   int? column;
   int? row;
   double width = 0;
   double height = 0;
   bool onlyForPlayer = false;
-  final Vector2 _minCoords = Vector2(0, 0);
-  final Vector2 _maxCoords = Vector2(0, 0);
-  Vector2? transformPoint;
+  final dVector2 _minCoords = dVector2(0, 0);
+  final dVector2 _maxCoords = dVector2(0, 0);
+  dVector2? transformPoint;
   double radius = 0;
   bool isOnlyForStatic;
   bool _isTrueRect = false;
 
   bool get isTrueRect => _isTrueRect && angle == 0;
-  List<Vector2> get vertices => _vertices;
-  Vector2 get rawCenter => _center;
+  List<dVector2> get vertices => _vertices;
+  dVector2 get rawCenter => _center;
   bool get isCircle => radius != 0;
 
 
@@ -84,7 +85,7 @@ abstract class DCollisionEntity extends Component
     calcVertices();
   }
 
-  void changeVertices(List<Vector2> verts, {bool isLoop = false, double radius = 0, bool isSolid = false})
+  void changeVertices(List<dVector2> verts, {bool isLoop = false, double radius = 0, bool isSolid = false})
   {
     if(isStatic){
       throw Exception("Cannot change vertices of static entity");
@@ -138,7 +139,7 @@ abstract class DCollisionEntity extends Component
       _minCoords.x = _vertices[0].x - radius;
       _maxCoords.x = _vertices[0].x + radius;
     }
-    transformPoint ??= Vector2.zero();
+    transformPoint ??= dVector2.zero();
   }
 
   void reInsertIntoCollisionProcessor()
@@ -146,27 +147,27 @@ abstract class DCollisionEntity extends Component
     game.gameMap.collisionProcessor!.addActiveCollEntity(this);
   }
 
-  Vector2 getMinVector()
+  dVector2 getMinVector()
   {
     if(isStatic){
       return _minCoords;
     }
     var par = parent as PositionComponent;
     if(par.isFlippedHorizontally){
-      return Vector2(_getPointFromRawPoint(_maxCoords).x, _getPointFromRawPoint(_minCoords).y);
+      return dVector2(_getPointFromRawPoint(_maxCoords).x, _getPointFromRawPoint(_minCoords).y);
     }else{
       return _getPointFromRawPoint(_minCoords);
     }
   }
 
-  Vector2 getMaxVector()
+  dVector2 getMaxVector()
   {
     if(isStatic){
       return _maxCoords;
     }
     var par = parent as PositionComponent;
     if(par.isFlippedHorizontally){
-      return Vector2(_getPointFromRawPoint(_minCoords).x, _getPointFromRawPoint(_maxCoords).y);
+      return dVector2(_getPointFromRawPoint(_minCoords).x, _getPointFromRawPoint(_maxCoords).y);
     }else{
       return _getPointFromRawPoint(_maxCoords);
     }
@@ -181,16 +182,16 @@ abstract class DCollisionEntity extends Component
     }
     if(radius != 0) {
       PointCust p = PointCust(
-          position: getPoint(0) - Vector2(radius,0), color: color);
+          position: (getPoint(0) - dVector2(radius,0)).toVector2(), color: color);
       game.gameMap.priorityHigh.add(p);
       p = PointCust(
-          position: getPoint(0) + Vector2(radius,0), color: color);
+          position: (getPoint(0) + dVector2(radius,0)).toVector2(), color: color);
       game.gameMap.priorityHigh.add(p);
       p = PointCust(
-          position: getPoint(0) - Vector2(0,radius), color: color);
+          position: (getPoint(0) - dVector2(0,radius)).toVector2(), color: color);
       game.gameMap.priorityHigh.add(p);
       p = PointCust(
-          position: getPoint(0) + Vector2(0,radius), color: color);
+          position: (getPoint(0) + dVector2(0,radius)).toVector2(), color: color);
       game.gameMap.priorityHigh.add(p);
     }else {
       for (int i = 0; i < vertices.length; i++) {
@@ -201,7 +202,7 @@ abstract class DCollisionEntity extends Component
           color = BasicPalette.green.color;
         }
         PointCust p = PointCust(
-            position: getPoint(i), color: color);
+            position: getPoint(i).toVector2(), color: color);
         game.gameMap.priorityHigh.add(p);
       }
     }
@@ -225,20 +226,20 @@ abstract class DCollisionEntity extends Component
 
   bool onComponentTypeCheck(DCollisionEntity other);
 
-  void onCollisionStart(Set<Vector2> intersectionPoints,
+  void onCollisionStart(Set<dVector2> intersectionPoints,
       DCollisionEntity other);
 
   void onCollisionEnd(DCollisionEntity other);
 
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other);
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other);
 
-  Vector2 _getPointFromRawPoint(Vector2 rawPoint)
+  dVector2 _getPointFromRawPoint(dVector2 rawPoint)
   {
     if(isStatic){
       return rawPoint;
     }else {
       var temp = parent as PositionComponent;
-      Vector2 point = rawPoint - transformPoint!;
+      dVector2 point = rawPoint - transformPoint!;
       if(temp.isFlippedHorizontally){
         point.x *= -1;
       }
@@ -256,7 +257,7 @@ abstract class DCollisionEntity extends Component
     }
   }
 
-  Vector2 getCenter() {
+  dVector2 getCenter() {
     return _getPointFromRawPoint(_center);
   }
 
@@ -264,17 +265,17 @@ abstract class DCollisionEntity extends Component
     return vertices.length;
   }
 
-  Vector2 getPoint(int index) {
+  dVector2 getPoint(int index) {
     return _getPointFromRawPoint(vertices[index]);
   }
 
-  Vector2 _rotatePoint(Vector2 point, bool isHorizontalFlip) {
+  dVector2 _rotatePoint(dVector2 point, bool isHorizontalFlip) {
     point -= transformPoint!;
     double radian = angle * pi / 180;
     isHorizontalFlip ? radian *= -1 : null;
     double x = point.x * cos(radian) - point.y * sin(radian);
     double y = point.x * sin(radian) + point.y * cos(radian);
-    return Vector2(x,y) + transformPoint!;
+    return dVector2(x,y) + transformPoint!;
   }
 }
 
@@ -299,7 +300,7 @@ class ObjectHitbox extends DCollisionEntity
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  void onCollisionStart(Set<dVector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is PlayerHitbox) {
       if(autoTrigger) {
@@ -325,7 +326,7 @@ class ObjectHitbox extends DCollisionEntity
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
   }
 
@@ -356,7 +357,7 @@ class PlayerHitbox extends DCollisionEntity
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
   }
 
@@ -366,7 +367,7 @@ class PlayerHitbox extends DCollisionEntity
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollisionStart(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollisionStart
   }
 }
@@ -392,7 +393,7 @@ class EnemyHitbox extends DCollisionEntity
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollision
   }
 
@@ -402,7 +403,7 @@ class EnemyHitbox extends DCollisionEntity
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+  void onCollisionStart(Set<dVector2> intersectionPoints, DCollisionEntity other) {
     // TODO: implement onCollisionStart
   }
 }
@@ -410,7 +411,7 @@ class EnemyHitbox extends DCollisionEntity
 class GroundHitBox extends DCollisionEntity
 {
 
-  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
+  Function(Set<dVector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
 
   GroundHitBox(super.vertices, {required super.collisionType, super.isSolid
     , required super.isStatic, required this.obstacleBehavoiurStart, super.isLoop, required super.game
@@ -425,12 +426,12 @@ class GroundHitBox extends DCollisionEntity
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  void onCollisionStart(Set<dVector2> intersectionPoints, DCollisionEntity other)
   {
     obstacleBehavoiurStart?.call(intersectionPoints,other);
   }
 
-  @override void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  @override void onCollision(Set<dVector2> intersectionPoints, DCollisionEntity other)
   {
     obstacleBehavoiurStart?.call(intersectionPoints,other);
   }

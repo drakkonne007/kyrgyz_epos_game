@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flame/components.dart';
 import 'package:flame/image_composition.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
@@ -66,7 +67,7 @@ class DCollisionProcessor
       int maxCol = 0;
       int minRow = 0;
       int maxRow = 0;
-      if(entity.angle == 0 && entity.scale == Vector2(1, 1)){
+      if(entity.angle == 0 && entity.scale == dVector2(1, 1)){
         minCol = entity.getMinVector().x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
         maxCol = entity.getMaxVector().x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
         minRow = entity.getMinVector().y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
@@ -164,8 +165,8 @@ class DCollisionProcessor
 //Грубая проверка - мгут ли вообще они потенциально как-то скреститься. Солид или нет - это потом
 void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMapObstacle)
 {
-  if(other.scale == Vector2.all(1) && other.angle == 0
-      && entity.scale == Vector2.all(1) && entity.angle == 0) {
+  if(other.scale == dVector2.all(1) && other.angle == 0
+      && entity.scale == dVector2.all(1) && entity.angle == 0) {
     if (other.getMaxVector().x < entity.getMinVector().x
         || other.getMinVector().x > entity.getMaxVector().x
         || other.getMaxVector().y < entity.getMinVector().y
@@ -176,7 +177,7 @@ void _calcTwoEntities(DCollisionEntity entity, DCollisionEntity other, bool isMa
   Set<int> insidePoints = {};
   if(isMapObstacle) { //Если у вас все обекты столкновения с препятсвием с землёй квадратные, иначе делать что ближе от центра твоего тела
     for (int i = 0; i < other.getVerticesCount(); i++) {
-      Vector2 otherFirst = other.getPoint(i);
+      dVector2 otherFirst = other.getPoint(i);
       if(otherFirst.x <= entity.getMaxVector().x
           && otherFirst.x >= entity.getMinVector().x
           && otherFirst.y <= entity.getPoint(1).y
@@ -227,12 +228,12 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
     if(!isMapObstacle){
       if(other.isSolid && other.radius > entity.radius){
         if(other.onComponentTypeCheck(entity)) {
-          other.onCollisionStart({Vector2.zero()}, entity);
+          other.onCollisionStart({dVector2.zero()}, entity);
         }
       }
       if(entity.isSolid && entity.radius > other.radius){
         if(entity.onComponentTypeCheck(other)) {
-          entity.onCollisionStart({Vector2.zero()}, other);
+          entity.onCollisionStart({dVector2.zero()}, other);
         }
       }
     }
@@ -292,8 +293,8 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
         tFirst = i;
       }
       tSecond = i + 1;
-      Vector2 otherFirst = other.getPoint(tFirst);
-      Vector2 otherSecond = other.getPoint(tSecond);
+      dVector2 otherFirst = other.getPoint(tFirst);
+      dVector2 otherSecond = other.getPoint(tSecond);
       var list = f_intersectLineWithCircle(
           [otherFirst, otherSecond], entity.getPoint(0), entity.radius);
       if (list.isNotEmpty) {
@@ -309,7 +310,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
           return;
         } else {
           if (list.length == 1) {
-            Vector2 absVec;
+            dVector2 absVec;
             if (insideCircles.contains(tFirst)) {
               absVec = list[0] + otherFirst;
             } else {
@@ -326,7 +327,7 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
     if(!isMapObstacle){
       if(other.isSolid){
         if(other.onComponentTypeCheck(entity) && !otherTrig){
-          other.onCollisionStart({Vector2.zero()}, entity);
+          other.onCollisionStart({dVector2.zero()}, entity);
           otherTrig = true;
         }
       }
@@ -347,14 +348,14 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
       tFirst = i;
     }
     tSecond = i + 1;
-    Vector2 otherFirst = other.getPoint(tFirst);
-    Vector2 otherSecond = other.getPoint(tSecond);
+    dVector2 otherFirst = other.getPoint(tFirst);
+    dVector2 otherSecond = other.getPoint(tSecond);
     if (isMapObstacle) {
       if(insidePoints.contains(tFirst) && insidePoints.contains(tSecond)) {
         entity.obstacleIntersects.add((otherFirst + otherSecond) / 2);
         continue;
       }
-      List<Vector2> tempBorderLines = [];
+      List<dVector2> tempBorderLines = [];
       for(int i = - 1; i<entity.getVerticesCount() - 1; i++){
         if (!entity.isLoop && i == -1) {
           continue;
@@ -366,17 +367,17 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
           tF = i;
         }
         tS = i + 1;
-        Vector2 point = f_pointOfIntersect(entity.getPoint(tF), entity.getPoint(tS)
+        dVector2 point = f_pointOfIntersect(entity.getPoint(tF), entity.getPoint(tS)
             , otherFirst, otherSecond);
 
-        if (point != Vector2.zero()) {
+        if (point != dVector2.zero()) {
           tempBorderLines.add(point);
         }
       }
       if (tempBorderLines.length == 2) {
         entity.obstacleIntersects.add((tempBorderLines[0] + tempBorderLines[1]) / 2);
       }else if(tempBorderLines.length == 1){
-        Vector2 absVec;
+        dVector2 absVec;
         if(insidePoints.contains(tFirst)){
           absVec = tempBorderLines[0] + otherFirst;
         }else{
@@ -398,8 +399,8 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
           tF = i;
           tS = i + 1;
         }
-        Vector2 tempPos = f_pointOfIntersect(entity.getPoint(tF), entity.getPoint(tS), otherFirst, otherSecond);
-        if(tempPos != Vector2.zero()){
+        dVector2 tempPos = f_pointOfIntersect(entity.getPoint(tF), entity.getPoint(tS), otherFirst, otherSecond);
+        if(tempPos != dVector2.zero()){
           if (entity.onComponentTypeCheck(other)) {
             entity.onCollisionStart({otherFirst}, other);
           }
@@ -415,14 +416,14 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
     if(entity.isSolid && other.isTrueRect){
       if(entity.getMinVector().x < other.getMinVector().x){
         if (entity.onComponentTypeCheck(other)) {
-          entity.onCollisionStart({Vector2.zero()}, other);
+          entity.onCollisionStart({dVector2.zero()}, other);
         }
       }
     }
     if(other.isSolid && entity.isTrueRect){
       if(other.getMinVector().x < entity.getMinVector().x){
         if (other.onComponentTypeCheck(entity)) {
-          other.onCollisionStart({Vector2.zero()}, entity);
+          other.onCollisionStart({dVector2.zero()}, entity);
         }
       }
     }

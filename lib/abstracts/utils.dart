@@ -2,8 +2,9 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:game_flame/abstracts/dVector2.dart';
 
-Vector2 f_pointOfIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+dVector2 f_pointOfIntersect(dVector2 a1, dVector2 a2, dVector2 b1, dVector2 b2)
 {
   double s1_x, s1_y, s2_x, s2_y;
   s1_x = a2.x - a1.x;
@@ -18,17 +19,17 @@ Vector2 f_pointOfIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
       (-s2_x * s1_y + s1_x * s2_y);
 
   if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-    return Vector2(a1.x + (t * s1_x), a1.y + (t * s1_y));
+    return dVector2(a1.x + (t * s1_x), a1.y + (t * s1_y));
   }
-  return Vector2.zero();
+  return dVector2.zero();
 }
 
 //return intersects line and circle (coordinates and radius)
 
-List<Vector2> f_intersectLineWithCircle(List<Vector2> line, Vector2 circlePos, double radius)
+List<dVector2> f_intersectLineWithCircle(List<dVector2> line, dVector2 circlePos, double radius)
 {
-  Vector2 startL = line.first - circlePos;
-  Vector2 endL = line.last - circlePos;
+  dVector2 startL = line.first - circlePos;
+  dVector2 endL = line.last - circlePos;
   double a = (endL.y - startL.y);
   double b = (endL.x - startL.x);
   double norm = sqrt(a*a + b*b);
@@ -50,15 +51,15 @@ List<Vector2> f_intersectLineWithCircle(List<Vector2> line, Vector2 circlePos, d
   return points;
 }
 
-List<Vector2> f_intersectLineFunctionWithCircle(double r,double a,double b,double c, Vector2 circlePos)
+List<dVector2> f_intersectLineFunctionWithCircle(double r,double a,double b,double c, dVector2 circlePos)
 {
-  List<Vector2> points = [];
+  List<dVector2> points = [];
   double x0 = -a*c/(a*a+b*b),  y0 = -b*c/(a*a+b*b);
   if (c*c > r*r*(a*a+b*b)) {
     return points;
   } else if ((c*c - r*r*(a*a+b*b)).abs() < 0) {
     return points;
-    // points.add(Vector2(x0, y0) + circlePos);
+    // points.add(dVector2(x0, y0) + circlePos);
   } else {
     double d = r*r - c*c/(a*a+b*b);
     double mult = sqrt (d / (a*a+b*b));
@@ -67,8 +68,8 @@ List<Vector2> f_intersectLineFunctionWithCircle(double r,double a,double b,doubl
     bx = x0 - b * mult;
     ay = y0 - a * mult;
     by = y0 + a * mult;
-    points.add(Vector2(ax, ay) + circlePos);
-    points.add(Vector2(bx, by) + circlePos);
+    points.add(dVector2(ax, ay) + circlePos);
+    points.add(dVector2(bx, by) + circlePos);
   }
   return points;
 }
@@ -76,7 +77,7 @@ List<Vector2> f_intersectLineFunctionWithCircle(double r,double a,double b,doubl
 class GroundSource
 {
   bool isLoop = false;
-  Set<Vector2> points = {};
+  Set<dVector2> points = {};
 }
 
 class AxesDiff
