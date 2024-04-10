@@ -326,9 +326,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
   {
     super.render(canvas);
     if(magicDamages.isNotEmpty){
-      var shader = gameRef.telepShader;
+      var shader = gameRef.fireShader;
       shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 1); //scalse
+      shader.setFloat(1, 4); //scalse
       shader.setFloat(2, 0); //offsetX
       shader.setFloat(3, 0);
       shader.setFloat(4,math.max(size.x,30)); //size

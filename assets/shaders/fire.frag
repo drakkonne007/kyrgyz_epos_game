@@ -1,5 +1,15 @@
 #version 320 es
 
+#define ITERATIONS 12
+#define SPEED 10.0
+#define DISPLACEMENT 0.05
+#define TIGHTNESS 10.0
+#define YOFFSET 0.1
+#define YSCALE 0.25
+#define FLAMETONE vec3(50.0, 5.0, 1.0)
+
+
+
 precision lowp float;
 out vec4 fragColor;
 
@@ -8,47 +18,47 @@ uniform float iScale;
 uniform vec2 iOffset;
 uniform vec2 iResolution;
 
-
-
-float snoise(vec3 uv, float res)
+float shape(in vec2 pos) // a blob shape to distort
 {
-	const vec3 s = vec3(1e0, 1e2, 1e3);
-	
-	uv *= res;
-	
-	vec3 uv0 = floor(mod(uv, res))*s;
-	vec3 uv1 = floor(mod(uv+vec3(1.), res))*s;
-	
-	vec3 f = fract(uv); f = f*f*(3.0-2.0*f);
+	return clamp( sin(pos.x*3.1416) - pos.y+YOFFSET, 0.0, 1.0 );
+}
 
-	vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,
-		      	  uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);
+float noise(vec2 x) // iq noise function
+{
+	vec3 i = floor(x);
+    vec3 f = fract(x);
 
-	vec4 r = fract(sin(v*1e-1)*1e3);
-	float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-	
-	r = fract(sin((v + uv1.z - uv0.z)*1e-1)*1e3);
-	float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-	
-	return mix(r0, r1, f.z)*2.-1.;
+    vec3 u = f*f*(3.0-2.0*f);
+
+    return mix( mix( dot( random2(i + vec2(0.0,0.0) ), f - vec2(0.0,0.0) ),
+                     dot( random2(i + vec2(1.0,0.0) ), f - vec2(1.0,0.0) ), u.x),
+                mix( dot( random2(i + vec2(0.0,1.0) ), f - vec2(0.0,1.0) ),
+                     dot( random2(i + vec2(1.0,1.0) ), f - vec2(1.0,1.0) ), u.x), u.y);
 }
 
 void main() 
 {
-	vec2 p = -.5 + gl_FragCoord.xy / iResolution.xy;
-	p.x *= iResolution.x/iResolution.y;
-	
-	p /= iScale;
-	p -= iOffset;
-	
-	float color = 3.0 - (3.*length(2.*p));
-	
-	vec3 coord = vec3(atan(p.x,p.y)/6.2832+.5, length(p)*.4, .5);
-	
-	for(int i = 1; i <= 7; i++)
+	vec2 uv = gl_FragCoord.xy / iResolution.xy;
+	uv /= iScale;
+	uv -= iOffset;
+	float nx = 0.0;
+	float ny = 0.0;
+	for (int i=1; i<ITERATIONS+1; i++)
 	{
-		float power = pow(2.0, float(i));
-		color += (1.5 / power) * snoise(coord + vec3(0.,-iTime*.05, iTime*.01), power*16.);
+		float ii = pow(float(i), 2.0);
+		float ifrac = float(i)/float(ITERATIONS);
+		float t = ifrac * iTime * SPEED;
+		float d = (1.0-ifrac) * DISPLACEMENT;
+		nx += noise( vec2(uv.x*ii-iTime*ifrac, uv.y*YSCALE*ii-t)) * d * 2.0;
+		ny += noise( vec2(uv.x*ii+iTime*ifrac, uv.y*YSCALE*ii-t)) * d;
 	}
-	fragColor = vec4( color, pow(max(color,0.),2.)*0.4, pow(max(color,0.),3.)*0.15 , max(color,0.));
+	float flame = shape( vec2(uv.x+nx, uv.y+ny) );
+	vec3 col = pow(flame, TIGHTNESS) * FLAMETONE;
+    
+    // tonemapping
+    col = col / (1.0+col);
+    col = pow(col, vec3(1.0/2.2));
+    col = clamp(col, 0.0, 1.0);
+	
+	fragColor = vec4(col, 1.0);
 }
