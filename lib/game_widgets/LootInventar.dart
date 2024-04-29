@@ -73,7 +73,7 @@ class _LootInvantarState extends State<LootInventar>
                   ValueListenableBuilder(valueListenable: widget.game.playerData.money, builder: (context, value, __) => AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 20,)),
                 ],
               ),
-                SizedBox(height: 5,),
+                const SizedBox(height: 5,),
                 Row(
                   children: [
                     Expanded(
