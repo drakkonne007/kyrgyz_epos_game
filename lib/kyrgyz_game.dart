@@ -28,7 +28,7 @@ import 'package:xml/xml.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 
-class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappables, WidgetsBindingObserver
+class KyrgyzGame extends FlameGame with KeyboardEvents, WidgetsBindingObserver
 {
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
@@ -106,7 +106,6 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   void onGameResize(Vector2 size) {
     double xZoom = size.x / 768;
     double yZoom = size.y / 448;
-    camera.zoom = max(xZoom, yZoom) + 0.04;
     // print(size);
     super.onGameResize(size);
   }
@@ -130,7 +129,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
   }
 
   @override
-  KeyEventResult onKeyEvent(RawKeyEvent event,
+  KeyEventResult onKeyEvent(KeyEvent event,
       Set<LogicalKeyboardKey> keysPressed,)
   {
     super.onKeyEvent(event, keysPressed);

@@ -61,7 +61,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       srcSize: Vector2(96,96),
     );
     _animFlying = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0,loop: true);
-    _totalAirDuration = _animFlying.ticker().totalDuration() * 8;
+    _totalAirDuration = SpriteAnimationTicker(_animFlying).totalDuration() * 8;
     _idleList.add(_animIdle);
     _idleList.add(_animIdle2);
     changeMoves();

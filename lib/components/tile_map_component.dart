@@ -180,10 +180,10 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
     }
-    gameRef.camera.followComponent(frontPlayer ?? orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,currentGameWorldData!.gameConsts.visibleBounds!.x
-        *32,
-        currentGameWorldData!.gameConsts.visibleBounds!.y
-            *32));
+    gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
+        game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x*game.playerData.playerBigMap.gameConsts.maxColumn!,
+        game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y*game.playerData.playerBigMap.gameConsts.maxRow!));
+    gameRef.camera.follow(frontPlayer ?? orthoPlayer!);
     gameRef.doGameHud();
     // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
     // _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
@@ -242,26 +242,26 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     if(!_isLoad){
       return;
     }
-    collisionProcessor?.updateCollisions();
-    int col = (gameRef.camera.position.x + gameRef.camera.canvasSize.x/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    int row = (gameRef.camera.position.y + gameRef.camera.canvasSize.y/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    if (col != _column || row != _row) {
-      reloadWorld(col, row);
-    }
-    return;
-    // if(orthoPlayer != null && !orthoPlayer!.gameHide){
-    //   int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    //   int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    //   if (col != _column || row != _row) {
-    //     reloadWorld(col, row);
-    //   }
-    // }else if(frontPlayer != null && !frontPlayer!.gameHide){
-    //   int col = frontPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    //   int row = frontPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    //   if (col != _column || row != _row) {
-    //     reloadWorld(col, row);
-    //   }
+    // collisionProcessor?.updateCollisions();
+    // int col = (gameRef.camera.position.x + gameRef.camera.canvasSize.x/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    // int row = (gameRef.camera.position.y + gameRef.camera.canvasSize.y/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    // if (col != _column || row != _row) {
+    //   reloadWorld(col, row);
     // }
+    // return;
+    if(orthoPlayer != null && !orthoPlayer!.gameHide){
+      int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+      int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+      if (col != _column || row != _row) {
+        reloadWorld(col, row);
+      }
+    }else if(frontPlayer != null && !frontPlayer!.gameHide){
+      int col = frontPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+      int row = frontPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+      if (col != _column || row != _row) {
+        reloadWorld(col, row);
+      }
+    }
   }
 
   void reloadWorld(int newColumn, int newRow)

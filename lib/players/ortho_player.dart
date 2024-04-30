@@ -161,7 +161,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation != animIdle && animation != animMove){
       return;
     }
-    _weapon?.energyCost = _isLongAttack ? _animLong.ticker().totalDuration() * 2.6 : _animShort.ticker().totalDuration() * 2.6;
+    _weapon?.energyCost = _isLongAttack ? SpriteAnimationTicker(_animLong).totalDuration() * 2.6 : SpriteAnimationTicker(_animShort).totalDuration() * 2.6;
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
@@ -225,32 +225,32 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed)
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed)
   {
     bool isRun = false;
-    if(event.isKeyPressed(LogicalKeyboardKey.keyO)){
+    if(keysPressed.contains(LogicalKeyboardKey.keyO)){
       position=Vector2(0,0);
     }
     Vector2 velo = Vector2.zero();
-    if(event.isKeyPressed(LogicalKeyboardKey.keyE)){
+    if(keysPressed.contains(LogicalKeyboardKey.keyE)){
       gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water));
     }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) || event.isKeyPressed(const LogicalKeyboardKey(0x00000057)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000077))) {
+    if(keysPressed.contains(LogicalKeyboardKey.arrowUp) || keysPressed.contains(const LogicalKeyboardKey(0x00000057)) || keysPressed.contains(const LogicalKeyboardKey(0x00000077))) {
       velo.y = -PhysicVals.startSpeed;
     }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowDown) || event.isKeyPressed(const LogicalKeyboardKey(0x00000073)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000053))) {
+    if(keysPressed.contains(LogicalKeyboardKey.arrowDown) || keysPressed.contains(const LogicalKeyboardKey(0x00000073)) || keysPressed.contains(const LogicalKeyboardKey(0x00000053))) {
       velo.y = PhysicVals.startSpeed;
     }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)  || event.isKeyPressed(const LogicalKeyboardKey(0x00000061)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000041))) {
+    if(keysPressed.contains(LogicalKeyboardKey.arrowLeft)  || keysPressed.contains(const LogicalKeyboardKey(0x00000061)) || keysPressed.contains(const LogicalKeyboardKey(0x00000041))) {
       velo.x = -PhysicVals.startSpeed;
     }
-    if(event.isKeyPressed(LogicalKeyboardKey.arrowRight) || event.isKeyPressed(const LogicalKeyboardKey(0x00000064)) || event.isKeyPressed(const LogicalKeyboardKey(0x00000044))) {
+    if(keysPressed.contains(LogicalKeyboardKey.arrowRight) || keysPressed.contains(const LogicalKeyboardKey(0x00000064)) || keysPressed.contains(const LogicalKeyboardKey(0x00000044))) {
       velo.x = PhysicVals.startSpeed;
     }
     if(velo.x == 0 && velo.y == 0){
       stopMove();
     }else{
-      if(event.isKeyPressed(LogicalKeyboardKey.shiftLeft) || event.isKeyPressed(LogicalKeyboardKey.shiftRight)){
+      if(keysPressed.contains(LogicalKeyboardKey.shiftLeft) || keysPressed.contains(LogicalKeyboardKey.shiftRight)){
         isRun = true;
       }
       movePlayer(atan2(velo.x,velo.y), isRun);

@@ -83,7 +83,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     remove(_objectHitbox!);
     game.gameMap.currentObject.value = null;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    double dur = animation!.ticker().totalDuration();
+    double dur = SpriteAnimationTicker(animation!).totalDuration();
     for(final myItem in myItems){
       myItem.getEffect(gameRef);
     }

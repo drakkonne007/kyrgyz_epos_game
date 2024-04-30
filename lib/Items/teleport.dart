@@ -26,18 +26,15 @@ class Teleport extends PositionComponent with HasGameRef<KyrgyzGame>
   void telep()
   {
     double dist = gameRef.gameMap.orthoPlayer?.position.distanceTo(targetPos) ?? 0;
-    gameRef.camera.speed = math.min(dist / 0.6, 800);
     final effect = OpacityEffect.to(
       0.2,
-      EffectController(duration: (dist/gameRef.camera.speed) / 2),onComplete: ()
+      EffectController(duration: (dist / math.min(dist / 0.6, 800)) / 2),onComplete: ()
         {
           gameRef.gameMap.orthoPlayer?.position = targetPos;
-          gameRef.gameMap.orthoPlayer?.add(OpacityEffect.to(1, EffectController(duration: (dist/gameRef.camera.speed) / 2),onComplete: (){
+          gameRef.gameMap.orthoPlayer?.add(OpacityEffect.to(1, EffectController(duration: (dist/math.min(dist / 0.6, 800)) / 2),onComplete: (){
             gameRef.playerData.isLockMove = false;
-            gameRef.camera.resetMovement();
-            gameRef.camera.followComponent(gameRef.gameMap.orthoPlayer!, worldBounds: Rect.fromLTRB(0,0,
-                game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x*game.playerData.playerBigMap.gameConsts.maxColumn!,
-                game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y*game.playerData.playerBigMap.gameConsts.maxRow!));
+            gameRef.camera.follow(gameRef.gameMap.orthoPlayer!,
+                maxSpeed: math.min(dist / 0.6, 800));
           }));
         }
     );
