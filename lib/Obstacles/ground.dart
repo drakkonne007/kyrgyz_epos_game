@@ -6,7 +6,7 @@ import 'package:vector_math/vector_math_64.dart';
 class Ground extends MapObstacle
 {
   Ground(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic
-    , super.isLoop, required super.game, super.column, super.row, super.radius, });
+    , super.isLoop, required super.gameKyrgyz, super.column, super.row, super.radius, });
 
 
   @override

@@ -95,7 +95,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
         _weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = 3;
-    _ground = Ground(_groundBoxPoints,collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+    _ground = Ground(_groundBoxPoints,collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
     add(TimerComponent(onTick: () {

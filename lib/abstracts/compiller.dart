@@ -22,8 +22,8 @@ Future precompileAll() async
   }
   for (final bigWorld in listOfFullMaps) {
     print('start compile ${bigWorld.nameForGame}');
-    var fileName = bigWorld.source; //'top_left_bottom-slice.tmx';
-    var tiled = await TiledComponent.load(fileName, Vector2.all(32));
+    var fileName = bigWorld.source;
+    var tiled = await TiledComponent.load(fileName, Vector2.all(320), prefix: 'assets/', atlasMaxX: 999999,atlasMaxY: 999999);
     var layersLists = tiled.tileMap.map.layers;
     MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
     MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();

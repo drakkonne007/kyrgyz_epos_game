@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
@@ -28,7 +29,7 @@ import 'package:xml/xml.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 
-class KyrgyzGame extends FlameGame with KeyboardEvents, WidgetsBindingObserver
+class KyrgyzGame extends Forge2DGame with KeyboardEvents, WidgetsBindingObserver, SingleGameInstance
 {
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
@@ -54,11 +55,13 @@ class KyrgyzGame extends FlameGame with KeyboardEvents, WidgetsBindingObserver
   {
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
+    maxPolygonVertices = 999999;
+    world.gravity = Vector2.zero();
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';
     _telepShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
-    _fireShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/fire.frag');
+    _fireShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
     _iceShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/ice.frag');
     _poisonShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/poison.frag');
     _lightningShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/lightning.frag');

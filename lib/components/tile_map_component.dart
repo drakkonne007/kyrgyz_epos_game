@@ -149,15 +149,16 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
                 temp.add(Vector2(double.parse(sources.split(',')[0]),
                     double.parse(sources.split(',')[1])));
               }
-              if (temp.isNotEmpty) {
+              if (temp.length > 1) {
                 var ground = Ground(temp, collisionType: DCollisionType.passive,
                     isSolid: false,
                     isStatic: true,
                     isLoop: obj.getAttribute('lp')! == '1',
-                    game: gameRef,
+                    gameKyrgyz: gameRef,
                     column: i,
                     row: j);
                 grounds.add(ground);
+                add(ground);
               }
             }
           }

@@ -143,7 +143,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     add(_groundBox);
     // _groundBox.debugColor = BasicPalette.red.color;
     _ground = Ground(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21))
-        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
     add(TimerComponent(onTick: () {

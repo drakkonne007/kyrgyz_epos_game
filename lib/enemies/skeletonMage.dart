@@ -110,7 +110,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     add(_groundBox);
     // _groundBox.debugColor = BasicPalette.red.color;
     _ground = Ground(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16))
-        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
     add(TimerComponent(onTick: () {

@@ -117,7 +117,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     add(_weapon);
     _weapon.damage = 3;
     _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
-        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     _ground.onlyForPlayer = true;
     add(_ground);
     var defWep = DefaultEnemyWeapon(_hitBoxPoint, collisionType: DCollisionType.active, isSolid: false, isStatic: false

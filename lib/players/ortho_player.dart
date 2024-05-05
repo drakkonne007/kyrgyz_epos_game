@@ -5,6 +5,8 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_forge2d/body_component.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -82,12 +84,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
     tPos = positionOfAnchor(anchor) - Vector2(11,-10);
     tSize = Vector2(20,16);
+    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0.3,);
+    BodyDef bd = BodyDef(
+      position: positionOfAnchor(anchor) - Vector2(11,-10),
+    );
+    add(BodyComponent(fixtureDefs: [fix], bodyDef: bd,));
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(groundBox!);
     add(Ground(getPointsForActivs(tPos,tSize),
-        collisionType: DCollisionType.passive, isSolid: false,isStatic: false, isLoop: true, game: gameRef));
+        collisionType: DCollisionType.passive, isSolid: false,isStatic: false, isLoop: true, gameKyrgyz: gameRef));
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,

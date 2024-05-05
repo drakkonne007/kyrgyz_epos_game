@@ -47,7 +47,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
       (Vector2(73,34) - Vector2(55,55)) * 1.15,
     ];
     _myBottomPoint = Ground(points,collisionType: DCollisionType.passive,isSolid: false,
-        isStatic: false, isLoop: true, game: gameRef);
+        isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     add(_myBottomPoint);
     add(ObjectHitbox(getPointsForActivs(Vector2(-30,-30), Vector2(60,60)),collisionType: DCollisionType.active,
         isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
@@ -69,10 +69,10 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
   void update(double dt)
   {
     super.update(dt);
-    if(_myBottomPoint.getMaxVector().y > _playerGround.getMaxVector().y){
-      parent = gameRef.gameMap.enemyOnPlayer;
-    }else{
-      parent = gameRef.gameMap.enemyComponent;
-    }
+    // if(_myBottomPoint.getMaxVector().y > _playerGround.getMaxVector().y){
+    //   parent = gameRef.gameMap.enemyOnPlayer;
+    // }else{
+    //   parent = gameRef.gameMap.enemyComponent;
+    // }
   }
 }
