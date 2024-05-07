@@ -68,7 +68,7 @@ flutter:
 
   shaders:
     - assets/shaders/portalShader.frag
-    - assets/shaders/fire.frag
+#    - assets/shaders/fire.frag
     - assets/shaders/ice.frag
     - assets/shaders/lightning.frag
     - assets/shaders/poison.frag

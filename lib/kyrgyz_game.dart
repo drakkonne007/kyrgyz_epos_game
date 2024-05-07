@@ -58,7 +58,7 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';
     _telepShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
-    _fireShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/fire.frag');
+    _fireShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
     _iceShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/ice.frag');
     _poisonShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/poison.frag');
     _lightningShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/lightning.frag');
