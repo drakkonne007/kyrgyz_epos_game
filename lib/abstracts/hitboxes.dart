@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -51,7 +52,7 @@ abstract class DCollisionEntity extends Component
   double angle = 0;
   Vector2 scale = Vector2(1, 1);
   Vector2 _center = Vector2(0, 0);
-  Set<Vector2> obstacleIntersects = {};
+  Set<Line> obstacleIntersects = {};
   KyrgyzGame game;
   int? column;
   int? row;
@@ -69,6 +70,8 @@ abstract class DCollisionEntity extends Component
   List<Vector2> get vertices => _vertices;
   Vector2 get rawCenter => _center;
   bool get isCircle => radius != 0;
+
+  Function()? processColide;
 
 
   DCollisionEntity(this._vertices,
@@ -410,10 +413,10 @@ class EnemyHitbox extends DCollisionEntity
 class GroundHitBox extends DCollisionEntity
 {
 
-  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
+  Function()? obstacleBehavoiurStart;
 
   GroundHitBox(super.vertices, {required super.collisionType, super.isSolid
-    , required super.isStatic, required this.obstacleBehavoiurStart, super.isLoop, required super.game
+    , required super.isStatic, required processColide, super.isLoop, required super.game
     ,  super.radius, super.isOnlyForStatic, });
 
   @override
@@ -427,12 +430,12 @@ class GroundHitBox extends DCollisionEntity
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    obstacleBehavoiurStart?.call(intersectionPoints,other);
+    obstacleBehavoiurStart?.call();
   }
 
   @override void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
-    obstacleBehavoiurStart?.call(intersectionPoints,other);
+    obstacleBehavoiurStart?.call();
   }
 
   @override

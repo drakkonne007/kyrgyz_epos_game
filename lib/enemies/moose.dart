@@ -168,7 +168,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     add(_hitBox);
     _groundBox = GroundHitBox(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
         ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-          obstacleBehaviour(intersectionPoints, other, _groundBox, this);
+          obstacleBehaviour(intersectionPoints, other, _groundBox, this, _speed);
         },
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);

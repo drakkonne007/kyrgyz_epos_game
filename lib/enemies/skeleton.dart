@@ -137,7 +137,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     _groundBox = GroundHitBox(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
+      obstacleBehaviour(intersectionPoints, other, _groundBox, this, _speed);
     },
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);

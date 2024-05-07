@@ -38,7 +38,7 @@ mixin KyrgyzEnemy
     }
   }
 
-  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other, GroundHitBox groundBox, PositionComponent object)
+  void obstacleBehaviour(Set<Vector2> intersectionPoints, DCollisionEntity other, GroundHitBox groundBox, PositionComponent object, Vector2 speed)
   {
     Map<Vector2,AxesDiff> diffs = {};
     bool isUp = false;
@@ -108,8 +108,14 @@ mixin KyrgyzEnemy
       }
       if(maxLeft > maxRight){
         object.position -= Vector2(maxRight,0);
+        if(speed.x > 0){
+          speed.x = 0;
+        }
       }else{
         object.position += Vector2(maxLeft,0);
+        if(speed.x < 0){
+          speed.x = 0;
+        }
       }
       return;
     }
@@ -122,8 +128,14 @@ mixin KyrgyzEnemy
       }
       if(maxUp > maxDown){
         object.position -= Vector2(0,maxDown);
+        if(speed.y > 0){
+          speed.y = 0;
+        }
       }else{
         object.position += Vector2(0,maxUp);
+        if(speed.y < 0){
+          speed.y = 0;
+        }
       }
       return;
     }
@@ -133,18 +145,30 @@ mixin KyrgyzEnemy
     if(isLeft){
       whereObstacle = ObstacleWhere.side;
       object.position +=  Vector2(maxLeft,0);
+      if(speed.x < 0){
+        speed.x = 0;
+      }
     }
     if(isRight){
       whereObstacle = ObstacleWhere.side;
       object.position -=  Vector2(maxRight,0);
+      if(speed.x > 0){
+        speed.x = 0;
+      }
     }
     if(isUp){
       whereObstacle = ObstacleWhere.upDown;
       object.position +=  Vector2(0,maxUp);
+      if(speed.y < 0){
+        speed.y = 0;
+      }
     }
     if(isDown){
       whereObstacle = ObstacleWhere.upDown;
       object.position -=  Vector2(0,maxDown);
+      if(speed.y > 0){
+        speed.y = 0;
+      }
     }
   }
 

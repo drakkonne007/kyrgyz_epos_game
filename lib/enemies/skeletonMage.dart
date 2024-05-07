@@ -104,7 +104,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     _groundBox = GroundHitBox(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16)) ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
+      obstacleBehaviour(intersectionPoints, other, _groundBox, this, _speed);
     },
         collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);

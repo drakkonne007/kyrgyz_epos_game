@@ -322,6 +322,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       double upDiffY = point.y - groundBox!.getMinVector().y;
       double downDiffY = point.y - groundBox!.getMaxVector().y;
 
+      leftDiffX /= groundBox!.width;
+      rightDiffX /= groundBox!.width;
+      upDiffY /= groundBox!.height;
+      downDiffY /= groundBox!.height;
+
       // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
 
       diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
@@ -360,8 +365,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
       if(maxLeft > maxRight){
         position -= Vector2(maxRight,0);
+        if(_speed.x > 0){
+          _speed.x = 0;
+        }
       }else{
         position += Vector2(maxLeft,0);
+        if(_speed.x < 0){
+          _speed.x = 0;
+        }
       }
       return;
     }
@@ -374,8 +385,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
       if(maxUp > maxDown){
         position -= Vector2(0,maxDown);
+        if(_speed.y > 0){
+          _speed.y = 0;
+        }
       }else{
         position += Vector2(0,maxUp);
+        if(_speed.y < 0){
+          _speed.y = 0;
+        }
       }
       return;
     }
@@ -384,15 +401,27 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
     if(isLeft){
       position +=  Vector2(maxLeft,0);
+      if(_speed.x < 0){
+        _speed.x = 0;
+      }
     }
     if(isRight){
       position -=  Vector2(maxRight,0);
+      if(_speed.x > 0){
+        _speed.x = 0;
+      }
     }
     if(isUp){
       position +=  Vector2(0,maxUp);
+      if(_speed.y < 0){
+        _speed.y = 0;
+      }
     }
     if(isDown){
       position -=  Vector2(0,maxDown);
+      if(_speed.y > 0){
+        _speed.y = 0;
+      }
     }
   }
 

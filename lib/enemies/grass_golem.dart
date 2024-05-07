@@ -108,7 +108,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     _groundBox = GroundHitBox(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38)),obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
+      obstacleBehaviour(intersectionPoints, other, _groundBox, this, _speed);
     },
         collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);

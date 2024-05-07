@@ -87,7 +87,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     _groundBox = GroundHitBox(_groundBoxPoints,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
+      obstacleBehaviour(intersectionPoints, other, _groundBox, this, _speed);
     },
         collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
     add(_groundBox);
