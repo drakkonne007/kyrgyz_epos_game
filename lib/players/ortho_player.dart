@@ -8,8 +8,10 @@ import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
@@ -44,7 +46,7 @@ final List<Vector2> _attack2ind2 = [
   Vector2(20,2),
 ];
 
-class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame> implements MainPlayer
+class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>  implements MainPlayer
 {
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
   late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong;
@@ -58,6 +60,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool _isLongAttack = false;
   bool _isMinusEnergy = false;
   bool _isRun = false;
+  Body? lastBody;
 
   @override
   Future<void> onLoad() async
@@ -74,21 +77,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animation = animIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
-
     Vector2 tPos = positionOfAnchor(anchor) - Vector2(15,20);
     Vector2 tSize = Vector2(22,45);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
-
     tPos = positionOfAnchor(anchor) - Vector2(11,-10);
     tSize = Vector2(20,16);
-    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0.3,);
-    BodyDef bd = BodyDef(
-      position: positionOfAnchor(anchor) - Vector2(11,-10),
-    );
-    add(BodyComponent(fixtureDefs: [fix], bodyDef: bd,));
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
         collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -114,6 +110,18 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
 
+  void setPosition(Vector2 pos)
+  {
+    if(lastBody != null){
+      game.world.destroyBody(lastBody!);
+    }
+    Vector2 tPos = positionOfAnchor(anchor) - Vector2(11,-10);
+    Vector2 tSize = Vector2(20,16);
+    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0,);
+    lastBody = game.world.createBody(BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true, ))..createFixture(fix);
+    lastBody?.inertia = 0.5;
+  }
+
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
@@ -132,6 +140,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
       _velocity.x = 0;
       _velocity.y = 0;
+      lastBody?.linearVelocity = Vector2.zero();
       _speed.x = 0;
       _speed.y = 0;
       animation = null;
@@ -149,6 +158,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
+    lastBody?.linearVelocity = Vector2.zero();
     animation = animIdle;
   }
 
@@ -158,6 +168,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
+    lastBody?.linearVelocity = Vector2.zero();
     if(animation != null){
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     }
@@ -179,6 +190,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
+    lastBody?.linearVelocity = Vector2.zero();
     _weapon?.cleanHashes();
     animationTicker?.onFrame = onFrameWeapon;
     animationTicker?.onComplete = (){
@@ -296,6 +308,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
   {
+    return;
     if(groundBox == null){
       return;
     }
@@ -407,7 +420,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void update(double dt)
   {
     // _groundBox?.doDebug(color: BasicPalette.red.color);
-    super.update(dt);
+
     if(gameHide){
       return;
     }
@@ -415,6 +428,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       _isMinusEnergy = false;
     }
     // _weapon?.doDebug();
+
+    lastBody?.linearVelocity = _velocity;
+    position = lastBody?.position ?? Vector2.zero();
+
+    super.update(dt);
+    return;
+
     if(animation != animMove){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
       gameRef.playerData.addEnergy(dt * 1.5);
@@ -438,14 +458,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     _speed.x = math.max(-_maxSpeeds.x.abs() * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeeds.x.abs() * PhysicVals.runCoef));
     _speed.y = math.max(-_maxSpeeds.y.abs() * PhysicVals.runCoef,math.min(_speed.y + dt * _velocity.y,_maxSpeeds.y.abs() * PhysicVals.runCoef));
+    lastBody?.applyLinearImpulse(_velocity, point: position);
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;
     if(_velocity.x == 0) {
       if (_speed.x > 0) {
+        // lastBody?.applyForce(Vector2(-PhysicVals.stopSpeed * dt, 0));
         _speed.x -= PhysicVals.stopSpeed * dt;
       } else if (_speed.x < 0) {
         _speed.x += PhysicVals.stopSpeed * dt;
+        // lastBody?.applyForce(Vector2(PhysicVals.stopSpeed * dt, 0));
       } else {
         countZero++;
       }
@@ -453,12 +476,15 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(_velocity.y == 0){
       if (_speed.y > 0) {
         _speed.y -= PhysicVals.stopSpeed * dt;
+        // lastBody?.applyForce(Vector2(0, -PhysicVals.stopSpeed * dt));
       } else if (_speed.y < 0) {
         _speed.y += PhysicVals.stopSpeed * dt;
+        // lastBody?.applyForce(_velocity);
       } else {
         countZero++;
       }
     }
+    // lastBody?.applyLinearImpulse(_speed);
     if(countZero == 2){
       setIdleAnimation();
       if(!gameRef.playerData.isLockEnergy) {
@@ -467,17 +493,20 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     if(_speed.y.isNegative != isYNan){
+      // lastBody?.linearVelocity.y = 0;
       _speed.y = 0;
       countZero++;
     }
     if(_speed.x.isNegative != isXNan){
+      // lastBody?.linearVelocity.x = 0;
       _speed.x = 0;
       countZero++;
     }
     if(countZero == 2){
       setIdleAnimation();
     }
-    position += _speed * dt;
+    // lastBody?.applyLinearImpulse(_speed);
+    position = lastBody?.position ?? Vector2.zero();
   }
 //
 // @override

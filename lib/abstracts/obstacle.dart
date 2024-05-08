@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flame_forge2d/forge2d_game.dart';
-import 'package:flame_forge2d/forge2d_world.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 abstract class MapObstacle extends BodyComponent with ContactCallbacks
@@ -38,25 +38,28 @@ abstract class MapObstacle extends BodyComponent with ContactCallbacks
 
   @override
   Body createBody() {
-      if(vertices.length == 2){
-        final shape = EdgeShape()..set(vertices[0], vertices[1]);
-        final fixtureDef = FixtureDef(shape, friction: 0.3,);
-        final bodyDef = BodyDef(
-          position: Vector2.zero(),
-        );
-        return world.createBody(bodyDef)..createFixture(fixtureDef);
-      }else if(vertices.length > 2){
-        final shape = PolygonShape()..set(vertices);
-        final fixtureDef = FixtureDef(shape, friction: 0.3,);
-        final bodyDef = BodyDef(
-          position: Vector2.zero(),
-        );
-        return world.createBody(bodyDef)..createFixture(fixtureDef);
-      }
-      return world.createBody(BodyDef());
+    Body myBody;
+    renderBody = false;
+    int currCol = column ?? vertices[0].x ~/ gameKyrgyz.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+    int currRow = row ?? vertices[0].y ~/ gameKyrgyz.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+    if(vertices.length == 2){
+      final shape = EdgeShape()..set(vertices[0], vertices[1]);
+      final fixtureDef = FixtureDef(shape, friction: 0,);
+      final bodyDef = BodyDef(
+        userData: BodyUserData(LoadedColumnRow(currCol, currRow), isStatic),
+      );
+      myBody = world.createBody(bodyDef)..createFixture(fixtureDef);
+    }else if(vertices.length > 2){
+      final shape = PolygonShape()..set(vertices);
+      final fixtureDef = FixtureDef(shape, friction: 0,);
+      myBody = world.createBody(BodyDef(
+        userData: BodyUserData(LoadedColumnRow(currCol, currRow), isStatic),
+      ))..createFixture(fixtureDef);
     }
+    myBody = world.createBody(BodyDef());
+    return myBody;
+  }
 
-  @override
   bool onComponentTypeCheck(DCollisionEntity other)
   {
     if(other is GroundHitBox) {

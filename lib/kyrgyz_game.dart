@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -8,6 +9,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/armorDress.dart';
 import 'package:game_flame/Items/helmetDress.dart';
 import 'package:game_flame/Items/swordDress.dart';
@@ -29,7 +31,7 @@ import 'package:xml/xml.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 
-class KyrgyzGame extends Forge2DGame with KeyboardEvents, WidgetsBindingObserver, SingleGameInstance
+class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsBindingObserver, SingleGameInstance
 {
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
@@ -50,13 +52,18 @@ class KyrgyzGame extends Forge2DGame with KeyboardEvents, WidgetsBindingObserver
   late FragmentShader poisonShader;
   late FragmentShader lightningShader;
 
+  // KyrgyzGame()
+  // {
+  //   world = UpWorld();
+  // }
+
   @override
   Future onLoad() async
   {
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
-    maxPolygonVertices = 999999;
-    world.gravity = Vector2.zero();
+    maxPolygonVertices = 50;
+    // world.gravity = Vector2.zero();
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';

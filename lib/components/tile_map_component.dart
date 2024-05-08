@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
+import 'package:flame_forge2d/flame_forge2d.dart' as forge2d;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -31,7 +33,7 @@ class LoadedColumnRow
   int get hashCode => column.hashCode ^ row.hashCode;
 }
 
-class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
+class CustomTileMap extends World with HasGameRef<KyrgyzGame>
 {
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
   static int countId = 0;
@@ -41,7 +43,6 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   MapNode? mapNode;
   Set<Vector2> loadedLivesObjs = {};
   Map<LoadedColumnRow,List<Component>> allEls = {};
-  final List<Ground> grounds = [];
   DCollisionProcessor? collisionProcessor;
   GameWorldData? currentGameWorldData;
   bool _isLoad = false;
@@ -57,6 +58,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
   @override
   Future onLoad() async
   {
+    gameRef.camera = CameraComponent.withFixedResolution(width: 600, height: 350, world: this);
     await add(playerLayout);
     await add(enemyComponent);
     await add(enemyOnPlayer);
@@ -87,6 +89,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
 
   Future<void> loadNewMap() async
   {
+
     game.doLoadingMapHud();
     _isLoad = false;
     _column = -100;
@@ -128,10 +131,9 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
     }
-    for(final gg in grounds){
-      gg.removeFromParent();
-    }
-    grounds.clear();
+    var forgeWorld = gameRef.world;
+    // var dworld = game.world.physicsWorld as DWorld;
+    // dworld.resetWorld();
     for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
       for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
         if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
@@ -149,16 +151,22 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
                 temp.add(Vector2(double.parse(sources.split(',')[0]),
                     double.parse(sources.split(',')[1])));
               }
+
               if (temp.length > 1) {
-                var ground = Ground(temp, collisionType: DCollisionType.passive,
-                    isSolid: false,
-                    isStatic: true,
-                    isLoop: obj.getAttribute('lp')! == '1',
-                    gameKyrgyz: gameRef,
-                    column: i,
-                    row: j);
-                grounds.add(ground);
-                add(ground);
+                for( int i = 0; i < temp.length - 1; i++) {
+                  final shape = forge2d.EdgeShape()..set(temp[i], temp[i + 1]);
+                  final fixtureDef = forge2d.FixtureDef(shape, friction: 0,);
+                  forgeWorld.createBody(forge2d.BodyDef(userData: BodyUserData(LoadedColumnRow(i,j),true))).createFixture(fixtureDef);
+                }
+                // var ground = Ground(temp, collisionType: DCollisionType.passive,
+                //     isSolid: false,
+                //     isStatic: true,
+                //     isLoop: obj.getAttribute('lp')! == '1',
+                //     gameKyrgyz: gameRef,
+                //     column: i,
+                //     row: j);
+                // grounds.add(ground);
+                // add(ground);
               }
             }
           }
@@ -172,7 +180,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
         await playerLayout.add(orthoPlayer!);
         await orthoPlayer!.loaded;
       }
-      orthoPlayer?.position = gameRef.playerData.startLocation;
+      orthoPlayer?.setPosition(gameRef.playerData.startLocation);
     }else{
       if(frontPlayer == null){
         frontPlayer = FrontPlayer();
@@ -182,8 +190,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
       frontPlayer?.position = gameRef.playerData.startLocation;
     }
     gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
-        game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x*game.playerData.playerBigMap.gameConsts.maxColumn!,
-        game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y*game.playerData.playerBigMap.gameConsts.maxRow!));
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.x,
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.y));
     gameRef.camera.follow(frontPlayer ?? orthoPlayer!);
     gameRef.doGameHud();
     // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
@@ -243,7 +251,7 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
     if(!_isLoad){
       return;
     }
-    // collisionProcessor?.updateCollisions();
+    collisionProcessor?.updateCollisions();
     // int col = (gameRef.camera.position.x + gameRef.camera.canvasSize.x/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
     // int row = (gameRef.camera.position.y + gameRef.camera.canvasSize.y/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     // if (col != _column || row != _row) {
@@ -267,8 +275,11 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
 
   void reloadWorld(int newColumn, int newRow)
   {
+    print('Hohoho');
     _column = newColumn;
     _row = newRow;
+    // var dworld = game.world.physicsWorld as DWorld;
+    // dworld.changeActiveBodies(LoadedColumnRow(newColumn, newRow));
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     for(final els in allEllsSet){
       if((els.row - _row).abs() >= 2 || (els.column - _column).abs() >= 2){
