@@ -53,7 +53,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
         isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
     position = _startPos;
     super.onLoad();
-    _playerGround = gameRef.gameMap.orthoPlayer?.groundBox ?? gameRef.gameMap.frontPlayer!.groundBox!;
+    _playerGround = gameRef.gameMap.orthoPlayer?.hitBox ?? gameRef.gameMap.frontPlayer!.groundBox!;
     int rand = Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();
@@ -69,10 +69,10 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
   void update(double dt)
   {
     super.update(dt);
-    // if(_myBottomPoint.getMaxVector().y > _playerGround.getMaxVector().y){
-    //   parent = gameRef.gameMap.enemyOnPlayer;
-    // }else{
-    //   parent = gameRef.gameMap.enemyComponent;
-    // }
+    if(_myBottomPoint.getMaxVector().y > _playerGround.getMaxVector().y){
+      parent = gameRef.gameMap.enemyOnPlayer;
+    }else{
+      parent = gameRef.gameMap.enemyComponent;
+    }
   }
 }

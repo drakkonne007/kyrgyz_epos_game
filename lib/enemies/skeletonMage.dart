@@ -347,7 +347,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     if(!isHigh) {
       if (_groundBox
           .getMaxVector()
-          .y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y) {
+          .y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y) {
         parent = gameRef.gameMap.enemyOnPlayer;
       } else {
         parent = gameRef.gameMap.enemyComponent;

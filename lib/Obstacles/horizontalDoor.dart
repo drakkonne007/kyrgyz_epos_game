@@ -2,8 +2,10 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:game_flame/Obstacles/ground.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
@@ -52,9 +54,10 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   Vector2 startPosition;
   Set<String>? neededItems;
   ObjectHitbox? _objectHitbox;
-  Ground? ground;
+  Body? ground;
   bool _isOpened = false;
   late SpriteAnimation _animClosed, _animOpening, _animOpened;
+  final BodyDef bf = BodyDef(userData: BodyUserData(LoadedColumnRow(0,0), false));
 
   @override
   Future onLoad() async
@@ -82,8 +85,9 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     add(_objectHitbox!);
-    ground = Ground(isVertical ? _startOpenedPoints : _groundPoints, collisionType: DCollisionType.passive,isSolid:false,isLoop:true,gameKyrgyz:gameRef,isStatic:false);
-    add(ground!);
+    Shape sh = PolygonShape()..set(isVertical ? _startOpenedPoints : _groundPoints);
+    FixtureDef fx = FixtureDef(sh);
+    ground = gameRef.world.createBody(bf)..createFixture(fx);
     _isOpened = isVertical;
   }
 
@@ -115,10 +119,18 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     if(!_isOpened){
       animation = _animOpening;
+      gameRef.world.destroyBody(ground!);
+      Shape sh = PolygonShape()..set(isVertical ? _startOpenedPoints : _openedPoints);
+      FixtureDef fx = FixtureDef(sh);
+      ground = gameRef.world.createBody(bf)..createFixture(fx);
       // ground?.changeVertices(isVertical ? _startOpenedPoints : _openedPoints,isLoop: true, isSolid: true);
       _objectHitbox?.changeVertices(_objOpenedPoints,isLoop: true, isSolid: true);
     }else{
       animation = _animOpening.reversed();
+      gameRef.world.destroyBody(ground!);
+      Shape sh = PolygonShape()..set(_groundPoints);
+      FixtureDef fx = FixtureDef(sh);
+      ground = gameRef.world.createBody(bf)..createFixture(fx);
       // ground?.changeVertices(_groundPoints,isLoop: true, isSolid: true);
       _objectHitbox?.changeVertices(_objPoints,isLoop: true, isSolid: true);
     }

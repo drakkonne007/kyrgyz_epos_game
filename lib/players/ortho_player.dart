@@ -9,7 +9,7 @@ import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/Obstacles/ground.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
@@ -53,14 +53,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
-  GroundHitBox? groundBox;
   PlayerWeapon? _weapon;
   bool gameHide = false;
   final Vector2 _maxSpeeds = Vector2.all(0);
   bool _isLongAttack = false;
   bool _isMinusEnergy = false;
   bool _isRun = false;
-  Body? lastBody;
+  Ground? groundRigidBody;
+  double dumping = 8;
 
   @override
   Future<void> onLoad() async
@@ -85,12 +85,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     add(hitBox!);
     tPos = positionOfAnchor(anchor) - Vector2(11,-10);
     tSize = Vector2(20,16);
-    groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
-        obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(groundBox!);
-    add(Ground(getPointsForActivs(tPos,tSize),
-        collisionType: DCollisionType.passive, isSolid: false,isStatic: false, isLoop: true, gameKyrgyz: gameRef));
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
@@ -112,14 +106,31 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setPosition(Vector2 pos)
   {
-    if(lastBody != null){
-      game.world.destroyBody(lastBody!);
+    print('Set position orthoPlayer');
+
+    if(groundRigidBody != null){
+      game.world.destroyBody(groundRigidBody!);
     }
     Vector2 tPos = positionOfAnchor(anchor) - Vector2(11,-10);
     Vector2 tSize = Vector2(20,16);
-    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0,);
-    lastBody = game.world.createBody(BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true, userData: BodyUserData(LoadedColumnRow(0,0), false)))..createFixture(fix);
-    lastBody?.inertia = 0.5;
+    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0.5);
+    groundRigidBody = Ground(
+        BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true,
+            userData: BodyUserData(LoadedColumnRow(0,0), false)),
+        gameRef.world.physicsWorld,
+      isPlayer: true
+    );
+    groundRigidBody?.createFixture(fix);
+    var world = game.world as DWorld;
+    world.addCustomBody(groundRigidBody!);
+    // groundRigidBody = game.world.createBody(BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true, userData: BodyUserData(LoadedColumnRow(0,0), false)))..createFixture(fix);
+    groundRigidBody?.linearDamping = dumping;
+    groundRigidBody?.angularDamping = dumping;
+    position = groundRigidBody?.position ?? Vector2.zero();
+    // MassData md = MassData();
+    // lastBody?.inertia = 1;
+    // md.mass = 60;
+    // lastBody?.setMassData(md);
   }
 
   @override
@@ -140,7 +151,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
       _velocity.x = 0;
       _velocity.y = 0;
-      lastBody?.linearVelocity = Vector2.zero();
+      groundRigidBody?.linearVelocity = Vector2.zero();
       _speed.x = 0;
       _speed.y = 0;
       animation = null;
@@ -149,18 +160,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void reInsertFullActiveHitBoxes()
-  {
-    hitBox!.reInsertIntoCollisionProcessor();
-    groundBox!.reInsertIntoCollisionProcessor();
-    _weapon!.reInsertIntoCollisionProcessor();
-    _velocity.x = 0;
-    _velocity.y = 0;
-    _speed.x = 0;
-    _speed.y = 0;
-    lastBody?.linearVelocity = Vector2.zero();
-    animation = animIdle;
-  }
+  // void reInsertFullActiveHitBoxes()
+  // {
+  //   hitBox!.reInsertIntoCollisionProcessor();
+  //   _weapon!.reInsertIntoCollisionProcessor();
+  //   _velocity.x = 0;
+  //   _velocity.y = 0;
+  //   _speed.x = 0;
+  //   _speed.y = 0;
+  //   lastBody?.linearVelocity = Vector2.zero();
+  //   animation = animIdle;
+  // }
 
   void refreshMoves()
   {
@@ -168,7 +178,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
-    lastBody?.linearVelocity = Vector2.zero();
+    groundRigidBody?.linearVelocity = Vector2.zero();
     if(animation != null){
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     }
@@ -190,7 +200,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _velocity.y = 0;
     _speed.x = 0;
     _speed.y = 0;
-    lastBody?.linearVelocity = Vector2.zero();
+    groundRigidBody?.linearVelocity = Vector2.zero();
     _weapon?.cleanHashes();
     animationTicker?.onFrame = onFrameWeapon;
     animationTicker?.onComplete = (){
@@ -306,135 +316,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
-  {
-    return;
-    if(groundBox == null){
-      return;
-    }
-    Map<Vector2,AxesDiff> diffs = {};
-    bool isUp = false;
-    bool isDown = false;
-    bool isLeft = false;
-    bool isRight = false;
-    double maxLeft = 0;
-    double maxRight = 0;
-    double maxUp = 0;
-    double maxDown = 0;
-
-    for(final point in points){
-
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-
-      double leftDiffX  = point.x - groundBox!.getMinVector().x;
-      double rightDiffX = point.x - groundBox!.getMaxVector().x;
-      double upDiffY = point.y - groundBox!.getMinVector().y;
-      double downDiffY = point.y - groundBox!.getMaxVector().y;
-
-      // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
-
-      diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
-      double minDiff = min(leftDiffX.abs(),rightDiffX.abs());
-      minDiff = min(minDiff,upDiffY.abs());
-      minDiff = min(minDiff,downDiffY.abs());
-      if(minDiff == leftDiffX.abs()){
-        isLeft = true;
-        maxLeft = max(maxLeft,minDiff);
-      }
-      if(minDiff == rightDiffX.abs()){
-        isRight = true;
-        maxRight = max(maxRight,minDiff);
-      }
-      if(minDiff == upDiffY.abs()){
-        isUp = true;
-        maxUp = max(maxUp,minDiff);
-      }
-      if(minDiff == downDiffY.abs()){
-        isDown = true;
-        maxDown = max(maxDown,minDiff);
-      }
-    }
-
-    if(isDown && isUp && isLeft && isRight){
-      print('What is??');
-      return;
-    }
-
-    if(isDown && isUp){
-      double maxLeft = 1000000000;
-      double maxRight = 1000000000;
-      for(final diff in diffs.values){
-        maxLeft = min(maxLeft,diff.leftDiff.abs());
-        maxRight = min(maxRight,diff.rightDiff.abs());
-      }
-      if(maxLeft > maxRight){
-        position -= Vector2(maxRight,0);
-      }else{
-        position += Vector2(maxLeft,0);
-      }
-      return;
-    }
-    if(isLeft && isRight){
-      double maxUp = 100000000;
-      double maxDown = 100000000;
-      for(final diff in diffs.values){
-        maxUp = min(maxUp,diff.upDiff.abs());
-        maxDown = min(maxDown,diff.downDiff.abs());
-      }
-      if(maxUp > maxDown){
-        position -= Vector2(0,maxDown);
-      }else{
-        position += Vector2(0,maxUp);
-      }
-      return;
-    }
-
-    // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
-
-    if(isLeft){
-      position +=  Vector2(maxLeft,0);
-    }
-    if(isRight){
-      position -=  Vector2(maxRight,0);
-    }
-    if(isUp){
-      position +=  Vector2(0,maxUp);
-    }
-    if(isDown){
-      position -=  Vector2(0,maxDown);
-    }
-  }
-
   @override
-  void update(double dt)
-  {
+  void update(double dt) {
     // _groundBox?.doDebug(color: BasicPalette.red.color);
-
-    if(gameHide){
+    if (gameHide) {
       return;
     }
-    if(gameRef.playerData.energy.value > 1){
+    position = groundRigidBody?.position ?? Vector2.zero();
+    super.update(dt);
+    if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
     }
-    // _weapon?.doDebug();
-
-    lastBody?.linearVelocity = _velocity;
-    position = lastBody?.position ?? Vector2.zero();
-
-    super.update(dt);
-    return;
-
     if(animation != animMove){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
       gameRef.playerData.addEnergy(dt * 1.5);
@@ -456,63 +348,20 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.playerData.addEnergy(dt);
       }
     }
-    _speed.x = math.max(-_maxSpeeds.x.abs() * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,_maxSpeeds.x.abs() * PhysicVals.runCoef));
-    _speed.y = math.max(-_maxSpeeds.y.abs() * PhysicVals.runCoef,math.min(_speed.y + dt * _velocity.y,_maxSpeeds.y.abs() * PhysicVals.runCoef));
-    lastBody?.applyLinearImpulse(_velocity, point: position);
-    bool isXNan = _speed.x.isNegative;
-    bool isYNan = _speed.y.isNegative;
-    int countZero = 0;
-    if(_velocity.x == 0) {
-      if (_speed.x > 0) {
-        // lastBody?.applyForce(Vector2(-PhysicVals.stopSpeed * dt, 0));
-        _speed.x -= PhysicVals.stopSpeed * dt;
-      } else if (_speed.x < 0) {
-        _speed.x += PhysicVals.stopSpeed * dt;
-        // lastBody?.applyForce(Vector2(PhysicVals.stopSpeed * dt, 0));
-      } else {
-        countZero++;
-      }
-    }
-    if(_velocity.y == 0){
-      if (_speed.y > 0) {
-        _speed.y -= PhysicVals.stopSpeed * dt;
-        // lastBody?.applyForce(Vector2(0, -PhysicVals.stopSpeed * dt));
-      } else if (_speed.y < 0) {
-        _speed.y += PhysicVals.stopSpeed * dt;
-        // lastBody?.applyForce(_velocity);
-      } else {
-        countZero++;
-      }
-    }
-    // lastBody?.applyLinearImpulse(_speed);
-    if(countZero == 2){
+    groundRigidBody?.applyLinearImpulse(_velocity * dt * 120 * dumping * 1.1);
+    Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
+    if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
       setIdleAnimation();
       if(!gameRef.playerData.isLockEnergy) {
         gameRef.playerData.addEnergy(dt);
       }
-      return;
     }
-    if(_speed.y.isNegative != isYNan){
-      // lastBody?.linearVelocity.y = 0;
-      _speed.y = 0;
-      countZero++;
-    }
-    if(_speed.x.isNegative != isXNan){
-      // lastBody?.linearVelocity.x = 0;
-      _speed.x = 0;
-      countZero++;
-    }
-    if(countZero == 2){
-      setIdleAnimation();
-    }
-    // lastBody?.applyLinearImpulse(_speed);
-    position = lastBody?.position ?? Vector2.zero();
   }
-//
+
 // @override
 // void render(Canvas canvas)
 // {
-//   var shader = gameRef.telepShaderProgramm.fragmentShader();
+//   var shader = gameRef.telepShader;
 //   shader.setFloat(0,0);
 //   shader.setFloat(1,max(size.x,30));
 //   shader.setFloat(2,max(size.y,30));

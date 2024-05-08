@@ -207,7 +207,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     _speed.setValues(0,0);
     animation = null;
-    var box = gameRef.gameMap.orthoPlayer?.groundBox ?? gameRef.gameMap.frontPlayer!.groundBox;
+    var box = gameRef.gameMap.orthoPlayer?.hitBox ?? gameRef.gameMap.frontPlayer!.hitBox;
     if(position.distanceToSquared((box!.getMinVector() + box.getMaxVector()) / 2)  < 1000){
       Vector2 vec = (box.getMinVector() + box.getMaxVector()) / 2;
       double angle = math.atan2(vec.y - position.y, vec.x - position.x);

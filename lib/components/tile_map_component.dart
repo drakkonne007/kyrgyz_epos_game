@@ -89,7 +89,9 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
 
   Future<void> loadNewMap() async
   {
-
+    // gameRef.world.gravity = Vector2(0,10);
+    var dworld = game.world.physicsWorld as DWorld;
+    dworld.resetWorld();
     game.doLoadingMapHud();
     _isLoad = false;
     _column = -100;
@@ -132,8 +134,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
       await Future.delayed(const Duration(milliseconds: 100));
     }
     var forgeWorld = gameRef.world;
-    // var dworld = game.world.physicsWorld as DWorld;
-    // dworld.resetWorld();
+
     for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
       for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
         if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
@@ -189,10 +190,10 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
     }
+    gameRef.camera.follow(frontPlayer ?? orthoPlayer!);
     gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
         game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32,
         game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32));
-    gameRef.camera.follow(frontPlayer ?? orthoPlayer!);
     gameRef.doGameHud();
     // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
     // _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);

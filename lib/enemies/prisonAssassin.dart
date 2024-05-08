@@ -288,7 +288,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       return;
     }
     super.update(dt);
-    if(_groundBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
+    if(_groundBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
       parent = gameRef.gameMap.enemyOnPlayer;
     }else{
       parent = gameRef.gameMap.enemyComponent;

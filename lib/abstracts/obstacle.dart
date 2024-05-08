@@ -5,6 +5,28 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
+
+class Ground extends Body
+{
+  Ground(super.bd, super.world, {this.isOnlyForStatic = false, this.isOnlyForPlayer = false, this.isPlayer = false});
+
+  bool isOnlyForStatic = false;
+  bool isOnlyForPlayer = false;
+  bool isPlayer = false;
+
+  @override
+  bool shouldCollide(Body other) {
+    var ground = other as Ground;
+    if(isOnlyForStatic && ground.bodyType != BodyType.static){
+      return false;
+    }
+    if(isOnlyForPlayer && !ground.isPlayer && ground.bodyType == BodyType.dynamic){
+      return false;
+    }
+    return true;
+  }
+}
+
 abstract class MapObstacle extends BodyComponent with ContactCallbacks
 {
   MapObstacle(this._vertices, {required this.collisionType, this.isSolid = false, required this.isStatic, this.isLoop = false, required this.gameKyrgyz,this.column, this.row, this.radius = 0, this.isOnlyForStatic = false, });

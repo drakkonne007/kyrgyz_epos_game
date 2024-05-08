@@ -36,7 +36,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     world: UpWorld()
   );
 
-
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;

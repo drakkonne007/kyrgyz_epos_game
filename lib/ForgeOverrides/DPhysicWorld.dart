@@ -97,6 +97,7 @@ class DWorld extends World
   void changeActiveBodies(LoadedColumnRow columnRow)
   {
     print('bodiesSize before update: ${bodies.length}');
+    print('size of active: ${activeBody.length}');
     assert(!isLocked);
     bodies.clear();
     bodies.addAll(activeBody);
@@ -114,13 +115,16 @@ class DWorld extends World
 
   void resetWorld()
   {
+    print('All bodies was delete');
+    assert(!isLocked);
     bodies.clear();
     allEls.clear();
     activeBody.clear();
   }
 
   @override
-  Body createBody(BodyDef def) {
+  Body createBody(BodyDef def)
+  {
     assert(!isLocked);
     final body = Body(def, this);
     if(def.userData != null && def.userData is BodyUserData){
@@ -135,9 +139,26 @@ class DWorld extends World
     return body;
   }
 
+  void addCustomBody(Body body)
+  {
+    if(body.userData != null && body.userData is BodyUserData){
+      var data = body.userData as BodyUserData;
+      if(data.isStatic){
+        allEls.putIfAbsent(data.loadedColumnRow, () => []);
+        allEls[data.loadedColumnRow]!.add(body);
+      }else{
+        activeBody.add(body);
+      }
+    }
+  }
+
   @override
-  void destroyBody(Body body) {
-    assert(bodies.isNotEmpty);
+  void destroyBody(Body body)
+  {
+    if(bodies.isEmpty){
+      return;
+    }
+    // assert(bodies.isNotEmpty);
     assert(!isLocked);
 
     // Delete the attached joints.
