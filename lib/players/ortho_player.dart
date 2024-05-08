@@ -118,7 +118,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Vector2 tPos = positionOfAnchor(anchor) - Vector2(11,-10);
     Vector2 tSize = Vector2(20,16);
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0,);
-    lastBody = game.world.createBody(BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true, ))..createFixture(fix);
+    lastBody = game.world.createBody(BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true, userData: BodyUserData(LoadedColumnRow(0,0), false)))..createFixture(fix);
     lastBody?.inertia = 0.5;
   }
 

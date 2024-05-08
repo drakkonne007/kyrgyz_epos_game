@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -33,6 +32,11 @@ ValueNotifier<int> isMapCached = ValueNotifier(0);
 
 class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsBindingObserver, SingleGameInstance
 {
+  KyrgyzGame() : super(
+    world: UpWorld()
+  );
+
+
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
@@ -52,18 +56,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader poisonShader;
   late FragmentShader lightningShader;
 
-  // KyrgyzGame()
-  // {
-  //   world = UpWorld();
-  // }
-
   @override
   Future onLoad() async
   {
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
-    maxPolygonVertices = 50;
-    // world.gravity = Vector2.zero();
+    maxPolygonVertices = 999999;
+    world.gravity = Vector2.zero();
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';

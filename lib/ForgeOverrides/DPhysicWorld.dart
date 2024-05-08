@@ -96,6 +96,7 @@ class DWorld extends World
 
   void changeActiveBodies(LoadedColumnRow columnRow)
   {
+    print('bodiesSize before update: ${bodies.length}');
     assert(!isLocked);
     bodies.clear();
     bodies.addAll(activeBody);
@@ -108,6 +109,7 @@ class DWorld extends World
         allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body) => bodies.add(body));
       }
     }
+    print('bodiesSize after update: ${bodies.length}');
   }
 
   void resetWorld()

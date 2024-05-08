@@ -190,8 +190,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
       frontPlayer?.position = gameRef.playerData.startLocation;
     }
     gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.x,
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.y));
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32,
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32));
     gameRef.camera.follow(frontPlayer ?? orthoPlayer!);
     gameRef.doGameHud();
     // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
@@ -278,8 +278,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     print('Hohoho');
     _column = newColumn;
     _row = newRow;
-    // var dworld = game.world.physicsWorld as DWorld;
-    // dworld.changeActiveBodies(LoadedColumnRow(newColumn, newRow));
+    var dworld = game.world.physicsWorld as DWorld;
+    dworld.changeActiveBodies(LoadedColumnRow(newColumn, newRow));
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     for(final els in allEllsSet){
       if((els.row - _row).abs() >= 2 || (els.column - _column).abs() >= 2){
