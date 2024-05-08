@@ -6,9 +6,9 @@ import 'package:game_flame/components/tile_map_component.dart';
 
 class BodyUserData
 {
-  BodyUserData(this.loadedColumnRow, this.isStatic);
-  LoadedColumnRow loadedColumnRow = LoadedColumnRow(0, 0);
-  bool isStatic = true;
+  BodyUserData({this.loadedColumnRow, this.isStatic = true});
+  LoadedColumnRow? loadedColumnRow;
+  bool isStatic;
 }
 
 class UpWorld extends Forge2DWorld
@@ -117,6 +117,9 @@ class DWorld extends World
   {
     print('All bodies was delete');
     assert(!isLocked);
+    for(final key in allEls.keys){
+       allEls[key]!.forEach((el) => destroyBody(el));
+    }
     bodies.clear();
     allEls.clear();
     activeBody.clear();
@@ -126,11 +129,13 @@ class DWorld extends World
   Body createBody(BodyDef def)
   {
     assert(!isLocked);
+
     final body = Body(def, this);
     if(def.userData != null && def.userData is BodyUserData){
       var data = def.userData as BodyUserData;
       if(data.isStatic){
-        allEls.putIfAbsent(data.loadedColumnRow, () => []);
+        assert(data.loadedColumnRow != null);
+        allEls.putIfAbsent(data.loadedColumnRow!, () => []);
         allEls[data.loadedColumnRow]!.add(body);
       }else{
         activeBody.add(body);
@@ -144,7 +149,8 @@ class DWorld extends World
     if(body.userData != null && body.userData is BodyUserData){
       var data = body.userData as BodyUserData;
       if(data.isStatic){
-        allEls.putIfAbsent(data.loadedColumnRow, () => []);
+        assert(data.loadedColumnRow != null);
+        allEls.putIfAbsent(data.loadedColumnRow!, () => []);
         allEls[data.loadedColumnRow]!.add(body);
       }else{
         activeBody.add(body);
@@ -181,7 +187,8 @@ class DWorld extends World
     if(body.userData != null && body.userData is BodyUserData){
       var data = body.userData as BodyUserData;
       if(data.isStatic){
-        allEls.putIfAbsent(data.loadedColumnRow, () => []);
+        assert(data.loadedColumnRow != null);
+        allEls.putIfAbsent(data.loadedColumnRow!, () => []);
         allEls[data.loadedColumnRow]?.remove(body);
       }else{
         activeBody.remove(body);

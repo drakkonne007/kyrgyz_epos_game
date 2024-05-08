@@ -4,12 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
-import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
@@ -51,8 +52,6 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   PrisonAssassin(this._startPos);
   late SpriteAnimation _animMove, _animIdle,_animIdle2, _animAttack,_animAttack2, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
-  late GroundHitBox _groundBox;
-  late Ground _ground;
   final Vector2 _spriteSheetSize = Vector2(220,96);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
@@ -86,18 +85,14 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(_groundBoxPoints,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
-    },
-        collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
-    add(_groundBox);
+    bodyDef.position = _startPos;
+    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    FixtureDef fx = FixtureDef(PolygonShape()..set(_groundBoxPoints));
+    groundBody?.createFixture(fx);
     _weapon = DefaultEnemyWeapon(
         _weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = 3;
-    _ground = Ground(_groundBoxPoints,collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
-    _ground.onlyForPlayer = true;
-    add(_ground);
     add(TimerComponent(onTick: () {
       if (!checkIsNeedSelfRemove(position.x ~/
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
@@ -166,6 +161,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       if(animation != _animIdle && animation != _animIdle2){
         _speed.x = 0;
         _speed.y = 0;
+        groundBody?.clearForces();
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
         animation = rand.isOdd ? _animIdle : _animIdle2;
       }
@@ -179,6 +175,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _weapon.currentCoolDown = _weapon.coolDown;
     _speed.x = 0;
     _speed.y = 0;
+    groundBody?.clearForces();
     animation = null;
     math.Random().nextInt(2) == 0 ? animation = _animAttack : animation = _animAttack2;
     animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
@@ -235,6 +232,8 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   {
     _speed.x = 0;
     _speed.y = 0;
+    groundBody?.clearForces();
+    groundBody?.setActive(false);
     if(loots.isNotEmpty) {
       if(loots.length > 1){
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
@@ -246,8 +245,6 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     }
     animation = _animDeath;
     _hitbox.removeFromParent();
-    _groundBox.collisionType = DCollisionType.inactive;
-    _ground.collisionType = DCollisionType.inactive;
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
@@ -288,15 +285,20 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       return;
     }
     super.update(dt);
-    if(_groundBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
-      parent = gameRef.gameMap.enemyOnPlayer;
+    if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
+      if(parent != gameRef.gameMap.enemyOnPlayer){
+        parent = gameRef.gameMap.enemyOnPlayer;
+      }
     }else{
-      parent = gameRef.gameMap.enemyComponent;
+      if(parent != gameRef.gameMap.enemyComponent){
+        parent = gameRef.gameMap.enemyComponent;
+      }
     }
+    position = groundBody?.position ?? Vector2.zero();
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    position += _speed * dt;
+    groundBody?.applyLinearImpulse(_speed * dt * 150);
   }
 
   @override

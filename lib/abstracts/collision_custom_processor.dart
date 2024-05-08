@@ -111,7 +111,7 @@ class DCollisionProcessor
             if(!entity.onComponentTypeCheck(other) && !other.onComponentTypeCheck(entity)) {
               continue;
             }
-            _calcTwoEntities(entity, other, other is MapObstacle);
+            _calcTwoEntities(entity, other, false);
           }
         }
       }
@@ -132,20 +132,6 @@ class DCollisionProcessor
             continue;
           }
           if(!listOfList[key][i].onComponentTypeCheck(listOfList[key][j]) && !listOfList[key][j].onComponentTypeCheck(listOfList[key][i])){
-            continue;
-          }
-          if(listOfList[key][j] is MapObstacle){
-            if(listOfList[key][i].parent != null && listOfList[key][i].parent is KyrgyzEnemy && listOfList[key][j].onlyForPlayer){
-              continue;
-            }
-            _calcTwoEntities(listOfList[key][i], listOfList[key][j],true);
-            continue;
-          }
-          if(listOfList[key][i] is MapObstacle){
-            if(listOfList[key][j].parent != null && listOfList[key][j].parent is KyrgyzEnemy && listOfList[key][i].onlyForPlayer){
-              continue;
-            }
-            _calcTwoEntities(listOfList[key][j], listOfList[key][i],true);
             continue;
           }
           _calcTwoEntities(listOfList[key][j], listOfList[key][i],false);

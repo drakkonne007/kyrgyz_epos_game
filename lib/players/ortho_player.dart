@@ -48,6 +48,7 @@ final List<Vector2> _attack2ind2 = [
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>  implements MainPlayer
 {
+  OrthoPlayer({required super.position});
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
   late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong;
   final Vector2 _speed = Vector2.all(0);
@@ -61,6 +62,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool _isRun = false;
   Ground? groundRigidBody;
   double dumping = 8;
+
+  @override
+  void onRemove()
+  {
+    if(groundRigidBody != null){
+      game.world.destroyBody(groundRigidBody!);
+    }
+  }
 
   @override
   Future<void> onLoad() async
@@ -92,6 +101,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
     add(_weapon!);
     gameRef.playerData.statChangeTrigger.addListener(setNewEnergyCostForWeapon);
+    setGroundBody();
   }
 
   void setNewEnergyCostForWeapon()
@@ -104,10 +114,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
 
-  void setPosition(Vector2 pos)
+  void setGroundBody()
   {
     print('Set position orthoPlayer');
-
     if(groundRigidBody != null){
       game.world.destroyBody(groundRigidBody!);
     }
@@ -115,10 +124,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Vector2 tSize = Vector2(20,16);
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0.5);
     groundRigidBody = Ground(
-        BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true,
-            userData: BodyUserData(LoadedColumnRow(0,0), false)),
+        BodyDef(type: BodyType.dynamic, position: position, fixedRotation: true,
+            userData: BodyUserData(isStatic: false)),
         gameRef.world.physicsWorld,
-      isPlayer: true
     );
     groundRigidBody?.createFixture(fix);
     var world = game.world as DWorld;
@@ -127,10 +135,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     groundRigidBody?.linearDamping = dumping;
     groundRigidBody?.angularDamping = dumping;
     position = groundRigidBody?.position ?? Vector2.zero();
-    // MassData md = MassData();
-    // lastBody?.inertia = 1;
-    // md.mass = 60;
-    // lastBody?.setMassData(md);
   }
 
   @override

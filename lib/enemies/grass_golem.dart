@@ -4,11 +4,12 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
-import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -63,13 +64,11 @@ final List<Vector2> _hitBoxPoint = [
   Vector2(101 - 112,56  - 96),
 ];
 
-class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,KyrgyzEnemy
+class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
 {
   GrassGolem(this._startPos,this.spriteVariant);
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
-  late GroundHitBox _groundBox;
-  late Ground _ground;
   final Vector2 _spriteSheetSize = Vector2(224,192);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
@@ -107,19 +106,18 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     _hitbox = EnemyHitbox(_hitBoxPoint,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38)),obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
-    },
-        collisionType: DCollisionType.active,isSolid: true,isStatic: false, isLoop: true, game: gameRef);
-    add(_groundBox);
     _weapon = DefaultEnemyWeapon(
         _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = 3;
-    _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
-        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
-    _ground.onlyForPlayer = true;
-    add(_ground);
+    bodyDef.position = _startPos;
+    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))));
+    groundBody?.createFixture(fx);
+    // _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
+    //     , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
+    // _ground.onlyForPlayer = true;
+    // add(_ground);
     var defWep = DefaultEnemyWeapon(_hitBoxPoint, collisionType: DCollisionType.active, isSolid: false, isStatic: false
         , onStartWeaponHit: null, onEndWeaponHit: null, isLoop: true, game: game);
     add(defWep);
@@ -284,8 +282,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
     }
     animation = _animDeath;
     _hitbox.removeFromParent();
-    _groundBox.collisionType = DCollisionType.inactive;
-    _ground.collisionType = DCollisionType.inactive;
+    groundBody?.setActive(false);
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
@@ -302,7 +299,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Ky
       return;
     }
     super.update(dt);
-    if(_groundBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
+    if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
       parent = gameRef.gameMap.enemyOnPlayer;
     }else{
       parent = gameRef.gameMap.enemyComponent;

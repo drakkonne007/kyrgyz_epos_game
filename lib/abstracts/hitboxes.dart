@@ -406,37 +406,3 @@ class EnemyHitbox extends DCollisionEntity
     // TODO: implement onCollisionStart
   }
 }
-
-class GroundHitBox extends DCollisionEntity
-{
-
-  Function(Set<Vector2> intersectionPoints, DCollisionEntity other)? obstacleBehavoiurStart;
-
-  GroundHitBox(super.vertices, {required super.collisionType, super.isSolid
-    , required super.isStatic, required this.obstacleBehavoiurStart, super.isLoop, required super.game
-    ,  super.radius, super.isOnlyForStatic, });
-
-  @override
-  bool onComponentTypeCheck(DCollisionEntity other) {
-    if(other is MapObstacle) {
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
-  {
-    obstacleBehavoiurStart?.call(intersectionPoints,other);
-  }
-
-  @override void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other)
-  {
-    obstacleBehavoiurStart?.call(intersectionPoints,other);
-  }
-
-  @override
-  void onCollisionEnd(DCollisionEntity other) {
-    // TODO: implement onCollisionEnd
-  }
-}

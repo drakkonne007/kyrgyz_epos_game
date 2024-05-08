@@ -5,11 +5,12 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
-import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -23,8 +24,6 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
   late SpriteAnimation _animMove, _animIdle, _animAttack,_animAttack2, _animHurt, _animDeath;
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackShield, _animAttack2Shield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
   late EnemyHitbox _hitbox;
-  late GroundHitBox _groundBox;
-  late Ground _ground;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
@@ -136,16 +135,10 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21)) ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
-    },
-        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_groundBox);
-    // _groundBox.debugColor = BasicPalette.red.color;
-    _ground = Ground(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21))
-        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
-    _ground.onlyForPlayer = true;
-    add(_ground);
+    bodyDef.position = _startPos;
+    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21))));
+    groundBody?.createFixture(fx);
     add(TimerComponent(onTick: () {
       if (!checkIsNeedSelfRemove(position.x ~/
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
@@ -174,6 +167,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     animation = null;
     _speed.x = 0;
     _speed.y = 0;
+    groundBody?.clearForces();
     _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(_variantOfHit == 0){
       animation = _withShieldNow ? _animAttackShield : _animAttack;
@@ -293,6 +287,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
       if(animation != _animIdle && animation != _animIdleShield){
         _speed.x = 0;
         _speed.y = 0;
+        groundBody?.clearForces();
         animation = _withShieldNow ? _animIdleShield : _animIdle;
       }
     }
@@ -330,6 +325,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
         if(rand == 0){
           _speed.x = 0;
           _speed.y = 0;
+          groundBody?.clearForces();
           animation = _animBlock;
           animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
           animationTicker?.onComplete = selectBehaviour;
@@ -349,6 +345,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
           _withShieldNow = false;
           _speed.x = 0;
           _speed.y = 0;
+          groundBody?.clearForces();
           animation = _animThrowShield;
           animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
           animationTicker?.onComplete = selectBehaviour;
@@ -366,9 +363,9 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
   {
     _speed.x = 0;
     _speed.y = 0;
+    groundBody?.clearForces();
+    groundBody?.setActive(false);
     _hitbox.removeFromParent();
-    _groundBox.collisionType = DCollisionType.inactive;
-    _ground.collisionType = DCollisionType.inactive;
     // removeAll(children);
     if(loots.isNotEmpty) {
       if (loots.length > 1) {
@@ -404,14 +401,15 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
       return;
     }
     super.update(dt);
-    if(_groundBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
+    if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
       parent = gameRef.gameMap.enemyOnPlayer;
     }else{
       parent = gameRef.gameMap.enemyComponent;
     }
+    position = groundBody?.position ?? Vector2.zero();
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      position += _speed * dt;
+      groundBody?.applyLinearImpulse(_speed * dt * 150);
     }
   }
 }

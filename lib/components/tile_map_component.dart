@@ -6,7 +6,6 @@ import 'package:flame_forge2d/flame_forge2d.dart' as forge2d;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/MapNode.dart';
@@ -157,7 +156,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
                 for( int i = 0; i < temp.length - 1; i++) {
                   final shape = forge2d.EdgeShape()..set(temp[i], temp[i + 1]);
                   final fixtureDef = forge2d.FixtureDef(shape, friction: 0,);
-                  forgeWorld.createBody(forge2d.BodyDef(userData: BodyUserData(LoadedColumnRow(i,j),true))).createFixture(fixtureDef);
+                  forgeWorld.createBody(forge2d.BodyDef(userData: BodyUserData(isStatic: true))).createFixture(fixtureDef);
                 }
                 // var ground = Ground(temp, collisionType: DCollisionType.passive,
                 //     isSolid: false,
@@ -177,11 +176,10 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     // print(grounds.length);
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
-        orthoPlayer = OrthoPlayer();
+        orthoPlayer = OrthoPlayer(position: gameRef.playerData.startLocation);
         await playerLayout.add(orthoPlayer!);
         await orthoPlayer!.loaded;
       }
-      orthoPlayer?.setPosition(gameRef.playerData.startLocation);
     }else{
       if(frontPlayer == null){
         frontPlayer = FrontPlayer();
