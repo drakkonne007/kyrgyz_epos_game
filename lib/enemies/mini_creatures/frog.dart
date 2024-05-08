@@ -86,7 +86,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     chooseMove();
 
     _groundHitBox = GroundHitBox(getPointsForActivs(Vector2.all(-7), Vector2.all(15)),collisionType: DCollisionType.active
-        ,isSolid: false,isStatic: false,isLoop: true,obstacleBehavoiurStart: _obstacle, game: gameRef, isOnlyForStatic: true);
+        ,isSolid: false,isQuadOptimizaion: false,isLoop: true,obstacleBehavoiurStart: _obstacle, game: gameRef, isOnlyForStatic: true);
     add(_groundHitBox);
   }
 

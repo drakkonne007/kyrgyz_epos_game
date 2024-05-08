@@ -22,7 +22,6 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
-  GroundHitBox? groundBox;
   bool _isPlayerRun = false;
   PlayerWeapon? _weapon;
   Timer? _timerHurt;
@@ -55,7 +54,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     add(hitBox!);
     groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
         obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: false,isStatic: false, isLoop: true, game: gameRef);
+        collisionType: DCollisionType.active, isSolid: false,isQuadOptimizaion: false, isLoop: true, game: gameRef);
     add(groundBox!);
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);

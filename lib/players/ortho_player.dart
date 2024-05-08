@@ -122,10 +122,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     Vector2 tPos = positionOfAnchor(anchor) - Vector2(11,-10);
     Vector2 tSize = Vector2(20,16);
-    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)), friction: 0.5);
+    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)));
     groundRigidBody = Ground(
         BodyDef(type: BodyType.dynamic, position: position, fixedRotation: true,
-            userData: BodyUserData(isStatic: false)),
+            userData: BodyUserData(isQuadOptimizaion: false)),
         gameRef.world.physicsWorld,
     );
     groundRigidBody?.createFixture(fix);

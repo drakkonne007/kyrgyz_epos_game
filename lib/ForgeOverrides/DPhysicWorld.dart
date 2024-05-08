@@ -6,9 +6,9 @@ import 'package:game_flame/components/tile_map_component.dart';
 
 class BodyUserData
 {
-  BodyUserData({this.loadedColumnRow, this.isStatic = true});
+  BodyUserData({this.loadedColumnRow, this.isQuadOptimizaion = true});
   LoadedColumnRow? loadedColumnRow;
-  bool isStatic;
+  bool isQuadOptimizaion;
 }
 
 class UpWorld extends Forge2DWorld
@@ -133,7 +133,7 @@ class DWorld extends World
     final body = Body(def, this);
     if(def.userData != null && def.userData is BodyUserData){
       var data = def.userData as BodyUserData;
-      if(data.isStatic){
+      if(data.isQuadOptimizaion){
         assert(data.loadedColumnRow != null);
         allEls.putIfAbsent(data.loadedColumnRow!, () => []);
         allEls[data.loadedColumnRow]!.add(body);
@@ -148,7 +148,7 @@ class DWorld extends World
   {
     if(body.userData != null && body.userData is BodyUserData){
       var data = body.userData as BodyUserData;
-      if(data.isStatic){
+      if(data.isQuadOptimizaion){
         assert(data.loadedColumnRow != null);
         allEls.putIfAbsent(data.loadedColumnRow!, () => []);
         allEls[data.loadedColumnRow]!.add(body);
@@ -186,7 +186,7 @@ class DWorld extends World
     }
     if(body.userData != null && body.userData is BodyUserData){
       var data = body.userData as BodyUserData;
-      if(data.isStatic){
+      if(data.isQuadOptimizaion){
         assert(data.loadedColumnRow != null);
         allEls.putIfAbsent(data.loadedColumnRow!, () => []);
         allEls[data.loadedColumnRow]?.remove(body);

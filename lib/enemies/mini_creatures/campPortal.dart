@@ -84,9 +84,9 @@ class CampPortalDown extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     ,autoTrigger: false);
     add(obj);
     
-    Ground ground = Ground(points, collisionType: DCollisionType.active,isSolid:false,isLoop:true,gameKyrgyz:gameRef,isStatic:false);
+    Ground ground = Ground(points, collisionType: DCollisionType.active,isSolid:false,isLoop:true,gameKyrgyz:gameRef,isQuadOptimizaion:false);
     add(ground);
-    ground = Ground(points2, collisionType: DCollisionType.active,isSolid:false,isLoop:true,gameKyrgyz:gameRef,isStatic:false);
+    ground = Ground(points2, collisionType: DCollisionType.active,isSolid:false,isLoop:true,gameKyrgyz:gameRef,isQuadOptimizaion:false);
     add(ground);
   }
 

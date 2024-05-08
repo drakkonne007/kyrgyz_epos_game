@@ -156,7 +156,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
                 for( int i = 0; i < temp.length - 1; i++) {
                   final shape = forge2d.EdgeShape()..set(temp[i], temp[i + 1]);
                   final fixtureDef = forge2d.FixtureDef(shape, friction: 0,);
-                  forgeWorld.createBody(forge2d.BodyDef(userData: BodyUserData(isStatic: true))).createFixture(fixtureDef);
+                  forgeWorld.createBody(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true))).createFixture(fixtureDef);
                 }
                 // var ground = Ground(temp, collisionType: DCollisionType.passive,
                 //     isSolid: false,

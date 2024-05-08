@@ -172,6 +172,6 @@ mixin KyrgyzEnemy
   List<Item> loots = [];
   Map<MagicDamage,int> magicDamages = {};
   Ground? groundBody;
-  BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isStatic: false),linearDamping: 6,
+  BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isQuadOptimizaion: false),linearDamping: 6,
   angularDamping: 6,fixedRotation: true);
 }

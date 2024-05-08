@@ -5,11 +5,11 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
-import 'package:game_flame/Obstacles/ground.dart';
 import 'package:game_flame/abstracts/enemy.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/enemies/skeleton.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
@@ -24,8 +24,6 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   late SpriteAnimation _animMove, _animIdle, _animAttackStart,_animAttackEnd,_animAttackLong, _animHurt, _animDeath;
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
   late EnemyHitbox _hitbox;
-  late GroundHitBox _groundBox;
-  late Ground _ground;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
@@ -103,16 +101,10 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    _groundBox = GroundHitBox(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16)) ,obstacleBehavoiurStart: (Set<Vector2> intersectionPoints, DCollisionEntity other){
-      obstacleBehaviour(intersectionPoints, other, _groundBox, this);
-    },
-        collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_groundBox);
-    // _groundBox.debugColor = BasicPalette.red.color;
-    _ground = Ground(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16))
-        , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
-    _ground.onlyForPlayer = true;
-    add(_ground);
+    bodyDef.position = _startPos;
+    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16))));
+    groundBody?.createFixture(fx);
     add(TimerComponent(onTick: () {
       if (!checkIsNeedSelfRemove(position.x ~/
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
@@ -231,6 +223,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     }
     _speed.x = 0;
     _speed.y = 0;
+    groundBody?.clearForces();
     if(isNearPlayer()){
       animation = _withShieldNow ? _animAttackStartShield : _animAttackStart;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
@@ -273,6 +266,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
         if(rand == 0){
           _speed.x = 0;
           _speed.y = 0;
+          groundBody?.clearForces();
           animation = _animBlock;
           animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
           animationTicker?.onComplete = selectBehaviour;
@@ -292,6 +286,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
           _withShieldNow = false;
           _speed.x = 0;
           _speed.y = 0;
+          groundBody?.clearForces();
           animation = _animThrowShield;
           animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
           animationTicker?.onComplete = selectBehaviour;
@@ -309,8 +304,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   {
     _speed.x = 0;
     _speed.y = 0;
+    groundBody?.clearForces();
+    groundBody?.setActive(false);
     _hitbox.removeFromParent();
-    _ground.collisionType = DCollisionType.inactive;
     // removeAll(children);
     if(loots.isNotEmpty) {
       if(loots.length > 1){
@@ -345,17 +341,16 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     }
     super.update(dt);
     if(!isHigh) {
-      if (_groundBox
-          .getMaxVector()
-          .y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y) {
+      if (_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y) {
         parent = gameRef.gameMap.enemyOnPlayer;
       } else {
         parent = gameRef.gameMap.enemyComponent;
       }
     }
+    position = groundBody?.position ?? Vector2.zero();
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      position += _speed * dt;
+      groundBody?.applyLinearImpulse(_speed * dt * 150);
     }
   }
 }

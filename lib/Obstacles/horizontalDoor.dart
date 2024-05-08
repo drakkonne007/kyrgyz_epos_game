@@ -57,7 +57,7 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   Body? ground;
   bool _isOpened = false;
   late SpriteAnimation _animClosed, _animOpening, _animOpened;
-  final BodyDef bf = BodyDef(userData: BodyUserData(isStatic: false));
+  final BodyDef bf = BodyDef(userData: BodyUserData(isQuadOptimizaion: false));
 
   @override
   Future onLoad() async
