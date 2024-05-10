@@ -2,8 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:game_flame/Obstacles/ground.dart';
-import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -49,7 +49,14 @@ class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
     Vector2 tSize = Vector2(43, 67);
     Vector2 tPos = Vector2(-24, -60);
-    _groundBox = Ground([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)],collisionType: DCollisionType.passive,isQuadOptimizaion: false, isSolid: false, isLoop: true, gameKyrgyz: gameRef);
-    add(_groundBox);
+    BodyDef bf = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos);
+    FixtureDef ft = FixtureDef(PolygonShape()..set([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)]));
+    _groundBox = Ground(bf,gameRef.world.physicsWorld);
+    _groundBox.createFixture(ft);
+  }
+
+  @override
+  void onRemove() {
+    gameRef.world.destroyBody(_groundBox);
   }
 }

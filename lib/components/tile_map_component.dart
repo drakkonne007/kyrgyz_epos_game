@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/components/cached_utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
@@ -155,8 +156,13 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
               if (temp.length > 1) {
                 for( int i = 0; i < temp.length - 1; i++) {
                   final shape = forge2d.EdgeShape()..set(temp[i], temp[i + 1]);
-                  final fixtureDef = forge2d.FixtureDef(shape, friction: 0,);
-                  forgeWorld.createBody(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true))).createFixture(fixtureDef);
+                  final fixtureDef = forge2d.FixtureDef(shape);
+                  Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld).createFixture(fixtureDef);
+                }
+                if(obj.getAttribute('lp')! == '1'){
+                  final shape = forge2d.EdgeShape()..set(temp.last, temp.first);
+                  final fixtureDef = forge2d.FixtureDef(shape);
+                  Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld).createFixture(fixtureDef);
                 }
                 // var ground = Ground(temp, collisionType: DCollisionType.passive,
                 //     isSolid: false,

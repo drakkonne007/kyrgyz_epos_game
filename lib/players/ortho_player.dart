@@ -66,6 +66,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void onRemove()
   {
+    print('destrou Player');
     if(groundRigidBody != null){
       game.world.destroyBody(groundRigidBody!);
     }
@@ -129,9 +130,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.world.physicsWorld,
     );
     groundRigidBody?.createFixture(fix);
-    var world = game.world as DWorld;
-    world.addCustomBody(groundRigidBody!);
-    // groundRigidBody = game.world.createBody(BodyDef(type: BodyType.dynamic, position:pos, fixedRotation: true, userData: BodyUserData(LoadedColumnRow(0,0), false)))..createFixture(fix);
     groundRigidBody?.linearDamping = dumping;
     groundRigidBody?.angularDamping = dumping;
     position = groundRigidBody?.position ?? Vector2.zero();

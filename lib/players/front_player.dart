@@ -52,10 +52,10 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
-    groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
-        obstacleBehavoiurStart: groundCalcLines,
-        collisionType: DCollisionType.active, isSolid: false,isQuadOptimizaion: false, isLoop: true, game: gameRef);
-    add(groundBox!);
+    // groundBox = GroundHitBox(getPointsForActivs(tPos,tSize),
+    //     obstacleBehavoiurStart: groundCalcLines,
+    //     collisionType: DCollisionType.active, isSolid: false,isQuadOptimizaion: false, isLoop: true, game: gameRef);
+    // add(groundBox!);
     tPos = positionOfAnchor(anchor) - Vector2(10,10);
     tSize = Vector2(20,20);
     _weapon = WSword(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
@@ -94,7 +94,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void reInsertFullActiveHitBoxes()
   {
     hitBox!.reInsertIntoCollisionProcessor();
-    groundBox!.reInsertIntoCollisionProcessor();
+    // groundBox!.reInsertIntoCollisionProcessor();
     _weapon!.reInsertIntoCollisionProcessor();
     _velocity.x = 0;
     _velocity.y = 0;
@@ -271,118 +271,119 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void groundCalcLines(Set<Vector2> points, DCollisionEntity other)
   {
-    if(groundBox == null){
-      return;
-    }
-    Map<Vector2,AxesDiff> diffs = {};
-    bool isUp = false;
-    bool isDown = false;
-    bool isLeft = false;
-    bool isRight = false;
-    double maxLeft = 0;
-    double maxRight = 0;
-    double maxUp = 0;
-    double maxDown = 0;
-
-
-
-    for(final point in points){
-
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-      if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
-        continue;
-      }
-
-      double leftDiffX  = point.x - groundBox!.getMinVector().x;
-      double rightDiffX = point.x - groundBox!.getMaxVector().x;
-      double upDiffY = point.y - groundBox!.getMinVector().y;
-      double downDiffY = point.y - groundBox!.getMaxVector().y;
-
-      // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
-
-      diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
-      double minDiff = min(leftDiffX.abs(),rightDiffX.abs());
-      minDiff = min(minDiff,upDiffY.abs());
-      minDiff = min(minDiff,downDiffY.abs());
-      if(minDiff == leftDiffX.abs()){
-        isLeft = true;
-        maxLeft = max(maxLeft,minDiff);
-      }
-      if(minDiff == rightDiffX.abs()){
-        isRight = true;
-        maxRight = max(maxRight,minDiff);
-      }
-      if(minDiff == upDiffY.abs()){
-        isUp = true;
-        maxUp = max(maxUp,minDiff);
-        _velocity.y = 0;
-        _speed.y = 0;
-      }
-      if(minDiff == downDiffY.abs()){
-        _onGround = true;
-        _groundTimer = 0;
-        _speed.y = min(0,_speed.y);
-        isDown = true;
-        maxDown = max(maxDown,minDiff);
-      }
-    }
-
-    if(isDown && isUp && isLeft && isRight){
-      print('What is??');
-      return;
-    }
-
-    if(isDown && isUp){
-      double maxLeft = 1000000000;
-      double maxRight = 1000000000;
-      for(final diff in diffs.values){
-        maxLeft = min(maxLeft,diff.leftDiff.abs());
-        maxRight = min(maxRight,diff.rightDiff.abs());
-      }
-      if(maxLeft > maxRight){
-        position -= Vector2(maxRight,0);
-      }else{
-        position += Vector2(maxLeft,0);
-      }
-      return;
-    }
-    if(isLeft && isRight){
-      double maxUp = 100000000;
-      double maxDown = 100000000;
-      for(final diff in diffs.values){
-        maxUp = min(maxUp,diff.upDiff.abs());
-        maxDown = min(maxDown,diff.downDiff.abs());
-      }
-      if(maxUp > maxDown){
-        position -= Vector2(0,maxDown);
-      }else{
-        position += Vector2(0,maxUp);
-      }
-      return;
-    }
-
-    // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
-
-    if(isLeft){
-      position +=  Vector2(maxLeft,0);
-    }
-    if(isRight){
-      position -=  Vector2(maxRight,0);
-    }
-    if(isUp){
-      position +=  Vector2(0,maxUp);
-    }
-    if(isDown){
-      position -=  Vector2(0,maxDown);
-    }
+    return;
+    // if(groundBox == null){
+    //   return;
+    // }
+    // Map<Vector2,AxesDiff> diffs = {};
+    // bool isUp = false;
+    // bool isDown = false;
+    // bool isLeft = false;
+    // bool isRight = false;
+    // double maxLeft = 0;
+    // double maxRight = 0;
+    // double maxUp = 0;
+    // double maxDown = 0;
+    //
+    //
+    //
+    // for(final point in points){
+    //
+    //   if(Vector2(groundBox!.getMinVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+    //     continue;
+    //   }
+    //   if(Vector2(groundBox!.getMinVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+    //     continue;
+    //   }
+    //   if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMaxVector().y).distanceToSquared(point) < 4){
+    //     continue;
+    //   }
+    //   if(Vector2(groundBox!.getMaxVector().x,groundBox!.getMinVector().y).distanceToSquared(point) < 4){
+    //     continue;
+    //   }
+    //
+    //   double leftDiffX  = point.x - groundBox!.getMinVector().x;
+    //   double rightDiffX = point.x - groundBox!.getMaxVector().x;
+    //   double upDiffY = point.y - groundBox!.getMinVector().y;
+    //   double downDiffY = point.y - groundBox!.getMaxVector().y;
+    //
+    //   // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
+    //
+    //   diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
+    //   double minDiff = min(leftDiffX.abs(),rightDiffX.abs());
+    //   minDiff = min(minDiff,upDiffY.abs());
+    //   minDiff = min(minDiff,downDiffY.abs());
+    //   if(minDiff == leftDiffX.abs()){
+    //     isLeft = true;
+    //     maxLeft = max(maxLeft,minDiff);
+    //   }
+    //   if(minDiff == rightDiffX.abs()){
+    //     isRight = true;
+    //     maxRight = max(maxRight,minDiff);
+    //   }
+    //   if(minDiff == upDiffY.abs()){
+    //     isUp = true;
+    //     maxUp = max(maxUp,minDiff);
+    //     _velocity.y = 0;
+    //     _speed.y = 0;
+    //   }
+    //   if(minDiff == downDiffY.abs()){
+    //     _onGround = true;
+    //     _groundTimer = 0;
+    //     _speed.y = min(0,_speed.y);
+    //     isDown = true;
+    //     maxDown = max(maxDown,minDiff);
+    //   }
+    // }
+    //
+    // if(isDown && isUp && isLeft && isRight){
+    //   print('What is??');
+    //   return;
+    // }
+    //
+    // if(isDown && isUp){
+    //   double maxLeft = 1000000000;
+    //   double maxRight = 1000000000;
+    //   for(final diff in diffs.values){
+    //     maxLeft = min(maxLeft,diff.leftDiff.abs());
+    //     maxRight = min(maxRight,diff.rightDiff.abs());
+    //   }
+    //   if(maxLeft > maxRight){
+    //     position -= Vector2(maxRight,0);
+    //   }else{
+    //     position += Vector2(maxLeft,0);
+    //   }
+    //   return;
+    // }
+    // if(isLeft && isRight){
+    //   double maxUp = 100000000;
+    //   double maxDown = 100000000;
+    //   for(final diff in diffs.values){
+    //     maxUp = min(maxUp,diff.upDiff.abs());
+    //     maxDown = min(maxDown,diff.downDiff.abs());
+    //   }
+    //   if(maxUp > maxDown){
+    //     position -= Vector2(0,maxDown);
+    //   }else{
+    //     position += Vector2(0,maxUp);
+    //   }
+    //   return;
+    // }
+    //
+    // // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
+    //
+    // if(isLeft){
+    //   position +=  Vector2(maxLeft,0);
+    // }
+    // if(isRight){
+    //   position -=  Vector2(maxRight,0);
+    // }
+    // if(isUp){
+    //   position +=  Vector2(0,maxUp);
+    // }
+    // if(isDown){
+    //   position -=  Vector2(0,maxDown);
+    // }
   }
 
   @override

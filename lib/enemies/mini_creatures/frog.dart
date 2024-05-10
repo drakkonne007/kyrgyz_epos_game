@@ -3,7 +3,10 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'dart:math' as math;
 
@@ -17,7 +20,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   late SpriteAnimation _idle1, _idle2, _idle3, _idle4, _idle5, _idle6, _walkForward, _walkBack, _wolkSide;
   final Vector2 _speed = Vector2.all(0);
   final double _velocity = 70;
-  late GroundHitBox _groundHitBox;
+  late Ground _groundHitBox;
   bool _isMove = false;
 
   @override onLoad() async
@@ -85,9 +88,10 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _idles.add(_idle6);
     chooseMove();
 
-    _groundHitBox = GroundHitBox(getPointsForActivs(Vector2.all(-7), Vector2.all(15)),collisionType: DCollisionType.active
-        ,isSolid: false,isQuadOptimizaion: false,isLoop: true,obstacleBehavoiurStart: _obstacle, game: gameRef, isOnlyForStatic: true);
-    add(_groundHitBox);
+    BodyDef bf = BodyDef(type: BodyType.dynamic,position: _startPos,userData: BodyUserData(isQuadOptimizaion: false), linearDamping: 6, angularDamping: 6);
+    _groundHitBox = Ground(bf, gameRef.world.physicsWorld,isOnlyForStatic: true,onGroundCollision: _obstacle);
+    _groundHitBox.createFixture(FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2.all(-7), Vector2.all(15)))));
+    position = _groundHitBox.position;
   }
 
   void regulMove(int index)
@@ -107,100 +111,15 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 1 || diffRow > 1){
       gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      gameRef.world.destroyBody(_groundHitBox);
       removeFromParent();
     }
   }
 
-  void _obstacle(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  void _obstacle(Object other, Contact contact)
   {
-    Map<Vector2,AxesDiff> diffs = {};
-    bool isUp = false;
-    bool isDown = false;
-    bool isLeft = false;
-    bool isRight = false;
-    double maxLeft = 0;
-    double maxRight = 0;
-    double maxUp = 0;
-    double maxDown = 0;
 
-    for(final point in intersectionPoints){
-      double leftDiffX  = point.x - _groundHitBox.getMinVector().x;
-      double rightDiffX = point.x - _groundHitBox.getMaxVector().x;
-      double upDiffY = point.y - _groundHitBox.getMinVector().y;
-      double downDiffY = point.y - _groundHitBox.getMaxVector().y;
 
-      // print('diffs: $leftDiffX $rightDiffX $upDiffY $downDiffY');
-
-      diffs.putIfAbsent(point, () => AxesDiff(leftDiffX,rightDiffX,upDiffY,downDiffY));
-      double minDiff = math.min(leftDiffX.abs(),rightDiffX.abs());
-      minDiff = math.min(minDiff,upDiffY.abs());
-      minDiff = math.min(minDiff,downDiffY.abs());
-      if(minDiff == leftDiffX.abs()){
-        isLeft = true;
-        maxLeft = math.max(maxLeft,minDiff);
-      }
-      if(minDiff == rightDiffX.abs()){
-        isRight = true;
-        maxRight = math.max(maxRight,minDiff);
-      }
-      if(minDiff == upDiffY.abs()){
-        isUp = true;
-        maxUp = math.max(maxUp,minDiff);
-      }
-      if(minDiff == downDiffY.abs()){
-        isDown = true;
-        maxDown = math.max(maxDown,minDiff);
-      }
-    }
-
-    if(isDown && isUp && isLeft && isRight){
-      print('What is??');
-      return;
-    }
-
-    if(isDown && isUp){
-      double maxLeft = 1000000000;
-      double maxRight = 1000000000;
-      for(final diff in diffs.values){
-        maxLeft = math.min(maxLeft,diff.leftDiff.abs());
-        maxRight = math.min(maxRight,diff.rightDiff.abs());
-      }
-      if(maxLeft > maxRight){
-        position -= Vector2(maxRight,0);
-      }else{
-        position += Vector2(maxLeft,0);
-      }
-      return;
-    }
-    if(isLeft && isRight){
-      double maxUp = 100000000;
-      double maxDown = 100000000;
-      for(final diff in diffs.values){
-        maxUp = math.min(maxUp,diff.upDiff.abs());
-        maxDown = math.min(maxDown,diff.downDiff.abs());
-      }
-      if(maxUp > maxDown){
-        position -= Vector2(0,maxDown);
-      }else{
-        position += Vector2(0,maxUp);
-      }
-      return;
-    }
-
-    // print('maxs: $maxLeft $maxRight $maxUp $maxDown');
-
-    if(isLeft){
-      position +=  Vector2(maxLeft,0);
-    }
-    if(isRight){
-      position -=  Vector2(maxRight,0);
-    }
-    if(isUp){
-      position +=  Vector2(0,maxUp);
-    }
-    if(isDown){
-      position -=  Vector2(0,maxDown);
-    }
   }
 
   void chooseMove()
@@ -250,8 +169,9 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @override
   void update(double dt) {
     super.update(dt);
+    position = _groundHitBox.position;
     if(_isMove) {
-      position += _speed * dt;
+      _groundHitBox.applyLinearImpulse(_speed * dt * 150);
     }
   }
 }

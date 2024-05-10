@@ -129,7 +129,6 @@ class DWorld extends World
   Body createBody(BodyDef def)
   {
     assert(!isLocked);
-
     final body = Body(def, this);
     if(def.userData != null && def.userData is BodyUserData){
       var data = def.userData as BodyUserData;
@@ -140,6 +139,8 @@ class DWorld extends World
       }else{
         activeBody.add(body);
       }
+    }else{
+      activeBody.add(body);
     }
     return body;
   }
@@ -155,6 +156,8 @@ class DWorld extends World
       }else{
         activeBody.add(body);
       }
+    }else{
+      activeBody.add(body);
     }
   }
 

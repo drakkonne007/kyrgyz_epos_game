@@ -3,8 +3,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:game_flame/Obstacles/ground.dart';
+import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class CampPortalUp extends SpriteAnimationComponent
@@ -40,6 +42,8 @@ class CampPortalDown extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
 
   CampPortalDown(this._startPos);
   final Vector2 _startPos;
+  late Ground firstGround;
+  late Ground secGround;
 
   @override onLoad() async
   {
@@ -83,12 +87,23 @@ class CampPortalDown extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     collisionType: DCollisionType.active,isSolid:true,isLoop:true,game:gameRef,isStatic:false, obstacleBehavoiur: openCampTeleportMenu
     ,autoTrigger: false);
     add(obj);
-    
-    Ground ground = Ground(points, collisionType: DCollisionType.active,isSolid:false,isLoop:true,gameKyrgyz:gameRef,isQuadOptimizaion:false);
-    add(ground);
-    ground = Ground(points2, collisionType: DCollisionType.active,isSolid:false,isLoop:true,gameKyrgyz:gameRef,isQuadOptimizaion:false);
-    add(ground);
+
+    BodyDef bd = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos);
+    firstGround = Ground(bd, gameRef.world.physicsWorld);
+    firstGround.createFixture(FixtureDef(PolygonShape()..set(points)));
+    BodyDef bd2 = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos);
+    secGround = Ground(bd2, gameRef.world.physicsWorld);
+    secGround.createFixture(FixtureDef(PolygonShape()..set(points2)));
   }
+
+  @override
+  void onRemove()
+  {
+    gameRef.world.destroyBody(firstGround);
+    gameRef.world.destroyBody(secGround);
+  }
+
+
 
   void openCampTeleportMenu()
   {

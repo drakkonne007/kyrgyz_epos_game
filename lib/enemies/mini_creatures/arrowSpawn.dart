@@ -83,33 +83,33 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
       case ArrowDirection.left:
         position.x -= size.x/2;
         angle = -math.pi/2;
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.x = -PhysicVals.maxSpeed - 40;
         break;
       case ArrowDirection.right:
         position.x += size.x/2;
         angle = math.pi/2;
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.x = PhysicVals.maxSpeed + 40;
         break;
       case ArrowDirection.down:
         position.y += size.y/2;
         flipVertically();
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.y = PhysicVals.maxSpeed + 40;
         break;
       default:
         position.y -= size.y/2;
-        _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
+        // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
         _speed.y = -PhysicVals.maxSpeed - 40;
         break;
     }
     _grBox.isOnlyForStatic = true;
-    add(_grBox);
+    // add(_grBox);
     add(_weapon);
     _weapon.damage = 5;
   }
@@ -128,7 +128,7 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
   {
     _speed.x = 0;
     _speed.y = 0;
-    _grBox.collisionType = DCollisionType.inactive;
+    // _grBox.collisionType = DCollisionType.inactive;
     add(OpacityEffect.by(-1,EffectController(duration: 0.5),onComplete: (){
       removeFromParent();
     }));
