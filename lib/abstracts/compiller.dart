@@ -13,21 +13,17 @@ import 'package:game_flame/components/tile_map_component.dart';
 Future precompileAll() async
 {
   final listOfFullMaps = fullMapsForPreCompille();
-  for (final bigWorlds in listOfFullMaps) {
+  for(final bigWorlds in listOfFullMaps) {
     Directory dir = Directory('assets/metaData/${bigWorlds.nameForGame}');
-    if (dir.existsSync()) {
+    if(dir.existsSync()){
       dir.deleteSync(recursive: true);
     }
     dir.createSync(recursive: true);
   }
   for (final bigWorld in listOfFullMaps) {
-    Set<GroundSource> onlyGround = {};
     print('start compile ${bigWorld.nameForGame}');
     var fileName = bigWorld.source;
-    var tiled = await TiledComponent.load(
-        fileName, Vector2.all(320), prefix: 'assets/',
-        atlasMaxX: 999999,
-        atlasMaxY: 999999);
+    var tiled = await TiledComponent.load(fileName, Vector2.all(320), prefix: 'assets/', atlasMaxX: 999999,atlasMaxY: 999999);
     var layersLists = tiled.tileMap.map.layers;
     MySuperAnimCompiler compilerAnimationBack = MySuperAnimCompiler();
     MySuperAnimCompiler compilerAnimation = MySuperAnimCompiler();
@@ -55,8 +51,8 @@ Future precompileAll() async
             layersToLoad: [a.name]);
         compilerAnimation.addLayer();
       }
-      await compilerAnimation.compile('high', bigWorld);
-      await compilerAnimationBack.compile('down', bigWorld);
+      await compilerAnimation.compile('high',bigWorld);
+      await compilerAnimationBack.compile('down',bigWorld);
     }
     // internalHitBoxes = compilerAnimationBack.
     // tiled = await TiledComponent.load(fileName, Vector2.all(320));
@@ -94,13 +90,10 @@ Future precompileAll() async
                 }
               }
               if (newObjs != '') {
-                File file = File('assets/metaData/${bigWorld
-                    .nameForGame}/$cols-$rows.objXml');
+                File file = File('assets/metaData/${bigWorld.nameForGame}/$cols-$rows.objXml');
                 if (!loadedFiles.contains(
-                    'assets/metaData/${bigWorld
-                        .nameForGame}/$cols-$rows.objXml')) {
-                  loadedFiles.add('assets/metaData/${bigWorld
-                      .nameForGame}/$cols-$rows.objXml');
+                    'assets/metaData/${bigWorld.nameForGame}/$cols-$rows.objXml')) {
+                  loadedFiles.add('assets/metaData/${bigWorld.nameForGame}/$cols-$rows.objXml');
                   file.writeAsStringSync('<p>\n', mode: FileMode.append);
                 }
                 file.writeAsStringSync(newObjs, mode: FileMode.append);
@@ -109,12 +102,14 @@ Future precompileAll() async
           }
         }
         if (objs != null && true) {
+          Map<LoadedColumnRow, Set<GroundSource>> objsMap = {};
           for (final obj in objs.objects) {
-            bool isLoop = false;
-            List<Vector2> points = [];
             if (obj.name != '') {
               continue;
             }
+            bool isLoop = false;
+
+            List<Vector2> points = [];
             if (obj.isPolygon) {
               isLoop = true;
               for (final point in obj.polygon) {
@@ -133,53 +128,217 @@ Future precompileAll() async
               points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
               points.add(Vector2(obj.x + obj.width, obj.y));
             }
+            int minCol = bigWorld.gameConsts.maxColumn!;
+            int minRow = bigWorld.gameConsts.maxRow!;
+            int maxCol = 0;
+            int maxRow = 0;
+
+            for (final point in points) {
+              minCol =
+                  min(minCol, (point.x) ~/ (bigWorld.gameConsts.lengthOfTileSquare.x));
+              minRow =
+                  min(minRow, (point.y) ~/ (bigWorld.gameConsts.lengthOfTileSquare.y));
+              maxCol =
+                  max(maxCol, (point.x) ~/ (bigWorld.gameConsts.lengthOfTileSquare.x));
+              maxRow =
+                  max(maxRow, (point.y) ~/ (bigWorld.gameConsts.lengthOfTileSquare.y));
+            }
+            //Короче вначале проверяем две точки - если обе входят - идём дальше, Если только вторая - проверяем пересечение с предыдущей
+            //и добавляем вначале пересечение, потом вторую точку
+            //Если только первая - ищем пересечение с гранью и начинаем сначала
+            bool isReallyLoop = minCol == maxCol && minRow == maxRow &&
+                isLoop;
+            for (int currColInCycle = minCol; currColInCycle <=
+                maxCol; currColInCycle++) {
+              for (int currRowInCycle = minRow; currRowInCycle <=
+                  maxRow; currRowInCycle++) {
+                Vector2 topLeft = Vector2(
+                    currColInCycle * bigWorld.gameConsts.lengthOfTileSquare.x,
+                    currRowInCycle * bigWorld.gameConsts.lengthOfTileSquare.y);
+                Vector2 topRight = Vector2(
+                    (currColInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.x,
+                    currRowInCycle * bigWorld.gameConsts.lengthOfTileSquare.y);
+                Vector2 bottomLeft = Vector2(
+                    currColInCycle * bigWorld.gameConsts.lengthOfTileSquare.x,
+                    (currRowInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.y);
+                Vector2 bottomRight = Vector2(
+                    (currColInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.x,
+                    (currRowInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.y);
+
+                List<Vector2> coord = [];
+                for (int i = -1; i < points.length - 1; i++) {
+                  if (!isLoop && i == -1) {
+                    continue;
+                  }
+                  int tF, tS;
+                  if (i == -1) {
+                    tF = points.length - 1;
+                  } else {
+                    tF = i;
+                  }
+                  tS = i + 1;
+
+                  int col = points[tF].x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+                  int row = points[tF].y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+                  bool isFirst = false;
+                  if (col == currColInCycle && row == currRowInCycle) {
+                    coord.add(points[tF]);
+                    isFirst = true;
+                  }
+                  col = points[tS].x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+                  row = points[tS].y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+                  bool isSecond = false;
+                  if (col == currColInCycle && row == currRowInCycle) {
+                    coord.add(points[tS]);
+                    isSecond = true;
+                  }
+                  if (isFirst && isSecond) {
+                    continue;
+                  }
+                  List<Vector2> tempCoord = [];
+                  Vector2 answer = f_pointOfIntersect(
+                      topLeft, topRight, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  answer = f_pointOfIntersect(
+                      topRight, bottomRight, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  answer = f_pointOfIntersect(
+                      bottomRight, bottomLeft, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  answer = f_pointOfIntersect(
+                      bottomLeft, topLeft, points[tF], points[tS]);
+                  if (answer != Vector2.zero()) {
+                    tempCoord.add(answer);
+                  }
+                  if (isFirst && !isSecond) {
+                    coord.add(tempCoord[0]);
+                    GroundSource newPoints = GroundSource();
+                    newPoints.isLoop = false;
+                    newPoints.points = List.unmodifiable(coord);
+                    objsMap.putIfAbsent(
+                        LoadedColumnRow(
+                            currColInCycle, currRowInCycle), () => {});
+                    objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                        .add(newPoints);
+                    coord.clear();
+                  }
+                  if (isSecond && !isFirst) {
+                    Vector2 temp = coord.last;
+                    coord.last = tempCoord[0];
+                    coord.add(temp);
+                    GroundSource newPoints = GroundSource();
+                    newPoints.isLoop = false;
+                    newPoints.points = List.unmodifiable(coord);
+                    objsMap.putIfAbsent(
+                        LoadedColumnRow(
+                            currColInCycle, currRowInCycle), () => {});
+                    objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                        .add(newPoints);
+                    coord.clear();
+                    //Записываем всё что есть
+                  }
+                  if (!isFirst && !isSecond && tempCoord.length == 2) {
+                    if (points[tF].distanceToSquared(tempCoord.first) >
+                        points[tF].distanceToSquared(tempCoord.last)) {
+                      coord.clear();
+                      coord.add(tempCoord.last);
+                      coord.add(tempCoord.first);
+                      //Записываем всё что есть
+                    } else {
+                      coord.clear();
+                      coord.add(tempCoord.first);
+                      coord.add(tempCoord.last);
+                      //Записываем всё что есть
+                    }
+                    GroundSource newPoints = GroundSource();
+                    newPoints.isLoop = false;
+                    newPoints.points = List.unmodifiable(coord);
+                    objsMap.putIfAbsent(
+                        LoadedColumnRow(
+                            currColInCycle, currRowInCycle), () => {});
+                    objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                        .add(newPoints);
+                    coord.clear();
+                  }
+                }
+                if (coord.isNotEmpty) {
+                  if (coord.length == 1) {
+                    print('Error in calc $coord');
+                  }
+                  GroundSource newPoints = GroundSource();
+                  newPoints.isLoop = isReallyLoop;
+                  newPoints.points = List.unmodifiable(coord);
+                  objsMap.putIfAbsent(
+                      LoadedColumnRow(currColInCycle, currRowInCycle), () => {});
+                  objsMap[LoadedColumnRow(currColInCycle, currRowInCycle)]!
+                      .add(newPoints);
+                  coord.clear();
+                }
+              }
+            }
+          }
+          for(final keys in compilerAnimationBack.internalObjs.keys){
+            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
             GroundSource newPoints = GroundSource();
-            newPoints.isLoop = isLoop;
-            newPoints.points = List.unmodifiable(points);
-            onlyGround.add(newPoints);
+            newPoints.isLoop = false;
+            newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
+            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
+            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          }
+          for(final keys in compilerAnimationBack.internalObjsLoop.keys){
+            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+            GroundSource newPoints = GroundSource();
+            newPoints.isLoop = true;
+            newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjsLoop[keys]!);
+            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
+            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          }
+          compilerAnimationBack.internalObjs.clear();
+          compilerAnimationBack.internalObjsLoop.clear();
+
+
+          for (final key in objsMap.keys) {
+            File file = File(
+                'assets/metaData/${bigWorld.nameForGame}/${key.column}-${key.row}.objXml');
+            if (!loadedFiles.contains(
+                'assets/metaData/${bigWorld.nameForGame}/${key.column}-${key.row}.objXml')) {
+              file.writeAsStringSync('<p>\n', mode: FileMode.append);
+              loadedFiles.add(
+                  'assets/metaData/${bigWorld.nameForGame}/${key.column}-${key.row}.objXml');
+            }
+            for (int i = 0; i < objsMap[key]!.length; i++) {
+              if (objsMap[key]!.elementAt(i).points.length <= 1) {
+                continue;
+              }
+              file.writeAsStringSync('\n<o lp="${objsMap[key]!.elementAt(i).isLoop
+                  ? '1'
+                  : '0'}" nm="" p="', mode: FileMode.append);
+              for (int j = 0; j < objsMap[key]!.elementAt(i).points.length; j++) {
+                if (j > 0) {
+                  file.writeAsStringSync(' ', mode: FileMode.append);
+                }
+                file.writeAsStringSync('${objsMap[key]!.elementAt(i).points.toList()[j]
+                    .x},${objsMap[key]!.elementAt(i).points.toList()[j].y}',
+                    mode: FileMode.append);
+              }
+              file.writeAsStringSync('"/>', mode: FileMode.append);
+            }
           }
         }
       }
     }
+
     for (final key in loadedFiles) {
       File file = File(key);
       file.writeAsStringSync('\n</p>', mode: FileMode.append);
     }
-    for (final keys in compilerAnimationBack.internalObjs.keys) {
-      GroundSource newPoints = GroundSource();
-      newPoints.isLoop = false;
-      newPoints.points =
-          List.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
-      onlyGround.add(newPoints);
-    }
-    for (final keys in compilerAnimationBack.internalObjsLoop.keys) {
-      GroundSource newPoints = GroundSource();
-      newPoints.isLoop = true;
-      newPoints.points = List.unmodifiable(
-          compilerAnimationBack.internalObjsLoop[keys]!);
-      onlyGround.add(newPoints);
-    }
-    compilerAnimationBack.internalObjs.clear();
-    compilerAnimationBack.internalObjsLoop.clear();
-    File file = File('assets/metaData/${bigWorld.nameForGame}/${bigWorld.nameForGame}.grounds');
-    file.writeAsStringSync('<p>\n', mode: FileMode.write);
-    for(final obj in onlyGround) {
-      if (obj.points.length <= 1) {
-        continue;
-      }
-      file.writeAsStringSync('\n<o lp="${obj.isLoop
-          ? '1'
-          : '0'}" nm="" p="', mode: FileMode.append);
-      for (int j = 0; j < obj.points.length; j++) {
-        if (j > 0) {
-          file.writeAsStringSync(' ', mode: FileMode.append);
-        }
-        file.writeAsStringSync('${obj.points.toList()[j]
-            .x},${obj.points.toList()[j].y}',
-            mode: FileMode.append);
-      }
-      file.writeAsStringSync('"/>', mode: FileMode.append);
-    }
-    file.writeAsStringSync('\n</p>', mode: FileMode.append);
   }
 }

@@ -103,33 +103,20 @@ class DWorld extends World
     assert(!isLocked);
     bodies.clear();
     bodies.addAll(activeBody);
-    // int xCoord = _currentQuad.column - 1;
-    // int yCoord = _currentQuad.row - 1;
-    // int xEnd = xCoord + 2;
-    // int yEnd = yCoord + 2;
-    // for(xCoord;xCoord < xEnd;xCoord++){
-    //   for(yCoord;yCoord < yEnd;yCoord++){
-    //     allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body){
-    //       body.setActive(false);
-    //     });
-    //   }
-    // }
-    //
-    // xCoord = columnRow.column - 1;
-    // yCoord = columnRow.row - 1;
-    // xEnd = xCoord + 2;
-    // yEnd = yCoord + 2;
-    // for(xCoord;xCoord < xEnd;xCoord++){
-    //   for(yCoord;yCoord < yEnd;yCoord++){
-    //     allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body){
-    //       body.setActive(true);
-    //       bodies.add(body);
-    //     });
-    //   }
-    // }
-    // _currentQuad = columnRow;
-    // var tempBroad =  contactManager.broadPhase as MyBroadPhase;
-    // tempBroad.bodies = bodies;
+    int xCoord = columnRow.column - 3;
+    int yCoord = columnRow.row - 3;
+    int xEnd = xCoord + 3;
+    int yEnd = yCoord + 3;
+    for(xCoord;xCoord < xEnd;xCoord++){
+      for(yCoord;yCoord < yEnd;yCoord++){
+        allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body){
+          bodies.add(body);
+        });
+      }
+    }
+    _currentQuad = columnRow;
+    var tempBroad =  contactManager.broadPhase as MyBroadPhase;
+    tempBroad.bodies = List.unmodifiable(bodies);
   }
 
   void resetWorld()

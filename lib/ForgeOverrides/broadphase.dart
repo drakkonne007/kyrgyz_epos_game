@@ -1,9 +1,20 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
 
+class TreeHandler
+{
+  TreeHandler(this.aabb, this.userData);
+  AABB aabb;
+  Object userData;
+}
+
+
 class MyBroadPhase implements BroadPhase,TreeCallback
 {
 
   List<Body> bodies = [];
+  int count = 0;
+
+  Map<int,TreeHandler> _tree = {};
 
   MyBroadPhase()
   {
@@ -13,9 +24,10 @@ class MyBroadPhase implements BroadPhase,TreeCallback
 
   @override
   int createProxy(AABB aabb, Object userData) {
-    // TODO: implement createProxy
-    print('createProxy');
-    return 0;
+    int currentCount = count;
+    _tree[currentCount] = TreeHandler(aabb, userData);
+    count++;
+    return currentCount;
   }
 
   @override
@@ -31,7 +43,7 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   @override
   AABB fatAABB(int proxyId) {
     print('fatAABB');
-    return AABB();
+    return _tree[proxyId]?.aabb ?? AABB();
   }
 
   @override
@@ -54,13 +66,15 @@ class MyBroadPhase implements BroadPhase,TreeCallback
 
   @override
   Object? getUserData(int proxyId) {
-    print('getUserData my broadPhase');
-    return null;
+    return _tree[proxyId]?.userData;
   }
 
   @override
   void moveProxy(int proxyId, AABB aabb, Vector2 displacement) {
-    print('moveProxy');
+    _tree[proxyId]!.aabb.lowerBound.x += displacement.x;
+    _tree[proxyId]!.aabb.lowerBound.y += displacement.y;
+    _tree[proxyId]!.aabb.upperBound.x += displacement.x;
+    _tree[proxyId]!.aabb.upperBound.y += displacement.y;
   }
 
   @override
@@ -79,8 +93,19 @@ class MyBroadPhase implements BroadPhase,TreeCallback
 
   @override
   bool testOverlap(int proxyIdA, int proxyIdB) {
-    print('testOverlap my broadPhase');
     return true;
+    if(!_tree.containsKey(proxyIdA) || !_tree.containsKey(proxyIdB)){
+      return false;
+    }
+    final a = _tree[proxyIdA]!.aabb;
+    final b = _tree[proxyIdB]!.aabb;
+    if(a.lowerBound.x > b.upperBound.x || b.lowerBound.x > a.upperBound.x){
+      return false;
+    }
+    if(a.lowerBound.y > b.upperBound.y || b.lowerBound.y > a.upperBound.y){
+      return false;
+    }
+    return false;
   }
 
   @override
@@ -91,22 +116,53 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   @override
   void updatePairs(PairCallback callback)
   {
-    for(final body in bodies){
-      for(final body2 in bodies){
-        if(body == body2){
+    Set<int> removeList = {};
+    for(int i = 0; i < bodies.length; i++) {
+      for (int j = 0; j < bodies.length; j++) {
+        if(i == j || removeList.contains(j)){
           continue;
         }
+        removeList.add(i);
+        Body body = bodies[i];
+        Body body2 = bodies[j];
         if(body.bodyType == BodyType.static && body2.bodyType == BodyType.static){
           continue;
-        }else{
-          // FixtureProxy fp = FixtureProxy(body.fixtures.first);
-          // fp.aabb.set(body.fixtures.first.getAABB(0));
-          // FixtureProxy fp2 = FixtureProxy(body2.fixtures.first);
-          // fp2.aabb.set(body2.fixtures.first.getAABB(0));
-          callback.addPair(body.fixtures.first.userData, body2.fixtures.first.userData);
         }
+        FixtureProxy fp = FixtureProxy(body.fixtures.first);
+        fp.aabb.set(body.fixtures.first.getAABB(0));
+        FixtureProxy fp2 = FixtureProxy(body2.fixtures.first);
+        fp2.aabb.set(body2.fixtures.first.getAABB(0));
+        // if(fp.aabb.lowerBound.x > fp2.aabb.upperBound.x || fp2.aabb.lowerBound.x > fp.aabb.upperBound.x) {
+        //   // print(fp.aabb.lowerBound.x);
+        //   // print(fp2.aabb.upperBound.x);
+        //   // print(fp.aabb.upperBound.x);
+        //   // print(fp2.aabb.lowerBound.x);
+        //   continue;
+        // }
+        // if(fp.aabb.lowerBound.y > fp2.aabb.upperBound.y || fp2.aabb.lowerBound.y > fp.aabb.upperBound.y) {
+        //   // print(fp.aabb.lowerBound.x);
+        //   // print(fp2.aabb.upperBound.x);
+        //   // print(fp.aabb.upperBound.x);
+        //   // print(fp2.aabb.lowerBound.x);
+        //   continue;
+        // }
+        callback.addPair(fp, fp2);
       }
     }
+      // for(final body2 in bodies){
+      //   if(body == body2){
+      //     continue;
+      //   }
+      //   if(body.bodyType == BodyType.static && body2.bodyType == BodyType.static){
+      //     continue;
+      //   }else{
+      //     FixtureProxy fp = FixtureProxy(body.fixtures.first);
+      //     fp.aabb.set(body.fixtures.first.getAABB(0));
+      //     FixtureProxy fp2 = FixtureProxy(body2.fixtures.first);
+      //     fp2.aabb.set(body2.fixtures.first.getAABB(0));
+      //     callback.addPair(fp, fp2);
+      //   }
+      // }
     // _pairBuffer.clear();
     // // Perform tree queries for all moving proxies.
     // for (final proxyId in _moveBuffer) {

@@ -135,90 +135,86 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     if(currentGameWorldData == null) return;
     isMapCached.value = 0;
     await _preloadAnimAndObj();
-    while(isMapCached.value < 5){
+    while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
     }
-    print(KyrgyzGame.cachedGrounds.length);
-    for(final ground in KyrgyzGame.cachedGrounds) {
-      var points = ground.getAttribute('p')!;
-      var pointsList = points.split(' ');
-      List<Vector2> temp = [];
-      for (final sources in pointsList) {
-        if (sources == '') {
-          continue;
-        }
-        temp.add(Vector2(double.parse(sources.split(',')[0]),
-            double.parse(sources.split(',')[1])));
-      }
-      if (temp.length > 1) {
-        for (int i = 0; i < temp.length - 1; i++) {
-          final shape = forge2d.EdgeShape()
-            ..set(temp[i], temp[i + 1]);
-          final fixtureDef = forge2d.FixtureDef(shape);
-          var tt = Ground(forge2d.BodyDef(),
-              gameRef.world.physicsWorld);
-          tt.setActive(false);
-          tt.createFixture(fixtureDef);
-        }
-        if (ground.getAttribute('lp')! == '1') {
-          final shape = forge2d.EdgeShape()
-            ..set(temp.last, temp.first);
-          final fixtureDef = forge2d.FixtureDef(shape);
-          var tt = Ground(forge2d.BodyDef(),
-              gameRef.world.physicsWorld);
-          tt.setActive(false);
-          tt.createFixture(fixtureDef);
-        }
-      }
-    }
-    // for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
-    //   for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
-    //     if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
-    //       var objects = KyrgyzGame.cachedObjXmls['$i-$j.objXml']!;
-    //       for(final obj in objects){
-    //         String? name = obj.getAttribute('nm');
-    //         if(name == ''){
-    //           var points = obj.getAttribute('p')!;
-    //           var pointsList = points.split(' ');
-    //           List<Vector2> temp = [];
-    //           for (final sources in pointsList) {
-    //             if (sources == '') {
-    //               continue;
-    //             }
-    //             temp.add(Vector2(double.parse(sources.split(',')[0]),
-    //                 double.parse(sources.split(',')[1])));
-    //           }
-    //
-    //           if (temp.length > 1) {
-    //             for( int i = 0; i < temp.length - 1; i++) {
-    //               final shape = forge2d.EdgeShape()..set(temp[i], temp[i + 1]);
-    //               final fixtureDef = forge2d.FixtureDef(shape);
-    //               var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
-    //               tt.setActive(false);
-    //               tt.createFixture(fixtureDef);
-    //             }
-    //             if(obj.getAttribute('lp')! == '1'){
-    //               final shape = forge2d.EdgeShape()..set(temp.last, temp.first);
-    //               final fixtureDef = forge2d.FixtureDef(shape);
-    //               var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
-    //               tt.setActive(false);
-    //               tt.createFixture(fixtureDef);
-    //             }
-    //             // var ground = Ground(temp, collisionType: DCollisionType.passive,
-    //             //     isSolid: false,
-    //             //     isStatic: true,
-    //             //     isLoop: obj.getAttribute('lp')! == '1',
-    //             //     gameKyrgyz: gameRef,
-    //             //     column: i,
-    //             //     row: j);
-    //             // grounds.add(ground);
-    //             // add(ground);
-    //           }
-    //         }
-    //       }
+    // for(final ground in KyrgyzGame.cachedGrounds) {
+    //   var points = ground.getAttribute('p')!;
+    //   var pointsList = points.split(' ');
+    //   List<Vector2> temp = [];
+    //   for (final sources in pointsList) {
+    //     if (sources == '') {
+    //       continue;
+    //     }
+    //     temp.add(Vector2(double.parse(sources.split(',')[0]),
+    //         double.parse(sources.split(',')[1])));
+    //   }
+    //   if (temp.length > 1) {
+    //     for (int i = 0; i < temp.length - 1; i++) {
+    //       final shape = forge2d.EdgeShape()
+    //         ..set(temp[i], temp[i + 1]);
+    //       final fixtureDef = forge2d.FixtureDef(shape);
+    //       var tt = Ground(forge2d.BodyDef(),
+    //           gameRef.world.physicsWorld);
+    //       tt.setActive(false);
+    //       tt.createFixture(fixtureDef);
+    //     }
+    //     if (ground.getAttribute('lp')! == '1') {
+    //       final shape = forge2d.EdgeShape()
+    //         ..set(temp.last, temp.first);
+    //       final fixtureDef = forge2d.FixtureDef(shape);
+    //       var tt = Ground(forge2d.BodyDef(),
+    //           gameRef.world.physicsWorld);
+    //       tt.setActive(false);
+    //       tt.createFixture(fixtureDef);
     //     }
     //   }
     // }
+    for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
+      for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
+        if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
+          var objects = KyrgyzGame.cachedObjXmls['$i-$j.objXml']!;
+          for(final obj in objects){
+            String? name = obj.getAttribute('nm');
+            if(name == ''){
+              var points = obj.getAttribute('p')!;
+              var pointsList = points.split(' ');
+              List<Vector2> temp = [];
+              for (final sources in pointsList) {
+                if (sources == '') {
+                  continue;
+                }
+                temp.add(Vector2(double.parse(sources.split(',')[0]),
+                    double.parse(sources.split(',')[1])));
+              }
+              if (temp.length > 1) {
+                for( int i = 0; i < temp.length - 1; i++) {
+                  final shape = forge2d.EdgeShape()..set(temp[i], temp[i + 1]);
+                  final fixtureDef = forge2d.FixtureDef(shape);
+                  var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
+                  tt.createFixture(fixtureDef);
+                }
+                if(obj.getAttribute('lp')! == '1'){
+                  final shape = forge2d.EdgeShape()..set(temp.last, temp.first);
+                  final fixtureDef = forge2d.FixtureDef(shape);
+                  var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
+                  tt.createFixture(fixtureDef);
+                }
+                // var ground = Ground(temp, collisionType: DCollisionType.passive,
+                //     isSolid: false,
+                //     isStatic: true,
+                //     isLoop: obj.getAttribute('lp')! == '1',
+                //     gameKyrgyz: gameRef,
+                //     column: i,
+                //     row: j);
+                // grounds.add(ground);
+                // add(ground);
+              }
+            }
+          }
+        }
+      }
+    }
 
     // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2(0.5,0.5))).createFixture(def);
     // print(grounds.length);
@@ -265,7 +261,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();
-    KyrgyzGame.cachedGrounds = [];
     if(isNeedCopyInternal) {
       isNeedCopyInternal = false;
       await firstCachedIntoInternal();
@@ -273,7 +268,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     loadObjs(currentGameWorldData!);
     loadAnimsHigh(currentGameWorldData!);
     loadAnimsDown(currentGameWorldData!);
-    loadGround(currentGameWorldData!);
     final manifestContent = await rootBundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {

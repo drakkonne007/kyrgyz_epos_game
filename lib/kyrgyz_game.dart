@@ -39,7 +39,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
-  static Iterable<XmlElement> cachedGrounds = [];
   static Map<String,Iterable<XmlElement>> cachedObjXmls = {};
   static Map<String,Iterable<XmlElement>> cachedAnims = {};
   static Map<String,ext.Image> cachedImgs = {};
@@ -63,6 +62,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
 
     maxPolygonVertices = 999999;
+    maxSubSteps = 3;
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';
