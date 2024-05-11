@@ -4,7 +4,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/kyrgyz_game.dart';

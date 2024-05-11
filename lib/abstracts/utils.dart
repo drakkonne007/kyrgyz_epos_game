@@ -1,24 +1,23 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 
 Vector2 f_pointOfIntersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
 {
-  double s1_x, s1_y, s2_x, s2_y;
-  s1_x = a2.x - a1.x;
-  s1_y = a2.y - a1.y;
-  s2_x = b2.x - b1.x;
-  s2_y = b2.y - b1.y;
+  double s1X, s1Y, s2X, s2Y;
+  s1X = a2.x - a1.x;
+  s1Y = a2.y - a1.y;
+  s2X = b2.x - b1.x;
+  s2Y = b2.y - b1.y;
 
   double s, t;
-  s = (-s1_y * (a1.x - b1.x) + s1_x * (a1.y - b1.y)) /
-      (-s2_x * s1_y + s1_x * s2_y);
-  t = (s2_x * (a1.y - b1.y) - s2_y * (a1.x - b1.x)) /
-      (-s2_x * s1_y + s1_x * s2_y);
+  s = (-s1Y * (a1.x - b1.x) + s1X * (a1.y - b1.y)) /
+      (-s2X * s1Y + s1X * s2Y);
+  t = (s2X * (a1.y - b1.y) - s2Y * (a1.x - b1.x)) /
+      (-s2X * s1Y + s1X * s2Y);
 
   if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-    return Vector2(a1.x + (t * s1_x), a1.y + (t * s1_y));
+    return Vector2(a1.x + (t * s1X), a1.y + (t * s1Y));
   }
   return Vector2.zero();
 }
@@ -39,9 +38,9 @@ List<Vector2> f_intersectLineWithCircle(List<Vector2> line, Vector2 circlePos, d
   if(points.length == 2){
     var distOfLine = line.first.distanceToSquared(line.last);
     if(line.first.distanceToSquared(points.first) > distOfLine
-    || line.first.distanceToSquared(points.last) > distOfLine
-    || line.last.distanceToSquared(points.first) > distOfLine
-    || line.last.distanceToSquared(points.last) > distOfLine){
+        || line.first.distanceToSquared(points.last) > distOfLine
+        || line.last.distanceToSquared(points.first) > distOfLine
+        || line.last.distanceToSquared(points.last) > distOfLine){
       return [];
     }else{
       return points;
@@ -76,7 +75,34 @@ List<Vector2> f_intersectLineFunctionWithCircle(double r,double a,double b,doubl
 class GroundSource
 {
   bool isLoop = false;
-  Set<Vector2> points = {};
+  List<Vector2> points = [];
+
+  @override
+  bool operator ==(Object other) {
+    if(other is GroundSource){
+      if(points.length != other.points.length) return false;
+      if(isLoop != other.isLoop) return false;
+      for(int i = 0; i < points.length; i++){
+        if(points.elementAt(i) != other.points.elementAt(i)) return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  int countHash()
+  {
+    int ret = 0;
+    for(int i = 0; i < points.length; i++){
+      ret += points.elementAt(i).hashCode;
+    }
+    ret += isLoop.hashCode;
+    return ret;
+  }
+
+  @override
+  int get hashCode => countHash();
+
 }
 
 class AxesDiff

@@ -61,6 +61,50 @@ void _loadObjs(SendPort mySendPort) async
   }
 }
 
+Future loadGround(GameWorldData worldData) async
+{
+  var dir = await getApplicationSupportDirectory();
+  ReceivePort objsReceivePort = ReceivePort();
+  var isol = await  Isolate.spawn<SendPort>(_loadGround, objsReceivePort.sendPort,errorsAreFatal: false);
+  SendPort objsSendPort = await objsReceivePort.first;
+  ReceivePort objResponseReceivePort = ReceivePort();
+  objsSendPort.send([
+    objResponseReceivePort.sendPort,
+    '${dir.path}/${worldData.nameForGame}/${worldData.nameForGame}.grounds',
+    worldData.gameConsts.maxColumn!,
+    worldData.gameConsts.maxRow!
+  ]);
+
+  final objsResponse = await objResponseReceivePort.first;
+  if(objsResponse is Iterable<XmlElement>){
+    KyrgyzGame.cachedGrounds = objsResponse;
+    isMapCached.value++;
+  }
+  objResponseReceivePort.close();
+  objsReceivePort.close();
+  isol.kill(priority: Isolate.immediate);
+}
+
+void _loadGround(SendPort mySendPort) async
+{
+  ReceivePort mikeReceivePort = ReceivePort();
+  mySendPort.send(mikeReceivePort.sendPort);
+  await for (final message in mikeReceivePort) {
+    if (message is List) {
+      final SendPort mikeResponseSendPort = message[0];
+      Iterable<XmlElement> objXmls = [];
+      String path = message[1];
+      try {
+        var file = File(path).readAsStringSync();
+        objXmls = XmlDocument.parse(file).findAllElements('o');
+      } catch (e) {
+        e;
+      }
+      mikeResponseSendPort.send(objXmls);
+    }
+  }
+}
+
 Future loadAnimsHigh(GameWorldData worldData) async
 {
   var dir = await getApplicationSupportDirectory();
@@ -239,6 +283,9 @@ Future firstCachedIntoInternal() async
         }
       }
     }
-
+    var temp = await rootBundle.loadString(
+        'assets/metaData/${world.nameForGame}/${world.nameForGame}.grounds', cache: false);
+    File file = File('${dir.path}/${world.nameForGame}/${world.nameForGame}.grounds');
+    file.writeAsStringSync(temp);
   }
 }

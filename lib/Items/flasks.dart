@@ -1,5 +1,4 @@
 
-import 'package:flame/components.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/kyrgyz_game.dart';

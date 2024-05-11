@@ -1,8 +1,5 @@
-import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flame/components.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/game_widgets/LootInventar.dart';
 import 'package:game_flame/game_widgets/typeInventar.dart';
@@ -119,8 +116,8 @@ class InventoryOverlayState extends State<InventoryOverlay>
                 });
               },
               style: defaultNoneButtonStyle.copyWith(
-                maximumSize: MaterialStateProperty.all<Size>(Size(width,height + 5)),
-                minimumSize: MaterialStateProperty.all<Size>(Size(width,height + 5)),
+                maximumSize: WidgetStateProperty.all<Size>(Size(width,height + 5)),
+                minimumSize: WidgetStateProperty.all<Size>(Size(width,height + 5)),
                 alignment: Alignment.bottomCenter
               ),
               child:

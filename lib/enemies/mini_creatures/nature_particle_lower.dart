@@ -5,7 +5,7 @@ import 'package:flame/sprite.dart';
 class NatureParticalLower extends SpriteAnimationComponent
 {
   NatureParticalLower(this._startPos, {super.priority});
-  Vector2 _startPos;
+  final Vector2 _startPos;
 
   @override onLoad() async
   {

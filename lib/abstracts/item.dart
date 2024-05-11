@@ -1,5 +1,3 @@
-import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:game_flame/Items/armorDress.dart';
 import 'package:game_flame/Items/flasks.dart';
 import 'package:game_flame/Items/helmetDress.dart';

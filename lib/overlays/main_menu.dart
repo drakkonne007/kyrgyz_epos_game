@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/main.dart';
+import 'package:game_flame/abstracts/compiller.dart';
 
 TextStyle textStyle = const TextStyle(fontSize: 20, color: Colors.amber);
 ButtonStyle bStyle = ElevatedButton.styleFrom(
@@ -116,12 +117,9 @@ class MainMenu extends StatelessWidget
                       child:
                       ElevatedButton(
                           clipBehavior: Clip.antiAlias,
-                          onPressed: (){
-                            if(LocaleSettings.currentLocale != AppLocale.ru) {
-                              LocaleSettings.setLocale(AppLocale.ru);
-                            }else{
-                              LocaleSettings.setLocale(AppLocale.kg);
-                            }
+                          onPressed: () async{
+                            await precompileAll();
+                            print('PRECOMPILE DONE!!!');
                           },
                           style: bStyle,
                           child:
@@ -133,7 +131,7 @@ class MainMenu extends StatelessWidget
                                 image: AssetImage('assets/images/gui/wood_button.png'),
                                 fit: BoxFit.fill,
                               ),
-                              Text('Настройки',style: textStyle),
+                              Text('Запустить прекомпил',style: textStyle),
                             ],
                           )
                       )

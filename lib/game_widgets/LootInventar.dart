@@ -1,9 +1,7 @@
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
@@ -18,7 +16,7 @@ enum LootVariant
 
 class LootInventar extends StatefulWidget
 {
-  const LootInventar(this.game, this.lootVariant, this.mySize);
+  const LootInventar(this.game, this.lootVariant, this.mySize, {super.key});
   final Size mySize;
   final KyrgyzGame game;
   final LootVariant lootVariant;
@@ -88,9 +86,9 @@ class _LootInvantarState extends State<LootInventar>
                         style: defaultNoneButtonStyle.copyWith(
                           foregroundBuilder: ((context, state, child)
                           {
-                            if(state.contains(MaterialState.focused)
-                                || state.contains(MaterialState.hovered)
-                                || state.contains(MaterialState.pressed)){
+                            if(state.contains(WidgetState.focused)
+                                || state.contains(WidgetState.hovered)
+                                || state.contains(WidgetState.pressed)){
                               return Image.asset('assets/images/inventar/leftActiveButton.png',
                                 fit: BoxFit.fitHeight,
                                 height: 50,);
@@ -125,9 +123,9 @@ class _LootInvantarState extends State<LootInventar>
                         style: defaultNoneButtonStyle.copyWith(
                           foregroundBuilder: ((context, state, child)
                           {
-                            if(state.contains(MaterialState.focused)
-                                || state.contains(MaterialState.hovered)
-                                || state.contains(MaterialState.pressed)){
+                            if(state.contains(WidgetState.focused)
+                                || state.contains(WidgetState.hovered)
+                                || state.contains(WidgetState.pressed)){
                               return Image.asset('assets/images/inventar/rightActiveButton.png',
                                 fit: BoxFit.fitHeight,
                                 height: 50,);
@@ -162,7 +160,7 @@ class _LootInvantarState extends State<LootInventar>
                   });
                 },
                 style: defaultNoneButtonStyle.copyWith(
-                  maximumSize: MaterialStateProperty.all<Size>(Size(minSize,minSize)),
+                  maximumSize: WidgetStateProperty.all<Size>(Size(minSize,minSize)),
                   backgroundBuilder: ((context, state, child){
                     return Stack(
                         fit: StackFit.passthrough,
@@ -190,7 +188,7 @@ class _LootInvantarState extends State<LootInventar>
             ElevatedButton(
                 onPressed: null,
                 style: defaultNoneButtonStyle.copyWith(
-                    maximumSize: MaterialStateProperty.all<Size>(Size(minSize,minSize)),
+                    maximumSize: WidgetStateProperty.all<Size>(Size(minSize,minSize)),
                     backgroundBuilder: ((context, state, child){
                       return Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
                         // centerSlice: const Rect.fromLTWH(6, 6, 20, 20),

@@ -1,11 +1,9 @@
 
-import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
-import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
@@ -184,11 +182,11 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     switch (dir) {
       case PlayerDirectionMove.Right:
       case PlayerDirectionMove.RightDown:
-        _velocity.x = PhysicVals.startSpeed * PhysicVals.runCoef;;
+        _velocity.x = PhysicVals.startSpeed * PhysicVals.runCoef; {}
         animation = animMove;
         break;
       case PlayerDirectionMove.RightUp:
-        _velocity.x = PhysicVals.startSpeed * PhysicVals.runCoef;;
+        _velocity.x = PhysicVals.startSpeed * PhysicVals.runCoef; {}
         animation = animMove;
         if (_onGround) {
           // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
@@ -196,7 +194,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
         break;
       case PlayerDirectionMove.LeftUp:
-        _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef;;
+        _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef; {}
         animation = animMove;
         if (_onGround) {
           // velocity.y = -PhysicFrontVals.maxSpeeds.y/2;
@@ -212,7 +210,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         break;
       case PlayerDirectionMove.Left:
       case PlayerDirectionMove.LeftDown:
-        _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef;;
+        _velocity.x = -PhysicVals.startSpeed * PhysicVals.runCoef; {}
         animation = animMove;
         break;
       case PlayerDirectionMove.NoMove:

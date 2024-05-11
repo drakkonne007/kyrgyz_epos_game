@@ -1,0 +1,21 @@
+flags |= locked;
+
+    _step.dt = dt;
+    _step.velocityIterations = settings.velocityIterations;
+    _step.positionIterations = settings.positionIterations;
+    if (dt > 0.0) {
+      _step.invDt = 1.0 / dt;
+    } else {
+      _step.invDt = 0.0;
+    }
+
+    _step.dtRatio = _invDt0 * dt;
+
+    _step.warmStarting = _warmStarting;
+    _profile.stepInit.record(_tempTimer.getMilliseconds());
+
+    // Update contacts. This is where some contacts are destroyed.
+    _tempTimer.reset();
+    contactManager.collide();
+    _profile.collide.record(_tempTimer.getMilliseconds());
+    print('del2: ${del.elapsedMilliseconds}');

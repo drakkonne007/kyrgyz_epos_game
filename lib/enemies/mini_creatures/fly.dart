@@ -7,7 +7,7 @@ class Fly extends SpriteAnimationComponent
 {
 
   Fly(this._startPos, {super.priority});
-  Vector2 _startPos;
+  final Vector2 _startPos;
 
   @override onLoad() async
   {

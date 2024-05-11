@@ -1,6 +1,5 @@
 
 
-import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flame/components.dart';
@@ -28,7 +27,7 @@ class DialogOverlay extends StatefulWidget
 {
   static const id = 'DialogOverlay';
   final KyrgyzGame _game;
-  DialogOverlay(this._game, {super.key});
+  const DialogOverlay(this._game, {super.key});
 
 
   @override
@@ -104,7 +103,7 @@ class _DialogOverlayState extends State<DialogOverlay> {
 class DialogAnswers extends StatefulWidget
 {
   final KyrgyzGame _game;
-  DialogAnswers(this._game, this.size, {super.key});
+  const DialogAnswers(this._game, this.size, {super.key});
   final Vector2 size;
 
   @override

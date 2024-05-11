@@ -27,7 +27,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   Vector2? _startPosition;
   Set<String>? neededItems;
   List<Item> myItems;
-  int _level;
+  final int _level;
   final Vector2 _spriteSheetSize = Vector2(64,64);
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;

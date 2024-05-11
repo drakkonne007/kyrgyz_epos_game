@@ -66,14 +66,4 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     gameRef.doDialogHud();
   }
 
-  @override
-  void update(double dt)
-  {
-    super.update(dt);
-    // if(_myBottomPoint.getMaxVector().y > gameRef.gameMap.orthoPlayer?.hitBox?.getMaxVector().y){
-    //   parent = gameRef.gameMap.enemyOnPlayer;
-    // }else{
-    //   parent = gameRef.gameMap.enemyComponent;
-    // }
-  }
 }

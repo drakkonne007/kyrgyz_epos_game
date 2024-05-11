@@ -15,7 +15,6 @@ import 'package:game_flame/enemies/mini_creatures/campfireSmoke.dart';
 import 'package:game_flame/enemies/mini_creatures/flying_obelisk.dart';
 import 'package:game_flame/enemies/mini_creatures/frog.dart';
 import 'package:game_flame/enemies/mini_creatures/stand_obelisk.dart';
-import 'package:game_flame/abstracts/item.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -69,12 +68,12 @@ class MapNode {
     myGame.gameMap.allEls.putIfAbsent(colRow, () => []);
     if (KyrgyzGame.cachedMapPngs.contains(
         '${colRow.column}-${colRow.row}_high.png')) {
-      Image _imageHigh = await Flame.images.load(
+      Image imageHigh = await Flame.images.load(
           'metaData/${myGame.playerData.playerBigMap.nameForGame}/${colRow
               .column}-${colRow
               .row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
       var spriteHigh = SpriteComponent(
-        sprite: Sprite(_imageHigh),
+        sprite: Sprite(imageHigh),
         position: Vector2(colRow.column * lengthOfTileSquare.x,
             colRow.row * lengthOfTileSquare.y),
         // priority: GamePriority.high - 1,
@@ -116,12 +115,12 @@ class MapNode {
     }
     if (KyrgyzGame.cachedMapPngs.contains(
         '${colRow.column}-${colRow.row}_down.png')) {
-      Image _imageDown = await Flame.images.load(
+      Image imageDown = await Flame.images.load(
           'metaData/${myGame.playerData.playerBigMap.nameForGame}/${colRow
               .column}-${colRow
               .row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
       var spriteDown = SpriteComponent(
-        sprite: Sprite(_imageDown),
+        sprite: Sprite(imageDown),
         position: Vector2(colRow.column * lengthOfTileSquare.x,
             colRow.row * lengthOfTileSquare.y),
         size: lengthOfTileSquare + Vector2.all(1),

@@ -2,9 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flame/components.dart';
 import 'package:flame/image_composition.dart';
-import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -14,8 +12,8 @@ class DCollisionProcessor
 {
   final List<DCollisionEntity> _activeCollEntity = [];
   final Map<LoadedColumnRow,List<DCollisionEntity>> _staticCollEntity = {};
-  Map<LoadedColumnRow, List<DCollisionEntity>> _potentialActiveEntity = {};
-  Set<LoadedColumnRow> _contactNests = {};
+  final Map<LoadedColumnRow, List<DCollisionEntity>> _potentialActiveEntity = {};
+  final Set<LoadedColumnRow> _contactNests = {};
   KyrgyzGame game;
   DCollisionProcessor(this.game);
 

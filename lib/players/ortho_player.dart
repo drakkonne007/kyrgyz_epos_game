@@ -1,17 +1,13 @@
 
 import 'dart:math';
-import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame_forge2d/body_component.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/abstracts/utils.dart';
-import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
@@ -48,12 +44,13 @@ final List<Vector2> _attack2ind2 = [
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>  implements MainPlayer
 {
-  OrthoPlayer({required super.position});
+  OrthoPlayer({required this.startPos});
   final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
   late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong;
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
+  Vector2 startPos;
   PlayerWeapon? _weapon;
   bool gameHide = false;
   final Vector2 _maxSpeeds = Vector2.all(0);
@@ -66,7 +63,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void onRemove()
   {
-    print('destrou Player');
+    print('destroy Player');
     if(groundRigidBody != null){
       game.world.destroyBody(groundRigidBody!);
     }
@@ -75,6 +72,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   Future<void> onLoad() async
   {
+
     Image? spriteImg;
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
@@ -87,21 +85,23 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animation = animIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
-    Vector2 tPos = positionOfAnchor(anchor) - Vector2(15,20);
+    Vector2 tPos = -Vector2(15,20);
     Vector2 tSize = Vector2(22,45);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
         collisionType: DCollisionType.passive,isSolid: false,
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
-    tPos = positionOfAnchor(anchor) - Vector2(11,-10);
+    // hitBox?.collisionType = DCollisionType.inactive;
+    tPos = -Vector2(11,-10);
     tSize = Vector2(20,16);
-    tPos = positionOfAnchor(anchor) - Vector2(10,10);
+    tPos = -Vector2(10,10);
     tSize = Vector2(20,20);
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
     add(_weapon!);
     gameRef.playerData.statChangeTrigger.addListener(setNewEnergyCostForWeapon);
+    position = startPos;
     setGroundBody();
   }
 
@@ -121,7 +121,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundRigidBody != null){
       game.world.destroyBody(groundRigidBody!);
     }
-    Vector2 tPos = positionOfAnchor(anchor) - Vector2(11,-10);
+    Vector2 tPos = -Vector2(11,-10);
     Vector2 tSize = Vector2(20,16);
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize)));
     groundRigidBody = Ground(
@@ -233,7 +233,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation == animIdle  || animation == animMove) {
       _isRun = isRun;
       if (isRun && gameRef.playerData.energy.value > 0 && !_isMinusEnergy) {
-        PhysicVals.runCoef = 1.3;
+        PhysicVals.runCoef = 3;
         animation = animMove;
         animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
       } else {
@@ -350,7 +350,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.playerData.addEnergy(dt);
       }
     }
-    groundRigidBody?.applyLinearImpulse(_velocity * dt * 120 * dumping * 1.1);
+    groundRigidBody?.applyLinearImpulse(_velocity * dt * 240 * dumping * 1.1);
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
     if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
       setIdleAnimation();

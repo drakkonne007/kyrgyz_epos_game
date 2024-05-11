@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/loot_list.dart';
-import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';

@@ -6,7 +6,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 class CampfireSmoke extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
   CampfireSmoke(this._startPos);
 
-  Vector2 _startPos;
+  final Vector2 _startPos;
 
   @override
   void onLoad() async

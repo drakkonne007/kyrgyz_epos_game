@@ -1,11 +1,9 @@
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
@@ -148,15 +146,4 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
   }
 
-  @override
-  void update(double dt)
-  {
-    super.update(dt);
-    // ground?.doDebug();
-    // if(ground!.getMaxVector().y > gameRef.gameMap.orthoPlayer!.groundBox!.getMaxVector().y){
-    //   parent = gameRef.gameMap.enemyOnPlayer;
-    // }else{
-    //   parent = gameRef.gameMap.enemyComponent;
-    // }
-  }
 }

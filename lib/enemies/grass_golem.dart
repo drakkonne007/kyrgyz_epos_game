@@ -5,7 +5,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -114,6 +113,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))));
     groundBody?.createFixture(fx);
+    add(BodyComponent(bodyDef: bodyDef, fixtureDefs: [fx]));
     // _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
     //     , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     // _ground.onlyForPlayer = true;
@@ -299,6 +299,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
       return;
     }
     super.update(dt);
+    position = groundBody?.position ?? Vector2.zero();
     if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
       parent = gameRef.gameMap.enemyOnPlayer;
     }else{
@@ -307,7 +308,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    position += _speed * dt;
+    groundBody?.applyLinearImpulse(_speed * dt * 10000);
   }
 
   @override

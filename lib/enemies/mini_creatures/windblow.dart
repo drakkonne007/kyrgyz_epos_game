@@ -7,7 +7,7 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   Windblow(this._startPos);
 
-  Vector2 _startPos;
+  final Vector2 _startPos;
 
   @override
   void onLoad() async

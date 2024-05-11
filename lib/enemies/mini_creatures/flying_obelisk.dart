@@ -11,7 +11,7 @@ double distToPlayer = 150;
 class FlyingHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   FlyingHighObelisk(this._startPosSource);
-  Vector2 _startPosSource;
+  final Vector2 _startPosSource;
   late Vector2 _startPos;
   final Vector2 _spriteSheetSize = Vector2(70,70);
 
@@ -38,7 +38,7 @@ class FlyingDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
   final Vector2 _spriteSheetSize = Vector2(70,80);
   late SpriteAnimationComponent _player;
   final Vector2 _speed = Vector2(0,0);
-  FlyingHighObelisk _highObelisk;
+  final FlyingHighObelisk _highObelisk;
 
   @override
   Future onLoad() async

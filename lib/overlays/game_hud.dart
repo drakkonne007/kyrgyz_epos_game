@@ -1,6 +1,5 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/game_widgets/joysticks.dart';
@@ -41,13 +40,13 @@ class GameHud extends StatelessWidget
                     children:[
                       TextButton(
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          surfaceTintColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          elevation: MaterialStateProperty.all<double>(0),
-                          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          elevation: WidgetStateProperty.all<double>(0),
+                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
                         ),
                         onLongPress: (){
                           _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
@@ -70,13 +69,13 @@ class GameHud extends StatelessWidget
                           _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
                         },
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          surfaceTintColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                          elevation: MaterialStateProperty.all<double>(0),
-                          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          elevation: WidgetStateProperty.all<double>(0),
+                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
                         ),
                         child: Image.asset('assets/images/inventar/UI-9-sliced object-223.png',width: 40,height: 40,
                         fit: BoxFit.cover,),
@@ -88,13 +87,13 @@ class GameHud extends StatelessWidget
                             _game.gameMap.orthoPlayer?.makeAction() : _game.gameMap.frontPlayer?.makeAction();
                           },
                           style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                            overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                            shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                            surfaceTintColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+                            foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                            backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                            overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                            shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                            surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                            elevation: WidgetStateProperty.all<double>(0),
+                            padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
                           ),
                           child: Image.asset('assets/images/inventar/UI-9-sliced object-89.png',width: 40,height: 40
                             ,fit: BoxFit.cover,),

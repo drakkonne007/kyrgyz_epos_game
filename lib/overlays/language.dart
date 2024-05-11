@@ -1,7 +1,6 @@
 
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
 
@@ -10,7 +9,7 @@ import 'package:game_flame/overlays/main_menu.dart';
 
 class LanguageChooser extends StatelessWidget
 {
-  const LanguageChooser(this._game);
+  const LanguageChooser(this._game, {super.key});
   static const id = 'LanguageChooser';
   final KyrgyzGame _game;
 

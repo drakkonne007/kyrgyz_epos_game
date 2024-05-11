@@ -7,7 +7,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';

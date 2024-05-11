@@ -1,7 +1,9 @@
 
 
+
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:forge2d/forge2d.dart' as forge2d;
+import 'package:game_flame/ForgeOverrides/broadphase.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 
 class BodyUserData
@@ -15,12 +17,13 @@ class UpWorld extends Forge2DWorld
 {
   UpWorld({
     Vector2? gravity,
+    BroadPhase? broadPhase,
     forge2d.ContactListener? contactListener,
     super.children,
-  }) : physicsWorld = DWorld(gravity ?? defaultGravity)
+  }) : physicsWorld = DWorld(gravity ?? defaultGravity,null)
     ..setContactListener(contactListener ?? WorldContactListener());
 
-  static final Vector2 defaultGravity = Vector2(0, 10.0);
+  static final Vector2 defaultGravity = Vector2(0, 0);
 
   @override
   final forge2d.World physicsWorld;
@@ -90,39 +93,59 @@ class UpWorld extends Forge2DWorld
 
 class DWorld extends World
 {
-  DWorld(super.gravity);
+  DWorld(super.gravity, super.broadPhase);
   Map<LoadedColumnRow, List<Body>> allEls = {};
   List<Body> activeBody = [];
+  LoadedColumnRow _currentQuad = LoadedColumnRow(0, 0);
 
   void changeActiveBodies(LoadedColumnRow columnRow)
   {
-    print('bodiesSize before update: ${bodies.length}');
-    print('size of active: ${activeBody.length}');
     assert(!isLocked);
     bodies.clear();
     bodies.addAll(activeBody);
-    int xCoord = columnRow.column - 1;
-    int yCoord = columnRow.row - 1;
-    int xEnd = xCoord + 2;
-    int yEnd = yCoord + 2;
-    for(xCoord;xCoord < xEnd;xCoord++){
-      for(yCoord;yCoord < yEnd;yCoord++){
-        allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body) => bodies.add(body));
-      }
-    }
-    print('bodiesSize after update: ${bodies.length}');
+    // int xCoord = _currentQuad.column - 1;
+    // int yCoord = _currentQuad.row - 1;
+    // int xEnd = xCoord + 2;
+    // int yEnd = yCoord + 2;
+    // for(xCoord;xCoord < xEnd;xCoord++){
+    //   for(yCoord;yCoord < yEnd;yCoord++){
+    //     allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body){
+    //       body.setActive(false);
+    //     });
+    //   }
+    // }
+    //
+    // xCoord = columnRow.column - 1;
+    // yCoord = columnRow.row - 1;
+    // xEnd = xCoord + 2;
+    // yEnd = yCoord + 2;
+    // for(xCoord;xCoord < xEnd;xCoord++){
+    //   for(yCoord;yCoord < yEnd;yCoord++){
+    //     allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body){
+    //       body.setActive(true);
+    //       bodies.add(body);
+    //     });
+    //   }
+    // }
+    // _currentQuad = columnRow;
+    // var tempBroad =  contactManager.broadPhase as MyBroadPhase;
+    // tempBroad.bodies = bodies;
   }
 
   void resetWorld()
   {
     print('All bodies was delete');
     assert(!isLocked);
+    flags |= World.locked;
     for(final key in allEls.keys){
-       allEls[key]!.forEach((el) => destroyBody(el));
+       for (var el in allEls[key]!) {
+         destroyBody(el);
+       }
     }
     bodies.clear();
     allEls.clear();
     activeBody.clear();
+    flags &= ~World.locked;
   }
 
   @override

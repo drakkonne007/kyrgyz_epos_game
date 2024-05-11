@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/obstacle.dart';

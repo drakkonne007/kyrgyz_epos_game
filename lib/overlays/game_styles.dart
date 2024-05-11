@@ -1,5 +1,4 @@
 
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 final TextStyle dialogStyleFont = TextStyle
@@ -24,13 +23,13 @@ final defaultTextStyle = TextStyle
 );
 
 final defaultNoneButtonStyle = ButtonStyle(
-  minimumSize: MaterialStateProperty.all<Size>(Size.zero),
-  foregroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-  backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-  overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-  shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
-  surfaceTintColor: MaterialStateProperty.all<Color>(Colors.transparent),
-  elevation: MaterialStateProperty.all<double>(0),
-  shape: MaterialStateProperty.all<RoundedRectangleBorder>(const RoundedRectangleBorder()),
-  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+  minimumSize: WidgetStateProperty.all<Size>(Size.zero),
+  foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+  backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+  overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+  shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+  surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
+  elevation: WidgetStateProperty.all<double>(0),
+  shape: WidgetStateProperty.all<RoundedRectangleBorder>(const RoundedRectangleBorder()),
+  padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
 );

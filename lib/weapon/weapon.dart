@@ -1,10 +1,7 @@
 
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -12,7 +9,6 @@ import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'dart:math' as math;
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/kyrgyz_game.dart';
 
 double radiansOfPlayerDirect(PlayerDirectionMove direct)
 {
@@ -111,7 +107,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   double coolDown = 1;
   double currentCoolDown = 0;
   double latencyBefore = 0;
-  Map<EnemyHitbox,int> _myHitboxes= {};
+  final Map<EnemyHitbox,int> _myHitboxes= {};
 
   Future<void> hit();
 

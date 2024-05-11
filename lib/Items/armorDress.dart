@@ -1,6 +1,5 @@
 
 
-import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 

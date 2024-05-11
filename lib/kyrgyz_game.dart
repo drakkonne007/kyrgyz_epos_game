@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:ui';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/ForgeOverrides/broadphase.dart';
 import 'package:game_flame/Items/armorDress.dart';
 import 'package:game_flame/Items/helmetDress.dart';
 import 'package:game_flame/Items/swordDress.dart';
@@ -39,6 +39,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
+  static Iterable<XmlElement> cachedGrounds = [];
   static Map<String,Iterable<XmlElement>> cachedObjXmls = {};
   static Map<String,Iterable<XmlElement>> cachedAnims = {};
   static Map<String,ext.Image> cachedImgs = {};
@@ -60,8 +61,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   {
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
+
     maxPolygonVertices = 999999;
-    world.gravity = Vector2.zero();
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';
@@ -104,10 +105,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     add(gameMap);
     await gameMap.loaded;
     //TODO добавить сохранённые бутылочки в gameMap;
-    if(isMapCompile){
-      await precompileAll();
-      exit(0);
-    }
   }
 
   @override

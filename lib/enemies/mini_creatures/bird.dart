@@ -8,8 +8,8 @@ import 'package:game_flame/kyrgyz_game.dart';
 class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   Bird(this._startPos, this._endPos);
-  Vector2 _startPos;
-  List<Vector2> _endPos;
+  final Vector2 _startPos;
+  final List<Vector2> _endPos;
   double _speed = 0;
   bool _isFlying = false;
   double _totalAirDuration = 0;
@@ -105,7 +105,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
             animationTicker?.onComplete = () {
               changeMoves();
             };
-          };
+          }
         };
       };
     }else{
