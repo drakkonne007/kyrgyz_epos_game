@@ -20,7 +20,7 @@ class UpWorld extends Forge2DWorld
     BroadPhase? broadPhase,
     forge2d.ContactListener? contactListener,
     super.children,
-  }) : physicsWorld = DWorld(gravity ?? defaultGravity,null)
+  }) : physicsWorld = DWorld(gravity ?? defaultGravity,MyBroadPhase())
     ..setContactListener(contactListener ?? WorldContactListener());
 
   static final Vector2 defaultGravity = Vector2(0, 0);

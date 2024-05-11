@@ -157,6 +157,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
           final fixtureDef = forge2d.FixtureDef(shape);
           var tt = Ground(forge2d.BodyDef(),
               gameRef.world.physicsWorld);
+          tt.setActive(false);
           tt.createFixture(fixtureDef);
         }
         if (ground.getAttribute('lp')! == '1') {
@@ -165,6 +166,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
           final fixtureDef = forge2d.FixtureDef(shape);
           var tt = Ground(forge2d.BodyDef(),
               gameRef.world.physicsWorld);
+          tt.setActive(false);
           tt.createFixture(fixtureDef);
         }
       }
