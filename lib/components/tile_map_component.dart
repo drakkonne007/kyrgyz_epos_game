@@ -243,6 +243,8 @@ class CustomTileMap extends Component with HasGameRef<KyrgyzGame>,HasDecorator
       return;
     }
     collisionProcessor?.updateCollisions();
+    collisionProcessor?.updateCollisions();
+    collisionProcessor?.updateCollisions();
     int col = (gameRef.camera.position.x + gameRef.camera.canvasSize.x/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
     int row = (gameRef.camera.position.y + gameRef.camera.canvasSize.y/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     if (col != _column || row != _row) {
