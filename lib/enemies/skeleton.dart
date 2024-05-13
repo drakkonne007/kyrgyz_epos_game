@@ -138,6 +138,9 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(-11,127-110), Vector2(22,21))));
     groundBody?.createFixture(fx);
+    var massData = groundBody!.getMassData();
+    massData.mass = 45;
+    groundBody!.setMassData(massData);
     add(TimerComponent(onTick: () {
       if (!checkIsNeedSelfRemove(position.x ~/
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
@@ -408,7 +411,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     position = groundBody?.position ?? Vector2.zero();
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      groundBody?.applyLinearImpulse(_speed * dt * 150);
+      groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
     }
   }
 }

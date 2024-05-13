@@ -1,10 +1,16 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/components/game_worlds.dart';
+import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 
 class TreeHandler
 {
-  TreeHandler(this.aabb, this.userData);
+  TreeHandler(this.aabb, {this.userData, this.parentNode = -1, this.isMoving = false});
   AABB aabb;
-  Object userData;
+  FixtureProxy? userData;
+  int parentNode;
+  bool isMoving;
+  Map<int,TreeHandler> children = {};
 }
 
 
@@ -13,68 +19,116 @@ class MyBroadPhase implements BroadPhase,TreeCallback
 
   List<Body> bodies = [];
   int count = 0;
+  int moveCount = 0;
+  GameWorldData? worldData;
+  Map<int,List<TreeHandler>> _nests = {};
+  Map<int,TreeHandler> _proxyHash = {};
+  Map<int,TreeHandler> _movingProxyHash = {};
+  int getCount() => count++;
 
-  Map<int,TreeHandler> _tree = {};
 
-  MyBroadPhase()
+  void initBroadPhase(GameWorldData worldData)
   {
-    print('Creatre my broadPhase');
+    this.worldData = worldData;
+    _proxyHash.clear();
+    count = 0;
+    _nests.clear();
+    for(int i = 0; i < worldData.gameConsts.maxColumn!; i++){
+      for(int j = 0; j < worldData.gameConsts.maxRow!; j++){
+        AABB tempAABB = AABB();
+        tempAABB.lowerBound.x = i * worldData.gameConsts.lengthOfTileSquare.x;
+        tempAABB.lowerBound.y = j * worldData.gameConsts.lengthOfTileSquare.y;
+        tempAABB.upperBound.x = tempAABB.lowerBound.x + worldData.gameConsts.lengthOfTileSquare.x;
+        tempAABB.upperBound.y = tempAABB.lowerBound.y + worldData.gameConsts.lengthOfTileSquare.y;
+        int currCount = getCount();
+        _proxyHash[currCount] = TreeHandler(tempAABB);
+        _nests[currCount] = [];
+      }
+    }
   }
 
-
   @override
-  int createProxy(AABB aabb, Object userData) {
-    int currentCount = count;
-    _tree[currentCount] = TreeHandler(aabb, userData);
-    count++;
+  int createProxy(AABB aabb, Object userData)
+  {
+    FixtureProxy? fixtureProxy = userData as FixtureProxy;
+    bool isStatic = fixtureProxy.fixture.body.bodyType == BodyType.static;
+    int col = aabb.lowerBound.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
+    int row = aabb.lowerBound.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
+    int mapPos = col + row * worldData!.gameConsts.maxColumn!;
+    TreeHandler newNode = TreeHandler(aabb, userData: userData as FixtureProxy,parentNode: mapPos);
+    int currentCount = getCount();
+    _proxyHash[currentCount] = newNode;
+    if(isStatic){
+      _nests[mapPos]!.add(newNode);
+    }else {
+      _proxyHash[currentCount]!.isMoving = true;
+      _movingProxyHash[currentCount] = newNode;
+    }
     return currentCount;
   }
 
   @override
-  void destroyProxy(int proxyId) {
-    print('destroyProxy');
+  void destroyProxy(int proxyId)
+  {
+    if(proxyId >= worldData!.gameConsts.maxColumn! * worldData!.gameConsts.maxRow!){
+      _nests[_proxyHash[proxyId]!.parentNode]!.remove(_proxyHash[proxyId]!);
+      _proxyHash.remove(proxyId);
+      _movingProxyHash.remove(proxyId);
+    }
   }
 
   @override
-  void drawTree(DebugDraw argDraw) {
+  void drawTree(DebugDraw argDraw)
+  {
     print('drawTree');
   }
 
   @override
-  AABB fatAABB(int proxyId) {
-    print('fatAABB');
-    return _tree[proxyId]?.aabb ?? AABB();
+  AABB fatAABB(int proxyId)
+  {
+    return _proxyHash[proxyId]!.aabb;
   }
 
   @override
-  int getTreeBalance() {
+  int getTreeBalance()
+  {
     print('getTreeBalance');
     return 0;
   }
 
   @override
-  int getTreeHeight() {
+  int getTreeHeight()
+  {
     print('getTreeHeight');
     return 0;
   }
 
   @override
-  double getTreeQuality() {
+  double getTreeQuality()
+  {
     print('getTreeQuality');
     return 0;
   }
 
   @override
-  Object? getUserData(int proxyId) {
-    return _tree[proxyId]?.userData;
+  Object? getUserData(int proxyId)
+  {
+    return _proxyHash[proxyId]?.userData;
   }
 
   @override
-  void moveProxy(int proxyId, AABB aabb, Vector2 displacement) {
-    _tree[proxyId]!.aabb.lowerBound.x += displacement.x;
-    _tree[proxyId]!.aabb.lowerBound.y += displacement.y;
-    _tree[proxyId]!.aabb.upperBound.x += displacement.x;
-    _tree[proxyId]!.aabb.upperBound.y += displacement.y;
+  void moveProxy(int proxyId, AABB aabb, Vector2 displacement)
+  {
+    if(proxyId < worldData!.gameConsts.maxColumn! * worldData!.gameConsts.maxRow!){
+      throw 'Move with no move!!!';
+    }
+    if(displacement != Vector2.zero() && _movingProxyHash.containsKey(proxyId)) {
+      _movingProxyHash[proxyId]?.aabb.lowerBound.x += displacement.x;
+      _movingProxyHash[proxyId]?.aabb.lowerBound.y += displacement.y;
+      _movingProxyHash[proxyId]?.aabb.upperBound.x += displacement.x;
+      _movingProxyHash[proxyId]?.aabb.upperBound.y += displacement.y;
+      _proxyHash[proxyId] = _movingProxyHash[proxyId]!;
+    }
   }
 
   @override
@@ -82,115 +136,109 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   int get proxyCount => 0;
 
   @override
-  void query(TreeCallback callback, AABB aabb) {
+  void query(TreeCallback callback, AABB aabb)
+  {
     print('query');
   }
 
   @override
-  void raycast(TreeRayCastCallback callback, RayCastInput input) {
+  void raycast(TreeRayCastCallback callback, RayCastInput input)
+  {
     print('raycast');
   }
 
   @override
-  bool testOverlap(int proxyIdA, int proxyIdB) {
-    return true;
-    if(!_tree.containsKey(proxyIdA) || !_tree.containsKey(proxyIdB)){
+  bool testOverlap(int proxyIdA, int proxyIdB)
+  {
+    if(_proxyHash[proxyIdA]!.isMoving && _proxyHash[proxyIdB]!.isMoving){
+      return true;
+    }
+    if(!_proxyHash[proxyIdA]!.isMoving && !_proxyHash[proxyIdB]!.isMoving){
       return false;
     }
-    final a = _tree[proxyIdA]!.aabb;
-    final b = _tree[proxyIdB]!.aabb;
-    if(a.lowerBound.x > b.upperBound.x || b.lowerBound.x > a.upperBound.x){
-      return false;
+    var moveEntity = _proxyHash[proxyIdA]!.isMoving ? _proxyHash[proxyIdA] : _proxyHash[proxyIdB];
+    var staticEntity = _proxyHash[proxyIdA]!.isMoving ? _proxyHash[proxyIdB] : _proxyHash[proxyIdA];
+
+    int minColumn,maxColumn,minRow,maxRow;
+    minColumn = moveEntity!.aabb.lowerBound.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
+    maxColumn = moveEntity.aabb.upperBound.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
+    minRow = moveEntity.aabb.lowerBound.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
+    maxRow = moveEntity.aabb.upperBound.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
+
+    int staticColumn = staticEntity!.aabb.center.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
+    int staticRow = staticEntity.aabb.center.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
+    if(staticColumn == minColumn && staticRow == minRow){
+      return true;
     }
-    if(a.lowerBound.y > b.upperBound.y || b.lowerBound.y > a.upperBound.y){
-      return false;
+    if(staticColumn == maxColumn && staticRow == maxRow){
+      return true;
     }
     return false;
   }
 
   @override
-  void touchProxy(int proxyId) {
-    print('touchProxy');
+  void touchProxy(int proxyId)
+  {
+    print('touchProxy: $proxyId');
   }
 
   @override
   void updatePairs(PairCallback callback)
   {
-    Set<int> removeList = {};
-    for(int i = 0; i < bodies.length; i++) {
-      for (int j = 0; j < bodies.length; j++) {
-        if(i == j || removeList.contains(j)){
-          continue;
+    var moveProxies = _movingProxyHash.values.toList(growable: false);
+    for(final body in moveProxies){
+      if(body.userData == null){
+        continue;
+      }
+      int minColumn = (body.aabb.lowerBound.x ) ~/ (worldData!.gameConsts.lengthOfTileSquare.x) - 1;
+      int maxColumn = (body.aabb.upperBound.x) ~/ (worldData!.gameConsts.lengthOfTileSquare.x) + 1;
+      int minRow = (body.aabb.lowerBound.y) ~/ (worldData!.gameConsts.lengthOfTileSquare.y) - 1;
+      int maxRow = (body.aabb.upperBound.y) ~/ (worldData!.gameConsts.lengthOfTileSquare.y) + 1;
+      for(int i = minColumn; i <= maxColumn; i++){
+        for(int j = minRow; j <= maxRow; j++){
+          int mapPos = i + j * worldData!.gameConsts.maxColumn!;
+          if(!_nests.containsKey(mapPos)){
+            continue;
+          }
+          for(final static in _nests[mapPos]!){
+            if(static.userData == null){
+              continue;
+            }
+            if(body.aabb.lowerBound.x - 20 > static.aabb.upperBound.x || body.aabb.upperBound.x + 20 < static.aabb.lowerBound.x){
+              continue;
+            }
+            if(body.aabb.lowerBound.y - 20 > static.aabb.upperBound.y || body.aabb.upperBound.y + 20 < static.aabb.lowerBound.y){
+              continue;
+            }
+            callback.addPair(body.userData, static.userData);
+          }
         }
-        removeList.add(i);
-        Body body = bodies[i];
-        Body body2 = bodies[j];
-        if(body.bodyType == BodyType.static && body2.bodyType == BodyType.static){
-          continue;
-        }
-        FixtureProxy fp = FixtureProxy(body.fixtures.first);
-        fp.aabb.set(body.fixtures.first.getAABB(0));
-        FixtureProxy fp2 = FixtureProxy(body2.fixtures.first);
-        fp2.aabb.set(body2.fixtures.first.getAABB(0));
-        // if(fp.aabb.lowerBound.x > fp2.aabb.upperBound.x || fp2.aabb.lowerBound.x > fp.aabb.upperBound.x) {
-        //   // print(fp.aabb.lowerBound.x);
-        //   // print(fp2.aabb.upperBound.x);
-        //   // print(fp.aabb.upperBound.x);
-        //   // print(fp2.aabb.lowerBound.x);
-        //   continue;
-        // }
-        // if(fp.aabb.lowerBound.y > fp2.aabb.upperBound.y || fp2.aabb.lowerBound.y > fp.aabb.upperBound.y) {
-        //   // print(fp.aabb.lowerBound.x);
-        //   // print(fp2.aabb.upperBound.x);
-        //   // print(fp.aabb.upperBound.x);
-        //   // print(fp2.aabb.lowerBound.x);
-        //   continue;
-        // }
-        callback.addPair(fp, fp2);
       }
     }
-      // for(final body2 in bodies){
-      //   if(body == body2){
-      //     continue;
-      //   }
-      //   if(body.bodyType == BodyType.static && body2.bodyType == BodyType.static){
-      //     continue;
-      //   }else{
-      //     FixtureProxy fp = FixtureProxy(body.fixtures.first);
-      //     fp.aabb.set(body.fixtures.first.getAABB(0));
-      //     FixtureProxy fp2 = FixtureProxy(body2.fixtures.first);
-      //     fp2.aabb.set(body2.fixtures.first.getAABB(0));
-      //     callback.addPair(fp, fp2);
-      //   }
-      // }
-    // _pairBuffer.clear();
-    // // Perform tree queries for all moving proxies.
-    // for (final proxyId in _moveBuffer) {
-    //   _queryProxyId = proxyId;
-    //   if (proxyId == BroadPhase.nullProxy) {
-    //     continue;
-    //   }
-    //
-    //   // We have to query the tree with the fat AABB so that
-    //   // we don't fail to create a pair that may touch later.
-    //   final fatAABB = _tree.fatAABB(proxyId);
-    //
-    //   // Query tree, create pairs and add them pair buffer.
-    //   _tree.query(this, fatAABB);
-    // }
-    //
-    // // Reset move buffer
-    // _moveBuffer.clear();
-    //
-    // // Send the pairs back to the client.
-    // for (final pair in _pairBuffer) {
-    //   final userDataA = _tree.userData(pair.proxyIdA);
-    //   final userDataB = _tree.userData(pair.proxyIdB);
-    //   callback.addPair(userDataA, userDataB);
+    Set<int> removeFilter = {};
+    for(int i=0; i<moveProxies.length; i++){
+      for(int j=0; j<moveProxies.length; j++){
+        if(i == j || removeFilter.contains(j)){
+          continue;
+        }
+        removeFilter.add(i);
+        if(moveProxies[i].userData == null || moveProxies[j].userData == null){
+          continue;
+        }
+        if(moveProxies[i].aabb.lowerBound.x - 20 > moveProxies[j].aabb.upperBound.x || moveProxies[i].aabb.upperBound.x + 20 < moveProxies[j].aabb.lowerBound.x){
+          continue;
+        }
+        if(moveProxies[i].aabb.lowerBound.y - 20 > moveProxies[j].aabb.upperBound.y || moveProxies[i].aabb.upperBound.y + 20 < moveProxies[j].aabb.lowerBound.y){
+          continue;
+        }
+        callback.addPair(moveProxies[i].userData, moveProxies[j].userData);
+      }
+    }
   }
 
   @override
-  bool treeCallback(int proxyId) {
+  bool treeCallback(int proxyId)
+  {
     print('treeCallback');
     return false;
   }

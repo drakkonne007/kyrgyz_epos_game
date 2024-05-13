@@ -103,10 +103,10 @@ class DWorld extends World
     assert(!isLocked);
     bodies.clear();
     bodies.addAll(activeBody);
-    int xCoord = columnRow.column - 3;
-    int yCoord = columnRow.row - 3;
-    int xEnd = xCoord + 3;
-    int yEnd = yCoord + 3;
+    int xCoord = columnRow.column - 1;
+    int yCoord = columnRow.row - 1;
+    int xEnd = xCoord + 2;
+    int yEnd = yCoord + 2;
     for(xCoord;xCoord < xEnd;xCoord++){
       for(yCoord;yCoord < yEnd;yCoord++){
         allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body){
@@ -115,8 +115,8 @@ class DWorld extends World
       }
     }
     _currentQuad = columnRow;
-    var tempBroad =  contactManager.broadPhase as MyBroadPhase;
-    tempBroad.bodies = List.unmodifiable(bodies);
+    // var tempBroad =  contactManager.broadPhase as MyBroadPhase;
+    // tempBroad.bodies = List.unmodifiable(bodies);
   }
 
   void resetWorld()

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:math';
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
@@ -6,6 +8,7 @@ import 'package:flame_forge2d/flame_forge2d.dart' as forge2d;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/ForgeOverrides/broadphase.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
@@ -133,6 +136,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     // }
     currentGameWorldData = gameRef.playerData.playerBigMap;
     if(currentGameWorldData == null) return;
+    var dd =  gameRef.world.physicsWorld.contactManager.broadPhase as MyBroadPhase;
+    dd.initBroadPhase(currentGameWorldData!);
     isMapCached.value = 0;
     await _preloadAnimAndObj();
     while(isMapCached.value < 4){
@@ -198,6 +203,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
                   final shape = forge2d.EdgeShape()..set(temp.last, temp.first);
                   final fixtureDef = forge2d.FixtureDef(shape);
                   var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
+                  // tt.fixtures.add(forge2d.Fixture(tt,fixtureDef));
                   tt.createFixture(fixtureDef);
                 }
                 // var ground = Ground(temp, collisionType: DCollisionType.passive,
@@ -232,7 +238,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
     }
-    gameRef.camera = CameraComponent.withFixedResolution(width: 600, height: 350, world: this);
+    gameRef.camera = CameraComponent.withFixedResolution(width: 750, height: 430, world: this);
     gameRef.camera.follow(frontPlayer ?? orthoPlayer!, snap: true);
     gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
         game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32,
@@ -249,9 +255,23 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     _isLoad = true;
 
 
-    forge2d.FixtureDef def = forge2d.FixtureDef(forge2d.PolygonShape()..set([Vector2(-1,-1),Vector2(-1,1),Vector2(1,1),Vector2(1,-1)],));
-    game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2.zero())).createFixture(def);
-    game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2(-0.5,-0.5))).createFixture(def);
+    // forge2d.FixtureDef def = forge2d.FixtureDef(forge2d.PolygonShape()..set([Vector2(-1,-1),Vector2(-1,1),Vector2(1,1),Vector2(1,-1)],));
+    // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2.zero())).createFixture(def);
+    // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2(-0.5,-0.5))).createFixture(def);
+  }
+
+  void setCamera(Vector2 size)
+  {
+    double xZoom = size.x / 768;
+    double yZoom = size.y / 448;
+    if(xZoom > yZoom){
+      gameRef.camera.viewport = FixedResolutionViewport(resolution: Vector2(768, 448 * (yZoom / xZoom)));
+    }else{
+      gameRef.camera.viewport = FixedResolutionViewport(resolution: Vector2(768 * (xZoom / yZoom), 448));
+    }
+    gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32,
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32), considerViewport: true);
   }
 
   Future _preloadAnimAndObj() async
@@ -307,27 +327,33 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     //   reloadWorld(col, row);
     // }
     // return;
+    int col = 0;
+    int row = 0;
     if(orthoPlayer != null && !orthoPlayer!.gameHide){
-      int col = orthoPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-      int row = orthoPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-      if (col != _column || row != _row) {
-        reloadWorld(col, row);
-      }
+      col = orthoPlayer!.hitBox!.getCenter().x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+      row = orthoPlayer!.hitBox!.getCenter().y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     }else if(frontPlayer != null && !frontPlayer!.gameHide){
-      int col = frontPlayer!.position.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-      int row = frontPlayer!.position.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-      if (col != _column || row != _row) {
-        reloadWorld(col, row);
-      }
+      col = frontPlayer!.hitBox!.getCenter().x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+      row = frontPlayer!.hitBox!.getCenter().y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    }
+    print('column: $col, row: $row');
+    print('control ${orthoPlayer!.hitBox!.getCenter().x / (currentGameWorldData!.gameConsts.lengthOfTileSquare.x)}');
+    print('control ${orthoPlayer!.hitBox!.getCenter().y / (currentGameWorldData!.gameConsts.lengthOfTileSquare.y)}');
+    col = min(col, currentGameWorldData!.gameConsts.maxColumn! - 2);
+    row = min(row, currentGameWorldData!.gameConsts.maxRow! - 2);
+    if (col != _column || row != _row) {
+      var dworld = game.world.physicsWorld as DWorld;
+      dworld.changeActiveBodies(LoadedColumnRow(col, row));
+    }
+    if (col != _column || row != _row) {
+      repaintWorld(col,row);
     }
   }
 
-  void reloadWorld(int newColumn, int newRow)
+  void repaintWorld(int newColumn, int newRow)
   {
     _column = newColumn;
     _row = newRow;
-    var dworld = game.world.physicsWorld as DWorld;
-    dworld.changeActiveBodies(LoadedColumnRow(newColumn, newRow));
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     for(final els in allEllsSet){
       if((els.row - _row).abs() >= 2 || (els.column - _column).abs() >= 2){

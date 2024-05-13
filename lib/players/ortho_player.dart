@@ -132,6 +132,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     groundRigidBody?.createFixture(fix);
     groundRigidBody?.linearDamping = dumping;
     groundRigidBody?.angularDamping = dumping;
+    var massData = groundRigidBody!.getMassData();
+    massData.mass = 20;
+    groundRigidBody!.setMassData(massData);
     position = groundRigidBody?.position ?? Vector2.zero();
   }
 
@@ -233,7 +236,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation == animIdle  || animation == animMove) {
       _isRun = isRun;
       if (isRun && gameRef.playerData.energy.value > 0 && !_isMinusEnergy) {
-        PhysicVals.runCoef = 3;
+        PhysicVals.runCoef = 2;
         animation = animMove;
         animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
       } else {
@@ -324,6 +327,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameHide) {
       return;
     }
+    hitBox!.doDebug();
     position = groundRigidBody?.position ?? Vector2.zero();
     super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
@@ -341,7 +345,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         PhysicVals.runCoef = 1;
       }else{
         animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
-        PhysicVals.runCoef = 1.3;
+        PhysicVals.runCoef = 2;
       }
       gameRef.playerData.addEnergy(dt * -2);
     }else{
@@ -350,7 +354,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.playerData.addEnergy(dt);
       }
     }
-    groundRigidBody?.applyLinearImpulse(_velocity * dt * 240 * dumping * 1.1);
+    groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * 7.5);
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
     if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
       setIdleAnimation();

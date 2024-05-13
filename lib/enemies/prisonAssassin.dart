@@ -89,6 +89,9 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_groundBoxPoints));
     groundBody?.createFixture(fx);
+    var massData = groundBody!.getMassData();
+    massData.mass = 100;
+    groundBody!.setMassData(massData);
     _weapon = DefaultEnemyWeapon(
         _weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
@@ -298,7 +301,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * 150);
+    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
   }
 
   @override

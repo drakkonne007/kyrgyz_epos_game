@@ -166,8 +166,11 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     add(_hitBox);
     bodyDef.position = _startPos;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    var massData = groundBody!.getMassData();
+    massData.mass = 400;
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))));
     groundBody?.createFixture(fx);
+    groundBody?.setMassData(massData);
     // _ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
     //     , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     // _ground.onlyForPlayer = true;
@@ -369,7 +372,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     if(animation == _animHurt || animation == animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * 150);
+    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
     // position += _speed * dt;
   }
 

@@ -113,6 +113,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))));
     groundBody?.createFixture(fx);
+    var massData = groundBody!.getMassData();
+    massData.mass = 2000;
+    groundBody!.setMassData(massData);
     add(BodyComponent(bodyDef: bodyDef, fixtureDefs: [fx]));
     // _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
     //     , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
@@ -308,7 +311,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * 10000);
+    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
   }
 
   @override
