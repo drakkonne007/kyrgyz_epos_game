@@ -336,9 +336,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
       col = frontPlayer!.hitBox!.getCenter().x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
       row = frontPlayer!.hitBox!.getCenter().y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     }
-    print('column: $col, row: $row');
-    print('control ${orthoPlayer!.hitBox!.getCenter().x / (currentGameWorldData!.gameConsts.lengthOfTileSquare.x)}');
-    print('control ${orthoPlayer!.hitBox!.getCenter().y / (currentGameWorldData!.gameConsts.lengthOfTileSquare.y)}');
     col = min(col, currentGameWorldData!.gameConsts.maxColumn! - 2);
     row = min(row, currentGameWorldData!.gameConsts.maxRow! - 2);
     if (col != _column || row != _row) {

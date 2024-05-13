@@ -327,7 +327,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameHide) {
       return;
     }
-    hitBox!.doDebug();
     position = groundRigidBody?.position ?? Vector2.zero();
     super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
