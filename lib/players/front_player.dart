@@ -154,10 +154,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
-      PhysicVals.runCoef = 1.3;
       _isPlayerRun = true;
     } else {
-      PhysicVals.runCoef = 1;
       _isPlayerRun = false;
     }
     // angle += math.pi/2;
@@ -230,7 +228,6 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     _velocity.x = 0;
     _isPlayerRun = false;
-    PhysicVals.runCoef = 1;
   }
 
   @override
@@ -401,10 +398,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(_isPlayerRun){
       gameRef.playerData.addEnergy(dt * -2);
       if(gameRef.playerData.energy.value < 0){
-        PhysicVals.runCoef = 1;
         gameRef.playerData.energy.value = 0;
       }else{
-        PhysicVals.runCoef = 1.3;
       }
     }else{
       if(!gameRef.playerData.isLockEnergy) {
@@ -412,7 +407,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
     }
     _speed.x = math.max(-PhysicFrontVals.maxSpeeds.x * PhysicVals.runCoef,math.min(_speed.x + dt * _velocity.x,PhysicFrontVals.maxSpeeds.x * PhysicVals.runCoef));
-    // _speed.y = math.max(-PhysicFrontVals.maxSpeeds.y * PhysicVals.runCoef,math.min(_speed.y + dt * _velocity.y,PhysicFrontVals.maxSpeeds.y * PhysicVals.runCoef));
+    _speed.y = math.max(-PhysicFrontVals.maxSpeeds.y * PhysicVals.runCoef,math.min(_speed.y + dt * _velocity.y,PhysicFrontVals.maxSpeeds.y * PhysicVals.runCoef));
     bool isXNan = _speed.x.isNegative;
     bool isYNan = _speed.y.isNegative;
     int countZero = 0;

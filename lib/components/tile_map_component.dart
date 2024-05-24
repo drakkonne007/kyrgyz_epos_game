@@ -36,7 +36,8 @@ class LoadedColumnRow
   int get hashCode => column.hashCode ^ row.hashCode;
 }
 
-class CustomTileMap extends World with HasGameRef<KyrgyzGame>
+
+class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
 {
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
   static int countId = 0;
@@ -90,13 +91,9 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     removeWhere((component) => component is! OrthoPlayer || component is! FrontPlayer);
   }
 
-  void Draw()
-  {
-
-  }
-
   Future<void> loadNewMap() async
   {
+
     game.world = UpWorld();
     var dworld = game.world.physicsWorld as DWorld;
     dworld.resetWorld();
@@ -194,16 +191,15 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
               }
               if (temp.length > 1) {
                 for( int i = 0; i < temp.length - 1; i++) {
-                  final shape = forge2d.EdgeShape()..set(temp[i], temp[i + 1]);
+                  final shape = forge2d.EdgeShape()..set(temp[i] * PhysicVals.physicScale, temp[i + 1] * PhysicVals.physicScale);
                   final fixtureDef = forge2d.FixtureDef(shape);
                   var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
                   tt.createFixture(fixtureDef);
                 }
                 if(obj.getAttribute('lp')! == '1'){
-                  final shape = forge2d.EdgeShape()..set(temp.last, temp.first);
+                  final shape = forge2d.EdgeShape()..set(temp.last * PhysicVals.physicScale, temp.first * PhysicVals.physicScale);
                   final fixtureDef = forge2d.FixtureDef(shape);
                   var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
-                  // tt.fixtures.add(forge2d.Fixture(tt,fixtureDef));
                   tt.createFixture(fixtureDef);
                 }
                 // var ground = Ground(temp, collisionType: DCollisionType.passive,
@@ -238,12 +234,13 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
     }
-    gameRef.camera = CameraComponent.withFixedResolution(width: 750, height: 430, world: this);
-    gameRef.camera.follow(frontPlayer ?? orthoPlayer!, snap: true);
+    gameRef.camera.world = this;
     gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
         game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32,
         game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32), considerViewport: true);
+    gameRef.camera.follow(frontPlayer ?? orthoPlayer!, snap: true);
     gameRef.doGameHud();
+
     // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
     // _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     // for(int i=0;i<3;i++) {
@@ -258,20 +255,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
     // forge2d.FixtureDef def = forge2d.FixtureDef(forge2d.PolygonShape()..set([Vector2(-1,-1),Vector2(-1,1),Vector2(1,1),Vector2(1,-1)],));
     // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2.zero())).createFixture(def);
     // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2(-0.5,-0.5))).createFixture(def);
-  }
-
-  void setCamera(Vector2 size)
-  {
-    double xZoom = size.x / 768;
-    double yZoom = size.y / 448;
-    if(xZoom > yZoom){
-      gameRef.camera.viewport = FixedResolutionViewport(resolution: Vector2(768, 448 * (yZoom / xZoom)));
-    }else{
-      gameRef.camera.viewport = FixedResolutionViewport(resolution: Vector2(768 * (xZoom / yZoom), 448));
-    }
-    gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32,
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32), considerViewport: true);
   }
 
   Future _preloadAnimAndObj() async
@@ -321,36 +304,32 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>
       return;
     }
     collisionProcessor?.updateCollisions();
-    // int col = (gameRef.camera.position.x + gameRef.camera.canvasSize.x/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    // int row = (gameRef.camera.position.y + gameRef.camera.canvasSize.y/2/gameRef.camera.zoom) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    // if (col != _column || row != _row) {
-    //   reloadWorld(col, row);
-    // }
+    int col = gameRef.camera.visibleWorldRect.center.dx ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    int row = gameRef.camera.visibleWorldRect.center.dy ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    if (col != _column || row != _row) {
+      repaintWorld(col, row);
+    }
     // return;
-    int col = 0;
-    int row = 0;
-    if(orthoPlayer != null && !orthoPlayer!.gameHide){
-      col = orthoPlayer!.hitBox!.getCenter().x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-      row = orthoPlayer!.hitBox!.getCenter().y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    }else if(frontPlayer != null && !frontPlayer!.gameHide){
-      col = frontPlayer!.hitBox!.getCenter().x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-      row = frontPlayer!.hitBox!.getCenter().y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    }
-    col = min(col, currentGameWorldData!.gameConsts.maxColumn! - 2);
-    row = min(row, currentGameWorldData!.gameConsts.maxRow! - 2);
-    if (col != _column || row != _row) {
-      var dworld = game.world.physicsWorld as DWorld;
-      dworld.changeActiveBodies(LoadedColumnRow(col, row));
-    }
-    if (col != _column || row != _row) {
-      repaintWorld(col,row);
-    }
+    // int col = 0;
+    // int row = 0;
+    // if(orthoPlayer != null && !orthoPlayer!.gameHide){
+    //   col = (orthoPlayer!.hitBox!.getCenter().x - 10) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    //   row = (orthoPlayer!.hitBox!.getCenter().y - 10) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    // }else if(frontPlayer != null && !frontPlayer!.gameHide){
+    //   col = (frontPlayer!.hitBox!.getCenter().x - 10) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
+    //   row = (frontPlayer!.hitBox!.getCenter().y - 10) ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    // }
+    // print('col: $col, row: $row');
+    // col = min(col, currentGameWorldData!.gameConsts.maxColumn! - 1);
+    // row = min(row, currentGameWorldData!.gameConsts.maxRow! - 1);
   }
 
   void repaintWorld(int newColumn, int newRow)
   {
     _column = newColumn;
     _row = newRow;
+    var dworld = game.world.physicsWorld as DWorld;
+    dworld.changeActiveBodies(LoadedColumnRow(_column, _row));
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     for(final els in allEllsSet){
       if((els.row - _row).abs() >= 2 || (els.column - _column).abs() >= 2){

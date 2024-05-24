@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:flame/camera.dart';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -63,9 +64,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   {
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
-
     maxPolygonVertices = 20;
-    maxSubSteps = 1;
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';
@@ -112,9 +111,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   @override
   void onGameResize(Vector2 size) {
-    if(gameMap.isMounted) {
-      gameMap.setCamera(size);
-    }
+    double xZoom = size.x / 768;
+    double yZoom = size.y / 448;
+    camera.viewfinder.zoom = max(xZoom, yZoom) + 0.04;
     super.onGameResize(size);
   }
 
@@ -219,9 +218,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   @override
   void update(double dt)
   {
-    if(dt > 0.041){
-      return;
-    }
+    // if(dt > 0.041){
+    //   return;
+    // }
     super.update(dt);
   }
 }

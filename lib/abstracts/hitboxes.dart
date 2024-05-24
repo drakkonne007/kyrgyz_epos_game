@@ -15,9 +15,10 @@ enum DCollisionType
   inactive
 }
 
-List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size)
+List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size, {double? scale})
 {
-  return [pos, pos + Vector2(0,size.y), pos + size, pos + Vector2(size.x,0)];
+  scale ??= 1;
+  return [pos * scale, (pos + Vector2(0,size.y)) * scale, (pos + size) * scale, (pos + Vector2(size.x,0)) * scale];
 }
 
 class PointCust extends PositionComponent

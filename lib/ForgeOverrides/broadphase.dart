@@ -160,17 +160,14 @@ class MyBroadPhase implements BroadPhase,TreeCallback
     var staticEntity = _proxyHash[proxyIdA]!.isMoving ? _proxyHash[proxyIdB] : _proxyHash[proxyIdA];
 
     int minColumn,maxColumn,minRow,maxRow;
-    minColumn = moveEntity!.aabb.lowerBound.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
-    maxColumn = moveEntity.aabb.upperBound.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
-    minRow = moveEntity.aabb.lowerBound.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
-    maxRow = moveEntity.aabb.upperBound.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
+    minColumn = (moveEntity!.aabb.lowerBound.x - 20) ~/ (worldData!.gameConsts.lengthOfTileSquare.x );
+    maxColumn = (moveEntity.aabb.upperBound.x + 20) ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
+    minRow = (moveEntity.aabb.lowerBound.y - 20) ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
+    maxRow = (moveEntity.aabb.upperBound.y + 20) ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
 
     int staticColumn = staticEntity!.aabb.center.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x);
     int staticRow = staticEntity.aabb.center.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y);
-    if(staticColumn == minColumn && staticRow == minRow){
-      return true;
-    }
-    if(staticColumn == maxColumn && staticRow == maxRow){
+    if((staticColumn == minColumn || staticColumn == maxColumn) && (staticRow == minRow || staticRow == maxRow)){
       return true;
     }
     return false;
@@ -190,7 +187,7 @@ class MyBroadPhase implements BroadPhase,TreeCallback
       if(body.userData == null){
         continue;
       }
-      int minColumn = (body.aabb.lowerBound.x ) ~/ (worldData!.gameConsts.lengthOfTileSquare.x) - 1;
+      int minColumn = (body.aabb.lowerBound.x) ~/ (worldData!.gameConsts.lengthOfTileSquare.x) - 1;
       int maxColumn = (body.aabb.upperBound.x) ~/ (worldData!.gameConsts.lengthOfTileSquare.x) + 1;
       int minRow = (body.aabb.lowerBound.y) ~/ (worldData!.gameConsts.lengthOfTileSquare.y) - 1;
       int maxRow = (body.aabb.upperBound.y) ~/ (worldData!.gameConsts.lengthOfTileSquare.y) + 1;

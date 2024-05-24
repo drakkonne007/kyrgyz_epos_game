@@ -10,6 +10,7 @@ import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/components/physic_vals.dart';
 
 enum StrangeMerchantVariant
 {
@@ -38,15 +39,15 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     animation = _animIdle;
     size *= 1.15;
     final List<Vector2> points = [
-      (Vector2(38,36) - Vector2(55,55)) * 1.15,
-      (Vector2(38,50) - Vector2(55,55)) * 1.15,
-      (Vector2(42,66) - Vector2(55,55)) * 1.15,
-      (Vector2(52,79) - Vector2(55,55)) * 1.15,
-      (Vector2(70,79) - Vector2(55,55)) * 1.15,
-      (Vector2(73,75) - Vector2(55,55)) * 1.15,
-      (Vector2(73,34) - Vector2(55,55)) * 1.15,
+      (Vector2(38,36) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
+      (Vector2(38,50) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
+      (Vector2(42,66) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
+      (Vector2(52,79) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
+      (Vector2(70,79) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
+      (Vector2(73,75) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
+      (Vector2(73,34) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
     ];
-    BodyDef df = BodyDef(position: _startPos, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false));
+    BodyDef df = BodyDef(position: _startPos * PhysicVals.physicScale, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false));
     FixtureDef ft = FixtureDef(PolygonShape()..set(points));
     ground = Ground(df,gameRef.world.physicsWorld);
     ground?.createFixture(ft);
@@ -58,7 +59,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     if(rand == 0){
       flipHorizontally();
     }
-    position = ground?.position ?? Vector2.zero();
+    position = ground!.position / PhysicVals.physicScale;
   }
 
   void getBuyMenu()
