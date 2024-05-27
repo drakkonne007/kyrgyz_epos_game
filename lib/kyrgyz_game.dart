@@ -96,10 +96,6 @@ class KyrgyzGame extends FlameGame with HasKeyboardHandlerComponents,HasTappable
     add(gameMap);
     await gameMap.loaded;
     //TODO добавить сохранённые бутылочки в gameMap;
-    if(isMapCompile){
-      await precompileAll();
-      exit(0);
-    }
   }
 
   @override

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:game_flame/abstracts/compiller.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/main.dart';
@@ -116,7 +117,10 @@ class MainMenu extends StatelessWidget
                       child:
                       ElevatedButton(
                           clipBehavior: Clip.antiAlias,
-                          onPressed: (){
+                          onPressed: ()async{
+                            await precompileAll();
+                            print('precompil done!');
+                            return;
                             if(LocaleSettings.currentLocale != AppLocale.ru) {
                               LocaleSettings.setLocale(AppLocale.ru);
                             }else{
@@ -133,7 +137,7 @@ class MainMenu extends StatelessWidget
                                 image: AssetImage('assets/images/gui/wood_button.png'),
                                 fit: BoxFit.fill,
                               ),
-                              Text('Настройки',style: textStyle),
+                              Text('ПРЕКОМПИЛ!',style: textStyle),
                             ],
                           )
                       )
