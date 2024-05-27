@@ -33,6 +33,7 @@ import 'package:xml/xml.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 const double aspect = 750.0 / 430.0;
+double constTime = 0;
 
 class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsBindingObserver, SingleGameInstance
 {
@@ -218,9 +219,10 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   @override
   void update(double dt)
   {
-    // if(dt > 0.041){
-    //   return;
-    // }
-    super.update(dt);
+    constTime += dt;
+    if(constTime > 1.0 / 30.0){
+      super.update(constTime);
+      constTime = 0;
+    }
   }
 }
