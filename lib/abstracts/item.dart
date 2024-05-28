@@ -3,9 +3,7 @@ import 'package:game_flame/Items/flasks.dart';
 import 'package:game_flame/Items/helmetDress.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/swordDress.dart';
-import 'package:game_flame/kyrgyz_game.dart';
-
-enum DressType
+import 'package:game_flame/kyrgyz_game.dart';enum DressType
 {
   none,
   helmet,
@@ -24,6 +22,8 @@ enum MagicDamage
   poison,
   lightning,
 }
+
+
 
 Item itemFromName(String id)
 {

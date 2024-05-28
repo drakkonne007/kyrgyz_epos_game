@@ -227,9 +227,9 @@ class PlayerData
 
 class PhysicVals
 {
-  static const double physicScale = 0.5;
+  static const double physicScale = 0.1;
   static double maxSpeed = 250;
-  static double startSpeed = 220;
+  static double startSpeed = 2;
   static const double runCoef = 1.7;
   static double runMinimum = 1;
   static double gravity = 20;

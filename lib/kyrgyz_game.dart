@@ -219,10 +219,11 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   @override
   void update(double dt)
   {
-    constTime += dt;
-    if(constTime > 1.0 / 30.0){
-      super.update(constTime);
-      constTime = 0;
-    }
+    super.update(dt);
+    // constTime += dt;
+    // if(constTime > 1.0 / 30.0){
+    //   super.update(constTime);
+    //   constTime = 0;
+    // }
   }
 }

@@ -58,7 +58,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool _isMinusEnergy = false;
   bool _isRun = false;
   Ground? groundRigidBody;
-  double dumping = 8;
+  double dumping = 15;
   bool isGygy = false;
 
   @override
@@ -123,7 +123,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     Vector2 tPos = -Vector2(11,-10);
     Vector2 tSize = Vector2(20,16);
-    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)), friction: 0.1, density: 0.1);
+    FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)), friction: 0.1, density: 1);
     groundRigidBody = Ground(
       BodyDef(type: BodyType.dynamic, position: position * PhysicVals.physicScale, fixedRotation: true,
           userData: BodyUserData(isQuadOptimizaion: false)),
@@ -253,12 +253,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         flipHorizontally();
       }
     }
-    print(groundRigidBody!.position);
-    if(!isGygy) {
-      groundRigidBody?.applyLinearImpulse(
-          Vector2(0, -5000));
-      isGygy = true;
-    }
+    // print(groundRigidBody!.position);
+    // if(!isGygy) {
+    //   groundRigidBody?.applyLinearImpulse(
+    //       Vector2(0, -200));
+    //   isGygy = true;
+    // }
   }
 
   @override
@@ -332,9 +332,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
-    if(isGygy && groundRigidBody?.linearVelocity == Vector2.zero()){
-      print(groundRigidBody!.position);
-    }
     super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
@@ -359,7 +356,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.playerData.addEnergy(dt);
       }
     }
-    // groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * 5 * (isReallyRun ? PhysicVals.runCoef : 1));
+    groundRigidBody?.applyLinearImpulse(_velocity * (isReallyRun ? PhysicVals.runCoef : 1));
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
     if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
       setIdleAnimation();
