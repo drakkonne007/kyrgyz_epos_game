@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/Obstacles/ground.dart';
@@ -48,6 +49,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong;
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
+  Vector2 _lastPosition = Vector2.zero();
   PlayerHitbox? hitBox;
   GroundHitBox? groundBox;
   PlayerWeapon? _weapon;
@@ -292,6 +294,15 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundBox == null){
       return;
     }
+
+
+    for(final collides in groundBox!.obstacleIntersects){
+      Vector2 normal = collides.lineWhichCollide.first - collides.lineWhichCollide.last;
+      normal = normal.normalized();
+      Vector2 reflect =  _speed - normal * (dot2(_speed, normal) * 2);
+      position = _lastPosition + reflect;
+    }
+    return;
     Map<Vector2,AxesDiff> diffs = {};
     bool isUp = false;
     bool isDown = false;
@@ -470,6 +481,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(countZero == 2){
       setIdleAnimation();
     }
+    _lastPosition = position;
     position += _speed * dt;
   }
 //

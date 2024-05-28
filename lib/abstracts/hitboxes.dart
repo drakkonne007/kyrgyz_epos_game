@@ -16,6 +16,12 @@ enum DCollisionType
   inactive
 }
 
+class CollideInfo
+{
+  List<Vector2> lineWhichCollide = [];
+  Vector2 collideDepth = Vector2.zero();
+}
+
 List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size)
 {
   return [pos, pos + Vector2(0,size.y), pos + size, pos + Vector2(size.x,0)];
@@ -51,7 +57,7 @@ abstract class DCollisionEntity extends Component
   double angle = 0;
   Vector2 scale = Vector2(1, 1);
   Vector2 _center = Vector2(0, 0);
-  Set<Vector2> obstacleIntersects = {};
+  Set<CollideInfo> obstacleIntersects = {};
   KyrgyzGame game;
   int? column;
   int? row;
@@ -64,6 +70,7 @@ abstract class DCollisionEntity extends Component
   double radius = 0;
   bool isOnlyForStatic;
   bool _isTrueRect = false;
+  Vector2 speed = Vector2.zero();
 
   bool get isTrueRect => _isTrueRect && angle == 0;
   List<Vector2> get vertices => _vertices;

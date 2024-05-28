@@ -155,7 +155,7 @@ class DCollisionProcessor
     }
     for(DCollisionEntity entity in _activeCollEntity){
       if(entity.obstacleIntersects.isNotEmpty){
-        entity.onCollisionStart(entity.obstacleIntersects, entity); ///obstacleIntersects есть только у ГроундХитбоксов, поэтому можно во втором аргументе передать лажу
+        entity.onCollisionStart({}, entity); ///obstacleIntersects есть только у ГроундХитбоксов, поэтому можно во втором аргументе передать лажу
         entity.obstacleIntersects.clear();
       }
     }
@@ -214,11 +214,11 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
           other.onCollisionStart({list.first}, entity);
         }
       }else{
-        if(list.length == 1){
-          entity.obstacleIntersects.add(list.first);
-        }else if(list.length == 2){
-          entity.obstacleIntersects.add((list.first + list.last) / 2);
-        }
+        // if(list.length == 1){
+        //   entity.obstacleIntersects.add(list.first);
+        // }else if(list.length == 2){
+        //   entity.obstacleIntersects.add((list.first + list.last) / 2);
+        // }
       }
     }
     if(entityTrig || otherTrig){
@@ -278,7 +278,6 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
       }
     }
     if(countOfinside == other.getVerticesCount()){
-
       return;
     }
     for (int i = -1; i < other.getVerticesCount() - 1; i++) {
@@ -308,18 +307,18 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
           }
           return;
         } else {
-          if (list.length == 1) {
-            Vector2 absVec;
-            if (insideCircles.contains(tFirst)) {
-              absVec = list[0] + otherFirst;
-            } else {
-              absVec = list[0] + otherSecond;
-            }
-            absVec /= 2;
-            entity.obstacleIntersects.add(absVec);
-          } else if (list.length == 2) {
-            entity.obstacleIntersects.add((list.first + list.last) / 2);
-          }
+          // if (list.length == 1) {
+          //   Vector2 absVec;
+          //   if (insideCircles.contains(tFirst)) {
+          //     absVec = list[0] + otherFirst;
+          //   } else {
+          //     absVec = list[0] + otherSecond;
+          //   }
+          //   absVec /= 2;
+          //   entity.obstacleIntersects.add(absVec);
+          // } else if (list.length == 2) {
+          //   entity.obstacleIntersects.add((list.first + list.last) / 2);
+          // }
         }
       }
     }
@@ -351,10 +350,14 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
     Vector2 otherSecond = other.getPoint(tSecond);
     if (isMapObstacle) {
       if(insidePoints.contains(tFirst) && insidePoints.contains(tSecond)) {
-        entity.obstacleIntersects.add((otherFirst + otherSecond) / 2);
+        CollideInfo cinf = CollideInfo();
+        cinf.collideDepth = (otherFirst + otherSecond) / 2;
+        cinf.lineWhichCollide = [otherFirst, otherSecond];
+        entity.obstacleIntersects.add(cinf);
         continue;
       }
       List<Vector2> tempBorderLines = [];
+      List<Vector2> entityFrames = [];
       for(int i = - 1; i<entity.getVerticesCount() - 1; i++){
         if (!entity.isLoop && i == -1) {
           continue;
@@ -368,22 +371,26 @@ void _finalInterCalc(DCollisionEntity entity, DCollisionEntity other,Set<int> in
         tS = i + 1;
         Vector2 point = f_pointOfIntersect(entity.getPoint(tF), entity.getPoint(tS)
             , otherFirst, otherSecond);
-
         if (point != Vector2.zero()) {
           tempBorderLines.add(point);
+          entityFrames.add(entity.getPoint(tF));
+          entityFrames.add(entity.getPoint(tS));
         }
       }
       if (tempBorderLines.length == 2) {
-        entity.obstacleIntersects.add((tempBorderLines[0] + tempBorderLines[1]) / 2);
+        CollideInfo cinf = CollideInfo();
+        cinf.collideDepth = (tempBorderLines[0] + tempBorderLines[1]) / 2;
+        cinf.lineWhichCollide = [tempBorderLines[0], tempBorderLines[1]];
+        entity.obstacleIntersects.add(cinf);
       }else if(tempBorderLines.length == 1){
-        Vector2 absVec;
+        CollideInfo cinf = CollideInfo();
         if(insidePoints.contains(tFirst)){
-          absVec = tempBorderLines[0] + otherFirst;
+          cinf.collideDepth = otherFirst;
         }else{
-          absVec = tempBorderLines[0] + otherSecond;
+          cinf.collideDepth = otherSecond;
         }
-        absVec /= 2;
-        entity.obstacleIntersects.add(absVec);
+        cinf.lineWhichCollide = [entityFrames[0], entityFrames[1]];
+        entity.obstacleIntersects.add(cinf);
       }
     } else {
       for(int i=-1; i<entity.getVerticesCount() - 1; i++){
