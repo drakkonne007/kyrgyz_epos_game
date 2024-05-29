@@ -214,13 +214,4 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       }
     }
   }
-
-  @override
-  void update(double dt)
-  {
-    // if(dt > 0.041){
-    //   return;
-    // }
-    super.update(dt);
-  }
 }

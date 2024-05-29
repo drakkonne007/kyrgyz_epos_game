@@ -59,7 +59,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool _isRun = false;
   Ground? groundRigidBody;
   double dumping = 8;
-  bool isGygy = false;
 
   @override
   void onRemove()
@@ -253,12 +252,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         flipHorizontally();
       }
     }
-    print(groundRigidBody!.position);
-    if(!isGygy) {
-      groundRigidBody?.applyLinearImpulse(
-          Vector2(0, -5000));
-      isGygy = true;
-    }
   }
 
   @override
@@ -332,9 +325,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
-    if(isGygy && groundRigidBody?.linearVelocity == Vector2.zero()){
-      print(groundRigidBody!.position);
-    }
     super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
@@ -359,7 +349,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.playerData.addEnergy(dt);
       }
     }
-    // groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * 5 * (isReallyRun ? PhysicVals.runCoef : 1));
+    groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * 5 * (isReallyRun ? PhysicVals.runCoef : 1));
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
     if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
       setIdleAnimation();

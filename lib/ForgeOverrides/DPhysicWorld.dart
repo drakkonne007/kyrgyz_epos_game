@@ -24,13 +24,21 @@ class UpWorld extends Forge2DWorld
     ..setContactListener(contactListener ?? WorldContactListener());
 
   static final Vector2 defaultGravity = Vector2(0, 0);
+  static const double tickLimit = 1.0 / 45;
+  double currentDt = 0;
 
   @override
   final forge2d.World physicsWorld;
 
   @override
-  void update(double dt) {
-    physicsWorld.stepDt(dt);
+  void update(double dt)
+  {
+    currentDt += dt;
+    int cycles = currentDt ~/ tickLimit;
+    for(int i = 0; i < cycles; i++){
+      physicsWorld.stepDt(tickLimit);
+    }
+    currentDt = currentDt - cycles * tickLimit;
   }
 
   @override
