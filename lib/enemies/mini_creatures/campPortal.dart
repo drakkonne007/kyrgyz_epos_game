@@ -7,6 +7,14 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class CampPortalUp extends SpriteAnimationComponent
@@ -66,21 +74,21 @@ class CampPortalDown extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     animation = SpriteAnimation.spriteList(sprites, stepTime: 0.14);
 
     final List<Vector2> points2 = [
-      (Vector2(168,178)  - Vector2(145,192)) / 1.5,
-      (Vector2(168,96)   - Vector2(145,192)) / 1.5,
-      (Vector2(229,96)   - Vector2(145,192)) / 1.5,
-      (Vector2(226,110)  - Vector2(145,192)) / 1.5,
-      (Vector2(244,129)  - Vector2(145,192)) / 1.5,
-      (Vector2(246,141)  - Vector2(145,192)) / 1.5,
-      (Vector2(266,148)  - Vector2(145,192)) / 1.5,
-      (Vector2(251,176)  - Vector2(145,192)) / 1.5,
+    ((Vector2(168,178)  - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
+    ((Vector2(168,96)   - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
+    ((Vector2(229,96)   - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
+    ((Vector2(226,110)  - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
+    ((Vector2(244,129)  - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
+    ((Vector2(246,141)  - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
+    ((Vector2(266,148)  - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
+    ((Vector2(251,176)  - Vector2(145,192)) / 1.5) * PhysicVals.physicScale,
     ];
 
     final List<Vector2> points = [
-      (Vector2(127,178)   - Vector2(145,192) ) / 1.5,
-      (Vector2(127,96)    - Vector2(145,192) ) / 1.5,
-      (Vector2(67,96)     - Vector2(145,192) ) / 1.5,
-      (Vector2(28,163)    - Vector2(145,192) ) / 1.5,
+      (Vector2(127,178)   - Vector2(145,192) ) / 1.5 * PhysicVals.physicScale,
+      (Vector2(127,96)    - Vector2(145,192) ) / 1.5 * PhysicVals.physicScale,
+      (Vector2(67,96)     - Vector2(145,192) ) / 1.5 * PhysicVals.physicScale,
+      (Vector2(28,163)    - Vector2(145,192) ) / 1.5 * PhysicVals.physicScale,
     ];
     
     ObjectHitbox obj = ObjectHitbox(getPointsForActivs(Vector2(-10,-70), Vector2(20,30)),
@@ -88,10 +96,10 @@ class CampPortalDown extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     ,autoTrigger: false);
     add(obj);
 
-    BodyDef bd = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos);
+    BodyDef bd = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos * PhysicVals.physicScale);
     firstGround = Ground(bd, gameRef.world.physicsWorld);
     firstGround.createFixture(FixtureDef(PolygonShape()..set(points)));
-    BodyDef bd2 = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos);
+    BodyDef bd2 = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos * PhysicVals.physicScale,);
     secGround = Ground(bd2, gameRef.world.physicsWorld);
     secGround.createFixture(FixtureDef(PolygonShape()..set(points2)));
   }

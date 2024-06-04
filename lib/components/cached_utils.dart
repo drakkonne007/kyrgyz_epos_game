@@ -179,9 +179,9 @@ Future firstCachedIntoInternal() async
 {
   // var dir = await getApplicationCacheDirectory();
   var dir = await getApplicationSupportDirectory();
-  // dir.listSync().forEach((element) {
-  //   element.deleteSync(recursive: true);
-  // });
+  dir.listSync().forEach((element) {
+    element.deleteSync(recursive: true);
+  });
   final allFullMaps = fullMaps();
   for(final bigWorlds in allFullMaps) {
     Directory dirdsds = Directory('${dir.path}/${bigWorlds.nameForGame}');

@@ -12,6 +12,7 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 
@@ -28,10 +29,10 @@ final List<Vector2> _hitBoxPoints = [ //вторая колонка
 ];
 
 final List<Vector2> _groundBoxPoints = [ //вторая колонка
-  Vector2(103 - 110,65 - 48) * zoomScale,
-  Vector2(117 - 110,65 - 48) * zoomScale,
-  Vector2(117 - 110,75 - 48) * zoomScale,
-  Vector2(103 - 110,75 - 48) * zoomScale,
+  Vector2(103 - 110,65 - 48) * zoomScale * PhysicVals.physicScale,
+  Vector2(117 - 110,65 - 48) * zoomScale * PhysicVals.physicScale,
+  Vector2(117 - 110,75 - 48) * zoomScale * PhysicVals.physicScale,
+  Vector2(103 - 110,75 - 48) * zoomScale * PhysicVals.physicScale,
 ];
 
 final List<Vector2> _weaponPoints = [ //вторая колонка
@@ -55,7 +56,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   final Vector2 _spriteSheetSize = Vector2(220,96);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 70;
+  final double _maxSpeed = 50;
   late DefaultEnemyWeapon _weapon;
   bool _wasHit = false;
 
@@ -85,7 +86,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    bodyDef.position = _startPos;
+    bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_groundBoxPoints));
     groundBody?.createFixture(fx);
@@ -240,14 +241,14 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     if(loots.isNotEmpty) {
       if(loots.length > 1){
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }else{
         var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }
     }
     animation = _animDeath;
-    _hitbox.removeFromParent();
+    _hitbox.collisionType = DCollisionType.inactive;
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
@@ -288,20 +289,25 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       return;
     }
     super.update(dt);
-    if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
-      if(parent != gameRef.gameMap.enemyOnPlayer){
-        parent = gameRef.gameMap.enemyOnPlayer;
-      }
-    }else{
-      if(parent != gameRef.gameMap.enemyComponent){
-        parent = gameRef.gameMap.enemyComponent;
-      }
+    // if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
+    //   if(parent != gameRef.gameMap.enemyOnPlayer){
+    //     parent = gameRef.gameMap.enemyOnPlayer;
+    //   }
+    // }else{
+    //   if(parent != gameRef.gameMap.enemyComponent){
+    //     parent = gameRef.gameMap.enemyComponent;
+    //   }
+    // }
+    position = groundBody!.position / PhysicVals.physicScale;
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
     }
-    position = groundBody?.position ?? Vector2.zero();
+    priority = pos;
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
+    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
   }
 
   @override

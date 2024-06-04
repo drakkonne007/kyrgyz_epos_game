@@ -4,6 +4,8 @@ import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
@@ -22,24 +24,24 @@ final List<Vector2> _objOpenedPoints = [
 ];
 
 final List<Vector2> _groundPoints = [
-  Vector2(20 - 48,101 - 64),
-  Vector2(20 - 48,110 - 64),
-  Vector2(76 - 48,110 - 64),
-  Vector2(76 - 48,101 - 64),
+  Vector2(20 - 48,101 - 64) * PhysicVals.physicScale,
+  Vector2(20 - 48,110 - 64) * PhysicVals.physicScale,
+  Vector2(76 - 48,110 - 64) * PhysicVals.physicScale,
+  Vector2(76 - 48,101 - 64) * PhysicVals.physicScale,
 ];
 
 final List<Vector2> _openedPoints = [
-  Vector2(788 - 48  - 96 * 8,58 - 64),
-  Vector2(793 - 48  - 96 * 8,58 - 64),
-  Vector2(793 - 48  - 96 * 8,110 - 64),
-  Vector2(788 - 48  - 96 * 8,110 - 64),
+  Vector2(788 - 48  - 96 * 8,58 - 64) * PhysicVals.physicScale,
+  Vector2(793 - 48  - 96 * 8,58 - 64) * PhysicVals.physicScale,
+  Vector2(793 - 48  - 96 * 8,110 - 64) * PhysicVals.physicScale,
+  Vector2(788 - 48  - 96 * 8,110 - 64) * PhysicVals.physicScale,
 ];
 
 final List<Vector2> _startOpenedPoints = [
-  Vector2(788 - 48  - 96 * 8,25 - 64),
-  Vector2(793 - 48  - 96 * 8,25 - 64),
-  Vector2(793 - 48  - 96 * 8,110 - 64),
-  Vector2(788 - 48  - 96 * 8,110 - 64),
+  Vector2(788 - 48  - 96 * 8,25 - 64) * PhysicVals.physicScale,
+  Vector2(793 - 48  - 96 * 8,25 - 64) * PhysicVals.physicScale,
+  Vector2(793 - 48  - 96 * 8,110 - 64) * PhysicVals.physicScale,
+  Vector2(788 - 48  - 96 * 8,110 - 64) * PhysicVals.physicScale,
 ];
 
 
@@ -121,7 +123,6 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       Shape sh = PolygonShape()..set(isVertical ? _startOpenedPoints : _openedPoints);
       FixtureDef fx = FixtureDef(sh);
       ground = gameRef.world.createBody(bf)..createFixture(fx);
-      // ground?.changeVertices(isVertical ? _startOpenedPoints : _openedPoints,isLoop: true, isSolid: true);
       _objectHitbox?.changeVertices(_objOpenedPoints,isLoop: true, isSolid: true);
     }else{
       animation = _animOpening.reversed();
@@ -129,7 +130,6 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       Shape sh = PolygonShape()..set(_groundPoints);
       FixtureDef fx = FixtureDef(sh);
       ground = gameRef.world.createBody(bf)..createFixture(fx);
-      // ground?.changeVertices(_groundPoints,isLoop: true, isSolid: true);
       _objectHitbox?.changeVertices(_objPoints,isLoop: true, isSolid: true);
     }
     animationTicker?.onComplete = changeHitboxes;

@@ -97,6 +97,11 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         _speed *= -1;
       }
     }
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
     super.update(dt);
   }
 }

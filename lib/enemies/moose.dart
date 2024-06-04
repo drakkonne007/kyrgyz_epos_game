@@ -12,6 +12,7 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'dart:math' as math;
@@ -91,7 +92,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
   late SpriteAnimation _animMove, _animIdle, animAttack, _animHurt, _animDeath;
   final Vector2 _spriteSheetSize = Vector2(347,192);
   final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 50;
+  final double _maxSpeed = 35;
   late EnemyHitbox _hitBox;
   DefaultEnemyWeapon? _weapon;
   bool _wasHit = false;
@@ -164,11 +165,11 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     _hitBox = EnemyHitbox(hitBoxPoint,collisionType: DCollisionType.passive
         ,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitBox);
-    bodyDef.position = _startPos;
+    bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
     var massData = groundBody!.getMassData();
     massData.mass = 400;
-    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))));
+    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25), scale: PhysicVals.physicScale)));
     groundBody?.createFixture(fx);
     groundBody?.setMassData(massData);
     // _ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
@@ -339,14 +340,14 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     if(loots.isNotEmpty) {
       if(loots.length > 1){
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }else{
         var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }
     }
     animation = _animDeath;
-    _hitBox.removeFromParent();
+    _hitBox.collisionType = DCollisionType.inactive;
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
@@ -363,16 +364,21 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
       return;
     }
     super.update(dt);
-    if(_hitBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
-      parent = gameRef.gameMap.enemyOnPlayer;
-    }else{
-      parent = gameRef.gameMap.enemyComponent;
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
     }
-    position = groundBody?.position ?? Vector2.zero();
+    priority = pos;
+    // if(_hitBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
+    //   parent = gameRef.gameMap.enemyOnPlayer;
+    // }else if(parent != gameRef.gameMap.enemyComponent){
+    //   parent = gameRef.gameMap.enemyComponent;
+    // }
+    position = groundBody!.position / PhysicVals.physicScale;
     if(animation == _animHurt || animation == animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
+    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
     // position += _speed * dt;
   }
 

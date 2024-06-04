@@ -3,7 +3,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class StandHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
@@ -48,8 +50,8 @@ class StandDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.09);
     Vector2 tSize = Vector2(43, 67);
     Vector2 tPos = Vector2(-24, -60);
-    BodyDef bf = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos);
-    FixtureDef ft = FixtureDef(PolygonShape()..set([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)]));
+    BodyDef bf = BodyDef(userData: BodyUserData(isQuadOptimizaion: false), position: _startPos * PhysicVals.physicScale,);
+    FixtureDef ft = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos, tSize, scale: PhysicVals.physicScale)));
     _groundBox = Ground(bf,gameRef.world.physicsWorld);
     _groundBox.createFixture(ft);
   }

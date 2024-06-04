@@ -1,5 +1,6 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 
 
 class Ground extends Body with ContactCallbacks
@@ -7,7 +8,7 @@ class Ground extends Body with ContactCallbacks
   Ground(super.bd, super.world, {this.onGroundCollision, this.isOnlyForStatic = false, this.isEnemy = false})
   {
     onBeginContact = onGroundCollision;
-    var wrld = world as DWorld;
+    var wrld = world as WorldPhy;
     wrld.addCustomBody(this);
   }
 

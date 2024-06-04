@@ -44,7 +44,7 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
 
   void spawnArrow()
   {
-    gameRef.gameMap.enemyComponent.add(Arrow(_startPos,direction: _arrowDir));
+    gameRef.gameMap.container.add(Arrow(_startPos,direction: _arrowDir));
   }
 
   void checkInRemoveItself()
@@ -107,7 +107,7 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
         _speed.y = -PhysicVals.maxSpeed - 40;
         break;
     }
-    _grBox.isOnlyForStatic = true;
+    // _grBox.isOnlyForStatic = true;
     // add(_grBox);
     add(_weapon);
     _weapon.damage = 5;
@@ -137,5 +137,10 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
   update(double dt)
   {
     position += _speed * dt;
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
   }
 }

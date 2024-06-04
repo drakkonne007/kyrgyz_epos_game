@@ -182,16 +182,16 @@ abstract class DCollisionEntity extends Component
     if(radius != 0) {
       PointCust p = PointCust(
           position: getPoint(0) - Vector2(radius,0), color: color);
-      game.gameMap.priorityHigh.add(p);
+      game.gameMap.container.add(p);
       p = PointCust(
           position: getPoint(0) + Vector2(radius,0), color: color);
-      game.gameMap.priorityHigh.add(p);
+      game.gameMap.container.add(p);
       p = PointCust(
           position: getPoint(0) - Vector2(0,radius), color: color);
-      game.gameMap.priorityHigh.add(p);
+      game.gameMap.container.add(p);
       p = PointCust(
           position: getPoint(0) + Vector2(0,radius), color: color);
-      game.gameMap.priorityHigh.add(p);
+      game.gameMap.container.add(p);
     }else {
       for (int i = 0; i < vertices.length; i++) {
         Color color;
@@ -202,7 +202,7 @@ abstract class DCollisionEntity extends Component
         }
         PointCust p = PointCust(
             position: getPoint(i), color: color);
-        game.gameMap.priorityHigh.add(p);
+        game.gameMap.container.add(p);
       }
     }
   }

@@ -10,6 +10,7 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -71,7 +72,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
   final Vector2 _spriteSheetSize = Vector2(224,192);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 30;
+  final double _maxSpeed = 20;
   final GolemVariant spriteVariant;
   late DefaultEnemyWeapon _weapon;
   bool _wasHit = false;
@@ -109,14 +110,13 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
         _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = 3;
-    bodyDef.position = _startPos;
+    bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
-    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))));
+    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38), scale: PhysicVals.physicScale)));
     groundBody?.createFixture(fx);
     var massData = groundBody!.getMassData();
     massData.mass = 2000;
     groundBody!.setMassData(massData);
-    add(BodyComponent(bodyDef: bodyDef, fixtureDefs: [fx]));
     // _ground = Ground(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38))
     //     , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     // _ground.onlyForPlayer = true;
@@ -277,14 +277,14 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     if(loots.isNotEmpty) {
       if(loots.length > 1){
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }else{
         var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }
     }
     animation = _animDeath;
-    _hitbox.removeFromParent();
+    _hitbox.collisionType = DCollisionType.inactive;
     groundBody?.setActive(false);
     // removeAll(children);
     animationTicker?.onComplete = () {
@@ -302,16 +302,21 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
       return;
     }
     super.update(dt);
-    position = groundBody?.position ?? Vector2.zero();
-    if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
-      parent = gameRef.gameMap.enemyOnPlayer;
-    }else{
-      parent = gameRef.gameMap.enemyComponent;
+    position = groundBody!.position / PhysicVals.physicScale;
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
     }
+    priority = pos;
+    // if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
+    //   parent = gameRef.gameMap.enemyOnPlayer;
+    // }else if (parent != gameRef.gameMap.enemyComponent){
+    //   parent = gameRef.gameMap.enemyComponent;
+    // }
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
+    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
   }
 
   @override

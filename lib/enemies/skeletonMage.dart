@@ -11,6 +11,7 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/enemies/skeleton.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -27,7 +28,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 70;
+  final double _maxSpeed = 45;
   bool isHigh;
   int _variantOfHit = 0;
   bool _withShieldNow = false;
@@ -101,9 +102,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     _hitbox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
-    bodyDef.position = _startPos;
+    bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
-    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16))));
+    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16), scale: PhysicVals.physicScale)));
     groundBody?.createFixture(fx);
     var massData = groundBody!.getMassData();
     massData.mass = 60;
@@ -169,9 +170,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       animationTicker?.onComplete = endHit;
     }else{
       if(isFlippedHorizontally){
-        gameRef.gameMap.priorityHighMinus1.add(MageSphere(position + Vector2(-48,22)));
+        gameRef.gameMap.container.add(MageSphere(position + Vector2(-48,22)));
       }else{
-        gameRef.gameMap.priorityHighMinus1.add(MageSphere(position + Vector2(48,22)));
+        gameRef.gameMap.container.add(MageSphere(position + Vector2(48,22)));
       }
       endHit();
     }
@@ -183,9 +184,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       return;
     }
     if(isFlippedHorizontally){
-      gameRef.gameMap.priorityHighMinus1.add(MageSphere(position + Vector2(-48,22)));
+      gameRef.gameMap.container.add(MageSphere(position + Vector2(-48,22)));
     }else{
-      gameRef.gameMap.priorityHighMinus1.add(MageSphere(position + Vector2(48,22)));
+      gameRef.gameMap.container.add(MageSphere(position + Vector2(48,22)));
     }
   }
 
@@ -309,15 +310,15 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     _speed.y = 0;
     groundBody?.clearForces();
     groundBody?.setActive(false);
-    _hitbox.removeFromParent();
+    _hitbox.collisionType = DCollisionType.inactive;
     // removeAll(children);
     if(loots.isNotEmpty) {
       if(loots.length > 1){
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }else{
         var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.enemyComponent.add(temp);
+        gameRef.gameMap.container.add(temp);
       }
     }
     animation = _withShieldNow ? _animDeathShield : _animDeath;
@@ -333,7 +334,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   {
     if(index == 4){
       DroppedShield droppedShield = DroppedShield(position,isFlippedHorizontally);
-      gameRef.gameMap.enemyComponent.add(droppedShield);
+      gameRef.gameMap.container.add(droppedShield);
     }
   }
 
@@ -343,17 +344,22 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       return;
     }
     super.update(dt);
-    if(!isHigh) {
-      if (_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y) {
-        parent = gameRef.gameMap.enemyOnPlayer;
-      } else {
-        parent = gameRef.gameMap.enemyComponent;
-      }
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
     }
-    position = groundBody?.position ?? Vector2.zero();
+    priority = pos;
+    // if(!isHigh) {
+    //   if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
+    //     parent = gameRef.gameMap.enemyOnPlayer;
+    //   }else if(parent != gameRef.gameMap.enemyComponent){
+    //     parent = gameRef.gameMap.enemyComponent;
+    //   }
+    // }
+    position = groundBody!.position / PhysicVals.physicScale;
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass * 7.5);
+      groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
     }
   }
 }
@@ -417,6 +423,11 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void update(double dt)
   {
     super.update(dt);
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
     if(!_isMove){
       return;
     }

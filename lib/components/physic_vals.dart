@@ -227,9 +227,9 @@ class PlayerData
 
 class PhysicVals
 {
-  static const double physicScale = 0.2;
+  static const double physicScale = 0.1;
   static double maxSpeed = 80;
-  static double startSpeed = 40;
+  static double startSpeed = 250;
   static const double runCoef = 1.5;
   static double runMinimum = 1;
   static double gravity = 20;
@@ -256,8 +256,10 @@ class GamePriority
   static const int woods = 3;
   static const int loot = 40;
   static const int player = 100;
-  static const int high = 150;
-  static const int maxPriority = 999999;
+  static const int high = 99999999;
+  static const int maxPriority = 99999999;
+  // static const int high = 4294967296;
+  // static const int maxPriority = 4294967296;
 }
 
 

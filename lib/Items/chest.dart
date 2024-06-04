@@ -99,11 +99,16 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void update(double dt)
   {
     super.update(dt);
-    if(position.y + _heightOfChest > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
-      parent = gameRef.gameMap.enemyOnPlayer;
-    }else{
-      parent = gameRef.gameMap.enemyComponent;
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
     }
+    priority = pos;
+    // if(position.y + _heightOfChest > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
+    //   parent = gameRef.gameMap.enemyOnPlayer;
+    // }else{
+    //   parent = gameRef.gameMap.enemyComponent;
+    // }
   }
 
 

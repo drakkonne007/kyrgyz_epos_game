@@ -231,9 +231,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if(animation == animIdle  || animation == animMove) {
       _isRun = isRun;
-      bool isReallyRun = false;
       if (isRun && gameRef.playerData.energy.value > 0 && !_isMinusEnergy) {
-        isReallyRun = true;
         animation = animMove;
         animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
       } else {
@@ -325,6 +323,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
     super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
@@ -349,7 +352,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         gameRef.playerData.addEnergy(dt);
       }
     }
-    groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * 5 * (isReallyRun ? PhysicVals.runCoef : 1));
+    groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * (isReallyRun ? PhysicVals.runCoef : 1));
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
     if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
       setIdleAnimation();

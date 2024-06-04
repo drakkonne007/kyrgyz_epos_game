@@ -67,4 +67,14 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     gameRef.doDialogHud();
   }
 
+  @override
+  void update(double dt) {
+    super.update(dt);
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
+  }
+
 }

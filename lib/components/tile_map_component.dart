@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/ForgeOverrides/broadphase.dart';
+import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
@@ -51,24 +52,26 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   GameWorldData? currentGameWorldData;
   bool _isLoad = false;
   double shaderTime = 0;
-  final Component priorityHigh = Component(priority: GamePriority.high);
-  final Component priorityHighMinus1 = Component(priority: GamePriority.high - 1);
-  final Component priorityGroundPlus1 = Component(priority: GamePriority.ground + 1);
-  final Component enemyComponent = Component(priority: GamePriority.player - 2);
-  final Component playerLayout = Component(priority: GamePriority.player);
-  final Component enemyOnPlayer = Component(priority: GamePriority.player +2);
+  Component container = Component();
+  // final Component priorityHigh = Component(priority: GamePriority.high);
+  // final Component priorityHighMinus1 = Component(priority: GamePriority.high - 1);
+  // final Component priorityGroundPlus1 = Component(priority: GamePriority.ground + 1);
+  // final Component enemyComponent = Component(priority: GamePriority.player - 2);
+  // final Component playerLayout = Component(priority: GamePriority.player);
+  // final Component enemyOnPlayer = Component(priority: GamePriority.player +2);
 
 
   @override
   Future onLoad() async
   {
+    await add(container);
     // gameRef.camera = CameraComponent.withFixedResolution(width: 600, height: 350, world: this);
-    await add(playerLayout);
-    await add(enemyComponent);
-    await add(enemyOnPlayer);
-    await add(priorityGroundPlus1);
-    await add(priorityHighMinus1);
-    await add(priorityHigh);
+    // await add(playerLayout);
+    // await add(enemyComponent);
+    // await add(enemyOnPlayer);
+    // await add(priorityGroundPlus1);
+    // await add(priorityHighMinus1);
+    // await add(priorityHigh);
   }
 
 
@@ -95,7 +98,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   {
 
     game.world = UpWorld();
-    var dworld = game.world.physicsWorld as DWorld;
+    var dworld = game.world.physicsWorld as WorldPhy;
     dworld.resetWorld();
     game.doLoadingMapHud();
     _isLoad = false;
@@ -117,12 +120,13 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
         el.removeFromParent();
       }
     }
-    priorityHigh.removeAll(priorityHigh.children);
-    priorityHighMinus1.removeAll(priorityHighMinus1.children);
-    priorityGroundPlus1.removeAll(priorityGroundPlus1.children);
-    enemyComponent.removeAll(enemyComponent.children);
-    playerLayout.removeAll(playerLayout.children);
-    enemyOnPlayer.removeAll(enemyOnPlayer.children);
+    container.removeAll(container.children);
+    // priorityHigh.removeAll(priorityHigh.children);
+    // priorityHighMinus1.removeAll(priorityHighMinus1.children);
+    // priorityGroundPlus1.removeAll(priorityGroundPlus1.children);
+    // enemyComponent.removeAll(enemyComponent.children);
+    // playerLayout.removeAll(playerLayout.children);
+    // enemyOnPlayer.removeAll(enemyOnPlayer.children);
 
     allEls.clear();
     loadedLivesObjs.clear();
@@ -223,13 +227,15 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
         orthoPlayer = OrthoPlayer(startPos: gameRef.playerData.startLocation);
-        await playerLayout.add(orthoPlayer!);
+        // await playerLayout.add(orthoPlayer!);
+        await container.add(orthoPlayer!);
         await orthoPlayer!.loaded;
       }
     }else{
       if(frontPlayer == null){
         frontPlayer = FrontPlayer();
-        await playerLayout.add(frontPlayer!);
+        // await playerLayout.add(frontPlayer!);
+        await container.add(frontPlayer!);
         await frontPlayer!.loaded;
       }
       frontPlayer?.position = gameRef.playerData.startLocation;
@@ -328,7 +334,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   {
     _column = newColumn;
     _row = newRow;
-    var dworld = game.world.physicsWorld as DWorld;
+    var dworld = game.world.physicsWorld as WorldPhy;
     dworld.changeActiveBodies(LoadedColumnRow(_column, _row));
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     for(final els in allEllsSet){

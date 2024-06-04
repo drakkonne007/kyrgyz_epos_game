@@ -3,7 +3,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 double distToPlayer = 150;
@@ -53,9 +55,9 @@ class FlyingDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.1);
     Vector2 tSize = Vector2(28, 52);
     Vector2 tPos = Vector2(22, 0);
-    BodyDef bf = BodyDef(position: position, type: BodyType.static, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false));
+    BodyDef bf = BodyDef(position: position * PhysicVals.physicScale, type: BodyType.static, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false));
     _groundBox = Ground(bf, gameRef.world.physicsWorld);
-    _groundBox.createFixture(FixtureDef(PolygonShape()..set([tPos,tPos + Vector2(0,tSize.y), tPos + tSize, tPos + Vector2(tSize.x,0)])));
+    _groundBox.createFixture(FixtureDef(PolygonShape()..set(getPointsForActivs(tPos, tSize, scale: PhysicVals.physicScale))));
     _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;
   }
 
@@ -70,7 +72,7 @@ class FlyingDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
       _speed.y = 0;
     }
     _groundBox.applyLinearImpulse(_speed * dt * 150);
-    position = _groundBox.position;
+    position = _groundBox.position / PhysicVals.physicScale;
     _highObelisk.position += _speed * dt;
     super.update(dt);
   }

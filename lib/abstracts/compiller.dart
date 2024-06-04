@@ -51,6 +51,10 @@ Future precompileAll() async
             layersToLoad: [a.name]);
         compilerAnimation.addLayer();
       }
+      compilerAnimation.internalObjs.clear();
+      compilerAnimationBack.internalObjs.clear();
+      compilerAnimation.internalObjsLoop.clear();
+      compilerAnimationBack.internalObjsLoop.clear();
       await compilerAnimation.compile('high',bigWorld);
       await compilerAnimationBack.compile('down',bigWorld);
     }
@@ -283,27 +287,28 @@ Future precompileAll() async
               }
             }
           }
-          for(final keys in compilerAnimationBack.internalObjs.keys){
-            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
-            GroundSource newPoints = GroundSource();
-            newPoints.isLoop = false;
-            newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
-            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
-            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
-          }
-          for(final keys in compilerAnimationBack.internalObjsLoop.keys){
-            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
-            GroundSource newPoints = GroundSource();
-            newPoints.isLoop = true;
-            newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjsLoop[keys]!);
-            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
-            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
-          }
+          // for(final keys in compilerAnimationBack.internalObjs.keys){
+          //   int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+          //   int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+          //   GroundSource newPoints = GroundSource();
+          //   newPoints.isLoop = false;
+          //   newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
+          //   objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
+          //   objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          // }
+          // for(final keys in compilerAnimationBack.internalObjsLoop.keys){
+          //   int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+          //   int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+          //   GroundSource newPoints = GroundSource();
+          //   newPoints.isLoop = true;
+          //   newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjsLoop[keys]!);
+          //   objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
+          //   objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          // }
           compilerAnimationBack.internalObjs.clear();
           compilerAnimationBack.internalObjsLoop.clear();
-
+          compilerAnimation.internalObjs.clear();
+          compilerAnimation.internalObjsLoop.clear();
 
           for (final key in objsMap.keys) {
             File file = File(
