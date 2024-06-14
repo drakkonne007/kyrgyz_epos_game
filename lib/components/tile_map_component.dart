@@ -106,10 +106,14 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     _row = -100;
     Flame.assets.clearCache();
     Flame.images.clearCache();
-    orthoPlayer?.removeFromParent();
-    orthoPlayer=null;
-    frontPlayer?.removeFromParent();
-    frontPlayer=null;
+    if(orthoPlayer != null){
+      container.remove(orthoPlayer!);
+      orthoPlayer = null;
+    }
+    if(frontPlayer != null){
+      container.remove(frontPlayer!);
+      frontPlayer = null;
+    }
     collisionProcessor ??= DCollisionProcessor(gameRef);
     collisionProcessor?.clearActiveCollEntity();
     collisionProcessor?.clearStaticCollEntity();
@@ -121,22 +125,19 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
       }
     }
     container.removeAll(container.children);
-    // priorityHigh.removeAll(priorityHigh.children);
-    // priorityHighMinus1.removeAll(priorityHighMinus1.children);
-    // priorityGroundPlus1.removeAll(priorityGroundPlus1.children);
-    // enemyComponent.removeAll(enemyComponent.children);
-    // playerLayout.removeAll(playerLayout.children);
-    // enemyOnPlayer.removeAll(enemyOnPlayer.children);
+
 
     allEls.clear();
     loadedLivesObjs.clear();
     currentObject.value = null;
-    // if(_currentGameWorldData != null && _currentGameWorldData!.nameForGame == gameRef.playerData.playerBigMap.nameForGame){
-    //   smallRestart();
-    //   return;
-    // }
+
     currentGameWorldData = gameRef.playerData.playerBigMap;
     if(currentGameWorldData == null) return;
+    if(currentGameWorldData!.orientation == OrientatinType.front){
+      game.world.gravity = Vector2(0,100);
+    }else{
+      game.world.gravity = Vector2(0,0);
+    }
     var dd =  gameRef.world.physicsWorld.contactManager.broadPhase as MyBroadPhase;
     dd.initBroadPhase(currentGameWorldData!);
     isMapCached.value = 0;
@@ -144,39 +145,9 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
     }
-    // for(final ground in KyrgyzGame.cachedGrounds) {
-    //   var points = ground.getAttribute('p')!;
-    //   var pointsList = points.split(' ');
-    //   List<Vector2> temp = [];
-    //   for (final sources in pointsList) {
-    //     if (sources == '') {
-    //       continue;
-    //     }
-    //     temp.add(Vector2(double.parse(sources.split(',')[0]),
-    //         double.parse(sources.split(',')[1])));
-    //   }
-    //   if (temp.length > 1) {
-    //     for (int i = 0; i < temp.length - 1; i++) {
-    //       final shape = forge2d.EdgeShape()
-    //         ..set(temp[i], temp[i + 1]);
-    //       final fixtureDef = forge2d.FixtureDef(shape);
-    //       var tt = Ground(forge2d.BodyDef(),
-    //           gameRef.world.physicsWorld);
-    //       tt.setActive(false);
-    //       tt.createFixture(fixtureDef);
-    //     }
-    //     if (ground.getAttribute('lp')! == '1') {
-    //       final shape = forge2d.EdgeShape()
-    //         ..set(temp.last, temp.first);
-    //       final fixtureDef = forge2d.FixtureDef(shape);
-    //       var tt = Ground(forge2d.BodyDef(),
-    //           gameRef.world.physicsWorld);
-    //       tt.setActive(false);
-    //       tt.createFixture(fixtureDef);
-    //     }
-    //   }
-    // }
+
     for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
+      print('make ground');
       for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
         if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
           var objects = KyrgyzGame.cachedObjXmls['$i-$j.objXml']!;
@@ -206,39 +177,24 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
                   var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
                   tt.createFixture(fixtureDef);
                 }
-                // var ground = Ground(temp, collisionType: DCollisionType.passive,
-                //     isSolid: false,
-                //     isStatic: true,
-                //     isLoop: obj.getAttribute('lp')! == '1',
-                //     gameKyrgyz: gameRef,
-                //     column: i,
-                //     row: j);
-                // grounds.add(ground);
-                // add(ground);
               }
             }
           }
         }
       }
     }
-
-    // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2(0.5,0.5))).createFixture(def);
-    // print(grounds.length);
     if(currentGameWorldData!.orientation == OrientatinType.orthogonal){
       if(orthoPlayer == null){
         orthoPlayer = OrthoPlayer(startPos: gameRef.playerData.startLocation);
-        // await playerLayout.add(orthoPlayer!);
         await container.add(orthoPlayer!);
         await orthoPlayer!.loaded;
       }
     }else{
       if(frontPlayer == null){
-        frontPlayer = FrontPlayer();
-        // await playerLayout.add(frontPlayer!);
+        frontPlayer = FrontPlayer(startPos: gameRef.playerData.startLocation);
         await container.add(frontPlayer!);
         await frontPlayer!.loaded;
       }
-      frontPlayer?.position = gameRef.playerData.startLocation;
     }
     gameRef.camera.world = this;
     gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
@@ -246,21 +202,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
         game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32), considerViewport: true);
     gameRef.camera.follow(frontPlayer ?? orthoPlayer!, snap: true);
     gameRef.doGameHud();
-
-    // _column = gameRef.playerData.startLocation.x ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    // _row = gameRef.playerData.startLocation.y ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    // for(int i=0;i<3;i++) {
-    //   for(int j=0;j<3;j++) {
-    //     mapNode?.generateMap(LoadedColumnRow(_column + j - 1, _row + i - 1));
-    //   }
-    // }
-    // // gameRef.camera.zoom = 1.35;
     _isLoad = true;
-
-
-    // forge2d.FixtureDef def = forge2d.FixtureDef(forge2d.PolygonShape()..set([Vector2(-1,-1),Vector2(-1,1),Vector2(1,1),Vector2(1,-1)],));
-    // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2.zero())).createFixture(def);
-    // game.world.createBody(forge2d.BodyDef(type:forge2d.BodyType.dynamic, position: Vector2(-0.5,-0.5))).createFixture(def);
   }
 
   Future _preloadAnimAndObj() async

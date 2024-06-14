@@ -23,7 +23,7 @@ List<Vector2> getPointsForActivs(Vector2 pos, Vector2 size, {double? scale})
 
 class PointCust extends PositionComponent
 {
-  PointCust({required super.position,this.color});
+  PointCust({required super.position,this.color,super.priority = 99999});
   Color? color;
 
   @override

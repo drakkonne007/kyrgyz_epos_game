@@ -18,7 +18,7 @@ class TreeHandler
 class MyBroadPhase implements BroadPhase,TreeCallback
 {
 
-    int count = 0;
+  int count = 0;
   int moveCount = 0;
   GameWorldData? worldData;
   Map<int,List<TreeHandler>> _nests = {};
@@ -31,8 +31,9 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   {
     this.worldData = worldData;
     _proxyHash.clear();
-    count = 0;
+    _movingProxyHash.clear();
     _nests.clear();
+    count = 0;
     for(int i = 0; i < worldData.gameConsts.maxColumn!; i++){
       for(int j = 0; j < worldData.gameConsts.maxRow!; j++){
         AABB tempAABB = AABB();
@@ -239,7 +240,7 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   bool treeCallback(int proxyId)
   {
     print('treeCallback');
-    return false;
+    return true;
   }
 }
 

@@ -229,7 +229,7 @@ class PhysicVals
 {
   static const double physicScale = 0.1;
   static double maxSpeed = 80;
-  static double startSpeed = 250;
+  static double startSpeed = 200;
   static const double runCoef = 1.5;
   static double runMinimum = 1;
   static double gravity = 20;

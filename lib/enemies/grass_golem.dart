@@ -5,6 +5,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -111,7 +112,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     add(_weapon);
     _weapon.damage = 3;
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    var temUs = bodyDef.userData as BodyUserData;
+    temUs.onBeginMyContact = onGround;
+    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38), scale: PhysicVals.physicScale)));
     groundBody?.createFixture(fx);
     var massData = groundBody!.getMassData();
@@ -286,6 +289,9 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     animation = _animDeath;
     _hitbox.collisionType = DCollisionType.inactive;
     groundBody?.setActive(false);
+    if(groundBody != null){
+      gameRef.world.destroyBody(groundBody!);
+    }
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){

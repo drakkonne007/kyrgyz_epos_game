@@ -5,6 +5,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -166,9 +167,11 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
         ,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitBox);
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    var temUs = bodyDef.userData as BodyUserData;
+    temUs.onBeginMyContact = onGround;
+    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     var massData = groundBody!.getMassData();
-    massData.mass = 400;
+    massData.mass = 1400;
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25), scale: PhysicVals.physicScale)));
     groundBody?.createFixture(fx);
     groundBody?.setMassData(massData);
@@ -337,6 +340,9 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     _speed.y = 0;
     groundBody?.clearForces();
     groundBody?.setActive(false);
+    if(groundBody != null){
+      gameRef.world.destroyBody(groundBody!);
+    }
     if(loots.isNotEmpty) {
       if(loots.length > 1){
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));

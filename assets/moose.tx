@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <tileset firstgid="1" source="moose1-347x192.tsx"/>
+ <object type="moose" gid="1" width="347" height="192"/>
+</template>

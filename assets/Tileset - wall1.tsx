@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="Tileset - wall1 -grass2" tilewidth="32" tileheight="32" tilecount="240" columns="16">
+<tileset version="1.10" tiledversion="1.10.2" name="Tileset - wall1 -grass2" tilewidth="32" tileheight="32" tilecount="240" columns="16">
  <image source="tiles/map/grassLand2/Tilesets/wall1.png" width="512" height="480"/>
  <tile id="1" probability="0"/>
  <tile id="3" probability="0"/>
@@ -7,21 +7,6 @@
  <tile id="10" probability="0"/>
  <tile id="25" probability="0"/>
  <tile id="26" probability="0"/>
- <tile id="32">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="16" y="0.076555" width="16" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="48">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="16" y="0" width="16" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="64">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="16" y="0" width="16" height="24"/>
-  </objectgroup>
- </tile>
  <tile id="65" probability="0"/>
  <tile id="67" probability="0"/>
  <tile id="80">

@@ -1,15 +1,19 @@
-
-
-
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:forge2d/forge2d.dart' as forge2d;
 import 'package:game_flame/ForgeOverrides/broadphase.dart';
 import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 
-class BodyUserData
+class BodyUserData with ContactCallbacks
 {
-  BodyUserData({this.loadedColumnRow, this.isQuadOptimizaion = true});
+  BodyUserData({this.loadedColumnRow, this.isQuadOptimizaion = true,this.onBeginMyContact,this.onEndMyContact})
+  {
+    onBeginContact = onBeginMyContact;
+    onEndContact = onEndMyContact;
+  }
+
+  Function(Object other, Contact contact)? onBeginMyContact;
+  Function(Object other, Contact contact)? onEndMyContact;
   LoadedColumnRow? loadedColumnRow;
   bool isQuadOptimizaion;
 }
@@ -74,6 +78,7 @@ class UpWorld extends Forge2DWorld
 
   @override
   void queryAABB(forge2d.QueryCallback callback, AABB aabb) {
+    print('queryAABB in DPhysicWorld');
     physicsWorld.queryAABB(callback, aabb);
   }
 

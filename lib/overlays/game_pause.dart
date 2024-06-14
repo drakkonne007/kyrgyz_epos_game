@@ -26,8 +26,9 @@ class GamePause extends StatelessWidget
           ),
           ElevatedButton(
             onPressed: () async{
-              await _game.loadNewMap();
               _game.resumeEngine();
+              await _game.loadNewMap();
+              // await _game.loadNewMap();
             },
             child: const Text('Загрузить'),
           ),

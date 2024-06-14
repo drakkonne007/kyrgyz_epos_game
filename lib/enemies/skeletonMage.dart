@@ -6,6 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
@@ -103,11 +104,13 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(_hitbox);
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true, onGroundCollision: onGround);
+    var temUs = bodyDef.userData as BodyUserData;
+    temUs.onBeginMyContact = onGround;
+    groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16), scale: PhysicVals.physicScale)));
     groundBody?.createFixture(fx);
     var massData = groundBody!.getMassData();
-    massData.mass = 60;
+    massData.mass = 800;
     groundBody!.setMassData(massData);
     add(TimerComponent(onTick: () {
       if (!checkIsNeedSelfRemove(position.x ~/
@@ -310,6 +313,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     _speed.y = 0;
     groundBody?.clearForces();
     groundBody?.setActive(false);
+    if(groundBody != null){
+      gameRef.world.destroyBody(groundBody!);
+    }
     _hitbox.collisionType = DCollisionType.inactive;
     // removeAll(children);
     if(loots.isNotEmpty) {

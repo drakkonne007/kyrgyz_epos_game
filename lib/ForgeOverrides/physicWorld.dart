@@ -146,7 +146,9 @@ class WorldPhy implements World
         destroyBody(el);
       }
     }
-    // bodies.clear();
+    for(final key in activeBody){
+        destroyBody(key);
+    }    // bodies.clear();
     allEls.clear();
     activeBody.clear();
     flags &= ~World.locked;
@@ -1056,19 +1058,4 @@ class WorldPhy implements World
       }
     }
   }
-}
-
-class WorldQueryWrapper implements TreeCallback {
-  @override
-  bool treeCallback(int nodeId) {
-    final userData = broadPhase.getUserData(nodeId);
-    if (userData == null) {
-      return false;
-    }
-    final proxy = userData as FixtureProxy;
-    return callback?.reportFixture(proxy.fixture) ?? false;
-  }
-
-  late BroadPhase broadPhase;
-  QueryCallback? callback;
 }

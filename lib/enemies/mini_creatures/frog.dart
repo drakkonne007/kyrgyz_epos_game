@@ -86,8 +86,9 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _idles.add(_idle6);
     chooseMove();
 
-    BodyDef bf = BodyDef(type: BodyType.dynamic,position: _startPos * PhysicVals.physicScale,userData: BodyUserData(isQuadOptimizaion: false), linearDamping: 6, angularDamping: 6);
-    _groundHitBox = Ground(bf, gameRef.world.physicsWorld,isOnlyForStatic: true,onGroundCollision: _obstacle);
+    BodyDef bf = BodyDef(type: BodyType.dynamic,position: _startPos * PhysicVals.physicScale,userData: BodyUserData(isQuadOptimizaion: false
+    ,onBeginMyContact: _obstacle), linearDamping: 6, angularDamping: 6);
+    _groundHitBox = Ground(bf, gameRef.world.physicsWorld,isOnlyForStatic: true);
     _groundHitBox.createFixture(FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2.all(-7), Vector2.all(15), scale: PhysicVals.physicScale))));
     position = _groundHitBox.position;
   }

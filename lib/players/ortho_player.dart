@@ -42,6 +42,14 @@ final List<Vector2> _attack2ind2 = [
   Vector2(20,2),
 ];
 
+class ResultRayCast extends RayCastCallback
+{
+  @override
+  double reportFixture(Fixture fixture, Vector2 point, Vector2 normal, double fraction) {
+    return 1;
+  }
+}
+
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>  implements MainPlayer
 {
   OrthoPlayer({required this.startPos});
@@ -59,15 +67,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool _isRun = false;
   Ground? groundRigidBody;
   double dumping = 8;
-
-  @override
-  void onRemove()
-  {
-    print('destroy Player');
-    if(groundRigidBody != null){
-      game.world.destroyBody(groundRigidBody!);
-    }
-  }
 
   @override
   Future<void> onLoad() async
@@ -118,6 +117,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     print('Set position orthoPlayer');
     if(groundRigidBody != null){
+      print('destroy again');
       game.world.destroyBody(groundRigidBody!);
     }
     Vector2 tPos = -Vector2(11,-10);
@@ -131,6 +131,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     groundRigidBody?.createFixture(fix);
     groundRigidBody?.linearDamping = dumping;
     groundRigidBody?.angularDamping = dumping;
+    var massData = groundRigidBody!.getMassData();
+    massData.mass = 70;
+    groundRigidBody!.setMassData(massData);
     position = groundRigidBody!.position / PhysicVals.physicScale;
   }
 

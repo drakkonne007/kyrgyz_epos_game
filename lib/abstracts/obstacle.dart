@@ -3,18 +3,22 @@ import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 
 
-class Ground extends Body with ContactCallbacks
+class Ground extends Body
 {
-  Ground(super.bd, super.world, {this.onGroundCollision, this.isOnlyForStatic = false, this.isEnemy = false})
+  Ground(super.bd, super.world, {this.isOnlyForStatic = false, this.isEnemy = false})
   {
-    onBeginContact = onGroundCollision;
     var wrld = world as WorldPhy;
     wrld.addCustomBody(this);
   }
 
   bool isOnlyForStatic = false;
   bool isEnemy = false;
-  Function(Object other, Contact contact)? onGroundCollision;
+
+  @override
+  Fixture createFixture(FixtureDef def) {
+    def.friction = 0.2;
+    return super.createFixture(def);
+  }
 
   @override
   bool shouldCollide(Body other) {
