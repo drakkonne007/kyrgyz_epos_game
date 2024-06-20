@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="Assassin like enemy - all animations" tilewidth="220" tileheight="96" tilecount="96" columns="12">
- <image source="C:/kyrgyz_epos_game/assets/tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png" width="2640" height="768"/>
+ <image source="tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png" width="2640" height="768"/>
  <tile id="0" type="assassin"/>
  <tile id="1" type="assassin"/>
  <tile id="2" type="assassin"/>

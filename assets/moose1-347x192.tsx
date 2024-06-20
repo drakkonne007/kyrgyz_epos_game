@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="moose1-347x192" tilewidth="347" tileheight="192" tilecount="150" columns="30">
- <image source="C:/kyrgyz_epos_game/assets/tiles/sprites/players/moose1-347x192.png" width="10410" height="960"/>
+ <image source="tiles/sprites/players/moose1-347x192.png" width="10410" height="960"/>
  <tile id="0" type="moose"/>
  <tile id="1" type="moose"/>
  <tile id="2" type="moose"/>

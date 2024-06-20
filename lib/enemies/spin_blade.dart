@@ -19,7 +19,7 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @override
   void onLoad() async
   {
-    anchor = const Anchor(72/128,79/128);
+    anchor = Anchor.center;
     position = _startPos;
     var spriteSheet = SpriteSheet(
       image: await Flame.images.load('tiles/map/prisonSet/Props/'
@@ -27,13 +27,13 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       srcSize: Vector2(128,128),
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
-    DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(0,-18)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: false
-        , game: gameRef, radius: 34, onStartWeaponHit: null, onEndWeaponHit: null);
+    DefaultEnemyWeapon weapon = DefaultEnemyWeapon([Vector2(7.84781,-3.33532)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: false
+        , game: gameRef, radius: 33, onStartWeaponHit: null, onEndWeaponHit: null);
     weapon.damage = 3;
     weapon.coolDown = _endPos == null ? 1 : 0.5;
     add(weapon);
-    DefaultPlayerWeapon weaponPlayer = DefaultPlayerWeapon([Vector2(0,-18)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: false
-        , game: gameRef, radius: 34, onStartWeaponHit:null, onEndWeaponHit: null);
+    DefaultPlayerWeapon weaponPlayer = DefaultPlayerWeapon([Vector2(7.84781,-3.33532)],collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: false
+        , game: gameRef, radius: 33, onStartWeaponHit:null, onEndWeaponHit: null);
     weaponPlayer.damage = 0;
     weaponPlayer.coolDown = _endPos == null ? 1 : 0.5;
     add(weaponPlayer);

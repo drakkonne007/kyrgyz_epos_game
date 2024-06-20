@@ -153,7 +153,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
           var objects = KyrgyzGame.cachedObjXmls['$i-$j.objXml']!;
           for(final obj in objects){
             String? name = obj.getAttribute('nm');
-            if(name == ''){
+            if(name == '' && obj.getAttribute('cl') == null){
               var points = obj.getAttribute('p')!;
               var pointsList = points.split(' ');
               List<Vector2> temp = [];

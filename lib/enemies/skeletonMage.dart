@@ -54,6 +54,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     anchor = const Anchor(115/220,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;
+    if(isHigh){
+      priority = GamePriority.high + 1;
+    }
 
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     _withShieldNow = rand == 0 ? false : true;
@@ -345,16 +348,19 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   }
 
   @override
-  void update(double dt) {
+  void update(double dt)
+  {
     if (!isRefresh) {
       return;
     }
     super.update(dt);
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
+    if(!isHigh) {
+      int pos = position.y.toInt();
+      if (pos <= 0) {
+        pos = 1;
+      }
+      priority = pos;
     }
-    priority = pos;
     // if(!isHigh) {
     //   if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
     //     parent = gameRef.gameMap.enemyOnPlayer;
@@ -384,6 +390,7 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @override
   void onLoad() async
   {
+    priority = GamePriority.maxPriority + 1;
     anchor = const Anchor(0.5,35/64);
     _weapon = DefaultEnemyWeapon([Vector2.zero()], collisionType: DCollisionType.active, radius: 10
       , isStatic: false, onObstacle: destroy, onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef,isSolid: true,);
@@ -429,11 +436,11 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void update(double dt)
   {
     super.update(dt);
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
+    // int pos = position.y.toInt();
+    // if(pos <= 0){
+    //   pos = 1;
+    // }
+    // priority = pos;
     if(!_isMove){
       return;
     }

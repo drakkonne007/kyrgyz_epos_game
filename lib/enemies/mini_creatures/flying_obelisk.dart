@@ -10,17 +10,25 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 double distToPlayer = 150;
 
-class FlyingHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+final List<Vector2> _groundPoints = [
+  Vector2(-11.4087,10.6735) * PhysicVals.physicScale
+  ,Vector2(-12.7391,33.8214) *PhysicVals.physicScale
+  ,Vector2(0.91903,46.9473) * PhysicVals.physicScale
+  ,Vector2(14.7715,33.7444) * PhysicVals.physicScale
+  ,Vector2(13.7789,10.4962) * PhysicVals.physicScale
+];
+
+class FlyingObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  FlyingHighObelisk(this._startPosSource);
-  final Vector2 _startPosSource;
-  late Vector2 _startPos;
-  final Vector2 _spriteSheetSize = Vector2(70,70);
+  FlyingObelisk(this._startPos);
+  final Vector2 _startPos;
+  final Vector2 _spriteSheetSize = Vector2(70,150);
+  late Ground ground;
 
   @override
   Future onLoad() async
   {
-    _startPos = Vector2(_startPosSource.x, _startPosSource.y - 69);
+    anchor = Anchor.center;
     position = _startPos;
     size = _spriteSheetSize;
     List<Sprite> sprites = [];
@@ -29,56 +37,24 @@ class FlyingHighObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzG
       sprites.add(Sprite(img,srcSize: _spriteSheetSize,srcPosition: Vector2(_spriteSheetSize.x * i,0)));
     }
     animation = SpriteAnimation.spriteList(sprites,stepTime: 0.1);
-  }
-}
-
-class FlyingDownObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
-{
-  FlyingDownObelisk(this._startPos, this._highObelisk);
-  final Vector2 _startPos;
-  late Ground _groundBox;
-  final Vector2 _spriteSheetSize = Vector2(70,80);
-  late SpriteAnimationComponent _player;
-  final Vector2 _speed = Vector2(0,0);
-  final FlyingHighObelisk _highObelisk;
-
-  @override
-  Future onLoad() async
-  {
-    position = _startPos;
-    size = _spriteSheetSize;
-    List<Sprite> sprites = [];
-    Image img = await Flame.images.load('tiles/map/ancientLand/Props/Obelisk1-animation1-activating-70x150.png');
-    for(int i=0;i<16;i++){
-      sprites.add(Sprite(img,srcSize: _spriteSheetSize,srcPosition: Vector2(_spriteSheetSize.x * i,70)));
-    }
-    animation = SpriteAnimation.spriteList(sprites,stepTime: 0.1);
-    Vector2 tSize = Vector2(28, 52);
-    Vector2 tPos = Vector2(22, 0);
-    BodyDef bf = BodyDef(position: position * PhysicVals.physicScale, type: BodyType.static, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false));
-    _groundBox = Ground(bf, gameRef.world.physicsWorld);
-    _groundBox.createFixture(FixtureDef(PolygonShape()..set(getPointsForActivs(tPos, tSize, scale: PhysicVals.physicScale))));
-    _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;
+    FixtureDef fix = FixtureDef(PolygonShape()..set(_groundPoints));
+    ground = Ground(
+      BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,
+          userData: BodyUserData(isQuadOptimizaion: false)),
+      gameRef.world.physicsWorld,
+    );
+    ground.createFixture(fix);
   }
 
   @override
   void update(double dt)
   {
-    if(_player.distance(this) < distToPlayer && position.y > _startPos.y - 20){
-      _speed.y = -30;
-    }else if(_player.distance(this) > distToPlayer && position.y < _startPos.y){
-      _speed.y = 30;
-    }else{
-      _speed.y = 0;
-    }
-    _groundBox.applyLinearImpulse(_speed * dt * 150);
-    position = _groundBox.position / PhysicVals.physicScale;
-    _highObelisk.position += _speed * dt;
     super.update(dt);
-  }
-
-  @override
-  void onRemove() {
-   gameRef.world.destroyBody(_groundBox);
+    position = ground.position / PhysicVals.physicScale;
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
   }
 }

@@ -167,14 +167,18 @@ class MapNode {
       var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow
           .row}.objXml']!;
       for (final obj in objects) {
-        String? name = obj.getAttribute('nm');
-        switch (name) {
-          case '':
-            break;
-          default:
-            createLiveObj(obj, name, colRow);
-            break;
+        String? name = obj.getAttribute('nm') ?? obj.getAttribute('cl');
+        if(name == null || name == ''){
+          return;
         }
+        createLiveObj(obj, name, colRow);
+        // switch (name) {
+        //   case '':
+        //     break;
+        //   default:
+        //     createLiveObj(obj, name, colRow);
+        //     break;
+        // }
       }
     }
   }
@@ -182,10 +186,12 @@ class MapNode {
   Future createLiveObj(XmlElement? obj, String? name,
       LoadedColumnRow? colRow, {String? cheatName}) async
   {
-    Vector2 position = cheatName == null ? Vector2(
-        double.parse(obj!.getAttribute('x')!),
-        double.parse(obj.getAttribute('y')!)
-    ) : myGame.gameMap.orthoPlayer?.position ?? myGame.gameMap.frontPlayer!.position;
+    assert(obj!.getAttribute('x') != null, '$name');
+    double posX = double.parse(obj!.getAttribute('x')!);
+    double posY = double.parse(obj.getAttribute('y')!);
+    posX += double.parse(obj.getAttribute('w')!) / 2.0;
+    posY += double.parse(obj.getAttribute('h')!) / 2.0;
+    Vector2 position = cheatName == null ? Vector2(posX,posY) : myGame.gameMap.orthoPlayer?.position ?? myGame.gameMap.frontPlayer!.position;
     if (myGame.gameMap.loadedLivesObjs.contains(position) && cheatName == null) {
       return;
     }
@@ -199,7 +205,7 @@ class MapNode {
         break;
       case 'sceletM':
         myGame.gameMap.loadedLivesObjs.add(position);
-        var isHigh = obj?.getAttribute('high');
+        var isHigh = obj.getAttribute('high');
         if(isHigh!=null){
           myGame.gameMap.container.add(SkeletonMage(position,isHigh: true));
         }else{
@@ -268,12 +274,9 @@ class MapNode {
         myGame.gameMap.container.add(temp);
         break;
       case 'fObelisk':
-        var temp = FlyingHighObelisk(position);
+        var temp = FlyingObelisk(position);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
-        var temp2 = FlyingDownObelisk(position,temp);
-        myGame.gameMap.allEls[colRow]!.add(temp2);
-        myGame.gameMap.container.add(temp2);
         break;
       case 'sObelisk':
         var temp = StandHighObelisk(position);
@@ -284,7 +287,7 @@ class MapNode {
         myGame.gameMap.container.add(temp2);
         break;
       case 'telep':
-        var targetPos = obj!.getAttribute('tar')!.split(',');
+        var targetPos = obj.getAttribute('tar')!.split(',');
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
         Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!),
@@ -299,7 +302,7 @@ class MapNode {
         myGame.gameMap.container.add(PrisonAssassin(position));
         break;
       case 'portal':
-        var targetPos = obj!.getAttribute('tar')!.split(',');
+        var targetPos = obj.getAttribute('tar')!.split(',');
         var world = obj.getAttribute('wrld')!;
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
@@ -313,7 +316,7 @@ class MapNode {
         myGame.gameMap.container.add(temp);
         break;
       case 'spinBlade':
-        var targetPos = obj?.getAttribute('tar')?.split(',');
+        var targetPos = obj.getAttribute('tar')?.split(',');
         Vector2? target;
         if (targetPos != null) {
           target = Vector2(double.parse(targetPos[0]), double.parse(targetPos[1]));
@@ -336,7 +339,7 @@ class MapNode {
         myGame.gameMap.container.add(campPortUp);
         break;
       case 'bird':
-        var targetPos = obj?.getAttribute('tar')?.split(';');
+        var targetPos = obj.getAttribute('tar')?.split(';');
         List<Vector2> target = [];
         for(int i=0;i<targetPos!.length;i++){
             var source = targetPos[i].split(',');
@@ -347,36 +350,37 @@ class MapNode {
         myGame.gameMap.container.add(bird);
         break;
       case 'vertBRW':
-        String targetPos = obj!.getAttribute('tar')!;
+        String targetPos = obj.getAttribute('tar')!;
         var verticalBigRollWood = VerticaBigRollingWood(position, double.parse(targetPos));
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'vertRW':
-        String targetPos = obj!.getAttribute('tar')!;
+        String targetPos = obj.getAttribute('tar')!;
         var verticalBigRollWood = VerticalSmallRollingWood(position, double.parse(targetPos));
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'hDoor':
-        String? bosses = obj!.getAttribute('boss');
+        String? bosses = obj.getAttribute('boss');
         String? items = obj.getAttribute('item');
         var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
             ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position);
         myGame.gameMap.allEls[colRow]!.add(hDoor);
         myGame.gameMap.container.add(hDoor);
       case 'vDoor':
-        String? bosses = obj!.getAttribute('boss');
+        String? bosses = obj.getAttribute('boss');
         String? items = obj.getAttribute('item');
         var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
             ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position, isVertical: true);
         myGame.gameMap.allEls[colRow]!.add(hDoor);
         myGame.gameMap.container.add(hDoor);
       case 'arrow':
-        String targetPos = obj!.getAttribute('dir')!;
+        String targetPos = obj.getAttribute('dir')!;
         ArrowSpawn spawn = ArrowSpawn(position, targetPos);
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.container.add(spawn);
+      default: print('wrong item: $name');
     }
   }
 }

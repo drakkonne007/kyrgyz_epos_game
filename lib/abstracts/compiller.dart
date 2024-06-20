@@ -75,15 +75,23 @@ Future precompileAll() async
                   positionCurs.x + bigWorld.gameConsts.lengthOfTileSquare.x,
                   positionCurs.y + bigWorld.gameConsts.lengthOfTileSquare.y));
               for (final obj in objs.objects) {
-                if (obj.name == '') {
+                if (obj.name == '' && obj.type == '' && obj.gid == null) {
                   continue;
+                }
+                String name = '';
+                if(obj.name == '' && obj.type == ''){
+                  final tileset = tiled.tileMap.map.tilesetByTileGId(obj.gid!);
+                  name = tileset.tiles.first.type!;
+                  assert(name != '','ERROR ${tileset.name}');
+                }else{
+                  name = obj.name;
                 }
                 Rectangle objRect = Rectangle.fromPoints(
                     Vector2(obj.x, obj.y),
                     Vector2(obj.x + obj.width, obj.y + obj.height));
-                if (isIntersect(rec, objRect)) {
+                if (rec.containsPoint(objRect.center)) {
                   newObjs +=
-                  '<o nm="${obj.name}" cl="${obj.type}" x="${obj
+                  '<o nm="$name" cl="${obj.type}" x="${obj
                       .x}" y="${obj.y}" w="${obj.width}" h="${obj
                       .height}"';
                   for (final props in obj.properties) {
@@ -108,7 +116,7 @@ Future precompileAll() async
         if (objs != null && true) {
           Map<LoadedColumnRow, Set<GroundSource>> objsMap = {};
           for (final obj in objs.objects) {
-            if (obj.name != '') {
+            if (obj.name != '' || obj.type != '' || obj.gid != null) {
               continue;
             }
             bool isLoop = false;
@@ -221,6 +229,9 @@ Future precompileAll() async
                     tempCoord.add(answer);
                   }
                   if (isFirst && !isSecond) {
+                    if(tempCoord.isEmpty){
+                      print('points[tF], points[tS] = ${points[tF]}, ${points[tS]}');
+                    }
                     coord.add(tempCoord[0]);
                     GroundSource newPoints = GroundSource();
                     newPoints.isLoop = false;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="Stone-224x192" tilewidth="224" tileheight="192" tilecount="85" columns="17">
- <image source="C:/kyrgyz_epos_game/assets/tiles/sprites/players/Stone-224x192.png" width="3808" height="960"/>
+ <image source="tiles/sprites/players/Stone-224x192.png" width="3808" height="960"/>
  <tile id="0" type="ggolem"/>
  <tile id="1" type="ggolem"/>
  <tile id="2" type="ggolem"/>
