@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
@@ -13,6 +14,7 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void onLoad() async
   {
     anchor = const Anchor(0.5, 0.5);
+    priority = GamePriority.maxPriority;
     position = _startPos;
     String name = 'wind cartoonish fx-288X64- 48frames.png';
     var spriteSheet = SpriteSheet(

@@ -26,8 +26,9 @@ Future loadObjs(GameWorldData worldData) async
   ]);
 
   final objsResponse = await objResponseReceivePort.first;
-  if(objsResponse is Map<String,Iterable<XmlElement>>){
-    KyrgyzGame.cachedObjXmls = objsResponse;
+  if(objsResponse is List<Map<String,Iterable<XmlElement>>>){ //Первая в листе земля, вторая - объекты
+    KyrgyzGame.cachedGround = objsResponse.first;
+    KyrgyzGame.cachedObjects = objsResponse.last;
     isMapCached.value++;
   }
   objResponseReceivePort.close();
@@ -42,7 +43,9 @@ void _loadObjs(SendPort mySendPort) async
   await for (final message in mikeReceivePort) {
     if (message is List) {
       final SendPort mikeResponseSendPort = message[0];
-      Map<String,Iterable<XmlElement>> objXmls = {};
+      List<Map<String,Iterable<XmlElement>>> answer = [];
+      Map<String,Iterable<XmlElement>> objectsXmls = {};
+      Map<String,Iterable<XmlElement>> groundXml = {};
       String path = message[1];
       int column = message[2];
       int row = message[3];
@@ -50,13 +53,17 @@ void _loadObjs(SendPort mySendPort) async
         for (int rw = 0; rw < row; rw++) {
           try {
             var file = File('$path/$cl-$rw.objXml').readAsStringSync();
-            objXmls['$cl-$rw.objXml'] = XmlDocument.parse(file).findAllElements('o');
+            var totaList = XmlDocument.parse(file).findAllElements('o');
+            groundXml['$cl-$rw.objXml'] = totaList.where((element) => element.getAttribute('nm') == '_g');
+            objectsXmls['$cl-$rw.objXml'] = totaList.where((element) => element.getAttribute('nm') != '_g');
           } catch (e) {
             e;
           }
         }
       }
-      mikeResponseSendPort.send(objXmls);
+      answer.add(groundXml);
+      answer.add(objectsXmls);
+      mikeResponseSendPort.send(answer);
     }
   }
 }

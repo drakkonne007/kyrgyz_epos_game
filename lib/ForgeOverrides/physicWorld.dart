@@ -786,8 +786,8 @@ class WorldPhy implements World
 
       for(;col<_currentQuad.column + 2;col++){
         for(;row<_currentQuad.row + 2;row++){
-          final bod = allEls[LoadedColumnRow(col, row)];
-          for (final b in bodies) {
+          final bod = allEls[LoadedColumnRow(col, row)] ?? [];
+          for (final b in bod) {
             b.flags &= ~Body.islandFlag;
             b.sweep.alpha0 = 0.0;
           }

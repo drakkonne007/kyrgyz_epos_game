@@ -42,13 +42,6 @@ final List<Vector2> _attack2ind2 = [
   Vector2(20,2),
 ];
 
-class ResultRayCast extends RayCastCallback
-{
-  @override
-  double reportFixture(Fixture fixture, Vector2 point, Vector2 normal, double fraction) {
-    return 1;
-  }
-}
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>  implements MainPlayer
 {

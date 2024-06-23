@@ -11,10 +11,10 @@ import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
 final List<Vector2> _vertBorderP = [
-  Vector2(-29.2932,-61.8109)* PhysicVals.physicScale
+  Vector2(-35.2932,-61.8109)* PhysicVals.physicScale
   ,Vector2(-23.4206,-61.8523)* PhysicVals.physicScale
   ,Vector2(-22.7246,47.5488)* PhysicVals.physicScale
-  ,Vector2(-29.4647,47.2117)* PhysicVals.physicScale
+  ,Vector2(-35.4647,47.2117)* PhysicVals.physicScale
   ,];
 
 final List<Vector2> _horBorderP = [
@@ -49,18 +49,22 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   Set<String>? neededItems;
   late ObjectHitbox _vertObj;
   late ObjectHitbox _horObj;
-  late FixtureDef vertBorder;
-  late FixtureDef horBorder;
   late Ground ground;
   bool _isOpened = false;
   late SpriteAnimation _animClosed, _animOpening, _animOpened;
   final BodyDef bf = BodyDef(userData: BodyUserData(isQuadOptimizaion: false));
+  late Fixture vertBorder;
+  late Fixture horBorder;
+
+  @override
+  void onRemove() {
+    gameRef.world.destroyBody(ground);
+  }
 
   @override
   Future onLoad() async
   {
     anchor = Anchor.center;
-    priority = position.y.toInt() + 61;
     String startName = 'tiles/map/prisonSet/Props/Wooden Doors/';
     int rand = math.Random().nextInt(5);
     switch(rand){
@@ -79,6 +83,7 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animation = isVertical ? _animOpened : _animClosed;
     //18,43
     position = startPosition;
+    priority = position.y.toInt() + 30;
     _vertObj = ObjectHitbox(_vertObjP,
         collisionType: isVertical ? DCollisionType.active : DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
@@ -88,19 +93,20 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     add(_vertObj);
     add(_horObj);
 
-    vertBorder = FixtureDef(PolygonShape()..set(_vertBorderP));
-    horBorder = FixtureDef(PolygonShape()..set(_horBorderP));
+    var fx = FixtureDef(PolygonShape()..set(_vertBorderP));
+    var fx2= FixtureDef(PolygonShape()..set(_horBorderP));
     ground = Ground(
       BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,
           userData: BodyUserData(isQuadOptimizaion: false)),
       gameRef.world.physicsWorld,
+
     );
-    ground.createFixture(vertBorder);
-    ground.createFixture(horBorder);
+    horBorder = ground.createFixture(fx2);
+    vertBorder = ground.createFixture(fx);
     if(isVertical){
-      vertBorder.isSensor = true;
+      horBorder.setSensor(true);
     }else{
-      horBorder.isSensor = true;
+      vertBorder.setSensor(true);
     }
     _isOpened = isVertical;
   }
@@ -133,15 +139,15 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     if(!_isOpened){
       animation = _animOpening;
-      vertBorder.isSensor = true;
-      horBorder.isSensor = false;
-      _vertObj.collisionType = DCollisionType.inactive;
-      _horObj.collisionType = DCollisionType.passive;
+      vertBorder.setSensor(false);
+      horBorder.setSensor(true);
+      _vertObj.collisionType = DCollisionType.active;
+      _horObj.collisionType = DCollisionType.inactive;
     }else{
       animation = _animOpening.reversed();
-      vertBorder.isSensor = false;
-      horBorder.isSensor = true;
-      _vertObj.collisionType = DCollisionType.passive;
+      vertBorder.setSensor(true);
+      horBorder.setSensor(false);
+      _vertObj.collisionType = DCollisionType.inactive;
       _horObj.collisionType = DCollisionType.active;
     }
     animationTicker?.onComplete = changeHitboxes;

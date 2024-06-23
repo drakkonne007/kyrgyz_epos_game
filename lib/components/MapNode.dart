@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/hWChest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/portal.dart';
+import 'package:game_flame/Items/sChest.dart';
 import 'package:game_flame/Items/teleport.dart';
 import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -15,6 +17,7 @@ import 'package:game_flame/enemies/mini_creatures/campPortal.dart';
 import 'package:game_flame/enemies/mini_creatures/campfireSmoke.dart';
 import 'package:game_flame/enemies/mini_creatures/flying_obelisk.dart';
 import 'package:game_flame/enemies/mini_creatures/frog.dart';
+import 'package:game_flame/enemies/mini_creatures/groundFire.dart';
 import 'package:game_flame/enemies/mini_creatures/stand_obelisk.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -23,7 +26,6 @@ import 'package:game_flame/enemies/mini_creatures/fly.dart';
 import 'package:game_flame/enemies/mini_creatures/nature_particals.dart';
 import 'package:game_flame/enemies/mini_creatures/nature_particle_lower.dart';
 import 'package:game_flame/enemies/mini_creatures/verticalBigRollingWood.dart';
-import 'package:game_flame/enemies/mini_creatures/verticalSmallRollingWood.dart';
 import 'package:game_flame/enemies/mini_creatures/windblow.dart';
 import 'package:game_flame/enemies/moose.dart';
 import 'package:game_flame/enemies/prisonAssassin.dart';
@@ -107,7 +109,7 @@ class MapNode {
           var ss = SpriteAnimationComponent(animation: sprAnim,
             position: Vector2(double.parse(anim.getAttribute('x')!),
                 double.parse(anim.getAttribute('y')!)),
-            size: Vector2(srcSize.x + 1, srcSize.y + 1),
+            size: Vector2(srcSize.x, srcSize.y),
             priority: GamePriority.high
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
@@ -154,7 +156,7 @@ class MapNode {
           var ss = SpriteAnimationComponent(animation: sprAnim,
             position: Vector2(double.parse(anim.getAttribute('x')!),
                 double.parse(anim.getAttribute('y')!)),
-            size: Vector2(sourceSize.x + 1, sourceSize.y + 1),
+            size: Vector2(sourceSize.x, sourceSize.y),
             priority: 1
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
@@ -162,15 +164,16 @@ class MapNode {
         }
       }
     }
-    if (KyrgyzGame.cachedObjXmls.containsKey(
+    if (KyrgyzGame.cachedObjects.containsKey(
         '${colRow.column}-${colRow.row}.objXml')) {
-      var objects = KyrgyzGame.cachedObjXmls['${colRow.column}-${colRow
+      var objects = KyrgyzGame.cachedObjects['${colRow.column}-${colRow
           .row}.objXml']!;
       for (final obj in objects) {
-        String? name = obj.getAttribute('nm') ?? obj.getAttribute('cl');
-        if(name == null || name == ''){
-          return;
+        String? name = obj.getAttribute('nm') ?? '';
+        if(name == ''){
+          name = obj.getAttribute('cl');
         }
+        assert(name != '', 'NAME OBJECT IS EMPTY!!! $colRow, ${myGame.gameMap.currentGameWorldData?.nameForGame}');
         createLiveObj(obj, name, colRow);
         // switch (name) {
         //   case '':
@@ -190,7 +193,7 @@ class MapNode {
     double posX = double.parse(obj!.getAttribute('x')!);
     double posY = double.parse(obj.getAttribute('y')!);
     posX += double.parse(obj.getAttribute('w')!) / 2.0;
-    posY += double.parse(obj.getAttribute('h')!) / 2.0;
+    posY -= double.parse(obj.getAttribute('h')!) / 2.0;
     Vector2 position = cheatName == null ? Vector2(posX,posY) : myGame.gameMap.orthoPlayer?.position ?? myGame.gameMap.frontPlayer!.position;
     if (myGame.gameMap.loadedLivesObjs.contains(position) && cheatName == null) {
       return;
@@ -234,6 +237,7 @@ class MapNode {
         break;
       case 'gold':
         var temp = LootOnMap(Gold()..isStaticObject = true, position: position);
+        temp.priority = temp.position.y.toInt();
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -244,6 +248,11 @@ class MapNode {
         break;
       case 'campS':
         var campS = CampfireSmoke(position);
+        myGame.gameMap.allEls[colRow]!.add(campS);
+        myGame.gameMap.container.add(campS);
+        break;
+      case 'groundFire':
+        var campS = GroundFire(position);
         myGame.gameMap.allEls[colRow]!.add(campS);
         myGame.gameMap.container.add(campS);
         break;
@@ -265,6 +274,16 @@ class MapNode {
       case 'chest':
         var temp = Chest(1, myItems: [Gold()], position: position);
         temp.isStatic = true;
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.container.add(temp);
+        break;
+      case 'hWChest':
+        var temp = HWChest(myItems: [Gold()], position: position);
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.container.add(temp);
+        break;
+      case 'sChest':
+        var temp = StoneChest(myItems: [Gold()], position: position);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -350,14 +369,14 @@ class MapNode {
         myGame.gameMap.container.add(bird);
         break;
       case 'vertBRW':
-        String targetPos = obj.getAttribute('tar')!;
-        var verticalBigRollWood = VerticaBigRollingWood(position, double.parse(targetPos));
+        String targetPos = obj.getAttribute('dir')!;
+        var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, true);
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'vertRW':
-        String targetPos = obj.getAttribute('tar')!;
-        var verticalBigRollWood = VerticalSmallRollingWood(position, double.parse(targetPos));
+        String targetPos = obj.getAttribute('dir')!;
+        var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, false);
         myGame.gameMap.loadedLivesObjs.add(position);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;

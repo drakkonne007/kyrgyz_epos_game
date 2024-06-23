@@ -43,7 +43,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
-  static Map<String,Iterable<XmlElement>> cachedObjXmls = {};
+  static Map<String,Iterable<XmlElement>> cachedGround = {};
+  static Map<String,Iterable<XmlElement>> cachedObjects = {};
   static Map<String,Iterable<XmlElement>> cachedAnims = {};
   static Map<String,ext.Image> cachedImgs = {};
   static Set<String> cachedMapPngs = {};

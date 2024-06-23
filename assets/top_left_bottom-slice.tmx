@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="40" nextobjectid="2416">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="40" nextobjectid="2417">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -6856,9 +6856,9 @@
   <object id="2380" x="4712.67" y="742.333">
    <polygon points="0,0 0.333333,-46 34.3333,-69.3333 32.3333,-114 65.3333,-131.333 67,-175 146.333,-254 288.333,-255.333 287.333,-274 247.667,-311 215.667,-311 183.333,-343 120.333,-343 93.3333,-374.667 -104.667,-374.667 -135,-406.333 -230.333,-406 -245,-392.333 -231.667,-379.333 -163.667,-381.667 -139.333,-349.333 64,-351 83.3333,-318.667 157,-318.667 171,-295.667 154.333,-278.333 125,-280.667 42.6667,-205.333 42.3333,-161.333 12.6667,-142.333 11,-100.333 -52.6667,-43.6667 -51.3333,-0.333333"/>
   </object>
-  <object id="2382" type="chest" gid="66999" x="211.697" y="334.856" width="64" height="64"/>
-  <object id="2383" type="chest" gid="66999" x="462.591" y="332.031" width="64" height="64"/>
-  <object id="2388" type="chest" gid="66999" x="6180.5" y="7397" width="64" height="64"/>
+  <object id="2382" gid="66999" x="211.697" y="334.856" width="64" height="64"/>
+  <object id="2383" gid="66999" x="462.591" y="332.031" width="64" height="64"/>
+  <object id="2388" gid="66999" x="6180.5" y="7397" width="64" height="64"/>
   <object id="2403" gid="67064" x="209.667" y="2647.67" width="110" height="110"/>
   <object id="2404" gid="67064" x="609.667" y="7639" width="110" height="110"/>
   <object id="2405" x="520.667" y="6065.67">
@@ -6867,9 +6867,9 @@
   <object id="2406" x="311.273" y="6305.09">
    <polygon points="0,0 -10.75,4 -37.25,28.5 -14,30 31,15.25 12.75,0.25"/>
   </object>
-  <object id="2410" type="chest" gid="66999" x="9418.38" y="3600.81" width="64" height="64"/>
-  <object id="2411" type="chest" gid="66999" x="6190.71" y="2251.38" width="64" height="64"/>
-  <object id="2412" type="chest" gid="66999" x="9.5" y="57.75" width="64" height="64"/>
+  <object id="2410" gid="66999" x="9418.38" y="3600.81" width="64" height="64"/>
+  <object id="2411" gid="66999" x="6190.71" y="2251.38" width="64" height="64"/>
+  <object id="2412" gid="66999" x="9.5" y="57.75" width="64" height="64"/>
   <object id="2413" x="5184" y="0">
    <polyline points="0,0 0,64 32,96 64,64 320,64 352,96 736,96 768,64 832,64 864,96 1024,96 1056,64 1120,64 1248,192 1312,192 1344,160 1440,160 1472,128 1472,96 1664,96 1696,64 1888,64 1920,96 2540,95.5"/>
   </object>
@@ -7266,31 +7266,31 @@
  </objectgroup>
  <objectgroup id="31" name="persons">
   <object id="2295" gid="66668" x="2044" y="1298" width="347" height="192"/>
-  <object id="2297" template="moose.tx" type="moose" x="4111" y="543.333"/>
-  <object id="2298" template="moose.tx" type="moose" x="4682.5" y="1210.67"/>
-  <object id="2299" template="moose.tx" type="moose" x="4784.83" y="1017.33"/>
-  <object id="2300" template="moose.tx" type="moose" x="3414.14" y="1726.73"/>
-  <object id="2301" template="moose.tx" type="moose" x="2651.83" y="1544"/>
-  <object id="2302" template="moose.tx" type="moose" x="3085.17" y="1478.67"/>
-  <object id="2303" template="moose.tx" type="moose" x="2706.5" y="1629.33"/>
-  <object id="2304" template="moose.tx" type="moose" x="2206.5" y="1693.33"/>
-  <object id="2305" template="moose.tx" type="moose" x="2447.83" y="1736"/>
-  <object id="2306" template="moose.tx" type="moose" x="4138.5" y="1902.67"/>
-  <object id="2307" template="moose.tx" type="moose" x="3803.83" y="1809.33"/>
-  <object id="2308" template="moose.tx" type="moose" x="4354.5" y="1388"/>
-  <object id="2309" template="moose.tx" type="moose" x="3955.83" y="1241.33"/>
-  <object id="2310" template="moose.tx" type="moose" x="3442.5" y="922.667"/>
-  <object id="2311" template="moose.tx" type="moose" x="2965.17" y="780"/>
-  <object id="2312" template="moose.tx" type="moose" x="3030.5" y="434.667"/>
-  <object id="2313" template="moose.tx" type="moose" x="3729.17" y="704"/>
-  <object id="2314" template="moose.tx" type="moose" x="4449.17" y="600"/>
-  <object id="2315" template="moose.tx" type="moose" x="2256.8" y="994.909"/>
-  <object id="2316" template="moose.tx" type="moose" x="4681.05" y="1455.52"/>
-  <object id="2317" template="moose.tx" type="moose" x="3838.62" y="976.727"/>
-  <object id="2318" template="moose.tx" type="moose" x="2592.5" y="784"/>
-  <object id="2319" template="moose.tx" type="moose" x="2821.17" y="1008"/>
-  <object id="2320" template="moose.tx" type="moose" x="2745.83" y="508"/>
-  <object id="2327" template="moose.tx" type="moose" x="56" y="1184"/>
+  <object id="2297" template="moose.tx" x="4111" y="543.333"/>
+  <object id="2298" template="moose.tx" x="4682.5" y="1210.67"/>
+  <object id="2299" template="moose.tx" x="4784.83" y="1017.33"/>
+  <object id="2300" template="moose.tx" x="3414.14" y="1726.73"/>
+  <object id="2301" template="moose.tx" x="2651.83" y="1544"/>
+  <object id="2302" template="moose.tx" x="3085.17" y="1478.67"/>
+  <object id="2303" template="moose.tx" x="2706.5" y="1629.33"/>
+  <object id="2304" template="moose.tx" x="2206.5" y="1693.33"/>
+  <object id="2305" template="moose.tx" x="2447.83" y="1736"/>
+  <object id="2306" template="moose.tx" x="4138.5" y="1902.67"/>
+  <object id="2307" template="moose.tx" x="3803.83" y="1809.33"/>
+  <object id="2308" template="moose.tx" x="4354.5" y="1388"/>
+  <object id="2309" template="moose.tx" x="3955.83" y="1241.33"/>
+  <object id="2310" template="moose.tx" x="3442.5" y="922.667"/>
+  <object id="2311" template="moose.tx" x="2965.17" y="780"/>
+  <object id="2312" template="moose.tx" x="3030.5" y="434.667"/>
+  <object id="2313" template="moose.tx" x="3729.17" y="704"/>
+  <object id="2314" template="moose.tx" x="4449.17" y="600"/>
+  <object id="2315" template="moose.tx" x="2256.8" y="994.909"/>
+  <object id="2316" template="moose.tx" x="4681.05" y="1455.52"/>
+  <object id="2317" template="moose.tx" x="3838.62" y="976.727"/>
+  <object id="2318" template="moose.tx" x="2592.5" y="784"/>
+  <object id="2319" template="moose.tx" x="2821.17" y="1008"/>
+  <object id="2320" template="moose.tx" x="2745.83" y="508"/>
+  <object id="2327" template="moose.tx" x="56" y="1184"/>
   <object id="2326" gid="66818" x="674.667" y="1486.67" width="224" height="192"/>
   <object id="2321" gid="66818" x="747.333" y="240" width="224" height="192"/>
   <object id="2322" gid="66818" x="25.3333" y="705.333" width="224" height="192"/>
@@ -7301,13 +7301,13 @@
   <object id="2329" gid="66818" x="1224.36" y="3985.82" width="224" height="192"/>
   <object id="2330" gid="66818" x="2360.73" y="3361.58" width="224" height="192"/>
   <object id="2332" gid="66818" x="3675.88" y="3267.64" width="224" height="192"/>
-  <object id="2334" template="moose.tx" type="moose" x="4947.71" y="3164.61"/>
-  <object id="2336" template="moose.tx" type="moose" x="465.894" y="4800.97"/>
+  <object id="2334" template="moose.tx" x="4947.71" y="3164.61"/>
+  <object id="2336" template="moose.tx" x="465.894" y="4800.97"/>
   <object id="2337" gid="66818" x="2218.3" y="4982.79" width="224" height="192"/>
   <object id="2338" gid="66818" x="6227.39" y="5061.58" width="224" height="192"/>
   <object id="2340" gid="66818" x="6063.76" y="3040.36" width="224" height="192"/>
   <object id="2342" gid="66818" x="6996" y="1620" width="224" height="192"/>
-  <object id="2343" template="moose.tx" type="moose" x="5154.5" y="2408"/>
+  <object id="2343" template="moose.tx" x="5154.5" y="2408"/>
   <object id="2344" gid="66818" x="1444" y="2396" width="224" height="192"/>
   <object id="2345" gid="66818" x="302" y="858" width="224" height="192"/>
   <object id="2346" gid="66818" x="554" y="732" width="224" height="192"/>
@@ -7325,13 +7325,13 @@
   <object id="2360" gid="66903" x="5846" y="3486" width="220" height="96"/>
   <object id="2361" gid="66903" x="6894" y="3784" width="220" height="96"/>
   <object id="2362" gid="66903" x="2538.48" y="2533.82" width="220" height="96"/>
-  <object id="2384" type="chest" gid="66999" x="5051.33" y="2189.67" width="64" height="64"/>
-  <object id="2385" type="chest" gid="66999" x="1439" y="5086.5" width="64" height="64"/>
-  <object id="2386" type="chest" gid="66999" x="1914" y="4832" width="64" height="64"/>
-  <object id="2387" type="chest" gid="66999" x="409" y="1762" width="64" height="64"/>
-  <object id="2407" type="chest" gid="66999" x="4121.33" y="347" width="64" height="64"/>
-  <object id="2408" type="chest" gid="66999" x="3855" y="284.5" width="64" height="64"/>
-  <object id="2409" type="chest" gid="66999" x="3129.33" y="3635.75" width="64" height="64"/>
+  <object id="2384" gid="66999" x="5051.33" y="2189.67" width="64" height="64"/>
+  <object id="2385" gid="66999" x="1439" y="5086.5" width="64" height="64"/>
+  <object id="2386" gid="66999" x="1914" y="4832" width="64" height="64"/>
+  <object id="2387" gid="66999" x="409" y="1762" width="64" height="64"/>
+  <object id="2407" gid="66999" x="4121.33" y="347" width="64" height="64"/>
+  <object id="2408" gid="66999" x="3855" y="284.5" width="64" height="64"/>
+  <object id="2409" gid="66999" x="3129.33" y="3635.75" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="28" name="startObjects">
   <object id="865" name="careta" x="7807.33" y="2340">

@@ -7,8 +7,6 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-const double _heightOfChest = 52.5 - 35;
-
 class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myItems
@@ -55,6 +53,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     add(_objectHitbox!);
+    priority = position.y.toInt();
   }
 
   void checkIsIOpen()
@@ -94,22 +93,4 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       removeFromParent();
     }));
   }
-
-  @override
-  void update(double dt)
-  {
-    super.update(dt);
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
-    // if(position.y + _heightOfChest > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
-    //   parent = gameRef.gameMap.enemyOnPlayer;
-    // }else{
-    //   parent = gameRef.gameMap.enemyComponent;
-    // }
-  }
-
-
 }

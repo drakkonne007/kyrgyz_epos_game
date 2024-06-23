@@ -147,36 +147,32 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     }
 
     for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
-      print('make ground');
       for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
-        if (KyrgyzGame.cachedObjXmls.containsKey('$i-$j.objXml')) {
-          var objects = KyrgyzGame.cachedObjXmls['$i-$j.objXml']!;
+        if (KyrgyzGame.cachedGround.containsKey('$i-$j.objXml')) {
+          var objects = KyrgyzGame.cachedGround['$i-$j.objXml']!;
           for(final obj in objects){
-            String? name = obj.getAttribute('nm');
-            if(name == '' && obj.getAttribute('cl') == null){
-              var points = obj.getAttribute('p')!;
-              var pointsList = points.split(' ');
-              List<Vector2> temp = [];
-              for (final sources in pointsList) {
-                if (sources == '') {
-                  continue;
-                }
-                temp.add(Vector2(double.parse(sources.split(',')[0]),
-                    double.parse(sources.split(',')[1])));
+            var points = obj.getAttribute('p')!;
+            var pointsList = points.split(' ');
+            List<Vector2> temp = [];
+            for (final sources in pointsList) {
+              if (sources == '') {
+                continue;
               }
-              if (temp.length > 1) {
-                for( int i = 0; i < temp.length - 1; i++) {
-                  final shape = forge2d.EdgeShape()..set(temp[i] * PhysicVals.physicScale, temp[i + 1] * PhysicVals.physicScale);
-                  final fixtureDef = forge2d.FixtureDef(shape);
-                  var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
-                  tt.createFixture(fixtureDef);
-                }
-                if(obj.getAttribute('lp')! == '1'){
-                  final shape = forge2d.EdgeShape()..set(temp.last * PhysicVals.physicScale, temp.first * PhysicVals.physicScale);
-                  final fixtureDef = forge2d.FixtureDef(shape);
-                  var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
-                  tt.createFixture(fixtureDef);
-                }
+              temp.add(Vector2(double.parse(sources.split(',')[0]),
+                  double.parse(sources.split(',')[1])));
+            }
+            if (temp.length > 1) {
+              for( int i = 0; i < temp.length - 1; i++) {
+                final shape = forge2d.EdgeShape()..set(temp[i] * PhysicVals.physicScale, temp[i + 1] * PhysicVals.physicScale);
+                final fixtureDef = forge2d.FixtureDef(shape);
+                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
+                tt.createFixture(fixtureDef);
+              }
+              if(obj.getAttribute('lp')! == '1'){
+                final shape = forge2d.EdgeShape()..set(temp.last * PhysicVals.physicScale, temp.first * PhysicVals.physicScale);
+                final fixtureDef = forge2d.FixtureDef(shape);
+                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
+                tt.createFixture(fixtureDef);
               }
             }
           }
@@ -208,7 +204,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   Future _preloadAnimAndObj() async
   {
     isMapCached.value = 0;
-    KyrgyzGame.cachedObjXmls.clear();
+    KyrgyzGame.cachedObjects.clear();
+    KyrgyzGame.cachedGround.clear();
     KyrgyzGame.cachedAnims.clear();
     KyrgyzGame.cachedImgs.clear();
     KyrgyzGame.cachedMapPngs.clear();

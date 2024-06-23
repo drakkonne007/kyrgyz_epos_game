@@ -51,10 +51,6 @@ Future precompileAll() async
             layersToLoad: [a.name]);
         compilerAnimation.addLayer();
       }
-      compilerAnimation.internalObjs.clear();
-      compilerAnimationBack.internalObjs.clear();
-      compilerAnimation.internalObjsLoop.clear();
-      compilerAnimationBack.internalObjsLoop.clear();
       await compilerAnimation.compile('high',bigWorld);
       await compilerAnimationBack.compile('down',bigWorld);
     }
@@ -67,13 +63,7 @@ Future precompileAll() async
         if (objs != null && true) {
           for (int cols = 0; cols < bigWorld.gameConsts.maxColumn!; cols++) {
             for (int rows = 0; rows < bigWorld.gameConsts.maxRow!; rows++) {
-              var positionCurs = Vector2(
-                  cols * bigWorld.gameConsts.lengthOfTileSquare.x,
-                  rows * bigWorld.gameConsts.lengthOfTileSquare.y);
               String newObjs = '';
-              Rectangle rec = Rectangle.fromPoints(positionCurs, Vector2(
-                  positionCurs.x + bigWorld.gameConsts.lengthOfTileSquare.x,
-                  positionCurs.y + bigWorld.gameConsts.lengthOfTileSquare.y));
               for (final obj in objs.objects) {
                 if (obj.name == '' && obj.type == '' && obj.gid == null) {
                   continue;
@@ -86,12 +76,10 @@ Future precompileAll() async
                 }else{
                   name = obj.name;
                 }
-                Rectangle objRect = Rectangle.fromPoints(
-                    Vector2(obj.x, obj.y),
-                    Vector2(obj.x + obj.width, obj.y + obj.height));
-                if (rec.containsPoint(objRect.center)) {
+                Vector2 center = Vector2(obj.x + obj.width / 2, obj.y - obj.height / 2);
+                if (center.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x == cols && center.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y == rows) {
                   newObjs +=
-                  '<o nm="$name" cl="${obj.type}" x="${obj
+                  '\n<o nm="$name" cl="${obj.type}" x="${obj
                       .x}" y="${obj.y}" w="${obj.width}" h="${obj
                       .height}"';
                   for (final props in obj.properties) {
@@ -298,24 +286,24 @@ Future precompileAll() async
               }
             }
           }
-          // for(final keys in compilerAnimationBack.internalObjs.keys){
-          //   int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-          //   int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
-          //   GroundSource newPoints = GroundSource();
-          //   newPoints.isLoop = false;
-          //   newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
-          //   objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
-          //   objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
-          // }
-          // for(final keys in compilerAnimationBack.internalObjsLoop.keys){
-          //   int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-          //   int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
-          //   GroundSource newPoints = GroundSource();
-          //   newPoints.isLoop = true;
-          //   newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjsLoop[keys]!);
-          //   objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
-          //   objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
-          // }
+          for(final keys in compilerAnimationBack.internalObjs.keys){
+            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+            GroundSource newPoints = GroundSource();
+            newPoints.isLoop = false;
+            newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
+            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
+            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          }
+          for(final keys in compilerAnimationBack.internalObjsLoop.keys){
+            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+            GroundSource newPoints = GroundSource();
+            newPoints.isLoop = true;
+            newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjsLoop[keys]!);
+            objsMap.putIfAbsent(LoadedColumnRow(col, row), () => {});
+            objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
+          }
           compilerAnimationBack.internalObjs.clear();
           compilerAnimationBack.internalObjsLoop.clear();
           compilerAnimation.internalObjs.clear();
@@ -336,7 +324,7 @@ Future precompileAll() async
               }
               file.writeAsStringSync('\n<o lp="${objsMap[key]!.elementAt(i).isLoop
                   ? '1'
-                  : '0'}" nm="" p="', mode: FileMode.append);
+                  : '0'}" nm="_g" p="', mode: FileMode.append);
               for (int j = 0; j < objsMap[key]!.elementAt(i).points.length; j++) {
                 if (j > 0) {
                   file.writeAsStringSync(' ', mode: FileMode.append);

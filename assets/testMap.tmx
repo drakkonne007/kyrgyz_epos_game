@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="53">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="55">
  <tileset firstgid="1" source="Terrain - Ancient Ruins.tsx"/>
  <tileset firstgid="2210" source="hole1.tsx"/>
  <tileset firstgid="2450" source="Tileset-Terrain-old prison.tsx"/>
  <tileset firstgid="6935" source="Atlas-PropsAncient.tsx"/>
+ <tileset firstgid="9435" source="vertical-wooden door - opening animation.tsx"/>
+ <tileset firstgid="9443" source="horizontal-wooden door - opening animation.tsx"/>
  <layer id="2" name="blabla" width="33" height="27">
   <data encoding="csv">
 2147,2102,2149,1909,2100,2100,2103,2100,2103,2102,1815,2053,2055,2148,1909,2103,2150,2101,1815,2102,2055,1861,1863,2055,1863,2103,1862,2101,2055,2054,2149,2053,2056,
@@ -118,5 +120,8 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="6" name="e"/>
+ <objectgroup id="6" name="e">
+  <object id="53" gid="9435" x="404.089" y="671.522" width="96" height="128"/>
+  <object id="54" gid="9443" x="899.75" y="755.25" width="96" height="128"/>
+ </objectgroup>
 </map>
