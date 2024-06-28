@@ -67,7 +67,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
 {
-  GrassGolem(this._startPos,this.spriteVariant);
+  GrassGolem(this._startPos,this.spriteVariant,int id){this.id = id;}
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   final Vector2 _spriteSheetSize = Vector2(224,192);
@@ -77,6 +77,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
   final GolemVariant spriteVariant;
   late DefaultEnemyWeapon _weapon;
   bool _wasHit = false;
+
 
   @override
   Future<void> onLoad() async
@@ -295,7 +296,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        gameRef.gameMap.loadedLivesObjs.remove(id);
         removeFromParent();
       }));
     };

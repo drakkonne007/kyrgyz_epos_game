@@ -18,16 +18,17 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
         super.nativeAngle,
         super.anchor = Anchor.center,
         super.children,
-        super.priority}){
-    _startPosition = position;
-  }
-  Vector2? _startPosition;
+        super.priority,
+      this.id = -1});
+
   final Item _item;
   late ObjectHitbox _objectHitbox;
+  int id;
 
   @override
   Future<void> onLoad() async
   {
+    priority = position.y.toInt();
     Image spriteImage = await Flame.images.load(
           _item.source);
     final spriteSheet = SpriteSheet(image: spriteImage,
@@ -50,7 +51,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));
     add(OpacityEffect.by(-1,EffectController(duration: dur),onComplete: (){
       if(_item.isStaticObject) {
-        gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
+        gameRef.gameMap.loadedLivesObjs.remove(id);
       }
       _item.getEffect(gameRef);
       removeFromParent();

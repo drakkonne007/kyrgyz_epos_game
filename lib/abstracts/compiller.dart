@@ -79,11 +79,11 @@ Future precompileAll() async
                 Vector2 center = Vector2(obj.x + obj.width / 2, obj.y - obj.height / 2);
                 if (center.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x == cols && center.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y == rows) {
                   newObjs +=
-                  '\n<o nm="$name" cl="${obj.type}" x="${obj
+                  '\n<o id="${obj.id}" nm="$name" cl="${obj.type}" x="${obj
                       .x}" y="${obj.y}" w="${obj.width}" h="${obj
                       .height}"';
                   for (final props in obj.properties) {
-                    newObjs += ' ${props.name}="${props.value}"';
+                    newObjs += ' ${props.name}="${props.value}" type="${props.type}"';
                   }
                   newObjs += '/>';
                   newObjs += '\n';
@@ -108,7 +108,8 @@ Future precompileAll() async
               continue;
             }
             bool isLoop = false;
-
+            bool isPlayer = obj.properties.has('playerObstacle');
+            bool isEnemy = obj.properties.has('enemyObstacle');
             List<Vector2> points = [];
             if (obj.isPolygon) {
               isLoop = true;
@@ -222,6 +223,8 @@ Future precompileAll() async
                     }
                     coord.add(tempCoord[0]);
                     GroundSource newPoints = GroundSource();
+                    newPoints.isPlayer = isPlayer;
+                    newPoints.isEnemy = isEnemy;
                     newPoints.isLoop = false;
                     newPoints.points = List.unmodifiable(coord);
                     objsMap.putIfAbsent(
@@ -236,6 +239,8 @@ Future precompileAll() async
                     coord.last = tempCoord[0];
                     coord.add(temp);
                     GroundSource newPoints = GroundSource();
+                    newPoints.isPlayer = isPlayer;
+                    newPoints.isEnemy = isEnemy;
                     newPoints.isLoop = false;
                     newPoints.points = List.unmodifiable(coord);
                     objsMap.putIfAbsent(
@@ -260,6 +265,8 @@ Future precompileAll() async
                       //Записываем всё что есть
                     }
                     GroundSource newPoints = GroundSource();
+                    newPoints.isPlayer = isPlayer;
+                    newPoints.isEnemy = isEnemy;
                     newPoints.isLoop = false;
                     newPoints.points = List.unmodifiable(coord);
                     objsMap.putIfAbsent(
@@ -275,6 +282,8 @@ Future precompileAll() async
                     print('Error in calc $coord');
                   }
                   GroundSource newPoints = GroundSource();
+                  newPoints.isPlayer = isPlayer;
+                  newPoints.isEnemy = isEnemy;
                   newPoints.isLoop = isReallyLoop;
                   newPoints.points = List.unmodifiable(coord);
                   objsMap.putIfAbsent(
@@ -324,7 +333,7 @@ Future precompileAll() async
               }
               file.writeAsStringSync('\n<o lp="${objsMap[key]!.elementAt(i).isLoop
                   ? '1'
-                  : '0'}" nm="_g" p="', mode: FileMode.append);
+                  : '0'}" ${objsMap[key]!.elementAt(i).isPlayer ? 'player="1"' : '' } ${objsMap[key]!.elementAt(i).isEnemy ? 'enemy="1"' : '' } nm="_g" p="', mode: FileMode.append);
               for (int j = 0; j < objsMap[key]!.elementAt(i).points.length; j++) {
                 if (j > 0) {
                   file.writeAsStringSync(' ', mode: FileMode.append);

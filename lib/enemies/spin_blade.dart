@@ -9,7 +9,8 @@ import 'dart:math' as math;
 
 class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  SpinBlade(this._startPos, this._endPos,{super.priority});
+  SpinBlade(this._startPos, this._endPos,this._id,{super.priority});
+  int _id;
   final Vector2 _startPos;
   final Vector2? _endPos;
   final double _maxSpeed = 180;
@@ -73,11 +74,11 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         int secDiff = (_endPos!.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x - gameRef.gameMap.column()).abs();
         int secDiffRow = (_endPos!.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y - gameRef.gameMap.row()).abs();
         if(secDiff > 1 || secDiffRow > 1){
-          gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+          gameRef.gameMap.loadedLivesObjs.remove(_id);
           removeFromParent();
         }
       }else{
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        gameRef.gameMap.loadedLivesObjs.remove(_id);
         removeFromParent();
       }
     }

@@ -1,13 +1,15 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
 
 class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  Bird(this._startPos, this._endPos);
+  Bird(this._startPos, this._endPos,this._id);
+  final int _id;
   final Vector2 _startPos;
   final List<Vector2> _endPos;
   double _speed = 0;
@@ -23,6 +25,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   @override onLoad() async
   {
+    priority = GamePriority.high;
     TimerComponent timer = TimerComponent(onTick: _checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
     add(timer);
     _endPos.add(_startPos);
@@ -133,7 +136,7 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
     }
     if(countOfMimo == _endPos.length){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      gameRef.gameMap.loadedLivesObjs.remove(_id);
       removeFromParent();
     }
   }

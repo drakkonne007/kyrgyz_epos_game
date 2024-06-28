@@ -6,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
@@ -33,7 +34,7 @@ final Vector2 pointSpawn = Vector2(16.8564,47.6186);
 
 class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  StoneChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false
+  StoneChest(this._id, {this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false
     ,Sprite? sprite,
     bool? autoResize,
     required super.position,
@@ -51,6 +52,7 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
   late Ground _ground;
+  int _id;
 
   @override
   void onRemove()
@@ -117,10 +119,10 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     Future.delayed(Duration(milliseconds: (dur * 1000).toInt()), () {
       int rand = Random().nextInt(4);
       if(rand == 0){
-        gameRef.gameMap.container.add(Skeleton(position + pointSpawn));
+        gameRef.gameMap.container.add(Skeleton(position + pointSpawn,-1));
       }else {
         for (final myItem in myItems) {
-          myItem.getEffect(gameRef);
+          gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
         }
       }
     });

@@ -5,14 +5,20 @@ import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 
 class Ground extends Body
 {
-  Ground(super.bd, super.world, {this.isOnlyForStatic = false, this.isEnemy = false})
+  Ground(super.bd, super.world, {this.isOnlyForStatic = false, this.isEnemy = false, this.isPlayer = false})
   {
     var wrld = world as WorldPhy;
     wrld.addCustomBody(this);
   }
 
+  void destroy()
+  {
+    world.destroyBody(this);
+  }
+
   bool isOnlyForStatic = false;
   bool isEnemy = false;
+  bool isPlayer = false;
 
   @override
   Fixture createFixture(FixtureDef def) {
@@ -35,6 +41,9 @@ class Ground extends Body
         return false;
       }
       if (other.isEnemy && isEnemy) {
+        return false;
+      }
+      if (other.isPlayer && isPlayer) {
         return false;
       }
       return true;

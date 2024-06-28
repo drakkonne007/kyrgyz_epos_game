@@ -87,7 +87,7 @@ final List<Vector2> hitBoxPoint = [
 
 class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy {
 
-  Moose(this._startPos, this._mooseVariant);
+  Moose(this._startPos, this._mooseVariant,int id){this.id = id;}
   final Vector2 _startPos;
   final MooseVariant _mooseVariant;
   late SpriteAnimation _animMove, _animIdle, animAttack, _animHurt, _animDeath;
@@ -357,7 +357,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        gameRef.gameMap.loadedLivesObjs.remove(id);
         removeFromParent();
       }));
     };

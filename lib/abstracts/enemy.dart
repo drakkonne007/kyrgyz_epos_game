@@ -33,7 +33,7 @@ mixin KyrgyzEnemy
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(startPos);
+      gameRef.gameMap.loadedLivesObjs.remove(id);
       if(groundBody != null){
         gameRef.world.destroyBody(groundBody!);
       }
@@ -55,6 +55,7 @@ mixin KyrgyzEnemy
   int maxLoots = 0;
   int column=0;
   int row=0;
+  int id=-1;
   double chanceOfLoot = 0.01; // 0 - never
   void doHurt({required double hurt, bool inArmor=true}){}
   void doMagicHurt({required double hurt,required MagicDamage magicDamage}){}

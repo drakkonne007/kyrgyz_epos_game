@@ -119,7 +119,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     groundRigidBody = Ground(
       BodyDef(type: BodyType.dynamic, position: position * PhysicVals.physicScale, fixedRotation: true,
           userData: BodyUserData(isQuadOptimizaion: false)),
-      gameRef.world.physicsWorld,
+      gameRef.world.physicsWorld,isPlayer: true
     );
     groundRigidBody?.createFixture(fix);
     groundRigidBody?.linearDamping = dumping;
@@ -257,7 +257,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     Vector2 velo = Vector2.zero();
     if(keysPressed.contains(LogicalKeyboardKey.keyE)){
-      gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water));
+      gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water,-1));
     }
     if(keysPressed.contains(LogicalKeyboardKey.arrowUp) || keysPressed.contains(const LogicalKeyboardKey(0x00000057)) || keysPressed.contains(const LogicalKeyboardKey(0x00000077))) {
       velo.y = -PhysicVals.startSpeed;
@@ -319,7 +319,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
-    int pos = position.y.toInt();
+    int pos = position.y.toInt() + 25;
     if(pos <= 0){
       pos = 1;
     }

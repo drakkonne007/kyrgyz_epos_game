@@ -6,9 +6,10 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  Windblow(this._startPos);
+  Windblow(this._startPos,this._id);
 
   final Vector2 _startPos;
+  final int _id;
 
   @override
   void onLoad() async
@@ -36,7 +37,7 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int diffRow = (row - gameRef.gameMap.row()).abs();
     int diffCol2 = (column2 - gameRef.gameMap.column()).abs();
     if((diffCol > 1 && diffCol2 > 1) || diffRow > 1){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      gameRef.gameMap.loadedLivesObjs.remove(_id);
       removeFromParent();
     }
   }

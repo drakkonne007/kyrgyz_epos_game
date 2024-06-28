@@ -51,7 +51,7 @@ final List<Vector2> _weaponPoints = [ //вторая колонка
 
 class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
 {
-  PrisonAssassin(this._startPos);
+  PrisonAssassin(this._startPos,int id){this.id = id;}
   late SpriteAnimation _animMove, _animIdle,_animIdle2, _animAttack,_animAttack2, _animHurt, _animDeath;
   late EnemyHitbox _hitbox;
   final Vector2 _spriteSheetSize = Vector2(220,96);
@@ -258,7 +258,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     // removeAll(children);
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        gameRef.gameMap.loadedLivesObjs.remove(id);
         removeFromParent();
       }));
     };

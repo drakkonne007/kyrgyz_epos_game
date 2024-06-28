@@ -131,6 +131,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
                 }
               })),
       gameRef.world.physicsWorld,
+      isPlayer: true
     );
     groundRigidBody?.createFixture(fix);
     groundRigidBody?.linearDamping = 0;
@@ -342,7 +343,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     Vector2 velo = Vector2.zero();
     if(keysPressed.contains(LogicalKeyboardKey.keyE)){
-      gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water));
+      gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water,-1));
     }
     if(keysPressed.contains(LogicalKeyboardKey.arrowUp) || keysPressed.contains(const LogicalKeyboardKey(0x00000057)) || keysPressed.contains(const LogicalKeyboardKey(0x00000077))) {
       velo.y = -PhysicVals.startSpeed;

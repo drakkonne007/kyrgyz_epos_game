@@ -3,6 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -18,11 +19,11 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     super.angle,
     super.nativeAngle,
     super.anchor = Anchor.center,
-    super.priority}){
-    _startPosition = position;
-  }
+    super.priority,
+  this.isStatic = false,
+    this.id
+  });
   Set<int>? nedeedKilledBosses;
-  Vector2? _startPosition;
   Set<String>? neededItems;
   List<Item> myItems;
   final int _level;
@@ -31,10 +32,14 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
   bool isStatic = false;
+  int? id;
 
   @override
   Future onLoad() async
   {
+    if(isStatic && id == null){
+      throw 'Error in create static chest';
+    }
     switch(_level){
       case 0: _spriteImg = await Flame.images.load(
           'tiles/map/grassLand/Props/treasure chest lvl 1-opening animation-standard style.png'); break;
@@ -53,7 +58,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     add(_objectHitbox!);
-    priority = position.y.toInt();
+    priority = position.y.toInt() + 10;
   }
 
   void checkIsIOpen()
@@ -80,15 +85,14 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
     }
     remove(_objectHitbox!);
-    game.gameMap.currentObject.value = null;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     double dur = SpriteAnimationTicker(animation!).totalDuration();
-    for(final myItem in myItems){
-      myItem.getEffect(gameRef);
+    for (final myItem in myItems) {
+      gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
     }
     add(OpacityEffect.by(-1,EffectController(duration: dur + 0.3),onComplete: (){
       if(isStatic) {
-        gameRef.gameMap.loadedLivesObjs.remove(_startPosition);
+        gameRef.gameMap.loadedLivesObjs.remove(id);
       }
       removeFromParent();
     }));

@@ -250,14 +250,12 @@ class PhysicFrontVals
 
 class GamePriority
 {
-  static const int ground = 0;
-  static const int road = 1;
-  static const int items = 2;
-  static const int woods = 3;
-  static const int loot = 40;
-  static const int player = 100;
-  static const int high = 99999999;
-  static const int maxPriority = 999999999;
+  static const int backgroundTile = 0;
+  static const int backgroundTileAnim = 1;
+  static const int players = 2;
+  static const int foregroundTile = 10000;
+  static const int high = 11000;
+  static const int maxPriority = 99999999;
   // static const int high = 4294967296;
   // static const int maxPriority = 4294967296;
 }

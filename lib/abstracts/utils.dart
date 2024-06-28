@@ -75,6 +75,8 @@ List<Vector2> f_intersectLineFunctionWithCircle(double r,double a,double b,doubl
 class GroundSource
 {
   bool isLoop = false;
+  bool isPlayer = false;
+  bool isEnemy = false;
   List<Vector2> points = [];
 
   @override

@@ -2,12 +2,14 @@ import 'dart:async';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/gearSwitch.dart';
 import 'package:game_flame/Items/hWChest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/sChest.dart';
 import 'package:game_flame/Items/teleport.dart';
+import 'package:game_flame/Obstacles/altarLightning.dart';
 import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/enemies/mini_creatures/arrowSpawn.dart';
@@ -79,9 +81,8 @@ class MapNode {
         sprite: Sprite(imageHigh),
         position: Vector2(colRow.column * lengthOfTileSquare.x,
             colRow.row * lengthOfTileSquare.y),
-        // priority: GamePriority.high - 1,
+        priority: GamePriority.foregroundTile,
         size: lengthOfTileSquare + Vector2.all(1),
-        priority: GamePriority.high - 1,
       );
       myGame.gameMap.allEls[colRow]!.add(spriteHigh);
       myGame.gameMap.container.add(spriteHigh);
@@ -97,20 +98,20 @@ class MapNode {
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
         for (final anim in obj.findAllElements('fr')) {
-          spriteList.add(Sprite(srcImage, srcSize: srcSize,
+          spriteList.add(Sprite(srcImage, srcSize: srcSize - Vector2.all(0.5),
               srcPosition: Vector2(
-                  double.parse(anim.getAttribute('cl')!) * srcSize.x,
-                  double.parse(anim.getAttribute('rw')!) * srcSize.y)));
+                  double.parse(anim.getAttribute('cl')!) * srcSize.x + 0.25,
+                  double.parse(anim.getAttribute('rw')!) * srcSize.y + 0.25)));
           stepTimes.add(double.parse(anim.getAttribute('dr')!));
         }
         var sprAnim = SpriteAnimation.variableSpriteList(
             spriteList, stepTimes: stepTimes);
         for (final anim in obj.findAllElements('ps')) {
           var ss = SpriteAnimationComponent(animation: sprAnim,
-            position: Vector2(double.parse(anim.getAttribute('x')!),
-                double.parse(anim.getAttribute('y')!)),
-            size: Vector2(srcSize.x, srcSize.y),
-            priority: GamePriority.high
+            position: Vector2(double.parse(anim.getAttribute('x')!) - 1,
+                double.parse(anim.getAttribute('y')!) - 1),
+            size: Vector2(srcSize.x + 2, srcSize.y + 2),
+            priority: GamePriority.foregroundTile
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
           myGame.gameMap.container.add(ss);
@@ -128,10 +129,9 @@ class MapNode {
         position: Vector2(colRow.column * lengthOfTileSquare.x,
             colRow.row * lengthOfTileSquare.y),
         size: lengthOfTileSquare + Vector2.all(1),
-        priority: 0,
       );
       myGame.gameMap.allEls[colRow]!.add(spriteDown);
-      myGame.gameMap.container.add(spriteDown);
+      myGame.gameMap.backgroundTile.add(spriteDown);
     }
     if (KyrgyzGame.cachedAnims.containsKey(
         '${colRow.column}-${colRow.row}_down.anim')) {
@@ -144,23 +144,22 @@ class MapNode {
         final List<Sprite> spriteList = [];
         final List<double> stepTimes = [];
         for (final anim in obj.findAllElements('fr')) {
-          spriteList.add(Sprite(srcImage, srcSize: sourceSize,
+          spriteList.add(Sprite(srcImage, srcSize: sourceSize - Vector2.all(0.5),
               srcPosition: Vector2(
-                  double.parse(anim.getAttribute('cl')!) * sourceSize.x,
-                  double.parse(anim.getAttribute('rw')!) * sourceSize.y)));
+                  double.parse(anim.getAttribute('cl')!) * sourceSize.x + 0.25,
+                  double.parse(anim.getAttribute('rw')!) * sourceSize.y + 0.25)));
           stepTimes.add(double.parse(anim.getAttribute('dr')!));
         }
         var sprAnim = SpriteAnimation.variableSpriteList(
             spriteList, stepTimes: stepTimes);
         for (final anim in obj.findAllElements('ps')) {
           var ss = SpriteAnimationComponent(animation: sprAnim,
-            position: Vector2(double.parse(anim.getAttribute('x')!),
-                double.parse(anim.getAttribute('y')!)),
-            size: Vector2(sourceSize.x, sourceSize.y),
-            priority: 1
+            position: Vector2(double.parse(anim.getAttribute('x')!) - 1,
+                double.parse(anim.getAttribute('y')!) - 1 ),
+            size: Vector2(sourceSize.x + 2, sourceSize.y + 2),
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
-          myGame.gameMap.container.add(ss);
+          myGame.gameMap.backgroundTile.add(ss);
         }
       }
     }
@@ -189,11 +188,14 @@ class MapNode {
   Future createLiveObj(XmlElement? obj, String? name,
       LoadedColumnRow? colRow, {String? cheatName}) async
   {
-    assert(obj!.getAttribute('x') != null, '$name');
-    double posX = double.parse(obj!.getAttribute('x')!);
-    double posY = double.parse(obj.getAttribute('y')!);
-    posX += double.parse(obj.getAttribute('w')!) / 2.0;
-    posY -= double.parse(obj.getAttribute('h')!) / 2.0;
+    double posX = 0;
+    double posY = 0;
+    if(cheatName == null){
+      posX = double.parse(obj!.getAttribute('x')!);
+      posY = double.parse(obj.getAttribute('y')!);
+      posX += double.parse(obj.getAttribute('w')!) / 2.0;
+      posY -= double.parse(obj.getAttribute('h')!) / 2.0;
+    }
     Vector2 position = cheatName == null ? Vector2(posX,posY) : myGame.gameMap.orthoPlayer?.position ?? myGame.gameMap.frontPlayer!.position;
     if (myGame.gameMap.loadedLivesObjs.contains(position) && cheatName == null) {
       return;
@@ -201,14 +203,16 @@ class MapNode {
     if(cheatName != null){
       position -= Vector2(0,200);
     }
+    int id = int.parse(obj?.getAttribute('id') ?? '0');
+    colRow ??= LoadedColumnRow(position.x ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.x, position.y ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     switch (cheatName ?? name) {
       case 'ggolem':
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Grass));
         break;
       case 'sceletM':
-        myGame.gameMap.loadedLivesObjs.add(position);
-        var isHigh = obj.getAttribute('high');
+        myGame.gameMap.loadedLivesObjs.add(id);
+        var isHigh = obj!.getAttribute('high');
         if(isHigh!=null){
           myGame.gameMap.container.add(SkeletonMage(position,isHigh: true));
         }else{
@@ -216,28 +220,27 @@ class MapNode {
         }
         break;
       case 'enemy':
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Grass));
         break;
       case 'wgolem':
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Water));
         break;
       case 'windb':
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(Windblow(position));
         break;
       case 'moose':
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(Moose(position, MooseVariant.PurpleWithGreenHair));
         break;
       case 'scelet':
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(Skeleton(position));
         break;
       case 'gold':
         var temp = LootOnMap(Gold()..isStaticObject = true, position: position);
-        temp.priority = temp.position.y.toInt();
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -256,6 +259,11 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(campS);
         myGame.gameMap.container.add(campS);
         break;
+      case 'auraLightning':
+        var aura = AuraLightning(position);
+        myGame.gameMap.allEls[colRow]!.add(aura);
+        myGame.gameMap.container.add(aura);
+        break;
       case 'npart':
         var natParticals = NaturePartical(position);
         myGame.gameMap.allEls[colRow]!.add(natParticals);
@@ -271,6 +279,11 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
+      case 'gearSwitch':
+        int target = int.parse(obj!.getAttribute('tar')!);
+        var temp = GearSwitch(position,target,true);
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.container.add(temp);
       case 'chest':
         var temp = Chest(1, myItems: [Gold()], position: position);
         temp.isStatic = true;
@@ -306,7 +319,7 @@ class MapNode {
         myGame.gameMap.container.add(temp2);
         break;
       case 'telep':
-        var targetPos = obj.getAttribute('tar')!.split(',');
+        var targetPos = obj!.getAttribute('tar')!.split(',');
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
         Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!),
@@ -317,11 +330,11 @@ class MapNode {
         myGame.gameMap.container.add(temp);
         break;
       case 'assassin':
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(PrisonAssassin(position));
         break;
       case 'portal':
-        var targetPos = obj.getAttribute('tar')!.split(',');
+        var targetPos = obj!.getAttribute('tar')!.split(',');
         var world = obj.getAttribute('wrld')!;
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
@@ -335,18 +348,18 @@ class MapNode {
         myGame.gameMap.container.add(temp);
         break;
       case 'spinBlade':
-        var targetPos = obj.getAttribute('tar')?.split(',');
+        var targetPos = obj!.getAttribute('tar')?.split(',');
         Vector2? target;
         if (targetPos != null) {
           target = Vector2(double.parse(targetPos[0]), double.parse(targetPos[1]));
         }
         SpinBlade spinBl = SpinBlade(position, target);
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(spinBl);
         break;
       case 'frog':
         Frog frog = Frog(position);
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(frog);
         break;
       case 'campPort':
@@ -358,46 +371,46 @@ class MapNode {
         myGame.gameMap.container.add(campPortUp);
         break;
       case 'bird':
-        var targetPos = obj.getAttribute('tar')?.split(';');
+        var targetPos = obj!.getAttribute('tar')?.split(';');
         List<Vector2> target = [];
         for(int i=0;i<targetPos!.length;i++){
             var source = targetPos[i].split(',');
             target.add(Vector2(double.parse(source[0]), double.parse(source[1])));
         }
         Bird bird = Bird(position, target);
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(bird);
         break;
       case 'vertBRW':
-        String targetPos = obj.getAttribute('dir')!;
+        String targetPos = obj!.getAttribute('dir')!;
         var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, true);
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'vertRW':
-        String targetPos = obj.getAttribute('dir')!;
+        String targetPos = obj!.getAttribute('dir')!;
         var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, false);
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'hDoor':
-        String? bosses = obj.getAttribute('boss');
+        String? bosses = obj!.getAttribute('boss');
         String? items = obj.getAttribute('item');
         var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
             ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position);
         myGame.gameMap.allEls[colRow]!.add(hDoor);
         myGame.gameMap.container.add(hDoor);
       case 'vDoor':
-        String? bosses = obj.getAttribute('boss');
+        String? bosses = obj!.getAttribute('boss');
         String? items = obj.getAttribute('item');
         var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
             ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position, isVertical: true);
         myGame.gameMap.allEls[colRow]!.add(hDoor);
         myGame.gameMap.container.add(hDoor);
       case 'arrow':
-        String targetPos = obj.getAttribute('dir')!;
+        String targetPos = obj!.getAttribute('dir')!;
         ArrowSpawn spawn = ArrowSpawn(position, targetPos);
-        myGame.gameMap.loadedLivesObjs.add(position);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(spawn);
       default: print('wrong item: $name');
     }

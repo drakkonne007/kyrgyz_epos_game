@@ -21,7 +21,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,KyrgyzEnemy
 {
-  Skeleton(this._startPos);
+  Skeleton(this._startPos,int id){this.id = id;}
   late SpriteAnimation _animMove, _animIdle, _animAttack,_animAttack2, _animHurt, _animDeath;
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackShield, _animAttack2Shield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
   late EnemyHitbox _hitbox;
@@ -390,7 +390,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     animation = _withShieldNow ? _animDeathShield : _animDeath;
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+        gameRef.gameMap.loadedLivesObjs.remove(id);
         removeFromParent();
       }));
     };

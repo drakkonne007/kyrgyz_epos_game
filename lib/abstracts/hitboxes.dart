@@ -339,6 +339,13 @@ class ObjectHitbox extends DCollisionEntity
     }
     super.update(dt);
   }
+
+  @override
+  void onRemove() {
+    if(game.gameMap.currentObject.value == this) {
+      game.gameMap.currentObject.value = null;
+    }
+  }
 }
 
 class PlayerHitbox extends DCollisionEntity

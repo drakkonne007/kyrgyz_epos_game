@@ -52,7 +52,8 @@ final List<Vector2> _groundSmallPhy = [
 
 class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  VerticaBigRollingWood(this._startPos, this._direct,this._isBigRoll);
+  VerticaBigRollingWood(this._startPos, this._direct,this._isBigRoll,this._id);
+  final int _id;
   final Vector2 _startPos;
   final bool _isBigRoll;
   final String _direct;
@@ -74,6 +75,9 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
       BodyDef(type: BodyType.dynamic, position: _startPos * PhysicVals.physicScale, fixedRotation: true,
           userData: BodyUserData(isQuadOptimizaion: false,onBeginMyContact: (Object other, Contact contact){
             if(contact.fixtureA.body.bodyType != BodyType.static && contact.fixtureB.body.bodyType != BodyType.static){
+              return;
+            }
+            if(contact.fixtureA.isSensor && contact.fixtureB.isSensor){
               return;
             }
             animation = _stopAnim;
@@ -128,7 +132,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
     _defWeapon.collisionType = DCollisionType.inactive;
     animation?.loop = false;
     add(OpacityEffect.by(-1,EffectController(duration: 0.7),onComplete: (){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      gameRef.gameMap.loadedLivesObjs.remove(_id);
       removeFromParent();
       gameRef.world.destroyBody(_ground);
     }));
@@ -148,7 +152,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
           || (_direct == 'right' && _player.absolutePositionOfAnchor(_player.anchor).x > _startPos.x))){
         _isStarted = true;
         animation = _moveAnim;
-        _ground.applyLinearImpulse(Vector2(_speed.x, 0));
+        _ground.applyLinearImpulse(Vector2(_speed.x * 3, 0));
       }
     }
   }

@@ -46,16 +46,15 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   FrontPlayer? frontPlayer;
   int _column=0, _row=0;
   MapNode? mapNode;
-  Set<Vector2> loadedLivesObjs = {};
+  Set<int> loadedLivesObjs = {};
   Map<LoadedColumnRow,List<Component>> allEls = {};
+  Map<int,Component> tileIdObjs = {};
   DCollisionProcessor? collisionProcessor;
   GameWorldData? currentGameWorldData;
   bool _isLoad = false;
   double shaderTime = 0;
-  Component container = Component();
-  // final Component priorityHigh = Component(priority: GamePriority.high);
-  // final Component priorityHighMinus1 = Component(priority: GamePriority.high - 1);
-  // final Component priorityGroundPlus1 = Component(priority: GamePriority.ground + 1);
+  Component container = Component(priority: GamePriority.players);
+  final Component backgroundTile = Component(priority: GamePriority.backgroundTile);
   // final Component enemyComponent = Component(priority: GamePriority.player - 2);
   // final Component playerLayout = Component(priority: GamePriority.player);
   // final Component enemyOnPlayer = Component(priority: GamePriority.player +2);
@@ -64,6 +63,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   @override
   Future onLoad() async
   {
+    await add(backgroundTile);
     await add(container);
     // gameRef.camera = CameraComponent.withFixedResolution(width: 600, height: 350, world: this);
     // await add(playerLayout);
@@ -125,7 +125,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
       }
     }
     container.removeAll(container.children);
-
+    backgroundTile.removeAll(backgroundTile.children);
 
     allEls.clear();
     loadedLivesObjs.clear();
@@ -165,13 +165,15 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
               for( int i = 0; i < temp.length - 1; i++) {
                 final shape = forge2d.EdgeShape()..set(temp[i] * PhysicVals.physicScale, temp[i + 1] * PhysicVals.physicScale);
                 final fixtureDef = forge2d.FixtureDef(shape);
-                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
+                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld
+                ,isPlayer: obj.getAttribute('player') != null, isEnemy: obj.getAttribute('enemy') != null);
                 tt.createFixture(fixtureDef);
               }
               if(obj.getAttribute('lp')! == '1'){
                 final shape = forge2d.EdgeShape()..set(temp.last * PhysicVals.physicScale, temp.first * PhysicVals.physicScale);
                 final fixtureDef = forge2d.FixtureDef(shape);
-                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
+                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld
+                    ,isPlayer: obj.getAttribute('player') != null, isEnemy: obj.getAttribute('enemy') != null);
                 tt.createFixture(fixtureDef);
               }
             }

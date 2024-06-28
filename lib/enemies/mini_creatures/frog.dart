@@ -12,7 +12,8 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  Frog(this._startPos,);
+  Frog(this._startPos,this._id);
+  final int _id;
   final Vector2 _startPos;
   final List<SpriteAnimation> _idles = [];
   late SpriteAnimation _idle1, _idle2, _idle3, _idle4, _idle5, _idle6, _walkForward, _walkBack, _wolkSide;
@@ -109,7 +110,7 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 1 || diffRow > 1){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      gameRef.gameMap.loadedLivesObjs.remove(_id);
       gameRef.world.destroyBody(_groundHitBox);
       removeFromParent();
     }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
@@ -22,8 +24,8 @@ enum ArrowDirection
 
 class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
 {
-
-  ArrowSpawn(this._startPos, this._direct);
+  ArrowSpawn(this._startPos, this._direct, this._id);
+  final int _id;
   final Vector2 _startPos;
   final String _direct;
   late LoadedColumnRow _loadedColumnRow;
@@ -52,21 +54,25 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
     int diffCol = (_loadedColumnRow.column - gameRef.gameMap.column()).abs();
     int diffRow = (_loadedColumnRow.row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(_startPos);
+      gameRef.gameMap.loadedLivesObjs.remove(_id);
       removeFromParent();
     }
   }
 
 }
 
-
+final List<Vector2> _groundP = [
+  Vector2(-1.0222,-21.9047) * PhysicVals.physicScale
+  ,Vector2(-3.05331,-11.5183) * PhysicVals.physicScale
+  ,Vector2(2.97964,-11.4713) * PhysicVals.physicScale
+  ,Vector2(1.31221,-21.7142) * PhysicVals.physicScale
+  ,];
 
 class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
 {
-  Vector2? tar;
   ArrowDirection? direction;
   final Vector2 _startPos;
-  Arrow(this._startPos, {this.tar, this.direction});
+  Arrow(this._startPos, {this.direction});
   late Ground _grBox;
   late EnemyWeapon _weapon;
   final Vector2 _speed = Vector2(0,0);
@@ -74,7 +80,6 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   onLoad() async
   {
-    BodyDef bd = BodyDef(type: BodyType.dynamic, position: _startPos, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false));
     anchor = Anchor.center;
     sprite = Sprite(await Flame.images.load('tiles/arrow.png'));
     position = _startPos;
@@ -107,6 +112,21 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
         _speed.y = -PhysicVals.maxSpeed - 40;
         break;
     }
+    BodyDef bd = BodyDef(type: BodyType.dynamic, position: _startPos * PhysicVals.physicScale, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false,
+    onBeginMyContact: (Object other, Contact contact){
+      startFadeout();
+    }));
+    List<Vector2> newPoints = [];
+    for(final vec in _groundP){
+      newPoints.add(Vector2(vec.x * cos(angle) - vec.y * sin(angle), vec.x * sin(angle) + vec.y * cos(angle)));
+    }
+    FixtureDef fx = FixtureDef(PolygonShape()..set(newPoints), isSensor: true);
+    _grBox = Ground(bd, gameRef.world.physicsWorld);
+    _grBox.createFixture(fx);
+    _grBox.applyLinearImpulse(_speed * 2);
+    // rotatedX = x * cos(angle) - y * sin(angle)
+    // rotatedY = x * sin(angle) + y * cos(angle)
+    // ss.
     // _grBox.isOnlyForStatic = true;
     // add(_grBox);
     add(_weapon);
@@ -125,10 +145,10 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
 
   void startFadeout()
   {
-    _speed.x = 0;
-    _speed.y = 0;
+    _grBox.linearVelocity = Vector2.zero();
     // _grBox.collisionType = DCollisionType.inactive;
     add(OpacityEffect.by(-1,EffectController(duration: 0.5),onComplete: (){
+      _grBox.destroy();
       removeFromParent();
     }));
   }
@@ -136,7 +156,7 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   update(double dt)
   {
-    position += _speed * dt;
+    position += _grBox.position / PhysicVals.physicScale;
     int pos = position.y.toInt();
     if(pos <= 0){
       pos = 1;

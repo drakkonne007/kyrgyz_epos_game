@@ -6,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
@@ -117,8 +118,8 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     double dur = SpriteAnimationTicker(animation!).totalDuration();
     Future.delayed(Duration(milliseconds: (dur * 1000).toInt()), () {
-      for(final myItem in myItems){
-        myItem.getEffect(gameRef);
+      for (final myItem in myItems) {
+        gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
       }
     });
   }
