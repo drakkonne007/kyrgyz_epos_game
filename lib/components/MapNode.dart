@@ -197,47 +197,47 @@ class MapNode {
       posY -= double.parse(obj.getAttribute('h')!) / 2.0;
     }
     Vector2 position = cheatName == null ? Vector2(posX,posY) : myGame.gameMap.orthoPlayer?.position ?? myGame.gameMap.frontPlayer!.position;
-    if (myGame.gameMap.loadedLivesObjs.contains(position) && cheatName == null) {
+    int id = int.parse(obj?.getAttribute('id') ?? '-1');
+    if (myGame.gameMap.loadedLivesObjs.contains(id) && cheatName == null) {
       return;
     }
     if(cheatName != null){
       position -= Vector2(0,200);
     }
-    int id = int.parse(obj?.getAttribute('id') ?? '0');
     colRow ??= LoadedColumnRow(position.x ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.x, position.y ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
     switch (cheatName ?? name) {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Grass));
+        myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Grass,id));
         break;
       case 'sceletM':
         myGame.gameMap.loadedLivesObjs.add(id);
         var isHigh = obj!.getAttribute('high');
         if(isHigh!=null){
-          myGame.gameMap.container.add(SkeletonMage(position,isHigh: true));
+          myGame.gameMap.container.add(SkeletonMage(position,id,isHigh: true));
         }else{
-          myGame.gameMap.container.add(SkeletonMage(position));
+          myGame.gameMap.container.add(SkeletonMage(position,id));
         }
         break;
       case 'enemy':
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Grass));
+        myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Grass,id));
         break;
       case 'wgolem':
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Water));
+        myGame.gameMap.container.add(GrassGolem(position, GolemVariant.Water,id));
         break;
       case 'windb':
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(Windblow(position));
+        myGame.gameMap.container.add(Windblow(position,id));
         break;
       case 'moose':
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(Moose(position, MooseVariant.PurpleWithGreenHair));
+        myGame.gameMap.container.add(Moose(position, MooseVariant.PurpleWithGreenHair,id));
         break;
       case 'scelet':
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(Skeleton(position));
+        myGame.gameMap.container.add(Skeleton(position,id));
         break;
       case 'gold':
         var temp = LootOnMap(Gold()..isStaticObject = true, position: position);
@@ -296,7 +296,7 @@ class MapNode {
         myGame.gameMap.container.add(temp);
         break;
       case 'sChest':
-        var temp = StoneChest(myItems: [Gold()], position: position);
+        var temp = StoneChest(myItems: [Gold()], position: position,id);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -331,7 +331,7 @@ class MapNode {
         break;
       case 'assassin':
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(PrisonAssassin(position));
+        myGame.gameMap.container.add(PrisonAssassin(position,id));
         break;
       case 'portal':
         var targetPos = obj!.getAttribute('tar')!.split(',');
@@ -353,12 +353,12 @@ class MapNode {
         if (targetPos != null) {
           target = Vector2(double.parse(targetPos[0]), double.parse(targetPos[1]));
         }
-        SpinBlade spinBl = SpinBlade(position, target);
+        SpinBlade spinBl = SpinBlade(position, target,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(spinBl);
         break;
       case 'frog':
-        Frog frog = Frog(position);
+        Frog frog = Frog(position,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(frog);
         break;
@@ -377,19 +377,19 @@ class MapNode {
             var source = targetPos[i].split(',');
             target.add(Vector2(double.parse(source[0]), double.parse(source[1])));
         }
-        Bird bird = Bird(position, target);
+        Bird bird = Bird(position, target,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(bird);
         break;
       case 'vertBRW':
         String targetPos = obj!.getAttribute('dir')!;
-        var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, true);
+        var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, true,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'vertRW':
         String targetPos = obj!.getAttribute('dir')!;
-        var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, false);
+        var verticalBigRollWood = VerticaBigRollingWood(position, targetPos, false,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
@@ -409,7 +409,7 @@ class MapNode {
         myGame.gameMap.container.add(hDoor);
       case 'arrow':
         String targetPos = obj!.getAttribute('dir')!;
-        ArrowSpawn spawn = ArrowSpawn(position, targetPos);
+        ArrowSpawn spawn = ArrowSpawn(position, targetPos,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(spawn);
       default: print('wrong item: $name');
