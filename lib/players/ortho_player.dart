@@ -319,7 +319,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
-    int pos = position.y.toInt() + 25;
+    int pos = position.y.toInt() + 26;
     if(pos <= 0){
       pos = 1;
     }

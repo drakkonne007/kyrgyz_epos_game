@@ -29,6 +29,12 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
   StrangeMerchantVariant spriteVariant;
 
   @override
+  void onRemove()
+  {
+    ground?.destroy();
+  }
+
+  @override
   void onLoad() async
   {
     anchor = Anchor.center;
@@ -60,21 +66,12 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
       flipHorizontally();
     }
     position = ground!.position / PhysicVals.physicScale;
+    priority = position.y.toInt();
   }
 
   void getBuyMenu()
   {
     gameRef.doDialogHud();
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
   }
 
 }

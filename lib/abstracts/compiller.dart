@@ -83,7 +83,7 @@ Future precompileAll() async
                       .x}" y="${obj.y}" w="${obj.width}" h="${obj
                       .height}"';
                   for (final props in obj.properties) {
-                    newObjs += ' ${props.name}="${props.value}" type="${props.type}"';
+                    newObjs += ' ${props.name}="${props.value}" ';
                   }
                   newObjs += '/>';
                   newObjs += '\n';

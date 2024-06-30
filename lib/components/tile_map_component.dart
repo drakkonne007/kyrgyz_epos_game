@@ -48,7 +48,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   MapNode? mapNode;
   Set<int> loadedLivesObjs = {};
   Map<LoadedColumnRow,List<Component>> allEls = {};
-  Map<int,Component> tileIdObjs = {};
   DCollisionProcessor? collisionProcessor;
   GameWorldData? currentGameWorldData;
   bool _isLoad = false;

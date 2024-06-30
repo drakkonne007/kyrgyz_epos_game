@@ -86,7 +86,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     health = 3;
     setChance();
 
-    anchor = const Anchor(115/220,0.5);
+    anchor = const Anchor(0.5,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;
 
@@ -410,7 +410,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     if (!isRefresh) {
       return;
     }
-    int pos = position.y.toInt();
+    int pos = position.y.toInt() + 38;
     if(pos <= 0){
       pos = 1;
     }

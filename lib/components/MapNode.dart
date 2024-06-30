@@ -3,6 +3,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/gearSwitch.dart';
+import 'package:game_flame/Items/hBridge.dart';
 import 'package:game_flame/Items/hWChest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
@@ -198,6 +199,7 @@ class MapNode {
     }
     Vector2 position = cheatName == null ? Vector2(posX,posY) : myGame.gameMap.orthoPlayer?.position ?? myGame.gameMap.frontPlayer!.position;
     int id = int.parse(obj?.getAttribute('id') ?? '-1');
+    // print(id);
     if (myGame.gameMap.loadedLivesObjs.contains(id) && cheatName == null) {
       return;
     }
@@ -281,7 +283,13 @@ class MapNode {
         break;
       case 'gearSwitch':
         int target = int.parse(obj!.getAttribute('tar')!);
-        var temp = GearSwitch(position,target,true);
+        String open = obj.getAttribute('open') ?? 'false';
+        var temp = GearSwitch(position,target,open != 'true');
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.container.add(temp);
+      case 'hBridge':
+        String open = obj?.getAttribute('open') ?? 'false';
+        var temp = HorizontalWoodBridge(position,id,open != 'true');
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
       case 'chest':

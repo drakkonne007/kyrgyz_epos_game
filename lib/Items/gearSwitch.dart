@@ -5,7 +5,7 @@ import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/abstracts/openClose.dart';
+import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -50,10 +50,12 @@ class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     var spriteSheet = SpriteSheet(image: spriteImg,
         srcSize: Vector2(spriteImg.width / 12, spriteImg.height.toDouble()));
     toOpen = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    closed = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 1, loop: false);
+    closed = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     opened = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 11, loop: false);
     anchor = Anchor.center;
     position = _startPosition;
+    DBAnswer ans = await gameRef.dbHandler.stateFromDb(_targetId);
+    isClosed = !ans.opened;
     animation = isClosed ? closed : opened;
     _objectHitbox = ObjectHitbox(_groundObj,
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
@@ -70,20 +72,14 @@ class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _ground.createFixture(fix);
   }
 
+
   void changeState() {
-    final obj = gameRef.gameMap.tileIdObjs[_targetId];
     if (isClosed) {
       animation = toOpen;
-      if (obj != null && obj is OpenClose) {
-        var dd = obj as OpenClose;
-        dd.changeState(true);
-      }
+      gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '1');
     } else {
       animation = toOpen.reversed();
-      if (obj != null && obj is OpenClose) {
-        var dd = obj as OpenClose;
-        dd.changeState(false);
-      }
+      gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '0');
     }
     isClosed = !isClosed;
   }

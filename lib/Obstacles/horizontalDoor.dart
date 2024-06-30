@@ -83,7 +83,7 @@ class WoodenDoor extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animation = isVertical ? _animOpened : _animClosed;
     //18,43
     position = startPosition;
-    priority = position.y.toInt() + 30;
+    priority = position.y.toInt() + 45;
     _vertObj = ObjectHitbox(_vertObjP,
         collisionType: isVertical ? DCollisionType.active : DCollisionType.passive, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);

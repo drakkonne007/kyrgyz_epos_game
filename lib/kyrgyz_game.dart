@@ -16,6 +16,7 @@ import 'package:game_flame/Items/armorDress.dart';
 import 'package:game_flame/Items/helmetDress.dart';
 import 'package:game_flame/Items/swordDress.dart';
 import 'package:game_flame/abstracts/compiller.dart';
+import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/main.dart';
@@ -30,9 +31,11 @@ import 'package:game_flame/components/tile_map_component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:xml/xml.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 const double aspect = 750.0 / 430.0;
+
 
 class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsBindingObserver, SingleGameInstance
 {
@@ -40,6 +43,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     world: UpWorld()
   );
 
+  final DbHandler dbHandler = DbHandler();
   final CustomTileMap gameMap = CustomTileMap();
   final PlayerData playerData = PlayerData();
   late final SharedPreferences prefs;
@@ -63,6 +67,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   @override
   Future onLoad() async
   {
+    if (Platform.isWindows || Platform.isLinux) {
+      // Initialize FFI
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+    await dbHandler.openDb();
+    dbHandler.createFakeObject();
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
     maxPolygonVertices = 20;
