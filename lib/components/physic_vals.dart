@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/CountTimer.dart';
+import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
 
@@ -66,12 +67,12 @@ class PlayerData
   void setDress(Item item)
   {
     switch(item.dressType){
-      case DressType.helmet:  helmetDress.value == item ?  helmetDress.value = NullItem() : helmetDress.value = item; break;
-      case DressType.armor: armorDress.value == item ?  armorDress.value = NullItem() : armorDress.value = item; break;
+      case DressType.helmet: helmetDress.value == item ?  helmetDress.value = NullItem() : helmetDress.value = item; break;
+      case DressType.armor:  armorDress.value == item ?  armorDress.value = NullItem() : armorDress.value = item; break;
       case DressType.gloves: glovesDress.value == item ?  glovesDress.value = NullItem() : glovesDress.value = item; break;
-      case DressType.sword: swordDress.value = item; break;
-      case DressType.ring: ringDress.value == item ?  ringDress.value = NullItem() : ringDress.value = item; break;
-      case DressType.boots: bootsDress.value == item ?  bootsDress.value = NullItem() : bootsDress.value = item; break;
+      case DressType.sword:  swordDress.value = item; break;
+      case DressType.ring:   ringDress.value == item ?  ringDress.value = NullItem() : ringDress.value = item; break;
+      case DressType.boots:  bootsDress.value == item ?  bootsDress.value = NullItem() : bootsDress.value = item; break;
       case DressType.none: throw 'DressType none';
     }
   }
@@ -132,7 +133,7 @@ class PlayerData
 
   final ValueNotifier<int> statChangeTrigger = ValueNotifier<int>(0);
 
-  final ValueNotifier<int> playerLevel = ValueNotifier<int>(1);
+  final ValueNotifier<double> playerLevel = ValueNotifier<double>(1);
   final ValueNotifier<double> health = ValueNotifier<double>(0);
   final ValueNotifier<double> energy = ValueNotifier<double>(0);
   final ValueNotifier<double> armor = ValueNotifier<double>(0);
@@ -215,6 +216,31 @@ class PlayerData
     this.health.value = health == 0 ? maxHealth.value : health;
   }
 
+  void loadGame(SavedGame svg)
+  {
+    for(final cur in svg.currentInventar){
+      Item it = itemFromName(cur);
+      switch(it.dressType){
+        case DressType.armor: armorDress.value = it; break;
+        case DressType.helmet: helmetDress.value = it; break;
+        case DressType.gloves: glovesDress.value = it; break;
+        case DressType.sword: swordDress.value = it; break;
+        case DressType.ring: ringDress.value = it; break;
+        case DressType.boots: bootsDress.value = it; break;
+        case DressType.none: break;
+      }
+    }
+    money.value = svg.gold;
+    weaponInventar = svg.weaponInventar;
+    armorInventar = svg.armorInventar;
+    flaskInventar = svg.flaskInventar;
+    itemInventar = svg.itemInventar;
+    energy.value = svg.energy;
+    health.value = svg.health;
+    playerLevel.value = svg.level;
+    playerBigMap =  getWorldFromName(svg.world);
+    startLocation = Vector2(svg.x, svg.y);
+  }
 
 
 // static void doNewGame(){

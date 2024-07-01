@@ -19,7 +19,7 @@ class Boots1 extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }

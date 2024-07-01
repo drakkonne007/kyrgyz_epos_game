@@ -54,7 +54,7 @@ class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     opened = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 11, loop: false);
     anchor = Anchor.center;
     position = _startPosition;
-    DBAnswer ans = await gameRef.dbHandler.stateFromDb(_targetId);
+    DBAnswer ans = await gameRef.dbHandler.stateFromDb(_targetId, gameRef.gameMap.currentGameWorldData!.nameForGame);
     isClosed = !ans.opened;
     animation = isClosed ? closed : opened;
     _objectHitbox = ObjectHitbox(_groundObj,

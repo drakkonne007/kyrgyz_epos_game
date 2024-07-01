@@ -120,6 +120,7 @@ class MainMenu extends StatelessWidget
                           onPressed: () async{
                             await precompileAll();
                             print('PRECOMPILE DONE!!!');
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Прекомпил сделан!!!'), duration: Duration(seconds: 2),));
                           },
                           style: bStyle,
                           child:
@@ -132,6 +133,31 @@ class MainMenu extends StatelessWidget
                                 fit: BoxFit.fill,
                               ),
                               Text('Запустить прекомпил',style: textStyle),
+                            ],
+                          )
+                      )
+                  ),
+                  const SizedBox(height: 10,),
+                  Expanded(
+                      child:
+                      ElevatedButton(
+                          clipBehavior: Clip.antiAlias,
+                          onPressed: () async{
+                            await _game.dbHandler.createTable();
+                            print('Обновили предметы в БД!!!');
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Обновили предметы в БД!!!'), duration: Duration(seconds: 2),));
+                          },
+                          style: bStyle,
+                          child:
+                          Stack(
+                            fit: StackFit.passthrough,
+                            alignment: Alignment.center,
+                            children: [
+                              const Image(
+                                image: AssetImage('assets/images/gui/wood_button.png'),
+                                fit: BoxFit.fill,
+                              ),
+                              Text('Рефреш предметов в БД',style: textStyle),
                             ],
                           )
                       )

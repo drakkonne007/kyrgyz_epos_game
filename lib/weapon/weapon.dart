@@ -198,7 +198,7 @@ abstract class PlayerWeapon extends DCollisionEntity
         var tempComponent = other.parent as Component;
         double damage = permanentDamage/2;
         MagicDamage magic = magicDamage!;
-        tempComponent.add(TempEffect(period: secsOfPermDamage,onUpdate: (dt){
+        tempComponent.add(TempEffect(parentId: 'magicDamage/${magic.name}', period: secsOfPermDamage,onUpdate: (dt){
           temp.doMagicHurt(hurt: damage * dt, magicDamage: magic);},onEndEffect: (){
           int curr = temp.magicDamages[magic]!;
           curr--;

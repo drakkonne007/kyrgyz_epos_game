@@ -26,7 +26,7 @@ class HpSmall extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addHealth(10);
     if(game.playerData.flaskInventar.containsKey(id)){
@@ -64,9 +64,9 @@ class HpMedium extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(period: 10, onUpdate: (dt){
+    var timer = TempEffect(parentId: id, period: duration ?? 10, onUpdate: (dt){
       game.playerData.addHealth(2.0 * dt);
     });
     game.gameMap.add(timer);
@@ -106,9 +106,9 @@ class HpBig extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(period: 15, onUpdate: (dt){
+    var timer = TempEffect(parentId: id, period: duration ?? 15, onUpdate: (dt){
       game.playerData.addHealth(2.5 * dt);
     });
     game.gameMap.add(timer);
@@ -148,7 +148,7 @@ class HpFull extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addHealth(0,full: true);
     if(game.playerData.flaskInventar.containsKey(id)){
@@ -187,7 +187,7 @@ class EnergySmall extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addEnergy(5);
     if(game.playerData.flaskInventar.containsKey(id)){
@@ -225,9 +225,9 @@ class EnergyMedium extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(period: 10, onUpdate: (dt){
+    var timer = TempEffect(parentId: 'energyMedium' ,period: duration ?? 10, onUpdate: (dt){
       game.playerData.addEnergy(1.5 * dt);
     });
     game.gameMap.add(timer);
@@ -267,9 +267,9 @@ class EnergyBig extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(period: 15, onUpdate: (dt){
+    var timer = TempEffect(parentId: id,period: duration ?? 15, onUpdate: (dt){
       game.playerData.addEnergy(2 * dt);
     });
     game.gameMap.add(timer);
@@ -309,7 +309,7 @@ class EnergyFull extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addEnergy(0, full: true);
     if(game.playerData.flaskInventar.containsKey(id)){

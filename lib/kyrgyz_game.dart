@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -14,6 +15,7 @@ import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/ForgeOverrides/broadphase.dart';
 import 'package:game_flame/Items/armorDress.dart';
 import 'package:game_flame/Items/helmetDress.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/swordDress.dart';
 import 'package:game_flame/abstracts/compiller.dart';
 import 'package:game_flame/components/DBHandler.dart';
@@ -64,6 +66,15 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader poisonShader;
   late FragmentShader lightningShader;
 
+  Future saveGame() async
+  {
+    await dbHandler.saveGame(0, gameMap.orthoPlayer?.x ?? gameMap.frontPlayer!.x, gameMap.orthoPlayer?.y ?? gameMap.frontPlayer!.y
+        , gameMap.currentGameWorldData!.nameForGame, playerData.health.value,  playerData.energy.value,  playerData.playerLevel.value
+        , playerData.money.value, playerData.helmetDress.value, playerData.armorDress.value, playerData.glovesDress.value, playerData.swordDress.value
+        , playerData.ringDress.value, playerData.bootsDress.value, playerData.weaponInventar, playerData.armorInventar, playerData.flaskInventar, playerData.itemInventar
+    ,playerData.tempEffects);
+  }
+
   @override
   Future onLoad() async
   {
@@ -73,7 +84,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       databaseFactory = databaseFactoryFfi;
     }
     await dbHandler.openDb();
-    dbHandler.createFakeObject();
+    await dbHandler.createTable();
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
     maxPolygonVertices = 20;
@@ -100,25 +111,64 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       overlays.add(MainMenu.id);
     }
     WidgetsBinding.instance.addObserver(this);
-    playerData.setStartValues(
-      helmet: StartHelmet(),
-      armor: ArmorStart(),
-      sword: SwordStart(),
-      weaponInventar: {'swordStart': 1, 'sword36' : 1, 'sword19' : 1},
-      armorInventar: {'armorStart': 1, 'startHelmet': 1},
-      flaskInventar: {
-        'hpSmall':10,
-        'hpMedium':10,
-        'hpBig':10,
-        'hpFull':10,
-        'energySmall':10,
-        'energyMedium':10,
-        'energyBig':10,
-        'energyFull':10},
-    );
+    if(!await dbHandler.checkSaved(0)) {
+      print('NO SAVE(((');
+      await dbHandler.saveGame(
+          0,
+          4772,
+          9433,
+          'topLeftTempleDungeon',
+          30,
+          15,
+          1,
+          100,
+          StartHelmet(),
+          ArmorStart(),
+          NullItem(),
+          SwordStart(),
+          NullItem(),
+          NullItem(),
+          {'swordStart': 1, 'sword36': 1, 'sword19': 1},
+          {'armorStart': 1, 'startHelmet': 1},
+          {'hpSmall': 10,
+            'hpMedium': 10,
+            'hpBig': 10,
+            'hpFull': 10,
+            'energySmall': 10,
+            'energyMedium': 10,
+            'energyBig': 10,
+            'energyFull': 10}
+          ,
+          {},
+          []);
+    }
+
+    await loadGame(0);
+    
+    // playerData.setStartValues(
+    //   helmet: StartHelmet(),
+    //   armor: ArmorStart(),
+    //   sword: SwordStart(),
+    //   weaponInventar: {'swordStart': 1, 'sword36' : 1, 'sword19' : 1},
+    //   armorInventar: {'armorStart': 1, 'startHelmet': 1},
+    //   flaskInventar: {
+    //     'hpSmall':10,
+    //     'hpMedium':10,
+    //     'hpBig':10,
+    //     'hpFull':10,
+    //     'energySmall':10,
+    //     'energyMedium':10,
+    //     'energyBig':10,
+    //     'energyFull':10},
+    // );
     add(gameMap);
     await gameMap.loaded;
     //TODO добавить сохранённые бутылочки в gameMap;
+  }
+
+  Future loadGame(int saveId) async
+  {
+    playerData.loadGame(await dbHandler.loadGame(saveId));
   }
 
   @override

@@ -26,9 +26,16 @@ class GamePause extends StatelessWidget
           ),
           ElevatedButton(
             onPressed: () async{
+              await _game.saveGame();
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Сохранено'), duration: Duration(seconds: 2),));
+            },
+            child: const Text('Сохранить'),
+          ),
+          ElevatedButton(
+            onPressed: () async{
               _game.resumeEngine();
+              await _game.loadGame(0);
               await _game.loadNewMap();
-              // await _game.loadNewMap();
             },
             child: const Text('Загрузить'),
           ),

@@ -18,7 +18,7 @@ class SwordStart extends Item
   }
 
   @override
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -41,7 +41,7 @@ class Sword1 extends Item
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -65,7 +65,7 @@ class Sword2 extends Item
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -88,7 +88,7 @@ class Sword3 extends Item
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -112,7 +112,7 @@ class Sword4 extends Item
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -134,7 +134,7 @@ class Sword5 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -155,7 +155,7 @@ class Sword6 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -177,7 +177,7 @@ class Sword7 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -198,7 +198,7 @@ class Sword8 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -219,7 +219,7 @@ class Sword9 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -241,7 +241,7 @@ class Sword10 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -263,7 +263,7 @@ class Sword11 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -285,7 +285,7 @@ class Sword12 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -306,7 +306,7 @@ class Sword13 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -328,7 +328,7 @@ class Sword14 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -350,7 +350,7 @@ class Sword15 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -372,7 +372,7 @@ class Sword16 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game)
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
   }
@@ -392,7 +392,7 @@ class Sword17 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -414,7 +414,7 @@ class Sword18 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -436,7 +436,7 @@ class Sword19 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -455,7 +455,7 @@ class Sword20 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -475,7 +475,7 @@ class Sword21 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -495,7 +495,7 @@ class Sword22 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -518,7 +518,7 @@ class Sword23 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -540,7 +540,7 @@ class Sword24 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -562,7 +562,7 @@ class Sword25 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -584,7 +584,7 @@ class Sword26 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -606,7 +606,7 @@ class Sword27 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -628,7 +628,7 @@ class Sword28 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -650,7 +650,7 @@ class Sword29 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -669,7 +669,7 @@ class Sword30 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -688,7 +688,7 @@ class Sword31 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -710,7 +710,7 @@ class Sword32 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -732,7 +732,7 @@ class Sword33 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -754,7 +754,7 @@ class Sword34 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -776,7 +776,7 @@ class Sword35 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -796,7 +796,7 @@ class Sword36 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -816,7 +816,7 @@ class Sword37 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -836,7 +836,7 @@ class Sword38 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -858,7 +858,7 @@ class Sword39 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -880,7 +880,7 @@ class Sword40 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -902,7 +902,7 @@ class Sword41 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -922,7 +922,7 @@ class Sword42 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -942,7 +942,7 @@ class Sword43 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -961,7 +961,7 @@ class Sword44 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -980,7 +980,7 @@ class Sword45 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1000,7 +1000,7 @@ class Sword46 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1020,7 +1020,7 @@ class Sword47 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1040,7 +1040,7 @@ class Sword48 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1060,7 +1060,7 @@ class Sword49 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1083,7 +1083,7 @@ class Sword50 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1103,7 +1103,7 @@ class Sword51 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1123,7 +1123,7 @@ class Sword52 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1143,7 +1143,7 @@ class Sword53 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1163,7 +1163,7 @@ class Sword54 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1183,7 +1183,7 @@ class Sword55 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1205,7 +1205,7 @@ class Sword56 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1227,7 +1227,7 @@ class Sword57 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1250,7 +1250,7 @@ class Sword58 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1272,7 +1272,7 @@ class Sword59 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1294,7 +1294,7 @@ class Sword60 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1314,7 +1314,7 @@ class Sword61 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1334,7 +1334,7 @@ class Sword62 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1357,7 +1357,7 @@ class Sword63 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1380,7 +1380,7 @@ class Sword64 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1400,7 +1400,7 @@ class Sword65 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1420,7 +1420,7 @@ class Sword66 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1440,7 +1440,7 @@ class Sword67 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1462,7 +1462,7 @@ class Sword68 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1484,7 +1484,7 @@ class Sword69 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1503,7 +1503,7 @@ class Sword70 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1526,7 +1526,7 @@ class Sword71 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1549,7 +1549,7 @@ class Sword72 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1569,7 +1569,7 @@ class Sword73 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1591,7 +1591,7 @@ class Sword74 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1613,7 +1613,7 @@ class Sword75 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1635,7 +1635,7 @@ class Sword76 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1657,7 +1657,7 @@ class Sword77 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1676,7 +1676,7 @@ class Sword78 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1696,7 +1696,7 @@ class Sword79 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1719,7 +1719,7 @@ class Sword80 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1739,7 +1739,7 @@ class Sword81 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1759,7 +1759,7 @@ class Sword82 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1778,7 +1778,7 @@ class Sword83 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1797,7 +1797,7 @@ class Sword84 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1817,7 +1817,7 @@ class Sword85 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1837,7 +1837,7 @@ class Sword86 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1857,7 +1857,7 @@ class Sword87 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1877,7 +1877,7 @@ class Sword88 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1897,7 +1897,7 @@ class Sword89 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1917,7 +1917,7 @@ class Sword90 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1937,7 +1937,7 @@ class Sword91 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1960,7 +1960,7 @@ class Sword92 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1980,7 +1980,7 @@ class Sword93 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -1999,7 +1999,7 @@ class Sword94 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -2019,7 +2019,7 @@ class Sword95 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }
@@ -2041,7 +2041,7 @@ class Sword96 extends Item {
     game.playerData.addToInventar(game.playerData.weaponInventar, this);
   }
 
-  @override void getEffectFromInventar(KyrgyzGame game) {
+  @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
     game.playerData.setDress(this);
   }
 }

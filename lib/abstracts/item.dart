@@ -162,7 +162,7 @@ abstract class Item
   {
     throw 'Not override catch item';
   }
-  void getEffectFromInventar(KyrgyzGame game)
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     throw 'Not override catch item from inventar';
   }

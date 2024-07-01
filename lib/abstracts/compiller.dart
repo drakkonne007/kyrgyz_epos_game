@@ -363,14 +363,14 @@ Future precompileAll() async
             if (obj.name == '' && obj.type == '' && obj.gid == null) {
               continue;
             }
-            String id,opened,quest,used;
+            String? id,opened,quest,used;
             id = obj.id.toString();
-            opened = obj.properties.getValue('opened');
-            if(opened == ''){
-              opened = obj.properties.getValue('open');
+            opened = obj.properties.getValue('opened') ?? '""';
+            if(opened == '""'){
+              opened = obj.properties.getValue('open') ?? '""';
             }
-            quest = obj.properties.getValue('quest');
-            used = obj.properties.getValue('used');
+            quest = obj.properties.getValue('quest') ?? '""';
+            used = obj.properties.getValue('used') ?? '""';
             file.writeAsStringSync('INSERT INTO ${bigWorld.nameForGame} (id,opened,quest,used) VALUES ($id,$opened,$quest,$used) ON CONFLICT DO NOTHING;\n', mode: FileMode.append);
           }
         }
