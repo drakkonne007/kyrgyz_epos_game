@@ -353,5 +353,28 @@ Future precompileAll() async
       File file = File(key);
       file.writeAsStringSync('\n</p>', mode: FileMode.append);
     }
+    for (var layer in layersLists) {
+      File file = File(
+          'assets/metaData/${bigWorld.nameForGame}/sqlObjects.sql');
+      if(layer.type == LayerType.objectGroup){
+        var objs = tiled.tileMap.getLayer<ObjectGroup>(layer.name);
+        if (objs != null) {
+          for(final obj in objs.objects){
+            if (obj.name == '' && obj.type == '' && obj.gid == null) {
+              continue;
+            }
+            String id,opened,quest,used;
+            id = obj.id.toString();
+            opened = obj.properties.getValue('opened');
+            if(opened == ''){
+              opened = obj.properties.getValue('open');
+            }
+            quest = obj.properties.getValue('quest');
+            used = obj.properties.getValue('used');
+            file.writeAsStringSync('INSERT INTO ${bigWorld.nameForGame} (id,opened,quest,used) VALUES ($id,$opened,$quest,$used) ON CONFLICT DO NOTHING;\n', mode: FileMode.append);
+          }
+        }
+      }
+    }
   }
 }
