@@ -52,8 +52,9 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   GameWorldData? currentGameWorldData;
   bool _isLoad = false;
   double shaderTime = 0;
-  Component container = Component(priority: GamePriority.players);
+  final Component container = Component(priority: GamePriority.players);
   final Component backgroundTile = Component(priority: GamePriority.backgroundTile);
+  final Component effectComponent = Component();
   // final Component enemyComponent = Component(priority: GamePriority.player - 2);
   // final Component playerLayout = Component(priority: GamePriority.player);
   // final Component enemyOnPlayer = Component(priority: GamePriority.player +2);
@@ -64,6 +65,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   {
     await add(backgroundTile);
     await add(container);
+    await add(effectComponent);
     // gameRef.camera = CameraComponent.withFixedResolution(width: 600, height: 350, world: this);
     // await add(playerLayout);
     // await add(enemyComponent);

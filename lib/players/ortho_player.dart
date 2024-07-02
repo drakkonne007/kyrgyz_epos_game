@@ -108,7 +108,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setGroundBody()
   {
-    print('Set position orthoPlayer');
     if(groundRigidBody != null){
       print('destroy again');
       game.world.destroyBody(groundRigidBody!);

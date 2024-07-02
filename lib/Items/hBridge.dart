@@ -21,11 +21,11 @@ final List<Vector2> _rightP = [
 
 class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  HorizontalWoodBridge(this._startPosition,this._id,this.isClosed);
+  HorizontalWoodBridge(this._startPosition,this._id);
   final int _id;
   final Vector2 _startPosition;
   late SpriteAnimation closed, opened, toClosed;
-  bool isClosed;
+  bool isClosed = false;
   late Ground _ground;
   late Fixture leftF, rightF;
 
@@ -48,6 +48,7 @@ class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<Kyrg
     anchor = Anchor.center;
     position = _startPosition;
     DBAnswer ans = await gameRef.dbHandler.stateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
+    print('load answerfrom DB state: ${ans.opened}');
     isClosed = !ans.opened;
     animation = isClosed ? closed : opened;
     priority = GamePriority.backgroundTileAnim;

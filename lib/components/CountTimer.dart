@@ -58,6 +58,8 @@ class TempEffect extends Component
       removeFromParent();
       return;
     }
-    onUpdate?.call(dt);
+    if(isMounted) {
+      onUpdate?.call(dt);
+    }
   }
 }

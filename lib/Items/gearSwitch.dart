@@ -29,12 +29,12 @@ final List<Vector2> _groundObj = [
 
 class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  GearSwitch(this._startPosition,this._targetId,this.isClosed);
+  GearSwitch(this._startPosition,this._targetId);
   final int _targetId;
   final Vector2 _startPosition;
   ObjectHitbox? _objectHitbox;
   late SpriteAnimation closed, opened, toOpen;
-  bool isClosed;
+  bool isClosed = false;
   late Ground _ground;
 
   @override
@@ -73,13 +73,13 @@ class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   }
 
 
-  void changeState() {
+  void changeState() async{
     if (isClosed) {
       animation = toOpen;
-      gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '1');
+      await gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '1');
     } else {
       animation = toOpen.reversed();
-      gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '0');
+      await gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '0');
     }
     isClosed = !isClosed;
   }

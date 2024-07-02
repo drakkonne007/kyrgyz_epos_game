@@ -69,8 +69,7 @@ class HpMedium extends Item
     var timer = TempEffect(parentId: id, period: duration ?? 10, onUpdate: (dt){
       game.playerData.addHealth(2.0 * dt);
     });
-    game.gameMap.add(timer);
-    game.playerData.tempEffects.add(timer);
+    game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -111,8 +110,7 @@ class HpBig extends Item
     var timer = TempEffect(parentId: id, period: duration ?? 15, onUpdate: (dt){
       game.playerData.addHealth(2.5 * dt);
     });
-    game.gameMap.add(timer);
-    game.playerData.tempEffects.add(timer);
+    game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -230,8 +228,7 @@ class EnergyMedium extends Item
     var timer = TempEffect(parentId: 'energyMedium' ,period: duration ?? 10, onUpdate: (dt){
       game.playerData.addEnergy(1.5 * dt);
     });
-    game.gameMap.add(timer);
-    game.playerData.tempEffects.add(timer);
+    game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -272,8 +269,7 @@ class EnergyBig extends Item
     var timer = TempEffect(parentId: id,period: duration ?? 15, onUpdate: (dt){
       game.playerData.addEnergy(2 * dt);
     });
-    game.gameMap.add(timer);
-    game.playerData.tempEffects.add(timer);
+    game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;

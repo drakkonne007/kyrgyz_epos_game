@@ -283,13 +283,11 @@ class MapNode {
         break;
       case 'gearSwitch':
         int target = int.parse(obj!.getAttribute('tar')!);
-        String open = obj.getAttribute('open') ?? 'false';
-        var temp = GearSwitch(position,target,open != 'true');
+        var temp = GearSwitch(position,target);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
       case 'hBridge':
-        String open = obj?.getAttribute('open') ?? 'false';
-        var temp = HorizontalWoodBridge(position,id,open != 'true');
+        var temp = HorizontalWoodBridge(position,id);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
       case 'chest':

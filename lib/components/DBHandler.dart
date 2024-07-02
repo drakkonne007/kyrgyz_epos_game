@@ -62,6 +62,7 @@ class DbHandler
           await createTable();
         },
         onCreate: (Database db, int v) async{
+          print('CREATE TABLES!!!');
           for(final wrld in fullMaps()){
             await db.execute('DROP TABLE IF EXISTS ${wrld.nameForGame}');
           }
@@ -138,8 +139,8 @@ class DbHandler
 
   Future<bool> checkSaved(int saveId)async
   {
-     final res = await _database?.rawQuery('SELECT id FROM player_data WHERE save_id = ?', [saveId]);
-     return (res != null && res.isNotEmpty);
+    final res = await _database?.rawQuery('SELECT id FROM player_data WHERE save_id = ?', [saveId]);
+    return (res != null && res.isNotEmpty);
   }
 
   Future saveGame(int saveId, double x, double y, String world, double health, double energy, double level, int gold,
@@ -190,6 +191,7 @@ class DbHandler
     var res = await _database?.rawQuery('SELECT * FROM player_data where save_id = ? ORDER BY id DESC LIMIT 1', [saveId]);
     if(res == null) return svGame;
     svGame.x = res[0]['x']! as double;
+    // svGame.x += 300;
     svGame.y = res[0]['y']! as double;
     svGame.world = res[0]['world']!.toString();
     svGame.health = res[0]['health']! as double;
@@ -225,21 +227,22 @@ class DbHandler
     return svGame;
   }
 
-  void changeState({required int id, String? openedAsInt, String? quest, String? usedAsInt})
+  Future changeState({required int id, String? openedAsInt, String? quest, String? usedAsInt})async
   {
-    _database?.rawQuery('SELECT * FROM topLeftTempleDungeon where id = ?', [id]).then((value) {
-      print('change State id = $id, openedAsInt = $openedAsInt, quest = $quest, usedAsInt = $usedAsInt');
-      _database?.rawUpdate('UPDATE topLeftTempleDungeon set opened = ?, quest = ?, used = ? where id = ?',
-          [openedAsInt ?? value[0]['opened'].toString(), quest ?? value[0]['quest'].toString(), usedAsInt ?? value[0]['used'].toString(), id.toString()]);
-      dbStateChanger.notifyListeners();
-    });
+    final res = await _database?.rawQuery('SELECT * FROM topLeftTempleDungeon where id = ?', [id]);
+    await _database?.rawUpdate('UPDATE topLeftTempleDungeon set opened = ?, quest = ?, used = ? where id = ?',
+        [openedAsInt ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsInt ?? res![0]['used'].toString(), id]);
+    dbStateChanger.notifyListeners();
   }
 
   Future<DBAnswer> stateFromDb(int id, String worldName)async
   {
     DBAnswer answer = DBAnswer();
     final res = await _database?.rawQuery('SELECT * FROM topLeftTempleDungeon where id = ?', [id]);
-    if(res == null) return answer;
+    if(res == null) {
+      print('HOW????');
+      return answer;
+    }
     answer.opened = res[0]['opened'].toString() == '1';
     answer.quest = int.tryParse(res[0]['quest'].toString()) ?? 0;
     answer.used = res[0]['used'].toString() == '1';

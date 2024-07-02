@@ -109,7 +109,6 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setGroundBody()
   {
-    print('Set position frontPlayer');
     if(groundRigidBody != null){
       game.world.destroyBody(groundRigidBody!);
     }

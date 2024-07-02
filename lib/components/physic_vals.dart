@@ -9,6 +9,8 @@ import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
 
+import 'package:game_flame/kyrgyz_game.dart';
+
 
 
 class MetaEnemyData
@@ -48,7 +50,7 @@ class GameConsts
 class PlayerData
 {
 
-  PlayerData()
+  PlayerData(this._game)
   {
     playerLevel.addListener(_recalcAfterChangeDress);
     extraArmor.addListener(_recalcAfterChangeDress);
@@ -160,8 +162,6 @@ class PlayerData
   final ValueNotifier<Item> swordDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
-  final List<CountTimer> effectTimer = [];
-  final List<TempEffect> tempEffects = [];
 
   void addToInventar(Map<String,int> hash, Item item)
   {
@@ -174,6 +174,7 @@ class PlayerData
     }
   }
 
+  KyrgyzGame _game;
 
   bool isLockEnergy = false;
   bool isLockMove = false;
@@ -240,6 +241,14 @@ class PlayerData
     playerLevel.value = svg.level;
     playerBigMap =  getWorldFromName(svg.world);
     startLocation = Vector2(svg.x, svg.y);
+
+    _game.gameMap.effectComponent.removeAll(_game.gameMap.effectComponent.children);
+
+    for(final cur in svg.tempEffects){
+      final it = itemFromName(cur.parentId);
+      it.getEffect(_game);
+      it.getEffectFromInventar(_game, duration: cur.dur);
+    }
   }
 
 

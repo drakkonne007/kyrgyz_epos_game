@@ -18,6 +18,7 @@ import 'package:game_flame/Items/helmetDress.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/swordDress.dart';
 import 'package:game_flame/abstracts/compiller.dart';
+import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/gen/strings.g.dart';
@@ -47,7 +48,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   final DbHandler dbHandler = DbHandler();
   final CustomTileMap gameMap = CustomTileMap();
-  final PlayerData playerData = PlayerData();
+  late PlayerData playerData;
   late final SharedPreferences prefs;
   static Map<String,Iterable<XmlElement>> cachedGround = {};
   static Map<String,Iterable<XmlElement>> cachedObjects = {};
@@ -72,12 +73,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         , gameMap.currentGameWorldData!.nameForGame, playerData.health.value,  playerData.energy.value,  playerData.playerLevel.value
         , playerData.money.value, playerData.helmetDress.value, playerData.armorDress.value, playerData.glovesDress.value, playerData.swordDress.value
         , playerData.ringDress.value, playerData.bootsDress.value, playerData.weaponInventar, playerData.armorInventar, playerData.flaskInventar, playerData.itemInventar
-    ,playerData.tempEffects);
+    ,gameMap.effectComponent.children.toList(growable: false).cast());
   }
 
   @override
   Future onLoad() async
   {
+    playerData = PlayerData(this);
     if (Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
       sqfliteFfiInit();
@@ -112,7 +114,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     }
     WidgetsBinding.instance.addObserver(this);
     if(!await dbHandler.checkSaved(0)) {
-      print('NO SAVE(((');
       await dbHandler.saveGame(
           0,
           4772,
