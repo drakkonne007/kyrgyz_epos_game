@@ -10,21 +10,6 @@
  <tile id="17" type="high"/>
  <tile id="19" type="high"/>
  <tile id="20" type="high"/>
- <tile id="32">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="16" y="0.076555" width="16" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="48">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="16" y="0" width="16" height="32"/>
-  </objectgroup>
- </tile>
- <tile id="64">
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="16" y="0" width="16" height="24"/>
-  </objectgroup>
- </tile>
  <tile id="65" probability="0"/>
  <tile id="67" probability="0"/>
  <tile id="80">

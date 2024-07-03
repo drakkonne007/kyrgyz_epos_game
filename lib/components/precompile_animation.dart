@@ -30,6 +30,7 @@ Future processTileType(
       for (var tileId in tileData) {
         bool isNeedAdd = true;
         if (tileId != 0) {
+          tileId &= 0xFFFFFF; //Маска внутренних преобразований тайла
           final tileset = tileMap.map.tilesetByTileGId(tileId);
           final firstGid = tileset.firstGid;
           if (firstGid != null) {

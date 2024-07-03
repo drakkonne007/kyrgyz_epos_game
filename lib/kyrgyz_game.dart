@@ -86,7 +86,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       databaseFactory = databaseFactoryFfi;
     }
     await dbHandler.openDb();
-    await dbHandler.createTable();
     // database = await openDatabase('kyrgyz.db');
     // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
     maxPolygonVertices = 20;

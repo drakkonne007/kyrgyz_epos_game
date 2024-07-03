@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js_interop';
 import 'dart:math';
 
 import 'package:flame/components.dart';
@@ -69,21 +70,43 @@ Future precompileAll() async
                   continue;
                 }
                 String name = '';
+                bool isReversedHorizontally = false;
                 if(obj.name == '' && obj.type == ''){
-                  final tileset = tiled.tileMap.map.tilesetByTileGId(obj.gid!);
+                  int gid = obj.gid! & 0xFFFFFF;
+                  isReversedHorizontally = (obj.gid! & 0x80000000) != 0;
+                  final tileset = tiled.tileMap.map.tilesetByTileGId(gid);
                   name = tileset.tiles.first.type!;
                   assert(name != '','ERROR ${tileset.name}');
                 }else{
                   name = obj.name;
                 }
                 Vector2 center = Vector2(obj.x + obj.width / 2, obj.y - obj.height / 2);
+
                 if (center.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x == cols && center.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y == rows) {
                   newObjs +=
-                  '\n<o id="${obj.id}" nm="$name" cl="${obj.type}" x="${obj
-                      .x}" y="${obj.y}" w="${obj.width}" h="${obj
-                      .height}"';
+                  '\n<o id="${obj.id}" nm="$name" cl="${obj.type}" x="${obj.x}" '
+                      '${isReversedHorizontally ? 'horizontalReverse="true"' : ''}  y="${obj.y}" w="${obj.width}" h="${obj.height}"';
                   for (final props in obj.properties) {
                     newObjs += ' ${props.name}="${props.value}" ';
+                  }
+                  bool isLoop = false;
+                  List<Point> points = [];
+                  if(obj.polygon.isNotEmpty){
+                    isLoop = true;
+                    points = obj.polygon;
+                  }
+                  if(obj.polyline.isNotEmpty){
+                    points = obj.polyline;
+                  }
+                  if(points.isNotEmpty){
+                    newObjs += isLoop ? ' lp="1"' : ' lp="0"';
+                    newObjs += ' p="';
+                  }
+                  for(final point in points){
+                    newObjs += '${point.x},${point.y} ';
+                  }
+                  if(points.isNotEmpty){
+                    newObjs += '"';
                   }
                   newObjs += '/>';
                   newObjs += '\n';

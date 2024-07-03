@@ -1,7 +1,9 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/components/CountTimer.dart';
@@ -130,9 +132,12 @@ class DbHandler
   {
     for(final wrld in fullMaps()){
       await _database?.execute('DELETE FROM ${wrld.nameForGame}');
-      File file = File('assets/metaData/${wrld.nameForGame}/sqlObjects.sql');
-      ;      if(file.existsSync()){
-        await _database?.execute(file.readAsStringSync());
+      var data = await rootBundle.loadString('assets/metaData/${wrld.nameForGame}/sqlObjects.sql',cache: false);
+      var list = data.split('\n');
+      for(final line in list){
+        if(line.length > 10) {
+          await _database?.execute(line.replaceAll('""', '0'));
+        }
       }
     }
   }
@@ -227,9 +232,9 @@ class DbHandler
     return svGame;
   }
 
-  Future changeState({required int id, String? openedAsInt, String? quest, String? usedAsInt})async
+  Future changeState({required int id, String? openedAsInt, String? quest, String? usedAsInt, required String worldName})async
   {
-    final res = await _database?.rawQuery('SELECT * FROM topLeftTempleDungeon where id = ?', [id]);
+    final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
     await _database?.rawUpdate('UPDATE topLeftTempleDungeon set opened = ?, quest = ?, used = ? where id = ?',
         [openedAsInt ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsInt ?? res![0]['used'].toString(), id]);
     dbStateChanger.notifyListeners();
@@ -238,9 +243,9 @@ class DbHandler
   Future<DBAnswer> stateFromDb(int id, String worldName)async
   {
     DBAnswer answer = DBAnswer();
-    final res = await _database?.rawQuery('SELECT * FROM topLeftTempleDungeon where id = ?', [id]);
-    if(res == null) {
-      print('HOW????');
+    final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
+    if(res == null || res.isEmpty) {
+      throw 'ERROR in SELECT * FROM $worldName where id = ?';
       return answer;
     }
     answer.opened = res[0]['opened'].toString() == '1';

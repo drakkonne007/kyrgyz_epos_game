@@ -7,10 +7,13 @@ import 'package:game_flame/Items/hBridge.dart';
 import 'package:game_flame/Items/hWChest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/Items/mapDialog.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/sChest.dart';
 import 'package:game_flame/Items/teleport.dart';
+import 'package:game_flame/Obstacles/BigWoodLamp.dart';
 import 'package:game_flame/Obstacles/altarLightning.dart';
+import 'package:game_flame/Obstacles/conusLight.dart';
 import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/enemies/mini_creatures/arrowSpawn.dart';
@@ -109,10 +112,10 @@ class MapNode {
             spriteList, stepTimes: stepTimes);
         for (final anim in obj.findAllElements('ps')) {
           var ss = SpriteAnimationComponent(animation: sprAnim,
-            position: Vector2(double.parse(anim.getAttribute('x')!) - 1,
-                double.parse(anim.getAttribute('y')!) - 1),
-            size: Vector2(srcSize.x + 2, srcSize.y + 2),
-            priority: GamePriority.foregroundTile
+              position: Vector2(double.parse(anim.getAttribute('x')!) - 1,
+                  double.parse(anim.getAttribute('y')!) - 1),
+              size: Vector2(srcSize.x + 2, srcSize.y + 2),
+              priority: GamePriority.foregroundTile
           );
           myGame.gameMap.allEls[colRow]!.add(ss);
           myGame.gameMap.container.add(ss);
@@ -207,6 +210,7 @@ class MapNode {
       position -= Vector2(0,200);
     }
     colRow ??= LoadedColumnRow(position.x ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.x, position.y ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    bool isHorReverse = obj?.getAttribute('horizontalReverse') == 'true';
     switch (cheatName ?? name) {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(id);
@@ -291,8 +295,7 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
       case 'chest':
-        var temp = Chest(1, myItems: [Gold()], position: position);
-        temp.isStatic = true;
+        var temp = Chest(1, myItems: [Gold()], position: position,id: id, isStatic: true);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -323,6 +326,29 @@ class MapNode {
         var temp2 = StandDownObelisk(position);
         myGame.gameMap.allEls[colRow]!.add(temp2);
         myGame.gameMap.container.add(temp2);
+        break;
+      case 'bigWoodLamp1':
+      case 'bigWoodLamp2':
+      case 'bigWoodLamp3':
+      case 'bigWoodLamp4':
+      case 'bigWoodLamp5':
+        String str = cheatName ?? name!;
+        str = str.replaceAll('bigWoodLamp', '');
+        int level = int.parse(str);
+        var temp = BigWoodLamp(position,level);
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.container.add(temp);
+        if(isHorReverse){
+          temp.flipHorizontally();
+        }
+        break;
+      case 'lightConus':
+      case 'lightConusNoGrass':
+      case 'lightConusSteel':
+      case 'lightConusSteelNoGrass':
+        var temp = LightConus(position,cheatName ?? name!);
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.container.add(temp);
         break;
       case 'telep':
         var targetPos = obj!.getAttribute('tar')!.split(',');
@@ -368,6 +394,14 @@ class MapNode {
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(frog);
         break;
+      case 'dialog':
+        bool isLoop = obj?.getAttribute('lp') == '1';
+        String text = obj!.getAttribute('text')!;
+        String vectorSource = obj.getAttribute('p')!;
+        MapDialog temp = MapDialog(position, text,vectorSource, isLoop);
+        myGame.gameMap.allEls[colRow]!.add(temp);
+        myGame.gameMap.backgroundTile.add(temp);
+        break;
       case 'campPort':
         CampPortalDown campPort = CampPortalDown(position);
         myGame.gameMap.allEls[colRow]!.add(campPort);
@@ -380,8 +414,8 @@ class MapNode {
         var targetPos = obj!.getAttribute('tar')?.split(';');
         List<Vector2> target = [];
         for(int i=0;i<targetPos!.length;i++){
-            var source = targetPos[i].split(',');
-            target.add(Vector2(double.parse(source[0]), double.parse(source[1])));
+          var source = targetPos[i].split(',');
+          target.add(Vector2(double.parse(source[0]), double.parse(source[1])));
         }
         Bird bird = Bird(position, target,id);
         myGame.gameMap.loadedLivesObjs.add(id);

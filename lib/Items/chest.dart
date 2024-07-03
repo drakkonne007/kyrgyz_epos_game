@@ -58,7 +58,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     add(_objectHitbox!);
-    priority = position.y.toInt() + 10;
+    priority = position.y.toInt() + 17;
   }
 
   void checkIsIOpen()
