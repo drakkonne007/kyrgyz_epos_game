@@ -54,27 +54,32 @@ class DbHandler
     _database = await openDatabase(path, version: 11,
         onUpgrade: (Database db, int oldVersion, int newVersion) async{
           print('UPGRADE TABLES!!!');
-          for(final wrld in fullMaps()){
-            await db.execute('DROP TABLE IF EXISTS ${wrld.nameForGame}');
-          }
-          await db.execute('DROP TABLE IF EXISTS player_data');
-          await db.execute('DROP TABLE IF EXISTS current_inventar');
-          await db.execute('DROP TABLE IF EXISTS inventar');
-          await db.execute('DROP TABLE IF EXISTS effects');
+          await dropAllTables();
           await createTable();
         },
         onCreate: (Database db, int v) async{
           print('CREATE TABLES!!!');
-          for(final wrld in fullMaps()){
-            await db.execute('DROP TABLE IF EXISTS ${wrld.nameForGame}');
-          }
-          await db.execute('DROP TABLE IF EXISTS player_data');
-          await db.execute('DROP TABLE IF EXISTS current_inventar');
-          await db.execute('DROP TABLE IF EXISTS inventar');
-          await db.execute('DROP TABLE IF EXISTS effects');
+          await dropAllTables();
           await createTable();
         });
+    try{
+      await _database?.rawQuery('SELECT id FROM player_data LIMIT 1');
+    }catch(e){
+      await dropAllTables();
+      await createTable();
+    }
     // await _database?.execute('DELETE FROM travel_shop');
+  }
+
+  Future dropAllTables()async
+  {
+    for(final wrld in fullMaps()){
+      await _database?.execute('DROP TABLE IF EXISTS ${wrld.nameForGame}');
+    }
+    await _database?.execute('DROP TABLE IF EXISTS player_data');
+    await _database?.execute('DROP TABLE IF EXISTS current_inventar');
+    await _database?.execute('DROP TABLE IF EXISTS inventar');
+    await _database?.execute('DROP TABLE IF EXISTS effects');
   }
 
   Future createTable() async

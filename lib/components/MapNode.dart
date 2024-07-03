@@ -397,7 +397,10 @@ class MapNode {
       case 'dialog':
         bool isLoop = obj?.getAttribute('lp') == '1';
         String text = obj!.getAttribute('text')!;
-        String vectorSource = obj.getAttribute('p')!;
+        String? vectorSource = obj.getAttribute('p');
+        if(vectorSource == null){
+
+        }
         MapDialog temp = MapDialog(position, text,vectorSource, isLoop);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.backgroundTile.add(temp);

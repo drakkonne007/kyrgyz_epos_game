@@ -9,11 +9,11 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 final List<Vector2> _lamp1 = [
-  Vector2(-8.95048,17.9914)
-  ,Vector2(-12.5661,36.0695)
-  ,Vector2(-0.815357,40.4383)
-  ,Vector2(13.1951,36.0695)
-  ,Vector2(7.01847,17.3888)
+  Vector2(-8.95048,17.9914) * PhysicVals.physicScale
+  ,Vector2(-12.5661,36.0695) * PhysicVals.physicScale
+  ,Vector2(-0.815357,40.4383) * PhysicVals.physicScale
+  ,Vector2(13.1951,36.0695) * PhysicVals.physicScale
+  ,Vector2(7.01847,17.3888) * PhysicVals.physicScale
   ,];
 
 class LightConus extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>

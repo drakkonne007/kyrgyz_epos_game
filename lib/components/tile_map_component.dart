@@ -215,6 +215,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     if(isNeedCopyInternal) {
       isNeedCopyInternal = false;
       await firstCachedIntoInternal();
+      await gameRef.dbHandler.fillGameObjects();
     }
     loadObjs(currentGameWorldData!);
     loadAnimsHigh(currentGameWorldData!);

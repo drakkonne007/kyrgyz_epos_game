@@ -1,12 +1,8 @@
 import 'dart:io';
-import 'dart:js_interop';
 import 'dart:math';
-
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:game_flame/abstracts/utils.dart';
-import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/components/precompile_animation.dart';
 import 'package:game_flame/components/tile_map_component.dart';
@@ -103,7 +99,7 @@ Future precompileAll() async
                     newObjs += ' p="';
                   }
                   for(final point in points){
-                    newObjs += '${point.x},${point.y} ';
+                    newObjs += '${point.x + obj.x},${point.y + obj.y} ';
                   }
                   if(points.isNotEmpty){
                     newObjs += '"';
