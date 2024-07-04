@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -11,13 +13,17 @@ import 'package:game_flame/overlays/game_styles.dart';
 
 class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
 
-  MapDialog(this._targetPos, this._text, this._vectorSource, this._isLoop);
+  MapDialog(this._targetPos, this._text,this._size, this._vectorSource, this._isLoop);
 
   Vector2 _targetPos;
   String _text;
-  String _vectorSource;
+  String? _vectorSource;
   bool _isLoop;
   bool _isActive = false;
+  int _countOfVariants = 0;
+  List<String> _texts = [];
+  Vector2 _size;
+  double currentSecs = 0;
 
   RenderText? _renderText;
 
@@ -26,19 +32,28 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
   @override
   Future<void> onLoad() async
   {
-
+    _texts = _text.split(';');
+    if(_texts.last == ''){
+      _texts.removeLast();
+    }
     anchor = Anchor.center;
     position = _targetPos;
-    var pointsList = _vectorSource.split(' ');
     List<Vector2> temp = [];
-    for (final sources in pointsList) {
-      if (sources == '') {
-        continue;
+    if(_vectorSource != null){
+      var pointsList = _vectorSource!.split(' ');
+      for (final sources in pointsList) {
+        if (sources == '') {
+          continue;
+        }
+        temp.add(Vector2(double.parse(sources.split(',')[0]) - position.x,
+            double.parse(sources.split(',')[1]) - position.y));
       }
-      temp.add(Vector2(double.parse(sources.split(',')[0]) - position.x,
-          double.parse(sources.split(',')[1]) - position.y));
+    }else{
+       temp.add(Vector2(-_size.x/2, -_size.y/2));
+       temp.add(Vector2(_size.x/2, -_size.y/2));
+       temp.add(Vector2(_size.x/2, _size.y/2));
+       temp.add(Vector2(-_size.x/2, _size.y/2));
     }
-
     add(ObjectHitbox(temp,
         collisionType: DCollisionType.active,
         isSolid: false,
@@ -54,15 +69,29 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
     if(_isActive){
       return;
     }
-    _renderText ??= RenderText(position, Vector2(150,75), _text);
+    int curs = min(_countOfVariants, _texts.length - 1);
+    _renderText ??= RenderText(position, Vector2(150,75), _texts[curs]);
     _isActive = true;
     gameRef.gameMap.container.add(_renderText!);
-    Future.delayed(const Duration(seconds: 3),(){
-      _isActive = false;
+    _countOfVariants++;
+  }
+
+  @override
+  void update(double dt)
+  {
+    if(!_isActive){
+      return;
+    }
+    currentSecs += dt;
+    if(currentSecs >= 3){
       if(_renderText != null) {
         _renderText!.removeFromParent();
         _renderText = null;
       }
-    });    // print(text);
+    }
+    if(currentSecs >= 6){
+      _isActive = false;
+    }
+    super.update(dt);
   }
 }

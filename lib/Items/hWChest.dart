@@ -116,11 +116,14 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _objectHitbox?.removeFromParent();
     isOpened = true;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    double dur = SpriteAnimationTicker(animation!).totalDuration();
-    Future.delayed(Duration(milliseconds: (dur * 1000).toInt()), () {
-      for (final myItem in myItems) {
-        gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
+    TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
+    removeOnFinish: true,
+      onTick: (){
+        for (final myItem in myItems) {
+          gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
+        }
       }
-    });
+    );
+    gameRef.gameMap.add(timer);
   }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1464">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1466">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -119,6 +119,7 @@
  <tileset firstgid="50429" source="animated lamp posts-5.tsx"/>
  <tileset firstgid="50448" source="altar-white aura fx.tsx"/>
  <tileset firstgid="50455" source="NPC Merchant-interaction-rest.tsx"/>
+ <tileset firstgid="50459" source="wind cartoonish fx-288X64- 48frames.tsx"/>
  <layer id="13" name="ground" width="110" height="99">
   <data encoding="csv">
 46647,46591,46647,46647,46645,46591,46701,46647,46701,46591,46646,46647,46591,46701,46701,46645,46647,46701,46701,46591,46647,46645,46701,46647,46701,46591,46701,46591,46647,46647,46646,46645,46591,46591,46646,46647,46645,46645,46647,46646,46647,46591,46645,46591,46645,46591,46701,46591,46646,46701,46647,46645,46591,46646,46646,46645,46591,46701,46646,46591,46591,46646,46647,46701,46647,46647,46647,46647,46591,46647,46646,46647,46646,46591,46591,46645,46645,46591,46646,46591,46646,46591,46645,46646,46645,46646,46646,46645,46645,46701,46701,46646,46591,46646,46591,46645,46591,46646,46701,46647,46646,46701,46591,46591,46646,46701,46645,46701,46645,46592,
@@ -1710,7 +1711,6 @@
   <object id="1123" x="2658.02" y="2086.82" width="59.9091" height="17.1502"/>
   <object id="1124" x="2796" y="1988.91" width="42.0909" height="22.0909"/>
   <object id="1128" x="2596.83" y="1924.64" width="54.625" height="54.1818"/>
-  <object id="1134" x="1416.82" y="1248" width="13" height="61"/>
   <object id="1135" x="338" y="919.125" width="31" height="24.8125"/>
   <object id="1136" x="371" y="750.25" width="9.75" height="36.875"/>
   <object id="1140" x="1385.86" y="1790" width="9.81818" height="380"/>
@@ -2058,13 +2058,13 @@
   </object>
   <object id="1298" name="dialog" x="1531.33" y="1034">
    <properties>
-    <property name="text" value="Эй!!! Не ходи по грядкам!!!"/>
+    <property name="text" value="Эй!!! Не ходи по грядкам!!!;Ну хваааатит;Иди по дорожке!"/>
    </properties>
-   <polyline points="0,0 -104,6 -166,60.6667 -378,58.6667 -380,149.333 -115.333,150 -38,78.6667 29.3333,72"/>
+   <polyline points="0,0 -104,6 -166,60.6667 -180.859,60.5265 -378,58.6667 -380,149.333 -115.333,150 -38,78.6667 29.3333,72"/>
   </object>
   <object id="1299" name="dialog" x="1676.5" y="913.5">
    <properties>
-    <property name="text" value="Эй!!! Не ходи по грядкам!!!"/>
+    <property name="text" value="Не топчи землю;Ну сказали же, не наступай;Эй, ну хватит уже..."/>
    </properties>
    <polyline points="0,0 71.5,-98 72.5,-188.5 156,-324.5 266,-430 338,-461 402.5,-472 480,-509.5 625.5,-517 600.5,-447.5 476,-408.5 405.5,-370.5 324.5,-355 275,-309.5 194,-160.5 155.5,-22 93,78"/>
   </object>
@@ -2184,9 +2184,6 @@
    <polygon points="10.5455,-35.0909 4.27274,-17.0909 5.36364,38.4546 52.2727,38.7272 105,32.2727 116.455,23.7273 125.119,-0.0419338 126.536,-35.6064"/>
   </object>
   <object id="1346" x="1443.75" y="320.25" width="54.75" height="30.5"/>
-  <object id="1349" name="windb" x="1013.33" y="2669.33">
-   <point/>
-  </object>
   <object id="1350" name="windb" x="1972.67" y="3004">
    <point/>
   </object>
@@ -2336,43 +2333,19 @@
    <properties>
     <property name="text" value="Эй! Не ходи по грядкам!"/>
    </properties>
-   <polyline points="0,0 0,165"/>
+   <polyline points="0,0 0,293.667"/>
   </object>
-  <object id="1455" name="dialog" x="1329" y="2455">
+  <object id="1456" name="dialog" x="1320.67" y="2561.33">
    <properties>
     <property name="text" value="Эй! Не ходи по грядкам!"/>
    </properties>
-   <polyline points="0,0 -5.5,95"/>
-  </object>
-  <object id="1456" name="dialog" x="1306" y="2562">
-   <properties>
-    <property name="text" value="Эй! Не ходи по грядкам!"/>
-   </properties>
-   <polyline points="0,0 -91,92.5"/>
-  </object>
-  <object id="1457" name="dialog" x="1198.5" y="2673.5">
-   <properties>
-    <property name="text" value="Эй! Не ходи по грядкам!"/>
-   </properties>
-   <polyline points="0,0 -100.5,91"/>
-  </object>
-  <object id="1458" name="dialog" x="923" y="2767">
-   <properties>
-    <property name="text" value="Эй! Не ходи по грядкам!"/>
-   </properties>
-   <polyline points="0,0 153,-0.5"/>
-  </object>
-  <object id="1459" name="dialog" x="908.5" y="2740">
-   <properties>
-    <property name="text" value="Эй! Не ходи по грядкам!"/>
-   </properties>
-   <polyline points="0,0 11,-45"/>
+   <polyline points="0,0 -236.333,203.167"/>
   </object>
   <object id="1460" name="dialog" x="946" y="2699">
    <properties>
     <property name="text" value="Эй! Не ходи по грядкам!"/>
    </properties>
-   <polyline points="0,0 121,-6"/>
+   <polyline points="133.333,64.3333 -32.6667,63.6667 -32.6667,30.3333 0,0 121,-6"/>
   </object>
   <object id="1461" name="dialog" x="1092.5" y="2677">
    <properties>
@@ -2380,17 +2353,13 @@
    </properties>
    <polyline points="0,0 133.5,-136.5"/>
   </object>
-  <object id="1462" name="dialog" x="1234" y="2394">
+  <object id="1462" name="dialog" x="1234" y="2290.67">
    <properties>
     <property name="text" value="Эй! Не ходи по грядкам!"/>
    </properties>
-   <polyline points="0,0 0,125.5"/>
+   <polyline points="0,0 0,228.833"/>
   </object>
-  <object id="1463" name="dialog" x="1235" y="2293">
-   <properties>
-    <property name="text" value="Эй! Не ходи по грядкам!"/>
-   </properties>
-   <polyline points="0,0 -1,80.5"/>
-  </object>
+  <object id="1464" gid="50459" x="789" y="2667" width="288" height="64"/>
+  <object id="1465" gid="50459" x="730" y="2467" width="288" height="64"/>
  </objectgroup>
 </map>

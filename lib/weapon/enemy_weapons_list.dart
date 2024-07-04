@@ -59,13 +59,17 @@ class EWBody extends EnemyWeapon
     _isActive = true;
     latencyBefore = -activeSecs/3;
     scale = Vector2(1,1);
-    Future.delayed(Duration(milliseconds: (activeSecs * 1000).toInt()),(){
-      transformPoint = rawCenter;
-      _isGrow = true;
-      onEndWeaponHit?.call();
-      _isActive = false;
-      scale = Vector2(1,1);
-    });
+    TimerComponent timer = TimerComponent(period: activeSecs,
+        removeOnFinish: true,
+        onTick: (){
+          transformPoint = rawCenter;
+          _isGrow = true;
+          onEndWeaponHit?.call();
+          _isActive = false;
+          scale = Vector2(1,1);
+        }
+    );
+    game.gameMap.add(timer);
   }
 
   @override
@@ -134,11 +138,14 @@ class EWMooseHummer extends EnemyWeapon //ось - середина муса
           collisionType = DCollisionType.inactive;
         }
       };
-      // print('start hit');
-      Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
+      TimerComponent timer = TimerComponent(period: _activeSecs,
+      removeOnFinish: true,
+      onTick: (){
         collisionType = DCollisionType.inactive;
         onEndWeaponHit?.call();
-      });
+      }
+      );
+      game.gameMap.add(timer);
     }
   }
 

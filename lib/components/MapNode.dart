@@ -13,7 +13,7 @@ import 'package:game_flame/Items/sChest.dart';
 import 'package:game_flame/Items/teleport.dart';
 import 'package:game_flame/Obstacles/BigWoodLamp.dart';
 import 'package:game_flame/Obstacles/altarLightning.dart';
-import 'package:game_flame/Obstacles/conusLight.dart';
+import 'package:game_flame/Obstacles/lightConus.dart';
 import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/enemies/mini_creatures/arrowSpawn.dart';
@@ -398,10 +398,8 @@ class MapNode {
         bool isLoop = obj?.getAttribute('lp') == '1';
         String text = obj!.getAttribute('text')!;
         String? vectorSource = obj.getAttribute('p');
-        if(vectorSource == null){
-
-        }
-        MapDialog temp = MapDialog(position, text,vectorSource, isLoop);
+        Vector2 size = Vector2(double.parse(obj.getAttribute('w')!), double.parse(obj.getAttribute('h')!));
+        MapDialog temp = MapDialog(position,text,size,vectorSource, isLoop);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.backgroundTile.add(temp);
         break;

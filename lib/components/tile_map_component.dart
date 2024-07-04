@@ -75,7 +75,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     // await add(priorityHigh);
   }
 
-
   int column()
   {
     return _column;

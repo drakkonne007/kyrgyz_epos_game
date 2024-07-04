@@ -74,10 +74,14 @@ class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<Kyrg
     bool toOpen = ans.opened;
     if(toOpen){
       animation = toClosed.reversed();
-      Future.delayed(Duration(milliseconds:  (animationTicker!.totalDuration() * 1000).toInt()), (){
+      TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
+        removeOnFinish: true,
+        onTick: () {
           leftF.setSensor(true);
           rightF.setSensor(true);
-      });
+        }
+      );
+      gameRef.gameMap.add(timer);
     }else{
       animation = toClosed;
       leftF.setSensor(false);

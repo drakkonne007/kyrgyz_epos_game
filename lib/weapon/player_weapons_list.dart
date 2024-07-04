@@ -89,15 +89,17 @@ class WSword extends PlayerWeapon
       _hitVariant = rand;
       game.playerData.isLockEnergy = true;
       collisionType = DCollisionType.active;
-      // print('start hit');
-      Future.delayed(Duration(milliseconds: (_activeSecs * 1000).toInt()),(){
-        collisionType = DCollisionType.inactive;
-        _isGrow = true;
-        game.playerData.isLockEnergy = false;
-        onEndWeaponHit?.call();
-        // transformPoint = rawCenter;
-        // print('end hit');
-      });
+
+      TimerComponent timer = TimerComponent(period: _activeSecs,
+          removeOnFinish: true,
+          onTick: (){
+            collisionType = DCollisionType.inactive;
+            _isGrow = true;
+            game.playerData.isLockEnergy = false;
+            onEndWeaponHit?.call();
+          }
+      );
+      game.gameMap.add(timer);
     }
   }
 

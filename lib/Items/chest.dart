@@ -86,11 +86,10 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     remove(_objectHitbox!);
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    double dur = SpriteAnimationTicker(animation!).totalDuration();
     for (final myItem in myItems) {
       gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
     }
-    add(OpacityEffect.by(-1,EffectController(duration: dur + 0.3),onComplete: (){
+    add(OpacityEffect.by(-1,EffectController(duration: animationTicker!.totalDuration() + 0.3),onComplete: (){
       if(isStatic) {
         gameRef.gameMap.loadedLivesObjs.remove(id);
       }

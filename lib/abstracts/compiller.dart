@@ -68,7 +68,7 @@ Future precompileAll() async
                 String name = '';
                 bool isReversedHorizontally = false;
                 if(obj.name == '' && obj.type == ''){
-                  int gid = obj.gid! & 0xFFFFFF;
+                  int gid = obj.gid! & 0xFFFFFFF;
                   isReversedHorizontally = (obj.gid! & 0x80000000) != 0;
                   final tileset = tiled.tileMap.map.tilesetByTileGId(gid);
                   name = tileset.tiles.first.type!;
