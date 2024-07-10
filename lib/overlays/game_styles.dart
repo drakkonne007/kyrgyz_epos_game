@@ -22,6 +22,17 @@ final defaultTextStyle = TextStyle
       ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 3)
 );
 
+final mapDialogTextStyle = TextStyle
+  (
+    fontSize: 16,
+    wordSpacing: 2,
+    foreground: Paint()..
+    style = PaintingStyle.fill
+      ..strokeJoin = StrokeJoin.round
+      ..color = const Color(0xFFFCF08E)
+      // ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 3)
+);
+
 final defaultNoneButtonStyle = ButtonStyle(
   minimumSize: WidgetStateProperty.all<Size>(Size.zero),
   foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),

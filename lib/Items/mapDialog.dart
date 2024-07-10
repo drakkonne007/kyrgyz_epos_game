@@ -1,15 +1,10 @@
 import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/palette.dart';
-import 'package:flutter/material.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/RenderText.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/overlays/game_styles.dart';
-
-
 
 class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
 
@@ -19,15 +14,11 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
   String _text;
   String? _vectorSource;
   bool _isLoop;
-  bool _isActive = false;
   int _countOfVariants = 0;
   List<String> _texts = [];
   Vector2 _size;
-  double currentSecs = 0;
-
   RenderText? _renderText;
-
-
+  late PositionComponent _player;
 
   @override
   Future<void> onLoad() async
@@ -62,36 +53,36 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
         autoTrigger: true,
         isLoop: _isLoop,
         game: gameRef));
+    _player = gameRef.gameMap.orthoPlayer ?? gameRef.gameMap.frontPlayer!;
   }
 
   void doDialog()
   {
-    if(_isActive){
-      return;
-    }
     int curs = min(_countOfVariants, _texts.length - 1);
-    _renderText ??= RenderText(position, Vector2(150,75), _texts[curs]);
-    _isActive = true;
-    gameRef.gameMap.container.add(_renderText!);
-    _countOfVariants++;
-  }
-
-  @override
-  void update(double dt)
-  {
-    if(!_isActive){
+    if(gameRef.gameMap.openSmallDialogs.contains(_texts[curs])){
       return;
     }
-    currentSecs += dt;
-    if(currentSecs >= 3){
-      if(_renderText != null) {
-        _renderText!.removeFromParent();
+    _renderText ??= RenderText(_player.position, Vector2(150,75), _texts[curs]);
+    _renderText?.priority = GamePriority.maxPriority;
+    gameRef.gameMap.container.add(_renderText!);
+    gameRef.gameMap.openSmallDialogs.add(_texts[curs]);
+    _countOfVariants++;
+    TimerComponent timer1 = TimerComponent(
+      period: _texts[curs].length * 0.05 + 2,
+      removeOnFinish: true,
+      onTick: () {
+        _renderText?.removeFromParent();
         _renderText = null;
-      }
-    }
-    if(currentSecs >= 6){
-      _isActive = false;
-    }
-    super.update(dt);
+      },
+    );
+    TimerComponent timer2 = TimerComponent(
+      period: _texts[curs].length * 0.05 + 6,
+      removeOnFinish: true,
+      onTick: () {
+        gameRef.gameMap.openSmallDialogs.remove(_texts[curs]);
+      },
+    );
+    gameRef.gameMap.add(timer1);
+    gameRef.gameMap.add(timer2);
   }
 }

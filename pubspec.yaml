@@ -222,6 +222,7 @@ flutter:
     - assets/tiles/sprites/dialogIcons/
     - assets/tiles/sprites/effects/
     - assets/tiles/sprites/players/
+    - assets/audio/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

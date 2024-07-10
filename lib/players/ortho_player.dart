@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
@@ -106,8 +107,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
 
-  void setGroundBody()
+  void setGroundBody({Vector2? targetPos})
   {
+    targetPos ??= position;
     if(groundRigidBody != null){
       print('destroy again');
       game.world.destroyBody(groundRigidBody!);
@@ -116,7 +118,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Vector2 tSize = Vector2(20,16);
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)), friction: 0.1, density: 0.1);
     groundRigidBody = Ground(
-      BodyDef(type: BodyType.dynamic, position: position * PhysicVals.physicScale, fixedRotation: true,
+      BodyDef(type: BodyType.dynamic, position: targetPos * PhysicVals.physicScale, fixedRotation: true,
           userData: BodyUserData(isQuadOptimizaion: false)),
       gameRef.world.physicsWorld,isPlayer: true
     );
@@ -189,6 +191,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
+    FlameAudio.play('playerHit.mp3',volume: 2);
     game.playerData.energy.value -= _weapon!.energyCost;
     _isLongAttack = isLong;
     animation = _isLongAttack ? _animLong : _animShort;
@@ -322,8 +325,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(pos <= 0){
       pos = 1;
     }
-    priority = pos;
     super.update(dt);
+    priority = pos;
     if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
     }

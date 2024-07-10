@@ -20,7 +20,6 @@ class GamePause extends StatelessWidget
           ElevatedButton(
             onPressed: (){
               _game.doGameHud();
-              _game.resumeEngine();
             },
             child:const Text('Продолжить',softWrap: false,),
           ),
@@ -33,9 +32,9 @@ class GamePause extends StatelessWidget
           ),
           ElevatedButton(
             onPressed: () async{
-              _game.resumeEngine();
               await _game.loadGame(0);
               await _game.loadNewMap();
+              _game.resumeEngine();
             },
             child: const Text('Загрузить'),
           ),

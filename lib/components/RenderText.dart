@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
 final regular = TextPaint(
-    style: dialogStyleFont.copyWith(fontSize: 16)
+    style: mapDialogTextStyle
 );
 
 class RenderText extends ScrollTextBoxComponent
 {
-  final bgPaint = Paint()..color = const Color(0xC5000000);
+  final bgPaint = Paint()..color = const Color(0xA5000000);
   final borderPaint = Paint()..color = const Color(0xFFFFFF00)..style = PaintingStyle.stroke;
 
   RenderText(Vector2 position, Vector2 frameSize, String text) : super(
@@ -23,7 +23,7 @@ class RenderText extends ScrollTextBoxComponent
   void render(Canvas canvas) {
     Rect rect = Rect.fromLTWH(0, 0, width, height);
     canvas.drawRect(rect, bgPaint);
-    canvas.drawRect(rect.deflate(3), borderPaint);
+    canvas.drawRect(rect.deflate(2), borderPaint);
     super.render(canvas);
   }
 }

@@ -7,6 +7,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart' as ext;
@@ -79,6 +80,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   @override
   Future onLoad() async
   {
+    FlameAudio.bgm.initialize();
+    // FlameAudio.bgm.play('background.mp3');
     playerData = PlayerData(this);
     if (Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
@@ -107,6 +110,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     var loc = prefs.getString('locale');
     if(loc == null){
       overlays.add(LanguageChooser.id);
+
     }else{
       LocaleSettings.setLocaleRaw(loc);
       overlays.add(MainMenu.id);
@@ -173,14 +177,18 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   @override
   void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     double xZoom = size.x / 768;
     double yZoom = size.y / 448;
     camera.viewfinder.zoom = max(xZoom, yZoom) + 0.04;
-    super.onGameResize(size);
+    if(gameMap.isMounted) {
+      gameMap.setCameraBounds();
+    }
   }
 
   void doGameHud()
   {
+    FlameAudio.bgm.stop();
     resumeEngine();
     _showOverlay(overlayName: GameHud.id,isHideOther: true);
   }
@@ -229,6 +237,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   {
     pauseEngine();
     _showOverlay(overlayName: GamePause.id,isHideOther: true);
+    // FlameAudio.bgm.play('background.mp3');
   }
 
   void doLoadingMapHud()

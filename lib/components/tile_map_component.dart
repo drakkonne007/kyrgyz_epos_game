@@ -55,6 +55,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   final Component container = Component(priority: GamePriority.players);
   final Component backgroundTile = Component(priority: GamePriority.backgroundTile);
   final Component effectComponent = Component();
+  Set<String> openSmallDialogs = {};
   // final Component enemyComponent = Component(priority: GamePriority.player - 2);
   // final Component playerLayout = Component(priority: GamePriority.player);
   // final Component enemyOnPlayer = Component(priority: GamePriority.player +2);
@@ -195,12 +196,17 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
       }
     }
     gameRef.camera.world = this;
-    gameRef.camera.setBounds(Rectangle.fromLTRB(0,0,
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32,
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32), considerViewport: true);
+    setCameraBounds();
     gameRef.camera.follow(frontPlayer ?? orthoPlayer!, snap: true);
     gameRef.doGameHud();
     _isLoad = true;
+  }
+
+  void setCameraBounds()
+  {
+    gameRef.camera.setBounds(Rectangle.fromLTRB(gameRef.camera.viewport.size.x / (2 * gameRef.camera.viewfinder.zoom),gameRef.camera.viewport.size.y / (2 * gameRef.camera.viewfinder.zoom),
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32 - gameRef.camera.viewport.size.x / (2 * gameRef.camera.viewfinder.zoom),
+        game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32 - gameRef.camera.viewport.size.y / (2 * gameRef.camera.viewfinder.zoom)));
   }
 
   Future _preloadAnimAndObj() async
