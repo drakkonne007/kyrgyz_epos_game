@@ -22,6 +22,7 @@ import 'package:game_flame/abstracts/compiller.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/components/quests.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/main.dart';
 import 'package:game_flame/overlays/death_menu.dart';
@@ -193,7 +194,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     _showOverlay(overlayName: GameHud.id,isHideOther: true);
   }
 
-  void doDialogHud()
+  void doDialogHud(Quest quest)
   {
     pauseEngine();
     _showOverlay(overlayName: DialogOverlay.id,isHideOther: true);

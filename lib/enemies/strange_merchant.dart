@@ -9,6 +9,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/quests.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
@@ -71,7 +72,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
 
   void getBuyMenu()
   {
-    gameRef.doDialogHud();
+    gameRef.doDialogHud(ChestOfGlory());
   }
 
 }

@@ -16,6 +16,7 @@ import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/components/cached_utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
+import 'package:game_flame/components/quests.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';
@@ -56,6 +57,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   final Component backgroundTile = Component(priority: GamePriority.backgroundTile);
   final Component effectComponent = Component();
   Set<String> openSmallDialogs = {};
+  Map<String,Quest> quests = {};
   // final Component enemyComponent = Component(priority: GamePriority.player - 2);
   // final Component playerLayout = Component(priority: GamePriority.player);
   // final Component enemyOnPlayer = Component(priority: GamePriority.player +2);

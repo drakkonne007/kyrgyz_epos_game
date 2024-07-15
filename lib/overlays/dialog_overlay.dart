@@ -4,6 +4,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/components/quests.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 

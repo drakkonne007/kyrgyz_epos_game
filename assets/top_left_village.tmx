@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1466">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1467">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -120,6 +120,7 @@
  <tileset firstgid="50448" source="altar-white aura fx.tsx"/>
  <tileset firstgid="50455" source="NPC Merchant-interaction-rest.tsx"/>
  <tileset firstgid="50459" source="wind cartoonish fx-288X64- 48frames.tsx"/>
+ <tileset firstgid="50511" source="treasure chest lvl 3-opening animation-cartoon style.tsx"/>
  <layer id="13" name="ground" width="110" height="99">
   <data encoding="csv">
 46647,46591,46647,46647,46645,46591,46701,46647,46701,46591,46646,46647,46591,46701,46701,46645,46647,46701,46701,46591,46647,46645,46701,46647,46701,46591,46701,46591,46647,46647,46646,46645,46591,46591,46646,46647,46645,46645,46647,46646,46647,46591,46645,46591,46645,46591,46701,46591,46646,46701,46647,46645,46591,46646,46646,46645,46591,46701,46646,46591,46591,46646,46647,46701,46647,46647,46647,46647,46591,46647,46646,46647,46646,46591,46591,46645,46645,46591,46646,46591,46646,46591,46645,46646,46645,46646,46646,46645,46645,46701,46701,46646,46591,46646,46591,46645,46591,46646,46701,46647,46646,46701,46591,46591,46646,46701,46645,46701,46645,46592,
@@ -2325,7 +2326,12 @@
   <object id="1440" gid="50455" x="1056.5" y="2027" width="110" height="110"/>
   <object id="1441" gid="50455" x="853.5" y="1472.5" width="110" height="110"/>
   <object id="1442" gid="50455" x="2424.33" y="732.333" width="110" height="110"/>
-  <object id="1443" gid="50455" x="833.667" y="2577.67" width="110" height="110"/>
+  <object id="1443" gid="50455" x="833.667" y="2577.67" width="110" height="110">
+   <properties>
+    <property name="quest" value="chestOfGlory"/>
+    <property name="tar" type="int" value="0"/>
+   </properties>
+  </object>
   <object id="1444" gid="2147534103" x="899.667" y="405.167" width="110" height="110"/>
   <object id="1445" gid="50455" x="837.5" y="396.25" width="110" height="110"/>
   <object id="1446" gid="50455" x="865.667" y="436.25" width="110" height="110"/>
@@ -2361,5 +2367,11 @@
   </object>
   <object id="1464" gid="50459" x="789" y="2667" width="288" height="64"/>
   <object id="1465" gid="50459" x="730" y="2467" width="288" height="64"/>
+  <object id="1466" gid="50511" x="719" y="365.75" width="64" height="64">
+   <properties>
+    <property name="quest" value="chestOfGlory"/>
+    <property name="tar" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
