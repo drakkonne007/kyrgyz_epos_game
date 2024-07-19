@@ -54,7 +54,7 @@ class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     opened = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 11, loop: false);
     anchor = Anchor.center;
     position = _startPosition;
-    DBAnswer ans = await gameRef.dbHandler.stateFromDb(_targetId, gameRef.gameMap.currentGameWorldData!.nameForGame);
+    DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_targetId, gameRef.gameMap.currentGameWorldData!.nameForGame);
     isClosed = !ans.opened;
     animation = isClosed ? closed : opened;
     _objectHitbox = ObjectHitbox(_groundObj,
@@ -76,10 +76,10 @@ class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void changeState() async{
     if (isClosed) {
       animation = toOpen;
-      await gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '1',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
+      await gameRef.dbHandler.changeItemState(id: _targetId, openedAsInt: '1',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
     } else {
       animation = toOpen.reversed();
-      await gameRef.dbHandler.changeState(id: _targetId, openedAsInt: '0',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
+      await gameRef.dbHandler.changeItemState(id: _targetId, openedAsInt: '0',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
     }
     isClosed = !isClosed;
   }

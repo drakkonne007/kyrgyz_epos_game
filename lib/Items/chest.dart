@@ -4,8 +4,11 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/components/RenderText.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
@@ -23,7 +26,10 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   this.isStatic = false,
     this.id
   });
-  Set<int>? nedeedKilledBosses;
+  Set<String>? nedeedKilledBosses;
+  final String _noNeededItem = 'Нет нужного предмета...';
+  final String _noNeededKilledBoss = 'Сначала победите хозяина';
+
   Set<String>? neededItems;
   List<Item> myItems;
   final int _level;
@@ -65,6 +71,24 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     if(nedeedKilledBosses != null){
       if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
+        if(gameRef.gameMap.openSmallDialogs.contains(_noNeededKilledBoss)){
+          return;
+        }
+        var player = gameRef.gameMap.orthoPlayer ?? gameRef.gameMap.frontPlayer!;
+        var renderText = RenderText(player.position, Vector2(150,75), _noNeededKilledBoss);
+        renderText.priority = GamePriority.maxPriority;
+        gameRef.gameMap.container.add(renderText);
+        gameRef.gameMap.openSmallDialogs.add(_noNeededKilledBoss);
+
+        TimerComponent timer1 = TimerComponent(
+          period: _noNeededKilledBoss.length * 0.05 + 2,
+          removeOnFinish: true,
+          onTick: () {
+            renderText.removeFromParent();
+            gameRef.gameMap.openSmallDialogs.remove(_noNeededKilledBoss);
+          },
+        );
+        gameRef.gameMap.add(timer1);
         print('not kill needed boss');
         return;
       }
@@ -74,12 +98,32 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         bool isNeed = true;
         for(final playerHas in gameRef.playerData.itemInventar.keys){
           if(playerHas == myNeeded){
+            var dd = KeyForChestOfGlory();
+            dd.getEffectFromInventar(gameRef);
             isNeed = false;
             break;
           }
         }
         if(isNeed){
-          print('not has nedeed item');
+          if(gameRef.gameMap.openSmallDialogs.contains(_noNeededItem)){
+            return;
+          }
+          var player = gameRef.gameMap.orthoPlayer ?? gameRef.gameMap.frontPlayer!;
+          var renderText = RenderText(player.position, Vector2(150,75), _noNeededItem);
+          renderText.priority = GamePriority.maxPriority;
+          gameRef.gameMap.container.add(renderText);
+          gameRef.gameMap.openSmallDialogs.add(_noNeededItem);
+
+          TimerComponent timer1 = TimerComponent(
+            period: _noNeededItem.length * 0.05 + 2,
+            removeOnFinish: true,
+            onTick: () {
+              renderText.removeFromParent();
+              gameRef.gameMap.openSmallDialogs.remove(_noNeededItem);
+            },
+          );
+          gameRef.gameMap.add(timer1);
+          print('not has needed item');
           return;
         }
       }

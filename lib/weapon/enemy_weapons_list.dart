@@ -2,7 +2,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/enemies/moose.dart';
+import 'package:game_flame/liveObjects/moose.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'dart:math' as math;
 

@@ -2321,17 +2321,20 @@
   <object id="1432" gid="2147534007" x="1405.33" y="2154" width="64" height="96"/>
   <object id="1433" gid="50359" x="1796" y="1803.33" width="64" height="96"/>
   <object id="1434" gid="2147534007" x="1052" y="1461.33" width="64" height="96"/>
-  <object id="1438" gid="50455" x="2581.92" y="2672.25" width="110" height="110"/>
+  <object id="1438" gid="50455" x="2581.92" y="2672.25" width="110" height="110">
+   <properties>
+    <property name="endShow" value="99999"/>
+    <property name="endTrigger" value="99999"/>
+    <property name="quest" value="chestOfGlory"/>
+    <property name="startShow" value="0"/>
+    <property name="startTrigger" value="0"/>
+   </properties>
+  </object>
   <object id="1439" gid="50455" x="601" y="2379.5" width="110" height="110"/>
   <object id="1440" gid="50455" x="1056.5" y="2027" width="110" height="110"/>
   <object id="1441" gid="50455" x="853.5" y="1472.5" width="110" height="110"/>
   <object id="1442" gid="50455" x="2424.33" y="732.333" width="110" height="110"/>
-  <object id="1443" gid="50455" x="833.667" y="2577.67" width="110" height="110">
-   <properties>
-    <property name="quest" value="chestOfGlory"/>
-    <property name="tar" type="int" value="0"/>
-   </properties>
-  </object>
+  <object id="1443" gid="50455" x="833.667" y="2577.67" width="110" height="110"/>
   <object id="1444" gid="2147534103" x="899.667" y="405.167" width="110" height="110"/>
   <object id="1445" gid="50455" x="837.5" y="396.25" width="110" height="110"/>
   <object id="1446" gid="50455" x="865.667" y="436.25" width="110" height="110"/>
@@ -2369,8 +2372,7 @@
   <object id="1465" gid="50459" x="730" y="2467" width="288" height="64"/>
   <object id="1466" gid="50511" x="719" y="365.75" width="64" height="64">
    <properties>
-    <property name="quest" value="chestOfGlory"/>
-    <property name="tar" value="1"/>
+    <property name="neededItems" value="keyForChestOfGlory"/>
    </properties>
   </object>
  </objectgroup>

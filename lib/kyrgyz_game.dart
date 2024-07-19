@@ -18,11 +18,12 @@ import 'package:game_flame/Items/armorDress.dart';
 import 'package:game_flame/Items/helmetDress.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/swordDress.dart';
+import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/abstracts/compiller.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/components/quests.dart';
+import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/main.dart';
 import 'package:game_flame/overlays/death_menu.dart';
@@ -68,6 +69,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader iceShader;
   late FragmentShader poisonShader;
   late FragmentShader lightningShader;
+  Quest? currentQuest;
+  Map<String,Quest> quests = {};
 
   Future saveGame() async
   {
@@ -90,8 +93,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       databaseFactory = databaseFactoryFfi;
     }
     await dbHandler.openDb();
-    // database = await openDatabase('kyrgyz.db');
-    // await database?.rawQuery('select is_cached_into_internal from kyrgyz_game.settings');
     maxPolygonVertices = 20;
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
@@ -117,12 +118,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       overlays.add(MainMenu.id);
     }
     WidgetsBinding.instance.addObserver(this);
+    await dbHandler.setQuestState('chestOfGlory', 0, false);
     if(!await dbHandler.checkSaved(0)) {
       await dbHandler.saveGame(
           0,
-          4772,
-          9433,
-          'topLeftTempleDungeon',
+          1700,
+          3000,
+          'topLeftVillage',
           30,
           15,
           1,
@@ -146,6 +148,12 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
           ,
           {},
           []);
+    }
+    for(final name in Quest.allQuests){
+      quests[name] = Quest.questFromName(this, name);
+      final state = await dbHandler.getQuestState(name);
+      quests[name]!.isDone = state.isDone;
+      quests[name]!.currentState = state.currentState;
     }
 
     await loadGame(0);
@@ -194,8 +202,12 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     _showOverlay(overlayName: GameHud.id,isHideOther: true);
   }
 
-  void doDialogHud(Quest quest)
+  void doDialogHud(String id)async
   {
+    if(!quests.containsKey(id)){
+      throw 'wrong quest!!! $id';
+    }
+    currentQuest = quests[id]!;
     pauseEngine();
     _showOverlay(overlayName: DialogOverlay.id,isHideOther: true);
   }

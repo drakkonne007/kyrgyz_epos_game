@@ -11,7 +11,7 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/enemies/skeleton.dart';
+import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 
@@ -35,17 +35,11 @@ final Vector2 pointSpawn = Vector2(16.8564,47.6186);
 class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   StoneChest(this._id, {this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false
-    ,Sprite? sprite,
-    bool? autoResize,
-    required super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
+    ,required super.position,
     super.anchor = Anchor.center,
     super.priority});
   bool isOpened;
-  Set<int>? nedeedKilledBosses;
+  Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
   List<Item> myItems;
   late Image _spriteImg;

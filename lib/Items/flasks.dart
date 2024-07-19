@@ -9,7 +9,6 @@ class HpSmall extends Item
   {
     id = 'hpSmall';
     cost = 10;
-    enabled = true;
     source = 'images/inventar/flask/hpSmall.png';
   }
 

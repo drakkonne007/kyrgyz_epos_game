@@ -3,6 +3,8 @@ import 'package:game_flame/Items/flasks.dart';
 import 'package:game_flame/Items/helmetDress.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/swordDress.dart';
+import 'package:game_flame/Quests/chestOfGlory.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 enum DressType
@@ -25,9 +27,18 @@ enum MagicDamage
   lightning,
 }
 
+enum InventarType
+{
+  weapon,
+  armor,
+  flask,
+  item,
+}
+
 Item itemFromName(String id)
 {
   switch(id){
+    case 'keyForChestOfGlory': return KeyForChestOfGlory();
     case 'armorStart':   return ArmorStart();
     case 'startHelmet':  return StartHelmet();
     case 'swordStart':   return SwordStart();
@@ -165,6 +176,34 @@ abstract class Item
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     throw 'Not override catch item from inventar';
+  }
+
+  void minusInInventar(KyrgyzGame game, InventarType type)
+  {
+    Map<String,int> hash;
+    switch(type){
+      case InventarType.armor:
+        hash = game.playerData.armorInventar;
+        break;
+      case InventarType.weapon:
+        hash = game.playerData.weaponInventar;
+        break;
+      case InventarType.flask:
+        hash = game.playerData.flaskInventar;
+        break;
+      case InventarType.item:
+        hash = game.playerData.itemInventar;
+        break;
+    }
+    if(hash.containsKey(id)){
+      int curr = hash[id]!;
+      curr--;
+      if(curr == 0){
+        hash.remove(id);
+      }else{
+        hash[id] = curr;
+      }
+    }
   }
 
   bool isStaticObject = false;

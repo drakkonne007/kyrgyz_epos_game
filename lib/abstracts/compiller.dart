@@ -17,6 +17,7 @@ Future precompileAll() async
     }
     dir.createSync(recursive: true);
   }
+  Set<String> allQuests = {};
   for (final bigWorld in listOfFullMaps) {
     print('start compile ${bigWorld.nameForGame}');
     var fileName = bigWorld.source;
@@ -390,7 +391,7 @@ Future precompileAll() async
             }
             quest = obj.properties.getValue('quest') ?? '""';
             used = obj.properties.getValue('used') ?? '""';
-            file.writeAsStringSync('INSERT INTO ${bigWorld.nameForGame} (id,opened,quest,used) VALUES ($id,$opened,$quest,$used) ON CONFLICT DO NOTHING;\n', mode: FileMode.append);
+            file.writeAsStringSync('INSERT INTO ${bigWorld.nameForGame} (id,opened,quest,used) VALUES ($id,$opened,\'$quest\',$used) ON CONFLICT DO NOTHING;\n', mode: FileMode.append);
           }
         }
       }

@@ -47,7 +47,7 @@ class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<Kyrg
     opened = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     anchor = Anchor.center;
     position = _startPosition;
-    DBAnswer ans = await gameRef.dbHandler.stateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
+    DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
     print('load answerfrom DB state: ${ans.opened}');
     isClosed = !ans.opened;
     animation = isClosed ? closed : opened;
@@ -70,7 +70,7 @@ class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<Kyrg
 
   void changeState() async
   {
-    DBAnswer ans = await gameRef.dbHandler.stateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
+    DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
     bool toOpen = ans.opened;
     if(toOpen){
       animation = toClosed.reversed();

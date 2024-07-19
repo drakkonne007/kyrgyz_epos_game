@@ -16,7 +16,7 @@ class StartHelmet extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(game.playerData.armorInventar, this);
+    game.playerData.addToInventar(InventarType.armor, this);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})

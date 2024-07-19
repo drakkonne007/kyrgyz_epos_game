@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:sqflite/sqflite.dart';
@@ -35,11 +36,17 @@ class SavedGame
   List<EffectTimerPure> tempEffects   = [];
 }
 
-class DBAnswer
+class DBItemState
 {
   bool opened = true;
   int quest = 0;
   bool used = false;
+}
+
+class DBQuestState
+{
+  int currentState = 0;
+  bool isDone = false;
 }
 
 class DbHandler
@@ -51,7 +58,7 @@ class DbHandler
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'kyrgyzGame.db');
-    _database = await openDatabase(path, version: 11,
+    _database = await openDatabase(path, version: 17,
         onUpgrade: (Database db, int oldVersion, int newVersion) async{
           print('UPGRADE TABLES!!!');
           await dropAllTables();
@@ -80,6 +87,7 @@ class DbHandler
     await _database?.execute('DROP TABLE IF EXISTS current_inventar');
     await _database?.execute('DROP TABLE IF EXISTS inventar');
     await _database?.execute('DROP TABLE IF EXISTS effects');
+    await _database?.execute('DROP TABLE IF EXISTS quests');
   }
 
   Future createTable() async
@@ -123,14 +131,14 @@ class DbHandler
         ',name_id TEXT NOT NULL'
         ',period double NOT NULL'
         ');');
+    await _database?.execute('CREATE TABLE IF NOT EXISTS quests '
+        '(name TEXT PRIMARY KEY NOT NULL'
+        ',current_state INTEGER NOT NULL DEFAULT 0'
+        ',is_done INTEGER NOT NULL DEFAULT 0'
+        ');');
+    print('All tables was created');
     await fillGameObjects();
-  }
-
-  void createFakeObject()async
-  {
-    await _database?.delete('current_inventar');
-    await _database?.delete('inventar');
-    await _database?.delete('effects');
+    await fillQuests();
   }
 
   Future fillGameObjects() async
@@ -144,6 +152,13 @@ class DbHandler
           await _database?.execute(line.replaceAll('""', '0'));
         }
       }
+    }
+  }
+
+  Future fillQuests() async
+  {
+    for(final name in Quest.allQuests){
+      await _database?.rawInsert('INSERT INTO quests(name) VALUES(?) ON CONFLICT DO NOTHING', [name]);
     }
   }
 
@@ -237,25 +252,42 @@ class DbHandler
     return svGame;
   }
 
-  Future changeState({required int id, String? openedAsInt, String? quest, String? usedAsInt, required String worldName})async
+  Future changeItemState({required int id, String? openedAsInt, String? quest, String? usedAsInt, required String worldName})async
   {
     final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
-    await _database?.rawUpdate('UPDATE topLeftTempleDungeon set opened = ?, quest = ?, used = ? where id = ?',
+    await _database?.rawUpdate('UPDATE $worldName set opened = ?, quest = ?, used = ? where id = ?',
         [openedAsInt ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsInt ?? res![0]['used'].toString(), id]);
     dbStateChanger.notifyListeners();
   }
 
-  Future<DBAnswer> stateFromDb(int id, String worldName)async
+  Future<DBItemState> getItemStateFromDb(int id, String worldName)async
   {
-    DBAnswer answer = DBAnswer();
+    DBItemState answer = DBItemState();
     final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
     if(res == null || res.isEmpty) {
       throw 'ERROR in SELECT * FROM $worldName where id = ?';
-      return answer;
     }
     answer.opened = res[0]['opened'].toString() == '1';
     answer.quest = int.tryParse(res[0]['quest'].toString()) ?? 0;
     answer.used = res[0]['used'].toString() == '1';
     return answer;
+  }
+
+  Future<DBQuestState> getQuestState(String name)async
+  {
+    final res = await _database?.rawQuery(
+        'SELECT * FROM quests WHERE name = ?',[name]);
+    if (res == null || res.isEmpty) {
+      throw 'No find this quest!!! $name';
+    }
+    DBQuestState answer = DBQuestState();
+    answer.currentState = int.tryParse(res[0]['current_state'].toString()) ?? 0;
+    answer.isDone = res[0]['is_done'].toString() == '1';
+    return answer;
+  }
+
+  Future setQuestState(String name, int state, bool isDone)async
+  {
+    await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[isDone ? 1 : 0, state, name]);
   }
 }

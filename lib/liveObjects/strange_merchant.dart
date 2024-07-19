@@ -7,9 +7,10 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/components/quests.dart';
+import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 
@@ -23,11 +24,14 @@ enum StrangeMerchantVariant
 
 class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  StrangeMerchant(this._startPos,this.spriteVariant,{super.priority});
+  StrangeMerchant(this._startPos,this.spriteVariant,{super.priority, this.quest, this.startTrigger, this.endTrigger});
   Ground? ground;
   late SpriteAnimation _animIdle;
   final Vector2 _startPos;
   StrangeMerchantVariant spriteVariant;
+  String? quest;
+  int? startTrigger;
+  int? endTrigger;
 
   @override
   void onRemove()
@@ -70,9 +74,13 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     priority = position.y.toInt();
   }
 
-  void getBuyMenu()
+  void getBuyMenu()async
   {
-    gameRef.doDialogHud(ChestOfGlory());
+    if(quest != null) {
+      var answer = gameRef.quests[quest]!;
+      if(answer.currentState >= startTrigger! && answer.currentState <= endTrigger!) {
+        gameRef.doDialogHud(quest!);
+      }
+    }
   }
-
 }

@@ -42,7 +42,7 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     super.anchor = Anchor.center,
     super.priority});
   bool isOpened;
-  Set<int>? nedeedKilledBosses;
+  Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
   List<Item> myItems;
   late Image _spriteImg;

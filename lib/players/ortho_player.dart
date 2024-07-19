@@ -13,7 +13,7 @@ import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/weapon/weapon.dart';
-import 'package:game_flame/enemies/grass_golem.dart';
+import 'package:game_flame/liveObjects/grass_golem.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;

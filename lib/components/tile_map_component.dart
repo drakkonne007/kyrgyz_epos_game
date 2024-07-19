@@ -16,7 +16,7 @@ import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/MapNode.dart';
 import 'package:game_flame/components/cached_utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
-import 'package:game_flame/components/quests.dart';
+import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/main.dart';

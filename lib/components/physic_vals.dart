@@ -33,6 +33,8 @@ enum PlayerDirectionMove{
   RightDown,
 }
 
+
+
 class GameConsts
 {  //9504 тайла
   GameConsts({this.maxColumn, this.maxRow, this.visibleBounds})
@@ -163,8 +165,23 @@ class PlayerData
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
 
-  void addToInventar(Map<String,int> hash, Item item)
+  void addToInventar(InventarType type, Item item)
   {
+    Map<String,int> hash = {};
+    switch(type){
+      case InventarType.weapon:
+        hash = weaponInventar;
+        break;
+      case InventarType.armor:
+        hash = armorInventar;
+        break;
+      case InventarType.flask:
+        hash = flaskInventar;
+        break;
+      case InventarType.item:
+        hash = itemInventar;
+        break;
+    }
     if(hash.containsKey(item.id)){
       int val = hash[item.id]!;
       hash[item.id] = val + 1;
@@ -178,7 +195,7 @@ class PlayerData
 
   bool isLockEnergy = false;
   bool isLockMove = false;
-  Set<int> killedBosses = {};
+  Set<String> killedBosses = {};
   ValueNotifier<int> money = ValueNotifier<int>(0);
   Map<String,int> weaponInventar = {};
   Map<String,int> armorInventar = {};

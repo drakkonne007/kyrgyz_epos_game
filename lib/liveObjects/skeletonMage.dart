@@ -13,7 +13,7 @@ import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/enemies/skeleton.dart';
+import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';

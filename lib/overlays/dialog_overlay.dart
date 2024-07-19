@@ -1,10 +1,7 @@
-
-
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:game_flame/components/quests.dart';
+import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
@@ -35,9 +32,22 @@ class DialogOverlay extends StatefulWidget
   State<DialogOverlay> createState() => _DialogOverlayState();
 }
 
-class _DialogOverlayState extends State<DialogOverlay> {
+class _DialogOverlayState extends State<DialogOverlay>
+{
+  Quest? currQuest;
+
   @override
-  Widget build(BuildContext context) {
+  void initState()
+  {
+    currQuest ??= widget._game.currentQuest!;
+    widget._game.currentQuest = null;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context)
+  {
+    AnswerForDialog answer = currQuest!.getAnswer();
     return LayoutBuilder(builder: (context,constraints){
       return
         Column(
@@ -53,7 +63,7 @@ class _DialogOverlayState extends State<DialogOverlay> {
                         fit: StackFit.passthrough,
                         children:[
                           getImg(constraints.maxWidth/5*2 - 5,constraints.maxHeight/2 - 5),
-                          Image.asset('assets/tiles/sprites/dialogIcons/azura.png',
+                          Image.asset(answer.image,
                               isAntiAlias: true,
                               width: constraints.maxWidth/5*2-25,
                               height: constraints.maxHeight/2-25,
@@ -62,7 +72,7 @@ class _DialogOverlayState extends State<DialogOverlay> {
                         ]
                     ),
                     const Spacer(),
-                    DialogAnswers(widget._game,Vector2(constraints.maxWidth/5*3,constraints.maxHeight/2)),
+                    chooseVariants(currQuest!,Vector2(constraints.maxWidth/5*3,constraints.maxHeight/2),widget._game),
                     const Spacer()
                   ]
               ),
@@ -80,10 +90,7 @@ class _DialogOverlayState extends State<DialogOverlay> {
                             child: SizedBox(
                                 width: constraints.maxWidth - 40,
                                 height: constraints.maxHeight/2 - 40,
-                                child: AutoSizeText(
-                                  'Привет, путник. Купи у меня мои штаны и мою блузку, '
-                                      'чтобы я походила в нижнем белье на этом чистом и приятном солнце. '
-                                      'Здесь так хорошо, щас прочитаю тебе свои стихи, малыш шаупшга уцагшцуапуцгш апуцгшапцугшапшг апуцшгапуцшап пагшуцпагшуцпашг',
+                                child: AutoSizeText(answer.text,
                                   // overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.start,
                                   style: dialogStyleFont,
@@ -98,99 +105,68 @@ class _DialogOverlayState extends State<DialogOverlay> {
         );
     });
   }
-}
 
-
-class DialogAnswers extends StatefulWidget
-{
-  final KyrgyzGame _game;
-  const DialogAnswers(this._game, this.size, {super.key});
-  final Vector2 size;
-
-  @override
-  State<DialogAnswers> createState() => _DialogAnswersState();
-}
-
-class _DialogAnswersState extends State<DialogAnswers> {
-  @override
-  Widget build(BuildContext context){
+  Widget chooseVariants(Quest quest,Vector2 size, KyrgyzGame game)
+  {
     return Stack(
         alignment: Alignment.center,
         fit: StackFit.passthrough,
         children:[
-          getImg(widget.size.x - 5,widget.size.y - 5),
+          getImg(size.x - 5,size.y - 5),
           SizedBox(
-              width: widget.size.x - 15,
-              height: widget.size.y - 15,
+              width: size.x - 15,
+              height: size.y - 15,
               child:Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                    Container(
-                      width:(widget.size.x - 30),
-                      height: (widget.size.y - 30)/3,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [Color(0x30FF0000),Colors.transparent,Colors.transparent,],
-                        begin: Alignment.topLeft, end: Alignment.bottomRight),
-                        border: Border.all(color: Colors.black,width: 3),
-                        // borderRadius: BorderRadius.zero,
-                      ),
-                      child: TextButton(onPressed: widget._game.doGameHud,
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Colors.transparent,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            )
-                        ),
-                        child: getPrettyAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
-                      ),
-                    ),
-                    Container(
-                        width:(widget.size.x - 30),
-                        height: (widget.size.y - 30)/3,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(colors: [Color(0x30FF0000),Colors.transparent,Colors.transparent,],
-                              begin: Alignment.topLeft, end: Alignment.bottomRight),
-                          border: Border.all(color: Colors.black,width: 3),
-                          // borderRadius: BorderRadius.zero,
-                        ),
-                        child: TextButton(onPressed: widget._game.doGameHud,
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              foregroundColor: Colors.transparent,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                              )
-                          ),
-                          child: getPrettyAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
-                        )
-                    ),
-                    Container(
-                        width:(widget.size.x - 30),
-                        height: (widget.size.y - 30)/3,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(colors: [Color(0x30FF0000),Colors.transparent,Colors.transparent,],
-                              begin: Alignment.topLeft, end: Alignment.bottomRight),
-                          border: Border.all(color: Colors.black,width: 3),
-                          // borderRadius: BorderRadius.zero,
-                        ),
-                        child: TextButton(onPressed: widget._game.doGameHud,
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              foregroundColor: Colors.transparent,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                              )
-                          ),
-                          child: getPrettyAnswer('\u261B Вот такие вот письмена ха ха ха1232131  dwqdqwd'),
-                        )
-                    ),
-                  ])
+                  children: questAnswers(size, quest, game))
           ),
         ]
     );
+  }
+
+  List<Widget> questAnswers(Vector2 size, Quest quest, KyrgyzGame game)
+  {
+    AnswerForDialog answer = quest.getAnswer();
+    List<Widget> tempContainer = [];
+    for(int i = 0; i < answer.answers.length; i++) {
+      tempContainer.add(Container(
+        width: (size.x - 30),
+        height: (size.y - 30) / 3,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [
+            Color(0x30FF0000),
+            Colors.transparent,
+            Colors.transparent,
+          ],
+              begin: Alignment.topLeft, end: Alignment.bottomRight),
+          border: Border.all(color: Colors.black, width: 3),
+          // borderRadius: BorderRadius.zero,
+        ),
+        child: TextButton(onPressed: () {
+          quest.changeState(answer.answerNumbers[i]);
+          answer.onAnswer?.call(answer.answerNumbers[i]);
+          if(answer.isEnd){
+            game.doGameHud();
+          }else{
+            setState(() {
+            });
+          }
+        },
+          style: TextButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.transparent,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              )
+          ),
+          child: getPrettyAnswer(
+              '\u261B ${answer.answers[i]}'),
+        ),
+      ));
+    }
+    return tempContainer;
   }
 }
 

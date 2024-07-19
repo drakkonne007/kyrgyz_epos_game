@@ -16,8 +16,8 @@ List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
   // list.add(TestMap());
-  // list.add(TopLeftVillage());
-  list.add(BigTopLeft());
+  list.add(TopLeftVillage());
+  // list.add(BigTopLeft());
   // list.addAll(getVillages());
   // list.add(TopLeftTempleDungeon());
   return list;

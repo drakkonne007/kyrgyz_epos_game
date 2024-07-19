@@ -155,6 +155,9 @@ class _LootInvantarState extends State<LootInventar>
         buttonsList.add(
             ElevatedButton(
                 onPressed: (){
+                  if(!item.enabled){
+                    return;
+                  }
                   setState(() {
                     item.getEffectFromInventar(widget.game);
                   });

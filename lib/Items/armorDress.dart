@@ -1,6 +1,7 @@
 
 
 import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class ArmorStart extends Item
@@ -18,7 +19,7 @@ class ArmorStart extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(game.playerData.armorInventar, this);
+    game.playerData.addToInventar(InventarType.armor, this);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
