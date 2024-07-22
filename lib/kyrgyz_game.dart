@@ -26,6 +26,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/main.dart';
+import 'package:game_flame/overlays/PrettySplash.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/dialog_overlay.dart';
 import 'package:game_flame/overlays/game_hud.dart';
@@ -93,6 +94,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       databaseFactory = databaseFactoryFfi;
     }
     await dbHandler.openDb();
+    await dbHandler.createTable(); //TODO разобраться почему автоматом не создаётся
     maxPolygonVertices = 20;
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
@@ -112,10 +114,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     var loc = prefs.getString('locale');
     if(loc == null){
       overlays.add(LanguageChooser.id);
-
     }else{
       LocaleSettings.setLocaleRaw(loc);
-      overlays.add(MainMenu.id);
+      overlays.add(SplashScreenGame.id);
     }
     WidgetsBinding.instance.addObserver(this);
     await dbHandler.setQuestState('chestOfGlory', 0, false);

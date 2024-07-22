@@ -76,10 +76,10 @@ class GearSwitch extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void changeState() async{
     if (isClosed) {
       animation = toOpen;
-      await gameRef.dbHandler.changeItemState(id: _targetId, openedAsInt: '1',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
+      await gameRef.dbHandler.changeItemState(id: _targetId, openedAsString: '1',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
     } else {
       animation = toOpen.reversed();
-      await gameRef.dbHandler.changeItemState(id: _targetId, openedAsInt: '0',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
+      await gameRef.dbHandler.changeItemState(id: _targetId, openedAsString: '0',worldName: gameRef.gameMap.currentGameWorldData!.nameForGame);
     }
     isClosed = !isClosed;
   }

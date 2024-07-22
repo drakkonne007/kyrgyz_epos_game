@@ -10,6 +10,7 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -47,6 +48,8 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   ObjectHitbox? _objectHitbox;
   late Ground _ground;
   int _id;
+  final String _noNeededItem = 'Нет нужного предмета...';
+  final String _noNeededKilledBoss = 'Сначала победите хозяина';
 
   @override
   void onRemove()
@@ -57,6 +60,8 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @override
   Future onLoad() async
   {
+    var res = await gameRef.dbHandler.getItemStateFromDb(_id, gameRef.gameMap.currentGameWorldData!.nameForGame);
+    isOpened = res.opened;
     priority = position.y.toInt();
      _spriteImg = await Flame.images.load(
           'tiles/map/prisonSet/Props/stone chest-openning animation-with dust FX.png');
@@ -87,23 +92,19 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     if(nedeedKilledBosses != null){
       if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
-        print('not kill needed boss');
+        createText(text: _noNeededKilledBoss,gameRef: gameRef);
         return;
       }
     }
     if(neededItems != null){
+      var setItems = gameRef.playerData.itemInventar.keys.toSet();
+      if(!setItems.containsAll(neededItems!)){
+        createText(text: _noNeededItem,gameRef: gameRef);
+        return;
+      }
       for(final myNeeded in neededItems!) {
-        bool isNeed = true;
-        for(final playerHas in gameRef.playerData.itemInventar.keys){
-          if(playerHas == myNeeded){
-            isNeed = false;
-            break;
-          }
-        }
-        if(isNeed){
-          print('not has nedeed item');
-          return;
-        }
+        Item temp = itemFromName(myNeeded);
+        temp.getEffectFromInventar(gameRef);
       }
     }
     _objectHitbox?.removeFromParent();
@@ -123,5 +124,6 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
     );
     gameRef.gameMap.add(timer);
+    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
   }
 }

@@ -2373,6 +2373,7 @@
   <object id="1466" gid="50511" x="719" y="365.75" width="64" height="64">
    <properties>
     <property name="neededItems" value="keyForChestOfGlory"/>
+    <property name="oneUse" value="true"/>
    </properties>
   </object>
  </objectgroup>

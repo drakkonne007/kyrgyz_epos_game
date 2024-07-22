@@ -174,7 +174,7 @@ class MapNode {
       for (final obj in objects) {
         String? name = obj.getAttribute('nm') ?? '';
         if(name == ''){
-          name = obj.getAttribute('cl');
+          name = obj.getAttribute('cl') ?? '';
         }
         assert(name != '', 'NAME OBJECT IS EMPTY!!! $colRow, ${myGame.gameMap.currentGameWorldData?.nameForGame}');
         createLiveObj(obj, name, colRow);
@@ -189,40 +189,38 @@ class MapNode {
     }
   }
 
-  Future createLiveObj(XmlElement? obj, String? name,
-      LoadedColumnRow? colRow, {String? cheatName}) async
+  Future createLiveObj(XmlElement obj, String name,
+      LoadedColumnRow? colRow) async
   {
-    double posX = 0;
-    double posY = 0;
-    if(cheatName == null){
-      posX = double.parse(obj!.getAttribute('x')!);
-      posY = double.parse(obj.getAttribute('y')!);
-      posX += double.parse(obj.getAttribute('w')!) / 2.0;
-      posY -= double.parse(obj.getAttribute('h')!) / 2.0;
-    }
-    Vector2 position = cheatName == null ? Vector2(posX,posY) : myGame.gameMap.orthoPlayer?.position ?? myGame.gameMap.frontPlayer!.position;
-    int id = int.parse(obj?.getAttribute('id') ?? '-1');
+    double posX = double.parse(obj.getAttribute('x')!);
+    double posY = double.parse(obj.getAttribute('y')!);
+    posX += double.parse(obj.getAttribute('w')!) / 2.0;
+    posY -= double.parse(obj.getAttribute('h')!) / 2.0;
+    Vector2 position =Vector2(posX,posY);
+    int id = int.parse(obj.getAttribute('id') ?? '-1');
     // print(id);
-    if (myGame.gameMap.loadedLivesObjs.contains(id) && cheatName == null) {
+    if (myGame.gameMap.loadedLivesObjs.contains(id)) {
       return;
     }
-    var quest = obj?.getAttribute('quest');
+    var quest = obj.getAttribute('quest');
     if(quest != null){
       var dbQuest = myGame.quests[quest]!;
-      int startShow = int.parse(obj?.getAttribute('startShow') ?? '0');
-      int endShow = int.parse(obj?.getAttribute('endShow') ?? '999999999999');
-      if(startShow > dbQuest.currentState || endShow < dbQuest.currentState){
+      int startShow = int.parse(obj.getAttribute('startShow') ?? '0');
+      int endShow = int.parse(obj.getAttribute('endShow') ?? '999999999999');
+      if(startShow > dbQuest.currentState || endShow <= dbQuest.currentState){
         return;
       }
     }
-
-    if(cheatName != null){
-      position -= Vector2(0,200);
+    if(obj.getAttribute('oneUse') != null){
+      var dd = await myGame.dbHandler.getItemStateFromDb(id, myGame.gameMap.currentGameWorldData!.nameForGame);
+      if(dd.used){
+        return;
+      }
     }
     colRow ??= LoadedColumnRow(position.x ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.x, position.y ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
-    bool isHorReverse = obj?.getAttribute('horizontalReverse') == 'true';
+    bool isHorReverse = obj.getAttribute('horizontalReverse') == 'true';
     PositionComponent? positionObject;
-    switch (cheatName ?? name) {
+    switch (name) {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(id);
         positionObject = GrassGolem(position, GolemVariant.Grass,id);
@@ -230,7 +228,7 @@ class MapNode {
         break;
       case 'sceletM':
         myGame.gameMap.loadedLivesObjs.add(id);
-        var isHigh = obj!.getAttribute('high');
+        var isHigh = obj.getAttribute('high');
         if(isHigh!=null){
           positionObject = SkeletonMage(position,id,isHigh: true);
           myGame.gameMap.container.add(positionObject);
@@ -303,15 +301,15 @@ class MapNode {
         int? startTrigger;
         int? endTrigger;
         if(quest != null){
-          startTrigger = int.parse(obj?.getAttribute('startTrigger') ?? '0');
-          endTrigger = int.parse(obj?.getAttribute('endTrigger') ?? '99999999');
+          startTrigger = int.parse(obj.getAttribute('startTrigger') ?? '0');
+          endTrigger = int.parse(obj.getAttribute('endTrigger') ?? '99999999');
         }
         positionObject = StrangeMerchant(position, StrangeMerchantVariant.black, quest: quest,startTrigger: startTrigger,endTrigger: endTrigger);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'gearSwitch':
-        int target = int.parse(obj!.getAttribute('tar')!);
+        int target = int.parse(obj.getAttribute('tar')!);
         positionObject = GearSwitch(position,target);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
@@ -320,21 +318,21 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
       case 'chest':
-        var neededItems = obj!.getAttribute('neededItems')?.split(',').toSet();
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
         positionObject = Chest(1, myItems: [Gold()], position: position,id: id, isStatic: true,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'hWChest':
-        var neededItems = obj!.getAttribute('neededItems')?.split(',').toSet();
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = HWChest(myItems: [Gold()], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = HWChest(myItems: [Gold()], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'sChest':
-        var neededItems = obj!.getAttribute('neededItems')?.split(',').toSet();
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
         positionObject = StoneChest(myItems: [Gold()], position: position,id,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
@@ -363,7 +361,7 @@ class MapNode {
       case 'bigWoodLamp3':
       case 'bigWoodLamp4':
       case 'bigWoodLamp5':
-        String str = cheatName ?? name!;
+        String str = name;
         str = str.replaceAll('bigWoodLamp', '');
         int level = int.parse(str);
         positionObject = BigWoodLamp(position,level);
@@ -374,12 +372,12 @@ class MapNode {
       case 'lightConusNoGrass':
       case 'lightConusSteel':
       case 'lightConusSteelNoGrass':
-        positionObject = LightConus(position,cheatName ?? name!);
+        positionObject = LightConus(position, name);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'telep':
-        var targetPos = obj!.getAttribute('tar')!.split(',');
+        var targetPos = obj.getAttribute('tar')!.split(',');
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
         Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!),
@@ -395,7 +393,7 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'portal':
-        var targetPos = obj!.getAttribute('tar')!.split(',');
+        var targetPos = obj.getAttribute('tar')!.split(',');
         var world = obj.getAttribute('wrld')!;
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
@@ -409,7 +407,7 @@ class MapNode {
         myGame.gameMap.container.add(temp);
         break;
       case 'spinBlade':
-        var targetPos = obj!.getAttribute('tar')?.split(',');
+        var targetPos = obj.getAttribute('tar')?.split(',');
         Vector2? target;
         if (targetPos != null) {
           target = Vector2(double.parse(targetPos[0]), double.parse(targetPos[1]));
@@ -424,8 +422,8 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'dialog':
-        bool isLoop = obj?.getAttribute('lp') == '1';
-        String text = obj!.getAttribute('text')!;
+        bool isLoop = obj.getAttribute('lp') == '1';
+        String text = obj.getAttribute('text')!;
         String? vectorSource = obj.getAttribute('p');
         Vector2 size = Vector2(double.parse(obj.getAttribute('w')!), double.parse(obj.getAttribute('h')!));
         MapDialog temp = MapDialog(position,text,size,vectorSource, isLoop);
@@ -441,7 +439,7 @@ class MapNode {
         myGame.gameMap.container.add(campPortUp);
         break;
       case 'bird':
-        var targetPos = obj!.getAttribute('tar')?.split(';');
+        var targetPos = obj.getAttribute('tar')?.split(';');
         List<Vector2> target = [];
         for(int i=0;i<targetPos!.length;i++){
           var source = targetPos[i].split(',');
@@ -452,33 +450,33 @@ class MapNode {
         myGame.gameMap.container.add(bird);
         break;
       case 'vertBRW':
-        String dir = obj!.getAttribute('dir')!;
+        String dir = obj.getAttribute('dir')!;
         var verticalBigRollWood = VerticaBigRollingWood(position, dir, true,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'vertRW':
-        String dir = obj!.getAttribute('dir')!;
+        String dir = obj.getAttribute('dir')!;
         var verticalBigRollWood = VerticaBigRollingWood(position, dir, false,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(verticalBigRollWood);
         break;
       case 'hDoor':
-        String? bosses = obj!.getAttribute('boss');
+        String? bosses = obj.getAttribute('boss');
         String? items = obj.getAttribute('item');
         var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
             ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position);
         myGame.gameMap.allEls[colRow]!.add(hDoor);
         myGame.gameMap.container.add(hDoor);
       case 'vDoor':
-        String? bosses = obj!.getAttribute('boss');
+        String? bosses = obj.getAttribute('boss');
         String? items = obj.getAttribute('item');
         var hDoor = WoodenDoor(neededItems: items?.split(',').toSet()
             ,nedeedKilledBosses: bosses?.split(',').toSet(),startPosition: position, isVertical: true);
         myGame.gameMap.allEls[colRow]!.add(hDoor);
         myGame.gameMap.container.add(hDoor);
       case 'arrow':
-        String targetPos = obj!.getAttribute('dir')!;
+        String targetPos = obj.getAttribute('dir')!;
         ArrowSpawn spawn = ArrowSpawn(position, targetPos,id);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(spawn);

@@ -165,7 +165,7 @@ class PlayerData
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
 
-  void addToInventar(InventarType type, Item item)
+  void addToInventar(InventarType type, String itemId)
   {
     Map<String,int> hash = {};
     switch(type){
@@ -182,12 +182,12 @@ class PlayerData
         hash = itemInventar;
         break;
     }
-    if(hash.containsKey(item.id)){
-      int val = hash[item.id]!;
-      hash[item.id] = val + 1;
-      hash[item.id] = val;
+    if(hash.containsKey(itemId)){
+      int val = hash[itemId]!;
+      hash[itemId] = val + 1;
+      hash[itemId] = val;
     }else{
-      hash[item.id] = 1;
+      hash[itemId] = 1;
     }
   }
 

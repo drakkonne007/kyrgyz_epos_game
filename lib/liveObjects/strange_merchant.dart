@@ -11,8 +11,10 @@ import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/quest.dart';
+import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/liveObjects/mini_creatures/npcDialogAttention.dart';
 
 enum StrangeMerchantVariant
 {
@@ -72,6 +74,9 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     }
     position = ground!.position / PhysicVals.physicScale;
     priority = position.y.toInt();
+    if(quest != null){
+      add(NpcDialogAttention(Vector2(position.x,position.y - height / 2)));
+    }
   }
 
   void getBuyMenu()async
@@ -81,6 +86,8 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
       if(answer.currentState >= startTrigger! && answer.currentState <= endTrigger!) {
         gameRef.doDialogHud(quest!);
       }
+    }else{
+      createSmallMapDialog(gameRef: gameRef);
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
+import 'package:game_flame/overlays/PrettySplash.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/dialog_overlay.dart';
 import 'package:game_flame/overlays/game_hud.dart';
@@ -40,6 +41,7 @@ void main()
                     GameHud.id: (context, KyrgyzGame game) => GameHud(game),
                     DialogOverlay.id: (context, KyrgyzGame game) => DialogOverlay(game),
                     InventoryOverlay.id: (context, KyrgyzGame game) => InventoryOverlay(game),
+                    SplashScreenGame.id: (context, KyrgyzGame game) => SplashScreenGame(game),
                   },
                 )
             ),

@@ -38,7 +38,7 @@ class SavedGame
 
 class DBItemState
 {
-  bool opened = true;
+  bool opened = false;
   int quest = 0;
   bool used = false;
 }
@@ -58,7 +58,7 @@ class DbHandler
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'kyrgyzGame.db');
-    _database = await openDatabase(path, version: 17,
+    _database = await openDatabase(path, version: 18,
         onUpgrade: (Database db, int oldVersion, int newVersion) async{
           print('UPGRADE TABLES!!!');
           await dropAllTables();
@@ -96,7 +96,7 @@ class DbHandler
       await _database?.execute('CREATE TABLE IF NOT EXISTS ${wrld.nameForGame} '
           '(id INTEGER PRIMARY KEY NOT NULL'
           ',save_id INT NOT NULL DEFAULT 0'
-          ',opened INTEGER NOT NULL DEFAULT 1'
+          ',opened INTEGER NOT NULL DEFAULT 0'
           ',quest INTEGER NOT NULL DEFAULT 0'
           ',used INTEGER NOY NULL DEFAULT 0'
           ');');
@@ -252,11 +252,11 @@ class DbHandler
     return svGame;
   }
 
-  Future changeItemState({required int id, String? openedAsInt, String? quest, String? usedAsInt, required String worldName})async
+  Future changeItemState({required int id, String? openedAsString, String? quest, String? usedAsString, required String worldName})async
   {
     final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
     await _database?.rawUpdate('UPDATE $worldName set opened = ?, quest = ?, used = ? where id = ?',
-        [openedAsInt ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsInt ?? res![0]['used'].toString(), id]);
+        [openedAsString ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsString ?? res![0]['used'].toString(), id]);
     dbStateChanger.notifyListeners();
   }
 

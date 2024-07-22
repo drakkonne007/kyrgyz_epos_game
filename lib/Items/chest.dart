@@ -71,61 +71,19 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     if(nedeedKilledBosses != null){
       if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
-        if(gameRef.gameMap.openSmallDialogs.contains(_noNeededKilledBoss)){
-          return;
-        }
-        var player = gameRef.gameMap.orthoPlayer ?? gameRef.gameMap.frontPlayer!;
-        var renderText = RenderText(player.position, Vector2(150,75), _noNeededKilledBoss);
-        renderText.priority = GamePriority.maxPriority;
-        gameRef.gameMap.container.add(renderText);
-        gameRef.gameMap.openSmallDialogs.add(_noNeededKilledBoss);
-
-        TimerComponent timer1 = TimerComponent(
-          period: _noNeededKilledBoss.length * 0.05 + 2,
-          removeOnFinish: true,
-          onTick: () {
-            renderText.removeFromParent();
-            gameRef.gameMap.openSmallDialogs.remove(_noNeededKilledBoss);
-          },
-        );
-        gameRef.gameMap.add(timer1);
-        print('not kill needed boss');
+        createText(text: _noNeededKilledBoss,gameRef: gameRef);
         return;
       }
     }
     if(neededItems != null){
+      var setItems = gameRef.playerData.itemInventar.keys.toSet();
+      if(!setItems.containsAll(neededItems!)){
+        createText(text: _noNeededItem,gameRef: gameRef);
+        return;
+      }
       for(final myNeeded in neededItems!) {
-        bool isNeed = true;
-        for(final playerHas in gameRef.playerData.itemInventar.keys){
-          if(playerHas == myNeeded){
-            var dd = KeyForChestOfGlory();
-            dd.getEffectFromInventar(gameRef);
-            isNeed = false;
-            break;
-          }
-        }
-        if(isNeed){
-          if(gameRef.gameMap.openSmallDialogs.contains(_noNeededItem)){
-            return;
-          }
-          var player = gameRef.gameMap.orthoPlayer ?? gameRef.gameMap.frontPlayer!;
-          var renderText = RenderText(player.position, Vector2(150,75), _noNeededItem);
-          renderText.priority = GamePriority.maxPriority;
-          gameRef.gameMap.container.add(renderText);
-          gameRef.gameMap.openSmallDialogs.add(_noNeededItem);
-
-          TimerComponent timer1 = TimerComponent(
-            period: _noNeededItem.length * 0.05 + 2,
-            removeOnFinish: true,
-            onTick: () {
-              renderText.removeFromParent();
-              gameRef.gameMap.openSmallDialogs.remove(_noNeededItem);
-            },
-          );
-          gameRef.gameMap.add(timer1);
-          print('not has needed item');
-          return;
-        }
+        Item temp = itemFromName(myNeeded);
+        temp.getEffectFromInventar(gameRef);
       }
     }
     remove(_objectHitbox!);
@@ -139,5 +97,8 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
       removeFromParent();
     }));
+    if(id != null) {
+      gameRef.dbHandler.changeItemState(id: id!, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame, usedAsString: '1', openedAsString: '1');
+    }
   }
 }

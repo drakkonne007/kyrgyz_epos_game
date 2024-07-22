@@ -4987,7 +4987,11 @@
     <property name="tar" value="1373,5524"/>
    </properties>
   </object>
-  <object id="1569" gid="50702" x="4447.75" y="8740.25" width="220" height="220"/>
+  <object id="1569" gid="50702" x="4447.75" y="8740.25" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1571" gid="50749" x="4680.06" y="8579.88" width="128" height="128"/>
   <object id="1583" gid="50719" x="4041" y="5107" width="96" height="160">
    <properties>
@@ -5041,51 +5045,151 @@
   </object>
   <object id="1594" gid="50741" x="8669.27" y="7847.82" width="96" height="128"/>
   <object id="1595" gid="50741" x="8669.75" y="8328" width="96" height="128"/>
-  <object id="1635" gid="50702" x="1154.67" y="5474" width="220" height="220"/>
+  <object id="1635" gid="50702" x="1154.67" y="5474" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1636" gid="50702" x="2039.33" y="5498" width="220" height="220"/>
-  <object id="1637" gid="50702" x="1684.67" y="5472.67" width="220" height="220"/>
-  <object id="1638" gid="50702" x="1268.67" y="5370.67" width="220" height="220"/>
-  <object id="1639" gid="50702" x="1271.33" y="5261.33" width="220" height="220"/>
-  <object id="1640" gid="50702" x="1288" y="5066.67" width="220" height="220"/>
+  <object id="1637" gid="50702" x="1684.67" y="5472.67" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1638" gid="50702" x="1268.67" y="5370.67" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1639" gid="50702" x="1271.33" y="5261.33" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1640" gid="50702" x="1288" y="5066.67" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1641" gid="50702" x="1102" y="5052.67" width="220" height="220"/>
   <object id="1642" gid="50702" x="676.667" y="5055.33" width="220" height="220"/>
-  <object id="1643" gid="50702" x="885.333" y="5054.67" width="220" height="220"/>
+  <object id="1643" gid="50702" x="885.333" y="5054.67" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1644" gid="50702" x="135.333" y="5056" width="220" height="220"/>
-  <object id="1645" gid="50702" x="825.5" y="5445" width="220" height="220"/>
-  <object id="1646" gid="50702" x="988" y="5472" width="220" height="220"/>
+  <object id="1645" gid="50702" x="825.5" y="5445" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1646" gid="50702" x="988" y="5472" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1647" gid="50702" x="504.5" y="5469" width="220" height="220"/>
-  <object id="1648" gid="50702" x="-5" y="5475.5" width="220" height="220"/>
+  <object id="1648" gid="50702" x="-5" y="5475.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1649" gid="50702" x="-10" y="5290.5" width="220" height="220"/>
-  <object id="1650" gid="50702" x="-11.5" y="5135" width="220" height="220"/>
+  <object id="1650" gid="50702" x="-11.5" y="5135" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1651" gid="50702" x="-10.5" y="4941" width="220" height="220"/>
-  <object id="1652" gid="50702" x="-7.5" y="4732.5" width="220" height="220"/>
+  <object id="1652" gid="50702" x="-7.5" y="4732.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1654" gid="50702" x="218" y="4691.5" width="220" height="220"/>
-  <object id="1655" gid="50702" x="399" y="4705" width="220" height="220"/>
+  <object id="1655" gid="50702" x="399" y="4705" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1656" gid="50702" x="733" y="4691.5" width="220" height="220"/>
-  <object id="1657" gid="50702" x="1073" y="4702.5" width="220" height="220"/>
-  <object id="1658" gid="50702" x="1267" y="4524.5" width="220" height="220"/>
+  <object id="1657" gid="50702" x="1073" y="4702.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1658" gid="50702" x="1267" y="4524.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1659" gid="50702" x="951.5" y="4509.5" width="220" height="220"/>
   <object id="1660" gid="50702" x="1595.5" y="4700" width="220" height="220"/>
-  <object id="1661" gid="50702" x="1599" y="4508.5" width="220" height="220"/>
-  <object id="1662" gid="50702" x="1876.5" y="4703" width="220" height="220"/>
+  <object id="1661" gid="50702" x="1599" y="4508.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1662" gid="50702" x="1876.5" y="4703" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1663" gid="50702" x="1777" y="4548" width="220" height="220"/>
   <object id="1664" gid="50702" x="1791.5" y="5076" width="220" height="220"/>
-  <object id="1665" gid="50702" x="1733.5" y="4705.5" width="220" height="220"/>
+  <object id="1665" gid="50702" x="1733.5" y="4705.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1666" gid="50702" x="272.667" y="5458" width="220" height="220"/>
-  <object id="1667" gid="50702" x="4545" y="7959.5" width="220" height="220"/>
-  <object id="1668" gid="50702" x="4023.25" y="7886.25" width="220" height="220"/>
+  <object id="1667" gid="50702" x="4545" y="7959.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1668" gid="50702" x="4023.25" y="7886.25" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1669" gid="50702" x="4718.33" y="7384.33" width="220" height="220"/>
   <object id="1670" gid="50702" x="8686.33" y="8072.33" width="220" height="220"/>
   <object id="1671" gid="50702" x="8197" y="7443.67" width="220" height="220"/>
   <object id="1672" gid="50702" x="7953.33" y="8318.67" width="220" height="220"/>
-  <object id="1673" gid="50702" x="5669" y="7695.67" width="220" height="220"/>
+  <object id="1673" gid="50702" x="5669" y="7695.67" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1674" gid="50702" x="6442.33" y="8657.33" width="220" height="220"/>
-  <object id="1676" gid="50825" x="3826.75" y="7068.5" width="220" height="96"/>
-  <object id="1681" gid="50825" x="3598.67" y="7918.33" width="220" height="96"/>
-  <object id="1684" gid="50702" x="8698" y="7836.5" width="220" height="220"/>
-  <object id="1685" gid="50702" x="8894" y="7936.5" width="220" height="220"/>
+  <object id="1676" gid="50825" x="3826.75" y="7068.5" width="220" height="96">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1681" gid="50825" x="3598.67" y="7918.33" width="220" height="96">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1684" gid="50702" x="8698" y="7836.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="1685" gid="50702" x="8894" y="7936.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1686" gid="50702" x="8880.5" y="7777" width="220" height="220"/>
-  <object id="1687" gid="50702" x="8903" y="8069" width="220" height="220"/>
+  <object id="1687" gid="50702" x="8903" y="8069" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1690" gid="50702" x="3778" y="7822.67" width="220" height="220"/>
   <object id="1691" gid="50702" x="3490" y="7893.33" width="220" height="220"/>
   <object id="1694" gid="50946" x="4801.12" y="8655.58" width="128" height="160"/>
@@ -5263,9 +5367,17 @@
   <object id="1633" gid="50823" x="2060.67" y="7211.33" width="256" height="256"/>
   <object id="1634" gid="50823" x="1218" y="7176" width="256" height="256"/>
   <object id="1677" gid="50825" x="4245.33" y="7817.33" width="220" height="96"/>
-  <object id="1678" gid="50825" x="2511.33" y="5051.67" width="220" height="96"/>
+  <object id="1678" gid="50825" x="2511.33" y="5051.67" width="220" height="96">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1679" gid="50825" x="3197.67" y="4992.67" width="220" height="96"/>
-  <object id="1680" gid="50825" x="2104" y="5116.67" width="220" height="96"/>
+  <object id="1680" gid="50825" x="2104" y="5116.67" width="220" height="96">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1693" gid="50934" x="7026.5" y="7487.25" width="110" height="110"/>
   <object id="1732" gid="51005" x="622.667" y="5267.33" width="220" height="220">
    <properties>
@@ -5278,7 +5390,11 @@
    </properties>
   </object>
   <object id="1735" gid="50825" x="8865.5" y="8353" width="220" height="96"/>
-  <object id="1736" gid="51005" x="7712.33" y="8152" width="220" height="220"/>
+  <object id="1736" gid="51005" x="7712.33" y="8152" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1738" gid="51011" x="4463.25" y="8443.75" width="100" height="100"/>
   <object id="1740" gid="51012" x="4365.64" y="8468.12" width="290" height="192"/>
  </objectgroup>

@@ -53,6 +53,7 @@ dependencies:
   forge2d: any
   path: ^1.9.0
   sqflite_common_ffi: ^2.3.3
+  flame_splash_screen: ^0.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

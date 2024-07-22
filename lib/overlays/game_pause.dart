@@ -38,19 +38,6 @@ class GamePause extends StatelessWidget
             },
             child: const Text('Загрузить'),
           ),
-          SizedBox(
-            width: 300,
-            child: TextFormField(
-              maxLines: 1,
-              controller: _controller,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: (){
-              _game.gameMap.mapNode!.createLiveObj(null,null,null,cheatName: _controller.text);
-            },
-            child: const Text('Создать'),
-          ),
           ElevatedButton(
             onPressed: (){
 

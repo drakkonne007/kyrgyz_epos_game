@@ -10,6 +10,7 @@ import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -31,16 +32,11 @@ final List<Vector2> _objPoints = [
 
 class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  HWChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false
-    ,Sprite? sprite,
-    bool? autoResize,
+  HWChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false,
     required super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
     super.anchor = Anchor.center,
-    super.priority});
+    super.priority
+  ,required this.dbId});
   bool isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
@@ -49,6 +45,9 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
   late Ground _ground;
+  int dbId;
+  final String _noNeededItem = 'Нет нужного предмета...';
+  final String _noNeededKilledBoss = 'Сначала победите хозяина';
 
   @override
   void onRemove()
@@ -70,6 +69,8 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
     _spriteSheet = SpriteSheet(image: _spriteImg,
         srcSize: Vector2(_spriteImg.width.toDouble() / 11, _spriteImg.height.toDouble()));
+    var res = await gameRef.dbHandler.getItemStateFromDb(dbId, gameRef.gameMap.currentGameWorldData!.nameForGame);
+    isOpened = res.opened;
     animation = isOpened ? _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 10, loop: false) : _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     if(!isOpened) {
       _objectHitbox = ObjectHitbox(_objPoints,
@@ -94,23 +95,19 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     if(nedeedKilledBosses != null){
       if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
-        print('not kill needed boss');
+        createText(text: _noNeededKilledBoss,gameRef: gameRef);
         return;
       }
     }
     if(neededItems != null){
+      var setItems = gameRef.playerData.itemInventar.keys.toSet();
+      if(!setItems.containsAll(neededItems!)){
+        createText(text: _noNeededItem,gameRef: gameRef);
+        return;
+      }
       for(final myNeeded in neededItems!) {
-        bool isNeed = true;
-        for(final playerHas in gameRef.playerData.itemInventar.keys){
-          if(playerHas == myNeeded){
-            isNeed = false;
-            break;
-          }
-        }
-        if(isNeed){
-          print('not has nedeed item');
-          return;
-        }
+        Item temp = itemFromName(myNeeded);
+        temp.getEffectFromInventar(gameRef);
       }
     }
     _objectHitbox?.removeFromParent();
@@ -125,5 +122,6 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
     );
     gameRef.gameMap.add(timer);
+    gameRef.dbHandler.changeItemState(id: dbId, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
   }
 }

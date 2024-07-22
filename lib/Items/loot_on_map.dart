@@ -45,7 +45,6 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
 
   void getItemToPlayer()
   {
-    print('getItemToPlayer');
     remove(_objectHitbox);
     double dur = 0.5;
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));

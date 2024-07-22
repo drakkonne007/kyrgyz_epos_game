@@ -1,10 +1,45 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
 final regular = TextPaint(
     style: mapDialogTextStyle
 );
+
+void createSmallMapDialog({Vector2? position, Vector2? frameSize, required KyrgyzGame gameRef})
+{
+  String? text = gameRef.gameMap.currentGameWorldData?.getSmallMapDialog();
+  if(text == null){
+    return;
+  }
+  createText(position: position, frameSize: frameSize, text: text, gameRef: gameRef);
+}
+
+void createText(
+    {Vector2? position, Vector2? frameSize,required String text,required KyrgyzGame gameRef})
+{
+  if(gameRef.gameMap.openSmallDialogs.contains(text)){
+    return;
+  }
+  frameSize ??= Vector2(150,75);
+  position ??= gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position;
+  RenderText textComponent = RenderText(position, frameSize, text);
+  textComponent.priority = GamePriority.maxPriority;
+  gameRef.gameMap.container.add(textComponent);
+  gameRef.gameMap.openSmallDialogs.add(text);
+
+  TimerComponent timer1 = TimerComponent(
+    period: text.length * 0.05 + 2,
+    removeOnFinish: true,
+    onTick: () {
+      textComponent.removeFromParent();
+      gameRef.gameMap.openSmallDialogs.remove(text);
+    },
+  );
+  gameRef.gameMap.add(timer1);
+}
 
 class RenderText extends ScrollTextBoxComponent
 {

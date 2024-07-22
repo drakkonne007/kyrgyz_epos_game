@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
 
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/overlays/PrettySplash.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 
 class LanguageChooser extends StatelessWidget
@@ -66,6 +67,6 @@ class LanguageChooser extends StatelessWidget
   void close()
   {
     _game.overlays.remove(id);
-    _game.overlays.add(MainMenu.id);
+    _game.overlays.add(SplashScreenGame.id);
   }
 }

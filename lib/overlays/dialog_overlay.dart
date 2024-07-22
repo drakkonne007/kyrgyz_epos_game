@@ -119,7 +119,7 @@ class _DialogOverlayState extends State<DialogOverlay>
               child:Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start ,
                   children: questAnswers(size, quest, game))
           ),
         ]
@@ -176,6 +176,7 @@ AutoSizeText getPrettyAnswer(String text)
     text,
     style: dialogStyleFont,
     minFontSize: 10,
+    maxFontSize: 25,
     maxLines:2,
     textAlign: TextAlign.center,
   );

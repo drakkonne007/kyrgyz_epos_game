@@ -48,7 +48,6 @@ class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<Kyrg
     anchor = Anchor.center;
     position = _startPosition;
     DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
-    print('load answerfrom DB state: ${ans.opened}');
     isClosed = !ans.opened;
     animation = isClosed ? closed : opened;
     priority = GamePriority.backgroundTileAnim;
