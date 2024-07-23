@@ -22,9 +22,9 @@ class SplashScreenGameState extends State<SplashScreenGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FlameSplashScreen(
-        showBefore: (BuildContext context) {
-          return const Text('Кыргыз Гейм');
-        },
+        // showBefore: (BuildContext context) {
+        //   return const Text('Кыргыз Гейм');
+        // },
         theme: FlameSplashTheme.dark,
         onFinish: (context){
             widget._game.overlays.remove(SplashScreenGame.id);

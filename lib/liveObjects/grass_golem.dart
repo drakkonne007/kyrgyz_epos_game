@@ -300,6 +300,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
         removeFromParent();
       }));
     };
+    gameRef.dbHandler.changeItemState(id: id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,usedAsString: '1');
   }
 
   @override

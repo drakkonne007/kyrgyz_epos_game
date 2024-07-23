@@ -196,7 +196,7 @@ class MapNode {
     double posY = double.parse(obj.getAttribute('y')!);
     posX += double.parse(obj.getAttribute('w')!) / 2.0;
     posY -= double.parse(obj.getAttribute('h')!) / 2.0;
-    Vector2 position =Vector2(posX,posY);
+    Vector2 position = Vector2(posX,posY);
     int id = int.parse(obj.getAttribute('id') ?? '-1');
     // print(id);
     if (myGame.gameMap.loadedLivesObjs.contains(id)) {
