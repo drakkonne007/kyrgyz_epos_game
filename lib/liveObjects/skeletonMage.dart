@@ -20,21 +20,19 @@ import 'package:game_flame/abstracts/item.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
-class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
+class SkeletonMage extends KyrgyzEnemy
 {
   SkeletonMage(this._startPos,int id,{this.isHigh = false}){this.id = id;}
   late SpriteAnimation _animMove, _animIdle, _animAttackStart,_animAttackEnd,_animAttackLong, _animHurt, _animDeath;
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
-  late EnemyHitbox _hitbox;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
-  final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 45;
   bool isHigh;
   int _variantOfHit = 0;
   bool _withShieldNow = false;
+  final double dist = 352 * 352;
 
-  final List<Vector2> _hitBoxPoints = [
+  final List<Vector2> hitBoxPoints = [
     Vector2(113-115,103-110),
     Vector2(109-115,114-110),
     Vector2(100-115,118-110),
@@ -50,8 +48,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     maxLoots = 2;
     chanceOfLoot = 0.12;
     health = 3;
-    setChance();
     anchor = const Anchor(115/220,0.5);
+    maxSpeed = 45;
+    super.onLoad();
     Image? spriteImage;
     Image? spriteImageWithShield;
     if(isHigh){
@@ -103,9 +102,9 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     animation = _withShieldNow ? _animIdleShield : _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
-    _hitbox = EnemyHitbox(_hitBoxPoints,
+    hitBox = EnemyHitbox(hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_hitbox);
+    add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     var temUs = bodyDef.userData as BodyUserData;
     temUs.onBeginMyContact = onGround;
@@ -120,7 +119,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
           , position.y ~/
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
-          , gameRef, _startPos, this)) {
+          , gameRef, _startPos)) {
         animation = _withShieldNow ? _animIdleShield : _animIdle;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
@@ -136,7 +135,7 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
   void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
     health -= hurt;
     if(health < 1){
-      death();
+      death(_withShieldNow ? _animDeathShield : _animDeath);
     }
   }
 
@@ -219,11 +218,11 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       }
       whereObstacle = ObstacleWhere.none;
       double angle = math.atan2(posY,posX);
-      _speed.x = math.cos(angle) * _maxSpeed;
-      _speed.y = math.sin(angle) * _maxSpeed;
-      if(_speed.x < 0 && !isFlippedHorizontally){
+      speed.x = math.cos(angle) * maxSpeed;
+      speed.y = math.sin(angle) * maxSpeed;
+      if(speed.x < 0 && !isFlippedHorizontally){
         flipHorizontally();
-      }else if(_speed.x > 0 && isFlippedHorizontally){
+      }else if(speed.x > 0 && isFlippedHorizontally){
         flipHorizontally();
       }
       animation = _withShieldNow ? _animMoveShield : _animMove;
@@ -231,10 +230,10 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       animationTicker?.onComplete = selectBehaviour;
       return;
     }
-    _speed.x = 0;
-    _speed.y = 0;
+    speed.x = 0;
+    speed.y = 0;
     groundBody?.clearForces();
-    if(isNearPlayer()){
+    if(isNearPlayer(dist)){
       animation = _withShieldNow ? _animAttackStartShield : _animAttackStart;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = chooseHit;
@@ -250,13 +249,14 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     animationTicker?.onComplete = selectBehaviour;
   }
 
-  bool isNearPlayer()
+  @override
+  bool isNearPlayer(double dist)
   {
     var pl = gameRef.gameMap.orthoPlayer!;
     if(pl.hitBox == null){
       return false;
     }
-    if(position.distanceToSquared(pl.position) > 352 * 352){
+    if(position.distanceToSquared(pl.position) > dist){
       return false;
     }
     return true;
@@ -268,34 +268,40 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
     if(animation == _animDeath || animation == _animDeathShield){
       return;
     }
-    animation = null;
-    if(inArmor){
-      if(_withShieldNow && ((position.x < gameRef.gameMap.orthoPlayer!.position.x && !isFlippedHorizontally)
-          || (position.x > gameRef.gameMap.orthoPlayer!.position.x && isFlippedHorizontally))){
-        int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
-        if(rand == 0){
-          _speed.x = 0;
-          _speed.y = 0;
+    if(inArmor) {
+      if (_withShieldNow &&
+          ((position.x < gameRef.gameMap.orthoPlayer!.position.x &&
+              !isFlippedHorizontally)
+              || (position.x > gameRef.gameMap.orthoPlayer!.position.x &&
+                  isFlippedHorizontally))) {
+        int rand = math.Random(DateTime
+            .now()
+            .microsecondsSinceEpoch).nextInt(3);
+        if (rand == 0) {
+          speed.x = 0;
+          speed.y = 0;
           groundBody?.clearForces();
           animation = _animBlock;
-          animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+          animationTicker?.isLastFrame ?? false
+              ? animationTicker?.reset()
+              : null;
           animationTicker?.onComplete = selectBehaviour;
           return;
         }
       }
-      health -= math.max(hurt - armor, 0);
-    }else{
-      health -= hurt;
+    }
+    if(!internalPhysHurt(hurt, inArmor)){
+      return;
     }
     if(health <1){
-      death();
+      death(_withShieldNow ? _animDeathShield : _animDeath);
     }else{
       if(_withShieldNow){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
         if (rand == 0) {
           _withShieldNow = false;
-          _speed.x = 0;
-          _speed.y = 0;
+          speed.x = 0;
+          speed.y = 0;
           groundBody?.clearForces();
           animation = _animThrowShield;
           animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
@@ -308,35 +314,6 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
-  }
-
-  void death()
-  {
-    _speed.x = 0;
-    _speed.y = 0;
-    groundBody?.clearForces();
-    groundBody?.setActive(false);
-    if(groundBody != null){
-      gameRef.world.destroyBody(groundBody!);
-    }
-    _hitbox.collisionType = DCollisionType.inactive;
-    // removeAll(children);
-    if(loots.isNotEmpty) {
-      if(loots.length > 1){
-        var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }else{
-        var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }
-    }
-    animation = _withShieldNow ? _animDeathShield : _animDeath;
-    animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(id);
-        removeFromParent();
-      }));
-    };
   }
 
   void dropShield(int index)
@@ -361,17 +338,10 @@ class SkeletonMage extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,
       }
       priority = pos;
     }
-    // if(!isHigh) {
-    //   if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
-    //     parent = gameRef.gameMap.enemyOnPlayer;
-    //   }else if(parent != gameRef.gameMap.enemyComponent){
-    //     parent = gameRef.gameMap.enemyComponent;
-    //   }
-    // }
     position = groundBody!.position / PhysicVals.physicScale;
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
+      groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
     }
   }
 }
@@ -382,9 +352,9 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   MageSphere(this.pos) : super(position: pos);
   late DefaultEnemyWeapon _weapon;
   late SpriteAnimation _animLoop,_animDestroy,_animDestroy2;
-  final double _maxSpeed = 80;
+  final double maxSpeed = 80;
   bool _isMove = true;
-  final Vector2 _speed = Vector2.zero();
+  final Vector2 speed = Vector2.zero();
   bool _isAutoAim = true;
 
   @override
@@ -448,9 +418,9 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
       double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
       double angle = math.atan2(posY,posX);
-      _speed.x = math.cos(angle) * _maxSpeed;
-      _speed.y = math.sin(angle) * _maxSpeed;
+      speed.x = math.cos(angle) * maxSpeed;
+      speed.y = math.sin(angle) * maxSpeed;
     }
-    position += _speed * dt;
+    position += speed * dt;
   }
 }

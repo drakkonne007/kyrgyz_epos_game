@@ -1,20 +1,16 @@
 import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 
 const double zoomScale = 1.2;
@@ -36,7 +32,7 @@ final List<Vector2> _groundBoxPoints = [ //вторая колонка
   Vector2(103 - 110,75 - 48) * zoomScale * PhysicVals.physicScale,
 ];
 
-final List<Vector2> _weaponPoints = [ //вторая колонка
+final List<Vector2> weaponPoints = [ //вторая колонка
   Vector2(746 - 110 - 220 * 3,350 - 48 - 96 * 3) * zoomScale,
   Vector2(755 - 110 - 220 * 3,355 - 48 - 96 * 3) * zoomScale,
   Vector2(770 - 110 - 220 * 3,361 - 48 - 96 * 3) * zoomScale,
@@ -49,17 +45,13 @@ final List<Vector2> _weaponPoints = [ //вторая колонка
   Vector2(787 - 110 - 220 * 3,341 - 48 - 96 * 3) * zoomScale,
 ];
 
-class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
+class PrisonAssassin extends KyrgyzEnemy
 {
   PrisonAssassin(this._startPos,int id){this.id = id;}
   late SpriteAnimation _animMove, _animIdle,_animIdle2, _animAttack,_animAttack2, _animHurt, _animDeath;
-  late EnemyHitbox _hitbox;
   final Vector2 _spriteSheetSize = Vector2(220,96);
   final Vector2 _startPos;
-  final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 50;
-  late DefaultEnemyWeapon _weapon;
-  bool _wasHit = false;
+  final double dist = 60*60;
 
   @override
   Future<void> onLoad() async
@@ -68,7 +60,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     chanceOfLoot = 0.02;
     health = 10;
     maxLoots = 3;
-    setChance();
+    maxSpeed = 50;
     Image spriteImage = await Flame.images.load(
         'tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
@@ -84,9 +76,9 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     animation = _animIdle;
     size = _spriteSheetSize * zoomScale;
     position = _startPos;
-    _hitbox = EnemyHitbox(_hitBoxPoints,
+    hitBox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_hitbox);
+    add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     var temUs = bodyDef.userData as BodyUserData;
     temUs.onBeginMyContact = onGround;
@@ -96,16 +88,16 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     var massData = groundBody!.getMassData();
     massData.mass = 1000;
     groundBody!.setMassData(massData);
-    _weapon = DefaultEnemyWeapon(
-        _weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
-    add(_weapon);
-    _weapon.damage = 3;
+    weapon = DefaultEnemyWeapon(
+        weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+    add(weapon!);
+    weapon?.damage = 3;
     add(TimerComponent(onTick: () {
       if (!checkIsNeedSelfRemove(position.x ~/
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
           , position.y ~/
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
-          , gameRef, _startPos, this)) {
+          , gameRef, _startPos)) {
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
         animation = rand.isOdd ? _animIdle : _animIdle2;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
@@ -115,6 +107,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     if(rand == 0){
       flipHorizontally();
     }
+    super.onLoad();
     selectBehaviour();
   }
 
@@ -123,7 +116,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
-    if(isNearPlayer()){
+    if(isNearPlayer(dist)){
       var pl = gameRef.gameMap.orthoPlayer!;
       if(pl.position.x > position.x){
         if(isFlippedHorizontally){
@@ -135,11 +128,11 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
           flipHorizontally();
         }
       }
-      _weapon.hit();
+      weapon?.hit();
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(random != 0 || _wasHit){
+    if(random != 0 || wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
         shift = -20;
@@ -156,18 +149,18 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       }
       whereObstacle = ObstacleWhere.none;
       double angle = math.atan2(posY,posX);
-      _speed.x = math.cos(angle) * _maxSpeed;
-      _speed.y = math.sin(angle) * _maxSpeed;
-      if(_speed.x < 0 && !isFlippedHorizontally){
+      speed.x = math.cos(angle) * maxSpeed;
+      speed.y = math.sin(angle) * maxSpeed;
+      if(speed.x < 0 && !isFlippedHorizontally){
         flipHorizontally();
-      }else if(_speed.x > 0 && isFlippedHorizontally){
+      }else if(speed.x > 0 && isFlippedHorizontally){
         flipHorizontally();
       }
       animation = _animMove;
     }else{
       if(animation != _animIdle && animation != _animIdle2){
-        _speed.x = 0;
-        _speed.y = 0;
+        speed.x = 0;
+        speed.y = 0;
         groundBody?.clearForces();
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
         animation = rand.isOdd ? _animIdle : _animIdle2;
@@ -179,31 +172,31 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
 
   void onStartHit()
   {
-    _weapon.currentCoolDown = _weapon.coolDown;
-    _speed.x = 0;
-    _speed.y = 0;
+    weapon?.currentCoolDown = weapon?.coolDown ?? 0;
+    speed.x = 0;
+    speed.y = 0;
     groundBody?.clearForces();
     animation = null;
     math.Random().nextInt(2) == 0 ? animation = _animAttack : animation = _animAttack2;
     animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
-    _wasHit = true;
+    wasHit = true;
   }
 
   void changeAttackVerts(int index)
   {
     if(animation == _animAttack){
       if(index == 3){
-        _weapon.collisionType = DCollisionType.active;
+        weapon?.collisionType = DCollisionType.active;
       }else if(index == 5){
-        _weapon.collisionType = DCollisionType.inactive;
+        weapon?.collisionType = DCollisionType.inactive;
       }
     }else{
       if(index == 4){
-        _weapon.collisionType = DCollisionType.active;
+        weapon?.collisionType = DCollisionType.active;
       }else if(index == 6){
-        _weapon.collisionType = DCollisionType.inactive;
+        weapon?.collisionType = DCollisionType.inactive;
       }
     }
   }
@@ -219,15 +212,11 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     if(animation == _animDeath){
       return;
     }
-    animation = null;
-    _weapon.collisionType = DCollisionType.inactive;
-    if(inArmor){
-      health -= math.max(hurt - armor, 0);
-    }else{
-      health -= hurt;
+    if(!internalPhysHurt(hurt,inArmor)){
+      return;
     }
     if(health <1){
-      death();
+      death(_animDeath);
     }else{
       animation = _animHurt;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
@@ -235,57 +224,13 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     }
   }
 
-  void death()
-  {
-    _speed.x = 0;
-    _speed.y = 0;
-    groundBody?.clearForces();
-    groundBody?.setActive(false);
-    if(groundBody != null){
-      gameRef.world.destroyBody(groundBody!);
-    }
-    if(loots.isNotEmpty) {
-      if(loots.length > 1){
-        var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }else{
-        var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }
-    }
-    animation = _animDeath;
-    _hitbox.collisionType = DCollisionType.inactive;
-    // removeAll(children);
-    animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(id);
-        removeFromParent();
-      }));
-    };
-  }
-
   @override
   void doMagicHurt({required double hurt, required MagicDamage magicDamage})
   {
     health -= hurt;
     if(health < 1){
-      death();
+      death(_animDeath);
     }
-  }
-
-  bool isNearPlayer()
-  {
-    var pl = gameRef.gameMap.orthoPlayer!;
-    if(pl.hitBox == null){
-      return false;
-    }
-    if(position.distanceToSquared(pl.position) > 60*60){
-      return false;
-    }
-    if(pl.hitBox!.getMinVector().y > _hitbox.getMaxVector().y || pl.hitBox!.getMaxVector().y < _hitbox.getMinVector().y){
-      return false;
-    }
-    return true;
   }
 
   @override
@@ -295,17 +240,8 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
       return;
     }
     super.update(dt);
-    // if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y){
-    //   if(parent != gameRef.gameMap.enemyOnPlayer){
-    //     parent = gameRef.gameMap.enemyOnPlayer;
-    //   }
-    // }else{
-    //   if(parent != gameRef.gameMap.enemyComponent){
-    //     parent = gameRef.gameMap.enemyComponent;
-    //   }
-    // }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt();
+    int pos = position.y.toInt() + (30 * zoomScale).toInt();
     if(pos <= 0){
       pos = 1;
     }
@@ -313,7 +249,7 @@ class PrisonAssassin extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
+    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
   }
 
   @override

@@ -17,24 +17,20 @@ import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'dart:math' as math;
-import 'package:game_flame/kyrgyz_game.dart';
 
-class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,KyrgyzEnemy
+class Skeleton extends KyrgyzEnemy
 {
   Skeleton(this._startPos,int id){this.id = id;}
   late SpriteAnimation _animMove, _animIdle, _animAttack,_animAttack2, _animHurt, _animDeath;
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackShield, _animAttack2Shield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
-  late EnemyHitbox _hitbox;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
-  final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 40;
-  bool _wasHit = false;
   late DefaultEnemyWeapon _defWeapon;
   int _variantOfHit = 0;
   bool _withShieldNow = false;
+  double dist = 65 * 65;
 
-  final List<Vector2> _hitBoxPoints = [
+  final List<Vector2> hitBoxPoints = [
     Vector2(115-115,100-110),
     Vector2(109-115,104-110),
     Vector2(110-115,112-110),
@@ -84,12 +80,10 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     maxLoots = 2;
     chanceOfLoot = 0.07;
     health = 3;
-    setChance();
-
+    maxSpeed = 40;
     anchor = const Anchor(0.5,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;
-
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     _withShieldNow = rand == 0 ? false : true;
     if(_withShieldNow){
@@ -133,9 +127,9 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     animation = _withShieldNow ? _animIdleShield : _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
-    _hitbox = EnemyHitbox(_hitBoxPoints,
+    hitBox = EnemyHitbox(hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_hitbox);
+    add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     var temUs = bodyDef.userData as BodyUserData;
     temUs.onBeginMyContact = onGround;
@@ -150,7 +144,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
           , position.y ~/
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
-          , gameRef, _startPos, this)) {
+          , gameRef, _startPos)) {
         animation = _withShieldNow ? _animIdleShield : _animIdle;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
@@ -163,16 +157,17 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     if(rand == 0){
       flipHorizontally();
     }
+    super.onLoad();
     selectBehaviour();
   }
 
   void chooseHit()
   {
     _defWeapon.currentCoolDown = _defWeapon.coolDown;
-    _wasHit = true;
+    wasHit = true;
     animation = null;
-    _speed.x = 0;
-    _speed.y = 0;
+    speed.x = 0;
+    speed.y = 0;
     groundBody?.clearForces();
     _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(_variantOfHit == 0){
@@ -213,7 +208,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
   void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
     health -= hurt;
     if(health < 1){
-      death();
+      death(_withShieldNow ? _animDeathShield : _animDeath);
     }
   }
 
@@ -247,7 +242,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
-    if (isNearPlayer()) {
+    if (isNearPlayer(dist)) {
       _defWeapon.currentCoolDown = _defWeapon.coolDown;
       var pl = gameRef.gameMap.orthoPlayer!;
       if (pl.position.x > position.x) {
@@ -264,7 +259,7 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(random != 0 || _wasHit){
+    if(random != 0 || wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
         shift = -50;
@@ -281,18 +276,18 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
       }
       whereObstacle = ObstacleWhere.none;
       double angle = math.atan2(posY,posX);
-      _speed.x = math.cos(angle) * _maxSpeed;
-      _speed.y = math.sin(angle) * _maxSpeed;
-      if(_speed.x < 0 && !isFlippedHorizontally){
+      speed.x = math.cos(angle) * maxSpeed;
+      speed.y = math.sin(angle) * maxSpeed;
+      if(speed.x < 0 && !isFlippedHorizontally){
         flipHorizontally();
-      }else if(_speed.x > 0 && isFlippedHorizontally){
+      }else if(speed.x > 0 && isFlippedHorizontally){
         flipHorizontally();
       }
       animation = _withShieldNow ? _animMoveShield : _animMove;
     }else{
       if(animation != _animIdle && animation != _animIdleShield){
-        _speed.x = 0;
-        _speed.y = 0;
+        speed.x = 0;
+        speed.y = 0;
         groundBody?.clearForces();
         animation = _withShieldNow ? _animIdleShield : _animIdle;
       }
@@ -301,56 +296,47 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     animationTicker?.onComplete = selectBehaviour;
   }
 
-  bool isNearPlayer()
-  {
-    var pl = gameRef.gameMap.orthoPlayer!;
-    if(pl.hitBox == null){
-      return false;
-    }
-    if(position.distanceToSquared(pl.position) > math.pow(_hitbox.width * 0.5 + 60,2)){
-      return false;
-    }
-    if(pl.hitBox!.getMinVector().y > _hitbox.getMaxVector().y || pl.hitBox!.getMaxVector().y < _hitbox.getMinVector().y){
-      return false;
-    }
-    return true;
-  }
-
   @override
   void doHurt({required double hurt, bool inArmor = true})
   {
     if(animation == _animDeath || animation == _animDeathShield){
       return;
     }
-    animation = null;
     _defWeapon.collisionType = DCollisionType.inactive;
-    if(inArmor){
-      if(_withShieldNow && ((position.x < gameRef.gameMap.orthoPlayer!.position.x && !isFlippedHorizontally)
-          || (position.x > gameRef.gameMap.orthoPlayer!.position.x && isFlippedHorizontally))){
-        int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
-        if(rand == 0){
-          _speed.x = 0;
-          _speed.y = 0;
+    if(inArmor) {
+      if (_withShieldNow &&
+          ((position.x < gameRef.gameMap.orthoPlayer!.position.x &&
+              !isFlippedHorizontally)
+              || (position.x > gameRef.gameMap.orthoPlayer!.position.x &&
+                  isFlippedHorizontally))) {
+        int rand = math.Random(DateTime
+            .now()
+            .microsecondsSinceEpoch).nextInt(3);
+        if (rand == 0) {
+          speed.x = 0;
+          speed.y = 0;
           groundBody?.clearForces();
           animation = _animBlock;
-          animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+          animationTicker?.isLastFrame ?? false
+              ? animationTicker?.reset()
+              : null;
           animationTicker?.onComplete = selectBehaviour;
           return;
         }
       }
-      health -= math.max(hurt - armor, 0);
-    }else{
-      health -= hurt;
+    }
+    if(!internalPhysHurt(hurt, inArmor)){
+      return;
     }
     if(health <1){
-      death();
+      death(_withShieldNow ? _animDeathShield : _animDeath);
     }else{
       if(_withShieldNow){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
         if (rand == 0) {
           _withShieldNow = false;
-          _speed.x = 0;
-          _speed.y = 0;
+          speed.x = 0;
+          speed.y = 0;
           groundBody?.clearForces();
           animation = _animThrowShield;
           animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
@@ -363,37 +349,6 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
-  }
-
-  void death()
-  {
-    _speed.x = 0;
-    _speed.y = 0;
-    groundBody?.clearForces();
-    groundBody?.setActive(false);
-    if(groundBody != null){
-      gameRef.world.destroyBody(groundBody!);
-    }
-    _hitbox.collisionType = DCollisionType.inactive;
-    // removeAll(children);
-    if(loots.isNotEmpty) {
-      if (loots.length > 1) {
-        var temp = Chest(
-            0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      } else {
-        var temp = LootOnMap(
-            loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }
-    }
-    animation = _withShieldNow ? _animDeathShield : _animDeath;
-    animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(id);
-        removeFromParent();
-      }));
-    };
   }
 
   void dropShield(int index)
@@ -416,14 +371,14 @@ class Skeleton extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,Kyrg
     }
     priority = pos;
     super.update(dt);
-    // if(_hitbox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
+    // if(hitBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
     //   parent = gameRef.gameMap.enemyOnPlayer;
     // }else if(parent != gameRef.gameMap.enemyComponent){
     //   parent = gameRef.gameMap.enemyComponent;
     // }
     if (animation == _animMoveShield || animation == _animMove
         || animation == _animIdleShield || animation == _animIdle) {
-      groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
+      groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
     }
   }
 }

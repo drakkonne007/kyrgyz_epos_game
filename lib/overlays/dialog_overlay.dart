@@ -91,6 +91,7 @@ class _DialogOverlayState extends State<DialogOverlay>
                                 width: constraints.maxWidth - 40,
                                 height: constraints.maxHeight/2 - 40,
                                 child: AutoSizeText(answer.text,
+                                  maxFontSize: 45,
                                   // overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.start,
                                   style: dialogStyleFont,
@@ -176,7 +177,7 @@ AutoSizeText getPrettyAnswer(String text)
     text,
     style: dialogStyleFont,
     minFontSize: 10,
-    maxFontSize: 25,
+    maxFontSize: 30,
     maxLines:2,
     textAlign: TextAlign.center,
   );

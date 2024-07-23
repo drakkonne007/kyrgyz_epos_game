@@ -168,23 +168,23 @@ abstract class PlayerWeapon extends DCollisionEntity
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
       temp.doHurt(hurt: damage ?? 0,inArmor: inArmor);
-      game.add(
-        ParticleSystemComponent(
-          position: other.getCenter(),
-          size: Vector2(5,5),
-          particle: Particle.generate(
-            count: 15,
-            generator: (i) => AcceleratedParticle(
-              lifespan: 0.3,
-              acceleration: randomVector2(),
-              child: CircleParticle(
-                radius: 0.7,
-                paint: Paint()..color = Colors.red[900]!,
-              ),
-            ),
-          ),
-        ),
-      );
+      // game.add(
+      //   ParticleSystemComponent(
+      //     position: other.getCenter(),
+      //     size: Vector2(5,5),
+      //     particle: Particle.generate(
+      //       count: 15,
+      //       generator: (i) => AcceleratedParticle(
+      //         lifespan: 0.3,
+      //         acceleration: randomVector2(),
+      //         child: CircleParticle(
+      //           radius: 0.7,
+      //           paint: Paint()..color = Colors.red[900]!,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // );
       if(secsOfPermDamage > 0
           && permanentDamage > 0
           && magicDamage != null){

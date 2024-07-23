@@ -85,18 +85,15 @@ final List<Vector2> hitBoxPoint = [
   Vector2(163 - 158,70  - 96),
 ];
 
-class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy {
+class Moose extends KyrgyzEnemy
+{
 
   Moose(this._startPos, this._mooseVariant,int id){this.id = id;}
   final Vector2 _startPos;
   final MooseVariant _mooseVariant;
   late SpriteAnimation _animMove, _animIdle, animAttack, _animHurt, _animDeath;
   final Vector2 _spriteSheetSize = Vector2(347,192);
-  final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 35;
-  late EnemyHitbox _hitBox;
-  DefaultEnemyWeapon? _weapon;
-  bool _wasHit = false;
+
 
   @override
   Future<void> onLoad() async
@@ -104,8 +101,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     maxLoots = 2;
     chanceOfLoot = 0.08;
     health = 4;
-    maxLoots = 2;
-    setChance();
+    maxSpeed = 35;
     Image? spriteImage;
     switch(_mooseVariant)
     {
@@ -163,9 +159,9 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     const double percentOfWidth = 158/347;
     Vector2 staticConstAnchor = Vector2(size.x * percentOfWidth,size.y/2);
     anchor = const Anchor(percentOfWidth, 0.5);
-    _hitBox = EnemyHitbox(hitBoxPoint,collisionType: DCollisionType.passive
+    hitBox = EnemyHitbox(hitBoxPoint,collisionType: DCollisionType.passive
         ,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_hitBox);
+    add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     var temUs = bodyDef.userData as BodyUserData;
     temUs.onBeginMyContact = onGround;
@@ -178,16 +174,16 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     // _ground = Ground(getPointsForActivs(Vector2(145,97) - staticConstAnchor, Vector2(24,25))
     //     , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     // _ground.onlyForPlayer = true;
-    _weapon = DefaultEnemyWeapon(ind1, collisionType: DCollisionType.inactive, isSolid: false, isStatic: false
+    weapon = DefaultEnemyWeapon(ind1, collisionType: DCollisionType.inactive, isSolid: false, isStatic: false
         , onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isLoop: true, game: game);
-    add(_weapon!);
-    _weapon!.damage = 3;
+    add(weapon!);
+    weapon!.damage = 3;
     add(TimerComponent(onTick: () {
       if (!checkIsNeedSelfRemove(position.x ~/
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
           , position.y ~/
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
-          , gameRef, _startPos, this)) {
+          , gameRef, _startPos)) {
         animation = _animIdle;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
@@ -196,6 +192,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     if(rand == 0){
       flipHorizontally();
     }
+    super.onLoad();
     selectBehaviour();
   }
 
@@ -204,7 +201,7 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
-    if(isNearPlayer()) {
+    if(isNearPlayer(10000)) {
       var pl = gameRef.gameMap.orthoPlayer!;
       if (pl.position.x > position.x) {
         if (isFlippedHorizontally) {
@@ -216,11 +213,11 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
           flipHorizontally();
         }
       }
-      _weapon?.hit();
+      weapon?.hit();
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(random != 0 || _wasHit){
+    if(random != 0 || wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
         shift = -100;
@@ -237,18 +234,18 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
       }
       whereObstacle = ObstacleWhere.none;
       double angle = math.atan2(posY,posX);
-      _speed.x = math.cos(angle) * _maxSpeed;
-      _speed.y = math.sin(angle) * _maxSpeed;
-      if(_speed.x < 0 && !isFlippedHorizontally){
+      speed.x = math.cos(angle) * maxSpeed;
+      speed.y = math.sin(angle) * maxSpeed;
+      if(speed.x < 0 && !isFlippedHorizontally){
         flipHorizontally();
-      }else if(_speed.x > 0 && isFlippedHorizontally){
+      }else if(speed.x > 0 && isFlippedHorizontally){
         flipHorizontally();
       }
       animation = _animMove;
     }else{
       if(animation != _animIdle){
-        _speed.x = 0;
-        _speed.y = 0;
+        speed.x = 0;
+        speed.y = 0;
         groundBody?.clearForces();
         animation = _animIdle;
       }
@@ -259,31 +256,31 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
 
   void onStartHit()
   {
-    _weapon?.currentCoolDown = _weapon?.coolDown ?? 0;
-    _speed.x = 0;
-    _speed.y = 0;
+    weapon?.currentCoolDown = weapon?.coolDown ?? 0;
+    speed.x = 0;
+    speed.y = 0;
     groundBody?.clearForces();
     animation = null;
     animation = animAttack;
     animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
-    _wasHit = true;
+    wasHit = true;
   }
 
   void changeAttackVerts(int index)
   {
     if(index == 3) {
-      _weapon?.collisionType = DCollisionType.active;
-      _weapon?.changeVertices(ind1,isLoop: true);
+      weapon?.collisionType = DCollisionType.active;
+      weapon?.changeVertices(ind1,isLoop: true);
     }else if(index == 7){
-      _weapon?.changeVertices(ind2,isLoop: true);
+      weapon?.changeVertices(ind2,isLoop: true);
     }else if(index == 9){
-      _weapon?.changeVertices(ind3,isLoop: true);
+      weapon?.changeVertices(ind3,isLoop: true);
     }else if(index == 10){
-      _weapon?.changeVertices(rad,radius: 55);
+      weapon?.changeVertices(rad,radius: 55);
     }else if(index == 17){
-      _weapon?.collisionType = DCollisionType.inactive;
+      weapon?.collisionType = DCollisionType.inactive;
     }
   }
 
@@ -292,75 +289,22 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
     selectBehaviour();
   }
 
-
-
-  bool isNearPlayer()
-  {
-    var pl = gameRef.gameMap.orthoPlayer!;
-    if(pl.hitBox == null){
-      return false;
-    }
-    if(position.distanceToSquared(pl.position) > 10000){
-      return false;
-    }
-    if(pl.hitBox!.getMinVector().y > _hitBox.getMaxVector().y || pl.hitBox!.getMaxVector().y < _hitBox.getMinVector().y){
-      return false;
-    }
-    return true;
-  }
-
-
-
-
   @override
   void doHurt({required double hurt, bool inArmor = true})
   {
-    if(animation == _animDeath){
+    if(animation == _animDeath || hurt == 0){
       return;
     }
-    animation = null;
-    _weapon?.collisionType = DCollisionType.inactive;
-    if(inArmor){
-      health -= math.max(hurt - armor, 0);
-    }else{
-      health -= hurt;
+    if(!internalPhysHurt(hurt,inArmor)){
+      return;
     }
     if(health <1){
-      death();
+      death(_animDeath);
     }else{
       animation = _animHurt;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
-  }
-
-  void death()
-  {
-    _speed.x = 0;
-    _speed.y = 0;
-    groundBody?.clearForces();
-    groundBody?.setActive(false);
-    if(groundBody != null){
-      gameRef.world.destroyBody(groundBody!);
-    }
-    if(loots.isNotEmpty) {
-      if(loots.length > 1){
-        var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }else{
-        var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }
-    }
-    animation = _animDeath;
-    _hitBox.collisionType = DCollisionType.inactive;
-    // removeAll(children);
-    animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(id);
-        removeFromParent();
-      }));
-    };
   }
 
   @override
@@ -375,24 +319,18 @@ class Moose extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, Kyrgyz
       pos = 1;
     }
     priority = pos;
-    // if(_hitBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
-    //   parent = gameRef.gameMap.enemyOnPlayer;
-    // }else if(parent != gameRef.gameMap.enemyComponent){
-    //   parent = gameRef.gameMap.enemyComponent;
-    // }
     position = groundBody!.position / PhysicVals.physicScale;
     if(animation == _animHurt || animation == animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
-    // position += _speed * dt;
+    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
   }
 
   @override
   void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
     health -= hurt;
     if(health < 1){
-      death();
+      death(_animDeath);
     }
   }
 

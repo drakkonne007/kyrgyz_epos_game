@@ -1,13 +1,10 @@
 import 'dart:ui';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -16,7 +13,6 @@ import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'dart:math' as math;
-import 'package:game_flame/kyrgyz_game.dart';
 
 enum GolemVariant
 {
@@ -65,18 +61,14 @@ final List<Vector2> _hitBoxPoint = [
   Vector2(101 - 112,56  - 96),
 ];
 
-class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, KyrgyzEnemy
+class GrassGolem extends KyrgyzEnemy
 {
   GrassGolem(this._startPos,this.spriteVariant,int id){this.id = id;}
   late SpriteAnimation _animMove, _animIdle, _animAttack, _animHurt, _animDeath;
-  late EnemyHitbox _hitbox;
   final Vector2 _spriteSheetSize = Vector2(224,192);
   final Vector2 _startPos;
-  final Vector2 _speed = Vector2(0,0);
-  final double _maxSpeed = 20;
   final GolemVariant spriteVariant;
-  late DefaultEnemyWeapon _weapon;
-  bool _wasHit = false;
+  final double distPlayerLength = 75 * 75;
 
 
   @override
@@ -85,7 +77,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     maxLoots = 1;
     chanceOfLoot = 0.02;
     health = 20;
-    setChance();
+    maxSpeed = 20;
     Image? spriteImage;
     if(spriteVariant == GolemVariant.Water){
       spriteImage = await Flame.images.load(
@@ -105,13 +97,13 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     animation = _animIdle;
     size = _spriteSheetSize;
     position = _startPos;
-    _hitbox = EnemyHitbox(_hitBoxPoint,
+    hitBox = EnemyHitbox(_hitBoxPoint,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    add(_hitbox);
-    _weapon = DefaultEnemyWeapon(
+    add(hitBox!);
+    weapon = DefaultEnemyWeapon(
         _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
-    add(_weapon);
-    _weapon.damage = 3;
+    add(weapon!);
+    weapon?.damage = 3;
     bodyDef.position = _startPos * PhysicVals.physicScale;
     var temUs = bodyDef.userData as BodyUserData;
     temUs.onBeginMyContact = onGround;
@@ -134,7 +126,7 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
           gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
           , position.y ~/
               gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
-          , gameRef, _startPos, this)) {
+          , gameRef, _startPos)) {
         animation = _animIdle;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       }
@@ -143,21 +135,22 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     if(rand == 0){
       flipHorizontally();
     }
+    super.onLoad();
     selectBehaviour();
   }
 
   void changeAttackVerts(int index)
   {
     if(index == 1){
-      _weapon.changeVertices(_ind1);
-      _weapon.collisionType = DCollisionType.active;
+      weapon?.changeVertices(_ind1);
+      weapon?.collisionType = DCollisionType.active;
     }else if(index == 2){
-      _weapon.changeVertices(_ind2,isLoop: true);
+      weapon?.changeVertices(_ind2,isLoop: true);
     }else if(index == 8){
-      _weapon.changeVertices(_ind3,isLoop: true);
+      weapon?.changeVertices(_ind3,isLoop: true);
     }else if(index == 12){
-      _weapon.collisionType = DCollisionType.inactive;
-      _weapon.changeVertices(_ind1,isLoop: true);
+      weapon?.collisionType = DCollisionType.inactive;
+      weapon?.changeVertices(_ind1,isLoop: true);
     }
   }
 
@@ -166,8 +159,8 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
-    if (isNearPlayer()) {
-      _weapon.currentCoolDown = _weapon.coolDown;
+    if (isNearPlayer(distPlayerLength)) {
+      weapon?.currentCoolDown = weapon?.coolDown ?? 0;
       var pl = gameRef.gameMap.orthoPlayer!;
       if (pl.position.x > position.x) {
         if (isFlippedHorizontally) {
@@ -179,11 +172,11 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
           flipHorizontally();
         }
       }
-      _weapon.hit();
+      weapon?.hit();
       return;
     }
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(random != 0 || _wasHit){
+    if(random != 0 || wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
         shift = -65;
@@ -200,18 +193,18 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
       }
       whereObstacle = ObstacleWhere.none;
       double angle = math.atan2(posY,posX);
-      _speed.x = math.cos(angle) * _maxSpeed;
-      _speed.y = math.sin(angle) * _maxSpeed;
-      if(_speed.x < 0 && !isFlippedHorizontally){
+      speed.x = math.cos(angle) * maxSpeed;
+      speed.y = math.sin(angle) * maxSpeed;
+      if(speed.x < 0 && !isFlippedHorizontally){
         flipHorizontally();
-      }else if(_speed.x > 0 && isFlippedHorizontally){
+      }else if(speed.x > 0 && isFlippedHorizontally){
         flipHorizontally();
       }
       animation = _animMove;
     }else{
       if(animation != _animIdle){
-        _speed.x = 0;
-        _speed.y = 0;
+        speed.x = 0;
+        speed.y = 0;
         animation = _animIdle;
       }
     }
@@ -221,15 +214,15 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
 
   void onStartHit()
   {
-    _weapon.currentCoolDown = _weapon.coolDown;
-    _speed.x = 0;
-    _speed.y = 0;
+    weapon?.currentCoolDown = weapon?.coolDown ?? 0;
+    speed.x = 0;
+    speed.y = 0;
     animation = null;
     animation = _animAttack;
     animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onFrame = changeAttackVerts;
     animationTicker?.onComplete = onEndHit;
-    _wasHit = true;
+    wasHit = true;
   }
 
   void onEndHit()
@@ -237,70 +230,22 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     selectBehaviour();
   }
 
-  bool isNearPlayer()
-  {
-    var pl = gameRef.gameMap.orthoPlayer!;
-    if(pl.hitBox == null){
-      return false;
-    }
-    if(pl.hitBox!.getMinVector().y > _weapon.getMaxVector().y || pl.hitBox!.getMaxVector().y < _weapon.getMinVector().y){
-      return false;
-    }
-    if(position.distanceToSquared(pl.position) > 75 * 75){
-      return false;
-    }
-    return true;
-  }
-
   @override
   void doHurt({required double hurt, bool inArmor = true})
   {
-    if(animation == _animDeath){
+    if(animation == _animDeath || hurt == 0){
       return;
     }
-    _weapon.collisionType = DCollisionType.inactive;
-    animation = null;
-    if(inArmor){
-      health -= math.max(hurt - armor, 0);
-    }else{
-      health -= hurt;
+    if(!internalPhysHurt(hurt,inArmor)){
+      return;
     }
-    if(health <1){
-      death();
+    if(health < 1){
+      death(_animDeath);
     }else{
       animation = _animHurt;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
-  }
-
-  void death()
-  {
-    _speed.x = 0;
-    _speed.y = 0;
-    if(loots.isNotEmpty) {
-      if(loots.length > 1){
-        var temp = Chest(0, myItems: loots, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }else{
-        var temp = LootOnMap(loots.first, position: positionOfAnchor(Anchor.center));
-        gameRef.gameMap.container.add(temp);
-      }
-    }
-    animation = _animDeath;
-    _hitbox.collisionType = DCollisionType.inactive;
-    groundBody?.setActive(false);
-    if(groundBody != null){
-      gameRef.world.destroyBody(groundBody!);
-    }
-    // removeAll(children);
-    animationTicker?.onComplete = () {
-      add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(id);
-        removeFromParent();
-      }));
-    };
-    gameRef.dbHandler.changeItemState(id: id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,usedAsString: '1');
   }
 
   @override
@@ -324,14 +269,14 @@ class GrassGolem extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>, K
     if(animation == _animHurt || animation == _animAttack || animation == _animDeath || animation == null){
       return;
     }
-    groundBody?.applyLinearImpulse(_speed * dt * groundBody!.mass);
+    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
   }
 
   @override
   void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
     health -= hurt;
     if(health < 1){
-      death();
+      death(_animDeath);
     }
   }
 

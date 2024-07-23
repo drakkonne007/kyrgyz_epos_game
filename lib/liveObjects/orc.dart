@@ -17,7 +17,7 @@
 // import 'dart:math' as math;
 // import 'package:game_flame/kyrgyz_game.dart';
 //
-// class Orc extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>,KyrgyzEnemy
+// class Orc extends KyrgyzEnemy with HasGameRef<KyrgyzGame>
 // {
 //   Orc(this._startPos);
 //   late SpriteAnimation _animMove, _animIdle, _animAttack,_animAttack2, _animHurt, _animDeath;

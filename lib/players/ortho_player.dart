@@ -72,8 +72,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
-    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 11,loop: false);
-    _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false);
+    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 11,loop: false); // 11
+    _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
     animation = animIdle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
@@ -187,7 +187,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation != animIdle && animation != animMove){
       return;
     }
-    _weapon?.energyCost = _isLongAttack ? SpriteAnimationTicker(_animLong).totalDuration() * 2.6 : SpriteAnimationTicker(_animShort).totalDuration() * 2.6;
+    _weapon?.energyCost = _isLongAttack ? SpriteAnimationTicker(_animLong).totalDuration() * 5.3 : SpriteAnimationTicker(_animShort).totalDuration() * 4.5;
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
@@ -205,6 +205,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animationTicker?.onComplete = (){
       animation = animIdle;
     };
+  }
+
+  void endHit()
+  {
+    _weapon?.collisionType = DCollisionType.inactive;
+    animation = animIdle;
   }
 
   void makeAction()
@@ -294,8 +300,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     if(_isLongAttack){
       if(index == 6){
-        _weapon?.collisionType = DCollisionType.active;
         _weapon?.changeVertices(_attack2ind1,isLoop: true);
+        _weapon?.collisionType = DCollisionType.active;
       }
       else if(index == 7){
         _weapon?.changeVertices(_attack2ind2,isLoop: true);
@@ -304,9 +310,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       }
     }else{
       if(index == 2){
-        _weapon?.collisionType = DCollisionType.active;
         _weapon?.changeVertices(_attack1ind1);
+        _weapon?.collisionType = DCollisionType.active;
       }else if(index == 5){
+        _weapon?.collisionType = DCollisionType.inactive;
+      }else if(index == 8){
         _weapon?.collisionType = DCollisionType.inactive;
       }
     }
@@ -344,7 +352,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
         isReallyRun = true;
       }
-      gameRef.playerData.addEnergy(dt * -2);
+      gameRef.playerData.addEnergy(dt * -3);
     }else{
       if(!gameRef.playerData.isLockEnergy) {
         gameRef.playerData.addEnergy(dt);

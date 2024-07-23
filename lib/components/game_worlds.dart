@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'dart:math' as math;
 
 List<GameWorldData> fullMaps()
 {
@@ -54,6 +55,13 @@ abstract class GameWorldData
   int _currentText = 0;
   List<String> mapSmallDialogs = [];
 
+  GameWorldData()
+  {
+    if(mapSmallDialogs.isNotEmpty){
+      _currentText = math.Random().nextInt(mapSmallDialogs.length);
+    }
+  }
+
   String? getSmallMapDialog()
   {
     if(mapSmallDialogs.isEmpty){
@@ -74,7 +82,8 @@ class TestMap extends GameWorldData {
     source = 'testMap.tmx';
     gameConsts = GameConsts(maxColumn: 3, maxRow:4, visibleBounds: Vector2(33,27));
     mapSmallDialogs = [
-      'Здесь еть прекрасный храм, вверху и слева',
+      'Здесь еcть прекрасный храм, вверху и слева',
+      'Можно легко заблудиться в этих местах',
       'Эта большая равнина хранит в себе много загадок',
       'Здесь нет особых правил, караванам надо передвигаться аккуратно',
       'Реку можно перейти в другом месте, или найти лодку. Но я не знаю где её взять',

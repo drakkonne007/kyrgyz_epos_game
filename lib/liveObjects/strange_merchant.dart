@@ -75,7 +75,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     position = ground!.position / PhysicVals.physicScale;
     priority = position.y.toInt();
     if(quest != null){
-      add(NpcDialogAttention(Vector2(width / 2,height / 2 - 45)));
+      add(NpcDialogAttention(Vector2(width / 2,height / 2 - 40)));
     }
   }
 
