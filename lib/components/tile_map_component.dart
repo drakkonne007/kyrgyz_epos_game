@@ -99,7 +99,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
 
   Future<void> loadNewMap() async
   {
-
     game.world = UpWorld();
     var dworld = game.world.physicsWorld as WorldPhy;
     dworld.resetWorld();
@@ -207,8 +206,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   void setCameraBounds()
   {
     gameRef.camera.setBounds(Rectangle.fromLTRB(gameRef.camera.viewport.size.x / (2 * gameRef.camera.viewfinder.zoom),gameRef.camera.viewport.size.y / (2 * gameRef.camera.viewfinder.zoom),
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.x * 32 - gameRef.camera.viewport.size.x / (2 * gameRef.camera.viewfinder.zoom),
-        game.playerData.playerBigMap.gameConsts.visibleBounds!.y * 32 - gameRef.camera.viewport.size.y / (2 * gameRef.camera.viewfinder.zoom)));
+        game.playerData.playerBigMap.gameConsts.visibleBounds.x * 32 - gameRef.camera.viewport.size.x / (2 * gameRef.camera.viewfinder.zoom),
+        game.playerData.playerBigMap.gameConsts.visibleBounds.y * 32 - gameRef.camera.viewport.size.y / (2 * gameRef.camera.viewfinder.zoom)));
   }
 
   Future _preloadAnimAndObj() async

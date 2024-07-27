@@ -31,7 +31,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   final String _noNeededKilledBoss = 'Сначала победите хозяина';
 
   Set<String>? neededItems;
-  List<Item> myItems;
+  List<String> myItems;
   final int _level;
   final Vector2 _spriteSheetSize = Vector2(64,64);
   late Image _spriteImg;
@@ -89,7 +89,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     remove(_objectHitbox!);
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     for (final myItem in myItems) {
-      gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
+      gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
     }
     add(OpacityEffect.by(-1,EffectController(duration: animationTicker!.totalDuration() + 0.3),onComplete: (){
       if(isStatic) {

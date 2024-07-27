@@ -84,146 +84,168 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
-#    - assets/defaultRules/
-    - assets/fonts/
-#    - assets/grass2Rules/
-    - assets/images/
-    - assets/images/inventar/
-    - assets/images/inventar/armor/
-    - assets/images/inventar/weapon/
-    - assets/images/inventar/item/
-    - assets/images/inventar/flask/
-    - assets/images/inventar/boots/
-    - assets/images/inventar/helmet/
-    - assets/images/inventar/gloves/
-    - assets/locale/
-    - assets/metaData/
-#    - assets/prisonRules/
-    - assets/tiles/
-    - assets/images/flags/
-    - assets/images/gui/
-    - assets/metaData/topLeft/
-    - assets/metaData/topLeftTempleDungeon/
-    - assets/metaData/topLeftVillage/
-    - assets/metaData/yurtaInTopLeftVillage0/
-    - assets/metaData/yurtaInTopLeftVillage1/
-    - assets/metaData/yurtaInTopLeftVillage2/
-    - assets/metaData/yurtaInTopLeftVillage3/
-    - assets/metaData/yurtaInTopLeftVillage4/
-    - assets/metaData/yurtaInTopLeftVillage5/
-    - assets/metaData/yurtaInTopLeftVillage6/
-    - assets/metaData/yurtaInTopLeftVillage7/
-    - assets/metaData/yurtaInTopLeftVillage8/
-    - assets/metaData/yurtaInTopLeftVillage9/
-    - assets/metaData/yurtaInTopLeftVillage10/
-    - assets/metaData/yurtaInTopLeftVillage11/
-    - assets/metaData/testMap/
-    - assets/tiles/bars/
-    - assets/tiles/buttons/
-    - assets/tiles/map/
-    - assets/tiles/sprites/
-    - assets/tiles/map/ancientLand/
-    - assets/tiles/map/grassLand/
-    - assets/tiles/map/grassLand2/
-    - assets/tiles/map/ground/
-    - assets/tiles/map/loot/
-    - assets/tiles/map/prisonSet/
-    - assets/tiles/map/yurta/
-    - assets/tiles/map/ancientLand/Characters/
-    - assets/tiles/map/ancientLand/Props/
-#    - assets/tiles/map/ancientLand/TiledMap/
-    - assets/tiles/map/ancientLand/Tilesets/
-    - assets/tiles/map/ancientLand/Characters/Moose/
-    - assets/tiles/map/ancientLand/Characters/NPC merchant/
-    - assets/tiles/map/ancientLand/Characters/NPC merchant/with animated items/
-    - assets/tiles/map/ancientLand/Props/Ancient Temple/
-    - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on flat surface/
-    - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on grass/
-#    - assets/tiles/map/ancientLand/TiledMap/Rules/
-#    - assets/tiles/map/ancientLand/TiledMap/TilesetsGame/
-    - assets/tiles/map/ancientLand/Tilesets/The same tiles but with transparency instead of flat color grass/
-    - assets/tiles/map/grassLand/Characters/
-    - assets/tiles/map/grassLand/Props/
-    - assets/tiles/map/grassLand/Tilesets/
-    - assets/tiles/map/grassLand/UI/
-    - assets/tiles/map/grassLand/UI/UI-elements-32x32-separated sprites/
-    - assets/tiles/map/grassLand2/Characters/
-    - assets/tiles/map/grassLand2/Props/
-#    - assets/tiles/map/grassLand2/TiledMap Editor new/
-    - assets/tiles/map/grassLand2/Tilesets/
-    - assets/tiles/map/grassLand2/Characters/orc mage/
-    - assets/tiles/map/grassLand2/Characters/orc warrior/
-    - assets/tiles/map/grassLand2/Characters/small animals/
-    - assets/tiles/map/grassLand2/Characters/orc mage/hand fx/
-    - assets/tiles/map/grassLand2/Characters/orc mage/orc1/
-    - assets/tiles/map/grassLand2/Characters/orc mage/orc2/
-    - assets/tiles/map/grassLand2/Characters/orc warrior/orc1/
-    - assets/tiles/map/grassLand2/Characters/orc warrior/orc2/
-    - assets/tiles/map/grassLand2/Characters/small animals/birds/
-    - assets/tiles/map/grassLand2/Characters/small animals/ducks/
-    - assets/tiles/map/grassLand2/Characters/small animals/frogs/
-    - assets/tiles/map/grassLand2/Characters/small animals/birds/bird1/
-    - assets/tiles/map/grassLand2/Characters/small animals/birds/bird2/
-    - assets/tiles/map/grassLand2/Characters/small animals/birds/bird3/
-    - assets/tiles/map/grassLand2/Characters/small animals/birds/bird4/
-    - assets/tiles/map/grassLand2/Characters/small animals/ducks/duck1/
-    - assets/tiles/map/grassLand2/Characters/small animals/ducks/duck2/
-    - assets/tiles/map/grassLand2/Characters/small animals/ducks/duck3/
-    - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog1/
-    - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog2/
-    - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog3/
-    - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog4/
-    - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog5/
-    - assets/tiles/map/grassLand2/Props/Animated props/
-    - assets/tiles/map/grassLand2/Props/Static props/
-    - assets/tiles/map/grassLand2/Props/Animated props/Cabin/
-    - assets/tiles/map/grassLand2/Props/Static props/Cabin/
-    - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet1 by individual sprites/
-    - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet2 by individual sprites/
-    - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet3 by individual sprites/
-#    - assets/tiles/map/grassLand2/TiledMap Editor new/Rules/
-    - assets/tiles/map/grassLand2/Tilesets/Beach/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/
-    - assets/tiles/map/grassLand2/Tilesets/Beach/standard - no thick foam - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Beach/standard - with thick foam - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Beach/transition tiles between coast platform and beach/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform - grass - coast - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform - grass2 - coast - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform -grass to water - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform -grass2 to water - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water full tile - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass - river orientation - sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass(transparency)- river orientation- sprites - Copia/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass(transparency)- sprites/
-    - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass2 - river orientation - sprites/
-    - assets/tiles/map/prisonSet/Characters/
-    - assets/tiles/map/prisonSet/Props/
-#    - assets/tiles/map/prisonSet/TiledMap Editor New/
-    - assets/tiles/map/prisonSet/Tilesets/
-    - assets/tiles/map/prisonSet/Characters/Assassin like enemy/
-    - assets/tiles/map/prisonSet/Characters/Mage Skeleton/
-    - assets/tiles/map/prisonSet/Characters/Skeleton 1/
-    - assets/tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton no shield/
-    - assets/tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton with shield/
-    - assets/tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton with shield/with rusty shield/
-    - assets/tiles/map/prisonSet/Characters/Skeleton 1/no shield/
-    - assets/tiles/map/prisonSet/Characters/Skeleton 1/with shield/
-    - assets/tiles/map/prisonSet/Characters/Skeleton 1/no shield/rusty sword/
-    - assets/tiles/map/prisonSet/Characters/Skeleton 1/with shield/with rusty sword and shield/
-    - assets/tiles/map/prisonSet/Props/atlas props - individual sprites/
-    - assets/tiles/map/prisonSet/Props/trap - rolling trunk/
-    - assets/tiles/map/prisonSet/Props/Wooden Doors/
-    - assets/tiles/map/prisonSet/Props/trap - rolling trunk/wood-color scheme 1/
-    - assets/tiles/map/prisonSet/Props/trap - rolling trunk/wood-color scheme 2/
-    - assets/tiles/map/prisonSet/Props/Wooden Doors/Wooden door1/
-    - assets/tiles/map/prisonSet/Props/Wooden Doors/Wooden door2/
-    - assets/tiles/map/yurta/Blue/
-    - assets/tiles/map/yurta/Кыргыз юрта/
-    - assets/tiles/sprites/dialogIcons/
-    - assets/tiles/sprites/effects/
-    - assets/tiles/sprites/players/
-    - assets/audio/
+  - assets/
+  - assets/audio/
+  - assets/defaultRules/
+  - assets/fonts/
+  - assets/grass2Rules/
+  - assets/images/
+  - assets/locale/
+  - assets/metaData/
+  - assets/mockups/
+  - assets/mountainRules/
+  - assets/prisonRules/
+  - assets/tiles/
+  - assets/images/flags/
+  - assets/images/gui/
+  - assets/images/inventar/
+  - assets/images/inventar/armor/
+  - assets/images/inventar/boots/
+  - assets/images/inventar/flask/
+  - assets/images/inventar/gloves/
+  - assets/images/inventar/helmet/
+  - assets/images/inventar/item/
+  - assets/images/inventar/ring/
+  - assets/images/inventar/weapon/
+  - assets/metaData/caveUnderRiver/
+  - assets/metaData/caveUnderRiver2/
+  - assets/metaData/dungeonUnderTemple/
+  - assets/metaData/dungeonUnderTemple2Floor/
+  - assets/metaData/testMap/
+  - assets/metaData/topLeft/
+  - assets/metaData/topLeftTempleDungeon/
+  - assets/metaData/topLeftVillage/
+  - assets/metaData/yurtaInTopLeftVillage0/
+  - assets/metaData/yurtaInTopLeftVillage1/
+  - assets/metaData/yurtaInTopLeftVillage10/
+  - assets/metaData/yurtaInTopLeftVillage11/
+  - assets/metaData/yurtaInTopLeftVillage2/
+  - assets/metaData/yurtaInTopLeftVillage3/
+  - assets/metaData/yurtaInTopLeftVillage4/
+  - assets/metaData/yurtaInTopLeftVillage5/
+  - assets/metaData/yurtaInTopLeftVillage6/
+  - assets/metaData/yurtaInTopLeftVillage7/
+  - assets/metaData/yurtaInTopLeftVillage8/
+  - assets/metaData/yurtaInTopLeftVillage9/
+  - assets/tiles/bars/
+  - assets/tiles/buttons/
+  - assets/tiles/map/
+  - assets/tiles/sprites/
+  - assets/tiles/map/ancientLand/
+  - assets/tiles/map/grassLand/
+  - assets/tiles/map/grassLand2/
+  - assets/tiles/map/ground/
+  - assets/tiles/map/loot/
+  - assets/tiles/map/mountainLand/
+  - assets/tiles/map/prisonSet/
+  - assets/tiles/map/yurta/
+  - assets/tiles/map/ancientLand/Characters/
+  - assets/tiles/map/ancientLand/Props/
+  - assets/tiles/map/ancientLand/TiledMap/
+  - assets/tiles/map/ancientLand/Tilesets/
+  - assets/tiles/map/ancientLand/Characters/Moose/
+  - assets/tiles/map/ancientLand/Characters/NPC merchant/
+  - assets/tiles/map/ancientLand/Characters/NPC merchant/with animated items/
+  - assets/tiles/map/ancientLand/Props/Ancient Temple/
+  - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on flat surface/
+  - assets/tiles/map/ancientLand/Props/Ancient Temple/To be used on grass/
+  - assets/tiles/map/ancientLand/TiledMap/Rules/
+  - assets/tiles/map/ancientLand/TiledMap/TilesetsGame/
+  - assets/tiles/map/ancientLand/Tilesets/The same tiles but with transparency instead of flat color grass/
+  - assets/tiles/map/grassLand/Characters/
+  - assets/tiles/map/grassLand/Props/
+  - assets/tiles/map/grassLand/Tilesets/
+  - assets/tiles/map/grassLand/UI/
+  - assets/tiles/map/grassLand/UI/UI-elements-32x32-separated sprites/
+  - assets/tiles/map/grassLand2/Characters/
+  - assets/tiles/map/grassLand2/Props/
+  - assets/tiles/map/grassLand2/TiledMap Editor new/
+  - assets/tiles/map/grassLand2/Tilesets/
+  - assets/tiles/map/grassLand2/Characters/orc mage/
+  - assets/tiles/map/grassLand2/Characters/orc warrior/
+  - assets/tiles/map/grassLand2/Characters/small animals/
+  - assets/tiles/map/grassLand2/Characters/orc mage/hand fx/
+  - assets/tiles/map/grassLand2/Characters/orc mage/orc1/
+  - assets/tiles/map/grassLand2/Characters/orc mage/orc2/
+  - assets/tiles/map/grassLand2/Characters/orc warrior/orc1/
+  - assets/tiles/map/grassLand2/Characters/orc warrior/orc2/
+  - assets/tiles/map/grassLand2/Characters/small animals/birds/
+  - assets/tiles/map/grassLand2/Characters/small animals/ducks/
+  - assets/tiles/map/grassLand2/Characters/small animals/frogs/
+  - assets/tiles/map/grassLand2/Characters/small animals/birds/bird1/
+  - assets/tiles/map/grassLand2/Characters/small animals/birds/bird2/
+  - assets/tiles/map/grassLand2/Characters/small animals/birds/bird3/
+  - assets/tiles/map/grassLand2/Characters/small animals/birds/bird4/
+  - assets/tiles/map/grassLand2/Characters/small animals/ducks/duck1/
+  - assets/tiles/map/grassLand2/Characters/small animals/ducks/duck2/
+  - assets/tiles/map/grassLand2/Characters/small animals/ducks/duck3/
+  - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog1/
+  - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog2/
+  - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog3/
+  - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog4/
+  - assets/tiles/map/grassLand2/Characters/small animals/frogs/frog5/
+  - assets/tiles/map/grassLand2/Props/Animated props/
+  - assets/tiles/map/grassLand2/Props/Static props/
+  - assets/tiles/map/grassLand2/Props/Animated props/Cabin/
+  - assets/tiles/map/grassLand2/Props/Static props/Cabin/
+  - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet1 by individual sprites/
+  - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet2 by individual sprites/
+  - assets/tiles/map/grassLand2/Props/Static props/props from spritesheet3 by individual sprites/
+  - assets/tiles/map/grassLand2/TiledMap Editor new/Rules/
+  - assets/tiles/map/grassLand2/Tilesets/Beach/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/
+  - assets/tiles/map/grassLand2/Tilesets/Beach/standard - no thick foam - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Beach/standard - with thick foam - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Beach/transition tiles between coast platform and beach/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform - grass - coast - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform - grass2 - coast - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform -grass to water - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/platform -grass2 to water - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water full tile - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass - river orientation - sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass(transparency)- river orientation- sprites - Copia/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass(transparency)- sprites/
+  - assets/tiles/map/grassLand2/Tilesets/Platform - grass to water/water to grass2 - river orientation - sprites/
+  - assets/tiles/map/mountainLand/Characters/
+  - assets/tiles/map/mountainLand/Mockups/
+  - assets/tiles/map/mountainLand/Props/
+  - assets/tiles/map/mountainLand/TiledMap Editor/
+  - assets/tiles/map/mountainLand/Tilesets/
+  - assets/tiles/map/mountainLand/Characters/Boss/
+  - assets/tiles/map/mountainLand/Characters/Enemy 1/
+  - assets/tiles/map/mountainLand/Characters/Enemy 2/
+  - assets/tiles/map/mountainLand/Characters/Pot Creature/
+  - assets/tiles/map/mountainLand/Characters/Enemy 1/variation1/
+  - assets/tiles/map/mountainLand/Props/Animated props/
+  - assets/tiles/map/mountainLand/Props/Static/
+  - assets/tiles/map/mountainLand/Props/Animated props/individual files/
+  - assets/tiles/map/mountainLand/Props/Static/Props-individual sprites/
+  - assets/tiles/map/prisonSet/Characters/
+  - assets/tiles/map/prisonSet/Props/
+  - assets/tiles/map/prisonSet/TiledMap Editor New/
+  - assets/tiles/map/prisonSet/Tilesets/
+  - assets/tiles/map/prisonSet/Characters/Assassin like enemy/
+  - assets/tiles/map/prisonSet/Characters/Mage Skeleton/
+  - assets/tiles/map/prisonSet/Characters/Skeleton 1/
+  - assets/tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton no shield/
+  - assets/tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton with shield/
+  - assets/tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton with shield/with rusty shield/
+  - assets/tiles/map/prisonSet/Characters/Skeleton 1/no shield/
+  - assets/tiles/map/prisonSet/Characters/Skeleton 1/with shield/
+  - assets/tiles/map/prisonSet/Characters/Skeleton 1/no shield/rusty sword/
+  - assets/tiles/map/prisonSet/Characters/Skeleton 1/with shield/with rusty sword and shield/
+  - assets/tiles/map/prisonSet/Props/atlas props - individual sprites/
+  - assets/tiles/map/prisonSet/Props/trap - rolling trunk/
+  - assets/tiles/map/prisonSet/Props/Wooden Doors/
+  - assets/tiles/map/prisonSet/Props/trap - rolling trunk/wood-color scheme 1/
+  - assets/tiles/map/prisonSet/Props/trap - rolling trunk/wood-color scheme 2/
+  - assets/tiles/map/prisonSet/Props/Wooden Doors/Wooden door1/
+  - assets/tiles/map/prisonSet/Props/Wooden Doors/Wooden door2/
+  - assets/tiles/map/yurta/Blue/
+  - assets/tiles/map/yurta/Кыргыз юрта/
+  - assets/tiles/sprites/dialogIcons/
+  - assets/tiles/sprites/effects/
+  - assets/tiles/sprites/players/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

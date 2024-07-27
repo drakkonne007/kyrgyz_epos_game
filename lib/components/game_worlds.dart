@@ -10,17 +10,25 @@ List<GameWorldData> fullMaps()
   list.addAll(getVillages());
   list.add(TopLeftTempleDungeon());
   list.add(TestMap());
+  list.add(TampleDungeon());
+  list.add(TampleDungeon2Floor());
+  list.add(CaveUnderRiver());
+  list.add(CaveUnderRiver2());
   return list;
 }
 
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
-  list.add(TestMap());
-  list.add(TopLeftVillage());
-  list.add(BigTopLeft());
-  list.addAll(getVillages());
-  list.add(TopLeftTempleDungeon());
+  // list.add(TestMap());
+  // list.add(TopLeftVillage());
+  // list.add(BigTopLeft());
+  // list.addAll(getVillages());
+  // list.add(TopLeftTempleDungeon());
+  list.add(TampleDungeon());
+  list.add(TampleDungeon2Floor());
+  // list.add(CaveUnderRiver());
+  // list.add(CaveUnderRiver2());
   return list;
 }
 
@@ -41,6 +49,10 @@ GameWorldData getWorldFromName(String name)
     case 'topLeft': return BigTopLeft();
     case 'topLeftTempleDungeon': return TopLeftTempleDungeon();
     case 'testMap': return TestMap();
+    case 'dungeonUnderTemple': return TampleDungeon();
+    case 'dungeonUnderTemple2Floor': return TampleDungeon2Floor();
+    case 'caveUnderRiver': return CaveUnderRiver();
+    case 'caveUnderRiver2': return CaveUnderRiver2();
     default: print('error name of World!'); return BigTopLeft();
   }
 }
@@ -50,7 +62,7 @@ abstract class GameWorldData
 {
   String source = '';
   String nameForGame = '';
-  GameConsts gameConsts = GameConsts();
+  GameConsts gameConsts = GameConsts(Vector2(297,297));
   OrientatinType orientation = OrientatinType.orthogonal;
   int _currentText = 0;
   List<String> mapSmallDialogs = [];
@@ -80,7 +92,7 @@ class TestMap extends GameWorldData {
     orientation = OrientatinType.orthogonal;
     nameForGame = 'testMap';
     source = 'testMap.tmx';
-    gameConsts = GameConsts(maxColumn: 3, maxRow:4, visibleBounds: Vector2(33,27));
+    gameConsts = GameConsts(Vector2(33,27));
     mapSmallDialogs = [
       'Здесь еcть прекрасный храм, вверху и слева',
       'Можно легко заблудиться в этих местах',
@@ -98,6 +110,13 @@ class BigTopLeft extends GameWorldData
     orientation = OrientatinType.orthogonal;
     nameForGame = 'topLeft';
     source = 'top_left_bottom-slice.tmx';
+    mapSmallDialogs = [
+      'Здесь еcть прекрасный храм, вверху и слева',
+      'Можно легко заблудиться в этих местах',
+      'Эта большая равнина хранит в себе много загадок',
+      'Здесь нет особых правил, караванам надо передвигаться аккуратно',
+      'Реку можно перейти в другом месте, или найти лодку. Но я не знаю где её взять',
+    ];
   }
 }
 
@@ -107,12 +126,38 @@ class TopLeftVillage extends GameWorldData {
     orientation = OrientatinType.orthogonal;
     nameForGame = 'topLeftVillage';
     source = 'top_left_village.tmx';
-    gameConsts = GameConsts(maxColumn: 10, maxRow:15,visibleBounds: Vector2(110,99));
+    gameConsts = GameConsts(Vector2(110,99));
     mapSmallDialogs = [
       'Наша деревня слваится своим садом недалеко от реки',
       'Не топчите огороды, если хотите перенять наш опыт выращивания овощей',
       'Мы возвели большие стены, и на нас давно никто не нападал',
       'Можете погреться у костра или зайти к кузнецу, он живёт от входа направо',
+    ];
+  }
+}
+
+class TampleDungeon extends GameWorldData {
+  TampleDungeon()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'dungeonUnderTemple';
+    source = 'dungeonUnderTemple.tmx';
+    gameConsts = GameConsts(Vector2(110,99));
+    mapSmallDialogs = [
+      'Жууууткое место',
+    ];
+  }
+}
+
+class TampleDungeon2Floor extends GameWorldData {
+  TampleDungeon2Floor()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'dungeonUnderTemple2Floor';
+    source = 'dungeonUnderTemple2Floor.tmx';
+    gameConsts = GameConsts(Vector2(80,62));
+    mapSmallDialogs = [
+      'Жууууткое место',
     ];
   }
 }
@@ -132,6 +177,41 @@ class TopLeftTempleDungeon extends GameWorldData {
     ];
   }
 }
+
+class CaveUnderRiver extends GameWorldData {
+  CaveUnderRiver()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'caveUnderRiver';
+    source = 'caveUnderRiver.tmx';
+    mapSmallDialogs = [
+      'Здесь довольно опасно...',
+      'Здесь есть не только враждебные, но и дружелюбные монстры',
+      'Открывайте сундуки, их здесь много',
+      'Здешние скелеты захватили деревянный аванпост, там теперь очень опасно',
+      'Остерегайтесь катящихся брёвен, они сбивают всё на своём пути'
+    ];
+    gameConsts = GameConsts(Vector2(110,99));
+  }
+}
+
+class CaveUnderRiver2 extends GameWorldData {
+  CaveUnderRiver2()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'caveUnderRiver2';
+    source = 'caveUnderRiver2.tmx';
+    mapSmallDialogs = [
+      'Здесь довольно опасно...',
+      'Здесь есть не только враждебные, но и дружелюбные монстры',
+      'Открывайте сундуки, их здесь много',
+      'Здешние скелеты захватили деревянный аванпост, там теперь очень опасно',
+      'Остерегайтесь катящихся брёвен, они сбивают всё на своём пути'
+    ];
+    gameConsts = GameConsts(Vector2(110,99));
+  }
+}
+
 
 List<GameWorldData> getVillages({List<int>? numbers})
 {
@@ -154,6 +234,6 @@ class YurtaInTopLeftVillage extends GameWorldData {
     orientation = OrientatinType.front;
     nameForGame = 'yurtaInTopLeftVillage$number';
     source = 'yurtaInTopLeftVillage$number.tmx';
-    gameConsts = GameConsts(maxColumn: 3, maxRow:3, visibleBounds: Vector2(33,18));
+    gameConsts = GameConsts(Vector2(33,18));
   }
 }

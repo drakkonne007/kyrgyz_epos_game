@@ -18,7 +18,7 @@ class KeyForChestOfGlory extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration}) async{
     minusInInventar(game, InventarType.item);
-    game.dbHandler.setQuestState('chestOfGlory',4,true);
+    game.setQuestState('chestOfGlory',4,true);
     createText(text: success, gameRef: game);
   }
 }

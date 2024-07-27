@@ -42,7 +42,7 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
-  List<Item> myItems;
+  List<String> myItems;
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
@@ -118,7 +118,7 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           gameRef.gameMap.container.add(Skeleton(position + pointSpawn,-1));
         }else {
           for (final myItem in myItems) {
-            gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
+            gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
           }
         }
       }

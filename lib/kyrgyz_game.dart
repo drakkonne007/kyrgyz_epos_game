@@ -82,6 +82,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     ,gameMap.effectComponent.children.toList(growable: false).cast());
   }
 
+  Future setQuestState(String name, int state, bool isDone)async
+  {
+    quests[name]?.isDone = isDone;
+    quests[name]?.currentState = state;
+    await dbHandler.setQuestState(name, state, isDone);
+  }
+
   @override
   Future onLoad() async
   {
@@ -119,7 +126,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       overlays.add(SplashScreenGame.id);
     }
     WidgetsBinding.instance.addObserver(this);
-    await dbHandler.setQuestState('chestOfGlory', 0, false);
+    await setQuestState('chestOfGlory', 0, false);
+    await setQuestState('templeDungeon', 0, false);
     if(!await dbHandler.checkSaved(0)) {
       await dbHandler.saveGame(
           0,

@@ -59,8 +59,8 @@ Future precompileAll() async
       if (layer.type == LayerType.objectGroup) {
         var objs = tiled.tileMap.getLayer<ObjectGroup>(layer.name);
         if (objs != null && true) {
-          for (int cols = 0; cols < bigWorld.gameConsts.maxColumn!; cols++) {
-            for (int rows = 0; rows < bigWorld.gameConsts.maxRow!; rows++) {
+          for (int cols = 0; cols < bigWorld.gameConsts.maxColumn; cols++) {
+            for (int rows = 0; rows < bigWorld.gameConsts.maxRow; rows++) {
               String newObjs = '';
               for (final obj in objs.objects) {
                 if (obj.name == '' && obj.type == '' && obj.gid == null) {
@@ -149,8 +149,8 @@ Future precompileAll() async
               points.add(Vector2(obj.x + obj.width, obj.y + obj.height));
               points.add(Vector2(obj.x + obj.width, obj.y));
             }
-            int minCol = bigWorld.gameConsts.maxColumn!;
-            int minRow = bigWorld.gameConsts.maxRow!;
+            int minCol = bigWorld.gameConsts.maxColumn;
+            int minRow = bigWorld.gameConsts.maxRow;
             int maxCol = 0;
             int maxRow = 0;
 
@@ -199,18 +199,22 @@ Future precompileAll() async
                   }
                   tS = i + 1;
 
-                  int col = points[tF].x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-                  int row = points[tF].y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+                  Vector2 tFTrue = Vector2(max(0,points[tF].x),max(0,points[tF].y));
+                  Vector2 tSTrue = Vector2(max(0,points[tS].x),max(0,points[tS].y));
+
+
+                  int col = tFTrue.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+                  int row = tFTrue.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
                   bool isFirst = false;
                   if (col == currColInCycle && row == currRowInCycle) {
-                    coord.add(points[tF]);
+                    coord.add(tFTrue);
                     isFirst = true;
                   }
-                  col = points[tS].x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-                  row = points[tS].y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+                  col = tSTrue.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
+                  row = tSTrue.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
                   bool isSecond = false;
                   if (col == currColInCycle && row == currRowInCycle) {
-                    coord.add(points[tS]);
+                    coord.add(tSTrue);
                     isSecond = true;
                   }
                   if (isFirst && isSecond) {
@@ -218,28 +222,28 @@ Future precompileAll() async
                   }
                   List<Vector2> tempCoord = [];
                   Vector2 answer = f_pointOfIntersect(
-                      topLeft, topRight, points[tF], points[tS]);
+                      topLeft, topRight, tFTrue, tSTrue);
                   if (answer != Vector2.zero()) {
                     tempCoord.add(answer);
                   }
                   answer = f_pointOfIntersect(
-                      topRight, bottomRight, points[tF], points[tS]);
+                      topRight, bottomRight, tFTrue, tSTrue);
                   if (answer != Vector2.zero()) {
                     tempCoord.add(answer);
                   }
                   answer = f_pointOfIntersect(
-                      bottomRight, bottomLeft, points[tF], points[tS]);
+                      bottomRight, bottomLeft, tFTrue, tSTrue);
                   if (answer != Vector2.zero()) {
                     tempCoord.add(answer);
                   }
                   answer = f_pointOfIntersect(
-                      bottomLeft, topLeft, points[tF], points[tS]);
+                      bottomLeft, topLeft, tFTrue, tSTrue);
                   if (answer != Vector2.zero()) {
                     tempCoord.add(answer);
                   }
                   if (isFirst && !isSecond) {
                     if(tempCoord.isEmpty){
-                      print('points[tF], points[tS] = ${points[tF]}, ${points[tS]}');
+                      print('tFTrue, tSTrue = $tFTrue, $tSTrue');
                     }
                     coord.add(tempCoord[0]);
                     GroundSource newPoints = GroundSource();
@@ -272,8 +276,8 @@ Future precompileAll() async
                     //Записываем всё что есть
                   }
                   if (!isFirst && !isSecond && tempCoord.length == 2) {
-                    if (points[tF].distanceToSquared(tempCoord.first) >
-                        points[tF].distanceToSquared(tempCoord.last)) {
+                    if (tFTrue.distanceToSquared(tempCoord.first) >
+                        tFTrue.distanceToSquared(tempCoord.last)) {
                       coord.clear();
                       coord.add(tempCoord.last);
                       coord.add(tempCoord.first);

@@ -30,9 +30,9 @@ final List<Vector2> _objPoints = [
   ,Vector2(25.3262,18.4032)
   ,];
 
-class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  HWChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false,
+  HorizontalWoodChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false,
     required super.position,
     super.anchor = Anchor.center,
     super.priority
@@ -40,7 +40,7 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
-  List<Item> myItems;
+  List<String> myItems;
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
@@ -117,7 +117,7 @@ class HWChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     removeOnFinish: true,
       onTick: (){
         for (final myItem in myItems) {
-          gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
+          gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
         }
       }
     );

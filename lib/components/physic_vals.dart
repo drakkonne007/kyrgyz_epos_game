@@ -37,16 +37,16 @@ enum PlayerDirectionMove{
 
 class GameConsts
 {  //9504 тайла
-  GameConsts({this.maxColumn, this.maxRow, this.visibleBounds})
+  GameConsts(this.visibleBounds)
   {
-    maxColumn ??= 25;
-    maxRow ??= 43;
-    visibleBounds ??= Vector2.all(297);
+    maxColumn = visibleBounds.x ~/ lengthOfTileSquareInTiles.x + (visibleBounds.x % lengthOfTileSquareInTiles.x != 0 ? 1 : 0);
+    maxRow = visibleBounds.y ~/ lengthOfTileSquareInTiles.y + (visibleBounds.y % lengthOfTileSquareInTiles.y != 0 ? 1 : 0);
   }
   final Vector2 lengthOfTileSquare = Vector2(32*12,32*7);
-  int? maxColumn;
-  int? maxRow;
-  Vector2? visibleBounds;
+  final Vector2 lengthOfTileSquareInTiles = Vector2(12,7);
+  int maxColumn = 0;
+  int maxRow = 0;
+  Vector2 visibleBounds;
 }
 
 class PlayerData

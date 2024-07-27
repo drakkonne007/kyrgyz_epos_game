@@ -3,6 +3,8 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'dart:math' as math;
 
+import 'package:game_flame/components/physic_vals.dart';
+
 class Fly extends SpriteAnimationComponent
 {
 
@@ -13,6 +15,7 @@ class Fly extends SpriteAnimationComponent
   {
     anchor = const Anchor(0.5,0.5);
     position = _startPos;
+    priority = GamePriority.maxPriority - 100;
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(10);
     String name = '';
     switch(rand){

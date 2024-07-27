@@ -13,7 +13,7 @@ class AnswerForDialog
 }
 
 
-abstract class Quest
+class Quest
 {
     Map<int, AnswerForDialog> dialogs = {};
     int currentState = 0;
@@ -25,12 +25,14 @@ abstract class Quest
     {
       switch(name){
         case 'chestOfGlory': return ChestOfGlory(game);
+        case 'templeDungeon': return Quest(game);
         default: return ChestOfGlory(game);
       }
     }
 
     static const List<String> allQuests = [
       'chestOfGlory',
+      'templeDungeon'
     ];
 
     Quest(this.kyrgyzGame, {this.currentState = 0, this.isDone = false});
@@ -42,8 +44,7 @@ abstract class Quest
 
     void changeState(int newState)
     {
-      currentState = newState;
-      kyrgyzGame.dbHandler.setQuestState(id, currentState, isDone);
+      kyrgyzGame.setQuestState(id, newState, isDone);
     }
 }
 

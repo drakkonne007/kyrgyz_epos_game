@@ -11,11 +11,16 @@ import 'package:game_flame/Items/mapDialog.dart';
 import 'package:game_flame/Items/portal.dart';
 import 'package:game_flame/Items/sChest.dart';
 import 'package:game_flame/Items/teleport.dart';
+import 'package:game_flame/Items/trigger.dart';
+import 'package:game_flame/Items/vWChest.dart';
 import 'package:game_flame/Obstacles/BigWoodLamp.dart';
 import 'package:game_flame/Obstacles/altarLightning.dart';
+import 'package:game_flame/Obstacles/fireCandelubr.dart';
 import 'package:game_flame/Obstacles/lightConus.dart';
 import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/liveObjects/mini_creatures/BigFlicker.dart';
+import 'package:game_flame/liveObjects/mini_creatures/WoodStairway.dart';
 import 'package:game_flame/liveObjects/mini_creatures/arrowSpawn.dart';
 import 'package:game_flame/liveObjects/mini_creatures/bigFlyingObelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/bird.dart';
@@ -206,6 +211,8 @@ class MapNode {
     if(quest != null){
       var dbQuest = myGame.quests[quest]!;
       int startShow = int.parse(obj.getAttribute('startShow') ?? '0');
+      print(startShow);
+      print(dbQuest.currentState);
       int endShow = int.parse(obj.getAttribute('endShow') ?? '999999999999');
       if(startShow > dbQuest.currentState || endShow <= dbQuest.currentState){
         return;
@@ -308,33 +315,61 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'woodStairway':
+        positionObject = WoodStairway(position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'gearSwitch':
         int target = int.parse(obj.getAttribute('tar')!);
         positionObject = GearSwitch(position,target);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
+        break;
+      case 'blueBigFlicker':
+        positionObject = BigFlicker(position,ColorState.blue);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'whiteBigFlicker':
+        positionObject = BigFlicker(position,ColorState.yellow);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'hBridge':
+
         positionObject = HorizontalWoodBridge(position,id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
       case 'chest':
+        var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = Chest(1, myItems: [Gold()], position: position,id: id, isStatic: true,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = Chest(1, myItems: items ?? ['gold'], position: position,id: id, isStatic: true,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'hWChest':
+        var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = HWChest(myItems: [Gold()], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        positionObject = HorizontalWoodChest(myItems: items ?? ['gold'], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'vWChest':
+        var items = obj.getAttribute('items')?.split(',');
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
+        var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
+        positionObject = VerticalWoodChest(myItems: items ?? ['gold'], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'sChest':
+        var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = StoneChest(myItems: [Gold()], position: position,id,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = StoneChest(myItems: items ?? ['gold'], position: position,id,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -376,6 +411,11 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'fireCandelubr':
+        positionObject = FireCandelubr(position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'telep':
         var targetPos = obj.getAttribute('tar')!.split(',');
         Vector2 target = Vector2(
@@ -405,6 +445,41 @@ class MapNode {
             toWorld: world);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
+        break;
+      case 'trigger':
+        Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!),
+            double.parse(obj.getAttribute('h')!));
+        bool? removeOnTrigger;
+        if(obj.getAttribute('removeOnTrigger') != null){
+          removeOnTrigger = obj.getAttribute('removeOnTrigger') == 'true';
+        }
+        bool? autoTrigger;
+        if(obj.getAttribute('autoTrigger') != null){
+          autoTrigger = obj.getAttribute('autoTrigger') == 'true';
+        }
+        String? dialog = obj.getAttribute('dialog');
+        int? startTrigger;
+        int? endTrigger;
+        int? onTrigger;
+        if(obj.getAttribute('startTrigger') != null){
+          startTrigger = int.parse(obj.getAttribute('startTrigger')!);
+        }
+        if(obj.getAttribute('endTrigger') != null){
+          endTrigger = int.parse(obj.getAttribute('endTrigger')!);
+        }
+        if(obj.getAttribute('onTrigger') != null){
+          onTrigger = int.parse(obj.getAttribute('onTrigger')!);
+        }
+        bool? isEndQuest;
+        if(obj.getAttribute('isEndQuest') != null){
+          isEndQuest = obj.getAttribute('isEndQuest') == 'true' || obj.getAttribute('isEndQuest') == '1';
+        }
+        String? quest = obj.getAttribute('quest');
+        positionObject = Trigger(size: telSize,position: position,kyrGame: myGame,removeOnTrigger: removeOnTrigger
+            ,autoTrigger: autoTrigger,dialog: dialog,startTrigger: startTrigger
+            ,endTrigger: endTrigger,onTrigger: onTrigger,quest: quest,isEndQuest: isEndQuest);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
         break;
       case 'spinBlade':
         var targetPos = obj.getAttribute('tar')?.split(',');

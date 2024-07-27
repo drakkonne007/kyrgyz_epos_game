@@ -145,13 +145,16 @@ class DbHandler
   {
     for(final wrld in fullMaps()){
       await _database?.execute('DELETE FROM ${wrld.nameForGame}');
-      var data = await rootBundle.loadString('assets/metaData/${wrld.nameForGame}/sqlObjects.sql',cache: false);
-      var list = data.split('\n');
-      for(final line in list){
-        if(line.length > 10) {
-          await _database?.execute(line.replaceAll('""', '0'));
+      try {
+        var data = await rootBundle.loadString(
+            'assets/metaData/${wrld.nameForGame}/sqlObjects.sql', cache: false);
+        var list = data.split('\n');
+        for (final line in list) {
+          if (line.length > 10) {
+            await _database?.execute(line.replaceAll('""', '0'));
+          }
         }
-      }
+      }catch(e){}
     }
   }
 

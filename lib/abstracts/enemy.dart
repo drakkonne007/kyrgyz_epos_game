@@ -26,7 +26,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int row=0;
   int id=-1;
   double chanceOfLoot = 0.01; // 0 - never
-  List<Item> loots = [];
+  List<String> loots = [];
   Map<MagicDamage,int> magicDamages = {};
   Ground? groundBody;
   BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isQuadOptimizaion: false),linearDamping: 6,
@@ -50,7 +50,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
       if(chance <= chanceOfLoot){
-        var item = Gold();
+        var item = 'gold';
         loots.add(item);
       }
     }
@@ -59,7 +59,6 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool internalPhysHurt(double hurt,bool inArmor)
   {
     weapon?.collisionType = DCollisionType.inactive;
-    // animation = null;
     if(inArmor){
       double dd = math.max(hurt - armor, 0);
       if(dd == 0){
@@ -94,7 +93,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(anchor));
         gameRef.gameMap.container.add(temp);
       }else{
-        var temp = LootOnMap(loots.first, position: positionOfAnchor(anchor));
+        var temp = LootOnMap(itemFromName(loots.first), position: positionOfAnchor(anchor));
         gameRef.gameMap.container.add(temp);
       }
     }

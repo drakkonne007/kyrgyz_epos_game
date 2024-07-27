@@ -25,6 +25,5 @@ class Gold extends Item
   {
       game.playerData.money.value += cost;
   }
-
 }
 
