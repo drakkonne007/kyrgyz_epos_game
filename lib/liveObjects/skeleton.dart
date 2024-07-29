@@ -80,7 +80,7 @@ class Skeleton extends KyrgyzEnemy
     maxLoots = 2;
     chanceOfLoot = 0.07;
     health = 3;
-    maxSpeed = 40;
+    maxSpeed = 30;
     anchor = const Anchor(0.5,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;
@@ -200,8 +200,6 @@ class Skeleton extends KyrgyzEnemy
     if(gameRef.gameMap.orthoPlayer == null){
       return;
     }
-    isSee();
-    print(wasSeen);
     if(wasSeen) {
       if (isNearPlayer(distPlayerLength)) {
         _defWeapon.currentCoolDown = _defWeapon.coolDown;
@@ -337,7 +335,7 @@ class Skeleton extends KyrgyzEnemy
     if (!isRefresh) {
       return;
     }
-    int pos = position.y.toInt() + 38;
+    int pos = position.y.toInt() + 10000;
     if(pos <= 0){
       pos = 1;
     }

@@ -169,8 +169,7 @@ class SkeletonMage extends KyrgyzEnemy
   @override
   void selectBehaviour() {
     if (gameRef.gameMap.orthoPlayer == null) {
-      return;
-    }
+      return;    }
 
     if(!wasSeen){
       isSee();
@@ -221,7 +220,9 @@ class SkeletonMage extends KyrgyzEnemy
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }else{
-      flipHorizontally();
+      animation = _withShieldNow ? _animIdleShield : animIdle;
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+      animationTicker?.onComplete = selectBehaviour;
     }
   }
 

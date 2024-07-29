@@ -463,7 +463,6 @@ class WorldPhy implements World
                 case ShapeType.chain: var temp = fixture.shape as ChainShape ; vertices = temp.vertices; break;
               }
               for(int k = 0; k < vertices.length - 1; k++) {
-                print(f_pointOfIntersect(p1,p2,vertices[k],vertices[k+1]));
                 if(f_pointOfIntersect(p1,p2,vertices[k],vertices[k+1]) != Vector2.zero()){
                     return true;
                 }

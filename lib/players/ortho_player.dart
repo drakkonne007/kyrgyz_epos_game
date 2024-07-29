@@ -95,8 +95,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     // hitBox?.collisionType = DCollisionType.inactive;
-    tPos = -Vector2(11,-10);
-    tSize = Vector2(20,16);
     tPos = -Vector2(10,10);
     tSize = Vector2(20,20);
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
@@ -172,18 +170,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  // void reInsertFullActiveHitBoxes()
-  // {
-  //   hitBox!.reInsertIntoCollisionProcessor();
-  //   _weapon!.reInsertIntoCollisionProcessor();
-  //   _velocity.x = 0;
-  //   _velocity.y = 0;
-  //   _speed.x = 0;
-  //   _speed.y = 0;
-  //   lastBody?.linearVelocity = Vector2.zero();
-  //   animation = animIdle;
-  // }
-
   void refreshMoves()
   {
     _velocity.x = 0;
@@ -237,8 +223,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void endHit()
   {
     _weapon?.collisionType = DCollisionType.inactive;
-    animation = animIdle;
-    _animState = AnimationState.idle;
+    int currAnim = animationTicker?.currentIndex ?? 0;
+    animation = animation!.reversed();
+    animationTicker?.currentIndex = animation!.frames.length - currAnim;
+    animationTicker?.onComplete = (){
+      chooseStaticAnimation();
+    };
   }
 
   void makeAction()
@@ -361,12 +351,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
-    int pos = position.y.toInt() + 26;
+    int pos = position.y.toInt() + 25;
     if(pos <= 0){
       pos = 1;
     }
-    super.update(dt);
     priority = pos;
+    super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
     }

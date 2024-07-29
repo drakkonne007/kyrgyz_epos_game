@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
@@ -16,6 +18,31 @@ import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
+
+class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
+{
+  ShieldLock({required super.position});
+
+  @override
+  void onLoad()async
+  {
+    anchor = Anchor.center;
+    priority = GamePriority.maxPriority;
+    final spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/loot/trans.png'),
+        srcSize: Vector2.all(32));
+    sprite = spriteSheet.getSprite(6, 2);
+    add(OpacityEffect.by(-1,EffectController(duration: 0.5),onComplete: (){
+      removeFromParent();
+    }));
+  }
+  
+  @override
+  void update(double dt)
+  {
+    position.y -= 5 * dt;
+  }
+}
 
 class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
@@ -143,8 +170,6 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     if((gameRef.gameMap.orthoPlayer!.position.x > position.x && !isFlippedHorizontally)
         || (gameRef.gameMap.orthoPlayer!.position.x < position.x && isFlippedHorizontally)
     ){
-      gameRef.gameMap.container.add(PointCust(position: position));
-      gameRef.gameMap.container.add(PointCust(position: gameRef.gameMap.orthoPlayer!.position));
       wasSeen = !tempW.myRayCast(position * PhysicVals.physicScale, gameRef.gameMap.orthoPlayer!.position * PhysicVals.physicScale, true);
     }else{
       wasSeen = false;
@@ -177,6 +202,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     if(inArmor){
       double dd = math.max(hurt - armor, 0);
       if(dd == 0){
+        ShieldLock shieldLock = ShieldLock(position: position);
+        gameRef.gameMap.container.add(shieldLock);
         gameRef.gameMap.orthoPlayer!.endHit();
         return false;
       }

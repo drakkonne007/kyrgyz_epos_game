@@ -60,7 +60,7 @@ class PrisonAssassin extends KyrgyzEnemy
     chanceOfLoot = 0.02;
     health = 10;
     maxLoots = 3;
-    maxSpeed = 50;
+    maxSpeed = 35;
     Image spriteImage = await Flame.images.load(
         'tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
