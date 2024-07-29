@@ -4,6 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -35,7 +36,7 @@ class PointCust extends PositionComponent
     hitbox.paint.color = color ?? BasicPalette.green.color;
     hitbox.renderShape = true;
     add(hitbox);
-    Future.delayed(const Duration(milliseconds: 30),(){
+    Future.delayed(const Duration(milliseconds: 1000),(){
       removeFromParent();
     });
   }
@@ -76,8 +77,8 @@ abstract class DCollisionEntity extends Component
         ,this.isLoop = true, required this.game, this.column, this.row, this.transformPoint, this.radius = 0, this.isOnlyForStatic = false})
   {
     if (isStatic) {
-      int currCol = column ?? vertices[0].x ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-      int currRow = row ?? vertices[0].y ~/ game.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+      int currCol = column ?? vertices[0].x ~/ GameConsts.lengthOfTileSquare.x;
+      int currRow = row ?? vertices[0].y ~/ GameConsts.lengthOfTileSquare.y;
       game.gameMap.collisionProcessor!.addStaticCollEntity(
           LoadedColumnRow(currCol, currRow), this);
     }

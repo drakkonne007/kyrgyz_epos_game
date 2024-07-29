@@ -30,9 +30,9 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void checkIsNeedSelfRemove()
   {
-    int column = _startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    int row =    _startPos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
-    int column2 = (_startPos.x + 288) ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
+    int column = _startPos.x ~/ GameConsts.lengthOfTileSquare.x;
+    int row =    _startPos.y ~/ GameConsts.lengthOfTileSquare.y;
+    int column2 = (_startPos.x + 288) ~/ GameConsts.lengthOfTileSquare.x;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     int diffCol2 = (column2 - gameRef.gameMap.column()).abs();

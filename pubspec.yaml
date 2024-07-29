@@ -92,7 +92,7 @@ flutter:
   - assets/images/
   - assets/locale/
   - assets/metaData/
-  - assets/mockups/
+#  - assets/mockups/
   - assets/mountainRules/
   - assets/prisonRules/
   - assets/tiles/

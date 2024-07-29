@@ -1,14 +1,10 @@
 import 'dart:ui';
-
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -23,8 +19,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 class SkeletonMage extends KyrgyzEnemy
 {
   SkeletonMage(this._startPos,int id,{this.isHigh = false}){this.id = id;}
-  late SpriteAnimation _animMove, _animIdle, _animAttackStart,_animAttackEnd,_animAttackLong, _animHurt, _animDeath;
-  late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
+  late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield, animAttackStart, animAttackEnd, animAttackLong, animBlock, animThrow;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   bool isHigh;
@@ -81,13 +76,13 @@ class SkeletonMage extends KyrgyzEnemy
     final spriteSheetWithShield = SpriteSheet(image: spriteImageWithShield,
         srcSize: _spriteSheetSize);
 
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
-    _animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
-    _animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
+    animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
+    animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
+    animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 8,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
 
     _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
@@ -99,7 +94,7 @@ class SkeletonMage extends KyrgyzEnemy
     _animThrowShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.07, from: 0, to: 8,loop: false);
     _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1, from: 0, to: 13,loop: false);
 
-    animation = _withShieldNow ? _animIdleShield : _animIdle;
+    animation = _withShieldNow ? _animIdleShield : animIdle;
     size = _spriteSheetSize;
     position = _startPos;
     hitBox = EnemyHitbox(hitBoxPoints,
@@ -114,16 +109,6 @@ class SkeletonMage extends KyrgyzEnemy
     var massData = groundBody!.getMassData();
     massData.mass = 800;
     groundBody!.setMassData(massData);
-    add(TimerComponent(onTick: () {
-      if (!checkIsNeedSelfRemove(position.x ~/
-          gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
-          , position.y ~/
-              gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
-          , gameRef, _startPos)) {
-        animation = _withShieldNow ? _animIdleShield : _animIdle;
-        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-      }
-    },repeat: true,period: 2));
     rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();
@@ -135,32 +120,7 @@ class SkeletonMage extends KyrgyzEnemy
   void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
     health -= hurt;
     if(health < 1){
-      death(_withShieldNow ? _animDeathShield : _animDeath);
-    }
-  }
-
-  @override
-  void render(Canvas canvas)
-  {
-    super.render(canvas);
-    if(magicDamages.isNotEmpty){
-      var shader = gameRef.telepShader;
-      shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 1); //scalse
-      shader.setFloat(2, 0); //offsetX
-      shader.setFloat(3, 0);
-      shader.setFloat(4,math.max(size.x,30)); //size
-      shader.setFloat(5,math.max(size.y,30));
-      final paint = Paint()..shader = shader;
-      canvas.drawRect(
-        Rect.fromLTWH(
-          0,
-          0,
-          math.max(size.x,30),
-          math.max(size.y,30),
-        ),
-        paint,
-      );
+      death(_withShieldNow ? _animDeathShield : animDeath);
     }
   }
 
@@ -169,7 +129,7 @@ class SkeletonMage extends KyrgyzEnemy
     animation = null;
     _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
     if(_variantOfHit == 0){
-      animation = _withShieldNow ? _animAttackLongShield :  _animAttackLong;
+      animation = _withShieldNow ? _animAttackLongShield :  animAttackLong;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onFrame = longAttack;
       animationTicker?.onComplete = endHit;
@@ -197,56 +157,72 @@ class SkeletonMage extends KyrgyzEnemy
 
   void endHit()
   {
-    animation = _withShieldNow ? _animAttackEndShield : _animAttackEnd;
+    animation = _withShieldNow ? _animAttackEndShield : animAttackEnd;
     animationTicker?.onComplete = selectBehaviour;
   }
 
-  void selectBehaviour()
-  {
-    if(gameRef.gameMap.orthoPlayer == null){
+  @override
+  void moveIdleRandom(bool isSee){
+
+  }
+
+  @override
+  void selectBehaviour() {
+    if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }
-    if(position.distanceToSquared(gameRef.gameMap.orthoPlayer!.position) < 100 * 100){
-      // _rigidSec = 0.8;
-      double posX = position.x - gameRef.gameMap.orthoPlayer!.position.x;
-      double posY = position.y - gameRef.gameMap.orthoPlayer!.position.y;
-      if(whereObstacle == ObstacleWhere.side){
-        posX = 0;
+
+    if(!wasSeen){
+      isSee();
+    }
+    if (wasSeen) {
+      if (position.distanceToSquared(gameRef.gameMap.orthoPlayer!.position) <
+          100 * 100) {
+        // _rigidSec = 0.8;
+        double posX = position.x - gameRef.gameMap.orthoPlayer!.position.x;
+        double posY = position.y - gameRef.gameMap.orthoPlayer!.position.y;
+        if (whereObstacle == ObstacleWhere.side) {
+          posX = 0;
+        }
+        if (whereObstacle == ObstacleWhere.upDown && posY < 0) {
+          posY = 0;
+        }
+        whereObstacle = ObstacleWhere.none;
+        double angle = math.atan2(posY, posX);
+        speed.x = math.cos(angle) * maxSpeed;
+        speed.y = math.sin(angle) * maxSpeed;
+        if (speed.x < 0 && !isFlippedHorizontally) {
+          flipHorizontally();
+        } else if (speed.x > 0 && isFlippedHorizontally) {
+          flipHorizontally();
+        }
+        animation = _withShieldNow ? _animMoveShield : animMove;
+        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+        animationTicker?.onComplete = selectBehaviour;
+        return;
       }
-      if(whereObstacle == ObstacleWhere.upDown && posY < 0){
-        posY = 0;
+      speed.x = 0;
+      speed.y = 0;
+      groundBody?.clearForces();
+      if (isNearPlayer(dist)) {
+        animation = _withShieldNow ? _animAttackStartShield : animAttackStart;
+        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+        animationTicker?.onComplete = chooseHit;
+        if (position.x < gameRef.gameMap.orthoPlayer!.position.x &&
+            isFlippedHorizontally) {
+          flipHorizontally();
+        } else if (position.x > gameRef.gameMap.orthoPlayer!.position.x &&
+            !isFlippedHorizontally) {
+          flipHorizontally();
+        }
+        return;
       }
-      whereObstacle = ObstacleWhere.none;
-      double angle = math.atan2(posY,posX);
-      speed.x = math.cos(angle) * maxSpeed;
-      speed.y = math.sin(angle) * maxSpeed;
-      if(speed.x < 0 && !isFlippedHorizontally){
-        flipHorizontally();
-      }else if(speed.x > 0 && isFlippedHorizontally){
-        flipHorizontally();
-      }
-      animation = _withShieldNow ? _animMoveShield : _animMove;
+      animation = _withShieldNow ? _animIdleShield : animIdle;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
-      return;
+    }else{
+      flipHorizontally();
     }
-    speed.x = 0;
-    speed.y = 0;
-    groundBody?.clearForces();
-    if(isNearPlayer(dist)){
-      animation = _withShieldNow ? _animAttackStartShield : _animAttackStart;
-      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-      animationTicker?.onComplete = chooseHit;
-      if(position.x < gameRef.gameMap.orthoPlayer!.position.x && isFlippedHorizontally){
-        flipHorizontally();
-      }else if(position.x > gameRef.gameMap.orthoPlayer!.position.x && !isFlippedHorizontally){
-        flipHorizontally();
-      }
-      return;
-    }
-    animation = _withShieldNow ? _animIdleShield : _animIdle;
-    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-    animationTicker?.onComplete = selectBehaviour;
   }
 
   @override
@@ -265,7 +241,7 @@ class SkeletonMage extends KyrgyzEnemy
   @override
   void doHurt({required double hurt, bool inArmor = true})
   {
-    if(animation == _animDeath || animation == _animDeathShield){
+    if(animation == animDeath || animation == _animDeathShield){
       return;
     }
     if(inArmor) {
@@ -294,7 +270,7 @@ class SkeletonMage extends KyrgyzEnemy
       return;
     }
     if(health <1){
-      death(_withShieldNow ? _animDeathShield : _animDeath);
+      death(_withShieldNow ? _animDeathShield : animDeath);
     }else{
       if(_withShieldNow){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
@@ -310,7 +286,7 @@ class SkeletonMage extends KyrgyzEnemy
           return;
         }
       }
-      animation = _withShieldNow ? _animHurtShield : _animHurt;
+      animation = _withShieldNow ? _animHurtShield : animHurt;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
@@ -339,8 +315,8 @@ class SkeletonMage extends KyrgyzEnemy
       priority = pos;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    if (animation == _animMoveShield || animation == _animMove
-        || animation == _animIdleShield || animation == _animIdle) {
+    if (animation == _animMoveShield || animation == animMove
+        || animation == _animIdleShield || animation == animIdle) {
       groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
     }
   }

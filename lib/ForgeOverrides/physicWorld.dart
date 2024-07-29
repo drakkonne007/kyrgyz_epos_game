@@ -3,11 +3,12 @@
 // ignore_for_file: use_setters_to_change_properties
 
 import 'dart:math';
-
 import 'package:forge2d/forge2d.dart';
 import 'package:forge2d/src/common/timer.dart';
 import 'package:forge2d/src/settings.dart' as settings;
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 
 /// The world class manages all physics entities, dynamic simulation, and
@@ -99,20 +100,6 @@ class WorldPhy implements World
 
   void changeActiveBodies(LoadedColumnRow columnRow)
   {
-    // assert(!isLocked);
-    // bodies.clear();
-    // bodies.addAll(activeBody);
-    // int xCoord = columnRow.column - 1;
-    // int yCoord = columnRow.row - 1;
-    // int xEnd = xCoord + 2;
-    // int yEnd = yCoord + 2;
-    // for(xCoord;xCoord < xEnd;xCoord++){
-    //   for(yCoord;yCoord < yEnd;yCoord++){
-    //     allEls[LoadedColumnRow(xCoord, yCoord)]?.forEach((body){
-    //       bodies.add(body);
-    //     });
-    //   }
-    // }
     _currentQuad = columnRow;
   }
 
@@ -147,7 +134,7 @@ class WorldPhy implements World
       }
     }
     for(final key in activeBody){
-        destroyBody(key);
+      destroyBody(key);
     }    // bodies.clear();
     allEls.clear();
     activeBody.clear();
@@ -429,6 +416,69 @@ class WorldPhy implements World
     _input.p1.setFrom(point1);
     _input.p2.setFrom(point2);
     contactManager.broadPhase.raycast(_raycastWrapper, _input);
+  }
+
+
+
+  bool myRayCust(Vector2 p1, Vector2 p2, bool? isOnlyStatic)
+  {
+    int minColumn = min(p1.x ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale),
+        p2.x ~/ (GameConsts.lengthOfTileSquare.x  * PhysicVals.physicScale));
+    int maxColumn = max(p1.x ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale),
+        p2.x ~/ (GameConsts.lengthOfTileSquare.x  * PhysicVals.physicScale));
+
+    int minRow = min(p1.y ~/ (GameConsts.lengthOfTileSquare.y  * PhysicVals.physicScale),
+        p2.y ~/ (GameConsts.lengthOfTileSquare.y  * PhysicVals.physicScale));
+    int maxRow = max(p1.y ~/ (GameConsts.lengthOfTileSquare.y  * PhysicVals.physicScale),
+        p2.y ~/ (GameConsts.lengthOfTileSquare.y  * PhysicVals.physicScale));
+
+    Vector2 minVector, maxVector;
+    minVector = Vector2(min(p1.x, p2.x), min(p1.y, p2.y));
+    maxVector = Vector2(max(p1.x, p2.x), max(p1.y, p2.y));
+
+    for(int i = minColumn; i <= maxColumn; i++) {
+      for (int j = minRow; j <= maxRow; j++) {
+        LoadedColumnRow mapPos = LoadedColumnRow(i, j);
+        if (allEls.containsKey(mapPos)) {
+          for (final bod in allEls[mapPos]!) {
+            for (final fixture in bod.fixtures) {
+              if (minVector.x - 20 * PhysicVals.physicScale >
+                  fixture.proxies[0].aabb.upperBound.x ||
+                  maxVector.x + 20 * PhysicVals.physicScale <
+                      fixture.proxies[0].aabb.lowerBound.x) {
+                continue;
+              }
+              if (minVector.y - 20 * PhysicVals.physicScale >
+                  fixture.proxies[0].aabb.upperBound.y ||
+                  maxVector.y + 20 * PhysicVals.physicScale <
+                      fixture.proxies[0].aabb.lowerBound.y) {
+                continue;
+              }
+              List<Vector2> vertices;
+              bool isLoop = false;
+              switch(fixture.shape.shapeType) {
+                case ShapeType.circle: vertices = [Vector2.zero()]; break;
+                case ShapeType.edge: var temp = fixture.shape as EdgeShape ; vertices = [temp.vertex1, temp.vertex2]; break;
+                case ShapeType.polygon: var temp = fixture.shape as PolygonShape ; vertices = temp.vertices; isLoop = true; break;
+                case ShapeType.chain: var temp = fixture.shape as ChainShape ; vertices = temp.vertices; break;
+              }
+              for(int k = 0; k < vertices.length - 1; k++) {
+                print(f_pointOfIntersect(p1,p2,vertices[k],vertices[k+1]));
+                if(f_pointOfIntersect(p1,p2,vertices[k],vertices[k+1]) != Vector2.zero()){
+                    return true;
+                }
+              }
+              if(isLoop){
+                if(f_pointOfIntersect(p1,p2,vertices[0],vertices[vertices.length - 1]) != Vector2.zero()){
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
 
   /// Ray-cast the world for all fixtures and particles in the path of the ray.

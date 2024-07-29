@@ -42,7 +42,7 @@ class GameConsts
     maxColumn = visibleBounds.x ~/ lengthOfTileSquareInTiles.x + (visibleBounds.x % lengthOfTileSquareInTiles.x != 0 ? 1 : 0);
     maxRow = visibleBounds.y ~/ lengthOfTileSquareInTiles.y + (visibleBounds.y % lengthOfTileSquareInTiles.y != 0 ? 1 : 0);
   }
-  final Vector2 lengthOfTileSquare = Vector2(32*12,32*7);
+  static final Vector2 lengthOfTileSquare = Vector2(32*12,32*7);
   final Vector2 lengthOfTileSquareInTiles = Vector2(12,7);
   int maxColumn = 0;
   int maxRow = 0;
@@ -282,7 +282,7 @@ class PhysicVals
   static const double physicScale = 0.1;
   static double maxSpeed = 80;
   static double startSpeed = 200;
-  static const double runCoef = 1.5;
+  static const double runCoef = 1.3;
   static double runMinimum = 1;
   static double gravity = 20;
   static double rigidy = 0.5;

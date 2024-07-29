@@ -35,7 +35,12 @@ class LoadedColumnRow
   }
 
   @override
-  int get hashCode => column.hashCode ^ row.hashCode;
+  int get hashCode => (column * 10000 + row).hashCode;
+
+  @override
+  String toString() {
+    return 'LoadedColumnRow{column: $column, row: $row}';
+  }
 }
 
 
@@ -147,9 +152,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     while(isMapCached.value < 4){
       await Future.delayed(const Duration(milliseconds: 100));
     }
-
-    for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn!;i++){
-      for(int j=0;j<currentGameWorldData!.gameConsts.maxRow!;j++){
+    for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn;i++){
+      for(int j=0;j<currentGameWorldData!.gameConsts.maxRow;j++){
         if (KyrgyzGame.cachedGround.containsKey('$i-$j.objXml')) {
           var objects = KyrgyzGame.cachedGround['$i-$j.objXml']!;
           for(final obj in objects){
@@ -164,8 +168,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
                   double.parse(sources.split(',')[1])));
             }
             if (temp.length > 1) {
-              for( int i = 0; i < temp.length - 1; i++) {
-                final shape = forge2d.EdgeShape()..set(temp[i] * PhysicVals.physicScale, temp[i + 1] * PhysicVals.physicScale);
+              for( int k = 0; k < temp.length - 1; k++) {
+                final shape = forge2d.EdgeShape()..set(temp[k] * PhysicVals.physicScale, temp[k + 1] * PhysicVals.physicScale);
                 final fixtureDef = forge2d.FixtureDef(shape);
                 var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld
                 ,isPlayer: obj.getAttribute('player') != null, isEnemy: obj.getAttribute('enemy') != null);
@@ -259,8 +263,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
       return;
     }
     collisionProcessor?.updateCollisions();
-    int col = gameRef.camera.visibleWorldRect.center.dx ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.x);
-    int row = gameRef.camera.visibleWorldRect.center.dy ~/ (currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    int col = gameRef.camera.visibleWorldRect.center.dx ~/ GameConsts.lengthOfTileSquare.x;
+    int row = gameRef.camera.visibleWorldRect.center.dy ~/ GameConsts.lengthOfTileSquare.y;
     if (col != _column || row != _row) {
       repaintWorld(col, row);
     }

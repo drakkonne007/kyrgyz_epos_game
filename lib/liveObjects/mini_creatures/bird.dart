@@ -127,8 +127,8 @@ class Bird extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     int countOfMimo = 0;
     for(final pos in _endPos){
-      int column = pos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-      int row =    pos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+      int column = pos.x ~/ GameConsts.lengthOfTileSquare.x;
+      int row =    pos.y ~/ GameConsts.lengthOfTileSquare.y;
       int diffCol = (column - gameRef.gameMap.column()).abs();
       int diffRow = (row - gameRef.gameMap.row()).abs();
       if(diffCol > 1 || diffRow > 1){

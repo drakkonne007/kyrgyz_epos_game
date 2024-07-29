@@ -91,13 +91,14 @@ class Moose extends KyrgyzEnemy
   Moose(this._startPos, this._mooseVariant,int id){this.id = id;}
   final Vector2 _startPos;
   final MooseVariant _mooseVariant;
-  late SpriteAnimation _animMove, _animIdle, animAttack, _animHurt, _animDeath;
   final Vector2 _spriteSheetSize = Vector2(347,192);
 
 
   @override
   Future<void> onLoad() async
   {
+    shiftAroundAnchorsForHit = 100;
+    distPlayerLength = 10000;
     maxLoots = 2;
     chanceOfLoot = 0.08;
     health = 4;
@@ -116,18 +117,18 @@ class Moose extends KyrgyzEnemy
     if(_mooseVariant == MooseVariant.Purple){
       final spriteSheet = SpriteSheet(image: spriteImage,
           srcSize: _spriteSheetSize);
-      _animIdle =
+      animIdle =
           spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8, loop: false);
-      _animMove =
+      animMove =
           spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 8, to: 16, loop: false);
       animAttack = spriteSheet.createAnimation(
           row: 0, stepTime: 0.08, from: 16,to: 46, loop: false);
-      _animHurt = spriteSheet.createAnimation(row: 0,
+      animHurt = spriteSheet.createAnimation(row: 0,
           stepTime: 0.07,
           from: 46,
           to: 52,
           loop: false);
-      _animDeath = spriteSheet.createAnimation(row: 0,
+      animDeath = spriteSheet.createAnimation(row: 0,
           stepTime: 0.1,
           from: 52,
           to: 67,
@@ -135,25 +136,25 @@ class Moose extends KyrgyzEnemy
     }else {
       final spriteSheet = SpriteSheet(image: spriteImage,
           srcSize: _spriteSheetSize);
-      _animIdle =
+      animIdle =
           spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8, loop: false);
-      _animMove =
+      animMove =
           spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8, loop: false);
       animAttack = spriteSheet.createAnimation(
           row: 2, stepTime: 0.08, from: 0, loop: false);
-      _animHurt = spriteSheet.createAnimation(row: 3,
+      animHurt = spriteSheet.createAnimation(row: 3,
           stepTime: 0.07,
           from: 0,
           to: 6,
           loop: false);
-      _animDeath = spriteSheet.createAnimation(row: 4,
+      animDeath = spriteSheet.createAnimation(row: 4,
           stepTime: 0.1,
           from: 0,
           to: 15,
           loop: false);
     }
     position = _startPos;
-    animation = _animIdle;
+    animation = animIdle;
     animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     size = _spriteSheetSize;
     const double percentOfWidth = 158/347;
@@ -178,80 +179,12 @@ class Moose extends KyrgyzEnemy
         , onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isLoop: true, game: game);
     add(weapon!);
     weapon!.damage = 3;
-    add(TimerComponent(onTick: () {
-      if (!checkIsNeedSelfRemove(position.x ~/
-          gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x
-          , position.y ~/
-              gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y
-          , gameRef, _startPos)) {
-        animation = _animIdle;
-        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-      }
-    },repeat: true,period: 2));
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();
     }
     super.onLoad();
     selectBehaviour();
-  }
-
-  void selectBehaviour()
-  {
-    if(gameRef.gameMap.orthoPlayer == null){
-      return;
-    }
-    if(isNearPlayer(10000)) {
-      var pl = gameRef.gameMap.orthoPlayer!;
-      if (pl.position.x > position.x) {
-        if (isFlippedHorizontally) {
-          flipHorizontally();
-        }
-      }
-      if (pl.position.x < position.x) {
-        if (!isFlippedHorizontally) {
-          flipHorizontally();
-        }
-      }
-      weapon?.hit();
-      return;
-    }
-    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(random != 0 || wasHit){
-      int shift = 0;
-      if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
-        shift = -100;
-      }else{
-        shift = 100;
-      }
-      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x + shift;
-      double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
-      if(whereObstacle == ObstacleWhere.side){
-        posX = 0;
-      }
-      if(whereObstacle == ObstacleWhere.upDown && posY < 0){
-        posY = 0;
-      }
-      whereObstacle = ObstacleWhere.none;
-      double angle = math.atan2(posY,posX);
-      speed.x = math.cos(angle) * maxSpeed;
-      speed.y = math.sin(angle) * maxSpeed;
-      if(speed.x < 0 && !isFlippedHorizontally){
-        flipHorizontally();
-      }else if(speed.x > 0 && isFlippedHorizontally){
-        flipHorizontally();
-      }
-      animation = _animMove;
-    }else{
-      if(animation != _animIdle){
-        speed.x = 0;
-        speed.y = 0;
-        groundBody?.clearForces();
-        animation = _animIdle;
-      }
-    }
-    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-    animationTicker?.onComplete = selectBehaviour;
   }
 
   void onStartHit()
@@ -289,73 +222,4 @@ class Moose extends KyrgyzEnemy
     selectBehaviour();
   }
 
-  @override
-  void doHurt({required double hurt, bool inArmor = true})
-  {
-    if(animation == _animDeath || hurt == 0){
-      return;
-    }
-    if(!internalPhysHurt(hurt,inArmor)){
-      return;
-    }
-    if(health <1){
-      death(_animDeath);
-    }else{
-      animation = _animHurt;
-      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-      animationTicker?.onComplete = selectBehaviour;
-    }
-  }
-
-  @override
-  void update(double dt)
-  {
-    if(!isRefresh){
-      return;
-    }
-    super.update(dt);
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
-    position = groundBody!.position / PhysicVals.physicScale;
-    if(animation == _animHurt || animation == animAttack || animation == _animDeath || animation == null){
-      return;
-    }
-    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
-  }
-
-  @override
-  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
-    health -= hurt;
-    if(health < 1){
-      death(_animDeath);
-    }
-  }
-
-  @override
-  void render(Canvas canvas)
-  {
-    super.render(canvas);
-    if(magicDamages.isNotEmpty){
-      var shader = gameRef.telepShader;
-      shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 1); //scalse
-      shader.setFloat(2, 0); //offsetX
-      shader.setFloat(3, 0);
-      shader.setFloat(4,math.max(size.x,30)); //size
-      shader.setFloat(5,math.max(size.y,30));
-      final paint = Paint()..shader = shader;
-      canvas.drawRect(
-        Rect.fromLTWH(
-          0,
-          0,
-          math.max(size.x,30),
-          math.max(size.y,30),
-        ),
-        paint,
-      );
-    }
-  }
 }

@@ -5,6 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
@@ -12,6 +13,7 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 
@@ -25,23 +27,129 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int column=0;
   int row=0;
   int id=-1;
-  double chanceOfLoot = 0.01; // 0 - never
+  SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
   List<String> loots = [];
   Map<MagicDamage,int> magicDamages = {};
   Ground? groundBody;
-  BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isQuadOptimizaion: false),linearDamping: 6,
+  late BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isQuadOptimizaion: false, onBeginMyContact: onBeginMyContact,onEndMyContact: onEndMyContact),linearDamping: 6,
       angularDamping: 6,fixedRotation: true);
   Vector2 speed = Vector2(0,0);
   double maxSpeed = 0;
   EnemyHitbox? hitBox;
   DefaultEnemyWeapon? weapon;
   bool wasHit = false;
+  bool wasSeen = false;
+  double chanceOfLoot = 0.01; // 0 - never
+  double distPlayerLength = 0;
+  int shiftAroundAnchorsForHit = 0;
 
   @override
   @mustCallSuper
   Future<void> onLoad() async
   {
     setChance();
+    add(TimerComponent(onTick: checkIsNeedSelfRemove ,repeat: true,period: 2));
+  }
+
+  void  onBeginMyContact(Object other, Contact contact)
+  {
+    if(contact.manifold.points.length == 2){
+      if(contact.manifold.points[0].localPoint.x == contact.manifold.points[1].localPoint.x){
+        whereObstacle = ObstacleWhere.side;
+      }else{
+        whereObstacle = ObstacleWhere.upDown;
+      }
+    }
+  }
+
+  void onEndMyContact(Object other, Contact contact)
+  {
+    whereObstacle = ObstacleWhere.none;
+  }
+
+  void moveIdleRandom(bool isSee)
+  {
+    int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(random != 0 || wasHit){
+      int shift = 0;
+      if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
+        shift = -shiftAroundAnchorsForHit;
+      }else{
+        shift = shiftAroundAnchorsForHit;
+      }
+      double posX = isSee ? gameRef.gameMap.orthoPlayer!.position.x - position.x + shift : math.Random().nextDouble() * 500 - 250;
+      double posY = isSee ? gameRef.gameMap.orthoPlayer!.position.y - position.y : math.Random().nextDouble() * 500 - 250;
+      if(whereObstacle == ObstacleWhere.side){
+        posX = 0;
+      }
+      if(whereObstacle == ObstacleWhere.upDown && posY < 0){
+        posY = 0;
+      }
+      double angle = math.atan2(posY,posX);
+      speed.x = math.cos(angle) * (isSee ? maxSpeed : maxSpeed / 2);
+      speed.y = math.sin(angle) * (isSee ? maxSpeed : maxSpeed / 2);
+      if(speed.x < 0 && !isFlippedHorizontally){
+        flipHorizontally();
+      }else if(speed.x > 0 && isFlippedHorizontally){
+        flipHorizontally();
+      }
+      animation = animMove;
+    }else{
+      if(animation != animIdle && animation != animIdle2){
+        speed.x = 0;
+        speed.y = 0;
+        if(animIdle2 != null){
+          int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+          animation = rand.isOdd ? animIdle : animIdle2;
+        }else {
+          animation = animIdle;
+        }
+      }
+    }
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+    animationTicker?.onComplete = selectBehaviour;
+  }
+
+  void selectBehaviour() {
+    if (gameRef.gameMap.orthoPlayer == null) {
+      return;
+    }
+    if (wasSeen) {
+      if (isNearPlayer(distPlayerLength)) {
+        weapon?.currentCoolDown = weapon?.coolDown ?? 0;
+        var pl = gameRef.gameMap.orthoPlayer!;
+        if (pl.position.x > position.x) {
+          if (isFlippedHorizontally) {
+            flipHorizontally();
+          }
+        }
+        if (pl.position.x < position.x) {
+          if (!isFlippedHorizontally) {
+            flipHorizontally();
+          }
+        }
+        weapon?.hit();
+        return;
+      }
+      moveIdleRandom(true);
+    } else {
+      moveIdleRandom(isSee());
+    }
+  }
+
+  bool isSee()
+  {
+    var tempW = gameRef.world as UpWorld;
+    if((gameRef.gameMap.orthoPlayer!.position.x > position.x && !isFlippedHorizontally)
+        || (gameRef.gameMap.orthoPlayer!.position.x < position.x && isFlippedHorizontally)
+    ){
+      gameRef.gameMap.container.add(PointCust(position: position));
+      gameRef.gameMap.container.add(PointCust(position: gameRef.gameMap.orthoPlayer!.position));
+      wasSeen = !tempW.myRayCast(position * PhysicVals.physicScale, gameRef.gameMap.orthoPlayer!.position * PhysicVals.physicScale, true);
+    }else{
+      wasSeen = false;
+    }
+    return wasSeen;
   }
 
   void setChance()
@@ -54,6 +162,13 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         loots.add(item);
       }
     }
+  }
+
+  @override
+  void onRemove()
+  {
+    groundBody?.destroy();
+    gameRef.gameMap.loadedLivesObjs.remove(id);
   }
 
   bool internalPhysHurt(double hurt,bool inArmor)
@@ -72,13 +187,34 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     return true;
   }
 
-  void doHurt({required double hurt, bool inArmor=true}){}
+  void doHurt({required double hurt, bool inArmor=true})
+  {
+    if(animation == animDeath || hurt == 0){
+      return;
+    }
+    if(!internalPhysHurt(hurt,inArmor)){
+      return;
+    }
+    if(health < 1){
+      death(animDeath);
+    }else{
+      animation = animHurt;
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+      animationTicker?.onComplete = selectBehaviour;
+    }
+  }
 
-  void doMagicHurt({required double hurt,required MagicDamage magicDamage}){}
+  void doMagicHurt({required double hurt,required MagicDamage magicDamage})
+  {
+    health -= hurt;
+    if(health < 1){
+      death(animDeath);
+    }
+  }
 
   void onGround(Object obj, Contact contact)
   {
-      print('enemy(((');
+    print('enemy(((');
   }
 
   void death(SpriteAnimation? anim)
@@ -101,7 +237,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     hitBox?.collisionType = DCollisionType.inactive;
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-        gameRef.gameMap.loadedLivesObjs.remove(id);
+
         removeFromParent();
       }));
     };
@@ -130,15 +266,14 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     return true;
   }
 
-  bool checkIsNeedSelfRemove(int column, int row,KyrgyzGame  gameRef, Vector2 startPos)
+  bool checkIsNeedSelfRemove()
   {
-    int diffCol = (column - gameRef.gameMap.column()).abs();
-    int diffRow = (row - gameRef.gameMap.row()).abs();
+
+    int diffCol = (position.x ~/
+        GameConsts.lengthOfTileSquare.x - gameRef.gameMap.column()).abs();
+    int diffRow = (position.y ~/
+        GameConsts.lengthOfTileSquare.y - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
-      gameRef.gameMap.loadedLivesObjs.remove(id);
-      if(groundBody != null){
-        gameRef.world.destroyBody(groundBody!);
-      }
       removeFromParent();
     }
     if(diffCol > 1 || diffRow > 1){
@@ -150,5 +285,48 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
   }
 
+  @override
+  void update(double dt)
+  {
+    super.update(dt);
+    if(!isRefresh){
+      return;
+    }
+    position = groundBody!.position / PhysicVals.physicScale;
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
+    if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
+      return;
+    }
+    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
+  }
+
+  @override
+  void render(Canvas canvas)
+  {
+    super.render(canvas);
+    if(magicDamages.isNotEmpty){
+      var shader = gameRef.fireShader;
+      shader.setFloat(0,gameRef.gameMap.shaderTime);
+      shader.setFloat(1, 4); //scalse
+      shader.setFloat(2, 0); //offsetX
+      shader.setFloat(3, 0);
+      shader.setFloat(4,math.max(size.x,30)); //size
+      shader.setFloat(5,math.max(size.y,30));
+      final paint = Paint()..shader = shader;
+      canvas.drawRect(
+        Rect.fromLTWH(
+          0,
+          0,
+          math.max(size.x,30),
+          math.max(size.y,30),
+        ),
+        paint,
+      );
+    }
+  }
 
 }

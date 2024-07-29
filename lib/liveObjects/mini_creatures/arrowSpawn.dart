@@ -39,7 +39,7 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
       case 'left': _arrowDir = ArrowDirection.left; break;
       case 'right': _arrowDir = ArrowDirection.right; break;
     }
-    _loadedColumnRow = LoadedColumnRow(_startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x,_startPos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y);
+    _loadedColumnRow = LoadedColumnRow(_startPos.x ~/ GameConsts.lengthOfTileSquare.x,_startPos.y ~/ GameConsts.lengthOfTileSquare.y);
     add(TimerComponent(period: 1.2,onTick: spawnArrow,repeat: true));
     add(TimerComponent(period: 1,repeat: true,onTick: checkInRemoveItself));
   }

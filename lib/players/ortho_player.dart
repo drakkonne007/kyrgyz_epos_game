@@ -18,6 +18,15 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
+enum AnimationState
+{
+  idle,
+  attack,
+  move,
+  death,
+  hurt,
+}
+
 final List<Vector2> _attack1ind1 = [
   Vector2(336,242) - Vector2(144*2 + 77,96*2 + 48),
   Vector2(361,224) - Vector2(144*2 + 77,96*2 + 48),
@@ -61,6 +70,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool _isRun = false;
   Ground? groundRigidBody;
   double dumping = 8;
+  AnimationState _animState = AnimationState.idle;
 
   @override
   Future<void> onLoad() async
@@ -75,6 +85,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 11,loop: false); // 11
     _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
     animation = animIdle;
+    _animState = AnimationState.idle;
     size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
     Vector2 tPos = -Vector2(15,20);
@@ -95,6 +106,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     gameRef.playerData.statChangeTrigger.addListener(setNewEnergyCostForWeapon);
     position = startPos;
     setGroundBody();
+    setNewEnergyCostForWeapon();
   }
 
   void setNewEnergyCostForWeapon()
@@ -118,9 +130,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Vector2 tSize = Vector2(20,16);
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)), friction: 0.1, density: 0.1);
     groundRigidBody = Ground(
-      BodyDef(type: BodyType.dynamic, position: targetPos * PhysicVals.physicScale, fixedRotation: true,
-          userData: BodyUserData(isQuadOptimizaion: false)),
-      gameRef.world.physicsWorld,isPlayer: true
+        BodyDef(type: BodyType.dynamic, position: targetPos * PhysicVals.physicScale, fixedRotation: true,
+            userData: BodyUserData(isQuadOptimizaion: false)),
+        gameRef.world.physicsWorld,isPlayer: true
     );
     groundRigidBody?.createFixture(fix);
     groundRigidBody?.linearDamping = dumping;
@@ -143,8 +155,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.health.value <1){
       animation = animDeath;
       animationTicker?.onComplete = gameRef.startDeathMenu;
+      _animState = AnimationState.death;
     }else{
-      if(animation == animHurt){
+      if(_animState == AnimationState.hurt){
         return;
       }
       _velocity.x = 0;
@@ -154,6 +167,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       _speed.y = 0;
       animation = null;
       animation = animHurt;
+      _animState = AnimationState.hurt;
       animationTicker?.onComplete = setIdleAnimation;
     }
   }
@@ -187,7 +201,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation != animIdle && animation != animMove){
       return;
     }
-    _weapon?.energyCost = _isLongAttack ? SpriteAnimationTicker(_animLong).totalDuration() * 5.3 : SpriteAnimationTicker(_animShort).totalDuration() * 4.5;
+    _weapon?.energyCost = _isLongAttack ? SpriteAnimationTicker(_animLong).totalDuration() * 4.5 : SpriteAnimationTicker(_animShort).totalDuration() * 3;
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
@@ -195,6 +209,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     game.playerData.energy.value -= _weapon!.energyCost;
     _isLongAttack = isLong;
     animation = _isLongAttack ? _animLong : _animShort;
+    _animState = AnimationState.attack;
     _velocity.x = 0;
     _velocity.y = 0;
     _speed.x = 0;
@@ -203,14 +218,27 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon?.cleanHashes();
     animationTicker?.onFrame = onFrameWeapon;
     animationTicker?.onComplete = (){
-      animation = animIdle;
+      chooseStaticAnimation();
     };
+  }
+
+  void chooseStaticAnimation()
+  {
+    Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
+    if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
+      animation = animIdle;
+      _animState = AnimationState.idle;
+    }else{
+      animation = animMove;
+      _animState = AnimationState.move;
+    }
   }
 
   void endHit()
   {
     _weapon?.collisionType = DCollisionType.inactive;
     animation = animIdle;
+    _animState = AnimationState.idle;
   }
 
   void makeAction()
@@ -225,6 +253,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     if(animation == animMove || animation == animHurt){
       animation = animIdle;
+      _animState = AnimationState.idle;
     }
   }
 
@@ -233,15 +262,18 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.isLockMove){
       return;
     }
-    if(animation == animIdle  || animation == animMove) {
+    if(_animState == AnimationState.move || _animState == AnimationState.idle){
       _isRun = isRun;
-      if (isRun && gameRef.playerData.energy.value > 0 && !_isMinusEnergy) {
+      _animState = AnimationState.move; // Тут может быть и анимация удара под конец ты тоже можешь бегать
+      if(animation == animIdle){
         animation = animMove;
-        animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
-      } else {
-        animMove.stepTime = 0.12;
-        animation = animMove;
-        animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
+      }
+      if(animation == animMove){
+        if (isRun && gameRef.playerData.energy.value > 0 && !_isMinusEnergy) {
+          animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
+        }else{
+          animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
+        }
       }
       angle += math.pi/2;
       _velocity.x = -cos(angle) * PhysicVals.startSpeed;
@@ -307,6 +339,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         _weapon?.changeVertices(_attack2ind2,isLoop: true);
       }else if(index == 11){
         _weapon?.collisionType = DCollisionType.inactive;
+        _animState = AnimationState.idle;
       }
     }else{
       if(index == 2){
@@ -314,8 +347,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         _weapon?.collisionType = DCollisionType.active;
       }else if(index == 5){
         _weapon?.collisionType = DCollisionType.inactive;
-      }else if(index == 8){
-        _weapon?.collisionType = DCollisionType.inactive;
+        _animState = AnimationState.idle;
       }
     }
   }
@@ -338,7 +370,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
     }
-    if(animation != animMove){
+    if(_animState != AnimationState.move){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
       gameRef.playerData.addEnergy(dt * 1.5);
       return;
@@ -347,9 +379,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(_isRun && !_isMinusEnergy){
       if(gameRef.playerData.energy.value <= 0){
         _isMinusEnergy = true;
-        animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
+        if(animation == animMove) {
+          animation?.frames[0].stepTime == 0.1 ? animation?.stepTime = 0.12 : null;
+        }
       }else{
-        animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
+        if(animation == animMove) {
+          animation?.frames[0].stepTime == 0.12 ? animation?.stepTime = 0.1 : null;
+        }
         isReallyRun = true;
       }
       gameRef.playerData.addEnergy(dt * -3);

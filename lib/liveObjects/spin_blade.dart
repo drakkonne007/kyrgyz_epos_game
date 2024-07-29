@@ -1,3 +1,4 @@
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -58,21 +59,21 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void checkIsNeedSelfRemove()
   {
-    int currColumn = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    int currRow = position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+    int currColumn = position.x ~/ GameConsts.lengthOfTileSquare.x;
+    int currRow = position.y ~/ GameConsts.lengthOfTileSquare.y;
     int diffCurrx = (currColumn - gameRef.gameMap.column()).abs();
     int diffCurrRow = (currRow - gameRef.gameMap.row()).abs();
     if(diffCurrx < 2 && diffCurrRow < 2){
       return;
     }
-    int column = _startPos.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    int row =    _startPos.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+    int column = _startPos.x ~/ GameConsts.lengthOfTileSquare.x;
+    int row =    _startPos.y ~/ GameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 1 || diffRow > 1){
       if(_endPos != null){
-        int secDiff = (_endPos!.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x - gameRef.gameMap.column()).abs();
-        int secDiffRow = (_endPos!.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y - gameRef.gameMap.row()).abs();
+        int secDiff = (_endPos!.x ~/ GameConsts.lengthOfTileSquare.x - gameRef.gameMap.column()).abs();
+        int secDiffRow = (_endPos!.y ~/ GameConsts.lengthOfTileSquare.y - gameRef.gameMap.row()).abs();
         if(secDiff > 1 || secDiffRow > 1){
           gameRef.gameMap.loadedLivesObjs.remove(_id);
           removeFromParent();

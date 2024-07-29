@@ -6,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
+import 'package:game_flame/components/physic_vals.dart';
 
 enum RenderCompileMode
 {
@@ -205,8 +206,8 @@ class MySuperAnimCompiler {
     for (int cols = 0; cols < worldData.gameConsts.maxColumn!; cols++) {
       for (int rows = 0; rows < worldData.gameConsts.maxRow!; rows++) {
         bool isWas = false;
-        var position = Vector2(cols * worldData.gameConsts.lengthOfTileSquare.x,
-            rows * worldData.gameConsts.lengthOfTileSquare.y);
+        var position = Vector2(cols * GameConsts.lengthOfTileSquare.x,
+            rows * GameConsts.lengthOfTileSquare.y);
         final composition = ImageCompositionExt();
         for (int i = 0; i < _mapsSprite.length; i++) {
           var currentSprites = _mapsSprite[i];
@@ -215,8 +216,8 @@ class MySuperAnimCompiler {
               continue;
             }
             for (final pos in currentSprites[spr]!) {
-              int column = pos.x ~/ worldData.gameConsts.lengthOfTileSquare.x;
-              int row =    pos.y ~/ worldData.gameConsts.lengthOfTileSquare.y;
+              int column = pos.x ~/ GameConsts.lengthOfTileSquare.x;
+              int row =    pos.y ~/ GameConsts.lengthOfTileSquare.y;
               if (column != cols || row != rows) {
                 continue;
               }
@@ -243,8 +244,8 @@ class MySuperAnimCompiler {
           String animText = '';
           List<Vector2> currentPoints = _animations[anim]!;
           for (final point in currentPoints) {
-            int column = point.x ~/ worldData.gameConsts.lengthOfTileSquare.x;
-            int row =    point.y ~/ worldData.gameConsts.lengthOfTileSquare.y;
+            int column = point.x ~/ GameConsts.lengthOfTileSquare.x;
+            int row =    point.y ~/ GameConsts.lengthOfTileSquare.y;
             if (column != cols || row != rows) {
               continue;
             }

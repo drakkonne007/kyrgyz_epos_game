@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/components/precompile_animation.dart';
 import 'package:game_flame/components/tile_map_component.dart';
 
@@ -79,7 +80,7 @@ Future precompileAll() async
                 }
                 Vector2 center = Vector2(obj.x + obj.width / 2, obj.y - obj.height / 2);
 
-                if (center.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x == cols && center.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y == rows) {
+                if (center.x ~/ GameConsts.lengthOfTileSquare.x == cols && center.y ~/ GameConsts.lengthOfTileSquare.y == rows) {
                   newObjs +=
                   '\n<o id="${obj.id}" nm="$name" cl="${obj.type}" x="${obj.x}" '
                       '${isReversedHorizontally ? 'horizontalReverse="true"' : ''}  y="${obj.y}" w="${obj.width}" h="${obj.height}"';
@@ -156,13 +157,13 @@ Future precompileAll() async
 
             for (final point in points) {
               minCol =
-                  min(minCol, (point.x) ~/ (bigWorld.gameConsts.lengthOfTileSquare.x));
+                  min(minCol, (point.x) ~/ (GameConsts.lengthOfTileSquare.x));
               minRow =
-                  min(minRow, (point.y) ~/ (bigWorld.gameConsts.lengthOfTileSquare.y));
+                  min(minRow, (point.y) ~/ (GameConsts.lengthOfTileSquare.y));
               maxCol =
-                  max(maxCol, (point.x) ~/ (bigWorld.gameConsts.lengthOfTileSquare.x));
+                  max(maxCol, (point.x) ~/ (GameConsts.lengthOfTileSquare.x));
               maxRow =
-                  max(maxRow, (point.y) ~/ (bigWorld.gameConsts.lengthOfTileSquare.y));
+                  max(maxRow, (point.y) ~/ (GameConsts.lengthOfTileSquare.y));
             }
             //Короче вначале проверяем две точки - если обе входят - идём дальше, Если только вторая - проверяем пересечение с предыдущей
             //и добавляем вначале пересечение, потом вторую точку
@@ -174,17 +175,17 @@ Future precompileAll() async
               for (int currRowInCycle = minRow; currRowInCycle <=
                   maxRow; currRowInCycle++) {
                 Vector2 topLeft = Vector2(
-                    currColInCycle * bigWorld.gameConsts.lengthOfTileSquare.x,
-                    currRowInCycle * bigWorld.gameConsts.lengthOfTileSquare.y);
+                    currColInCycle * GameConsts.lengthOfTileSquare.x,
+                    currRowInCycle * GameConsts.lengthOfTileSquare.y);
                 Vector2 topRight = Vector2(
-                    (currColInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.x,
-                    currRowInCycle * bigWorld.gameConsts.lengthOfTileSquare.y);
+                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x,
+                    currRowInCycle * GameConsts.lengthOfTileSquare.y);
                 Vector2 bottomLeft = Vector2(
-                    currColInCycle * bigWorld.gameConsts.lengthOfTileSquare.x,
-                    (currRowInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.y);
+                    currColInCycle * GameConsts.lengthOfTileSquare.x,
+                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y);
                 Vector2 bottomRight = Vector2(
-                    (currColInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.x,
-                    (currRowInCycle + 1) * bigWorld.gameConsts.lengthOfTileSquare.y);
+                    (currColInCycle + 1) * GameConsts.lengthOfTileSquare.x,
+                    (currRowInCycle + 1) * GameConsts.lengthOfTileSquare.y);
 
                 List<Vector2> coord = [];
                 for (int i = -1; i < points.length - 1; i++) {
@@ -203,15 +204,15 @@ Future precompileAll() async
                   Vector2 tSTrue = Vector2(max(0,points[tS].x),max(0,points[tS].y));
 
 
-                  int col = tFTrue.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-                  int row = tFTrue.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+                  int col = tFTrue.x ~/ GameConsts.lengthOfTileSquare.x;
+                  int row = tFTrue.y ~/ GameConsts.lengthOfTileSquare.y;
                   bool isFirst = false;
                   if (col == currColInCycle && row == currRowInCycle) {
                     coord.add(tFTrue);
                     isFirst = true;
                   }
-                  col = tSTrue.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-                  row = tSTrue.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+                  col = tSTrue.x ~/ GameConsts.lengthOfTileSquare.x;
+                  row = tSTrue.y ~/ GameConsts.lengthOfTileSquare.y;
                   bool isSecond = false;
                   if (col == currColInCycle && row == currRowInCycle) {
                     coord.add(tSTrue);
@@ -320,8 +321,8 @@ Future precompileAll() async
             }
           }
           for(final keys in compilerAnimationBack.internalObjs.keys){
-            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+            int col = keys.x ~/ GameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ GameConsts.lengthOfTileSquare.y;
             GroundSource newPoints = GroundSource();
             newPoints.isLoop = false;
             newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjs[keys]!);
@@ -329,8 +330,8 @@ Future precompileAll() async
             objsMap[LoadedColumnRow(col, row)]!.add(newPoints);
           }
           for(final keys in compilerAnimationBack.internalObjsLoop.keys){
-            int col = keys.x ~/ bigWorld.gameConsts.lengthOfTileSquare.x;
-            int row = keys.y ~/ bigWorld.gameConsts.lengthOfTileSquare.y;
+            int col = keys.x ~/ GameConsts.lengthOfTileSquare.x;
+            int row = keys.y ~/ GameConsts.lengthOfTileSquare.y;
             GroundSource newPoints = GroundSource();
             newPoints.isLoop = true;
             newPoints.points = List.unmodifiable(compilerAnimationBack.internalObjsLoop[keys]!);

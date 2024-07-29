@@ -29,6 +29,6 @@ class BigFlicker extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       srcSize: Vector2(160, 160),
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.15, from: 0);
-    size = size * 1.5;
+    size = size * 1.2;
   }
 }

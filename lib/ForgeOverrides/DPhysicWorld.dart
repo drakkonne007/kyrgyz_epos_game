@@ -71,6 +71,12 @@ class UpWorld extends Forge2DWorld
     physicsWorld.raycast(callback, point1, point2);
   }
 
+  bool myRayCast(Vector2 first, Vector2 sec, bool? isOnlyStatic)
+  {
+    var dd = physicsWorld as WorldPhy;
+    return dd.myRayCust(first, sec, isOnlyStatic);
+  }
+
   @override
   void clearForces() {
     physicsWorld.clearForces();

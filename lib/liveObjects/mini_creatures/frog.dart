@@ -105,8 +105,8 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void _checkIsNeedSelfRemove()
   {
-    int column = position.x ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.x;
-    int row =    position.y ~/ gameRef.playerData.playerBigMap.gameConsts.lengthOfTileSquare.y;
+    int column = position.x ~/ GameConsts.lengthOfTileSquare.x;
+    int row =    position.y ~/ GameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
     if(diffCol > 1 || diffRow > 1){

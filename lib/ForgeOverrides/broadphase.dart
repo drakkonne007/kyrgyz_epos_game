@@ -1,8 +1,6 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/components/tile_map_component.dart';
-import 'package:game_flame/kyrgyz_game.dart';
 
 class TreeHandler
 {
@@ -34,13 +32,13 @@ class MyBroadPhase implements BroadPhase,TreeCallback
     _movingProxyHash.clear();
     _nests.clear();
     count = 0;
-    for(int i = 0; i < worldData.gameConsts.maxColumn!; i++){
-      for(int j = 0; j < worldData.gameConsts.maxRow!; j++){
+    for(int i = 0; i < worldData.gameConsts.maxColumn; i++){
+      for(int j = 0; j < worldData.gameConsts.maxRow; j++){
         AABB tempAABB = AABB();
-        tempAABB.lowerBound.x = i * worldData.gameConsts.lengthOfTileSquare.x * PhysicVals.physicScale;
-        tempAABB.lowerBound.y = j * worldData.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale;
-        tempAABB.upperBound.x = tempAABB.lowerBound.x + worldData.gameConsts.lengthOfTileSquare.x * PhysicVals.physicScale;
-        tempAABB.upperBound.y = tempAABB.lowerBound.y + worldData.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale;
+        tempAABB.lowerBound.x = i * GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale;
+        tempAABB.lowerBound.y = j * GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale;
+        tempAABB.upperBound.x = tempAABB.lowerBound.x + GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale;
+        tempAABB.upperBound.y = tempAABB.lowerBound.y + GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale;
         int currCount = getCount();
         _proxyHash[currCount] = TreeHandler(tempAABB);
         _nests[currCount] = [];
@@ -53,9 +51,9 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   {
     FixtureProxy? fixtureProxy = userData as FixtureProxy;
     bool isStatic = fixtureProxy.fixture.body.bodyType == BodyType.static;
-    int col = aabb.lowerBound.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x * PhysicVals.physicScale);
-    int row = aabb.lowerBound.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
-    int mapPos = col + row * worldData!.gameConsts.maxColumn!;
+    int col = aabb.lowerBound.x ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale);
+    int row = aabb.lowerBound.y ~/ (GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
+    int mapPos = col + row * worldData!.gameConsts.maxColumn;
     TreeHandler newNode = TreeHandler(aabb, userData: userData,parentNode: mapPos);
     int currentCount = getCount();
     _proxyHash[currentCount] = newNode;
@@ -71,7 +69,7 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   @override
   void destroyProxy(int proxyId)
   {
-    if(proxyId >= worldData!.gameConsts.maxColumn! * worldData!.gameConsts.maxRow!){
+    if(proxyId >= worldData!.gameConsts.maxColumn * worldData!.gameConsts.maxRow){
       if(_proxyHash[proxyId] == null){
         return;
       }
@@ -163,13 +161,13 @@ class MyBroadPhase implements BroadPhase,TreeCallback
     var staticEntity = _proxyHash[proxyIdA]!.isMoving ? _proxyHash[proxyIdB] : _proxyHash[proxyIdA];
 
     int minColumn,maxColumn,minRow,maxRow;
-    minColumn = (moveEntity!.aabb.lowerBound.x - 20 * PhysicVals.physicScale) ~/ (worldData!.gameConsts.lengthOfTileSquare.x  * PhysicVals.physicScale);
-    maxColumn = (moveEntity.aabb.upperBound.x + 20 * PhysicVals.physicScale) ~/ (worldData!.gameConsts.lengthOfTileSquare.x * PhysicVals.physicScale);
-    minRow = (moveEntity.aabb.lowerBound.y - 20 * PhysicVals.physicScale) ~/ (worldData!.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
-    maxRow = (moveEntity.aabb.upperBound.y + 20 * PhysicVals.physicScale) ~/ (worldData!.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
+    minColumn = (moveEntity!.aabb.lowerBound.x - 20 * PhysicVals.physicScale) ~/ (GameConsts.lengthOfTileSquare.x  * PhysicVals.physicScale);
+    maxColumn = (moveEntity.aabb.upperBound.x + 20 * PhysicVals.physicScale) ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale);
+    minRow = (moveEntity.aabb.lowerBound.y - 20 * PhysicVals.physicScale) ~/ (GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
+    maxRow = (moveEntity.aabb.upperBound.y + 20 * PhysicVals.physicScale) ~/ (GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
 
-    int staticColumn = staticEntity!.aabb.center.x ~/ (worldData!.gameConsts.lengthOfTileSquare.x * PhysicVals.physicScale);
-    int staticRow = staticEntity.aabb.center.y ~/ (worldData!.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
+    int staticColumn = staticEntity!.aabb.center.x ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale);
+    int staticRow = staticEntity.aabb.center.y ~/ (GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale);
     if((staticColumn == minColumn || staticColumn == maxColumn) && (staticRow == minRow || staticRow == maxRow)){
       return true;
     }
@@ -190,10 +188,10 @@ class MyBroadPhase implements BroadPhase,TreeCallback
       if(body.userData == null){
         continue;
       }
-      int minColumn = (body.aabb.lowerBound.x) ~/ (worldData!.gameConsts.lengthOfTileSquare.x * PhysicVals.physicScale) - 1;
-      int maxColumn = (body.aabb.upperBound.x) ~/ (worldData!.gameConsts.lengthOfTileSquare.x * PhysicVals.physicScale) + 1;
-      int minRow = (body.aabb.lowerBound.y) ~/ (worldData!.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale) - 1;
-      int maxRow = (body.aabb.upperBound.y) ~/ (worldData!.gameConsts.lengthOfTileSquare.y * PhysicVals.physicScale) + 1;
+      int minColumn = (body.aabb.lowerBound.x) ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale) - 1;
+      int maxColumn = (body.aabb.upperBound.x) ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale) + 1;
+      int minRow = (body.aabb.lowerBound.y) ~/ (GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale) - 1;
+      int maxRow = (body.aabb.upperBound.y) ~/ (GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale) + 1;
       for(int i = minColumn; i <= maxColumn; i++){
         for(int j = minRow; j <= maxRow; j++){
           int mapPos = i + j * worldData!.gameConsts.maxColumn!;
@@ -243,4 +241,3 @@ class MyBroadPhase implements BroadPhase,TreeCallback
     return true;
   }
 }
-

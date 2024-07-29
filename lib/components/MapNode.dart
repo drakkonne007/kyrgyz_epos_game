@@ -69,10 +69,8 @@ class MapNode {
 
   Future<void> generateMap(LoadedColumnRow colRow) async
   {
-    int maxRow = myGame.gameMap.currentGameWorldData!.gameConsts.maxRow!;
-    int maxColumn = myGame.gameMap.currentGameWorldData!.gameConsts.maxColumn!;
-    Vector2 lengthOfTileSquare = myGame.gameMap.currentGameWorldData!.gameConsts
-        .lengthOfTileSquare;
+    int maxRow = myGame.gameMap.currentGameWorldData!.gameConsts.maxRow;
+    int maxColumn = myGame.gameMap.currentGameWorldData!.gameConsts.maxColumn;
     if (colRow.column >= maxColumn || colRow.row >= maxRow) {
       return;
     }
@@ -88,10 +86,10 @@ class MapNode {
               .row}_high.png'); //KyrgyzGame.cachedImgs['$column-${row}_high.png']!;
       var spriteHigh = SpriteComponent(
         sprite: Sprite(imageHigh),
-        position: Vector2(colRow.column * lengthOfTileSquare.x,
-            colRow.row * lengthOfTileSquare.y),
+        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
+            colRow.row * GameConsts.lengthOfTileSquare.y),
         priority: GamePriority.foregroundTile,
-        size: lengthOfTileSquare + Vector2.all(1),
+        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
       );
       myGame.gameMap.allEls[colRow]!.add(spriteHigh);
       myGame.gameMap.container.add(spriteHigh);
@@ -135,9 +133,9 @@ class MapNode {
               .row}_down.png'); //KyrgyzGame.cachedImgs['$column-${row}_down.png']!;
       var spriteDown = SpriteComponent(
         sprite: Sprite(imageDown),
-        position: Vector2(colRow.column * lengthOfTileSquare.x,
-            colRow.row * lengthOfTileSquare.y),
-        size: lengthOfTileSquare + Vector2.all(1),
+        position: Vector2(colRow.column * GameConsts.lengthOfTileSquare.x,
+            colRow.row * GameConsts.lengthOfTileSquare.y),
+        size: GameConsts.lengthOfTileSquare + Vector2.all(1),
       );
       myGame.gameMap.allEls[colRow]!.add(spriteDown);
       myGame.gameMap.backgroundTile.add(spriteDown);
@@ -211,8 +209,6 @@ class MapNode {
     if(quest != null){
       var dbQuest = myGame.quests[quest]!;
       int startShow = int.parse(obj.getAttribute('startShow') ?? '0');
-      print(startShow);
-      print(dbQuest.currentState);
       int endShow = int.parse(obj.getAttribute('endShow') ?? '999999999999');
       if(startShow > dbQuest.currentState || endShow <= dbQuest.currentState){
         return;
@@ -224,7 +220,7 @@ class MapNode {
         return;
       }
     }
-    colRow ??= LoadedColumnRow(position.x ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.x, position.y ~/ myGame.gameMap.currentGameWorldData!.gameConsts.lengthOfTileSquare.y);
+    colRow ??= LoadedColumnRow(position.x ~/ GameConsts.lengthOfTileSquare.x, position.y ~/ GameConsts.lengthOfTileSquare.y);
     bool isHorReverse = obj.getAttribute('horizontalReverse') == 'true';
     PositionComponent? positionObject;
     switch (name) {
@@ -337,7 +333,6 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'hBridge':
-
         positionObject = HorizontalWoodBridge(position,id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
