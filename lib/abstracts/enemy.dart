@@ -7,9 +7,7 @@ import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/item.dart';
@@ -40,7 +38,7 @@ class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   void update(double dt)
   {
-    position.y -= 5 * dt;
+    position.y -= 10 * dt;
   }
 }
 
@@ -216,7 +214,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void doHurt({required double hurt, bool inArmor=true})
   {
-    if(animation == animDeath || hurt == 0){
+    if(animation == animDeath){
       return;
     }
     if(!internalPhysHurt(hurt,inArmor)){
@@ -310,25 +308,6 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       isRefresh = true;
       return true;
     }
-  }
-
-  @override
-  void update(double dt)
-  {
-    super.update(dt);
-    if(!isRefresh){
-      return;
-    }
-    position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
-    if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
-      return;
-    }
-    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
   }
 
   @override

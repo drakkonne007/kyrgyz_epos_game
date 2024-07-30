@@ -10,6 +10,7 @@ import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
+import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/weapon/weapon.dart';
 
 final List<Vector2> _groundPoints = [
@@ -124,6 +125,12 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
     _defWeapon.coolDown = 0.5;
     _defWeapon.damage = 5;
     add(_defWeapon);
+
+    var temp = DefaultPlayerWeapon(_isBigRoll ? _groundPoints : _groundSmallPoints,collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
+        , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
+    temp.coolDown = 0.5;
+    temp.damage = 2;
+    add(temp);
     _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;
   }
 
@@ -134,7 +141,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
     add(OpacityEffect.by(-1,EffectController(duration: 0.7),onComplete: (){
       gameRef.gameMap.loadedLivesObjs.remove(_id);
       removeFromParent();
-      gameRef.world.destroyBody(_ground);
+      _ground.destroy();
     }));
   }
 

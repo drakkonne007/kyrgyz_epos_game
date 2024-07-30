@@ -225,7 +225,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon?.collisionType = DCollisionType.inactive;
     int currAnim = animationTicker?.currentIndex ?? 0;
     animation = animation!.reversed();
-    animationTicker?.currentIndex = animation!.frames.length - currAnim;
+    int temp = min(animation!.frames.length - 1,animation!.frames.length - currAnim - 1);
+    animationTicker?.currentIndex = temp;
     animationTicker?.onComplete = (){
       chooseStaticAnimation();
     };

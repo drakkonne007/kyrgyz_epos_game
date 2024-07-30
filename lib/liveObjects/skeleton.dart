@@ -79,15 +79,15 @@ class Skeleton extends KyrgyzEnemy
     shiftAroundAnchorsForHit = 50;
     maxLoots = 2;
     chanceOfLoot = 0.07;
-    health = 3;
-    maxSpeed = 30;
+    health = 10;
+    maxSpeed = 60;
     anchor = const Anchor(0.5,0.5);
     Image? spriteImage;
     Image? spriteImageWithShield;
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     _withShieldNow = rand == 0 ? false : true;
     if(_withShieldNow){
-      health = 4;
+      health = 11;
     }
     if (rand == 0) {
       spriteImage = await Flame.images.load(
@@ -335,7 +335,7 @@ class Skeleton extends KyrgyzEnemy
     if (!isRefresh) {
       return;
     }
-    int pos = position.y.toInt() + 10000;
+    int pos = position.y.toInt() + 39;
     if(pos <= 0){
       pos = 1;
     }

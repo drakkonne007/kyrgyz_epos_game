@@ -76,7 +76,7 @@ class GrassGolem extends KyrgyzEnemy
     maxLoots = 1;
     chanceOfLoot = 0.02;
     health = 20;
-    maxSpeed = 20;
+    maxSpeed = 47;
     Image? spriteImage;
     if(spriteVariant == GolemVariant.Water){
       spriteImage = await Flame.images.load(
@@ -151,6 +151,25 @@ class GrassGolem extends KyrgyzEnemy
   void onEndHit()
   {
     selectBehaviour();
+  }
+
+  @override
+  void update(double dt)
+  {
+    super.update(dt);
+    if(!isRefresh){
+      return;
+    }
+    position = groundBody!.position / PhysicVals.physicScale;
+    int pos = position.y.toInt() + 29;
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
+    if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
+      return;
+    }
+    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
   }
 
 

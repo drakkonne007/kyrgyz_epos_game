@@ -101,8 +101,8 @@ class Moose extends KyrgyzEnemy
     distPlayerLength = 10000;
     maxLoots = 2;
     chanceOfLoot = 0.08;
-    health = 4;
-    maxSpeed = 35;
+    health = 20;
+    maxSpeed = 50;
     Image? spriteImage;
     switch(_mooseVariant)
     {
@@ -220,6 +220,25 @@ class Moose extends KyrgyzEnemy
   void onEndHit()
   {
     selectBehaviour();
+  }
+
+  @override
+  void update(double dt)
+  {
+    super.update(dt);
+    if(!isRefresh){
+      return;
+    }
+    position = groundBody!.position / PhysicVals.physicScale;
+    int pos = position.y.toInt() + 26;
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
+    if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
+      return;
+    }
+    groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
   }
 
 }

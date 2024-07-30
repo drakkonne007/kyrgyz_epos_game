@@ -42,9 +42,9 @@ class SkeletonMage extends KyrgyzEnemy
   {
     maxLoots = 2;
     chanceOfLoot = 0.12;
-    health = 3;
+    health = 9;
     anchor = const Anchor(115/220,0.5);
-    maxSpeed = 45;
+    maxSpeed = 55;
     super.onLoad();
     Image? spriteImage;
     Image? spriteImageWithShield;
@@ -169,12 +169,13 @@ class SkeletonMage extends KyrgyzEnemy
   @override
   void selectBehaviour() {
     if (gameRef.gameMap.orthoPlayer == null) {
-      return;    }
+      return;
+    }
 
-    if(!wasSeen){
+    if(!wasSeen && !isHigh){
       isSee();
     }
-    if (wasSeen) {
+    if (wasSeen || isHigh) {
       if (position.distanceToSquared(gameRef.gameMap.orthoPlayer!.position) <
           100 * 100) {
         // _rigidSec = 0.8;
