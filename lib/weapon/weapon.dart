@@ -167,7 +167,8 @@ abstract class PlayerWeapon extends DCollisionEntity
       // }
       // currentCoolDown = 0;
       var temp = other.parent as KyrgyzEnemy;
-      temp.doHurt(hurt: damage ?? 0,inArmor: inArmor);
+      bool isPlayer = parent is MainPlayer;
+      temp.doHurt(hurt: damage ?? 0,inArmor: inArmor, isPlayer: isPlayer);
       // game.add(
       //   ParticleSystemComponent(
       //     position: other.getCenter(),

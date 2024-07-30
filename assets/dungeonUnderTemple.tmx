@@ -1734,7 +1734,7 @@
   </object>
   <object id="1570" name="portal" x="2.66667" y="110.5" width="37.5" height="132">
    <properties>
-    <property name="tar" value="591,1475"/>
+    <property name="tar" value="621,1474"/>
     <property name="wrld" value="dungeonUnderTemple2Floor"/>
    </properties>
   </object>

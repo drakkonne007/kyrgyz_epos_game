@@ -95,6 +95,7 @@ class SkeletonMage extends KyrgyzEnemy
     _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1, from: 0, to: 13,loop: false);
 
     animation = _withShieldNow ? _animIdleShield : animIdle;
+    animationTicker?.onComplete = selectBehaviour;
     size = _spriteSheetSize;
     position = _startPos;
     hitBox = EnemyHitbox(hitBoxPoints,
@@ -113,7 +114,6 @@ class SkeletonMage extends KyrgyzEnemy
     if(rand == 0){
       flipHorizontally();
     }
-    selectBehaviour();
   }
 
   @override
@@ -241,8 +241,11 @@ class SkeletonMage extends KyrgyzEnemy
   }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true})
+  void doHurt({required double hurt, bool inArmor = true, bool isPlayer = false})
   {
+    if(isPlayer){
+      wasSeen = true;
+    }
     if(animation == animDeath || animation == _animDeathShield){
       return;
     }

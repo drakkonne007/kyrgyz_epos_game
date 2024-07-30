@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/overlays/game_styles.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 
 class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
@@ -35,6 +37,66 @@ class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
     }));
   }
   
+  @override
+  void update(double dt)
+  {
+    position.y -= 10 * dt;
+  }
+}
+
+class HitBar extends PositionComponent with HasGameRef<KyrgyzGame>
+{
+  HitBar({required super.position,this.percentHp = 100});
+  double percentHp = 100;
+  late Sprite emptyBar, healthBar;
+  double opacity = 1;
+
+  @override
+  void onLoad()async
+  {
+    size = Vector2(50,20);
+    anchor = Anchor.center;
+    priority = GamePriority.maxPriority;
+    final img = await Flame.images.load('tiles/map/grassLand/UI/UI-elements-64x64.png');
+    SpriteSheet spriteSheet = SpriteSheet(image: img,srcSize: Vector2(64,64));
+    emptyBar = spriteSheet.getSprite(3, 12);
+    healthBar = spriteSheet.getSprite(3, 13);
+    add(TimerComponent(period: 0.5,onTick: removeFromParent));
+  }
+
+  @override
+  void render(Canvas canvas)
+  {
+    emptyBar.render(canvas,size: size, overridePaint: Paint()..color = BasicPalette.white.color.withOpacity(opacity));
+    healthBar.render(canvas,size: Vector2(size.x * percentHp / 100,size.y), overridePaint: Paint()..color = BasicPalette.white.color.withOpacity(opacity));
+  }
+
+  @override
+  void update(double dt)
+  {
+    opacity -= dt;
+  }
+}
+
+
+class HitText extends TextComponent with HasGameRef<KyrgyzGame>
+{
+  HitText(this._text,{required super.position});
+  String _text;
+  final regular = TextPaint(
+      style: hitStateStyle
+  );
+
+  @override
+  void onLoad()async
+  {
+    anchor = Anchor.center;
+    priority = GamePriority.maxPriority;
+    text = _text;
+    textRenderer = regular;
+    add(TimerComponent(period: 0.5,onTick: removeFromParent));
+  }
+
   @override
   void update(double dt)
   {
@@ -67,6 +129,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double chanceOfLoot = 0.01; // 0 - never
   double distPlayerLength = 0;
   int shiftAroundAnchorsForHit = 0;
+  double _maxHp = 0;
 
   @override
   @mustCallSuper
@@ -74,6 +137,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     setChance();
     add(TimerComponent(onTick: checkIsNeedSelfRemove ,repeat: true,period: 2));
+    _maxHp = health;
   }
 
   void  onBeginMyContact(Object other, Contact contact)
@@ -206,14 +270,31 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         return false;
       }
       health -= dd;
+      if(health > 1) {
+        // HitText ddText = HitText(dd.ceil().toString(), position: position - Vector2(0, 10));
+        HitBar hBar = HitBar(position: position - Vector2(0, 10),percentHp: health / _maxHp * 100);
+        gameRef.gameMap.container.add(hBar);
+        // gameRef.gameMap.container.add(ddText);
+      }
     }else{
       health -= hurt;
+      if(health > 1) {
+        // HitText ddText = HitText(
+        //     hurt.ceil().toString(), position: position - Vector2(0, 10));
+        HitBar hBar = HitBar(position: position - Vector2(0, 10),
+            percentHp: health / _maxHp * 100);
+        gameRef.gameMap.container.add(hBar);
+        // gameRef.gameMap.container.add(ddText);
+      }
     }
     return true;
   }
 
-  void doHurt({required double hurt, bool inArmor=true})
+  void doHurt({required double hurt, bool inArmor=true, bool isPlayer = false})
   {
+    if(isPlayer){
+      wasSeen = true;
+    }
     if(animation == animDeath){
       return;
     }

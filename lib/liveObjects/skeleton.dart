@@ -125,6 +125,7 @@ class Skeleton extends KyrgyzEnemy
     _animDeathShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
 
     animation = _withShieldNow ? _animIdleShield : animIdle;
+    animationTicker?.onComplete = selectBehaviour;
     size = _spriteSheetSize;
     position = _startPos;
     hitBox = EnemyHitbox(hitBoxPoints,
@@ -148,7 +149,6 @@ class Skeleton extends KyrgyzEnemy
       flipHorizontally();
     }
     super.onLoad();
-    selectBehaviour();
   }
 
   void chooseHit()
@@ -267,8 +267,11 @@ class Skeleton extends KyrgyzEnemy
    }
 
   @override
-  void doHurt({required double hurt, bool inArmor = true})
+  void doHurt({required double hurt, bool inArmor = true, bool isPlayer = false})
   {
+    if(isPlayer){
+      wasSeen = true;
+    }
     if(animation == animDeath || animation == _animDeathShield){
       return;
     }
@@ -331,6 +334,7 @@ class Skeleton extends KyrgyzEnemy
 
   @override
   void update(double dt) {
+    super.update(dt);
     position = groundBody!.position / PhysicVals.physicScale;
     if (!isRefresh) {
       return;
@@ -340,7 +344,6 @@ class Skeleton extends KyrgyzEnemy
       pos = 1;
     }
     priority = pos;
-    super.update(dt);
     // if(hitBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
     //   parent = gameRef.gameMap.enemyOnPlayer;
     // }else if(parent != gameRef.gameMap.enemyComponent){

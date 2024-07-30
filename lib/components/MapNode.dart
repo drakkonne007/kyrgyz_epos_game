@@ -26,6 +26,7 @@ import 'package:game_flame/liveObjects/mini_creatures/bigFlyingObelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/bird.dart';
 import 'package:game_flame/liveObjects/mini_creatures/campPortal.dart';
 import 'package:game_flame/liveObjects/mini_creatures/campfireSmoke.dart';
+import 'package:game_flame/liveObjects/mini_creatures/crystalEffect.dart';
 import 'package:game_flame/liveObjects/mini_creatures/flying_obelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/frog.dart';
 import 'package:game_flame/liveObjects/mini_creatures/groundFire.dart';
@@ -35,6 +36,7 @@ import 'package:game_flame/liveObjects/mini_creatures/nature_particle_lower.dart
 import 'package:game_flame/liveObjects/mini_creatures/verticalBigRollingWood.dart';
 import 'package:game_flame/liveObjects/mini_creatures/windblow.dart';
 import 'package:game_flame/liveObjects/moose.dart';
+import 'package:game_flame/liveObjects/orc.dart';
 import 'package:game_flame/liveObjects/prisonAssassin.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/liveObjects/skeletonMage.dart';
@@ -265,6 +267,11 @@ class MapNode {
         positionObject = Skeleton(position,id);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'orc':
+      myGame.gameMap.loadedLivesObjs.add(id);
+      positionObject = OrcWarrior(position,id);
+      myGame.gameMap.container.add(positionObject);
+      break;
       case 'gold':
         positionObject = LootOnMap(Gold()..isStaticObject = true, position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
@@ -324,6 +331,11 @@ class MapNode {
         break;
       case 'blueBigFlicker':
         positionObject = BigFlicker(position,ColorState.blue);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'crystalEffect':
+        positionObject = CrystalEffect(position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;

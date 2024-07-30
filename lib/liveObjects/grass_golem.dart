@@ -94,6 +94,7 @@ class GrassGolem extends KyrgyzEnemy
     animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
+    animationTicker?.onComplete = selectBehaviour;
     size = _spriteSheetSize;
     position = _startPos;
     hitBox = EnemyHitbox(_hitBoxPoint,
@@ -117,7 +118,6 @@ class GrassGolem extends KyrgyzEnemy
       flipHorizontally();
     }
     super.onLoad();
-    selectBehaviour();
   }
 
   void changeAttackVerts(int index)

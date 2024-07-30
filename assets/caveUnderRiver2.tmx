@@ -1453,7 +1453,7 @@
   <object id="1655" gid="75072" x="2253.25" y="2730.75" width="87" height="81"/>
   <object id="1656" gid="61877" x="1804.75" y="273" width="160" height="160"/>
   <object id="1657" gid="61877" x="2100.67" y="281.667" width="160" height="160"/>
-  <object id="1659" name="portal" x="1602.17" y="3123.66" width="263.663" height="34.6705">
+  <object id="1659" name="portal" x="1598.17" y="3132.41" width="263.663" height="34.6705">
    <properties>
     <property name="tar" value="1408,317"/>
     <property name="wrld" value="caveUnderRiver"/>

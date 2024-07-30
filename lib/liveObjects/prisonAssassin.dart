@@ -74,6 +74,7 @@ class PrisonAssassin extends KyrgyzEnemy
     animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
+    animationTicker?.onComplete = selectBehaviour;
     size = _spriteSheetSize * zoomScale;
     position = _startPos;
     hitBox = EnemyHitbox(_hitBoxPoints,
@@ -97,7 +98,6 @@ class PrisonAssassin extends KyrgyzEnemy
       flipHorizontally();
     }
     super.onLoad();
-    selectBehaviour();
   }
 
   void onStartHit()
@@ -139,10 +139,10 @@ class PrisonAssassin extends KyrgyzEnemy
   @override
   void update(double dt)
   {
+    super.update(dt);
     if(!isRefresh){
       return;
     }
-    super.update(dt);
     position = groundBody!.position / PhysicVals.physicScale;
     int pos = position.y.toInt() + (30 * zoomScale).toInt();
     if(pos <= 0){

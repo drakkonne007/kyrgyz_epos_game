@@ -20,15 +20,15 @@ List<GameWorldData> fullMaps()
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
-  // list.add(TestMap());
-  // list.add(TopLeftVillage());
-  // list.add(BigTopLeft());
-  // list.addAll(getVillages());
-  // list.add(TopLeftTempleDungeon());
+  list.add(TestMap());
+  list.add(TopLeftVillage());
+  list.add(BigTopLeft());
+  list.addAll(getVillages());
+  list.add(TopLeftTempleDungeon());
   list.add(TampleDungeon());
   list.add(TampleDungeon2Floor());
-  // list.add(CaveUnderRiver());
-  // list.add(CaveUnderRiver2());
+  list.add(CaveUnderRiver());
+  list.add(CaveUnderRiver2());
   return list;
 }
 
@@ -66,6 +66,7 @@ abstract class GameWorldData
   OrientatinType orientation = OrientatinType.orthogonal;
   int _currentText = 0;
   List<String> mapSmallDialogs = [];
+  bool isDungeon = false;
 
   GameWorldData()
   {
@@ -139,6 +140,7 @@ class TopLeftVillage extends GameWorldData {
 class TampleDungeon extends GameWorldData {
   TampleDungeon()
   {
+    isDungeon = true;
     orientation = OrientatinType.orthogonal;
     nameForGame = 'dungeonUnderTemple';
     source = 'dungeonUnderTemple.tmx';
@@ -152,6 +154,7 @@ class TampleDungeon extends GameWorldData {
 class TampleDungeon2Floor extends GameWorldData {
   TampleDungeon2Floor()
   {
+    isDungeon = true;
     orientation = OrientatinType.orthogonal;
     nameForGame = 'dungeonUnderTemple2Floor';
     source = 'dungeonUnderTemple2Floor.tmx';
@@ -165,6 +168,7 @@ class TampleDungeon2Floor extends GameWorldData {
 class TopLeftTempleDungeon extends GameWorldData {
   TopLeftTempleDungeon()
   {
+    isDungeon = true;
     orientation = OrientatinType.orthogonal;
     nameForGame = 'topLeftTempleDungeon';
     source = 'topLeftTempleDungeon.tmx';
@@ -181,6 +185,7 @@ class TopLeftTempleDungeon extends GameWorldData {
 class CaveUnderRiver extends GameWorldData {
   CaveUnderRiver()
   {
+    isDungeon = true;
     orientation = OrientatinType.orthogonal;
     nameForGame = 'caveUnderRiver';
     source = 'caveUnderRiver.tmx';
@@ -198,6 +203,7 @@ class CaveUnderRiver extends GameWorldData {
 class CaveUnderRiver2 extends GameWorldData {
   CaveUnderRiver2()
   {
+    isDungeon = true;
     orientation = OrientatinType.orthogonal;
     nameForGame = 'caveUnderRiver2';
     source = 'caveUnderRiver2.tmx';

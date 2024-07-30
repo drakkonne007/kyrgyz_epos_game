@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="crystal particle effects-shiny1" tilewidth="87" tileheight="81" tilecount="8" columns="8">
  <image source="tiles/map/mountainLand/Props/Animated props/crystal particle effects-shiny1.png" width="696" height="81"/>
- <tile id="0" type="crystalEffect1">
+ <tile id="0" type="crystalEffect">
   <animation>
    <frame tileid="0" duration="150"/>
    <frame tileid="1" duration="150"/>
@@ -13,4 +13,11 @@
    <frame tileid="7" duration="150"/>
   </animation>
  </tile>
+ <tile id="1" type="crystalEffect"/>
+ <tile id="2" type="crystalEffect"/>
+ <tile id="3" type="crystalEffect"/>
+ <tile id="4" type="crystalEffect"/>
+ <tile id="5" type="crystalEffect"/>
+ <tile id="6" type="crystalEffect"/>
+ <tile id="7" type="crystalEffect"/>
 </tileset>

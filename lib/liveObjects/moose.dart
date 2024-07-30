@@ -155,6 +155,7 @@ class Moose extends KyrgyzEnemy
     }
     position = _startPos;
     animation = animIdle;
+    animationTicker?.onComplete = selectBehaviour;
     animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     size = _spriteSheetSize;
     const double percentOfWidth = 158/347;
@@ -184,7 +185,6 @@ class Moose extends KyrgyzEnemy
       flipHorizontally();
     }
     super.onLoad();
-    selectBehaviour();
   }
 
   void onStartHit()
