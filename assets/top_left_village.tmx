@@ -1955,19 +1955,19 @@
   <object id="1249" x="479.152" y="1782.64">
    <polygon points="0,0 -4.27273,0.454545 -11.4545,4 -15.2727,10.1818 -18.8182,21.0909 -19.3636,30.3636 -8.27273,37.4545 10.6364,36.3636 22.4545,31.9091 13.3636,7.27273 10.3636,3.36364 6.54545,1.27273"/>
   </object>
-  <object id="1252" name="portal" x="1623.83" y="3142.83" width="306.333" height="11.5">
+  <object id="1252" name="portal" x="1623.83" y="3142.83" width="306.333" height="21.1667">
    <properties>
     <property name="tar" value="7887,30"/>
     <property name="wrld" value="topLeft"/>
    </properties>
   </object>
-  <object id="1254" name="portal" x="2710.83" y="2578.25" width="92.333" height="21.375">
+  <object id="1254" name="portal" x="2730.83" y="2588.5" width="44.833" height="21.375">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage0"/>
    </properties>
   </object>
-  <object id="1255" name="portal" x="2347" y="2458.33" width="88.3333" height="8.83333">
+  <object id="1255" name="portal" x="2371.73" y="2462.33" width="32.1515" height="24.6515">
    <properties>
     <property name="tar" value="4787,9467"/>
     <property name="wrld" value="topLeftTempleDungeon"/>
@@ -2028,7 +2028,7 @@
    <polygon points="-14.6667,5.2278 58.8333,13.7666 228.667,8.53875 290.5,-2.78817 287.667,-25.6162 279.387,-60.4781 -6.5,-60.6425"/>
   </object>
   <object id="1278" x="1253.68" y="818.789">
-   <polygon points="-1.07927,-1.1604 34.1211,17.4387 98.7534,22.6278 174.842,22.6278 237.71,13.3446 273.767,-8.37671 274.405,-53.3784 -2.42836,-54.5388"/>
+   <polygon points="4.04573,-2.4104 36.2461,13.9387 98.7534,21.1278 185.342,20.3778 230.71,13.5946 262.153,3.29844 270.517,-17.8767 274.405,-53.3784 -2.42836,-54.5388"/>
   </object>
   <object id="1279" x="351.748" y="910">
    <polygon points="-0.0360624,12.2445 31.2971,24.1421 67.5497,30.1011 166.342,33.4173 229.693,21.683 260.807,8.96012 263.419,-46.9373 -2.33114,-47.9577"/>
@@ -2072,67 +2072,67 @@
   <object id="1301" x="1209" y="2934">
    <polyline points="0,0 0.5,208 411.5,206.5 411.5,230.667 720,230.333 720.091,204.182 733.182,204.182 733.727,208.182 973.909,208.364 974.455,1.09091"/>
   </object>
-  <object id="1302" name="portal" x="458.902" y="2250.85" width="92.333" height="20.9545">
+  <object id="1302" name="portal" x="496.538" y="2263.94" width="37.7875" height="28.2272">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage1"/>
    </properties>
   </object>
-  <object id="1303" name="portal" x="1186.79" y="1957.58" width="92.333" height="19.0455">
+  <object id="1303" name="portal" x="1237.97" y="1966.31" width="36.1512" height="27.1364">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage2"/>
    </properties>
   </object>
-  <object id="1304" name="portal" x="2067.83" y="1931.3" width="92.333" height="18.5">
+  <object id="1304" name="portal" x="2098.45" y="1940.42" width="29.083" height="23.5">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage3"/>
    </properties>
   </object>
-  <object id="1305" name="portal" x="775.47" y="1399.52" width="92.333" height="20.9545">
+  <object id="1305" name="portal" x="811.47" y="1412.27" width="38.833" height="29.4545">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage4"/>
    </properties>
   </object>
-  <object id="1306" name="portal" x="435.834" y="932.795" width="92.333" height="20.9545">
+  <object id="1306" name="portal" x="477.107" y="944.795" width="40.8785" height="32.2272">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage7"/>
    </properties>
   </object>
-  <object id="1307" name="portal" x="1334.33" y="820.523" width="92.333" height="20.9545">
+  <object id="1307" name="portal" x="1359.58" y="845.773" width="30.833" height="19.7045">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage8"/>
    </properties>
   </object>
-  <object id="1308" name="portal" x="2055.58" y="1120.52" width="92.333" height="20.9545">
+  <object id="1308" name="portal" x="2084.7" y="1124.52" width="29.458" height="26.9545">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage6"/>
    </properties>
   </object>
-  <object id="1309" name="portal" x="2686.33" y="1335.52" width="92.333" height="20.9545">
+  <object id="1309" name="portal" x="2710.7" y="1348.02" width="28.333" height="31.4545">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage5"/>
    </properties>
   </object>
-  <object id="1310" name="portal" x="2723.83" y="486.023" width="92.333" height="20.9545">
+  <object id="1310" name="portal" x="2760.38" y="495.114" width="25.7875" height="20.9545">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage9"/>
    </properties>
   </object>
-  <object id="1311" name="portal" x="1575.83" y="407.523" width="92.333" height="20.9545">
+  <object id="1311" name="portal" x="1603.33" y="417.023" width="30.833" height="23.7045">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage10"/>
    </properties>
   </object>
-  <object id="1312" name="portal" x="436.709" y="396.898" width="92.333" height="20.9545">
+  <object id="1312" name="portal" x="462.209" y="412.148" width="42.083" height="27.7045">
    <properties>
     <property name="tar" value="90,512"/>
     <property name="wrld" value="yurtaInTopLeftVillage11"/>
@@ -2308,7 +2308,7 @@
   <object id="1423" name="strMerchant" x="2098" y="854">
    <point/>
   </object>
-  <object id="1429" name="portal" x="1538.17" y="2995.58" width="26.6666" height="119.5">
+  <object id="1429" name="portal" x="1537.5" y="3053.58" width="30.9999" height="31.5">
    <properties>
     <property name="tar" value="733,799"/>
     <property name="wrld" value="testMap"/>

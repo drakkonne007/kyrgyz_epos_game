@@ -18,6 +18,7 @@ class Portal extends PositionComponent with HasGameRef<KyrgyzGame> {
   @override
   Future<void> onLoad() async
   {
+    anchor = Anchor.center;
     add(ObjectHitbox(getPointsForActivs(-size / 2, size),
         collisionType: DCollisionType.active,
         isSolid: true,

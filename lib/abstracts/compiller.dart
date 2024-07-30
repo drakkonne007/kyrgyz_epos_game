@@ -78,7 +78,7 @@ Future precompileAll() async
                 }else{
                   name = obj.name;
                 }
-                Vector2 center = Vector2(obj.x + obj.width / 2, obj.y - obj.height / 2);
+                Vector2 center = Vector2(obj.x + obj.width / 2, obj.gid != null ? obj.y - obj.height / 2 : obj.y + obj.height / 2);
 
                 if (center.x ~/ GameConsts.lengthOfTileSquare.x == cols && center.y ~/ GameConsts.lengthOfTileSquare.y == rows) {
                   newObjs +=
