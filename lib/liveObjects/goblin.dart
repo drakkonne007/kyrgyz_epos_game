@@ -124,8 +124,6 @@ class Goblin extends KyrgyzEnemy
     add(weapon!);
     weapon?.damage = 4;
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    var temUs = bodyDef.userData as BodyUserData;
-    temUs.onBeginMyContact = onGround;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_ground));
     groundBody?.createFixture(fx);

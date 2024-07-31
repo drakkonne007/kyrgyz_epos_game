@@ -104,8 +104,6 @@ class GrassGolem extends KyrgyzEnemy
     add(weapon!);
     weapon?.damage = 3;
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    var temUs = bodyDef.userData as BodyUserData;
-    temUs.onBeginMyContact = onGround;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38), scale: PhysicVals.physicScale)));
     groundBody?.createFixture(fx);

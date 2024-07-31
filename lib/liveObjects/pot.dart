@@ -16,84 +16,98 @@ import 'package:game_flame/abstracts/item.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
-class SkeletonMage extends KyrgyzEnemy
+final List<Vector2> _ground = [
+  Vector2(-12.2508,15.3288) * PhysicVals.physicScale
+  ,Vector2(-8.96699,28.8095) * PhysicVals.physicScale
+  ,Vector2(7.62466,28.8095) * PhysicVals.physicScale
+  ,Vector2(11.9454,15.8473) * PhysicVals.physicScale
+  ,];
+
+final List<Vector2> _hitBoxPoints = [
+  Vector2(-14.8432,-3.16395)
+  ,Vector2(-8.4485,28.9824)
+  ,Vector2(7.45183,28.9824)
+  ,Vector2(14.7107,-2.64546)
+  ,Vector2(0.365811,-8.34884)
+  ,];
+
+final List<Vector2> _attack1ind12 = [ //17 всё
+Vector2(9.19474,14.9207)
+,Vector2(26.2462,19.5292)
+,Vector2(28.2048,21.9487)
+,Vector2(35.2328,21.7183)
+,Vector2(38.8044,18.7227)
+,Vector2(37.9979,11.4643)
+,Vector2(36.3849,8.46881)
+,Vector2(29.357,8.81444)
+,Vector2(25.4397,12.9621)
+,Vector2(11.7294,9.96657)
+,];
+
+//Вторая атака будет на 18 индексе и в этой точке: [
+// Vector2(0.852862,-11.841)
+// ,];
+
+class Pot extends KyrgyzEnemy
 {
-  SkeletonMage(this._startPos,int id,{this.isHigh = false}){this.id = id;}
-  late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield, animAttackStart, animAttackEnd, animAttackLong, animBlock, animThrow;
+  Pot(this._startPos,int id,{this.isHigh = false}){this.id = id;}
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   bool isHigh;
-  bool _withShieldNow = false;
   final double dist = 352 * 352;
+  final Vector2 srcSize = Vector2(160,128);
+  late SpriteAnimation animRevealing;
+  bool wakeUp = false;
 
-  final List<Vector2> hitBoxPoints = [
-    Vector2(113-115,103-110),
-    Vector2(109-115,114-110),
-    Vector2(100-115,118-110),
-    Vector2(101-115,148-110),
-    Vector2(122-115,148-110),
-    Vector2(124-115,108-110),
-    Vector2(120-115,103-110)
-  ];
 
   @override
   Future<void> onLoad() async
   {
     maxLoots = 2;
     chanceOfLoot = 0.12;
-    health = 9;
-    anchor = const Anchor(115/220,0.5);
-    maxSpeed = 55;
-    Image? spriteImage;
-    Image? spriteImageWithShield;
+    health = 6;
+    anchor = Anchor.center;
+    maxSpeed = 35;
     if(isHigh){
       priority = GamePriority.high + 1;
     }
 
-    int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    _withShieldNow = rand == 0 ? false : true;
-    if(_withShieldNow){
-      health++;
-    }
-    if (rand == 0) {
-      spriteImage = await Flame.images.load(
-          'tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton no shield/Mage Skeleton - all animations.png');
-    }else{
-      spriteImage = await Flame.images.load(
-          'tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton no shield/Mage Skeleton - all animations.png');
-    }
-    if (rand == 0) {
-      spriteImageWithShield = await Flame.images.load(
-          'tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton with shield/Mage Skeleton - all animations.png');
-    } else {
-      spriteImageWithShield = await Flame.images.load(
-          'tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton with shield/with rusty shield/Mage Skeleton - all animations-with rusty shield.png');
-    }
-    final spriteSheet = SpriteSheet(image: spriteImage,
-        srcSize: _spriteSheetSize);
-    final spriteSheetWithShield = SpriteSheet(image: spriteImageWithShield,
-        srcSize: _spriteSheetSize);
+    SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-atk1.png'
+    ), srcSize: srcSize);
+    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.05, from: 0, loop: false);
 
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
-    animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 8,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
+    spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-death.png'
+    ), srcSize: srcSize);
+    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0, loop: false);
 
-    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackStartShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
-    _animAttackLongShield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackEndShield = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
-    _animBlock = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animHurtShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 8,loop: false);
-    _animThrowShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1, from: 0, to: 13,loop: false);
+    spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-idle.png'
+    ), srcSize: srcSize);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
 
-    animation = _withShieldNow ? _animIdleShield : animIdle;
-    animationTicker?.onComplete = selectBehaviour;
+    spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-walk.png'
+    ), srcSize: srcSize);
+    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+
+    spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-hurt.png'
+    ), srcSize: srcSize);
+    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06, from: 0, loop: false);
+
+    spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-atk2.png'
+    ), srcSize: srcSize);
+    animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.05, from: 0, loop: false);
+
+    spriteSheet = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-revealing itself.png'
+    ), srcSize: srcSize);
+    animRevealing = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+
+    animation = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 1, loop: false);
     position = _startPos;
     hitBox = EnemyHitbox(hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -124,8 +138,8 @@ class SkeletonMage extends KyrgyzEnemy
   void chooseHit()
   {
     animation = null;
-    variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
-    if(variantOfHit == 0){
+    _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
+    if(_variantOfHit == 0){
       animation = _withShieldNow ? _animAttackLongShield :  animAttackLong;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onFrame = longAttack;

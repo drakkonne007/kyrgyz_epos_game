@@ -13,7 +13,7 @@ import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 
-const double zoomScale = 1.2;
+const double zoomScale = 1.3;
 
 final List<Vector2> _hitBoxPoints = [ //вторая колонка
   Vector2(110 - 110 ,35 - 48) * zoomScale,
@@ -81,8 +81,6 @@ class PrisonAssassin extends KyrgyzEnemy
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    var temUs = bodyDef.userData as BodyUserData;
-    temUs.onBeginMyContact = onGround;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_groundBoxPoints));
     groundBody?.createFixture(fx);

@@ -151,8 +151,6 @@ class OrcWarrior extends KyrgyzEnemy
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    var temUs = bodyDef.userData as BodyUserData;
-    temUs.onBeginMyContact = onGround;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_ground));
     groundBody?.createFixture(fx);

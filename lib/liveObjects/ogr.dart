@@ -12,7 +12,7 @@ import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'dart:math' as math;
 
-const double zoomScale = 1.2;
+const double zoomScale = 1.4;
 
 final List<Vector2> _ground = [
   Vector2(-8.69533,0.113669) * PhysicVals.physicScale * zoomScale
@@ -152,8 +152,6 @@ class Ogr extends KyrgyzEnemy
     add(weapon!);
     weapon?.damage = 4;
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    var temUs = bodyDef.userData as BodyUserData;
-    temUs.onBeginMyContact = onGround;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_ground));
     groundBody?.createFixture(fx);

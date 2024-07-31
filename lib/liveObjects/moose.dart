@@ -163,8 +163,6 @@ class Moose extends KyrgyzEnemy
         ,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
-    var temUs = bodyDef.userData as BodyUserData;
-    temUs.onBeginMyContact = onGround;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     var massData = groundBody!.getMassData();
     massData.mass = 1400;

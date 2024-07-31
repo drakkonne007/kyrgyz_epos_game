@@ -359,11 +359,6 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
   }
 
-  void onGround(Object obj, Contact contact)
-  {
-    print('enemy(((');
-  }
-
   void death(SpriteAnimation? anim)
   {
     speed.x = 0;
