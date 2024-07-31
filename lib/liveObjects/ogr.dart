@@ -12,49 +12,51 @@ import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'dart:math' as math;
 
+const double zoomScale = 1.2;
+
 final List<Vector2> _ground = [
-  Vector2(-8.69533,0.113669) * PhysicVals.physicScale
-  ,Vector2(-11.7451,14.4909) * PhysicVals.physicScale
-  ,Vector2(12.2171,14.9992) * PhysicVals.physicScale
-  ,Vector2(9.31257,0.0410569) * PhysicVals.physicScale
+  Vector2(-8.69533,0.113669) * PhysicVals.physicScale * zoomScale
+  ,Vector2(-11.7451,14.4909) * PhysicVals.physicScale * zoomScale
+  ,Vector2(12.2171,14.9992) * PhysicVals.physicScale * zoomScale
+  ,Vector2(9.31257,0.0410569) * PhysicVals.physicScale * zoomScale
   ,];
 
 final List<Vector2> _attack1ind7 = [
-  Vector2(-9.53588,0.313003)
-  ,Vector2(-18.0629,-6.99587)
-  ,Vector2(-15.9514,-15.5229)
-  ,Vector2(-2.87669,-9.26974)
+  Vector2(-9.53588,0.313003) * zoomScale
+  ,Vector2(-18.0629,-6.99587) * zoomScale
+  ,Vector2(-15.9514,-15.5229) * zoomScale
+  ,Vector2(-2.87669,-9.26974) * zoomScale
   ,];
 
 final List<Vector2> _attack1ind8 = [
-  Vector2(10.7823,-5.18749)
-  ,Vector2(3.16294,8.78138)
-  ,Vector2(23.058,12.8733)
-  ,Vector2(42.1065,2.57299)
-  ,Vector2(45.9162,-12.948)
-  ,Vector2(34.6282,-26.4936)
-  ,Vector2(17.5551,-29.7388)
-  ,Vector2(10.359,-18.0276)
-  ,Vector2(34.6282,-15.6289)
-  ,Vector2(25.7389,-4.0587)
+  Vector2(10.7823,-5.18749) * zoomScale
+  ,Vector2(3.16294,8.78138) * zoomScale
+  ,Vector2(23.058,12.8733) * zoomScale
+  ,Vector2(42.1065,2.57299) * zoomScale
+  ,Vector2(45.9162,-12.948) * zoomScale
+  ,Vector2(34.6282,-26.4936) * zoomScale
+  ,Vector2(17.5551,-29.7388) * zoomScale
+  ,Vector2(10.359,-18.0276) * zoomScale
+  ,Vector2(34.6282,-15.6289) * zoomScale
+  ,Vector2(25.7389,-4.0587) * zoomScale
   ,];
 
 final List<Vector2> _attack1ind9 = [
-  Vector2(24.5266,-29.0825)
-  ,Vector2(37.3453,-16.2637)
-  ,Vector2(27.1827,4.29243)
-  ,Vector2(38.8466,-1.2508)
-  ,Vector2(43.3505,-14.416)
-  ,Vector2(36.3059,-26.1954)
+  Vector2(24.5266,-29.0825) * zoomScale
+  ,Vector2(37.3453,-16.2637) * zoomScale
+  ,Vector2(27.1827,4.29243) * zoomScale
+  ,Vector2(38.8466,-1.2508) * zoomScale
+  ,Vector2(43.3505,-14.416) * zoomScale
+  ,Vector2(36.3059,-26.1954) * zoomScale
   ,];
 
 
 final List<Vector2> _hitBoxPoint = [
-  Vector2(-8.69533,0.113669)
-  ,Vector2(-11.7451,14.4909)
-  ,Vector2(12.2171,14.9992)
-  ,Vector2(4.63,-29.9448)
-  ,Vector2(-4.78062,-28.7938)
+  Vector2(-8.69533,0.113669) * zoomScale
+  ,Vector2(-11.7451,14.4909) * zoomScale
+  ,Vector2(12.2171,14.9992) * zoomScale
+  ,Vector2(4.63,-29.9448) * zoomScale
+  ,Vector2(-4.78062,-28.7938) * zoomScale
   ,];
 
 class Ogr extends KyrgyzEnemy
@@ -162,6 +164,7 @@ class Ogr extends KyrgyzEnemy
     if(rand == 0){
       flipHorizontally();
     }
+    size *= zoomScale;
     super.onLoad();
   }
 
@@ -200,7 +203,7 @@ class Ogr extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt() + 15;
+    int pos = position.y.toInt() + (15 * zoomScale).toInt();
     if(pos <= 0){
       pos = 1;
     }
