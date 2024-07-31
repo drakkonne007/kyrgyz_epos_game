@@ -19,6 +19,7 @@ import 'package:game_flame/Obstacles/fireCandelubr.dart';
 import 'package:game_flame/Obstacles/lightConus.dart';
 import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/liveObjects/goblin.dart';
 import 'package:game_flame/liveObjects/mini_creatures/BigFlicker.dart';
 import 'package:game_flame/liveObjects/mini_creatures/WoodStairway.dart';
 import 'package:game_flame/liveObjects/mini_creatures/arrowSpawn.dart';
@@ -36,6 +37,7 @@ import 'package:game_flame/liveObjects/mini_creatures/nature_particle_lower.dart
 import 'package:game_flame/liveObjects/mini_creatures/verticalBigRollingWood.dart';
 import 'package:game_flame/liveObjects/mini_creatures/windblow.dart';
 import 'package:game_flame/liveObjects/moose.dart';
+import 'package:game_flame/liveObjects/ogr.dart';
 import 'package:game_flame/liveObjects/orc.dart';
 import 'package:game_flame/liveObjects/prisonAssassin.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
@@ -268,10 +270,20 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'orc':
-      myGame.gameMap.loadedLivesObjs.add(id);
-      positionObject = OrcWarrior(position,id);
-      myGame.gameMap.container.add(positionObject);
-      break;
+        myGame.gameMap.loadedLivesObjs.add(id);
+        positionObject = OrcWarrior(position,id);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'ogr':
+        myGame.gameMap.loadedLivesObjs.add(id);
+        positionObject = Ogr(position,id);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'goblin':
+        myGame.gameMap.loadedLivesObjs.add(id);
+        positionObject = Goblin(position,id);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'gold':
         positionObject = LootOnMap(Gold()..isStaticObject = true, position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);

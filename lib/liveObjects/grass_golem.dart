@@ -89,19 +89,18 @@ class GrassGolem extends KyrgyzEnemy
         srcSize: _spriteSheetSize);
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 12,loop: false);
+    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.05, from: 0,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0, to: 12,loop: false);
     animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
-    size = _spriteSheetSize;
     position = _startPos;
     hitBox = EnemyHitbox(_hitBoxPoint,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     weapon = DefaultEnemyWeapon(
-        _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+        _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
     weapon?.damage = 3;
     bodyDef.position = _startPos * PhysicVals.physicScale;
@@ -120,37 +119,15 @@ class GrassGolem extends KyrgyzEnemy
     super.onLoad();
   }
 
-  void changeAttackVerts(int index)
+  @override
+  void changeVertsInWeapon(int index)
   {
-    if(index == 1){
-      weapon?.changeVertices(_ind1);
-      weapon?.collisionType = DCollisionType.active;
-    }else if(index == 2){
-      weapon?.changeVertices(_ind2,isLoop: true);
-    }else if(index == 8){
+    if(index == 7){
       weapon?.changeVertices(_ind3,isLoop: true);
-    }else if(index == 12){
+      weapon?.collisionType = DCollisionType.active;
+    }else if(index == 10){
       weapon?.collisionType = DCollisionType.inactive;
-      weapon?.changeVertices(_ind1,isLoop: true);
     }
-  }
-
-  void onStartHit()
-  {
-    weapon?.currentCoolDown = weapon?.coolDown ?? 0;
-    speed.x = 0;
-    speed.y = 0;
-    animation = null;
-    animation = animAttack;
-    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-    animationTicker?.onFrame = changeAttackVerts;
-    animationTicker?.onComplete = onEndHit;
-    wasHit = true;
-  }
-
-  void onEndHit()
-  {
-    selectBehaviour();
   }
 
   @override
@@ -171,8 +148,4 @@ class GrassGolem extends KyrgyzEnemy
     }
     groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
   }
-
-
-  @override
-  Map<MagicDamage, int> magicDamages = {};
 }

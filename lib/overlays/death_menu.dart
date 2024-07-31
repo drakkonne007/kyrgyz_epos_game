@@ -22,9 +22,8 @@ class DeathMenu extends StatelessWidget
               children: [
                 ElevatedButton(
                   onPressed: () async {
+                    await _game.loadGame(0);
                     await _game.loadNewMap();
-                    // _game.showOverlay(overlayName: OrthoJoystick.id,isHideOther: true);
-                    // _game.showOverlay(overlayName: HealthBar.id);
                     _game.resumeEngine();
                   },
                   child: const Text('Да'),),

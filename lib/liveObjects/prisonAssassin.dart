@@ -70,12 +70,12 @@ class PrisonAssassin extends KyrgyzEnemy
     animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 6, loop: false);
     animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0,to: 9, loop: false);
     animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.08, from: 0,to: 11, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.05, from: 0, to: 7,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 7,loop: false);
     animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
-    size = _spriteSheetSize * zoomScale;
+    size *= zoomScale;
     position = _startPos;
     hitBox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -90,7 +90,7 @@ class PrisonAssassin extends KyrgyzEnemy
     massData.mass = 1000;
     groundBody!.setMassData(massData);
     weapon = DefaultEnemyWeapon(
-        weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+        weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
     weapon?.damage = 3;
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -100,21 +100,8 @@ class PrisonAssassin extends KyrgyzEnemy
     super.onLoad();
   }
 
-  void onStartHit()
-  {
-    weapon?.currentCoolDown = weapon?.coolDown ?? 0;
-    speed.x = 0;
-    speed.y = 0;
-    groundBody?.clearForces();
-    animation = null;
-    math.Random().nextInt(2) == 0 ? animation = animAttack : animation = animAttack2;
-    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-    animationTicker?.onFrame = changeAttackVerts;
-    animationTicker?.onComplete = onEndHit;
-    wasHit = true;
-  }
-
-  void changeAttackVerts(int index)
+  @override
+  void changeVertsInWeapon(int index)
   {
     if(animation == animAttack){
       if(index == 3){
@@ -129,11 +116,6 @@ class PrisonAssassin extends KyrgyzEnemy
         weapon?.collisionType = DCollisionType.inactive;
       }
     }
-  }
-
-  void onEndHit()
-  {
-    selectBehaviour();
   }
 
   @override

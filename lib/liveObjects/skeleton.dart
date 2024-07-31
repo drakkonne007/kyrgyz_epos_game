@@ -24,8 +24,6 @@ class Skeleton extends KyrgyzEnemy
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackShield, _animAttack2Shield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
-  late DefaultEnemyWeapon _defWeapon;
-  int _variantOfHit = 0;
   bool _withShieldNow = false;
 
   final List<Vector2> hitBoxPoints = [
@@ -110,23 +108,22 @@ class Skeleton extends KyrgyzEnemy
 
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
-    animAttack2 = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 13, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0, to: 8,loop: false);
+    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.07, from: 0,loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 13, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.05, from: 0, to: 8,loop: false);
     animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0, to: 13,loop: false);
 
     _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08, from: 0,loop: false);
-    _animAttack2Shield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 13, loop: false);
+    _animAttackShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.07, from: 0,loop: false);
+    _animAttack2Shield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 13, loop: false);
     _animBlock = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animHurtShield = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.07, from: 0, to: 8,loop: false);
+    _animHurtShield = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.05, from: 0, to: 8,loop: false);
     _animThrowShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 8,loop: false);
     _animDeathShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
 
     animation = _withShieldNow ? _animIdleShield : animIdle;
     animationTicker?.onComplete = selectBehaviour;
-    size = _spriteSheetSize;
     position = _startPos;
     hitBox = EnemyHitbox(hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -140,10 +137,10 @@ class Skeleton extends KyrgyzEnemy
     var massData = groundBody!.getMassData();
     massData.mass = 800;
     groundBody!.setMassData(massData);
-    _defWeapon = DefaultEnemyWeapon(_attack1PointsOnStart,collisionType: DCollisionType.inactive,isStatic: false,isLoop:true,game: gameRef
+    weapon = DefaultEnemyWeapon(_attack1PointsOnStart,collisionType: DCollisionType.inactive,isStatic: false,isLoop:true,game: gameRef
         ,isSolid: false,onStartWeaponHit: null,onEndWeaponHit: null);
-    _defWeapon.damage = 3;
-    add(_defWeapon);
+    weapon!.damage = 3;
+    add(weapon!);
     rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();
@@ -151,16 +148,17 @@ class Skeleton extends KyrgyzEnemy
     super.onLoad();
   }
 
+  @override
   void chooseHit()
   {
-    _defWeapon.currentCoolDown = _defWeapon.coolDown;
+    weapon!.currentCoolDown = weapon!.coolDown;
     wasHit = true;
     animation = null;
     speed.x = 0;
     speed.y = 0;
     groundBody?.clearForces();
-    _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(_variantOfHit == 0){
+    variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(variantOfHit == 0){
       animation = _withShieldNow ? _animAttackShield : animAttack;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     }else{
@@ -171,25 +169,26 @@ class Skeleton extends KyrgyzEnemy
     animationTicker?.onFrame = changeVertsInWeapon;
   }
 
+  @override
   void changeVertsInWeapon(int index)
   {
-    if(_variantOfHit == 0){
+    if(variantOfHit == 0){
       if(index == 2 || index == 3){
-        _defWeapon.changeVertices(_attack1PointsOnStart,isLoop: true);
-        _defWeapon.collisionType = DCollisionType.active;
+        weapon!.changeVertices(_attack1PointsOnStart,isLoop: true);
+        weapon!.collisionType = DCollisionType.active;
       }else if(index == 4 || index == 5){
-        _defWeapon.changeVertices(_attack1PointsOnEnd,isLoop: true);
+        weapon!.changeVertices(_attack1PointsOnEnd,isLoop: true);
       }else{
-        _defWeapon.collisionType = DCollisionType.inactive;
+        weapon!.collisionType = DCollisionType.inactive;
       }
     }else{
       if(index == 2){
-        _defWeapon.changeVertices(_attack2PointsOnStart,isLoop: true);
-        _defWeapon.collisionType = DCollisionType.active;
+        weapon!.changeVertices(_attack2PointsOnStart,isLoop: true);
+        weapon!.collisionType = DCollisionType.active;
       }else if(index == 4){
-        _defWeapon.changeVertices(_attack2PointsOnEnd,isLoop: true);
+        weapon!.changeVertices(_attack2PointsOnEnd,isLoop: true);
       }else if(index == 7){
-        _defWeapon.collisionType = DCollisionType.inactive;
+        weapon!.collisionType = DCollisionType.inactive;
       }
     }
   }
@@ -202,7 +201,7 @@ class Skeleton extends KyrgyzEnemy
     }
     if(wasSeen) {
       if (isNearPlayer(distPlayerLength)) {
-        _defWeapon.currentCoolDown = _defWeapon.coolDown;
+        weapon!.currentCoolDown = weapon!.coolDown;
         var pl = gameRef.gameMap.orthoPlayer!;
         if (pl.position.x > position.x) {
           if (isFlippedHorizontally) {
@@ -275,7 +274,6 @@ class Skeleton extends KyrgyzEnemy
     if(animation == animDeath || animation == _animDeathShield){
       return;
     }
-    _defWeapon.collisionType = DCollisionType.inactive;
     if(inArmor) {
       if (_withShieldNow &&
           ((position.x < gameRef.gameMap.orthoPlayer!.position.x &&
@@ -302,8 +300,14 @@ class Skeleton extends KyrgyzEnemy
       return;
     }
     if(health <1){
+      weapon!.collisionType = DCollisionType.inactive;
       death(_withShieldNow ? _animDeathShield : animDeath);
     }else{
+      if((animation == animAttack || animation == animAttack2 || animation == _animAttackShield || animation == _animAttack2Shield)
+      && animationTicker!.currentIndex > 1){
+        return;
+      }
+      weapon!.collisionType = DCollisionType.inactive;
       if(_withShieldNow){
         int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
         if (rand == 0) {

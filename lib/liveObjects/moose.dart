@@ -122,9 +122,9 @@ class Moose extends KyrgyzEnemy
       animMove =
           spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 8, to: 16, loop: false);
       animAttack = spriteSheet.createAnimation(
-          row: 0, stepTime: 0.08, from: 16,to: 46, loop: false);
+          row: 0, stepTime: 0.06, from: 16,to: 46, loop: false);
       animHurt = spriteSheet.createAnimation(row: 0,
-          stepTime: 0.07,
+          stepTime: 0.06,
           from: 46,
           to: 52,
           loop: false);
@@ -141,9 +141,9 @@ class Moose extends KyrgyzEnemy
       animMove =
           spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8, loop: false);
       animAttack = spriteSheet.createAnimation(
-          row: 2, stepTime: 0.08, from: 0, loop: false);
+          row: 2, stepTime: 0.06, from: 0, loop: false);
       animHurt = spriteSheet.createAnimation(row: 3,
-          stepTime: 0.07,
+          stepTime: 0.06,
           from: 0,
           to: 6,
           loop: false);
@@ -156,8 +156,6 @@ class Moose extends KyrgyzEnemy
     position = _startPos;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
-    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-    size = _spriteSheetSize;
     const double percentOfWidth = 158/347;
     Vector2 staticConstAnchor = Vector2(size.x * percentOfWidth,size.y/2);
     anchor = const Anchor(percentOfWidth, 0.5);
@@ -177,7 +175,7 @@ class Moose extends KyrgyzEnemy
     //     , collisionType: DCollisionType.passive, isSolid: false, isStatic: false, isLoop: true, gameKyrgyz: gameRef);
     // _ground.onlyForPlayer = true;
     weapon = DefaultEnemyWeapon(ind1, collisionType: DCollisionType.inactive, isSolid: false, isStatic: false
-        , onStartWeaponHit: onStartHit, onEndWeaponHit: onEndHit, isLoop: true, game: game);
+        , onStartWeaponHit: null, onEndWeaponHit: null, isLoop: true, game: game);
     add(weapon!);
     weapon!.damage = 3;
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
@@ -187,39 +185,22 @@ class Moose extends KyrgyzEnemy
     super.onLoad();
   }
 
-  void onStartHit()
+  @override
+  void changeVertsInWeapon(int index)
   {
-    weapon?.currentCoolDown = weapon?.coolDown ?? 0;
-    speed.x = 0;
-    speed.y = 0;
-    groundBody?.clearForces();
-    animation = null;
-    animation = animAttack;
-    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-    animationTicker?.onFrame = changeAttackVerts;
-    animationTicker?.onComplete = onEndHit;
-    wasHit = true;
-  }
-
-  void changeAttackVerts(int index)
-  {
-    if(index == 3) {
+    // if(index == 3) {
+    //   weapon?.changeVertices(ind1,isLoop: true);
+    // }
+    if(index == 7){
       weapon?.collisionType = DCollisionType.active;
-      weapon?.changeVertices(ind1,isLoop: true);
-    }else if(index == 7){
       weapon?.changeVertices(ind2,isLoop: true);
     }else if(index == 9){
       weapon?.changeVertices(ind3,isLoop: true);
     }else if(index == 10){
       weapon?.changeVertices(rad,radius: 55);
-    }else if(index == 17){
+    }else if(index == 12){
       weapon?.collisionType = DCollisionType.inactive;
     }
-  }
-
-  void onEndHit()
-  {
-    selectBehaviour();
   }
 
   @override

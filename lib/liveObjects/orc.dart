@@ -133,15 +133,16 @@ class OrcWarrior extends KyrgyzEnemy
 
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 9,loop: false);
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 6,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 7, stepTime: 0.06, from: 0, to: 6,loop: false);
     animDeath = spriteSheet.createAnimation(row: 8, stepTime: 0.1, from: 0, to: 12,loop: false);
-    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.08, from: 0, to: 4,loop: false);
 
     _animIdleToMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 2,loop: false);
-    _animAttack1FromIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0,to: 15,loop: false);
-    _animAttack1FromMove = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 2, to: 15,loop: false);
-    _animPrepareToAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 11,loop: false);
-    _postAttack2 = spriteSheet.createAnimation(row: 6, stepTime: 0.08, from: 0, to: 5,loop: false);
+    _animAttack1FromIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.055, from: 0,to: 15,loop: false);
+    _animAttack1FromMove = spriteSheet.createAnimation(row: 3, stepTime: 0.055, from: 2, to: 15,loop: false);
+
+    _animPrepareToAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.05, from: 0, to: 11,loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0, to: 4,loop: false);
+    _postAttack2 = spriteSheet.createAnimation(row: 6, stepTime: 0.05, from: 0, to: 5,loop: false);
 
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -170,6 +171,7 @@ class OrcWarrior extends KyrgyzEnemy
     // selectBehaviour();
   }
 
+  @override
   void chooseHit()
   {
     weapon?.currentCoolDown = weapon!.coolDown;
@@ -234,6 +236,7 @@ class OrcWarrior extends KyrgyzEnemy
     }
   }
 
+  @override
   void changeVertsInWeapon(int index)
   {
     if(_variantOfHit == 0){ // атака длинная вперёд просто
@@ -269,96 +272,6 @@ class OrcWarrior extends KyrgyzEnemy
         }
       }
     }
-  }
-
-  @override
-  void selectBehaviour()
-  {
-    if(gameRef.gameMap.orthoPlayer == null){
-      return;
-    }
-    if(wasSeen) {
-      if (isNearPlayer(distPlayerLength)) {
-        weapon!.currentCoolDown = weapon!.coolDown;
-        var pl = gameRef.gameMap.orthoPlayer!;
-        if (pl.position.x > position.x) {
-          if (isFlippedHorizontally) {
-            flipHorizontally();
-          }
-        }
-        if (pl.position.x < position.x) {
-          if (!isFlippedHorizontally) {
-            flipHorizontally();
-          }
-        }
-        chooseHit();
-        return;
-      }
-      moveIdleRandom(true);
-    }else{
-      moveIdleRandom(isSee());
-    }
-  }
-
-  @override
-  void moveIdleRandom(bool isSee)
-  {
-    int random = math.Random(DateTime
-        .now()
-        .microsecondsSinceEpoch).nextInt(2);
-    if (random != 0 || wasHit) {
-      int shift = 0;
-      if (position.x < gameRef.gameMap.orthoPlayer!.position.x) {
-        shift = -shiftAroundAnchorsForHit;
-      } else {
-        shift = shiftAroundAnchorsForHit;
-      }
-      double posX = isSee ? gameRef.gameMap.orthoPlayer!.position.x - position.x + shift : math.Random().nextDouble() * 500 - 250;
-      double posY = isSee ? gameRef.gameMap.orthoPlayer!.position.y - position.y: math.Random().nextDouble() * 500 - 250;
-      if (whereObstacle == ObstacleWhere.side) {
-        posX = 0;
-      }
-      if (whereObstacle == ObstacleWhere.upDown && posY < 0) {
-        posY = 0;
-      }
-      whereObstacle = ObstacleWhere.none;
-      double angle = math.atan2(posY, posX);
-      speed.x = math.cos(angle) * (isSee ? maxSpeed : maxSpeed / 2);
-      speed.y = math.sin(angle) * (isSee ? maxSpeed : maxSpeed / 2);
-      if (speed.x < 0 && !isFlippedHorizontally) {
-        flipHorizontally();
-      } else if (speed.x > 0 && isFlippedHorizontally) {
-        flipHorizontally();
-      }
-      if(animation == animIdle){
-        animation = _animIdleToMove;
-        animationTicker?.onComplete = (){
-          animation = animMove;
-          animationTicker?.onComplete = selectBehaviour;
-        };
-      }else{
-        animation = animMove;
-        animationTicker?.onComplete = selectBehaviour;
-      }
-    } else {
-      if (animation != animIdle) {
-        speed.x = 0;
-        speed.y = 0;
-        groundBody?.clearForces();
-        if(animation == animMove){
-          animation = _animIdleToMove.reversed();
-          animationTicker?.onComplete = (){
-            animation = animIdle;
-            animationTicker?.onComplete = selectBehaviour;
-          };
-        }else {
-          animation = animIdle;
-          animationTicker?.onComplete = selectBehaviour;
-        }
-      }
-    }
-    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-
   }
 
   @override

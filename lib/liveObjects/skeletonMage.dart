@@ -45,7 +45,6 @@ class SkeletonMage extends KyrgyzEnemy
     health = 9;
     anchor = const Anchor(115/220,0.5);
     maxSpeed = 55;
-    super.onLoad();
     Image? spriteImage;
     Image? spriteImageWithShield;
     if(isHigh){
@@ -81,7 +80,7 @@ class SkeletonMage extends KyrgyzEnemy
     animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
     animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
     animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 8,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 8,loop: false);
     animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
 
     _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
@@ -90,13 +89,12 @@ class SkeletonMage extends KyrgyzEnemy
     _animAttackLongShield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
     _animAttackEndShield = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
     _animBlock = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animHurtShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 8,loop: false);
+    _animHurtShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 8,loop: false);
     _animThrowShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.07, from: 0, to: 8,loop: false);
     _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1, from: 0, to: 13,loop: false);
 
     animation = _withShieldNow ? _animIdleShield : animIdle;
     animationTicker?.onComplete = selectBehaviour;
-    size = _spriteSheetSize;
     position = _startPos;
     hitBox = EnemyHitbox(hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -114,6 +112,7 @@ class SkeletonMage extends KyrgyzEnemy
     if(rand == 0){
       flipHorizontally();
     }
+    super.onLoad();
   }
 
   @override
@@ -124,6 +123,7 @@ class SkeletonMage extends KyrgyzEnemy
     }
   }
 
+  @override
   void chooseHit()
   {
     animation = null;
@@ -162,16 +162,10 @@ class SkeletonMage extends KyrgyzEnemy
   }
 
   @override
-  void moveIdleRandom(bool isSee){
-
-  }
-
-  @override
   void selectBehaviour() {
     if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }
-
     if(!wasSeen && !isHigh){
       isSee();
     }
@@ -313,7 +307,7 @@ class SkeletonMage extends KyrgyzEnemy
     }
     super.update(dt);
     if(!isHigh) {
-      int pos = position.y.toInt();
+      int pos = position.y.toInt() + 38;
       if (pos <= 0) {
         pos = 1;
       }
@@ -344,7 +338,7 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     priority = GamePriority.maxPriority + 1;
     anchor = const Anchor(0.5,35/64);
     _weapon = DefaultEnemyWeapon([Vector2.zero()], collisionType: DCollisionType.active, radius: 10
-      , isStatic: false, onObstacle: destroy, onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef,isSolid: true,);
+      , isStatic: false, onObstacle: destroy, game: gameRef,isSolid: true,);
     add(_weapon);
     _weapon.damage = 1;
 

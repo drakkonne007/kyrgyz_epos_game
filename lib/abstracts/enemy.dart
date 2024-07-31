@@ -54,13 +54,11 @@ class HitBar extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   void onLoad()async
   {
-    size = Vector2(50,20);
+    size = Vector2(23,7);
     anchor = Anchor.center;
     priority = GamePriority.maxPriority;
-    final img = await Flame.images.load('tiles/map/grassLand/UI/UI-elements-64x64.png');
-    SpriteSheet spriteSheet = SpriteSheet(image: img,srcSize: Vector2(64,64));
-    emptyBar = spriteSheet.getSprite(3, 12);
-    healthBar = spriteSheet.getSprite(3, 13);
+    emptyBar = Sprite(await Flame.images.load('tiles/map/grassLand/UI/emptyBar.png'));
+    healthBar = Sprite(await Flame.images.load('tiles/map/grassLand/UI/healthBar.png'));
     add(TimerComponent(period: 0.5,onTick: removeFromParent));
   }
 
@@ -75,6 +73,7 @@ class HitBar extends PositionComponent with HasGameRef<KyrgyzGame>
   void update(double dt)
   {
     opacity -= dt;
+    position.y -= 10 * dt;
   }
 }
 
@@ -114,6 +113,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int column=0;
   int row=0;
   int id=-1;
+  int variantOfHit = 0;
   SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
   List<String> loots = [];
   Map<MagicDamage,int> magicDamages = {};
@@ -154,6 +154,34 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void onEndMyContact(Object other, Contact contact)
   {
     whereObstacle = ObstacleWhere.none;
+  }
+
+  void changeVertsInWeapon(int index){}
+
+  void chooseHit()
+  {
+    weapon?.currentCoolDown = weapon!.coolDown;
+    wasHit = true;
+    animation = null;
+    speed.x = 0;
+    speed.y = 0;
+    groundBody?.clearForces();
+    if(animAttack2 == null){
+      animation = animAttack;
+      animationTicker?.onComplete = selectBehaviour;
+      animationTicker?.onFrame = changeVertsInWeapon;
+      return;
+    }
+    variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(variantOfHit == 0){
+      animation = animAttack;
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+    }else{
+      animation = animAttack2;
+      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+    }
+    animationTicker?.onComplete = selectBehaviour;
+    animationTicker?.onFrame = changeVertsInWeapon;
   }
 
   void moveIdleRandom(bool isSee)
@@ -217,7 +245,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
             flipHorizontally();
           }
         }
-        weapon?.hit();
+        chooseHit();
         return;
       }
       moveIdleRandom(true);
@@ -258,9 +286,25 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     gameRef.gameMap.loadedLivesObjs.remove(id);
   }
 
+  void _createSpecEffect()
+  {
+    // HitText ddText = HitText(dd.ceil().toString(), position: position - Vector2(0, 10));
+    final temp = ColorEffect(
+      const Color(0xFFFFFFFF),
+      EffectController(duration: 0.1),
+      opacityFrom: 0.3,
+      opacityTo: 0.4,
+    );
+    temp.onComplete = temp.reset;
+    add(temp);
+    HitBar hBar = HitBar(position: position - Vector2(0, 30),percentHp: health / _maxHp * 100);
+    gameRef.gameMap.container.add(hBar);
+    // gameRef.gameMap.container.add(ddText);
+  }
+
   bool internalPhysHurt(double hurt,bool inArmor)
   {
-    weapon?.collisionType = DCollisionType.inactive;
+
     if(inArmor){
       double dd = math.max(hurt - armor, 0);
       if(dd == 0){
@@ -271,20 +315,12 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
       health -= dd;
       if(health > 1) {
-        // HitText ddText = HitText(dd.ceil().toString(), position: position - Vector2(0, 10));
-        HitBar hBar = HitBar(position: position - Vector2(0, 10),percentHp: health / _maxHp * 100);
-        gameRef.gameMap.container.add(hBar);
-        // gameRef.gameMap.container.add(ddText);
+        _createSpecEffect();
       }
     }else{
       health -= hurt;
       if(health > 1) {
-        // HitText ddText = HitText(
-        //     hurt.ceil().toString(), position: position - Vector2(0, 10));
-        HitBar hBar = HitBar(position: position - Vector2(0, 10),
-            percentHp: health / _maxHp * 100);
-        gameRef.gameMap.container.add(hBar);
-        // gameRef.gameMap.container.add(ddText);
+        _createSpecEffect();
       }
     }
     return true;
@@ -303,7 +339,12 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     if(health < 1){
       death(animDeath);
+      weapon?.collisionType = DCollisionType.inactive;
     }else{
+      if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 1){
+        return;
+      }
+      weapon?.collisionType = DCollisionType.inactive;
       animation = animHurt;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;

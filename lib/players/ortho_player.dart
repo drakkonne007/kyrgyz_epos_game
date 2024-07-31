@@ -82,7 +82,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
-    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 11,loop: false); // 11
+    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11,loop: false); // 11
     _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
     animation = animIdle;
     _animState = AnimationState.idle;
@@ -283,6 +283,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed)
   {
     bool isRun = false;
+
+    if(keysPressed.contains(LogicalKeyboardKey.keyJ)){
+      startHit(false);
+    }
+    if(keysPressed.contains(LogicalKeyboardKey.keyK)){
+      startHit(true);
+    }
+    if(keysPressed.contains(LogicalKeyboardKey.keyL)){
+      makeAction();
+    }
     if(keysPressed.contains(LogicalKeyboardKey.keyO)){
       position=Vector2(0,0);
     }
