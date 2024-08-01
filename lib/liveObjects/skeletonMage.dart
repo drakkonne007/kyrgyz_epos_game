@@ -195,7 +195,7 @@ class SkeletonMage extends KyrgyzEnemy
       speed.x = 0;
       speed.y = 0;
       groundBody?.clearForces();
-      if (isNearPlayer(dist)) {
+      if (isNearPlayer(dist, isDistanceWeapon: true)) {
         animation = _withShieldNow ? _animAttackStartShield : animAttackStart;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
         animationTicker?.onComplete = chooseHit;
@@ -216,19 +216,6 @@ class SkeletonMage extends KyrgyzEnemy
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
-  }
-
-  @override
-  bool isNearPlayer(double dist)
-  {
-    var pl = gameRef.gameMap.orthoPlayer!;
-    if(pl.hitBox == null){
-      return false;
-    }
-    if(position.distanceToSquared(pl.position) > dist){
-      return false;
-    }
-    return true;
   }
 
   @override

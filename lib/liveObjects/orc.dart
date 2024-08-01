@@ -137,10 +137,10 @@ class OrcWarrior extends KyrgyzEnemy
     animDeath = spriteSheet.createAnimation(row: 8, stepTime: 0.1, from: 0, to: 12,loop: false);
 
     _animIdleToMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 2,loop: false);
-    _animAttack1FromIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.055, from: 0,to: 15,loop: false);
-    _animAttack1FromMove = spriteSheet.createAnimation(row: 3, stepTime: 0.055, from: 2, to: 15,loop: false);
+    _animAttack1FromIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 15,loop: false);
+    _animAttack1FromMove = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 2, to: 15,loop: false);
 
-    _animPrepareToAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.05, from: 0, to: 11,loop: false);
+    _animPrepareToAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.045, from: 0, to: 11,loop: false);
     animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0, to: 4,loop: false);
     _postAttack2 = spriteSheet.createAnimation(row: 6, stepTime: 0.05, from: 0, to: 5,loop: false);
 

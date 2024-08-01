@@ -27,6 +27,13 @@ enum AnimationState
   hurt,
 }
 
+final List<Vector2> _hitboxPoint = [
+  Vector2(-11.0858,-17.0421)
+  ,Vector2(6.85155,-17.1332)
+  ,Vector2(6.7605,25.8437)
+  ,Vector2(-10.8127,25.7526)
+  ,];
+
 final List<Vector2> _attack1ind1 = [
   Vector2(336,242) - Vector2(144*2 + 77,96*2 + 48),
   Vector2(361,224) - Vector2(144*2 + 77,96*2 + 48),
@@ -86,12 +93,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
     animation = animIdle;
     _animState = AnimationState.idle;
-    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
     anchor = const Anchor(0.5, 0.5);
     Vector2 tPos = -Vector2(15,20);
     Vector2 tSize = Vector2(22,45);
-    hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
-        collisionType: DCollisionType.passive,isSolid: false,
+
+    hitBox = PlayerHitbox(_hitboxPoint,
+        collisionType: DCollisionType.passive,isSolid: true,
         isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     // hitBox?.collisionType = DCollisionType.inactive;

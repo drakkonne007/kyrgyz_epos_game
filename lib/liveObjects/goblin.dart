@@ -72,7 +72,7 @@ class Goblin extends KyrgyzEnemy
     SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-atk1-no combo.png'
     ), srcSize: srcSize);
-    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.05, from: 0, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-death.png'
@@ -92,7 +92,7 @@ class Goblin extends KyrgyzEnemy
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-hurt.png'
     ), srcSize: srcSize);
-    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06, from: 0, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-atk1.png'

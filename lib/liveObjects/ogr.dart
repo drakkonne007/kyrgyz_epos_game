@@ -69,11 +69,11 @@ class Ogr extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
-    shiftAroundAnchorsForHit = 45;
-    distPlayerLength = 60 * 60;
+    shiftAroundAnchorsForHit = 60;
+    distPlayerLength = 70 * 70;
     maxLoots = 3;
     chanceOfLoot = 0.02;
-    health = 30;
+    health = 40;
     maxSpeed = 40;
 
     if(gameRef.gameMap.currentGameWorldData!.isDungeon) {
@@ -81,7 +81,7 @@ class Ogr extends KyrgyzEnemy
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-atk1.png'
       ), srcSize: srcSize);
       animAttack = spriteSheet.createAnimation(
-          row: 0, stepTime: 0.05, from: 0, loop: false);
+          row: 0, stepTime: 0.07, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-death.png'
@@ -106,13 +106,13 @@ class Ogr extends KyrgyzEnemy
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
       ), srcSize: srcSize);
-      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.06, from: 0, loop: false);
+      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
 
     }else{
       SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk1.png'
       ), srcSize: srcSize);
-      animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.05, from: 0, loop: false);
+      animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-death.png'
@@ -132,12 +132,12 @@ class Ogr extends KyrgyzEnemy
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-hurt.png'
       ), srcSize: srcSize);
-      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06, from: 0, loop: false);
+      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
       ), srcSize: srcSize);
-      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.06, from: 0, loop: false);
+      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
     }
 
     anchor = const Anchor(0.44922,0.5);
@@ -218,22 +218,29 @@ class Ogr extends KyrgyzEnemy
 class CrystalAttack extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   final List<Vector2> _ind1 = [
-    Vector2(1.51065,16.8907)
-    ,Vector2(-24.4776,0.71257)
-    ,Vector2(7.87864,-15.2935)
-    ,Vector2(19.582,-0.836401)
+    Vector2(-39.0797,2.11664)
+    ,Vector2(10.3252,-14.2934)
+    ,Vector2(20.276,0.196315)
+    ,Vector2(8.92858,16.9556)
+    ,Vector2(-36.1119,5.60815)
+    ,Vector2(6.6591,11.02)
+    ,Vector2(8.754,-8.70703)
+    ,Vector2(-4.16458,6.48103)
+    ,Vector2(-6.78321,-2.42232)
+    ,Vector2(-21.0984,2.29122)
     ,];
 
   final List<Vector2> _ind2 = [
-    Vector2(-33.1351,4.60503)
-    ,Vector2(45.6934,-34.4057)
-    ,Vector2(72.8663,1.37655)
-    ,Vector2(49.729,38.2349)
-    ,Vector2(-30.7138,8.10254)
-    ,Vector2(51.3432,22.3616)
-    ,Vector2(-11.612,2.72175)
-    ,Vector2(60.4905,1.91463)
-    ,Vector2(31.1653,-14.7658)
+    Vector2(-39.064,4.48612)
+    ,Vector2(45.5454,-31.7751)
+    ,Vector2(70.9786,0.4571)
+    ,Vector2(50.3299,39.9919)
+    ,Vector2(-34.5314,7.50789)
+    ,Vector2(48.819,31.1784)
+    ,Vector2(45.2936,-22.7098)
+    ,Vector2(21.1195,17.0768)
+    ,Vector2(13.3133,-7.34913)
+    ,Vector2(-7.83911,6.75245)
     ,];
 
   CrystalAttack({required super.position});
@@ -250,7 +257,7 @@ class CrystalAttack extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animationTicker?.onFrame = changeVerts;
     weapon = DefaultEnemyWeapon(_ind1, collisionType: DCollisionType.active, isStatic: false, game: gameRef,isLoop: true);
     // weapon!.coolDown = 1;
-    weapon!.damage = 1000;
+    weapon!.damage = 4;
     add(weapon!);
   }
 
@@ -258,6 +265,8 @@ class CrystalAttack extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     if (index == 1) {
       weapon?.changeVertices(_ind2, isLoop: true);
+    }else if(index == 3){
+      weapon?.collisionType = DCollisionType.inactive;
     }
   }
 }

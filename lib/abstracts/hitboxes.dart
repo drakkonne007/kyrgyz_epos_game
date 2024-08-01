@@ -382,8 +382,14 @@ class PlayerHitbox extends DCollisionEntity
 class EnemyHitbox extends DCollisionEntity
 {
   EnemyHitbox(super.vertices, {required super.collisionType, super.isSolid
-    , required super.isStatic, super.isLoop, required super.game,   super.radius, super.isOnlyForStatic, });
+    , required super.isStatic, super.isLoop, required super.game,   super.radius, super.isOnlyForStatic, this.onStartColl});
 
+  Function(DCollisionEntity other)? onStartColl;
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    // TODO: implement onCollision
+  }
 
   @override
   bool onComponentTypeCheck(DCollisionEntity other) {
@@ -400,17 +406,12 @@ class EnemyHitbox extends DCollisionEntity
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, DCollisionEntity other) {
-    // TODO: implement onCollision
-  }
-
-  @override
   void onCollisionEnd(DCollisionEntity other) {
     // TODO: implement onCollisionEnd
   }
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
-    // TODO: implement onCollisionStart
+    onStartColl?.call(other);
   }
 }

@@ -48,7 +48,7 @@ abstract class EnemyWeapon extends DCollisionEntity
   bool inArmor = true;
   double activeSecs = 0;
   double coolDown = 1;
-  double currentCoolDown = 0;
+  double currentCoolDown = 1;
   double latencyBefore = 0;
 
 
@@ -150,65 +150,76 @@ abstract class PlayerWeapon extends DCollisionEntity
   Vector2 randomVector2() => (Vector2.random() - Vector2.random()) * 100;
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
-  {
-    if(other is EnemyHitbox){
-      if(_myHitboxes.containsKey(other)){
-        if(DateTime.now().millisecondsSinceEpoch - _myHitboxes[other]! < coolDown * 1000){
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+    if (other is EnemyHitbox) {
+      if (_myHitboxes.containsKey(other)) {
+        if (DateTime
+            .now()
+            .millisecondsSinceEpoch - _myHitboxes[other]! < coolDown * 1000) {
           return;
-        } else{
-          _myHitboxes[other] = DateTime.now().millisecondsSinceEpoch;
+        } else {
+          _myHitboxes[other] = DateTime
+              .now()
+              .millisecondsSinceEpoch;
         }
-      }else{
-        _myHitboxes[other] = DateTime.now().millisecondsSinceEpoch;
+      } else {
+        _myHitboxes[other] = DateTime
+            .now()
+            .millisecondsSinceEpoch;
       }
       // if(currentCoolDown < coolDown){
       //   return;
       // }
       // currentCoolDown = 0;
-      var temp = other.parent as KyrgyzEnemy;
-      bool isPlayer = parent is MainPlayer;
-      temp.doHurt(hurt: damage ?? 0,inArmor: inArmor, isPlayer: isPlayer);
-      // game.add(
-      //   ParticleSystemComponent(
-      //     position: other.getCenter(),
-      //     size: Vector2(5,5),
-      //     particle: Particle.generate(
-      //       count: 15,
-      //       generator: (i) => AcceleratedParticle(
-      //         lifespan: 0.3,
-      //         acceleration: randomVector2(),
-      //         child: CircleParticle(
-      //           radius: 0.7,
-      //           paint: Paint()..color = Colors.red[900]!,
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // );
-      if(secsOfPermDamage > 0
-          && permanentDamage > 0
-          && magicDamage != null){
-        if(temp.magicDamages.containsKey(magicDamage)){
-          int curr = temp.magicDamages[magicDamage]!;
-          curr++;
-          temp.magicDamages[magicDamage!] = curr;
-        }else{
-          temp.magicDamages[magicDamage!] = 1;
-        }
-        var tempComponent = other.parent as Component;
-        double damage = permanentDamage/2;
-        MagicDamage magic = magicDamage!;
-        tempComponent.add(TempEffect(parentId: 'magicDamage/${magic.name}', period: secsOfPermDamage,onUpdate: (dt){
-          temp.doMagicHurt(hurt: damage * dt, magicDamage: magic);},onEndEffect: (){
-          int curr = temp.magicDamages[magic]!;
-          curr--;
-          if(curr == 0){
-            temp.magicDamages.remove(magic);
-          }else{
-            temp.magicDamages[magic] = curr;
+      if (other.parent is KyrgyzEnemy) {
+        var temp = other.parent as KyrgyzEnemy;
+        bool isPlayer = parent is MainPlayer;
+        temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);
+        // game.add(
+        //   ParticleSystemComponent(
+        //     position: other.getCenter(),
+        //     size: Vector2(5,5),
+        //     particle: Particle.generate(
+        //       count: 15,
+        //       generator: (i) => AcceleratedParticle(
+        //         lifespan: 0.3,
+        //         acceleration: randomVector2(),
+        //         child: CircleParticle(
+        //           radius: 0.7,
+        //           paint: Paint()..color = Colors.red[900]!,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // );
+        if (secsOfPermDamage > 0
+            && permanentDamage > 0
+            && magicDamage != null) {
+          if (temp.magicDamages.containsKey(magicDamage)) {
+            int curr = temp.magicDamages[magicDamage]!;
+            curr++;
+            temp.magicDamages[magicDamage!] = curr;
+          } else {
+            temp.magicDamages[magicDamage!] = 1;
           }
-        }));
+          var tempComponent = other.parent as Component;
+          double damage = permanentDamage / 2;
+          MagicDamage magic = magicDamage!;
+          tempComponent.add(TempEffect(parentId: 'magicDamage/${magic.name}',
+              period: secsOfPermDamage,
+              onUpdate: (dt) {
+                temp.doMagicHurt(hurt: damage * dt, magicDamage: magic);
+              },
+              onEndEffect: () {
+                int curr = temp.magicDamages[magic]!;
+                curr--;
+                if (curr == 0) {
+                  temp.magicDamages.remove(magic);
+                } else {
+                  temp.magicDamages[magic] = curr;
+                }
+              }));
+        }
       }
     }
   }

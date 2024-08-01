@@ -154,8 +154,8 @@ class PlayerData
   final ValueNotifier<double> extraDamage = ValueNotifier<double>(0);
   final ValueNotifier<double> extraChanceOfLoot = ValueNotifier<double>(0);
   final ValueNotifier<double> extraAttackSpeed = ValueNotifier<double>(0);
-  final double _beginEnergy = 15;
-  final double _beginHealth = 30;
+  final double _beginEnergy = 50;
+  final double _beginHealth = 100;
   final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
   final ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
   final ValueNotifier<Item> helmetDress = ValueNotifier<Item>(NullItem());

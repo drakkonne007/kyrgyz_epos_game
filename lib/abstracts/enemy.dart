@@ -341,7 +341,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       death(animDeath);
       weapon?.collisionType = DCollisionType.inactive;
     }else{
-      if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 1){
+      if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 0){
         return;
       }
       weapon?.collisionType = DCollisionType.inactive;
@@ -390,7 +390,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
   }
 
-  bool isNearPlayer(double squaredDistance)
+  bool isNearPlayer(double squaredDistance, {bool isDistanceWeapon = false})
   {
     var pl = gameRef.gameMap.orthoPlayer!;
     if(pl.hitBox == null){
@@ -402,7 +402,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     if(hitBox == null){
       return false;
     }
-    if(pl.hitBox!.getMinVector().y > hitBox!.getMaxVector().y || pl.hitBox!.getMaxVector().y < hitBox!.getMinVector().y){
+    if((pl.hitBox!.getMinVector().y > hitBox!.getMaxVector().y || pl.hitBox!.getMaxVector().y < hitBox!.getMinVector().y) && !isDistanceWeapon){
       return false;
     }
     return true;

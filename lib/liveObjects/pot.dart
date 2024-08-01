@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
@@ -32,17 +33,17 @@ final List<Vector2> _hitBoxPoints = [
   ,];
 
 final List<Vector2> _attack1ind12 = [ //17 всё
-Vector2(9.19474,14.9207)
-,Vector2(26.2462,19.5292)
-,Vector2(28.2048,21.9487)
-,Vector2(35.2328,21.7183)
-,Vector2(38.8044,18.7227)
-,Vector2(37.9979,11.4643)
-,Vector2(36.3849,8.46881)
-,Vector2(29.357,8.81444)
-,Vector2(25.4397,12.9621)
-,Vector2(11.7294,9.96657)
-,];
+  Vector2(9.19474,14.9207)
+  ,Vector2(26.2462,19.5292)
+  ,Vector2(28.2048,21.9487)
+  ,Vector2(35.2328,21.7183)
+  ,Vector2(38.8044,18.7227)
+  ,Vector2(37.9979,11.4643)
+  ,Vector2(36.3849,8.46881)
+  ,Vector2(29.357,8.81444)
+  ,Vector2(25.4397,12.9621)
+  ,Vector2(11.7294,9.96657)
+  ,];
 
 //Вторая атака будет на 18 индексе и в этой точке: [
 // Vector2(0.852862,-11.841)
@@ -51,13 +52,13 @@ Vector2(9.19474,14.9207)
 class Pot extends KyrgyzEnemy
 {
   Pot(this._startPos,int id,{this.isHigh = false}){this.id = id;}
-  final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   bool isHigh;
-  final double dist = 352 * 352;
+  final double dist = 350 * 350;
   final Vector2 srcSize = Vector2(160,128);
   late SpriteAnimation animRevealing;
   bool wakeUp = false;
+  TimerComponent? timer;
 
 
   @override
@@ -65,7 +66,7 @@ class Pot extends KyrgyzEnemy
   {
     maxLoots = 2;
     chanceOfLoot = 0.12;
-    health = 6;
+    health = 15;
     anchor = Anchor.center;
     maxSpeed = 35;
     if(isHigh){
@@ -95,7 +96,7 @@ class Pot extends KyrgyzEnemy
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-hurt.png'
     ), srcSize: srcSize);
-    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06, from: 0, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-atk2.png'
@@ -107,69 +108,26 @@ class Pot extends KyrgyzEnemy
     ), srcSize: srcSize);
     animRevealing = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
 
-    animation = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 1, loop: false);
+    wakeUp = isHigh;
+    animation = isHigh ? animIdle : spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 1, loop: false);
     position = _startPos;
-    hitBox = EnemyHitbox(hitBoxPoints,
+    hitBox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
-    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(100-115,132-110), Vector2(24,16), scale: PhysicVals.physicScale)));
+    FixtureDef fx = FixtureDef(PolygonShape()..set(_ground));
     groundBody?.createFixture(fx);
     var massData = groundBody!.getMassData();
     massData.mass = 800;
     groundBody!.setMassData(massData);
-    rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(rand == 0){
-      flipHorizontally();
-    }
+    timer = TimerComponent(period: 1, onTick: selectBehaviour,repeat: true);
+    add(timer!);
+    weapon = DefaultEnemyWeapon(
+        _attack1ind12,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+    add(weapon!);
+    weapon?.damage = 2;
     super.onLoad();
-  }
-
-  @override
-  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
-    health -= hurt;
-    if(health < 1){
-      death(_withShieldNow ? _animDeathShield : animDeath);
-    }
-  }
-
-  @override
-  void chooseHit()
-  {
-    animation = null;
-    _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
-    if(_variantOfHit == 0){
-      animation = _withShieldNow ? _animAttackLongShield :  animAttackLong;
-      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-      animationTicker?.onFrame = longAttack;
-      animationTicker?.onComplete = endHit;
-    }else{
-      if(isFlippedHorizontally){
-        gameRef.gameMap.container.add(MageSphere(position + Vector2(-48,22)));
-      }else{
-        gameRef.gameMap.container.add(MageSphere(position + Vector2(48,22)));
-      }
-      endHit();
-    }
-  }
-
-  void longAttack(int index)
-  {
-    if(index % 2 == 0){
-      return;
-    }
-    if(isFlippedHorizontally){
-      gameRef.gameMap.container.add(MageSphere(position + Vector2(-48,22)));
-    }else{
-      gameRef.gameMap.container.add(MageSphere(position + Vector2(48,22)));
-    }
-  }
-
-  void endHit()
-  {
-    animation = _withShieldNow ? _animAttackEndShield : animAttackEnd;
-    animationTicker?.onComplete = selectBehaviour;
   }
 
   @override
@@ -181,38 +139,71 @@ class Pot extends KyrgyzEnemy
       isSee();
     }
     if (wasSeen || isHigh) {
-      if (position.distanceToSquared(gameRef.gameMap.orthoPlayer!.position) <
-          100 * 100) {
-        // _rigidSec = 0.8;
-        double posX = position.x - gameRef.gameMap.orthoPlayer!.position.x;
-        double posY = position.y - gameRef.gameMap.orthoPlayer!.position.y;
-        if (whereObstacle == ObstacleWhere.side) {
-          posX = 0;
+      if(!wakeUp){
+        if(isNearPlayer(200 * 200, isDistanceWeapon: true)){
+          wakeUp = true;
+          animation = animRevealing;
+          animationTicker?.onComplete = selectBehaviour;
+        }else{
+          return;
         }
-        if (whereObstacle == ObstacleWhere.upDown && posY < 0) {
-          posY = 0;
+      }
+      if(timer != null){
+        timer!.removeFromParent();
+        timer = null;
+      }
+      if (isNearPlayer(70 * 70, isDistanceWeapon: true)) {
+        int rand = math.Random().nextInt(3);
+        if (rand < 2) {
+          // _rigidSec = 0.8;
+          double posX = position.x - gameRef.gameMap.orthoPlayer!.position.x;
+          double posY = position.y - gameRef.gameMap.orthoPlayer!.position.y;
+          if (whereObstacle == ObstacleWhere.side) {
+            posX = 0;
+          }
+          if (whereObstacle == ObstacleWhere.upDown && posY < 0) {
+            posY = 0;
+          }
+          whereObstacle = ObstacleWhere.none;
+          double angle = math.atan2(posY, posX);
+          speed.x = math.cos(angle) * maxSpeed;
+          speed.y = math.sin(angle) * maxSpeed;
+          if (speed.x < 0 && !isFlippedHorizontally) {
+            flipHorizontally();
+          } else if (speed.x > 0 && isFlippedHorizontally) {
+            flipHorizontally();
+          }
+          animation = animMove;
+          animationTicker?.isLastFrame ?? false
+              ? animationTicker?.reset()
+              : null;
+          animationTicker?.onComplete = selectBehaviour;
+          return;
+        }else{
+          weapon?.currentCoolDown = weapon?.coolDown ?? 0;
+          var pl = gameRef.gameMap.orthoPlayer!;
+          if (pl.position.x > position.x) {
+            if (isFlippedHorizontally) {
+              flipHorizontally();
+            }
+          }
+          if (pl.position.x < position.x) {
+            if (!isFlippedHorizontally) {
+              flipHorizontally();
+            }
+          }
+          animation = animAttack;
+          animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+          animationTicker?.onFrame = changeVertsInWeapon;
+          animationTicker?.onComplete = selectBehaviour;
+          return;
         }
-        whereObstacle = ObstacleWhere.none;
-        double angle = math.atan2(posY, posX);
-        speed.x = math.cos(angle) * maxSpeed;
-        speed.y = math.sin(angle) * maxSpeed;
-        if (speed.x < 0 && !isFlippedHorizontally) {
-          flipHorizontally();
-        } else if (speed.x > 0 && isFlippedHorizontally) {
-          flipHorizontally();
-        }
-        animation = _withShieldNow ? _animMoveShield : animMove;
+      }
+      if (isNearPlayer(dist, isDistanceWeapon: true)) {
+        animation = animAttack2;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
         animationTicker?.onComplete = selectBehaviour;
-        return;
-      }
-      speed.x = 0;
-      speed.y = 0;
-      groundBody?.clearForces();
-      if (isNearPlayer(dist)) {
-        animation = _withShieldNow ? _animAttackStartShield : animAttackStart;
-        animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-        animationTicker?.onComplete = chooseHit;
+        animationTicker?.onFrame = changeVertsInWeapon;
         if (position.x < gameRef.gameMap.orthoPlayer!.position.x &&
             isFlippedHorizontally) {
           flipHorizontally();
@@ -222,91 +213,28 @@ class Pot extends KyrgyzEnemy
         }
         return;
       }
-      animation = _withShieldNow ? _animIdleShield : animIdle;
-      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-      animationTicker?.onComplete = selectBehaviour;
-    }else{
-      animation = _withShieldNow ? _animIdleShield : animIdle;
+      animation = animIdle;
+      speed.x = 0;
+      speed.y = 0;
+      groundBody?.clearForces();
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
   }
 
   @override
-  bool isNearPlayer(double dist)
+  changeVertsInWeapon(int index)
   {
-    var pl = gameRef.gameMap.orthoPlayer!;
-    if(pl.hitBox == null){
-      return false;
-    }
-    if(position.distanceToSquared(pl.position) > dist){
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  void doHurt({required double hurt, bool inArmor = true, bool isPlayer = false})
-  {
-    if(isPlayer){
-      wasSeen = true;
-    }
-    if(animation == animDeath || animation == _animDeathShield){
-      return;
-    }
-    if(inArmor) {
-      if (_withShieldNow &&
-          ((position.x < gameRef.gameMap.orthoPlayer!.position.x &&
-              !isFlippedHorizontally)
-              || (position.x > gameRef.gameMap.orthoPlayer!.position.x &&
-                  isFlippedHorizontally))) {
-        int rand = math.Random(DateTime
-            .now()
-            .microsecondsSinceEpoch).nextInt(3);
-        if (rand == 0) {
-          speed.x = 0;
-          speed.y = 0;
-          groundBody?.clearForces();
-          animation = _animBlock;
-          animationTicker?.isLastFrame ?? false
-              ? animationTicker?.reset()
-              : null;
-          animationTicker?.onComplete = selectBehaviour;
-          return;
-        }
+    if(animation == animAttack){
+      if(index == 12){
+        weapon?.collisionType = DCollisionType.active;
+      }else if(index == 17){
+        weapon?.collisionType = DCollisionType.inactive;
       }
-    }
-    if(!internalPhysHurt(hurt, inArmor)){
-      return;
-    }
-    if(health <1){
-      death(_withShieldNow ? _animDeathShield : animDeath);
     }else{
-      if(_withShieldNow){
-        int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(3);
-        if (rand == 0) {
-          _withShieldNow = false;
-          speed.x = 0;
-          speed.y = 0;
-          groundBody?.clearForces();
-          animation = _animThrowShield;
-          animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-          animationTicker?.onComplete = selectBehaviour;
-          animationTicker?.onFrame = dropShield;
-          return;
-        }
+      if(index == 18){
+        gameRef.gameMap.container.add(PotBubble(position: position + Vector2(0,-12)));
       }
-      animation = _withShieldNow ? _animHurtShield : animHurt;
-      animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
-      animationTicker?.onComplete = selectBehaviour;
-    }
-  }
-
-  void dropShield(int index)
-  {
-    if(index == 4){
-      DroppedShield droppedShield = DroppedShield(position,isFlippedHorizontally);
-      gameRef.gameMap.container.add(droppedShield);
     }
   }
 
@@ -325,88 +253,117 @@ class Pot extends KyrgyzEnemy
       priority = pos;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    if (animation == _animMoveShield || animation == animMove
-        || animation == _animIdleShield || animation == animIdle) {
+    if (animation == animMove
+        || animation == animIdle) {
       groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
     }
   }
 }
 
-class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+class PotBubble extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  final Vector2 pos;
-  MageSphere(this.pos) : super(position: pos);
-  late DefaultEnemyWeapon _weapon;
-  late SpriteAnimation _animLoop,_animDestroy,_animDestroy2;
-  final double maxSpeed = 80;
-  bool _isMove = true;
-  final Vector2 speed = Vector2.zero();
-  bool _isAutoAim = true;
+  final List<Vector2> _hitboxPoints = [
+    Vector2(-10.7276,2.51066)
+    ,Vector2(-0.755925,9.84616)
+    ,Vector2(9.73154,-0.297456)
+    ,Vector2(-0.469382,-10.4984)
+    ,];
+
+  PotBubble({required super.position});
+  Vector2? target;
+  double gravity = 250;
+  Vector2 speed = Vector2.zero();
+  double secTime = 2.1;
+  EnemyHitbox? hitBox;
+  late TimerComponent timer;
 
   @override
   void onLoad() async
   {
     priority = GamePriority.maxPriority + 1;
-    anchor = const Anchor(0.5,35/64);
-    _weapon = DefaultEnemyWeapon([Vector2.zero()], collisionType: DCollisionType.active, radius: 10
-      , isStatic: false, onObstacle: destroy, game: gameRef,isSolid: true,);
-    add(_weapon);
-    _weapon.damage = 1;
-
-    Image imgLoop   = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-loop.png');
-    Image imgDestr1 = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-destroy.png');
-    Image imgDestr2 = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-destroy2.png');
-
-    final spriteSheetLoop = SpriteSheet(image: imgLoop,
-        srcSize: Vector2(92,64));
-    _animLoop = spriteSheetLoop.createAnimation(row: 0, stepTime: 0.1,loop: true);
-
-    final spriteSheetDestroy = SpriteSheet(image: imgDestr1,
-        srcSize: Vector2(92,64));
-    _animDestroy = spriteSheetDestroy.createAnimation(row: 0, stepTime: 0.07,loop: false);
-
-    final spriteSheetDestroy2 = SpriteSheet(image: imgDestr2,
-        srcSize: Vector2(92,64));
-    _animDestroy2 = spriteSheetDestroy2.createAnimation(row: 0, stepTime: 0.07,loop: false);
-
-    animation = _animLoop;
-
-    add(TimerComponent(period: 2,onTick: (){_isAutoAim = false;}));
-    add(TimerComponent(period: 4,onTick: destroy));
+    anchor = Anchor.center;
+    final spriteSheetLoop = SpriteSheet(image: await Flame.images.load('tiles/map/mountainLand/Characters/Pot Creature/atk2 projectile-travelling.png'),
+        srcSize: Vector2(32,32));
+    animation = spriteSheetLoop.createAnimation(row: 0, stepTime: 0.08,loop: true);
+    target = gameRef.gameMap.orthoPlayer!.position;
+    speed = Vector2((target!.x - position.x) / secTime, (target!.y - position.y)/secTime - secTime/2 * gravity + 1);
+    timer = TimerComponent(period: secTime, onTick: (){
+      gameRef.gameMap.container.add(PotSplash(position: position));
+      removeFromParent();
+    });
+    add(timer);
+    hitBox = EnemyHitbox(_hitboxPoints,
+        collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef, onStartColl: perfectDelete);
+    add(hitBox!);
   }
 
-  void destroy()
+  void perfectDelete(DCollisionEntity other)
   {
-    _isMove = false;
-    _weapon.collisionType = DCollisionType.inactive;
-    int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(rand == 0){
-      animation = _animDestroy;
-    }else{
-      animation = _animDestroy2;
-    }
-    animationTicker?.onComplete = removeFromParent;
+    hitBox?.collisionType = DCollisionType.inactive;
+    timer.removeFromParent();
+    speed.setZero();
+    add(ScaleEffect.to(Vector2.all(0.01),EffectController(duration: 0.5),onComplete: (){
+      removeFromParent();
+    }));
+    add(OpacityEffect.to(0,EffectController(duration: 0.5)));
   }
 
   @override
   void update(double dt)
   {
     super.update(dt);
-    // int pos = position.y.toInt();
-    // if(pos <= 0){
-    //   pos = 1;
-    // }
-    // priority = pos;
-    if(!_isMove){
-      return;
-    }
-    if(_isAutoAim && gameRef.gameMap.orthoPlayer != null){
-      double posX = gameRef.gameMap.orthoPlayer!.position.x - position.x;
-      double posY = gameRef.gameMap.orthoPlayer!.position.y - position.y;
-      double angle = math.atan2(posY,posX);
-      speed.x = math.cos(angle) * maxSpeed;
-      speed.y = math.sin(angle) * maxSpeed;
-    }
+    speed.y += gravity * dt;
+    // print('position and speed: ${position.y}, ${target!.y}');
     position += speed * dt;
+  }
+}
+
+class PotSplash extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+{
+
+  PotSplash({required super.position});
+
+  List<Vector2> _weapons = [
+    Vector2(-0.65143,-4.85678)
+    ,Vector2(-19.8676,-0.159481)
+    ,Vector2(-30.7568,8.80808)
+    ,Vector2(-33.1055,26.3162)
+    ,Vector2(-15.5974,30.3729)
+    ,Vector2(21.1269,30.3729)
+    ,Vector2(31.3756,26.9567)
+    ,Vector2(30.5215,11.7973)
+    ,Vector2(20.9134,0.908087)
+    ,Vector2(2.33776,-5.07029)
+    ,Vector2(-25.2055,23.327)
+    ,Vector2(22.835,23.5405)
+    ,Vector2(-0.437917,5.60538)
+    ,];
+
+  late DefaultEnemyWeapon _weapon;
+
+  @override
+  void onLoad() async
+  {
+    anchor = Anchor.center;
+    priority = position.y.toInt() + 30;
+    final spriteSheetLoop = SpriteSheet(image: await Flame.images.load(
+        'tiles/map/mountainLand/Characters/Pot Creature/atk2 projectile-splash.png'),
+        srcSize: Vector2(160, 128));
+    animation = spriteSheetLoop.createAnimation(row: 0, stepTime: 0.1, loop: false);
+    animationTicker?.onComplete = removeFromParent;
+    animationTicker?.onFrame = animChange;
+    _weapon = DefaultEnemyWeapon(
+        _weapons,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+    add(_weapon);
+    _weapon.damage = 4;
+  }
+
+  void animChange(int index)
+  {
+    if(index == 1){
+      _weapon.collisionType = DCollisionType.active;
+    }else if(index == 3){
+      _weapon.collisionType = DCollisionType.inactive;
+    }
   }
 }

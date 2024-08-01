@@ -39,6 +39,7 @@ import 'package:game_flame/liveObjects/mini_creatures/windblow.dart';
 import 'package:game_flame/liveObjects/moose.dart';
 import 'package:game_flame/liveObjects/ogr.dart';
 import 'package:game_flame/liveObjects/orc.dart';
+import 'package:game_flame/liveObjects/pot.dart';
 import 'package:game_flame/liveObjects/prisonAssassin.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/liveObjects/skeletonMage.dart';
@@ -282,6 +283,11 @@ class MapNode {
       case 'goblin':
         myGame.gameMap.loadedLivesObjs.add(id);
         positionObject = Goblin(position,id);
+        myGame.gameMap.container.add(positionObject);
+        break;//Pot
+      case 'pot':
+        myGame.gameMap.loadedLivesObjs.add(id);
+        positionObject = Pot(position,id);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'gold':
