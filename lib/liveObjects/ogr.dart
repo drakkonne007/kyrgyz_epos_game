@@ -81,63 +81,63 @@ class Ogr extends KyrgyzEnemy
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-atk1.png'
       ), srcSize: srcSize);
       animAttack = spriteSheet.createAnimation(
-          row: 0, stepTime: 0.07, from: 0, loop: false);
+          row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-death.png'
       ), srcSize: srcSize);
-      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0, loop: false);
+      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-idle.png'
       ), srcSize: srcSize);
-      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-walk.png'
       ), srcSize: srcSize);
-      animMove = spriteSheet.createAnimation(row: 0,stepTime: 0.08,from: 0,loop: false);
+      animMove = spriteSheet.createAnimation(row: 0,stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125,from: 0,loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-hurt.png'
       ), srcSize: srcSize);
-      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06, from: 0, loop: false);
+      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
       ), srcSize: srcSize);
-      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     }else{
       SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk1.png'
       ), srcSize: srcSize);
-      animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+      animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-death.png'
       ), srcSize: srcSize);
-      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0, loop: false);
+      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-idle.png'
       ), srcSize: srcSize);
-      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-walk.png'
       ), srcSize: srcSize);
-      animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+      animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-hurt.png'
       ), srcSize: srcSize);
-      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
       ), srcSize: srcSize);
-      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
     }
 
     anchor = const Anchor(0.44922,0.5);
@@ -196,6 +196,9 @@ class Ogr extends KyrgyzEnemy
   @override
   void update(double dt)
   {
+    if(isFreeze > 0){
+      return;
+    }
     super.update(dt);
     if(!isRefresh){
       return;

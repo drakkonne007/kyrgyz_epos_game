@@ -106,21 +106,21 @@ class Skeleton extends KyrgyzEnemy
     final spriteSheetWithShield = SpriteSheet(image: spriteImageWithShield,
         srcSize: _spriteSheetSize);
 
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.07, from: 0,loop: false);
-    animAttack2 = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 13, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.05, from: 0, to: 8,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.1, from: 0, to: 13,loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 3, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
 
-    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.07, from: 0,loop: false);
-    _animAttack2Shield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.07, from: 0, to: 13, loop: false);
-    _animBlock = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animHurtShield = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.05, from: 0, to: 8,loop: false);
-    _animThrowShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animDeathShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
+    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animAttackShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
+    _animAttack2Shield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13, loop: false);
+    _animBlock = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animHurtShield = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animThrowShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animDeathShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
 
     animation = _withShieldNow ? _animIdleShield : animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -235,13 +235,23 @@ class Skeleton extends KyrgyzEnemy
        }
        double posX = isSee ? gameRef.gameMap.orthoPlayer!.position.x - position.x + shift : math.Random().nextDouble() * 500 - 250;
        double posY = isSee ? gameRef.gameMap.orthoPlayer!.position.y - position.y: math.Random().nextDouble() * 500 - 250;
-       if (whereObstacle == ObstacleWhere.side) {
-         posX = 0;
+       for(final temp in myContactMap.values){
+         if(temp == ObstacleWhere.up && posY < 0){
+           posY = 0;
+         }
+         if(temp == ObstacleWhere.down && posY > 0){
+           posY = 0;
+         }
+         if(temp == ObstacleWhere.left && posX < 0){
+           posX = 0;
+         }
+         if(temp == ObstacleWhere.right && posX > 0){
+           posX = 0;
+         }
        }
-       if (whereObstacle == ObstacleWhere.upDown && posY < 0) {
-         posY = 0;
+       if(posX == 0 && posY == 0){
+         posX = posY = math.Random().nextDouble() * 500 - 250;
        }
-       whereObstacle = ObstacleWhere.none;
        double angle = math.atan2(posY, posX);
        speed.x = math.cos(angle) * (isSee ? maxSpeed : maxSpeed / 2);
        speed.y = math.sin(angle) * (isSee ? maxSpeed : maxSpeed / 2);
@@ -336,11 +346,14 @@ class Skeleton extends KyrgyzEnemy
 
   @override
   void update(double dt) {
+    if(isFreeze > 0){
+      return;
+    }
     super.update(dt);
-    position = groundBody!.position / PhysicVals.physicScale;
     if (!isRefresh) {
       return;
     }
+    position = groundBody!.position / PhysicVals.physicScale;
     int pos = position.y.toInt() + 39;
     if(pos <= 0){
       pos = 1;

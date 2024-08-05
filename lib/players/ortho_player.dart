@@ -1,6 +1,7 @@
 
 import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
@@ -9,9 +10,17 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/weapon/darkBall.dart';
+import 'package:game_flame/weapon/darkBall.dart';
+import 'package:game_flame/weapon/darkBall.dart';
+import 'package:game_flame/weapon/electroBall.dart';
+import 'package:game_flame/weapon/fireBall.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
+import 'package:game_flame/weapon/poisonBall.dart';
+import 'package:game_flame/weapon/poisonBall.dart';
+import 'package:game_flame/weapon/poisonBall.dart';
 import 'package:game_flame/weapon/weapon.dart';
 import 'package:game_flame/liveObjects/grass_golem.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -78,10 +87,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   Ground? groundRigidBody;
   double dumping = 8;
   AnimationState _animState = AnimationState.idle;
+  bool _canMagicSpell = true;
 
   @override
   Future<void> onLoad() async
   {
+    opacity = 0;
     Image? spriteImg;
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
@@ -112,6 +123,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     position = startPos;
     setGroundBody();
     setNewEnergyCostForWeapon();
+    add(OpacityEffect.to(1, EffectController(duration: 0.7)));
   }
 
   void setNewEnergyCostForWeapon()
@@ -186,6 +198,68 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     groundRigidBody?.linearVelocity = Vector2.zero();
     if(animation != null){
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+    }
+  }
+
+  void startMagic()
+  {
+    if(!_canMagicSpell){
+      return;
+    }
+    if(animation != animIdle && animation != animMove){
+      return;
+    }
+    if(game.playerData.energy.value < _weapon!.energyCost){
+      return;
+    }
+    _canMagicSpell = false;
+    add(TimerComponent(period: 2, removeOnFinish: true, onTick: (){
+      _canMagicSpell = true;
+    }));
+    switch(gameRef.playerData.playerMagicSpell){
+      case PlayerMagicSpell.none: return;
+      case PlayerMagicSpell.darkBall:
+        Vector2 norm = groundRigidBody?.linearVelocity ?? Vector2.zero();
+        double vecAngle = norm.angleToSigned(Vector2(1,0));
+        gameRef.gameMap.container.add(DarkBall(Vector2(math.cos(vecAngle + math.pi / 6), -math.sin(vecAngle + math.pi / 6)), position: position - Vector2(22,2)));
+        gameRef.gameMap.container.add(DarkBall(Vector2(math.cos(vecAngle), -math.sin(vecAngle)), position: position - Vector2(22,2)));
+        gameRef.gameMap.container.add(DarkBall(Vector2(math.cos(vecAngle - math.pi / 6), -math.sin(vecAngle - math.pi / 6)), position: position - Vector2(22,2)));
+      case PlayerMagicSpell.electroBall:
+        gameRef.gameMap.container.add(ElectroBall(5 * math.pi / 6));
+        gameRef.gameMap.container.add(ElectroBall(math.pi / 6));
+        gameRef.gameMap.container.add(ElectroBall(3 * math.pi / 2));
+      case PlayerMagicSpell.fireBallBlue:
+        Vector2 norm = groundRigidBody?.linearVelocity ?? Vector2.zero();
+        double vecAngle = norm.angleToSigned(Vector2(1,0));
+        if(isFlippedHorizontally){
+          gameRef.gameMap.container.add(FireBall(FireBallType.blue,Vector2(math.cos(vecAngle + math.pi / 6), -math.sin(vecAngle + math.pi / 6)), position: position - Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.blue,Vector2(math.cos(vecAngle), -math.sin(vecAngle)), position: position - Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.blue,Vector2(math.cos(vecAngle - math.pi / 6), -math.sin(vecAngle - math.pi / 6)), position: position - Vector2(22,2)));
+        }else{
+          gameRef.gameMap.container.add(FireBall(FireBallType.blue,Vector2(math.cos(vecAngle + math.pi / 6), -math.sin(vecAngle + math.pi / 6)), position: position + Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.blue,Vector2(math.cos(vecAngle), -math.sin(vecAngle)), position: position + Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.blue,Vector2(math.cos(vecAngle - math.pi / 6), -math.sin(vecAngle - math.pi / 6)), position: position + Vector2(22,2)));
+        }
+        break;
+      case PlayerMagicSpell.fireBallRed:
+        Vector2 norm = groundRigidBody?.linearVelocity ?? Vector2.zero();
+        double vecAngle = norm.angleToSigned(Vector2(1,0));
+        if(isFlippedHorizontally){
+          gameRef.gameMap.container.add(FireBall(FireBallType.red,Vector2(math.cos(vecAngle + math.pi / 6), -math.sin(vecAngle + math.pi / 6)), position: position - Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.red,Vector2(math.cos(vecAngle), -math.sin(vecAngle)), position: position - Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.red,Vector2(math.cos(vecAngle - math.pi / 6), -math.sin(vecAngle - math.pi / 6)), position: position - Vector2(22,2)));
+        }else{
+          gameRef.gameMap.container.add(FireBall(FireBallType.red,Vector2(math.cos(vecAngle + math.pi / 6), -math.sin(vecAngle + math.pi / 6)), position: position + Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.red,Vector2(math.cos(vecAngle), -math.sin(vecAngle)), position: position + Vector2(22,2)));
+          gameRef.gameMap.container.add(FireBall(FireBallType.red,Vector2(math.cos(vecAngle - math.pi / 6), -math.sin(vecAngle - math.pi / 6)), position: position + Vector2(22,2)));
+        }
+        break;
+      case PlayerMagicSpell.poisonBall:
+        Vector2 norm = groundRigidBody?.linearVelocity ?? Vector2.zero();
+        double vecAngle = norm.angleToSigned(Vector2(1,0));
+        gameRef.gameMap.container.add(PoisonBall(Vector2(math.cos(vecAngle + math.pi / 6), -math.sin(vecAngle + math.pi / 6)), position: position - Vector2(22,2)));
+        gameRef.gameMap.container.add(PoisonBall(Vector2(math.cos(vecAngle), -math.sin(vecAngle)), position: position - Vector2(22,2)));
+        gameRef.gameMap.container.add(PoisonBall(Vector2(math.cos(vecAngle - math.pi / 6), -math.sin(vecAngle - math.pi / 6)), position: position - Vector2(22,2)));
     }
   }
 

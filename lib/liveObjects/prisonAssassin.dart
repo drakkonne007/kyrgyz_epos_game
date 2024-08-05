@@ -65,13 +65,13 @@ class PrisonAssassin extends KyrgyzEnemy
         'tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 7, loop: false);
-    animIdle2 = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 10, loop: false);
-    animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0, to: 6, loop: false);
-    animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0,to: 9, loop: false);
-    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.08, from: 0,to: 11, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 7,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0,loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
+    animIdle2 = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 10, loop: false);
+    animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 6, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 9, loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 11, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -119,6 +119,9 @@ class PrisonAssassin extends KyrgyzEnemy
   @override
   void update(double dt)
   {
+    if(isFreeze > 0){
+      return;
+    }
     super.update(dt);
     if(!isRefresh){
       return;

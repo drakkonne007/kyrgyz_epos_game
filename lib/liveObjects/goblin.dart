@@ -72,27 +72,27 @@ class Goblin extends KyrgyzEnemy
     SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-atk1-no combo.png'
     ), srcSize: srcSize);
-    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-death.png'
     ), srcSize: srcSize);
-    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0, loop: false);
+    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-idle.png'
     ), srcSize: srcSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-walk.png'
     ), srcSize: srcSize);
-    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-hurt.png'
     ), srcSize: srcSize);
-    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-atk1.png'
@@ -159,11 +159,14 @@ class Goblin extends KyrgyzEnemy
   @override
   void update(double dt)
   {
+    if(isFreeze > 0){
+      return;
+    }
+    position = groundBody!.position / PhysicVals.physicScale;
     super.update(dt);
     if(!isRefresh){
       return;
     }
-    position = groundBody!.position / PhysicVals.physicScale;
     int pos = position.y.toInt() + 30;
     if(pos <= 0){
       pos = 1;

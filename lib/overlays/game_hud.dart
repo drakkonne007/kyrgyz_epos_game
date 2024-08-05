@@ -50,6 +50,27 @@ class GameHud extends StatelessWidget
                         ),
                         onLongPress: (){
                           _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                          _game.gameMap.orthoPlayer?.startMagic() : _game.gameMap.frontPlayer?.startMagic();
+                        },
+                        onPressed: (){
+                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                          _game.gameMap.orthoPlayer?.startMagic() : _game.gameMap.frontPlayer?.startMagic();
+                        },
+                        child: Image.asset('assets/images/inventar/UI-9-sliced object-209.png',width: 40,height: 40,
+                          fit: BoxFit.cover,),
+                      ),
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          elevation: WidgetStateProperty.all<double>(0),
+                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
+                        ),
+                        onLongPress: (){
+                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
                           _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
                         },
                         onPressed: (){

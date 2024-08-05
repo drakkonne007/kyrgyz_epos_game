@@ -464,7 +464,7 @@ class WorldPhy implements World
               }
               for(int k = 0; k < vertices.length - 1; k++) {
                 if(f_pointOfIntersect(p1,p2,vertices[k],vertices[k+1]) != Vector2.zero()){
-                    return true;
+                  return true;
                 }
               }
               if(isLoop){

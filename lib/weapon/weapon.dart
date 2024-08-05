@@ -9,6 +9,7 @@ import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'dart:math' as math;
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/weapon/magicEffects/lightningEffect.dart';
 
 double radiansOfPlayerDirect(PlayerDirectionMove direct)
 {
@@ -46,13 +47,25 @@ abstract class EnemyWeapon extends DCollisionEntity
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;
-  double activeSecs = 0;
-  double coolDown = 1;
+  double _activeSecs = 0;
+  double _coolDown = 1;
   double currentCoolDown = 1;
   double latencyBefore = 0;
 
+  set coolDown(double val)
+  {
+    _coolDown = val;
+    currentCoolDown = _coolDown;
+  }
+  double get coolDown => _coolDown;
 
   Future<void> hit();
+
+  @override
+  void onLoad()
+  {
+    currentCoolDown = _coolDown;
+  }
 
 
   @override
@@ -68,7 +81,7 @@ abstract class EnemyWeapon extends DCollisionEntity
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is PlayerHitbox){
-      if(currentCoolDown < coolDown){
+      if(currentCoolDown < _coolDown){
         return;
       }
       onObstacle?.call();
@@ -83,7 +96,7 @@ abstract class EnemyWeapon extends DCollisionEntity
   void update(double dt)
   {
     // doDebug();
-    if(currentCoolDown < coolDown){
+    if(currentCoolDown < _coolDown){
       currentCoolDown += dt;
     }
     // super.update(dt);
@@ -92,8 +105,8 @@ abstract class EnemyWeapon extends DCollisionEntity
 
 abstract class PlayerWeapon extends DCollisionEntity
 {
-  PlayerWeapon(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic,required this.onStartWeaponHit,
-    required this.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic});
+  PlayerWeapon(super._vertices, {required super.collisionType, super.isSolid, required super.isStatic,this.onStartWeaponHit,
+    this.onEndWeaponHit, super.isLoop, required super.game, super.radius, super.isOnlyForStatic});
 
   Function()? onStartWeaponHit;
   Function()? onEndWeaponHit;
@@ -104,18 +117,26 @@ abstract class PlayerWeapon extends DCollisionEntity
   double secsOfPermDamage = 0;
   bool inArmor = true;
   double energyCost = 0;
-  double coolDown = 1;
+  double _coolDown = 1;
   double currentCoolDown = 0;
   double latencyBefore = 0;
   final Map<EnemyHitbox,int> _myHitboxes= {};
 
-  Future<void> hit();
+  set coolDown(double val)
+  {
+    _coolDown = val;
+    currentCoolDown = _coolDown;
+  }
+  double get coolDown => _coolDown;
+
+  void hit();
 
   @override
   void onLoad()
   {
     TimerComponent timer = TimerComponent(period: 60, repeat: true,onTick: cleanHash);
     add(timer);
+    currentCoolDown = coolDown;
   }
 
   void cleanHash()
@@ -151,47 +172,22 @@ abstract class PlayerWeapon extends DCollisionEntity
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
+
     if (other is EnemyHitbox) {
       if (_myHitboxes.containsKey(other)) {
-        if (DateTime
-            .now()
-            .millisecondsSinceEpoch - _myHitboxes[other]! < coolDown * 1000) {
+        if (DateTime.now().millisecondsSinceEpoch - _myHitboxes[other]! < coolDown * 1000) {
           return;
         } else {
-          _myHitboxes[other] = DateTime
-              .now()
-              .millisecondsSinceEpoch;
+          _myHitboxes[other] = DateTime.now().millisecondsSinceEpoch;
         }
       } else {
-        _myHitboxes[other] = DateTime
-            .now()
-            .millisecondsSinceEpoch;
+        _myHitboxes[other] = DateTime.now().millisecondsSinceEpoch;
       }
-      // if(currentCoolDown < coolDown){
-      //   return;
-      // }
-      // currentCoolDown = 0;
+      hit();
       if (other.parent is KyrgyzEnemy) {
         var temp = other.parent as KyrgyzEnemy;
         bool isPlayer = parent is MainPlayer;
         temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);
-        // game.add(
-        //   ParticleSystemComponent(
-        //     position: other.getCenter(),
-        //     size: Vector2(5,5),
-        //     particle: Particle.generate(
-        //       count: 15,
-        //       generator: (i) => AcceleratedParticle(
-        //         lifespan: 0.3,
-        //         acceleration: randomVector2(),
-        //         child: CircleParticle(
-        //           radius: 0.7,
-        //           paint: Paint()..color = Colors.red[900]!,
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // );
         if (secsOfPermDamage > 0
             && permanentDamage > 0
             && magicDamage != null) {
@@ -205,19 +201,11 @@ abstract class PlayerWeapon extends DCollisionEntity
           var tempComponent = other.parent as Component;
           double damage = permanentDamage / 2;
           MagicDamage magic = magicDamage!;
-          tempComponent.add(TempEffect(parentId: 'magicDamage/${magic.name}',
-              period: secsOfPermDamage,
-              onUpdate: (dt) {
-                temp.doMagicHurt(hurt: damage * dt, magicDamage: magic);
-              },
-              onEndEffect: () {
-                int curr = temp.magicDamages[magic]!;
-                curr--;
-                if (curr == 0) {
-                  temp.magicDamages.remove(magic);
-                } else {
-                  temp.magicDamages[magic] = curr;
-                }
+          tempComponent.add(CountTimer(
+              period: 1,
+              count: secsOfPermDamage.toInt(),
+              onTick: () {
+                temp.doMagicHurt(hurt: damage, magicDamage: magic);
               }));
         }
       }

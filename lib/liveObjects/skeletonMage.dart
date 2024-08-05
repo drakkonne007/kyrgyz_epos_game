@@ -74,23 +74,23 @@ class SkeletonMage extends KyrgyzEnemy
     final spriteSheetWithShield = SpriteSheet(image: spriteImageWithShield,
         srcSize: _spriteSheetSize);
 
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
-    animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 8,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1, from: 0, to: 13,loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 6,loop: false);
+    animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
 
-    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackStartShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08, from: 0,to: 6,loop: false);
-    _animAttackLongShield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08, from: 0, to: 8,loop: false);
-    _animAttackEndShield = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.08, from: 0, to: 7, loop: false);
-    _animBlock = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animHurtShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.06, from: 0, to: 8,loop: false);
-    _animThrowShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.07, from: 0, to: 8,loop: false);
-    _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1, from: 0, to: 13,loop: false);
+    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animAttackStartShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 6,loop: false);
+    _animAttackLongShield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animAttackEndShield = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
+    _animBlock = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animHurtShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animThrowShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
 
     animation = _withShieldNow ? _animIdleShield : animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -172,13 +172,23 @@ class SkeletonMage extends KyrgyzEnemy
         // _rigidSec = 0.8;
         double posX = position.x - gameRef.gameMap.orthoPlayer!.position.x;
         double posY = position.y - gameRef.gameMap.orthoPlayer!.position.y;
-        if (whereObstacle == ObstacleWhere.side) {
-          posX = 0;
+        for(final temp in myContactMap.values){
+          if(temp == ObstacleWhere.up && posY < 0){
+            posY = 0;
+          }
+          if(temp == ObstacleWhere.down && posY > 0){
+            posY = 0;
+          }
+          if(temp == ObstacleWhere.left && posX < 0){
+            posX = 0;
+          }
+          if(temp == ObstacleWhere.right && posX > 0){
+            posX = 0;
+          }
         }
-        if (whereObstacle == ObstacleWhere.upDown && posY < 0) {
-          posY = 0;
+        if(posX == 0 && posY == 0){
+          posX = posY = math.Random().nextDouble() * 500 - 250;
         }
-        whereObstacle = ObstacleWhere.none;
         double angle = math.atan2(posY, posX);
         speed.x = math.cos(angle) * maxSpeed;
         speed.y = math.sin(angle) * maxSpeed;
@@ -286,10 +296,13 @@ class SkeletonMage extends KyrgyzEnemy
   @override
   void update(double dt)
   {
-    if (!isRefresh) {
+    if(isFreeze > 0){
       return;
     }
     super.update(dt);
+    if (!isRefresh) {
+      return;
+    }
     if(!isHigh) {
       int pos = position.y.toInt() + 38;
       if (pos <= 0) {
@@ -324,7 +337,7 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _weapon = DefaultEnemyWeapon([Vector2.zero()], collisionType: DCollisionType.active, radius: 10
       , isStatic: false, onObstacle: destroy, game: gameRef,isSolid: true,);
     add(_weapon);
-    _weapon.damage = 1;
+    _weapon.damage = 2;
 
     Image imgLoop   = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-loop.png');
     Image imgDestr1 = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-destroy.png');

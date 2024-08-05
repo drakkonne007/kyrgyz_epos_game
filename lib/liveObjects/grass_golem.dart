@@ -87,11 +87,11 @@ class GrassGolem extends KyrgyzEnemy
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0, to: 8,loop: false);
-    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.05, from: 0,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0, to: 12,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1, from: 0, to: 13,loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 12,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -131,6 +131,9 @@ class GrassGolem extends KyrgyzEnemy
   @override
   void update(double dt)
   {
+    if(isFreeze > 0){
+      return;
+    }
     super.update(dt);
     if(!isRefresh){
       return;

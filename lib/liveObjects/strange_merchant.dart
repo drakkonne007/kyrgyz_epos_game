@@ -48,7 +48,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     SpriteSheet spriteSheet = SpriteSheet(
       image: await Flame.images.load('tiles/map/ancientLand/Characters/NPC merchant/with animated items/NPC Merchant-interaction-loop.png'),
         srcSize:  Vector2(110,110));
-    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0);
+    _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + Random().nextDouble() / 40 - 0.0125,from: 0);
     animation = _animIdle;
     size *= 1.15;
     final List<Vector2> points = [
@@ -75,7 +75,7 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     position = ground!.position / PhysicVals.physicScale;
     priority = position.y.toInt();
     if(quest != null){
-      add(NpcDialogAttention(Vector2(width / 2,height / 2 - 40)));
+      add(NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width / 2,height / 2 - 40)));
     }
   }
 

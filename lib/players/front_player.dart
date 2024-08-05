@@ -9,6 +9,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/weapon/fireBall.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
@@ -116,21 +117,21 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     Vector2 tSize = Vector2(22,45);
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)));
     groundRigidBody = Ground(
-      BodyDef(type: BodyType.dynamic, position: position * PhysicVals.physicScale, fixedRotation: true,
-          userData: BodyUserData(isQuadOptimizaion: false
-          ,onBeginMyContact: (Object other, Contact contact){
-                if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
-                  _groundCount++;
-                  _onGround = true;
-                }
-              },
-              onEndMyContact: (Object other, Contact contact){
-                if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
-                  _groundCount--;
-                }
-              })),
-      gameRef.world.physicsWorld,
-      isPlayer: true
+        BodyDef(type: BodyType.dynamic, position: position * PhysicVals.physicScale, fixedRotation: true,
+            userData: BodyUserData(isQuadOptimizaion: false
+                ,onBeginMyContact: (Object other, Contact contact){
+                  if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
+                    _groundCount++;
+                    _onGround = true;
+                  }
+                },
+                onEndMyContact: (Object other, Contact contact){
+                  if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
+                    _groundCount--;
+                  }
+                })),
+        gameRef.world.physicsWorld,
+        isPlayer: true
     );
     groundRigidBody?.createFixture(fix);
     groundRigidBody?.linearDamping = 0;
@@ -180,6 +181,19 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     groundRigidBody?.linearVelocity = Vector2.zero();
     if(animation != null){
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
+    }
+  }
+
+  void startMagic()
+  {
+    if(isFlippedHorizontally){
+      gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-0.5,-0.5), position: position - Vector2(30,0)));
+      gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-1,0), position: position - Vector2(30,0)));
+      gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-0.5,0.5), position: position - Vector2(30,0)));
+    }else{
+      gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(0.5,-0.5), position: position - Vector2(30,0)));
+      gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(1,0), position: position - Vector2(30,0)));
+      gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(0.5,0.5), position: position - Vector2(30,0)));
     }
   }
 

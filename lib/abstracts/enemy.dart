@@ -7,6 +7,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
@@ -18,6 +19,9 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
+import 'package:game_flame/weapon/magicEffects/fireEffect.dart';
+import 'package:game_flame/weapon/magicEffects/lightningEffect.dart';
+import 'package:game_flame/weapon/magicEffects/poisonEffect.dart';
 
 class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
 {
@@ -36,7 +40,7 @@ class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
       removeFromParent();
     }));
   }
-  
+
   @override
   void update(double dt)
   {
@@ -59,21 +63,34 @@ class HitBar extends PositionComponent with HasGameRef<KyrgyzGame>
     priority = GamePriority.maxPriority;
     emptyBar = Sprite(await Flame.images.load('tiles/map/grassLand/UI/emptyBar.png'));
     healthBar = Sprite(await Flame.images.load('tiles/map/grassLand/UI/healthBar.png'));
-    add(TimerComponent(period: 0.5,onTick: removeFromParent));
   }
 
   @override
   void render(Canvas canvas)
   {
-    emptyBar.render(canvas,size: size, overridePaint: Paint()..color = BasicPalette.white.color.withOpacity(opacity));
-    healthBar.render(canvas,size: Vector2(size.x * percentHp / 100,size.y), overridePaint: Paint()..color = BasicPalette.white.color.withOpacity(opacity));
+    if(opacity > 0) {
+      emptyBar.render(canvas, size: size, overridePaint: Paint()
+        ..color = BasicPalette.white.color.withOpacity(opacity));
+      healthBar.render(canvas, size: Vector2(size.x * percentHp / 100, size.y),
+          overridePaint: Paint()
+            ..color = BasicPalette.white.color.withOpacity(opacity));
+    }
   }
 
   @override
   void update(double dt)
   {
-    opacity -= dt;
-    position.y -= 10 * dt;
+    if(opacity > 0){
+      var temp = parent as PositionComponent;
+      if(temp.isFlippedHorizontally && !isFlippedHorizontally){
+        flipHorizontally();
+      }
+      if(!temp.isFlippedHorizontally && isFlippedHorizontally){
+        flipHorizontally();
+      }
+      opacity -= dt;
+      position.y -= 10 * dt;
+    }
   }
 }
 
@@ -105,8 +122,8 @@ class HitText extends TextComponent with HasGameRef<KyrgyzGame>
 
 class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  ObstacleWhere whereObstacle = ObstacleWhere.none;
   bool isRefresh = true;
+  int isFreeze = 0;
   double health = 0;
   double armor = 0;
   int maxLoots = 0;
@@ -130,6 +147,9 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double distPlayerLength = 0;
   int shiftAroundAnchorsForHit = 0;
   double _maxHp = 0;
+  Map<BodyUserData,ObstacleWhere> myContactMap = {};
+  HitBar? _hitBar;
+
 
   @override
   @mustCallSuper
@@ -138,22 +158,34 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     setChance();
     add(TimerComponent(onTick: checkIsNeedSelfRemove ,repeat: true,period: 2));
     _maxHp = health;
+    animationTicker?.currentIndex = math.Random().nextInt(animation?.frames.length ?? 0);
+    _hitBar = HitBar(position: Vector2(width * anchor.x, height * anchor.y));
+    _hitBar?.opacity = 0;
+    add(_hitBar!);
   }
 
-  void  onBeginMyContact(Object other, Contact contact)
+  void onBeginMyContact(Object other, Contact contact)
   {
-    if(contact.manifold.points.length == 2){
-      if(contact.manifold.points[0].localPoint.x == contact.manifold.points[1].localPoint.x){
-        whereObstacle = ObstacleWhere.side;
+    ObstacleWhere temp;
+    if(contact.manifold.localNormal.x.abs() > contact.manifold.localNormal.y.abs()){
+      if(contact.manifold.localNormal.x > 0){
+        temp = ObstacleWhere.left;
       }else{
-        whereObstacle = ObstacleWhere.upDown;
+        temp = ObstacleWhere.right;
+      }
+    }else{
+      if(contact.manifold.localNormal.y > 0){
+        temp = ObstacleWhere.up;
+      }else{
+        temp = ObstacleWhere.down;
       }
     }
+    myContactMap[other as BodyUserData] = temp;
   }
 
   void onEndMyContact(Object other, Contact contact)
   {
-    whereObstacle = ObstacleWhere.none;
+    myContactMap.remove(other as BodyUserData);
   }
 
   void changeVertsInWeapon(int index){}
@@ -196,11 +228,22 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
       double posX = isSee ? gameRef.gameMap.orthoPlayer!.position.x - position.x + shift : math.Random().nextDouble() * 500 - 250;
       double posY = isSee ? gameRef.gameMap.orthoPlayer!.position.y - position.y : math.Random().nextDouble() * 500 - 250;
-      if(whereObstacle == ObstacleWhere.side){
-        posX = 0;
+      for(final temp in myContactMap.values){
+        if(temp == ObstacleWhere.up && posY < 0){
+          posY = 0;
+        }
+        if(temp == ObstacleWhere.down && posY > 0){
+          posY = 0;
+        }
+        if(temp == ObstacleWhere.left && posX < 0){
+          posX = 0;
+        }
+        if(temp == ObstacleWhere.right && posX > 0){
+          posX = 0;
+        }
       }
-      if(whereObstacle == ObstacleWhere.upDown && posY < 0){
-        posY = 0;
+      if(posX == 0 && posY == 0){
+        posX = posY = math.Random().nextDouble() * 500 - 250;
       }
       double angle = math.atan2(posY,posX);
       speed.x = math.cos(angle) * (isSee ? maxSpeed : maxSpeed / 2);
@@ -288,23 +331,22 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void _createSpecEffect()
   {
-    // HitText ddText = HitText(dd.ceil().toString(), position: position - Vector2(0, 10));
     final temp = ColorEffect(
       const Color(0xFFFFFFFF),
-      EffectController(duration: 0.1),
-      opacityFrom: 0.3,
+      EffectController(duration: 0.07, reverseDuration: 0.07),
+      opacityFrom: 0.0,
       opacityTo: 0.4,
     );
-    temp.onComplete = temp.reset;
     add(temp);
-    HitBar hBar = HitBar(position: position - Vector2(0, 30),percentHp: health / _maxHp * 100);
-    gameRef.gameMap.container.add(hBar);
+    // HitBar hBar =
+    _hitBar?.opacity = 1;
+    _hitBar?.percentHp = health / _maxHp * 100;
+    _hitBar?.position = Vector2(width * anchor.x, height * anchor.y - 30);
     // gameRef.gameMap.container.add(ddText);
   }
 
   bool internalPhysHurt(double hurt,bool inArmor)
   {
-
     if(inArmor){
       double dd = math.max(hurt - armor, 0);
       if(dd == 0){
@@ -338,8 +380,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       return;
     }
     if(health < 1){
-      death(animDeath);
       weapon?.collisionType = DCollisionType.inactive;
+      death(animDeath);
     }else{
       if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 0){
         return;
@@ -353,8 +395,32 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void doMagicHurt({required double hurt,required MagicDamage magicDamage})
   {
-    health -= hurt;
+    if(animation == animDeath){
+      return;
+    }
+    internalPhysHurt(hurt,false);
+    Component magicAnim;
+    switch(magicDamage){
+      case MagicDamage.fire:
+        magicAnim = FireEffect(position: Vector2(width * anchor.x, height * anchor.y));
+        break;
+      case MagicDamage.ice:
+        isFreeze++;
+        magicAnim = ColorEffect(opacityTo: 0.5, BasicPalette.blue.color, EffectController(duration: 0.51,reverseDuration: 0.51), onComplete: (){isFreeze--;});
+        break;
+      case MagicDamage.lightning:
+        magicAnim = LightningEffect(position: Vector2(width * anchor.x, height * anchor.y));
+        break;
+      case MagicDamage.none:
+        magicAnim = LightningEffect(position: Vector2(width * anchor.x, height * anchor.y));
+        break;
+      case MagicDamage.poison:
+        magicAnim = PoisonEffect(position: Vector2(width * anchor.x, height * anchor.y));
+        break;
+    }
+    add(magicAnim);
     if(health < 1){
+      weapon?.collisionType = DCollisionType.inactive;
       death(animDeath);
     }
   }
@@ -427,29 +493,29 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
   }
 
-  @override
-  void render(Canvas canvas)
-  {
-    super.render(canvas);
-    if(magicDamages.isNotEmpty){
-      var shader = gameRef.fireShader;
-      shader.setFloat(0,gameRef.gameMap.shaderTime);
-      shader.setFloat(1, 4); //scalse
-      shader.setFloat(2, 0); //offsetX
-      shader.setFloat(3, 0);
-      shader.setFloat(4,math.max(size.x,30)); //size
-      shader.setFloat(5,math.max(size.y,30));
-      final paint = Paint()..shader = shader;
-      canvas.drawRect(
-        Rect.fromLTWH(
-          0,
-          0,
-          math.max(size.x,30),
-          math.max(size.y,30),
-        ),
-        paint,
-      );
-    }
-  }
+// @override
+// void render(Canvas canvas)
+// {
+//   super.render(canvas);
+//   if(magicDamages.isNotEmpty){
+//     var shader = gameRef.fireShader;
+//     shader.setFloat(0,gameRef.gameMap.shaderTime);
+//     shader.setFloat(1, 4); //scalse
+//     shader.setFloat(2, 0); //offsetX
+//     shader.setFloat(3, 0);
+//     shader.setFloat(4,math.max(size.x,30)); //size
+//     shader.setFloat(5,math.max(size.y,30));
+//     final paint = Paint()..shader = shader;
+//     canvas.drawRect(
+//       Rect.fromLTWH(
+//         0,
+//         0,
+//         math.max(size.x,30),
+//         math.max(size.y,30),
+//       ),
+//       paint,
+//     );
+//   }
+// }
 
 }

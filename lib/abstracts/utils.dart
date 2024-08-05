@@ -119,6 +119,8 @@ class AxesDiff
 enum ObstacleWhere
 {
   none,
-  side,
-  upDown
+  up,
+  down,
+  left,
+  right,
 }

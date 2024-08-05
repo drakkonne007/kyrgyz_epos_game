@@ -76,40 +76,40 @@ class Pot extends KyrgyzEnemy
     SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-atk1.png'
     ), srcSize: srcSize);
-    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.05, from: 0, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-death.png'
     ), srcSize: srcSize);
-    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0, loop: false);
+    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-idle.png'
     ), srcSize: srcSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-walk.png'
     ), srcSize: srcSize);
-    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
+    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-hurt.png'
     ), srcSize: srcSize);
-    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-atk2.png'
     ), srcSize: srcSize);
-    animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.05, from: 0, loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-revealing itself.png'
     ), srcSize: srcSize);
-    animRevealing = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0, loop: false);
+    animRevealing = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     wakeUp = isHigh;
-    animation = isHigh ? animIdle : spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 1, loop: false);
+    animation = isHigh ? animIdle : spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 1, loop: false);
     position = _startPos;
     hitBox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -158,13 +158,23 @@ class Pot extends KyrgyzEnemy
           // _rigidSec = 0.8;
           double posX = position.x - gameRef.gameMap.orthoPlayer!.position.x;
           double posY = position.y - gameRef.gameMap.orthoPlayer!.position.y;
-          if (whereObstacle == ObstacleWhere.side) {
-            posX = 0;
+          for(final temp in myContactMap.values){
+            if(temp == ObstacleWhere.up && posY < 0){
+              posY = 0;
+            }
+            if(temp == ObstacleWhere.down && posY > 0){
+              posY = 0;
+            }
+            if(temp == ObstacleWhere.left && posX < 0){
+              posX = 0;
+            }
+            if(temp == ObstacleWhere.right && posX > 0){
+              posX = 0;
+            }
           }
-          if (whereObstacle == ObstacleWhere.upDown && posY < 0) {
-            posY = 0;
+          if(posX == 0 && posY == 0){
+            posX = posY = math.Random().nextDouble() * 500 - 250;
           }
-          whereObstacle = ObstacleWhere.none;
           double angle = math.atan2(posY, posX);
           speed.x = math.cos(angle) * maxSpeed;
           speed.y = math.sin(angle) * maxSpeed;
@@ -241,10 +251,13 @@ class Pot extends KyrgyzEnemy
   @override
   void update(double dt)
   {
-    if (!isRefresh) {
+    if(isFreeze > 0){
       return;
     }
     super.update(dt);
+    if (!isRefresh) {
+      return;
+    }
     if(!isHigh) {
       int pos = position.y.toInt() + 38;
       if (pos <= 0) {
@@ -323,7 +336,7 @@ class PotSplash extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   PotSplash({required super.position});
 
-  List<Vector2> _weapons = [
+  final List<Vector2> _weapons = [
     Vector2(-0.65143,-4.85678)
     ,Vector2(-19.8676,-0.159481)
     ,Vector2(-30.7568,8.80808)

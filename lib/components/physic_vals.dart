@@ -33,7 +33,15 @@ enum PlayerDirectionMove{
   RightDown,
 }
 
-
+enum PlayerMagicSpell
+{
+  none,
+  darkBall,
+  electroBall,
+  fireBallBlue,
+  fireBallRed,
+  poisonBall,
+}
 
 class GameConsts
 {  //9504 тайла
@@ -164,6 +172,7 @@ class PlayerData
   final ValueNotifier<Item> swordDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
+  PlayerMagicSpell playerMagicSpell = PlayerMagicSpell.darkBall;
 
   void addToInventar(InventarType type, String itemId)
   {

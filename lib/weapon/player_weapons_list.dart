@@ -9,10 +9,10 @@ import 'dart:math' as math;
 class DefaultPlayerWeapon extends PlayerWeapon
 {
   DefaultPlayerWeapon(super._vertices, {required super.collisionType,super.isSolid,required super.isStatic,
-    required super.onStartWeaponHit,required super.onEndWeaponHit,super.isLoop,required super.game,super.radius, super.isOnlyForStatic, });
+     super.onStartWeaponHit, super.onEndWeaponHit,super.isLoop,required super.game,super.radius, super.isOnlyForStatic, });
 
   @override
-  Future<void> hit() async {
+  void hit() {
     onStartWeaponHit?.call();
   }
 

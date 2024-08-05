@@ -9,7 +9,7 @@ class TreeHandler
   FixtureProxy? userData;
   int parentNode;
   bool isMoving;
-  Map<int,TreeHandler> children = {};
+  Map<int,TreeHandler> children = {}; //TODO Можно добавить сюда бфлаг того, что только для статичных объектов, и тогда можно ускорить немного нагрузку на процессор
 }
 
 
@@ -121,7 +121,7 @@ class MyBroadPhase implements BroadPhase,TreeCallback
   @override
   void moveProxy(int proxyId, AABB aabb, Vector2 displacement)
   {
-    if(proxyId < worldData!.gameConsts.maxColumn! * worldData!.gameConsts.maxRow!){
+    if(proxyId < worldData!.gameConsts.maxColumn * worldData!.gameConsts.maxRow){
       throw 'Move with no move!!!';
     }
     if(displacement != Vector2.zero() && _movingProxyHash.containsKey(proxyId)) {
@@ -194,7 +194,7 @@ class MyBroadPhase implements BroadPhase,TreeCallback
       int maxRow = (body.aabb.upperBound.y) ~/ (GameConsts.lengthOfTileSquare.y * PhysicVals.physicScale) + 1;
       for(int i = minColumn; i <= maxColumn; i++){
         for(int j = minRow; j <= maxRow; j++){
-          int mapPos = i + j * worldData!.gameConsts.maxColumn!;
+          int mapPos = i + j * worldData!.gameConsts.maxColumn;
           if(!_nests.containsKey(mapPos)){
             continue;
           }
@@ -213,7 +213,7 @@ class MyBroadPhase implements BroadPhase,TreeCallback
         }
       }
     }
-    Set<int> removeFilter = {};
+    Set<int> removeFilter = {};  //TODO Можно добавить сюда флаг того, что только для статичных объектов, и тогда можно ускорить немного нагрузку на процессор
     for(int i=0; i<moveProxies.length; i++){
       for(int j=0; j<moveProxies.length; j++){
         if(i == j || removeFilter.contains(j)){
