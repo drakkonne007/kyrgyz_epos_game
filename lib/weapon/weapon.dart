@@ -4,7 +4,7 @@ import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'dart:math' as math;

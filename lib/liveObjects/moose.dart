@@ -10,7 +10,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';

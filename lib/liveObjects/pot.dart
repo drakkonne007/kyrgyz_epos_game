@@ -13,7 +13,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 

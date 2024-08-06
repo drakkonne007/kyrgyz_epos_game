@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
-import 'package:flame/camera.dart';
+import 'package:game_flame/Items/Dresses/ringDress.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
@@ -13,19 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart' as ext;
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/ForgeOverrides/broadphase.dart';
-import 'package:game_flame/Items/armorDress.dart';
-import 'package:game_flame/Items/helmetDress.dart';
+import 'package:game_flame/Items/Dresses/armorDress.dart';
+import 'package:game_flame/Items/Dresses/helmetDress.dart';
 import 'package:game_flame/Items/loot_list.dart';
-import 'package:game_flame/Items/swordDress.dart';
-import 'package:game_flame/Quests/chestOfGlory.dart';
-import 'package:game_flame/abstracts/compiller.dart';
-import 'package:game_flame/components/CountTimer.dart';
+import 'package:game_flame/Items/Dresses/swordDress.dart';
 import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/gen/strings.g.dart';
-import 'package:game_flame/main.dart';
 import 'package:game_flame/overlays/PrettySplash.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/dialog_overlay.dart';
@@ -72,6 +67,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader lightningShader;
   Quest? currentQuest;
   Map<String,Quest> quests = {};
+  int currentStateInventar = 0;
 
   Future saveGame() async
   {
@@ -142,10 +138,10 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
           ArmorStart(),
           NullItem(),
           SwordStart(),
-          NullItem(),
+          Ring1(),
           NullItem(),
           {'swordStart': 1, 'sword36': 1, 'sword19': 1},
-          {'armorStart': 1, 'startHelmet': 1},
+          {'armorStart': 1, 'startHelmet': 1, 'Ring1' : 1, 'Ring2' : 1, 'Ring3' : 1, 'Ring4' : 1, 'Ring5' : 1},
           {'hpSmall': 10,
             'hpMedium': 10,
             'hpBig': 10,

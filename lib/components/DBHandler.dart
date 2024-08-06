@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/Items/loot_list.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/game_worlds.dart';

@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';

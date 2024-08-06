@@ -4,7 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>

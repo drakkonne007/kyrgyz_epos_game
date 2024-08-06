@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
@@ -170,7 +170,7 @@ class _LootInvantarState extends State<LootInventar>
                         alignment: Alignment.center,
                         children: [
                           Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
-                            // centerSlice: const Rect.fromLTWH(6, 6, 20, 20),
+                            centerSlice: const Rect.fromLTWH(23, 24, 8, 8),
                             fit: BoxFit.contain,
                           ),
                           Image.asset('assets/${item.source}',
@@ -194,7 +194,7 @@ class _LootInvantarState extends State<LootInventar>
                     maximumSize: WidgetStateProperty.all<Size>(Size(minSize,minSize)),
                     backgroundBuilder: ((context, state, child){
                       return Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
-                        // centerSlice: const Rect.fromLTWH(6, 6, 20, 20),
+                        centerSlice: const Rect.fromLTWH(23, 24, 8, 8),
                         fit: BoxFit.contain,);
                     })
                 ),
@@ -225,7 +225,7 @@ class _LootInvantarState extends State<LootInventar>
   {
     if((item == widget.game.playerData.helmetDress.value || item == widget.game.playerData.armorDress.value || item == widget.game.playerData.bootsDress.value || item == widget.game.playerData.glovesDress.value
         || item == widget.game.playerData.swordDress.value || item == widget.game.playerData.ringDress.value) && item.id != 'nullItem'){
-      return 'assets/images/inventar/UI-9-sliced object-12.png';
+      return 'assets/images/inventar/UI-9-sliced object-14.png';
     }else{
       return 'assets/images/inventar/nullImage.png';
     }

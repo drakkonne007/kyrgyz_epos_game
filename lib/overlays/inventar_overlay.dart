@@ -36,6 +36,12 @@ class InventoryOverlayState extends State<InventoryOverlay>
   int currentIndex = 0;
 
   @override
+  void initState() {
+    currentIndex = widget.game.currentStateInventar;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context)
   {
     return LayoutBuilder(builder: (context,constraints){
@@ -57,7 +63,7 @@ class InventoryOverlayState extends State<InventoryOverlay>
                     children:[
                       Image.asset('assets/images/inventar/UI-9-sliced object-31.png',
                         fit: BoxFit.fill,
-                        centerSlice: const Rect.fromLTWH(8,9,9,10),
+                        centerSlice: const Rect.fromLTWH(18,18,14,20),
                         isAntiAlias: true,
                         filterQuality: FilterQuality.high,
                         width: constraints.maxWidth * 0.75,
@@ -112,31 +118,37 @@ class InventoryOverlayState extends State<InventoryOverlay>
                   currentIndex = i;
                   if(i == 5){
                     widget.game.doGameHud();
+                  }else{
+                    widget.game.currentStateInventar = i;
                   }
                 });
               },
               style: defaultNoneButtonStyle.copyWith(
-                maximumSize: WidgetStateProperty.all<Size>(Size(width,height + 5)),
-                minimumSize: WidgetStateProperty.all<Size>(Size(width,height + 5)),
+                maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                minimumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
                 alignment: Alignment.bottomCenter
               ),
               child:
               Stack(
                   fit: StackFit.passthrough,
-                  alignment: Alignment.center,
+                  alignment: Alignment.bottomCenter,
                   children:
                   [
                     Image.asset(asset,
                       fit: BoxFit.fill,
-                      centerSlice: const Rect.fromLTWH(4,4,17,19),
+                      centerSlice: currentIndex == i ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
                       isAntiAlias: true,
                       filterQuality: FilterQuality.high,
                       width: width,
-                      height: i == currentIndex ? height + 5 : height,
+                      height: i == currentIndex ? height - 5: height - 10,
+                      alignment: Alignment.bottomCenter,
                     ),
-                    Image.asset(getImage(i),
+                    Image.asset(
+                      getImage(i),
                       width: width,
-                      height: height,)
+                      height: height - 10,
+                      alignment: Alignment.center,
+                    )
                   ]
               )
           )

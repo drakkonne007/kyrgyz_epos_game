@@ -1,2 +1,8 @@
 Get-ChildItem -Recurse | ?{ $_.PSIsContainer } | Select-Object FullName
 -Это выделить все папки в проекте
+
+
+Изменить все даты файлов
+Get-ChildItem -force  * | ForEach-Object{$_.CreationTime = ("6 August 2024 10:10:00")}
+Get-ChildItem -force  * | ForEach-Object{$_.LastWriteTime = ("6 August 2024 10:10:00")}
+Get-ChildItem -force  * | ForEach-Object{$_.LastAccessTime = ("6 August 2024 10:10:00")}

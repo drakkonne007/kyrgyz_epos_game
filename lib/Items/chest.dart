@@ -6,7 +6,7 @@ import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';

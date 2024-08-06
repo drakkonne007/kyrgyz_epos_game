@@ -1,4 +1,4 @@
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class NullItem extends Item

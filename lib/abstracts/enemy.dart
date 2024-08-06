@@ -12,7 +12,7 @@ import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/abstracts/item.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -81,13 +81,6 @@ class HitBar extends PositionComponent with HasGameRef<KyrgyzGame>
   void update(double dt)
   {
     if(opacity > 0){
-      var temp = parent as PositionComponent;
-      if(temp.isFlippedHorizontally && !isFlippedHorizontally){
-        flipHorizontally();
-      }
-      if(!temp.isFlippedHorizontally && isFlippedHorizontally){
-        flipHorizontally();
-      }
       opacity -= dt;
       position.y -= 10 * dt;
     }
@@ -162,6 +155,13 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _hitBar = HitBar(position: Vector2(width * anchor.x, height * anchor.y));
     _hitBar?.opacity = 0;
     add(_hitBar!);
+  }
+
+  @override
+  void flipHorizontally()
+  {
+    super.flipHorizontally();
+    _hitBar?.flipHorizontally();
   }
 
   void onBeginMyContact(Object other, Contact contact)
