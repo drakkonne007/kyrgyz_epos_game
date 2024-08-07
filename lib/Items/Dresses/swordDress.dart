@@ -14,7 +14,7 @@ class SwordStart extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override
@@ -38,7 +38,7 @@ class Sword1 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -62,7 +62,7 @@ class Sword2 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -85,7 +85,7 @@ class Sword3 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -109,7 +109,7 @@ class Sword4 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -131,7 +131,7 @@ class Sword5 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -152,7 +152,7 @@ class Sword6 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -174,7 +174,7 @@ class Sword7 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -195,7 +195,7 @@ class Sword8 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -216,7 +216,7 @@ class Sword9 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -238,7 +238,7 @@ class Sword10 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -260,7 +260,7 @@ class Sword11 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -282,7 +282,7 @@ class Sword12 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -303,7 +303,7 @@ class Sword13 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -325,7 +325,7 @@ class Sword14 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -347,7 +347,7 @@ class Sword15 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -369,7 +369,7 @@ class Sword16 extends Item {
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -389,7 +389,7 @@ class Sword17 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -411,7 +411,7 @@ class Sword18 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -433,7 +433,7 @@ class Sword19 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -452,7 +452,7 @@ class Sword20 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -472,7 +472,7 @@ class Sword21 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -492,7 +492,7 @@ class Sword22 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -515,7 +515,7 @@ class Sword23 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -537,7 +537,7 @@ class Sword24 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -559,7 +559,7 @@ class Sword25 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -581,7 +581,7 @@ class Sword26 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -603,7 +603,7 @@ class Sword27 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -625,7 +625,7 @@ class Sword28 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -647,7 +647,7 @@ class Sword29 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -666,7 +666,7 @@ class Sword30 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -685,7 +685,7 @@ class Sword31 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -707,7 +707,7 @@ class Sword32 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -729,7 +729,7 @@ class Sword33 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -751,7 +751,7 @@ class Sword34 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -773,7 +773,7 @@ class Sword35 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -793,7 +793,7 @@ class Sword36 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -813,7 +813,7 @@ class Sword37 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -833,7 +833,7 @@ class Sword38 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -855,7 +855,7 @@ class Sword39 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -877,7 +877,7 @@ class Sword40 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -899,7 +899,7 @@ class Sword41 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -919,7 +919,7 @@ class Sword42 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -939,7 +939,7 @@ class Sword43 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -958,7 +958,7 @@ class Sword44 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -977,7 +977,7 @@ class Sword45 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -997,7 +997,7 @@ class Sword46 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1017,7 +1017,7 @@ class Sword47 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1037,7 +1037,7 @@ class Sword48 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1057,7 +1057,7 @@ class Sword49 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1080,7 +1080,7 @@ class Sword50 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1100,7 +1100,7 @@ class Sword51 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1120,7 +1120,7 @@ class Sword52 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1140,7 +1140,7 @@ class Sword53 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1160,7 +1160,7 @@ class Sword54 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1180,7 +1180,7 @@ class Sword55 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1202,7 +1202,7 @@ class Sword56 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1224,7 +1224,7 @@ class Sword57 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1247,7 +1247,7 @@ class Sword58 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1269,7 +1269,7 @@ class Sword59 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1291,7 +1291,7 @@ class Sword60 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1311,7 +1311,7 @@ class Sword61 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1331,7 +1331,7 @@ class Sword62 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1354,7 +1354,7 @@ class Sword63 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1377,7 +1377,7 @@ class Sword64 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1397,7 +1397,7 @@ class Sword65 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1417,7 +1417,7 @@ class Sword66 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1437,7 +1437,7 @@ class Sword67 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1459,7 +1459,7 @@ class Sword68 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1481,7 +1481,7 @@ class Sword69 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1500,7 +1500,7 @@ class Sword70 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1523,7 +1523,7 @@ class Sword71 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1546,7 +1546,7 @@ class Sword72 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1566,7 +1566,7 @@ class Sword73 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1588,7 +1588,7 @@ class Sword74 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1610,7 +1610,7 @@ class Sword75 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1632,7 +1632,7 @@ class Sword76 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1654,7 +1654,7 @@ class Sword77 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1673,7 +1673,7 @@ class Sword78 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1693,7 +1693,7 @@ class Sword79 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1716,7 +1716,7 @@ class Sword80 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1736,7 +1736,7 @@ class Sword81 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1756,7 +1756,7 @@ class Sword82 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1775,7 +1775,7 @@ class Sword83 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1794,7 +1794,7 @@ class Sword84 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1814,7 +1814,7 @@ class Sword85 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1834,7 +1834,7 @@ class Sword86 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1854,7 +1854,7 @@ class Sword87 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1874,7 +1874,7 @@ class Sword88 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1894,7 +1894,7 @@ class Sword89 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1914,7 +1914,7 @@ class Sword90 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1934,7 +1934,7 @@ class Sword91 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1957,7 +1957,7 @@ class Sword92 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1977,7 +1977,7 @@ class Sword93 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -1996,7 +1996,7 @@ class Sword94 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -2016,7 +2016,7 @@ class Sword95 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {
@@ -2038,7 +2038,7 @@ class Sword96 extends Item {
 
   @override
   void getEffect(KyrgyzGame game) {
-    game.playerData.addToInventar(InventarType.weapon, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration}) {

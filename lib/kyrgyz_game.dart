@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:game_flame/Items/Dresses/ringDress.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -38,11 +39,26 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 const double aspect = 750.0 / 430.0;
 
+enum InventarOverlayType
+{
+  dress,
+  helmet,
+  armor,
+  gloves,
+  boots,
+  sword,
+  ring,
+  flask,
+  item,
+  quests,
+  map
+}
+
 
 class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsBindingObserver, SingleGameInstance
 {
   KyrgyzGame() : super(
-    world: UpWorld()
+      world: UpWorld()
   );
 
   final DbHandler dbHandler = DbHandler();
@@ -67,15 +83,34 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader lightningShader;
   Quest? currentQuest;
   Map<String,Quest> quests = {};
-  int currentStateInventar = 0;
+  ValueNotifier<InventarOverlayType> currentStateInventar = ValueNotifier<InventarOverlayType>(InventarOverlayType.helmet);
 
   Future saveGame() async
   {
-    await dbHandler.saveGame(0, gameMap.orthoPlayer?.x ?? gameMap.frontPlayer!.x, gameMap.orthoPlayer?.y ?? gameMap.frontPlayer!.y
-        , gameMap.currentGameWorldData!.nameForGame, playerData.health.value,  playerData.energy.value,  playerData.playerLevel.value
-        , playerData.money.value, playerData.helmetDress.value, playerData.armorDress.value, playerData.glovesDress.value, playerData.swordDress.value
-        , playerData.ringDress.value, playerData.bootsDress.value, playerData.weaponInventar, playerData.armorInventar, playerData.flaskInventar, playerData.itemInventar
-    ,gameMap.effectComponent.children.toList(growable: false).cast());
+    await dbHandler.saveGame(
+        saveId: 0,
+        x: gameMap.orthoPlayer?.x ?? gameMap.frontPlayer!.x,
+        y: gameMap.orthoPlayer?.y ?? gameMap.frontPlayer!.y,
+        world: gameMap.currentGameWorldData!.nameForGame,
+        health: playerData.health.value,
+        energy: playerData.energy.value,
+        level: playerData.playerLevel.value,
+        gold: playerData.money.value,
+        helmetDress: playerData.helmetDress.value,
+        armorDress: playerData.armorDress.value,
+        glovesDress: playerData.glovesDress.value,
+        swordDress: playerData.swordDress.value,
+        ringDress: playerData.ringDress.value,
+        bootsDress: playerData.bootsDress.value,
+        helmetInventar: playerData.helmetInventar,
+        bodyArmorInventar: playerData.bodyArmorInventar,
+        glovesInventar: playerData.glovesInventar,
+        bootsInventar: playerData.bootsInventar,
+        flaskInventar: playerData.flaskInventar,
+        itemInventar: playerData.itemInventar,
+        swordInventar: playerData.swordInventar,
+        ringInventar: playerData.ringInventar,
+        tempEffects:  gameMap.effectComponent.children.toList(growable: false).cast());
   }
 
   Future setQuestState(String name, int state, bool isDone)async
@@ -126,33 +161,38 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     await setQuestState('templeDungeon', 0, false);
     if(!await dbHandler.checkSaved(0) || true) {
       await dbHandler.saveGame(
-          0,
-          1700,
-          3000,
-          'topLeftVillage',
-          30,
-          15,
-          1,
-          100,
-          StartHelmet(),
-          ArmorStart(),
-          NullItem(),
-          SwordStart(),
-          Ring1(),
-          NullItem(),
-          {'swordStart': 1, 'sword36': 1, 'sword19': 1},
-          {'armorStart': 1, 'startHelmet': 1, 'Ring1' : 1, 'Ring2' : 1, 'Ring3' : 1, 'Ring4' : 1, 'Ring5' : 1},
-          {'hpSmall': 10,
-            'hpMedium': 10,
-            'hpBig': 10,
-            'hpFull': 10,
-            'energySmall': 10,
-            'energyMedium': 10,
-            'energyBig': 10,
-            'energyFull': 10}
-          ,
-          {},
-          []);
+        saveId: 0,
+        x: 1700,
+        y: 3000,
+        world: 'topLeftVillage',
+        health: 30,
+        energy: 15,
+        level: 1,
+        gold: 100,
+        helmetDress: StartHelmet(),
+        armorDress: ArmorStart(),
+        glovesDress: NullItem(),
+        swordDress: SwordStart(),
+        ringDress: Ring1(),
+        bootsDress: NullItem(),
+        helmetInventar: {'startHelmet': 1},
+        bodyArmorInventar: {'armorStart': 1},
+        glovesInventar: {},
+        bootsInventar: {},
+        flaskInventar: {
+          'hpSmall': 10,
+          'hpMedium': 10,
+          'hpBig': 10,
+          'hpFull': 10,
+          'energySmall': 10,
+          'energyMedium': 10,
+          'energyBig': 10,
+          'energyFull': 10},
+        itemInventar: {},
+        swordInventar: {'swordStart': 1, 'sword36': 1, 'sword19': 1},
+        ringInventar: {'Ring1' : 1, 'Ring2' : 1, 'Ring3' : 1, 'Ring4' : 1, 'Ring5' : 1},
+        tempEffects: [],
+      );
     }
     for(final name in Quest.allQuests){
       quests[name] = Quest.questFromName(this, name);
@@ -162,7 +202,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     }
 
     await loadGame(0);
-    
+
     // playerData.setStartValues(
     //   helmet: StartHelmet(),
     //   armor: ArmorStart(),

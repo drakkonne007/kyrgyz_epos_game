@@ -29,10 +29,14 @@ class SavedGame
   double level = 0;
   int gold = 0;
   List<String> currentInventar = [];
-  Map<String,int> weaponInventar = {};
-  Map<String,int> armorInventar  = {};
-  Map<String,int> flaskInventar  = {};
-  Map<String,int> itemInventar   = {};
+  Map<String,int> helmetInventar = {};
+  Map<String,int> bodyArmorInventar = {};
+  Map<String,int> glovesInventar = {};
+  Map<String,int> bootsInventar = {};
+  Map<String,int> flaskInventar = {};
+  Map<String,int> itemInventar = {};
+  Map<String,int> swordInventar = {};
+  Map<String,int> ringInventar = {};
   List<EffectTimerPure> tempEffects   = [];
 }
 
@@ -171,18 +175,30 @@ class DbHandler
     return (res != null && res.isNotEmpty);
   }
 
-  Future saveGame(int saveId, double x, double y, String world, double health, double energy, double level, int gold,
-      Item helmetDress,
-      Item armorDress,
-      Item glovesDress,
-      Item swordDress,
-      Item ringDress,
-      Item bootsDress,
-      Map<String,int> weaponInventar,
-      Map<String,int> armorInventar,
-      Map<String,int> flaskInventar,
-      Map<String,int> itemInventar,
-      List<TempEffect> tempEffects)async
+  Future saveGame(
+      {required int saveId,
+      required double x,
+      required double y,
+      required String world,
+      required double health,
+      required double energy,
+      required double level,
+      required int gold,
+      required Item helmetDress,
+      required Item armorDress,
+      required Item glovesDress,
+      required Item swordDress,
+      required Item ringDress,
+      required Item bootsDress,
+      required Map<String, int> helmetInventar,
+      required Map<String, int> bodyArmorInventar,
+      required Map<String, int> glovesInventar,
+      required Map<String, int> bootsInventar,
+      required Map<String, int> flaskInventar,
+      required Map<String, int> itemInventar,
+      required Map<String, int> swordInventar,
+      required Map<String, int> ringInventar,
+      required List<TempEffect> tempEffects})async
   {
     await _database?.rawDelete('DELETE FROM player_data WHERE save_id = ?', [saveId]);
     await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,energy,level,gold) VALUES(?,?,?,?,?,?,?,?)', [saveId, x, y, world, health, energy, level, gold]);
@@ -195,17 +211,29 @@ class DbHandler
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, bootsDress.id]);
 
     await _database?.execute('DELETE FROM inventar WHERE save_id = ?', [saveId]);
-    for(final item in weaponInventar.keys){
-      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,weaponInventar[item],10,'weapon']);
+    for(final item in helmetInventar.keys){
+      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,helmetInventar[item],10,'helmet']);
     }
-    for(final item in armorInventar.keys){
-      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,armorInventar[item],10,'armor']);
+    for(final item in bodyArmorInventar.keys){
+      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,bodyArmorInventar[item],10,'armor']);
+    }
+    for(final item in glovesInventar.keys){
+      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,glovesInventar[item],10,'gloves']);
+    }
+    for(final item in bootsInventar.keys){
+      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,bootsInventar[item],10,'boots']);
     }
     for(final item in flaskInventar.keys){
       await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,flaskInventar[item],10,'flask']);
     }
     for(final item in itemInventar.keys){
       await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,itemInventar[item],10,'item']);
+    }
+    for(final item in swordInventar.keys){
+      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,swordInventar[item],10,'sword']);
+    }
+    for(final item in ringInventar.keys){
+      await _database?.rawInsert('INSERT INTO inventar(save_id,name_id,count,count_of_use,type) VALUES(?,?,?,?,?)', [saveId, item,ringInventar[item],10,'ring']);
     }
     await _database?.execute('DELETE FROM effects WHERE save_id = ?', [saveId]);
     for(final eff in tempEffects){
@@ -237,10 +265,14 @@ class DbHandler
     if(res == null) return svGame;
     for(final item in res){
       switch(item['type']!.toString()){
-        case 'weapon': svGame.weaponInventar[item['name_id']!.toString()] = item['count']! as int; break;
-        case 'armor': svGame.armorInventar[item['name_id']!.toString()] = item['count']! as int; break;
+        case 'helmet': svGame.helmetInventar[item['name_id']!.toString()] = item['count']! as int; break;
+        case 'armor': svGame.bodyArmorInventar[item['name_id']!.toString()] = item['count']! as int; break;
+        case 'gloves': svGame.glovesInventar[item['name_id']!.toString()] = item['count']! as int; break;
+        case 'boots': svGame.bootsInventar[item['name_id']!.toString()] = item['count']! as int; break;
         case 'flask': svGame.flaskInventar[item['name_id']!.toString()] = item['count']! as int; break;
         case 'item': svGame.itemInventar[item['name_id']!.toString()] = item['count']! as int; break;
+        case 'sword': svGame.swordInventar[item['name_id']!.toString()] = item['count']! as int; break;
+        case 'ring': svGame.ringInventar[item['name_id']!.toString()] = item['count']! as int; break;
       }
     }
 

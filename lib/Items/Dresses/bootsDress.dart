@@ -16,7 +16,7 @@ class Boots1 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.armor, id);
+    game.playerData.addToInventar(InventarType.boots, id);
   }
 
   @override

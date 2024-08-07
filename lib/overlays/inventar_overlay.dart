@@ -2,7 +2,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/game_widgets/LootInventar.dart';
-import 'package:game_flame/game_widgets/typeInventar.dart';
+import 'package:game_flame/game_widgets/bigWindowInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
@@ -30,17 +30,8 @@ class InventoryOverlay extends StatefulWidget
   }
 }
 
-class InventoryOverlayState extends State<InventoryOverlay>
+class InventoryOverlayState extends State<InventoryOverlay> //Делает верхние вкладки с инвентарями
 {
-
-  int currentIndex = 0;
-
-  @override
-  void initState() {
-    currentIndex = widget.game.currentStateInventar;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context)
   {
@@ -49,12 +40,11 @@ class InventoryOverlayState extends State<InventoryOverlay>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children:[
-                const Spacer(),
                 Row(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: getUpTabs((constraints.maxWidth * 0.75)/11,(constraints.maxHeight * 0.75)/7)
+                    children: getUpTabs((constraints.maxWidth)/11,(constraints.maxHeight * 0.75)/7)
                 ),
                 Stack(
                     alignment: Alignment.center,
@@ -69,91 +59,249 @@ class InventoryOverlayState extends State<InventoryOverlay>
                         width: constraints.maxWidth * 0.75,
                         height: constraints.maxHeight * 0.75,
                       ),
-                      TypeInventar(widget.game,getVariant(currentIndex), Size(constraints.maxWidth * 0.75,constraints.maxHeight * 0.75))
+                      BigWindowInventar(widget.game, Size(constraints.maxWidth * 0.75,constraints.maxHeight * 0.75))
                     ]
                 ),
-                const Spacer()
               ]
       );
     })  ;
   }
 
-  LootVariant getVariant(int index)
+  bool nowIsDress()
   {
-    switch(index){
-      case 0: return LootVariant.weapon;
-      case 1: return LootVariant.armor;
-      case 2: return LootVariant.flask;
-      case 3: return LootVariant.item;
-    }
-    return LootVariant.weapon;
+    return widget.game.currentStateInventar.value == InventarOverlayType.dress || widget.game.currentStateInventar.value == InventarOverlayType.helmet
+        || widget.game.currentStateInventar.value == InventarOverlayType.armor
+        || widget.game.currentStateInventar.value == InventarOverlayType.gloves
+        || widget.game.currentStateInventar.value == InventarOverlayType.boots
+        || widget.game.currentStateInventar.value == InventarOverlayType.sword
+        || widget.game.currentStateInventar.value == InventarOverlayType.ring;
   }
 
-  String getImage(int index)
+  String getImage(InventarOverlayType type)
   {
     String source = '';
-    switch(index){
-      case 0: index == currentIndex ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png'; break;
-      case 1: index == currentIndex ? source = 'shieldYark.png' : source = 'shield.png'; break;
-      case 2: index == currentIndex ? source = 'manaBright.png' : source = 'manaDark.png'; break;
-      case 3: index == currentIndex ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png'; break;
-      case 4: index == currentIndex ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png'; break;
-      case 5: index == currentIndex ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png'; break;
+    switch(type){
+      // case 0: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png'; break;
+      // case 1: index == widget.game.currentStateInventar ? source = 'shieldYark.png' : source = 'shield.png'; break;
+      // case 2: index == widget.game.currentStateInventar ? source = 'manaBright.png' : source = 'manaDark.png'; break;
+      // case 3: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png'; break;
+      // case 4: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png'; break;
+      // case 5: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png'; break;
+      case InventarOverlayType.dress:
+      case InventarOverlayType.helmet:
+      case InventarOverlayType.armor:
+      case InventarOverlayType.gloves:
+      case InventarOverlayType.boots:
+      case InventarOverlayType.sword:
+      case InventarOverlayType.ring:
+        widget.game.currentStateInventar.value == type ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png';
+        break;
+      case InventarOverlayType.flask:
+        widget.game.currentStateInventar.value == type ? source = 'manaBright.png' : source = 'manaDark.png';
+        break;
+      case InventarOverlayType.item:
+        widget.game.currentStateInventar.value == type ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png';
+        break;
+      case InventarOverlayType.quests:
+        widget.game.currentStateInventar.value == type ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png';
+        break;
+      case InventarOverlayType.map:
+        widget.game.currentStateInventar.value == type ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png';
+        break;
     }
     return 'assets/images/inventar/$source';
   }
 
-  List<Widget> getUpTabs(double width, double height)
+  List<Widget> getUpTabs(double width, double height) //
   {
     List<Widget> temp = [SizedBox(width: width*2,)];
-    for(int i=0;i<6;i++){
-      String asset = 'assets/images/inventar/UI-9-sliced object-35.png';
-      if(currentIndex == i) {
-        asset = 'assets/images/inventar/UI-9-sliced object-34.png';
-      }
-      temp.add(
-          ElevatedButton(
-              onPressed: (){
-                setState(() {
-                  currentIndex = i;
-                  if(i == 5){
-                    widget.game.doGameHud();
-                  }else{
-                    widget.game.currentStateInventar = i;
-                  }
-                });
-              },
-              style: defaultNoneButtonStyle.copyWith(
+
+    temp.add(
+        ElevatedButton(
+            onPressed: (){
+              setState(() {
+                  widget.game.currentStateInventar.value = InventarOverlayType.dress;
+              });
+            },
+            style: defaultNoneButtonStyle.copyWith(
                 maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
                 minimumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
                 alignment: Alignment.bottomCenter
-              ),
-              child:
-              Stack(
-                  fit: StackFit.passthrough,
-                  alignment: Alignment.bottomCenter,
-                  children:
-                  [
-                    Image.asset(asset,
-                      fit: BoxFit.fill,
-                      centerSlice: currentIndex == i ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
-                      isAntiAlias: true,
-                      filterQuality: FilterQuality.high,
-                      width: width,
-                      height: i == currentIndex ? height - 5: height - 10,
-                      alignment: Alignment.bottomCenter,
-                    ),
-                    Image.asset(
-                      getImage(i),
-                      width: width,
-                      height: height - 10,
-                      alignment: Alignment.center,
-                    )
-                  ]
-              )
-          )
-      );
-    }
+            ),
+            child:
+            Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.bottomCenter,
+                children:
+                [
+                  Image.asset(nowIsDress() ? 'assets/images/inventar/UI-9-sliced object-34.png' : 'assets/images/inventar/UI-9-sliced object-35.png',
+                    fit: BoxFit.fill,
+                    centerSlice: nowIsDress() ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: width,
+                    height: nowIsDress() ? height - 5: height - 10,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Image.asset(
+                    getImage(InventarOverlayType.dress),
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.center,
+                  )
+                ]
+            )
+        )
+    );
+    temp.add(
+        ElevatedButton(
+            onPressed: (){
+              setState(() {
+                widget.game.currentStateInventar.value = InventarOverlayType.flask;
+              });
+            },
+            style: defaultNoneButtonStyle.copyWith(
+                maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                minimumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                alignment: Alignment.bottomCenter
+            ),
+            child:
+            Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.bottomCenter,
+                children:
+                [
+                  Image.asset(widget.game.currentStateInventar.value == InventarOverlayType.flask ? 'assets/images/inventar/UI-9-sliced object-34.png' : 'assets/images/inventar/UI-9-sliced object-35.png',
+                    fit: BoxFit.fill,
+                    centerSlice: widget.game.currentStateInventar.value == InventarOverlayType.flask ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: width,
+                    height: widget.game.currentStateInventar.value == InventarOverlayType.flask ? height - 5: height - 10,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Image.asset(
+                    getImage(InventarOverlayType.flask),
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.center,
+                  )
+                ]
+            )
+        )
+    );
+    temp.add(
+        ElevatedButton(
+            onPressed: (){
+              setState(() {
+                widget.game.currentStateInventar.value = InventarOverlayType.item;
+              });
+            },
+            style: defaultNoneButtonStyle.copyWith(
+                maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                minimumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                alignment: Alignment.bottomCenter
+            ),
+            child:
+            Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.bottomCenter,
+                children:
+                [
+                  Image.asset(widget.game.currentStateInventar.value == InventarOverlayType.item ? 'assets/images/inventar/UI-9-sliced object-34.png' : 'assets/images/inventar/UI-9-sliced object-35.png',
+                    fit: BoxFit.fill,
+                    centerSlice: widget.game.currentStateInventar.value == InventarOverlayType.item ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: width,
+                    height: widget.game.currentStateInventar.value == InventarOverlayType.item ? height - 5: height - 10,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Image.asset(
+                    getImage(InventarOverlayType.item),
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.center,
+                  )
+                ]
+            )
+        )
+    );
+    temp.add(
+        ElevatedButton(
+            onPressed: (){
+              setState(() {
+                widget.game.currentStateInventar.value = InventarOverlayType.quests;
+              });
+            },
+            style: defaultNoneButtonStyle.copyWith(
+                maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                minimumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                alignment: Alignment.bottomCenter
+            ),
+            child:
+            Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.bottomCenter,
+                children:
+                [
+                  Image.asset(widget.game.currentStateInventar.value == InventarOverlayType.quests ? 'assets/images/inventar/UI-9-sliced object-34.png' : 'assets/images/inventar/UI-9-sliced object-35.png',
+                    fit: BoxFit.fill,
+                    centerSlice: widget.game.currentStateInventar.value == InventarOverlayType.quests ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: width,
+                    height: widget.game.currentStateInventar.value == InventarOverlayType.quests ? height - 5: height - 10,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Image.asset(
+                    getImage(InventarOverlayType.quests),
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.center,
+                  )
+                ]
+            )
+        )
+    );
+    temp.add(
+        ElevatedButton(
+            onPressed: (){
+              setState(() {
+                // widget.game.currentStateInventar.value = InventarOverlayType.map;
+                widget.game.doGameHud();
+              });
+            },
+            style: defaultNoneButtonStyle.copyWith(
+                maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                minimumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                alignment: Alignment.bottomCenter
+            ),
+            child:
+            Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.bottomCenter,
+                children:
+                [
+                  Image.asset(widget.game.currentStateInventar.value == InventarOverlayType.map ? 'assets/images/inventar/UI-9-sliced object-34.png' : 'assets/images/inventar/UI-9-sliced object-35.png',
+                    fit: BoxFit.fill,
+                    centerSlice: widget.game.currentStateInventar.value == InventarOverlayType.map ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: width,
+                    height: widget.game.currentStateInventar.value == InventarOverlayType.map ? height - 5: height - 10,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Image.asset(
+                    getImage(InventarOverlayType.map),
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.center,
+                  )
+                ]
+            )
+        )
+    );
     return temp;
   }
 }

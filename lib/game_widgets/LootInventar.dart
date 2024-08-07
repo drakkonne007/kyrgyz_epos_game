@@ -6,26 +6,17 @@ import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
-enum LootVariant
+class LootInInventar extends StatefulWidget
 {
-  weapon,
-  armor,
-  flask,
-  item,
-}
-
-class LootInventar extends StatefulWidget
-{
-  const LootInventar(this.game, this.lootVariant, this.mySize, {super.key});
+  const LootInInventar(this.game, this.mySize, {super.key});
   final Size mySize;
   final KyrgyzGame game;
-  final LootVariant lootVariant;
 
   @override
   State<StatefulWidget> createState() => _LootInvantarState();
 }
 
-class _LootInvantarState extends State<LootInventar>
+class _LootInvantarState extends State<LootInInventar>
 {
   int _curPage = 0;
 
@@ -35,26 +26,51 @@ class _LootInvantarState extends State<LootInventar>
     super.initState();
   }
 
+  Map<String,int> getCurrentItems(InventarOverlayType type)
+  {
+    Map<String,int> temp = {};
+    // temp = widget.game.playerData.weaponInventar;
+    switch(type){
+      case InventarOverlayType.dress:
+      case InventarOverlayType.armor:
+        temp = widget.game.playerData.bodyArmorInventar;
+        break;
+      case InventarOverlayType.helmet:
+        temp = widget.game.playerData.helmetInventar;
+        break;
+      case InventarOverlayType.gloves:
+        temp = widget.game.playerData.glovesInventar;
+        break;
+      case InventarOverlayType.boots:
+        temp = widget.game.playerData.bootsInventar;
+        break;
+      case InventarOverlayType.sword:
+        temp = widget.game.playerData.swordInventar;
+        break;
+      case InventarOverlayType.ring:
+        temp = widget.game.playerData.ringInventar;
+        break;
+      case InventarOverlayType.flask:
+        temp = widget.game.playerData.flaskInventar;
+        break;
+      case InventarOverlayType.item:
+        temp = widget.game.playerData.itemInventar;
+        break;
+      case InventarOverlayType.quests:
+      // TODO: Handle this case.
+      // TODO: Handle this case.
+      case InventarOverlayType.map:
+      // TODO: Handle this case.
+    }
+    return temp;
+  }
+
   @override
   Widget build(BuildContext context)
   {
-    Map<String,int> temp = {};
-    switch(widget.lootVariant){
-      case LootVariant.weapon:
-        temp = widget.game.playerData.weaponInventar;
-        break;
-      case LootVariant.armor:
-        temp = widget.game.playerData.armorInventar;
-        break;
-      case LootVariant.flask:
-        temp = widget.game.playerData.flaskInventar;
-        break;
-      case LootVariant.item:
-        temp = widget.game.playerData.itemInventar;
-        break;
-    }
-
-    return
+    return ValueListenableBuilder (
+        valueListenable: widget.game.currentStateInventar,
+        builder: (BuildContext context, value, Widget? child) =>
       SizedBox(
           width: widget.mySize.width * 0.62,
           height: widget.mySize.height,
@@ -62,15 +78,6 @@ class _LootInvantarState extends State<LootInventar>
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/images/inventar/gold.png',
-                    fit: BoxFit.contain,
-                    height: 25,),
-                  ValueListenableBuilder(valueListenable: widget.game.playerData.money, builder: (context, value, __) => AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 20,)),
-                ],
-              ),
                 const SizedBox(height: 5,),
                 Row(
                   children: [
@@ -106,15 +113,15 @@ class _LootInvantarState extends State<LootInventar>
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children:[
-                              getLootInventar(temp),
+                              getLootInventar(getCurrentItems(value)),
                               const SizedBox(height: 3,),
-                              getPageHolderOfInventar(temp)
+                              getPageHolderOfInventar(getCurrentItems(value))
                             ]
                         )),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: (){
-                          if(_curPage * 16 + 16 < temp.length){
+                          if(_curPage * 16 + 16 < getCurrentItems(value).length){
                             setState(() {
                               _curPage++;
                             });
@@ -141,7 +148,8 @@ class _LootInvantarState extends State<LootInventar>
                   ],
                 )
               ])
-      );
+      )
+    );
   }
 
   Widget getLootInventar(Map<String,int> hash)
@@ -169,7 +177,7 @@ class _LootInvantarState extends State<LootInventar>
                         fit: StackFit.passthrough,
                         alignment: Alignment.center,
                         children: [
-                          Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
+                          Image.asset('assets/images/inventar/UI-9-sliced object-42.png',
                             centerSlice: const Rect.fromLTWH(23, 24, 8, 8),
                             fit: BoxFit.contain,
                           ),
@@ -177,7 +185,8 @@ class _LootInvantarState extends State<LootInventar>
                             fit: BoxFit.contain,
                             width: minSize/2,
                             height: minSize/2,),
-                          Image.asset(checkIfIsEquipNow(item),fit: BoxFit.contain,),
+                          Image.asset(checkIfIsEquipNow(item),fit: BoxFit.contain,
+                          centerSlice: const Rect.fromLTWH(17, 17, 24, 26),),
                           AutoSizeText(hash[list[i]]!.toString(),style: defaultTextStyle)
                         ]
                     );
@@ -193,7 +202,7 @@ class _LootInvantarState extends State<LootInventar>
                 style: defaultNoneButtonStyle.copyWith(
                     maximumSize: WidgetStateProperty.all<Size>(Size(minSize,minSize)),
                     backgroundBuilder: ((context, state, child){
-                      return Image.asset('assets/images/inventar/UI-9-sliced object-32.png',
+                      return Image.asset('assets/images/inventar/UI-9-sliced object-42.png',
                         centerSlice: const Rect.fromLTWH(23, 24, 8, 8),
                         fit: BoxFit.contain,);
                     })

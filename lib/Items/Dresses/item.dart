@@ -30,8 +30,12 @@ enum MagicDamage
 
 enum InventarType
 {
-  weapon,
-  armor,
+  helmet,
+  bodyArmor,
+  gloves,
+  boots,
+  sword,
+  ring,
   flask,
   item,
 }
@@ -188,17 +192,29 @@ abstract class Item
   {
     Map<String,int> hash;
     switch(type){
-      case InventarType.armor:
-        hash = game.playerData.armorInventar;
+      case InventarType.bodyArmor:
+        hash = game.playerData.bodyArmorInventar;
         break;
-      case InventarType.weapon:
-        hash = game.playerData.weaponInventar;
+      case InventarType.sword:
+        hash = game.playerData.swordInventar;
         break;
       case InventarType.flask:
         hash = game.playerData.flaskInventar;
         break;
       case InventarType.item:
         hash = game.playerData.itemInventar;
+        break;
+      case InventarType.helmet:
+        hash = game.playerData.helmetInventar;
+        break;
+      case InventarType.gloves:
+        hash = game.playerData.glovesInventar;
+        break;
+      case InventarType.boots:
+        hash = game.playerData.bootsInventar;
+        break;
+      case InventarType.ring:
+        hash = game.playerData.ringInventar;
         break;
     }
     if(hash.containsKey(id)){

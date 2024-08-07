@@ -178,17 +178,29 @@ class PlayerData
   {
     Map<String,int> hash = {};
     switch(type){
-      case InventarType.weapon:
-        hash = weaponInventar;
+      case InventarType.sword:
+        hash = swordInventar;
         break;
-      case InventarType.armor:
-        hash = armorInventar;
+      case InventarType.bodyArmor:
+        hash = bodyArmorInventar;
         break;
       case InventarType.flask:
         hash = flaskInventar;
         break;
       case InventarType.item:
         hash = itemInventar;
+        break;
+      case InventarType.helmet:
+        hash = helmetInventar;
+        break;
+      case InventarType.gloves:
+        hash = glovesInventar;
+        break;
+      case InventarType.boots:
+        hash = bootsInventar;
+        break;
+      case InventarType.ring:
+        hash = ringInventar;
         break;
     }
     if(hash.containsKey(itemId)){
@@ -206,10 +218,15 @@ class PlayerData
   bool isLockMove = false;
   Set<String> killedBosses = {};
   ValueNotifier<int> money = ValueNotifier<int>(0);
-  Map<String,int> weaponInventar = {};
-  Map<String,int> armorInventar = {};
+
+  Map<String,int> helmetInventar = {};
+  Map<String,int> bodyArmorInventar = {};
+  Map<String,int> glovesInventar = {};
+  Map<String,int> bootsInventar = {};
   Map<String,int> flaskInventar = {};
   Map<String,int> itemInventar = {};
+  Map<String,int> swordInventar = {};
+  Map<String,int> ringInventar = {};
 
   Vector2 location = Vector2(-1,-1);
   Vector2 curPosition = Vector2(-1,-1);
@@ -219,29 +236,29 @@ class PlayerData
   Vector2 startLocation = Vector2(1772,3067);
 
 
-  void setStartValues({Item? helmet, Item? armor, Item? gloves, Item? sword, Item? ring, Item? boots, int gold = 0, double energy = 0, double health = 0
-  ,double extraArmor = 0, double extraHurtMiss = 0, double extraDamage = 0, double extraChanceOfLoot = 0, double extraAttackSpeed = 0
-  ,Map<String,int>? weaponInventar, Map<String,int>? armorInventar, Map<String,int>? flaskInventar, Map<String,int>? itemInventar})
-  {
-    helmetDress.value = helmet ?? NullItem();
-    armorDress.value = armor ?? NullItem();
-    glovesDress.value = gloves ?? NullItem();
-    swordDress.value = sword ?? NullItem();
-    ringDress.value = ring ?? NullItem();
-    bootsDress.value = boots ?? NullItem();
-    this.extraArmor.value = extraArmor;
-    this.extraHurtMiss.value = extraHurtMiss;
-    this.extraDamage.value = extraDamage;
-    this.extraChanceOfLoot.value = extraChanceOfLoot;
-    this.extraAttackSpeed.value = extraAttackSpeed;
-    money.value = gold;
-    this.weaponInventar = weaponInventar ?? {};
-    this.armorInventar = armorInventar ?? {};
-    this.flaskInventar = flaskInventar ?? {};
-    this.itemInventar = itemInventar ?? {};
-    this.energy.value = energy == 0 ? maxEnergy.value : energy;
-    this.health.value = health == 0 ? maxHealth.value : health;
-  }
+  // void setStartValues({Item? helmet, Item? armor, Item? gloves, Item? sword, Item? ring, Item? boots, int gold = 0, double energy = 0, double health = 0
+  // ,double extraArmor = 0, double extraHurtMiss = 0, double extraDamage = 0, double extraChanceOfLoot = 0, double extraAttackSpeed = 0
+  // ,Map<String,int>? weaponInventar, Map<String,int>? armorInventar, Map<String,int>? flaskInventar, Map<String,int>? itemInventar})
+  // {
+  //   helmetDress.value = helmet ?? NullItem();
+  //   armorDress.value = armor ?? NullItem();
+  //   glovesDress.value = gloves ?? NullItem();
+  //   swordDress.value = sword ?? NullItem();
+  //   ringDress.value = ring ?? NullItem();
+  //   bootsDress.value = boots ?? NullItem();
+  //   this.extraArmor.value = extraArmor;
+  //   this.extraHurtMiss.value = extraHurtMiss;
+  //   this.extraDamage.value = extraDamage;
+  //   this.extraChanceOfLoot.value = extraChanceOfLoot;
+  //   this.extraAttackSpeed.value = extraAttackSpeed;
+  //   money.value = gold;
+  //   this.weaponInventar = weaponInventar ?? {};
+  //   this.armorInventar = armorInventar ?? {};
+  //   this.flaskInventar = flaskInventar ?? {};
+  //   this.itemInventar = itemInventar ?? {};
+  //   this.energy.value = energy == 0 ? maxEnergy.value : energy;
+  //   this.health.value = health == 0 ? maxHealth.value : health;
+  // }
 
   void loadGame(SavedGame svg)
   {
@@ -258,8 +275,12 @@ class PlayerData
       }
     }
     money.value = svg.gold;
-    weaponInventar = svg.weaponInventar;
-    armorInventar = svg.armorInventar;
+    swordInventar = svg.swordInventar;
+    ringInventar = svg.ringInventar;
+    helmetInventar = svg.helmetInventar;
+    bodyArmorInventar = svg.bodyArmorInventar;
+    glovesInventar = svg.glovesInventar;
+    bootsInventar = svg.bootsInventar;
     flaskInventar = svg.flaskInventar;
     itemInventar = svg.itemInventar;
     energy.value = svg.energy;

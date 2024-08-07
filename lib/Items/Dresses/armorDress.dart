@@ -19,7 +19,7 @@ class ArmorStart extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.armor, id);
+    game.playerData.addToInventar(InventarType.sword, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})

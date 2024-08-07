@@ -17,7 +17,7 @@ class Ring1 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.armor, id);
+    game.playerData.addToInventar(InventarType.ring, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -42,7 +42,7 @@ class Ring2 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.armor, id);
+    game.playerData.addToInventar(InventarType.ring, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -67,7 +67,7 @@ class Ring3 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.armor, id);
+    game.playerData.addToInventar(InventarType.ring, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -92,7 +92,7 @@ class Ring4 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.armor, id);
+    game.playerData.addToInventar(InventarType.ring, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
@@ -117,7 +117,7 @@ class Ring5 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.armor, id);
+    game.playerData.addToInventar(InventarType.ring, id);
   }
 
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
