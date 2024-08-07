@@ -257,6 +257,7 @@ class PlayerStats extends StatelessWidget
                               ValueListenableBuilder(valueListenable: game.playerData.swordDress, builder: (context, value, __) => AutoSizeText(value.damage.toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10)),
                             ]
                         ),
+
                         Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
