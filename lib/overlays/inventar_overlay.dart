@@ -56,10 +56,10 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                         centerSlice: const Rect.fromLTWH(18,18,14,20),
                         isAntiAlias: true,
                         filterQuality: FilterQuality.high,
-                        width: constraints.maxWidth * 0.75,
-                        height: constraints.maxHeight * 0.75,
+                        width: constraints.maxWidth * 0.95,
+                        height: constraints.maxHeight * 0.85,
                       ),
-                      BigWindowInventar(widget.game, Size(constraints.maxWidth * 0.75,constraints.maxHeight * 0.75))
+                      BigWindowInventar(widget.game, Size(constraints.maxWidth * 0.95,constraints.maxHeight * 0.85))
                     ]
                 ),
               ]
@@ -114,7 +114,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
 
   List<Widget> getUpTabs(double width, double height) //
   {
-    List<Widget> temp = [SizedBox(width: width*2,)];
+    List<Widget> temp = [SizedBox(width: width,)];
 
     temp.add(
         ElevatedButton(
