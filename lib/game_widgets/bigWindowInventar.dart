@@ -69,7 +69,7 @@ class PlayerStats extends StatelessWidget
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset('assets/images/inventar/gold.png',height: 27,),
-                            ValueListenableBuilder(valueListenable: game.playerData.money, builder: (context, value, __) => AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 18,)),
+                            ValueListenableBuilder(valueListenable: game.playerData.money, builder: (context, value, __) => Expanded(child: AutoSizeText(value.toString(), style: defaultTextStyle, minFontSize: 18,))),
                           ],
                         ),
                         Row(
@@ -229,7 +229,7 @@ class PlayerStats extends StatelessWidget
                             children:[
                               Image.asset('assets/images/inventar/UI-9-sliced object-55.png', width: size.width / 17, height: (size.height - 40 - 27 - ((size.width / 3) / 4.5) * 2 - 42) / 6,fit: BoxFit.contain, alignment: Alignment.centerLeft,),
                               const SizedBox(width: 3,),
-                              ValueListenableBuilder(valueListenable: game.playerData.health, builder: (context, value, __) => AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxHealth.value.toInt().toString()}', style: defaultTextStyle, minFontSize: 10,)),
+                              ValueListenableBuilder(valueListenable: game.playerData.health, builder: (context, value, __) => Expanded(child: AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxHealth.value.toInt().toString()}', style: defaultTextStyle, minFontSize: 10,))),
                             ]
                         ),
                         Row(
@@ -239,7 +239,7 @@ class PlayerStats extends StatelessWidget
                             children:[
                               Image.asset('assets/images/inventar/UI-9-sliced object-56.png',width: size.width / 17, height: (size.height - 40 - 27 - ((size.width / 3) / 4.5) * 2 - 42) / 6,fit: BoxFit.contain, alignment: Alignment.centerLeft,),
                               const SizedBox(width: 3,),
-                              ValueListenableBuilder(valueListenable: game.playerData.energy, builder: (context, value, __) => AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxEnergy.value.toInt().toString()}', style: defaultTextStyle, minFontSize: 10)),
+                              ValueListenableBuilder(valueListenable: game.playerData.energy, builder: (context, value, __) => Expanded(child: AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxEnergy.value.toInt().toString()}', style: defaultTextStyle, minFontSize: 10))),
                             ]
                         ),
                         Row(
@@ -249,7 +249,7 @@ class PlayerStats extends StatelessWidget
                             children:[
                               Image.asset('assets/images/inventar/UI-9-sliced object-66Less.png',width: size.width / 17, height: (size.height - 40 - 27 - ((size.width / 3) / 4.5) * 2 - 42) / 6,fit: BoxFit.contain, alignment: Alignment.centerLeft,),
                               const SizedBox(width: 3,),
-                              ValueListenableBuilder(valueListenable: game.playerData.armor, builder: (context, value, __) => AutoSizeText(value.toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10)),
+                              ValueListenableBuilder(valueListenable: game.playerData.armor, builder: (context, value, __) => Expanded(child: AutoSizeText(value.toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10))),
                             ]
                         ),
                         Row(
@@ -259,7 +259,7 @@ class PlayerStats extends StatelessWidget
                             children:[
                               Image.asset('assets/images/inventar/UI-9-sliced object-65Less.png',width: size.width / 17, height: (size.height - 40 - 27 - ((size.width / 3) / 4.5) * 2 - 42) / 6,fit: BoxFit.contain, alignment: Alignment.centerLeft,),
                               const SizedBox(width: 3,),
-                              ValueListenableBuilder(valueListenable: game.playerData.swordDress, builder: (context, value, __) => AutoSizeText(value.damage.toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10)),
+                              ValueListenableBuilder(valueListenable: game.playerData.swordDress, builder: (context, value, __) => Expanded(child: AutoSizeText(value.damage.toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10))),
                             ]
                         ),
 
@@ -270,8 +270,8 @@ class PlayerStats extends StatelessWidget
                             children:[
                               Image.asset('assets/images/inventar/magicSword.png',width: size.width / 17, height: (size.height - 40 - 27 - ((size.width / 3) / 4.5) * 2 - 42) / 6,fit: BoxFit.contain, alignment: Alignment.centerLeft,),
                               const SizedBox(width: 3,),
-                              AutoSizeText('Магический урон ', style: defaultTextStyle, minFontSize: 10),
-                              ValueListenableBuilder(valueListenable: game.playerData.swordDress, builder: (context, value, __) => AutoSizeText((value.permanentDamage * value.secsOfPermDamage).toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10)),
+                              Expanded(child: AutoSizeText('Магический урон ', style: defaultTextStyle, minFontSize: 10)),
+                              ValueListenableBuilder(valueListenable: game.playerData.swordDress, builder: (context, value, __) => Expanded(child: AutoSizeText((value.permanentDamage * value.secsOfPermDamage).toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10))),
                             ]
                         ),
                         Row(
@@ -281,8 +281,8 @@ class PlayerStats extends StatelessWidget
                             children:[
                               Image.asset('assets/images/inventar/UI-9-sliced object-65Speed.png',width: size.width / 17, height: (size.height - 40 - 27 - ((size.width / 3) / 4.5) * 2 - 42) / 6,fit: BoxFit.contain, alignment: Alignment.centerLeft,),
                               const SizedBox(width: 3,),
-                              AutoSizeText('Скорость атаки ', style: defaultTextStyle, minFontSize: 10),
-                              ValueListenableBuilder(valueListenable: game.playerData.swordDress, builder: (context, value, __) => AutoSizeText((0.7 + value.attackSpeed).toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10)),
+                              Expanded(child: AutoSizeText('Скорость атаки ', style: defaultTextStyle, minFontSize: 10)),
+                              ValueListenableBuilder(valueListenable: game.playerData.swordDress, builder: (context, value, __) => Expanded(child: Align(alignment: Alignment.centerRight,  child: AutoSizeText((0.7 + value.attackSpeed).toStringAsPrecision(2), style: defaultTextStyle, minFontSize: 10)))),
                             ]
                         ),
                         // Row(
