@@ -74,63 +74,77 @@ class _LootInvantarState extends State<LootInInventar>
     List<Widget> myList = [];
     Item temp = widget.game.currentItemInInventar.value!;
     double rowHeight = widget.mySize.height / 10;
-    double rowWidth = widget.mySize.width * 0.62 - 10 - 40 - min(widget.mySize.height - 50, widget.mySize.width * 0.5 - widget.mySize.width * 0.1);
-    myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: 30),child:
+    //min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 10 - getDoubleForTable() * 3)
+    double rowWidth = -30 + min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 50 - getDoubleForTable() * 3);//-30 + widget.mySize.width * 0.62 - 10 - 40 - getDoubleForTable() * 3;
+    // rowWidth = min(rowWidth, widget.mySize.width * 0.25 - 30);
+    myList.add(const SizedBox(height: 20));
+    myList.add(Image.asset('assets/' +  widget.game.currentItemInInventar.value!.source, height: rowHeight * 3, width: rowWidth,fit: BoxFit.contain, alignment: Alignment.center,));
+    myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
     Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-        children:[Image.asset('assets/images/inventar/gold.png'),AutoSizeText(temp.cost.toString(),
-          style: defaultInventarTextStyle,
-          minFontSize: 10,
-          maxLines: 1,)])
+        children:[
+      Expanded(
+      child: Image.asset('assets/images/inventar/gold.png', height: rowHeight,alignment: Alignment.centerRight,),),
+          Expanded(
+              child: SizedBox(
+                  child:AutoSizeText(temp.cost.toString(),
+                    textAlign: TextAlign.left,
+                    style: defaultInventarTextStyle,
+                    minFontSize: 10,
+                    maxLines: 1,)))])
     ));
+    myList.add(const Spacer());
     if(temp.dressType == DressType.none){
       double secs = temp.secsOfPermDamage == 0 ? 1 : temp.secsOfPermDamage;
       if(temp.hp != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
-        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
+        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-55.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,)
-              ,const Spacer(),
-              AutoSizeText(temp.hp * secs > widget.game.playerData.maxHealth.value
+              ,Expanded(
+                child: SizedBox(
+                    child:AutoSizeText(temp.hp * secs > widget.game.playerData.maxHealth.value
                   ? 'Full'
                   : (temp.hp * secs).toStringAsFixed(1),style: defaultInventarTextStyle,
                 minFontSize: 10,
-                maxLines: 1,),
-              const Spacer()
+                      textAlign: TextAlign.center,
+                maxLines: 1,)))
             ])));
       }
       if(temp.energy != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
-        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
+        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-56.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,)
               ,
-              const Spacer(),
-              AutoSizeText(
+            Expanded(
+                child: SizedBox(
+                    child:AutoSizeText(
                 temp.energy * secs > widget.game.playerData.maxEnergy.value
                     ? 'Full'
                     : (temp.energy * secs).toStringAsFixed(1),style: defaultInventarTextStyle,
                 minFontSize: 10,
-                maxLines: 1,)
-              ,const Spacer()
+                      textAlign: TextAlign.center,
+                maxLines: 1,)))
             ])));
       }
       myList.add(Container(constraints: BoxConstraints.expand(
           width: rowWidth, height: rowHeight), child:
-      Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
+      Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset('assets/images/inventar/clock.png',
               fit: BoxFit.contain, alignment: Alignment.centerLeft,)
-            ,
-            const Spacer(),
-            AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
+            ,Expanded(
+              child: SizedBox(
+                  child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
               minFontSize: 10,
-              maxLines: 1,)
-            ,const Spacer()
+                    textAlign: TextAlign.center,
+              maxLines: 1,)))
           ])));
+      myList.add(const Spacer());
       myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
       ElevatedButton(onPressed: (){
         setState(() {
@@ -143,100 +157,99 @@ class _LootInvantarState extends State<LootInInventar>
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
         Row(mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/healthInInventar.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,)
               ,
-              const Spacer()
-              ,
-              AutoSizeText(
-                temp.hp.toStringAsFixed(2), style: defaultInventarTextStyle,
-                minFontSize: 10,
-                maxLines: 1,),
-              const Spacer()
+              Expanded(
+                child: SizedBox(
+                  child:AutoSizeText(
+                    textAlign: TextAlign.center,
+                    temp.hp.toStringAsFixed(2), style: defaultInventarTextStyle,
+                    minFontSize: 10,
+                    maxLines: 1,),),
+              ),
             ])));
       }
       if(temp.energy != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
         Row(mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/staminaInInventar.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,)
-              ,
-              const Spacer()
-              ,
-              AutoSizeText(
+              ,Expanded(
+                child: SizedBox(
+                    child:AutoSizeText(
                 temp.energy.toStringAsFixed(2), style: defaultInventarTextStyle,
                 minFontSize: 10,
-                maxLines: 1,),
-              const Spacer()
+                      textAlign: TextAlign.center,
+                maxLines: 1,)))
             ])));
       }
       if(temp.armor != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
-        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
+        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-66Less.png',fit: BoxFit.contain, alignment: Alignment.centerLeft,)
-              ,const Spacer()
-              ,AutoSizeText(temp.armor.toStringAsFixed(2),style: defaultInventarTextStyle,
+              ,Expanded(
+                child: SizedBox(
+                    child:AutoSizeText(temp.armor.toStringAsFixed(2),style: defaultInventarTextStyle,
                 minFontSize: 10,
-                maxLines: 1,),
-              const Spacer()])));
+                      textAlign: TextAlign.center,
+                maxLines: 1,)))])));
       }
       if(temp.damage != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
         Row(mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/images/inventar/UI-9-sliced object-65Less.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,)
-              ,
-              const Spacer()
-              ,
-              AutoSizeText(
+              ,Expanded(
+                child: SizedBox(
+                    child:AutoSizeText(
                 temp.damage.toStringAsFixed(2), style: defaultInventarTextStyle,
                 minFontSize: 10,
-                maxLines: 1,)
-              ,
-              const Spacer()
+                      textAlign: TextAlign.center,
+                maxLines: 1,)))
             ])));
       }
 
       if(temp.permanentDamage != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
-        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
+        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/images/inventar/magicSword.png', fit: BoxFit.contain,
                 alignment: Alignment.centerLeft,)
-              ,
-              const Spacer(),
-              AutoSizeText((temp.permanentDamage * temp.secsOfPermDamage).toStringAsFixed(1),style: defaultInventarTextStyle,
+              ,Expanded(
+                child: SizedBox(
+                    child:AutoSizeText((temp.permanentDamage * temp.secsOfPermDamage).toStringAsFixed(1),style: defaultInventarTextStyle,
                 minFontSize: 10,
-                maxLines: 1,)
-              ,const Spacer()
+                      textAlign: TextAlign.center,
+                maxLines: 1,)))
             ])));
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
-        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
+        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/clock.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,)
-              ,
-              const Spacer(),
-              AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
+              ,Expanded(
+                child: SizedBox(
+                    child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
                 minFontSize: 10,
-                maxLines: 1,)
-              ,const Spacer()
+                      textAlign: TextAlign.center,
+                maxLines: 1,)))
             ])));
 
       }
@@ -257,6 +270,7 @@ class _LootInvantarState extends State<LootInInventar>
         case DressType.boots:
           isEquip = temp == widget.game.playerData.bootsDress.value;
       }
+      myList.add(const Spacer());
       myList.add(Container(constraints: BoxConstraints.expand(
           width: rowWidth, height: rowHeight),
           child: ElevatedButton(onPressed: () {
@@ -266,6 +280,7 @@ class _LootInvantarState extends State<LootInInventar>
             });
           }, child: Text(isEquip ? 'Снять' :  'Надеть'))));
     }
+    myList.add(const SizedBox(height: 20,));
     return myList;
   }
 
@@ -279,94 +294,103 @@ class _LootInvantarState extends State<LootInInventar>
                 width: widget.mySize.width * 0.62 - 10,
                 height: widget.mySize.height,
                 child:
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: infoAboutChoosen()
-                          ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      width: min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 50 - getDoubleForTable() * 3),
+                      height: widget.mySize.height - 5,
+                      child:
+                      Stack(
+                          alignment: Alignment.center,
+                          fit: StackFit.passthrough,
+                          children: [
+                            Image.asset('assets/images/inventar/UI-9-sliced object-5.png',
+                              centerSlice: const Rect.fromLTWH(30, 28, 4, 4),
+                              width: min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 10 - getDoubleForTable() * 3),
+                              height: widget.mySize.height - 20,
+                            ),
+                            Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: infoAboutChoosen()
+                            ),
+                          ]),
+                    )
 
-                          ElevatedButton(
-                            onPressed: (){
-                              if(_curPage > 0){
-                                setState(() {
-                                  _curPage--;
-                                });
-                              }
-                            },
-                            style: defaultNoneButtonStyle.copyWith(
-                              foregroundBuilder: ((context, state, child)
-                              {
-                                if(state.contains(WidgetState.focused)
-                                    || state.contains(WidgetState.hovered)
-                                    || state.contains(WidgetState.pressed)){
-                                  return Image.asset('assets/images/inventar/leftActiveButton.png',
-                                    width: 20,
-                                    fit: BoxFit.fitWidth,);
-                                }
-                                return Image.asset('assets/images/inventar/leftPassiveButton.png',
-                                  width: 20,
-                                  fit: BoxFit.fitWidth,);
-                              }),
-                            ),
-                            child:  null,
-                          ),
-                          Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children:[
-                                getLootInventar(getCurrentItems(value)),
-                                const SizedBox(height: 3,),
-                                getPageHolderOfInventar(getCurrentItems(value))
-                              ]
-                          ),
-                          ElevatedButton(
-                            onPressed: (){
-                              if(_curPage * 16 + 16 < getCurrentItems(value).length){
-                                setState(() {
-                                  _curPage++;
-                                });
-                              }
-                            },
-                            style: defaultNoneButtonStyle.copyWith(
-                              foregroundBuilder: ((context, state, child)
-                              {
-                                if(state.contains(WidgetState.focused)
-                                    || state.contains(WidgetState.hovered)
-                                    || state.contains(WidgetState.pressed)){
-                                  return Image.asset('assets/images/inventar/rightActiveButton.png',
-                                      width: 20,
-                                      fit: BoxFit.fitWidth);
-                                }
-                                return Image.asset('assets/images/inventar/rightPassiveButton.png',
-                                  width: 20,
-                                  fit: BoxFit.fitWidth,);
-                              }),
-                            ),
-                            child:  null,
-                          ),
-                        ],
-                      )
-                    ])
+                    ,
+                    ElevatedButton(
+                      onPressed: (){
+                        if(_curPage > 0){
+                          setState(() {
+                            _curPage--;
+                          });
+                        }
+                      },
+                      style: defaultNoneButtonStyle.copyWith(
+                        foregroundBuilder: ((context, state, child)
+                        {
+                          if(state.contains(WidgetState.focused)
+                              || state.contains(WidgetState.hovered)
+                              || state.contains(WidgetState.pressed)){
+                            return Image.asset('assets/images/inventar/leftActiveButton.png',
+                              width: 20,
+                              fit: BoxFit.fitWidth,);
+                          }
+                          return Image.asset('assets/images/inventar/leftPassiveButton.png',
+                            width: 20,
+                            fit: BoxFit.fitWidth,);
+                        }),
+                      ),
+                      child:  null,
+                    ),
+                    getLootInventar(getCurrentItems(value)),
+                    ElevatedButton(
+                      onPressed: (){
+                        if(_curPage * 16 + 16 < getCurrentItems(value).length){
+                          setState(() {
+                            _curPage++;
+                          });
+                        }
+                      },
+                      style: defaultNoneButtonStyle.copyWith(
+                        foregroundBuilder: ((context, state, child)
+                        {
+                          if(state.contains(WidgetState.focused)
+                              || state.contains(WidgetState.hovered)
+                              || state.contains(WidgetState.pressed)){
+                            return Image.asset('assets/images/inventar/rightActiveButton.png',
+                                width: 20,
+                                fit: BoxFit.fitWidth);
+                          }
+                          return Image.asset('assets/images/inventar/rightPassiveButton.png',
+                            width: 20,
+                            fit: BoxFit.fitWidth,);
+                        }),
+                      ),
+                      child:  null,
+                    ),
+                  ],
+                )
             )
     );
+  }
+
+  double getDoubleForTable()
+  {
+    return min((widget.mySize.height - 30) / 4, (widget.mySize.width * 0.4 - widget.mySize.width * 0.1) / 3);
   }
 
   Widget getLootInventar(Map<String,int> hash)
   {
     var list = hash.keys.toList(growable: false);
-    double minSize = min(widget.mySize.height - 50, widget.mySize.width * 0.5 - widget.mySize.width * 0.1);
+    double minSize = getDoubleForTable();
     List<Widget> buttonsList = [];
-    for(int i = _curPage * 16;i<_curPage * 16 + 16;i++){
+    for(int i = _curPage * 12;i<_curPage * 12 + 12;i++){
       if(i < list.length){
         Item item = itemFromName(list[i]);
         buttonsList.add(
@@ -388,38 +412,35 @@ class _LootInvantarState extends State<LootInInventar>
                         alignment: Alignment.center,
                         children: [
                           Image.asset('assets/images/inventar/UI-9-sliced object-42.png',
-                            width: minSize/4,
-                            height: minSize/4,
+                            width: minSize,
+                            height: minSize,
                             centerSlice: const Rect.fromLTWH(23, 24, 8, 8),
                             fit: BoxFit.contain,
                           ),
                           Image.asset('assets/${item.source}',
                             fit: BoxFit.contain,
-                            width: minSize/8,
-                            height: minSize/8,),
+                            width: minSize / 2,
+                            height: minSize / 2,),
                           checkIfIsEquipNow(item) ? Image.asset(item == widget.game.currentItemInInventar.value ? widget.assetRed : widget.asset,fit: BoxFit.contain,
-                            width: minSize/4,
-                            height: minSize/4,
+                            width: minSize,
+                            height: minSize,
                             centerSlice: const Rect.fromLTWH(17, 17, 24, 26),) : const SizedBox(width: 0,height: 0,),
                           (item == widget.game.currentItemInInventar.value && !checkIfIsEquipNow(item) ? Image.asset('assets/images/inventar/UI-9-sliced object-13.png',fit: BoxFit.contain,
-                            width: minSize/4,
-                            height: minSize/4,
+                            width: minSize,
+                            height:minSize,
                             centerSlice: const Rect.fromLTWH(17, 17, 24, 26),) : const SizedBox(width: 0,height: 0,)),
                           SizedBox(
-                              width: minSize/4,
-                              height: minSize/4,
+                              width: minSize,
+                              height:minSize,
                               child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
                                     alignment: Alignment.center,
-                                    height: minSize/15,
-                                    margin: const EdgeInsets.only(bottom: 3),
-                                    child: AutoSizeText('x${hash[list[i]]!.toString()}',style: defaultInventarTextStyleGood.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])
-                                      ,
-
-                                    )             ),
+                                    height: minSize/4,
+                                    margin: EdgeInsets.only(bottom: minSize / 20),
+                                    child: AutoSizeText('x${hash[list[i]]!.toString()}',style: defaultInventarTextStyleGood.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
                               )
-                          ),
+                          )),
 
                         ]
                     );
@@ -437,8 +458,8 @@ class _LootInvantarState extends State<LootInInventar>
                     backgroundBuilder: ((context, state, child){
                       return Image.asset('assets/images/inventar/UI-9-sliced object-42.png',
                         centerSlice: const Rect.fromLTWH(23, 24, 8, 8),
-                        width: minSize/4,
-                        height: minSize/4,
+                        width:  minSize,
+                        height: minSize,
                         fit: BoxFit.contain,);
                     })
                 ),
@@ -449,33 +470,35 @@ class _LootInvantarState extends State<LootInInventar>
     }
     return Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [buttonsList[0],buttonsList[1],buttonsList[2],buttonsList[3]]
+              children: [buttonsList[0],buttonsList[1],buttonsList[2]]
           ),
           Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [buttonsList[4],buttonsList[5],buttonsList[6],buttonsList[7]]
+              children: [buttonsList[3],buttonsList[4],buttonsList[5]]
           ),
           Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [buttonsList[8],buttonsList[9],buttonsList[10],buttonsList[11]]
+              children: [buttonsList[6],buttonsList[7],buttonsList[8]]
           ),
           Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [buttonsList[12],buttonsList[13],buttonsList[14],buttonsList[15]]
-          )
+              children: [buttonsList[9],buttonsList[10],buttonsList[11]]
+          ),
+          const SizedBox(height: 3,),
+          getPageHolderOfInventar(getCurrentItems(widget.game.currentStateInventar.value))
         ]
     );
   }
