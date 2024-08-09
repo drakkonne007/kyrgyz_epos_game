@@ -11,7 +11,21 @@ import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
 
-
+class MetaDataForNewItem
+{
+  double health = 0;
+  double energy = 0;
+  double maxHealth = 0;
+  double maxEnergy = 0;
+  double armor = 0;
+  double chanceOfLoot = 0;
+  double hurtMiss = 0;
+  double damage = 0;
+  double attackSpeed = 0;
+  double permanentDamage = 0;
+  double secsOfPermanentDamage = 0;
+  MagicDamage magicDamage = MagicDamage.none;
+}
 
 class MetaEnemyData
 {
@@ -89,6 +103,68 @@ class PlayerData
     }
   }
 
+
+  MetaDataForNewItem? calcNewChoice(Item? newItem)
+  {
+    if(newItem == null){
+      return null;
+    }
+    Item helmet, armor, gloves, sword, ring, boots;
+    helmet = helmetDress.value;
+    armor = armorDress.value;
+    gloves = glovesDress.value;
+    sword = swordDress.value;
+    ring = ringDress.value;
+    boots = bootsDress.value;
+    switch(newItem.dressType){
+      case DressType.helmet:  helmet = newItem; break;
+      case DressType.armor: armor = newItem; break;
+      case DressType.gloves: gloves = newItem; break;
+      case DressType.sword: sword = newItem; break;
+      case DressType.ring: ring = newItem; break;
+      case DressType.boots: boots = newItem; break;
+      case DressType.none: return null;
+    }
+    MetaDataForNewItem answer = MetaDataForNewItem();
+    double procentOfHealth = health.value / maxHealth.value;
+    double procentOfEnergy = energy.value / maxEnergy.value;
+    answer.maxHealth =
+        armor.hp + helmet.hp + gloves.hp +
+            sword.hp + ring.hp + boots.hp +
+            _beginHealth + (_beginHealth * playerLevel.value) / 100;
+    answer.maxEnergy = armor.energy + helmet.energy +
+        gloves.energy + sword.energy +
+        ring.energy + boots.energy + _beginEnergy +
+        (_beginEnergy * playerLevel.value) / 100;
+    answer.armor = armor.armor + helmet.armor +
+        gloves.armor + sword.armor +
+        ring.armor + boots.armor + extraArmor.value;
+    answer.chanceOfLoot =
+        armor.chanceOfLoot + helmet.chanceOfLoot +
+            gloves.chanceOfLoot + sword.chanceOfLoot +
+            ring.chanceOfLoot + boots.chanceOfLoot +
+            extraChanceOfLoot.value;
+    answer.hurtMiss = armor.hurtMiss + helmet.hurtMiss +
+        gloves.hurtMiss + sword.hurtMiss +
+        ring.hurtMiss + boots.hurtMiss +
+        extraHurtMiss.value;
+    answer.damage = armor.damage + helmet.damage +
+        gloves.damage + sword.damage +
+        ring.damage + boots.damage + extraDamage.value;
+    answer.attackSpeed =
+        armor.attackSpeed + helmet.attackSpeed +
+            gloves.attackSpeed + sword.attackSpeed +
+            ring.attackSpeed + boots.attackSpeed +
+            extraAttackSpeed.value;
+    answer.permanentDamage = sword.permanentDamage;
+    answer.secsOfPermanentDamage = sword.secsOfPermDamage;
+    answer.magicDamage = sword.magicDamage ?? MagicDamage.none;
+    answer.health = procentOfHealth * answer.maxHealth;
+    answer.energy = procentOfEnergy * answer.maxEnergy;
+    return answer;
+  }
+
+
   void _recalcAfterChangeDress()
   {
     double procentOfHealth = health.value / maxHealth.value;
@@ -115,7 +191,7 @@ class PlayerData
       return;
     }
     if(extra){
-        energy.value += val;
+      energy.value += val;
     }else if(energy.value < maxEnergy.value && val > 0) {
       energy.value += val;
       energy.value = math.min(energy.value, maxEnergy.value);
@@ -338,8 +414,8 @@ class GamePriority
   static const int foregroundTile = 10000;
   static const int high = 11000;
   static const int maxPriority = 99999999;
-  // static const int high = 4294967296;
-  // static const int maxPriority = 4294967296;
+// static const int high = 4294967296;
+// static const int maxPriority = 4294967296;
 }
 
 

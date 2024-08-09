@@ -15,11 +15,42 @@ final TextStyle dialogStyleFont = TextStyle
 
 final defaultTextStyle = TextStyle
   (
+    fontSize: 40,
     foreground: Paint()..
     style = PaintingStyle.fill
       ..strokeJoin = StrokeJoin.round
       ..color = const Color(0xFFFCF08E)
       ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 3)
+);
+
+final defaultTextStyleWithoutBlur = TextStyle
+  (
+    fontSize: 40,
+    foreground: Paint()..
+    style = PaintingStyle.fill
+      ..strokeJoin = StrokeJoin.round
+      ..color = const Color(0xFFFCF08E)
+);
+
+final defaultInventarTextStyleGood = TextStyle //0xFF37FF7D
+  (
+     fontSize: 30,
+    foreground: Paint()
+      ..color = const Color(0xFF37FF7D)
+);
+
+final defaultInventarTextStyleBad = TextStyle //0xFF37FF7D
+  (
+    fontSize: 30,
+    foreground: Paint()
+      ..color = const Color(0xFFFF3737)
+);
+
+final defaultInventarTextStyle = TextStyle //0xFF37FF7D
+  (
+    fontSize: 30,
+    foreground: Paint()
+      ..color = const Color(0xFFFFFFFF)
 );
 
 final mapDialogTextStyle = TextStyle

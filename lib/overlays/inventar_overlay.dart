@@ -31,45 +31,47 @@ class InventoryOverlay extends StatefulWidget
 }
 
 class InventoryOverlayState extends State<InventoryOverlay> //Делает верхние вкладки с инвентарями
-{
+    {
   @override
   Widget build(BuildContext context)
   {
     return LayoutBuilder(builder: (context,constraints){
       return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children:[
-                Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: getUpTabs((constraints.maxWidth)/11,(constraints.maxHeight * 0.75)/7)
-                ),
-                Stack(
-                    alignment: Alignment.center,
-                    fit: StackFit.passthrough,
-                    clipBehavior: Clip.none,
-                    children:[
-                      Image.asset('assets/images/inventar/UI-9-sliced object-31.png',
-                        fit: BoxFit.fill,
-                        centerSlice: const Rect.fromLTWH(18,18,14,20),
-                        isAntiAlias: true,
-                        filterQuality: FilterQuality.high,
-                        width: constraints.maxWidth * 0.95,
-                        height: constraints.maxHeight * 0.85,
-                      ),
-                      BigWindowInventar(widget.game, Size(constraints.maxWidth * 0.95,constraints.maxHeight * 0.85))
-                    ]
-                ),
-              ]
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children:[
+            ValueListenableBuilder(valueListenable: widget.game.currentStateInventar, builder: (context, value, child) {
+              return Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: getUpTabs((constraints.maxWidth)/11,(constraints.maxHeight * 0.75)/6)
+              );
+            }),
+            Stack(
+                alignment: Alignment.topCenter,
+                fit: StackFit.passthrough,
+                clipBehavior: Clip.none,
+                children:[
+                  Image.asset('assets/images/inventar/UI-9-sliced object-31.png',
+                    fit: BoxFit.fill,
+                    centerSlice: const Rect.fromLTWH(18,18,14,20),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: constraints.maxWidth * 0.95,
+                    height: constraints.maxHeight * 0.85,
+                  ),
+                  BigWindowInventar(widget.game, Size(constraints.maxWidth * 0.95,constraints.maxHeight * 0.85))
+                ]
+            ),
+          ]
       );
     })  ;
   }
 
   bool nowIsDress()
   {
-    return widget.game.currentStateInventar.value == InventarOverlayType.dress || widget.game.currentStateInventar.value == InventarOverlayType.helmet
+    return widget.game.currentStateInventar.value == InventarOverlayType.helmet
         || widget.game.currentStateInventar.value == InventarOverlayType.armor
         || widget.game.currentStateInventar.value == InventarOverlayType.gloves
         || widget.game.currentStateInventar.value == InventarOverlayType.boots
@@ -81,13 +83,12 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
   {
     String source = '';
     switch(type){
-      // case 0: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png'; break;
-      // case 1: index == widget.game.currentStateInventar ? source = 'shieldYark.png' : source = 'shield.png'; break;
-      // case 2: index == widget.game.currentStateInventar ? source = 'manaBright.png' : source = 'manaDark.png'; break;
-      // case 3: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png'; break;
-      // case 4: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png'; break;
-      // case 5: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png'; break;
-      case InventarOverlayType.dress:
+    // case 0: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png'; break;
+    // case 1: index == widget.game.currentStateInventar ? source = 'shieldYark.png' : source = 'shield.png'; break;
+    // case 2: index == widget.game.currentStateInventar ? source = 'manaBright.png' : source = 'manaDark.png'; break;
+    // case 3: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png'; break;
+    // case 4: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png'; break;
+    // case 5: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png'; break;
       case InventarOverlayType.helmet:
       case InventarOverlayType.armor:
       case InventarOverlayType.gloves:
@@ -120,8 +121,16 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
         ElevatedButton(
             onPressed: (){
               setState(() {
-                  widget.game.currentStateInventar.value = InventarOverlayType.dress;
-              });
+                if(nowIsDress()){
+                  return;
+                }else {
+                  if(widget.game.currentStateInventar.value !=
+                      InventarOverlayType.helmet) {
+                    widget.game.currentStateInventar.value =
+                        InventarOverlayType.helmet;
+                    widget.game.currentItemInInventar.value = null;
+                  }
+                }});
             },
             style: defaultNoneButtonStyle.copyWith(
                 maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
@@ -144,7 +153,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                     alignment: Alignment.bottomCenter,
                   ),
                   Image.asset(
-                    getImage(InventarOverlayType.dress),
+                    getImage(InventarOverlayType.armor),
                     width: width,
                     height: height - 10,
                     alignment: Alignment.center,
@@ -157,7 +166,11 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
         ElevatedButton(
             onPressed: (){
               setState(() {
-                widget.game.currentStateInventar.value = InventarOverlayType.flask;
+                if(widget.game.currentStateInventar.value != InventarOverlayType.flask) {
+                  widget.game.currentItemInInventar.value = null;
+                  widget.game.currentStateInventar.value =
+                      InventarOverlayType.flask;
+                }
               });
             },
             style: defaultNoneButtonStyle.copyWith(
@@ -194,7 +207,10 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
         ElevatedButton(
             onPressed: (){
               setState(() {
-                widget.game.currentStateInventar.value = InventarOverlayType.item;
+                if(widget.game.currentStateInventar.value != InventarOverlayType.item){
+                  widget.game.currentItemInInventar.value = null;
+                  widget.game.currentStateInventar.value = InventarOverlayType.item;
+                }
               });
             },
             style: defaultNoneButtonStyle.copyWith(
@@ -231,6 +247,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
         ElevatedButton(
             onPressed: (){
               setState(() {
+                widget.game.currentItemInInventar.value = null;
                 widget.game.currentStateInventar.value = InventarOverlayType.quests;
               });
             },

@@ -1,8 +1,8 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/Items/Dresses/ringDress.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -41,7 +41,6 @@ const double aspect = 750.0 / 430.0;
 
 enum InventarOverlayType
 {
-  dress,
   helmet,
   armor,
   gloves,
@@ -52,6 +51,16 @@ enum InventarOverlayType
   item,
   quests,
   map
+}
+
+enum PlayerState
+{
+  armor,
+  damage,
+  magicDamage,
+  lengthMagicDamage,
+  attackSpeed,
+  uvorot,
 }
 
 
@@ -81,6 +90,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader iceShader;
   late FragmentShader poisonShader;
   late FragmentShader lightningShader;
+  ValueNotifier<Item?> currentItemInInventar = ValueNotifier<Item?>(null);
   Quest? currentQuest;
   Map<String,Quest> quests = {};
   ValueNotifier<InventarOverlayType> currentStateInventar = ValueNotifier<InventarOverlayType>(InventarOverlayType.helmet);

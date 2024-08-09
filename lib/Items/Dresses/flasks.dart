@@ -10,6 +10,7 @@ class HpSmall extends Item
     id = 'hpSmall';
     cost = 10;
     source = 'images/inventar/flask/hpSmall.png';
+    hp = 10;
   }
 
   @override
@@ -27,7 +28,7 @@ class HpSmall extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    game.playerData.addHealth(10);
+    game.playerData.addHealth(hp);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -48,6 +49,8 @@ class HpMedium extends Item
     cost = 25;
     enabled = true;
     source = 'images/inventar/flask/hpMedium.png';
+    hp = 2;
+    secsOfPermDamage = 10;
   }
 
   @override
@@ -65,8 +68,8 @@ class HpMedium extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(parentId: id, period: duration ?? 10, onUpdate: (dt){
-      game.playerData.addHealth(2.0 * dt);
+    var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addHealth(hp * dt);
     });
     game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
@@ -89,6 +92,8 @@ class HpBig extends Item
     cost = 50;
     enabled = true;
     source = 'images/inventar/flask/hpBig.png';
+    hp = 2.5;
+    secsOfPermDamage = 15;
   }
 
   @override
@@ -106,8 +111,8 @@ class HpBig extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(parentId: id, period: duration ?? 15, onUpdate: (dt){
-      game.playerData.addHealth(2.5 * dt);
+    var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addHealth(hp * dt);
     });
     game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
@@ -130,6 +135,7 @@ class HpFull extends Item
     cost = 90;
     enabled = true;
     source = 'images/inventar/flask/hpFull.png';
+    hp = 99999999;
   }
 
   @override
@@ -169,6 +175,7 @@ class EnergySmall extends Item
     cost = 10;
     enabled = true;
     source = 'images/inventar/flask/energySmall.png';
+    energy = 5;
   }
 
   @override
@@ -186,7 +193,7 @@ class EnergySmall extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    game.playerData.addEnergy(5);
+    game.playerData.addEnergy(energy);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
       curr--;
@@ -207,6 +214,8 @@ class EnergyMedium extends Item
     cost = 25;
     enabled = true;
     source = 'images/inventar/flask/energyMedium.png';
+    secsOfPermDamage = 10;
+    energy = 1.5;
   }
 
   @override
@@ -224,8 +233,8 @@ class EnergyMedium extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(parentId: 'energyMedium' ,period: duration ?? 10, onUpdate: (dt){
-      game.playerData.addEnergy(1.5 * dt);
+    var timer = TempEffect(parentId: 'energyMedium' ,period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addEnergy(energy * dt);
     });
     game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
@@ -248,6 +257,8 @@ class EnergyBig extends Item
     cost = 50;
     enabled = true;
     source = 'images/inventar/flask/energyBig.png';
+    energy = 2;
+    secsOfPermDamage = 15;
   }
 
   @override
@@ -265,8 +276,8 @@ class EnergyBig extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
-    var timer = TempEffect(parentId: id,period: duration ?? 15, onUpdate: (dt){
-      game.playerData.addEnergy(2 * dt);
+    var timer = TempEffect(parentId: id,period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addEnergy(energy * dt);
     });
     game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
@@ -289,6 +300,7 @@ class EnergyFull extends Item
     cost = 90;
     enabled = true;
     source = 'images/inventar/flask/energyFull.png';
+    energy = 9999999;
   }
 
   @override
