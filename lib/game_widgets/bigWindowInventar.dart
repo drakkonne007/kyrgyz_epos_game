@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/game_widgets/LootInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -616,13 +617,18 @@ class PlayerStats extends StatelessWidget
 
                             SizedBox(
                               height: newStrokeHeight,
-                              child: Row(
+                              child: ValueListenableBuilder(
+                                valueListenable: game.playerData
+                                    .swordDress,
+                                builder: (context, value, __) =>
+                                    Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Image.asset(
-                                      'assets/images/inventar/magicSword.png',
+                                      'assets/${getMagicStateString(value.magicDamage)}',
+                                      // 'assets/images/inventar/magicSword.png',
                                       width: size.width / 17,
                                       height: newStrokeHeight,
                                       fit: BoxFit.contain,
@@ -633,10 +639,7 @@ class PlayerStats extends StatelessWidget
                                           style: defaultInventarTextStyle,
                                           minFontSize: 10,
                                           maxLines: 2,))),
-                                    ValueListenableBuilder(
-                                        valueListenable: game.playerData
-                                            .swordDress,
-                                        builder: (context, value, __) =>
+
                                             Expanded(child: Align(
                                                 alignment: Alignment.centerRight,
                                                 child: SizedBox(
@@ -652,8 +655,8 @@ class PlayerStats extends StatelessWidget
                                                           metaDataForNewItem.secsOfPermanentDamage < value.permanentDamage *
                                                           value.secsOfPermDamage ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
                                                       minFontSize: 10,
-                                                      maxLines: 1,))))),
-                                  ]
+                                                      maxLines: 1,)))),
+                                  ])
                               ),
                             ),
                             SizedBox(

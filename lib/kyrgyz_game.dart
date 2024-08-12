@@ -130,6 +130,16 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     await dbHandler.setQuestState(name, state, isDone);
   }
 
+  Vector2 playerPosition()
+  {
+    return gameMap.orthoPlayer?.position ?? gameMap.frontPlayer!.position;
+  }
+
+  bool isPlayerFlipped()
+  {
+    return gameMap.orthoPlayer?.isFlippedHorizontally ?? gameMap.frontPlayer!.isFlippedHorizontally;
+  }
+
   @override
   Future onLoad() async
   {

@@ -113,14 +113,6 @@ class SkeletonMage extends KyrgyzEnemy
   }
 
   @override
-  void doMagicHurt({required double hurt, required MagicDamage magicDamage}) {
-    health -= hurt;
-    if(health < 1){
-      death(_withShieldNow ? _animDeathShield : animDeath);
-    }
-  }
-
-  @override
   void chooseHit()
   {
     animation = null;

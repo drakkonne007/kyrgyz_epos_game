@@ -19,6 +19,21 @@ enum DressType
   boots,
 }
 
+String getMagicStateString(MagicDamage? magDamage)
+{
+  switch(magDamage)
+  {
+    case MagicDamage.none: return 'images/inventar/gif/blueCancel.gif';
+    case MagicDamage.fire: return 'images/inventar/gif/red.gif';
+    case MagicDamage.ice: return 'images/inventar/gif/blue.gif';
+    case MagicDamage.poison: return 'images/inventar/gif/poison.gif';
+    case MagicDamage.lightning: return 'images/inventar/gif/electro.gif';
+    case MagicDamage.copyOfPlayer: return 'images/inventar/gif/dark.gif';
+    case null:
+      return 'images/inventar/gif/blueCancel.gif';
+  }
+}
+
 enum MagicDamage
 {
   none,
@@ -26,6 +41,7 @@ enum MagicDamage
   ice,
   poison,
   lightning,
+  copyOfPlayer
 }
 
 enum InventarType
@@ -245,6 +261,7 @@ abstract class Item
   MagicDamage? magicDamage;
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
+  MagicSpellVariant magicSpellVariant = MagicSpellVariant.none;
 
 
   @override

@@ -417,7 +417,10 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       case MagicDamage.poison:
         magicAnim = PoisonEffect(position: Vector2(width * anchor.x, height * anchor.y));
         break;
-    }
+      case MagicDamage.copyOfPlayer:
+        magicAnim = LightningEffect(position: Vector2(width * anchor.x, height * anchor.y));
+        break;
+      }
     add(magicAnim);
     if(health < 1){
       weapon?.collisionType = DCollisionType.inactive;

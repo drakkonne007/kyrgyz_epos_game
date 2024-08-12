@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
+import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
@@ -73,12 +74,12 @@ class _LootInvantarState extends State<LootInInventar>
     }
     List<Widget> myList = [];
     Item temp = widget.game.currentItemInInventar.value!;
-    double rowHeight = widget.mySize.height / 10;
+    double rowHeight = (widget.mySize.height - widget.mySize.height * 0.25 - 20) / 8 - 2;
     //min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 10 - getDoubleForTable() * 3)
     double rowWidth = -30 + min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 50 - getDoubleForTable() * 3);//-30 + widget.mySize.width * 0.62 - 10 - 40 - getDoubleForTable() * 3;
     // rowWidth = min(rowWidth, widget.mySize.width * 0.25 - 30);
     myList.add(const SizedBox(height: 20));
-    myList.add(Image.asset('assets/' +  widget.game.currentItemInInventar.value!.source, height: rowHeight * 3, width: rowWidth,fit: BoxFit.contain, alignment: Alignment.center,));
+    myList.add(Image.asset('assets/' +  widget.game.currentItemInInventar.value!.source, height: widget.mySize.height * 0.25, width: rowWidth,fit: BoxFit.contain, alignment: Alignment.center,));
     myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
     Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
         children:[
@@ -136,7 +137,7 @@ class _LootInvantarState extends State<LootInInventar>
       Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset('assets/images/inventar/clock.png',
-              fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+              fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
             ,Expanded(
               child: SizedBox(
                   child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
@@ -161,7 +162,7 @@ class _LootInvantarState extends State<LootInInventar>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/healthInInventar.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
               ,
               Expanded(
                 child: SizedBox(
@@ -181,7 +182,7 @@ class _LootInvantarState extends State<LootInInventar>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/staminaInInventar.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
               ,Expanded(
                 child: SizedBox(
                     child:AutoSizeText(
@@ -195,7 +196,7 @@ class _LootInvantarState extends State<LootInInventar>
         myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
         Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/images/inventar/UI-9-sliced object-66Less.png',fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+              Image.asset('assets/images/inventar/UI-9-sliced object-66Less.png',height: rowHeight,fit: BoxFit.contain, alignment: Alignment.centerLeft,)
               ,Expanded(
                 child: SizedBox(
                     child:AutoSizeText(temp.armor.toStringAsFixed(2),style: defaultInventarTextStyle,
@@ -212,7 +213,7 @@ class _LootInvantarState extends State<LootInInventar>
             children: [
               Image.asset(
                 'assets/images/inventar/UI-9-sliced object-65Less.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
               ,Expanded(
                 child: SizedBox(
                     child:AutoSizeText(
@@ -223,27 +224,32 @@ class _LootInvantarState extends State<LootInInventar>
             ])));
       }
 
-      if(temp.permanentDamage != 0) {
+      if(temp.permanentDamage != 0 || temp.secsOfPermDamage != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
-        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/inventar/magicSword.png', fit: BoxFit.contain,
+              Image.asset('assets/${getMagicStateString(temp.magicDamage)}', fit: BoxFit.contain,height: rowHeight,
                 alignment: Alignment.centerLeft,)
               ,Expanded(
                 child: SizedBox(
-                    child:AutoSizeText((temp.permanentDamage * temp.secsOfPermDamage).toStringAsFixed(1),style: defaultInventarTextStyle,
+                    child: Stack(
+                      fit: StackFit.passthrough,
+                        children:[
+                          Image.asset(temp.magicSpellVariant == MagicSpellVariant.circle ? 'assets/images/inventar/aroundSpell.png'
+                              : 'assets/images/inventar/forwardSpell.png',height: rowHeight,
+                            fit: BoxFit.contain, alignment: Alignment.centerLeft,),
+                          AutoSizeText((temp.permanentDamage * temp.secsOfPermDamage).toStringAsFixed(1),style: defaultInventarTextStyle,
                 minFontSize: 10,
                       textAlign: TextAlign.center,
-                maxLines: 1,)))
+                maxLines: 1,)])))
             ])));
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
         Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/clock.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
               ,Expanded(
                 child: SizedBox(
                     child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
@@ -251,6 +257,21 @@ class _LootInvantarState extends State<LootInInventar>
                       textAlign: TextAlign.center,
                 maxLines: 1,)))
             ])));
+
+        // myList.add(Container(constraints: BoxConstraints.expand(
+        //     width: rowWidth, height: rowHeight), child:
+
+        // Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+        //     children: [
+        //       Image.asset('assets/images/inventar/clock.png',height: rowHeight,
+        //         fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+        //       ,Expanded(
+        //           child: SizedBox(
+        //               child:AutoSizeText(temp.magicSpellVariant.name,style: defaultInventarTextStyle,
+        //                 minFontSize: 10,
+        //                 textAlign: TextAlign.center,
+        //                 maxLines: 1,)))
+        //     ])));
 
       }
       bool isEquip = false;

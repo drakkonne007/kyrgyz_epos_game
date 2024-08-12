@@ -11,7 +11,11 @@ class Ring1 extends Item
     hp = 0;
     cost = 100;
     armor = 0.01;
+    permanentDamage = 2;
+    secsOfPermDamage = 3;
     dressType = DressType.ring;
+    magicDamage = MagicDamage.fire;
+    magicSpellVariant = MagicSpellVariant.forward;
   }
 
   @override
@@ -23,7 +27,6 @@ class Ring1 extends Item
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
-    game.playerData.playerMagicSpell = PlayerMagicSpell.darkBall;
   }
 }
 
@@ -37,6 +40,10 @@ class Ring2 extends Item
     cost = 100;
     armor = 0.01;
     dressType = DressType.ring;
+    magicDamage = MagicDamage.ice;
+    magicSpellVariant = MagicSpellVariant.circle;
+    permanentDamage = 0;
+    secsOfPermDamage = 3;
   }
 
   @override
@@ -48,7 +55,6 @@ class Ring2 extends Item
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
-    game.playerData.playerMagicSpell = PlayerMagicSpell.electroBall;
   }
 }
 
@@ -62,6 +68,10 @@ class Ring3 extends Item
     cost = 100;
     armor = 0.01;
     dressType = DressType.ring;
+    magicDamage = MagicDamage.lightning;
+    magicSpellVariant = MagicSpellVariant.circle;
+    permanentDamage = 2;
+    secsOfPermDamage = 1;
   }
 
   @override
@@ -73,7 +83,6 @@ class Ring3 extends Item
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
-    game.playerData.playerMagicSpell = PlayerMagicSpell.fireBallBlue;
   }
 }
 
@@ -87,6 +96,10 @@ class Ring4 extends Item
     cost = 100;
     armor = 0.01;
     dressType = DressType.ring;
+    magicDamage = MagicDamage.poison;
+    magicSpellVariant = MagicSpellVariant.forward;
+    permanentDamage = 1;
+    secsOfPermDamage = 8;
   }
 
   @override
@@ -98,7 +111,6 @@ class Ring4 extends Item
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
-    game.playerData.playerMagicSpell = PlayerMagicSpell.fireBallRed;
   }
 }
 
@@ -112,6 +124,9 @@ class Ring5 extends Item
     cost = 100;
     armor = 0.01;
     dressType = DressType.ring;
+    magicDamage = MagicDamage.copyOfPlayer;
+    magicSpellVariant = MagicSpellVariant.forward;
+    secsOfPermDamage = 15;
   }
 
   @override
@@ -123,6 +138,5 @@ class Ring5 extends Item
   @override void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.setDress(this);
-    game.playerData.playerMagicSpell = PlayerMagicSpell.poisonBall;
   }
 }

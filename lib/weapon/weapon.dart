@@ -47,7 +47,6 @@ abstract class EnemyWeapon extends DCollisionEntity
   double permanentDamage = 0;
   double secsOfPermDamage = 0;
   bool inArmor = true;
-  double _activeSecs = 0;
   double _coolDown = 1;
   double currentCoolDown = 1;
   double latencyBefore = 0;
@@ -187,26 +186,32 @@ abstract class PlayerWeapon extends DCollisionEntity
       if (other.parent is KyrgyzEnemy) {
         var temp = other.parent as KyrgyzEnemy;
         bool isPlayer = parent is MainPlayer;
-        temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);
-        if (secsOfPermDamage > 0
-            && permanentDamage > 0
-            && magicDamage != null) {
-          if (temp.magicDamages.containsKey(magicDamage)) {
-            int curr = temp.magicDamages[magicDamage]!;
-            curr++;
-            temp.magicDamages[magicDamage!] = curr;
-          } else {
-            temp.magicDamages[magicDamage!] = 1;
+        if(damage != null){
+          if((damage! == 0 && magicDamage == null) || damage! > 0){
+            temp.doHurt(hurt: damage!, inArmor: inArmor, isPlayer: isPlayer);
           }
+        }
+        // temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);
+        if (magicDamage != null) {
+          // if (temp.magicDamages.containsKey(magicDamage)) {
+          //   int curr = temp.magicDamages[magicDamage]!;
+          //   curr++;
+          //   temp.magicDamages[magicDamage!] = curr;
+          // } else {
+          //   temp.magicDamages[magicDamage!] = 1;
+          // }
           var tempComponent = other.parent as Component;
-          double damage = permanentDamage / 2;
+          double damage = permanentDamage;
           MagicDamage magic = magicDamage!;
-          tempComponent.add(CountTimer(
-              period: 1,
-              count: secsOfPermDamage.toInt(),
-              onTick: () {
-                temp.doMagicHurt(hurt: damage, magicDamage: magic);
-              }));
+          temp.doMagicHurt(hurt: damage, magicDamage: magic);
+          if(secsOfPermDamage.toInt() > 0) {
+            tempComponent.add(CountTimer(
+                period: 1,
+                count: secsOfPermDamage.toInt(),
+                onTick: () {
+                  temp.doMagicHurt(hurt: damage, magicDamage: magic);
+                }));
+          }
         }
       }
     }

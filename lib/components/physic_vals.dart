@@ -47,14 +47,11 @@ enum PlayerDirectionMove{
   RightDown,
 }
 
-enum PlayerMagicSpell
+enum MagicSpellVariant
 {
   none,
-  darkBall,
-  electroBall,
-  fireBallBlue,
-  fireBallRed,
-  poisonBall,
+  circle,
+  forward,
 }
 
 class GameConsts
@@ -222,6 +219,7 @@ class PlayerData
   final ValueNotifier<int> statChangeTrigger = ValueNotifier<int>(0);
 
   final ValueNotifier<double> playerLevel = ValueNotifier<double>(1);
+  final ValueNotifier<double> playerMagicLevel = ValueNotifier<double>(1);
   final ValueNotifier<double> health = ValueNotifier<double>(0);
   final ValueNotifier<double> energy = ValueNotifier<double>(0);
   final ValueNotifier<double> armor = ValueNotifier<double>(0);
@@ -248,7 +246,6 @@ class PlayerData
   final ValueNotifier<Item> swordDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
-  PlayerMagicSpell playerMagicSpell = PlayerMagicSpell.darkBall;
 
   void addToInventar(InventarType type, String itemId)
   {
