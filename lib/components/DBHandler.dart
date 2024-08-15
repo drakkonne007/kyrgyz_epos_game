@@ -9,6 +9,7 @@ import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/game_worlds.dart';
+import 'package:game_flame/components/tile_map_component.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -87,6 +88,7 @@ class DbHandler
     for(final wrld in fullMaps()){
       await _database?.execute('DROP TABLE IF EXISTS ${wrld.nameForGame}');
     }
+    await _database?.execute('DROP TABLE IF EXISTS map_info');
     await _database?.execute('DROP TABLE IF EXISTS player_data');
     await _database?.execute('DROP TABLE IF EXISTS current_inventar');
     await _database?.execute('DROP TABLE IF EXISTS inventar');
@@ -105,6 +107,13 @@ class DbHandler
           ',used INTEGER NOY NULL DEFAULT 0'
           ');');
     }
+    await _database?.execute('CREATE TABLE IF NOT EXISTS map_info '
+        '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
+        ',save_id INT NOT NULL DEFAULT 0'
+        ',world_name TEXT'
+        ',column INT'
+        ',row INT,'
+        ' CONSTRAINT map_world_constraint UNIQUE (save_id, world_name, column, row));');
     await _database?.execute('CREATE TABLE IF NOT EXISTS player_data '
         '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
         ',save_id INT NOT NULL DEFAULT 0'
@@ -160,6 +169,24 @@ class DbHandler
         }
       }catch(e){}
     }
+  }
+
+  Future addClearMap(int saveId, String world, LoadedColumnRow colRow)async
+  {
+    await _database?.rawInsert('INSERT INTO map_info(save_id, world_name, column, row) VALUES(?,?,?,?) ON CONFLICT DO NOTHING', [saveId, world, colRow.column, colRow.row]);
+  }
+
+  Future<Map<String,Set<LoadedColumnRow>>> getClearMap(int saveId)async
+  {
+    final res = await _database?.rawQuery('SELECT * FROM map_info WHERE save_id = ?', [saveId]);
+    Map<String,Set<LoadedColumnRow>> answer = {};
+    if(res != null && res.isNotEmpty){
+      for(final row in res){
+        answer.putIfAbsent(row['world_name']!.toString(), ()=>{});
+        answer[row['world_name']!.toString()]!.add(LoadedColumnRow(row['column']! as int, row['row']! as int));
+      }
+    }
+    return answer;
   }
 
   Future fillQuests() async

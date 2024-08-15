@@ -288,7 +288,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     _column = newColumn;
     _row = newRow;
     var dworld = game.world.physicsWorld as WorldPhy;
-    dworld.changeActiveBodies(LoadedColumnRow(_column, _row));
+    LoadedColumnRow current = LoadedColumnRow(_column, _row);
+    dworld.changeActiveBodies(current);
     Set<LoadedColumnRow> allEllsSet = allEls.keys.toSet();
     for(final els in allEllsSet){
       if((els.row - _row).abs() >= 2 || (els.column - _column).abs() >= 2){
@@ -308,5 +309,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
         mapNode?.generateMap(LoadedColumnRow(_column + i, _row + j));
       }
     }
+    gameRef.clearMap.putIfAbsent(currentGameWorldData!.nameForGame, () => {});
+    gameRef.clearMap[currentGameWorldData!.nameForGame]!.add(current);
+    gameRef.dbHandler.addClearMap(0, currentGameWorldData!.nameForGame, current);
   }
 }

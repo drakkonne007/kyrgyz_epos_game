@@ -111,6 +111,9 @@ flutter:
   - assets/images/inventar/weapon/
   - assets/metaData/caveUnderRiver/
   - assets/metaData/caveUnderRiver2/
+  - assets/metaData/caveUnderRiver3/
+  - assets/metaData/caveUnderRiver4/
+  - assets/metaData/underTampleRoom/
   - assets/metaData/dungeonUnderTemple/
   - assets/metaData/dungeonUnderTemple2Floor/
   - assets/metaData/testMap/

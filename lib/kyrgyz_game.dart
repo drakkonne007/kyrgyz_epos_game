@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
+import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/Items/Dresses/ringDress.dart';
@@ -31,6 +32,7 @@ import 'package:game_flame/overlays/inventar_overlay.dart';
 import 'package:game_flame/overlays/language.dart';
 import 'package:game_flame/overlays/main_menu.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/overlays/mapOverlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:xml/xml.dart';
@@ -91,6 +93,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader poisonShader;
   late FragmentShader lightningShader;
   ValueNotifier<Item?> currentItemInInventar = ValueNotifier<Item?>(null);
+  Map<String, Set<LoadedColumnRow>> clearMap = {};
+  Image? imageForMap;
   Quest? currentQuest;
   Map<String,Quest> quests = {};
   ValueNotifier<InventarOverlayType> currentStateInventar = ValueNotifier<InventarOverlayType>(InventarOverlayType.helmet);
@@ -246,6 +250,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   Future loadGame(int saveId) async
   {
+    clearMap = await dbHandler.getClearMap(saveId);
     playerData.loadGame(await dbHandler.loadGame(saveId));
   }
 
@@ -265,6 +270,40 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     FlameAudio.bgm.stop();
     resumeEngine();
     _showOverlay(overlayName: GameHud.id,isHideOther: true);
+  }
+
+  void doMapHud() async
+  {
+    FlameAudio.bgm.stop();
+    pauseEngine();
+    final composition = ImageCompositionExt();
+    var img = await Flame.images.load('metaData/${gameMap.currentGameWorldData?.nameForGame}/fullMap.png');
+    composition.add(img, Vector2.zero());
+    Set<LoadedColumnRow> temp = {};
+    for(final loadCol in clearMap[gameMap.currentGameWorldData?.nameForGame] ?? <LoadedColumnRow>{}){
+      int col = loadCol.column;
+      int row = loadCol.row;
+      for(int i=-1;i<2;i++) {
+        for(int j=-1;j<2;j++) {
+          temp.add(LoadedColumnRow(col + i, row + j));
+        }
+      }
+    }
+    for (int cols = 0; cols < gameMap.currentGameWorldData!.gameConsts.maxColumn; cols++) {
+      for (int rows = 0; rows < gameMap.currentGameWorldData!.gameConsts.maxRow; rows++) {
+        LoadedColumnRow loadedColumnRow = LoadedColumnRow(cols, rows);
+        if(temp.contains(loadedColumnRow)){
+          continue;
+        }
+        composition.add(await Flame.images.load('nullDarkQuarter.png'), Vector2(cols * GameConsts.lengthOfTileSquare.x / 4, rows * GameConsts.lengthOfTileSquare.y / 4));
+      }
+    }
+    composition.add(await Flame.images.load('images/inventar/warrior.png'), playerPosition() / 4);
+    final newImg = composition.compose();
+    // newImg = await newImg.resize(Vector2(newImg.width / 4, newImg.height / 4));
+    var bytes = await newImg.toByteData(format: ImageByteFormat.png);
+    imageForMap = Image.memory(bytes!.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+    _showOverlay(overlayName: MapOverlay.id, isHideOther: true);
   }
 
   void doDialogHud(String id)async

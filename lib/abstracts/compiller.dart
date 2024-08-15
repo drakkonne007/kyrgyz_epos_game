@@ -1,7 +1,12 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:ui' as ui;
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled_utils/flame_tiled_utils.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -18,7 +23,6 @@ Future precompileAll() async
     }
     dir.createSync(recursive: true);
   }
-  Set<String> allQuests = {};
   for (final bigWorld in listOfFullMaps) {
     print('start compile ${bigWorld.nameForGame}');
     var fileName = bigWorld.source;
@@ -53,6 +57,42 @@ Future precompileAll() async
       await compilerAnimation.compile('high',bigWorld);
       await compilerAnimationBack.compile('down',bigWorld);
     }
+    final fullCompose = ImageCompositionExt();
+    for (int cols = 0; cols < bigWorld.gameConsts.maxColumn; cols++) {
+      for (int rows = 0; rows < bigWorld.gameConsts.maxRow; rows++) {
+        if (File(
+            'assets/metaData/${bigWorld.nameForGame}/$cols-${rows}_down.png')
+            .existsSync()) {
+          var data = File(
+              'assets/metaData/${bigWorld.nameForGame}/$cols-${rows}_down.png').readAsBytesSync();
+          ui.Codec codec = await ui.instantiateImageCodec(data);
+          ui.FrameInfo fi = await codec.getNextFrame();
+          fullCompose.add(fi.image, Vector2(GameConsts.lengthOfTileSquare.x * cols,
+              GameConsts.lengthOfTileSquare.y * rows));
+        }
+        if (File(
+            'assets/metaData/${bigWorld.nameForGame}/$cols-${rows}_high.png')
+            .existsSync()) {
+          var data = File(
+              'assets/metaData/${bigWorld.nameForGame}/$cols-${rows}_high.png').readAsBytesSync();
+          ui.Codec codec = await ui.instantiateImageCodec(data);
+          ui.FrameInfo fi = await codec.getNextFrame();
+          fullCompose.add(fi.image, Vector2(GameConsts.lengthOfTileSquare.x * cols,
+              GameConsts.lengthOfTileSquare.y * rows));
+        }
+      }
+    }
+    {
+      var composedImage = fullCompose.compose();
+      composedImage = await composedImage.resize(
+          Vector2(composedImage.width / 4, composedImage.height / 4));
+      var byteData = await composedImage.toByteData(
+          format: ui.ImageByteFormat.png);
+      File fileDdsdsd = File(
+          'assets/metaData/${bigWorld.nameForGame}/fullMap.png');
+      fileDdsdsd.writeAsBytesSync(byteData!.buffer.asUint8List());
+    }
+
     // internalHitBoxes = compilerAnimationBack.
     // tiled = await TiledComponent.load(fileName, Vector2.all(320));
     Set<String> loadedFiles = {};
@@ -79,7 +119,6 @@ Future precompileAll() async
                   name = obj.name;
                 }
                 Vector2 center = Vector2(obj.x + obj.width / 2, obj.gid != null ? obj.y - obj.height / 2 : obj.y + obj.height / 2);
-
                 if (center.x ~/ GameConsts.lengthOfTileSquare.x == cols && center.y ~/ GameConsts.lengthOfTileSquare.y == rows) {
                   newObjs +=
                   '\n<o id="${obj.id}" nm="$name" cl="${obj.type}" x="${obj.x}" '

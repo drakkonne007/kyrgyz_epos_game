@@ -203,8 +203,8 @@ class MySuperAnimCompiler {
   Future<void> compile(String path, GameWorldData worldData) async
   {
     final nullImage = await Flame.images.load('NULL.png');
-    for (int cols = 0; cols < worldData.gameConsts.maxColumn!; cols++) {
-      for (int rows = 0; rows < worldData.gameConsts.maxRow!; rows++) {
+    for (int cols = 0; cols < worldData.gameConsts.maxColumn; cols++) {
+      for (int rows = 0; rows < worldData.gameConsts.maxRow; rows++) {
         bool isWas = false;
         var position = Vector2(cols * GameConsts.lengthOfTileSquare.x,
             rows * GameConsts.lengthOfTileSquare.y);
@@ -237,8 +237,8 @@ class MySuperAnimCompiler {
         }
       }
     }
-    for (int cols = 0; cols < worldData.gameConsts.maxColumn!; cols++) {
-      for (int rows = 0; rows < worldData.gameConsts.maxRow!; rows++) {
+    for (int cols = 0; cols < worldData.gameConsts.maxColumn; cols++) {
+      for (int rows = 0; rows < worldData.gameConsts.maxRow; rows++) {
         bool isStartFile = false;
         for (final anim in _animations.keys) {
           String animText = '';

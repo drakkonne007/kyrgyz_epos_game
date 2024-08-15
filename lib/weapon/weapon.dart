@@ -192,20 +192,24 @@ abstract class PlayerWeapon extends DCollisionEntity
           }
         }
         // temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);
-        if (magicDamage != null) {
-          // if (temp.magicDamages.containsKey(magicDamage)) {
-          //   int curr = temp.magicDamages[magicDamage]!;
-          //   curr++;
-          //   temp.magicDamages[magicDamage!] = curr;
-          // } else {
-          //   temp.magicDamages[magicDamage!] = 1;
-          // }
-          var tempComponent = other.parent as Component;
+        if (temp.magicDamages.contains(magicDamage)) {
+          return;
+        }
+        if (magicDamage != null && magicDamage != MagicDamage.none) {
           double damage = permanentDamage;
+          if(magicDamage == MagicDamage.poison){
+            damage *= temp.magicScalePoison;
+          }else if(magicDamage == MagicDamage.fire){
+            damage *= temp.magicScaleFire;
+          }else if(magicDamage == MagicDamage.lightning){
+            damage *= temp.magicScaleElectro;
+          }
           MagicDamage magic = magicDamage!;
           temp.doMagicHurt(hurt: damage, magicDamage: magic);
+          temp.magicDamages.add(magicDamage!);
           if(secsOfPermDamage.toInt() > 0) {
-            tempComponent.add(CountTimer(
+            temp.add(CountTimer(
+                onEndCount: (){temp.magicDamages.remove(magicDamage!);},
                 period: 1,
                 count: secsOfPermDamage.toInt(),
                 onTick: () {

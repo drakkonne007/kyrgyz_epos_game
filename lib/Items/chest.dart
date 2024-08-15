@@ -59,7 +59,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     size = Vector2.all(70);
     anchor = Anchor.center;
-    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2.all(-35), size),
+    _objectHitbox = ObjectHitbox(getPointsForActivs(Vector2.all(-15), Vector2.all(30)),
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
     // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);

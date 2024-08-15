@@ -126,7 +126,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int variantOfHit = 0;
   SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
   List<String> loots = [];
-  Map<MagicDamage,int> magicDamages = {};
+  Set<MagicDamage> magicDamages = {};
   Ground? groundBody;
   late BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isQuadOptimizaion: false, onBeginMyContact: onBeginMyContact,onEndMyContact: onEndMyContact),linearDamping: 6,
       angularDamping: 6,fixedRotation: true);
@@ -142,6 +142,10 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double _maxHp = 0;
   Map<BodyUserData,ObstacleWhere> myContactMap = {};
   HitBar? _hitBar;
+  double magicScaleFire = 1;
+  double magicScalePoison = 1;
+  double magicScaleElectro = 1;
+  double magicScaleFreeze = 1;
 
 
   @override
@@ -402,16 +406,21 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     Component magicAnim;
     switch(magicDamage){
       case MagicDamage.fire:
+        isFreeze = 0;
         magicAnim = FireEffect(position: Vector2(width * anchor.x, height * anchor.y));
         break;
       case MagicDamage.ice:
+        if(isFreeze < 0){
+          isFreeze = 0;
+        }
         isFreeze++;
-        magicAnim = ColorEffect(opacityTo: 0.5, BasicPalette.blue.color, EffectController(duration: 0.51,reverseDuration: 0.51), onComplete: (){isFreeze--;});
+        magicAnim = ColorEffect(opacityTo: 0.5, BasicPalette.blue.color, EffectController(duration: 0.51 * magicScaleFreeze,reverseDuration: 0.51 * magicScaleFreeze), onComplete: (){isFreeze--;});
         break;
       case MagicDamage.lightning:
         magicAnim = LightningEffect(position: Vector2(width * anchor.x, height * anchor.y));
         break;
       case MagicDamage.none:
+        throw 'NON MAGIC HAS MAGIC DAMAGE!!!';
         magicAnim = LightningEffect(position: Vector2(width * anchor.x, height * anchor.y));
         break;
       case MagicDamage.poison:

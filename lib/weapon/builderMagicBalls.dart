@@ -8,7 +8,7 @@ import 'package:flame/components.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
-import 'package:game_flame/weapon/electroBall.dart';
+import 'package:game_flame/weapon/circleMagicBall.dart';
 import 'package:game_flame/weapon/forwardMagicBall.dart';
 import 'dart:math' as math;
 

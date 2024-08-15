@@ -5,30 +5,36 @@ import 'dart:math' as math;
 List<GameWorldData> fullMaps()
 {
   List<GameWorldData> list = [];
+  list.add(TestMap());
   list.add(TopLeftVillage());
   list.add(BigTopLeft());
   list.addAll(getVillages());
   list.add(TopLeftTempleDungeon());
-  list.add(TestMap());
   list.add(TampleDungeon());
   list.add(TampleDungeon2Floor());
   list.add(CaveUnderRiver());
   list.add(CaveUnderRiver2());
+  list.add(CaveUnderRiver3());
+  list.add(CaveUnderRiver4());
+  list.add(UnderTampleRoom());
   return list;
 }
 
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
-  list.add(TestMap());
-  // list.add(TopLeftVillage());
-  // list.add(BigTopLeft());
-  // list.addAll(getVillages());
-  // list.add(TopLeftTempleDungeon());
-  // list.add(TampleDungeon());
-  // list.add(TampleDungeon2Floor());
-  // list.add(CaveUnderRiver());
-  // list.add(CaveUnderRiver2());
+  // list.add(TestMap());
+  list.add(TopLeftVillage());
+  list.add(BigTopLeft());
+  list.addAll(getVillages());
+  list.add(TopLeftTempleDungeon());
+  list.add(TampleDungeon());
+  list.add(TampleDungeon2Floor());
+  list.add(CaveUnderRiver());
+  list.add(CaveUnderRiver2());
+  list.add(CaveUnderRiver3());
+  list.add(CaveUnderRiver4());
+  list.add(UnderTampleRoom());
   return list;
 }
 
@@ -53,6 +59,9 @@ GameWorldData getWorldFromName(String name)
     case 'dungeonUnderTemple2Floor': return TampleDungeon2Floor();
     case 'caveUnderRiver': return CaveUnderRiver();
     case 'caveUnderRiver2': return CaveUnderRiver2();
+    case 'caveUnderRiver3': return CaveUnderRiver3();
+    case 'caveUnderRiver4': return CaveUnderRiver4();
+    case 'underTampleRoom': return UnderTampleRoom();
     default: print('error name of World!'); return BigTopLeft();
   }
 }
@@ -182,6 +191,24 @@ class TopLeftTempleDungeon extends GameWorldData {
   }
 }
 
+class UnderTampleRoom extends GameWorldData {
+  UnderTampleRoom()
+  {
+    isDungeon = false;
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'underTampleRoom';
+    source = 'underTampleRoom.tmx';
+    mapSmallDialogs = [
+      'Здесь довольно опасно...',
+      'Здесь есть не только враждебные, но и дружелюбные монстры',
+      'Открывайте сундуки, их здесь много',
+      'Здешние скелеты захватили деревянный аванпост, там теперь очень опасно',
+      'Остерегайтесь катящихся брёвен, они сбивают всё на своём пути'
+    ];
+    gameConsts = GameConsts(Vector2(50,50));
+  }
+}
+
 class CaveUnderRiver extends GameWorldData {
   CaveUnderRiver()
   {
@@ -215,6 +242,42 @@ class CaveUnderRiver2 extends GameWorldData {
       'Остерегайтесь катящихся брёвен, они сбивают всё на своём пути'
     ];
     gameConsts = GameConsts(Vector2(110,99));
+  }
+}
+
+class CaveUnderRiver3 extends GameWorldData {
+  CaveUnderRiver3()
+  {
+    isDungeon = true;
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'caveUnderRiver3';
+    source = 'caveUnderRiver3.tmx';
+    mapSmallDialogs = [
+      'Здесь довольно опасно...',
+      'Здесь есть не только враждебные, но и дружелюбные монстры',
+      'Открывайте сундуки, их здесь много',
+      'Здешние скелеты захватили деревянный аванпост, там теперь очень опасно',
+      'Остерегайтесь катящихся брёвен, они сбивают всё на своём пути'
+    ];
+    gameConsts = GameConsts(Vector2(110,99));
+  }
+}
+
+class CaveUnderRiver4 extends GameWorldData {
+  CaveUnderRiver4()
+  {
+    isDungeon = true;
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'caveUnderRiver4';
+    source = 'caveUnderRiver4.tmx';
+    mapSmallDialogs = [
+      'Здесь довольно опасно...',
+      'Здесь есть не только враждебные, но и дружелюбные монстры',
+      'Открывайте сундуки, их здесь много',
+      'Здешние скелеты захватили деревянный аванпост, там теперь очень опасно',
+      'Остерегайтесь катящихся брёвен, они сбивают всё на своём пути'
+    ];
+    gameConsts = GameConsts(Vector2(150,150));
   }
 }
 

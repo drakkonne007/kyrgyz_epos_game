@@ -10,6 +10,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/inventar_overlay.dart';
 import 'package:game_flame/overlays/language.dart';
 import 'package:game_flame/overlays/main_menu.dart';
+import 'package:game_flame/overlays/mapOverlay.dart';
 import 'package:game_flame/overlays/save_dialog.dart';
 
 bool isMapCompile = false; //Надо ли компилить просто карту
@@ -42,6 +43,7 @@ void main()
                     DialogOverlay.id: (context, KyrgyzGame game) => DialogOverlay(game),
                     InventoryOverlay.id: (context, KyrgyzGame game) => InventoryOverlay(game),
                     SplashScreenGame.id: (context, KyrgyzGame game) => SplashScreenGame(game),
+                    MapOverlay.id: (context, KyrgyzGame game) => MapOverlay(game),
                   },
                 )
             ),

@@ -2,6 +2,7 @@
 
 
 import 'package:flame/geometry.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'dart:math' as math;
@@ -27,66 +28,69 @@ class HealthBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return
-      GestureDetector(
-        onTap: (){game.doInventoryHud();},
-        child: Padding(
+    return Padding(
             padding: const EdgeInsets.only(left: 10, top: 10),
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ValueListenableBuilder(
                     valueListenable: game.playerData.health,
-                    builder: (_,val,__) => Row(
-                        children:[
+                    builder: (_,val,__) =>
                           ShakeWidget(
                             shakeConstant: ShakeDefaultConstant2(),
                             autoPlay: isHurt(val),
                             child: SizedBox(
                               width: 42,
                               height: 42,
-                              child:
-                              CustomPaint(
-                                painter: ArcGradientPainter(color: Colors.red, currentProc: val / game.playerData.maxHealth.value),
-                                child:const Icon(Icons.heart_broken, color: Colors.red,size: 35,
-                                  shadows: [
-                                    BoxShadow(color: Colors.black,blurRadius: 5,offset: Offset(-1,1), blurStyle: BlurStyle.normal)
-                                  ],),
+                              child: GestureDetector(
+                                onTap: game.doInventoryHud,
+                                child: Stack(
+                                  fit: StackFit.passthrough,
+                                  children:[
+                                    CustomPaint(
+                                      painter: ArcGradientPainter(color: Colors.red, currentProc: val / game.playerData.maxHealth.value),
+                                    ),
+                                    Container(alignment: Alignment.center, width: 42,height: 42,
+                                        child: Image.asset('assets/images/inventar/heartForGui.png', width: 32, height: 32, alignment: Alignment.center,)),
+                                  ]
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: 5, height: 0,),
-                          // Text('$val',style: widget.myTextStyle.copyWith(color: Colors.red[700]!),),
-                        ]
-                    ),
+                            ),))
                   ),
-                  const SizedBox(width: 1, height: 8,),
-                  const SizedBox(width: 1, height: 8,),
+                  const SizedBox(height: 15,),
                   ValueListenableBuilder(
                       valueListenable: game.playerData.energy,
-                      builder: (_,val,__) => Row(
-                        children:[
+                      builder: (_,val,__) =>
                           ShakeWidget(
                             shakeConstant: ShakeDefaultConstant2(),
                             autoPlay: false,
                             child: SizedBox(
-                              width: 42,
-                              height: 42,
-                              child: CustomPaint(
-                                painter: ArcGradientPainter(color: Colors.blue, currentProc: val / game.playerData.maxEnergy.value),
-                                child:const Icon(Icons.directions_run, color: Colors.blue,size: 35,
-                                  shadows: [
-                                    BoxShadow(color: Colors.black,blurRadius: 2,offset: Offset(0,0),spreadRadius: 1, blurStyle: BlurStyle.normal)
-                                  ],),
-                              ),
-                            ),
+                                width: 42,
+                                height: 42,
+                                child: GestureDetector(
+                                onTap: game.doInventoryHud,
+                                child: Stack(
+                                    fit: StackFit.passthrough,
+                                    children:[
+                                      CustomPaint(
+                                          painter: ArcGradientPainter(color: const Color.fromARGB(255, 247, 220, 106), currentProc: val / game.playerData.maxEnergy.value)),
+                                      Container(alignment: Alignment.center, width: 42,height: 42,
+                                          child: Image.asset('assets/images/inventar/staminaForGui.png', width: 32, height: 32, alignment: Alignment.center,)),
+                                    ]
+                                )
+                              // child:
+                            )),
                           ),
-                        ],
-                      )
                   ),
+                  Container(
+                    width: 60,
+                    height: 60,
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: game.doMapHud,
+                      child: Image.asset('assets/images/inventar/UI-9-sliced object-53.png', width: 60, height: 60, alignment: Alignment.center,)),
+                    )
                 ]
             )
-        ),
       );
   }
 }
@@ -108,7 +112,7 @@ class ArcGradientPainter extends CustomPainter
     _gradient = SweepGradient(
         stops: [0.0,currentProc,currentProc,1],
         tileMode: TileMode.repeated,
-        colors: [color.withAlpha(180),color.withAlpha(180), Colors.black.withAlpha(80), Colors.black.withAlpha(80)],
+        colors: [color,color, Colors.black.withAlpha(80), Colors.black.withAlpha(80)],
         transform: const GradientRotation(-math.pi/2));
     final paint = Paint()
       ..shader = _gradient.createShader(rect)

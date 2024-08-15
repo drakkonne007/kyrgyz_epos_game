@@ -1,3 +1,5 @@
+// verticalSteelGate
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -10,24 +12,21 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 final List<Vector2> _leftP = [
-  Vector2(-53.9972,69.5286) * PhysicVals.physicScale
-  ,Vector2(-53.694,135.911) * PhysicVals.physicScale
+  Vector2(-9.54347,-109.687) * PhysicVals.physicScale
+  ,Vector2(-9.1539,99.1214) * PhysicVals.physicScale
+  ,Vector2(2.53315,99.1214) * PhysicVals.physicScale
+  ,Vector2(1.36445,-117.868) * PhysicVals.physicScale
   ,];
 
-final List<Vector2> _rightP = [
-  Vector2(55.731,73.166) * PhysicVals.physicScale
-  ,Vector2(56.3373,135.608) * PhysicVals.physicScale
-  ,];
-
-class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+class VerticalSteelGate extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  HorizontalWoodBridge(this._startPosition,this._id);
+  VerticalSteelGate(this._startPosition,this._id);
   final int _id;
   final Vector2 _startPosition;
   late SpriteAnimation closed, opened, toClosed;
   bool isClosed = false;
   late Ground _ground;
-  late Fixture leftF, rightF;
+  late Fixture leftF;
 
   @override
   void onRemove()
@@ -39,30 +38,27 @@ class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<Kyrg
   @override
   Future onLoad() async
   {
-    Image spriteImg = await Flame.images.load('tiles/map/prisonSet/Props/hanging bridge-lifting animation-horizontal.png');
+    Image spriteImg = await Flame.images.load('tiles/map/mountainLand/Props/Animated props/boss gate-going down-vertical.png');
     var spriteSheet = SpriteSheet(image: spriteImg,
-        srcSize: Vector2(spriteImg.width / 15, spriteImg.height.toDouble()));
-    toClosed = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    closed = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 14, loop: false);
-    opened = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
+        srcSize: Vector2(spriteImg.width / 18, spriteImg.height.toDouble()));
+    toClosed = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false).reversed();
+    closed = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
+    opened = spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 17, loop: false);
     anchor = Anchor.center;
     position = _startPosition;
     DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
     isClosed = !ans.opened;
     animation = isClosed ? closed : opened;
     priority = GamePriority.backgroundTileAnim;
-    FixtureDef fix = FixtureDef(EdgeShape()..set(_leftP.first,_leftP.last));
-    FixtureDef fixRight = FixtureDef(EdgeShape()..set(_rightP.first,_rightP.last));
+    FixtureDef fix = FixtureDef(PolygonShape()..set(_leftP));
     _ground = Ground(
         BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,
             userData: BodyUserData(isQuadOptimizaion: false)),
         gameRef.world.physicsWorld
     );
     leftF = _ground.createFixture(fix);
-    rightF = _ground.createFixture(fixRight);
     if(!isClosed){
       leftF.setSensor(true);
-      rightF.setSensor(true);
     }
     gameRef.dbHandler.dbStateChanger.addListener(changeState);
   }
@@ -74,17 +70,15 @@ class HorizontalWoodBridge extends SpriteAnimationComponent with HasGameRef<Kyrg
     if(toOpen && isClosed){
       animation = toClosed.reversed();
       TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-        removeOnFinish: true,
-        onTick: () {
-          leftF.setSensor(true);
-          rightF.setSensor(true);
-        }
+          removeOnFinish: true,
+          onTick: () {
+            leftF.setSensor(true);
+          }
       );
       gameRef.gameMap.add(timer);
     }else if(!toOpen && !isClosed){
       animation = toClosed;
       leftF.setSensor(false);
-      rightF.setSensor(false);
     }
   }
 }

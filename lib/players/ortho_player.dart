@@ -15,7 +15,7 @@ import 'package:game_flame/weapon/builderMagicBalls.dart';
 import 'package:game_flame/weapon/darkBall.dart';
 import 'package:game_flame/weapon/darkBall.dart';
 import 'package:game_flame/weapon/darkBall.dart';
-import 'package:game_flame/weapon/electroBall.dart';
+import 'package:game_flame/weapon/circleMagicBall.dart';
 import 'package:game_flame/weapon/fireBall.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';

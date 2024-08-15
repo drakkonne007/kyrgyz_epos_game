@@ -186,15 +186,15 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void startMagic()
   {
-    if(isFlippedHorizontally){
-      gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-0.5,-0.5), position: position - Vector2(30,0)));
-      gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-1,0), position: position - Vector2(30,0)));
-      gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-0.5,0.5), position: position - Vector2(30,0)));
-    }else{
-      gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(0.5,-0.5), position: position - Vector2(30,0)));
-      gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(1,0), position: position - Vector2(30,0)));
-      gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(0.5,0.5), position: position - Vector2(30,0)));
-    }
+    // if(isFlippedHorizontally){
+    //   gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-0.5,-0.5), position: position - Vector2(30,0)));
+    //   gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-1,0), position: position - Vector2(30,0)));
+    //   gameRef.gameMap.container.add(FireBall(FireBallType.blue, Vector2(-0.5,0.5), position: position - Vector2(30,0)));
+    // }else{
+    //   gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(0.5,-0.5), position: position - Vector2(30,0)));
+    //   gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(1,0), position: position - Vector2(30,0)));
+    //   gameRef.gameMap.container.add(FireBall(FireBallType.red, Vector2(0.5,0.5), position: position - Vector2(30,0)));
+    // }
   }
 
   void startHit(bool isLong)

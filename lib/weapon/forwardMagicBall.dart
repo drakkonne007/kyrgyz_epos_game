@@ -43,7 +43,7 @@ class ForwardMagicBall extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     _ground = Ground(bodyDef, gameRef.world.physicsWorld, isOnlyForStatic: true);
     _ground.createFixture(FixtureDef(CircleShape()..radius = 9 * PhysicVals.physicScale, restitution: 0.7));
     add(TimerComponent(period: 3.5,onTick: perfectRemove));
-    _weapon = DefaultPlayerWeapon([Vector2.zero()], collisionType: DCollisionType.active, isStatic: false, onStartWeaponHit: perfectRemove, game: gameRef, radius: 8);
+    _weapon = DefaultPlayerWeapon([Vector2.zero()], collisionType: DCollisionType.active, isStatic: false, game: gameRef, radius: 8);
     _weapon.permanentDamage = damage;
     _weapon.secsOfPermDamage = secs;
     _weapon.magicDamage = magicDamage;

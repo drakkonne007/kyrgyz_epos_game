@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="30" nextobjectid="1610">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="30" nextobjectid="1611">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -1728,11 +1728,11 @@
   <object id="1567" gid="61873" x="1999.75" y="2423.5" width="160" height="160"/>
   <object id="1569" name="portal" x="1730.33" y="1438.65" width="26.833" height="17.7045">
    <properties>
-    <property name="tar" value="371,473"/>
-    <property name="wrld" value="topLeft"/>
+    <property name="tar" value="1535,255"/>
+    <property name="wrld" value="underTampleRoom"/>
    </properties>
   </object>
-  <object id="1570" name="portal" x="2.66667" y="110.5" width="37.5" height="132">
+  <object id="1570" name="portal" x="1.16667" y="116.75" width="37.5" height="132">
    <properties>
     <property name="tar" value="621,1474"/>
     <property name="wrld" value="dungeonUnderTemple2Floor"/>

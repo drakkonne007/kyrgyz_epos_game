@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="3072" columns="64">
  <image source="tiles/map/mountainLand/Props/Static/Atlas-props.png" width="2048" height="1536"/>
+ <tile id="749">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="11.0563" y="0" width="20.9437" height="26.938"/>
+  </objectgroup>
+ </tile>
+ <tile id="750">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="20.0044" height="27.0785"/>
+  </objectgroup>
+ </tile>
+ <tile id="757">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="10.9626" y="-0.0936974" width="20.9414" height="27.3128"/>
+  </objectgroup>
+ </tile>
+ <tile id="758">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="-0.0936974" y="-0.0936974" width="32.1851" height="27.0317"/>
+  </objectgroup>
+ </tile>
+ <tile id="759">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="20.0512" height="27.0785"/>
+  </objectgroup>
+ </tile>
  <tile id="2576" type="high"/>
  <tile id="2577" type="high"/>
  <tile id="2578" type="high"/>

@@ -5,6 +5,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/gearSwitch.dart';
 import 'package:game_flame/Items/hBridge.dart';
 import 'package:game_flame/Items/hWChest.dart';
+import 'package:game_flame/Items/lightning.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/mapDialog.dart';
@@ -13,6 +14,7 @@ import 'package:game_flame/Items/sChest.dart';
 import 'package:game_flame/Items/teleport.dart';
 import 'package:game_flame/Items/trigger.dart';
 import 'package:game_flame/Items/vWChest.dart';
+import 'package:game_flame/Items/verticalSteelGate.dart';
 import 'package:game_flame/Obstacles/BigWoodLamp.dart';
 import 'package:game_flame/Obstacles/altarLightning.dart';
 import 'package:game_flame/Obstacles/fireCandelubr.dart';
@@ -341,6 +343,26 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'lightning160':
+        positionObject = LightningTrap(position: position, srcHeight: 160);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'lightning96':
+        positionObject = LightningTrap(position: position, srcHeight: 96);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'lightning46':
+        positionObject = LightningTrap(position: position, srcHeight: 46);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'lightning160':
+        positionObject = WoodStairway(position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'gearSwitch':
         int target = int.parse(obj.getAttribute('tar')!);
         positionObject = GearSwitch(position,target);
@@ -364,6 +386,10 @@ class MapNode {
         break;
       case 'hBridge':
         positionObject = HorizontalWoodBridge(position,id);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+      case 'verticalSteelGate':
+        positionObject = VerticalSteelGate(position, _id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
       case 'chest':

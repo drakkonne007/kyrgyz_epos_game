@@ -337,4 +337,18 @@
  <tile id="1835" type="high"/>
  <tile id="1964" type="high"/>
  <tile id="1965" type="high"/>
+ <tile id="2642">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="12.087" y="5.2002">
+    <polygon points="0,0 -6.09033,4.73172 -6.04348,10.6815 -2.24874,20.2386 8.71386,19.7701 12.9771,7.73003 10.9157,1.54601 6.69936,-0.234243"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="3304">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="12.087" y="6.04348">
+    <polygon points="0,0 -5.85609,4.87226 -6.04348,11.759 -2.15504,21.0351 8.8544,20.8945 12.9302,11.8996 12.8365,5.05966 6.88676,-0.187395"/>
+   </object>
+  </objectgroup>
+ </tile>
 </tileset>
