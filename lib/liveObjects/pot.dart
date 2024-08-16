@@ -51,7 +51,7 @@ final List<Vector2> _attack1ind12 = [ //17 всё
 
 class Pot extends KyrgyzEnemy
 {
-  Pot(this._startPos,int id,{this.isHigh = false}){this.id = id;}
+  Pot(this._startPos,int id,{this.isHigh = false}){this.id = id; super.isHigh = isHigh;}
   final Vector2 _startPos;
   bool isHigh;
   final double dist = 350 * 350;
@@ -59,11 +59,13 @@ class Pot extends KyrgyzEnemy
   late SpriteAnimation animRevealing;
   bool wakeUp = false;
   TimerComponent? timer;
+  bool _castMagic = false;
 
 
   @override
   Future<void> onLoad() async
   {
+    dopPriority = 30;
     maxLoots = 2;
     chanceOfLoot = 0.12;
     health = 15;
@@ -209,7 +211,8 @@ class Pot extends KyrgyzEnemy
           return;
         }
       }
-      if (isNearPlayer(dist, isDistanceWeapon: true)) {
+      if (!_castMagic && isNearPlayer(dist, isDistanceWeapon: true)) {
+        _castMagic = true;
         animation = animAttack2;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
         animationTicker?.onComplete = selectBehaviour;
@@ -224,6 +227,7 @@ class Pot extends KyrgyzEnemy
         return;
       }
       animation = animIdle;
+      _castMagic = false;
       speed.x = 0;
       speed.y = 0;
       groundBody?.clearForces();
@@ -257,13 +261,6 @@ class Pot extends KyrgyzEnemy
     super.update(dt);
     if (!isRefresh) {
       return;
-    }
-    if(!isHigh) {
-      int pos = position.y.toInt() + 38;
-      if (pos <= 0) {
-        pos = 1;
-      }
-      priority = pos;
     }
     position = groundBody!.position / PhysicVals.physicScale;
     if (animation == animMove

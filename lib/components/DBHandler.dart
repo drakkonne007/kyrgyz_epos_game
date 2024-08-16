@@ -169,6 +169,7 @@ class DbHandler
         }
       }catch(e){}
     }
+    print('all game objects was edded');
   }
 
   Future addClearMap(int saveId, String world, LoadedColumnRow colRow)async

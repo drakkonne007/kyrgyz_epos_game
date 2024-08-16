@@ -109,20 +109,21 @@ Future precompileAll() async
                 }
                 String name = '';
                 bool isReversedHorizontally = false;
-                if(obj.name == '' && obj.type == ''){
+                bool isGid = obj.name == '' && obj.type == '';
+                if(isGid){
                   int gid = obj.gid! & 0xFFFFFFF;
                   isReversedHorizontally = (obj.gid! & 0x80000000) != 0;
                   final tileset = tiled.tileMap.map.tilesetByTileGId(gid);
                   name = tileset.tiles.first.type!;
                   assert(name != '','ERROR ${tileset.name}');
                 }else{
-                  name = obj.name;
+                  name = obj.name == '' ? obj.type : obj.name;
                 }
-                Vector2 center = Vector2(obj.x + obj.width / 2, obj.gid != null ? obj.y - obj.height / 2 : obj.y + obj.height / 2);
+                Vector2 center = Vector2(obj.x + obj.width / 2, isGid ? obj.y - obj.height / 2 : obj.y + obj.height / 2);
                 if (center.x ~/ GameConsts.lengthOfTileSquare.x == cols && center.y ~/ GameConsts.lengthOfTileSquare.y == rows) {
                   newObjs +=
-                  '\n<o id="${obj.id}" nm="$name" cl="${obj.type}" x="${obj.x}" '
-                      '${isReversedHorizontally ? 'horizontalReverse="true"' : ''}  y="${obj.y}" w="${obj.width}" h="${obj.height}"';
+                  '\n<o id="${obj.id}" nm="$name" cl="${obj.type}" x="${center.x}" '
+                      '${isReversedHorizontally ? 'horizontalReverse="true"' : ''}  y="${center.y}" w="${obj.width}" h="${obj.height}"';
                   for (final props in obj.properties) {
                     newObjs += ' ${props.name}="${props.value}" ';
                   }

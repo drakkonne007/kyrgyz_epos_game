@@ -10,7 +10,7 @@ enum ColorState
   yellow
 }
 
-class BigFlicker extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+class BigFlicker extends SpriteAnimationComponent
 {
   BigFlicker(this._startPos,this._state);
   final ColorState _state;
@@ -19,7 +19,7 @@ class BigFlicker extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @override
   void onLoad() async
   {
-    anchor = const Anchor(0.5, 0.5);
+    anchor = Anchor.center;
     priority = GamePriority.maxPriority;
     position = _startPos;
     String name = _state == ColorState.yellow ? 'magic flame-white-bigger.png' : 'magic flame-flickering light- bigger.png';

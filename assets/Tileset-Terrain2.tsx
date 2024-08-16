@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="Tileset-Terrain2" tilewidth="32" tileheight="32" tilecount="3520" columns="64">
+<tileset version="1.10" tiledversion="1.10.2" name="Tileset-Terrain2" tilewidth="32" tileheight="32" tilecount="3520" columns="64">
  <image source="tiles/map/mountainLand/Tilesets/Tileset-Terrain2.png" width="2048" height="1760"/>
  <tile id="1383" probability="0"/>
  <tile id="1384" probability="0"/>
@@ -22,6 +22,148 @@
  <tile id="2527" probability="0.2"/>
  <tile id="2590" probability="0.2"/>
  <tile id="2591" probability="0.2"/>
+ <tile id="2726" type="high"/>
+ <tile id="2727" type="high"/>
+ <tile id="2728" type="high"/>
+ <tile id="2729" type="high"/>
+ <tile id="2730" type="high"/>
+ <tile id="2731" type="high"/>
+ <tile id="2790" type="high"/>
+ <tile id="2791" type="high"/>
+ <tile id="2792" type="high"/>
+ <tile id="2793" type="high"/>
+ <tile id="2794" type="high"/>
+ <tile id="2795" type="high"/>
+ <tile id="2854">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="6.81818" y="-0.181818" width="19.0909" height="32.2727"/>
+  </objectgroup>
+ </tile>
+ <tile id="2855">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="6.63636" y="-0.0909091" width="19.2727" height="32.0909"/>
+  </objectgroup>
+ </tile>
+ <tile id="2856">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="2.18182" y="0.0909091" width="28.4545" height="31.9091"/>
+  </objectgroup>
+ </tile>
+ <tile id="2857">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="1.90909" y="0.0909091" width="29.0909" height="31.8182"/>
+  </objectgroup>
+ </tile>
+ <tile id="2858">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="2.09091" y="0.181818" width="28.8182" height="31.9091"/>
+  </objectgroup>
+ </tile>
+ <tile id="2859">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="2.09091" y="0.0909091" width="28.9091" height="31.8182"/>
+  </objectgroup>
+ </tile>
+ <tile id="2918">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="6.90909" y="0.0909091" width="19" height="31"/>
+  </objectgroup>
+ </tile>
+ <tile id="2919">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="6.90909" y="0.272727" width="18.9091" height="30.5455"/>
+  </objectgroup>
+ </tile>
+ <tile id="2920">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="5" y="0" width="22.8182" height="30.9091"/>
+  </objectgroup>
+ </tile>
+ <tile id="2921">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="5.09091" y="0" width="23" height="31.1818"/>
+  </objectgroup>
+ </tile>
+ <tile id="2922">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="5.09091" y="0.0909091" width="22.8182" height="30.9091"/>
+  </objectgroup>
+ </tile>
+ <tile id="2923">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="5.27273" y="0" width="22.7273" height="31"/>
+  </objectgroup>
+ </tile>
+ <tile id="2982" type="high"/>
+ <tile id="2983" type="high"/>
+ <tile id="2984" type="high"/>
+ <tile id="2985" type="high"/>
+ <tile id="2986" type="high"/>
+ <tile id="2987" type="high"/>
+ <tile id="3046">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="6.90909" y="0" width="19.0909" height="32.0909"/>
+  </objectgroup>
+ </tile>
+ <tile id="3047">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="7.18182" y="0.0909091" width="18.8182" height="31.8182"/>
+  </objectgroup>
+ </tile>
+ <tile id="3048">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="2.18182" y="0.454545">
+    <polygon points="0,0 2.81818,31.2727 25.7273,31.6364 26.9091,6.45455 12,-0.363636"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="3049">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="3.54545" y="0.181818" width="26" height="31.9091"/>
+  </objectgroup>
+ </tile>
+ <tile id="3050">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="5.27273" y="32.2727">
+    <polygon points="0,0 1.18182,-21 10.5455,-20.4545 21.8182,-11.0909 22.6364,-0.0909091"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="3051">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="3.45455" y="0.0909091" width="25.9091" height="31.9091"/>
+  </objectgroup>
+ </tile>
+ <tile id="3110">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="7" y="0.0909091" width="19.1818" height="31"/>
+  </objectgroup>
+ </tile>
+ <tile id="3111">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="6.90909" y="0.0909091" width="19.2727" height="30.9091"/>
+  </objectgroup>
+ </tile>
+ <tile id="3112">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="5.09091" y="0.0909091" width="22.9091" height="31.0909"/>
+  </objectgroup>
+ </tile>
+ <tile id="3113">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="5" y="0" width="23.0909" height="31.3636"/>
+  </objectgroup>
+ </tile>
+ <tile id="3114">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="4.90909" y="0.0909091" width="23.1818" height="30.7273"/>
+  </objectgroup>
+ </tile>
+ <tile id="3115">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="4.90909" y="-0.0909091" width="23.0909" height="31.0909"/>
+  </objectgroup>
+ </tile>
  <wangsets>
   <wangset name="ground-cave-tilesets" type="corner" tile="2454">
    <wangcolor name="tileset 5-ground" color="#ff0000" tile="2454" probability="1"/>

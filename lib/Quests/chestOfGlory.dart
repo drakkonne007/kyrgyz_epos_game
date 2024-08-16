@@ -13,6 +13,7 @@ class KeyForChestOfGlory extends Item
     id = 'keyForChestOfGlory';
     enabled = false;
     source = 'images/inventar/gloves/6.png';
+    description = 'Ключ от сундука в деревне с садом';
   }
 
   @override

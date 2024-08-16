@@ -1,21 +1,13 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/Items/Dresses/item.dart';
 import 'dart:math' as math;
 
 class OrcWarrior extends KyrgyzEnemy
@@ -119,6 +111,7 @@ class OrcWarrior extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    dopPriority = 26;
     distPlayerLength = 93 * 93;
     shiftAroundAnchorsForHit = 80;
     maxLoots = 2;
@@ -282,11 +275,11 @@ class OrcWarrior extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt() + 25;
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
+    // int pos = position.y.toInt() + 25;
+    // if(pos <= 0){
+    //   pos = 1;
+    // }
+    // priority = pos;
     if (animation == animMove || animation == animIdle) {
       groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
     }

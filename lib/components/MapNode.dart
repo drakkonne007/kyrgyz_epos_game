@@ -29,7 +29,9 @@ import 'package:game_flame/liveObjects/mini_creatures/bigFlyingObelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/bird.dart';
 import 'package:game_flame/liveObjects/mini_creatures/campPortal.dart';
 import 'package:game_flame/liveObjects/mini_creatures/campfireSmoke.dart';
+import 'package:game_flame/liveObjects/mini_creatures/candleFire.dart';
 import 'package:game_flame/liveObjects/mini_creatures/crystalEffect.dart';
+import 'package:game_flame/liveObjects/mini_creatures/duck.dart';
 import 'package:game_flame/liveObjects/mini_creatures/flying_obelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/frog.dart';
 import 'package:game_flame/liveObjects/mini_creatures/groundFire.dart';
@@ -41,6 +43,7 @@ import 'package:game_flame/liveObjects/mini_creatures/windblow.dart';
 import 'package:game_flame/liveObjects/moose.dart';
 import 'package:game_flame/liveObjects/ogr.dart';
 import 'package:game_flame/liveObjects/orc.dart';
+import 'package:game_flame/liveObjects/orcMage.dart';
 import 'package:game_flame/liveObjects/pot.dart';
 import 'package:game_flame/liveObjects/prisonAssassin.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
@@ -68,11 +71,7 @@ bool isIntersect(Rectangle rect1, Rectangle rect2)
 
 class MapNode {
   MapNode(this.myGame);
-
-  int _id = 0;
   KyrgyzGame myGame;
-
-  int id() => _id++;
 
   Future<void> generateMap(LoadedColumnRow colRow) async
   {
@@ -204,8 +203,8 @@ class MapNode {
   {
     double posX = double.parse(obj.getAttribute('x')!);
     double posY = double.parse(obj.getAttribute('y')!);
-    posX += double.parse(obj.getAttribute('w')!) / 2.0;
-    posY -= double.parse(obj.getAttribute('h')!) / 2.0;
+    // posX += double.parse(obj.getAttribute('w')!) / 2.0;
+    // posY -= double.parse(obj.getAttribute('h')!) / 2.0;
     Vector2 position = Vector2(posX,posY);
     int id = int.parse(obj.getAttribute('id') ?? '-1');
     // print(id);
@@ -277,6 +276,11 @@ class MapNode {
         positionObject = OrcWarrior(position,id);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'orcMage':
+        myGame.gameMap.loadedLivesObjs.add(id);
+        positionObject = OrcMage(position,id);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'ogr':
         myGame.gameMap.loadedLivesObjs.add(id);
         positionObject = Ogr(position,id);
@@ -299,6 +303,11 @@ class MapNode {
         break;
       case 'fly':
         positionObject = Fly(position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'duck':
+        positionObject = Duck(position, id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -374,6 +383,11 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'candleFire':
+        positionObject = CandleFire(position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'crystalEffect':
         positionObject = CrystalEffect(position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
@@ -389,7 +403,7 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
       case 'verticalSteelGate':
-        positionObject = VerticalSteelGate(position, _id);
+        positionObject = VerticalSteelGate(position, id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
       case 'chest':

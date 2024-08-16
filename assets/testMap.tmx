@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="64">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="93">
  <tileset firstgid="1" source="Terrain - Ancient Ruins.tsx"/>
  <tileset firstgid="2210" source="hole1.tsx"/>
  <tileset firstgid="2450" source="Tileset-Terrain-old prison.tsx"/>
@@ -11,6 +11,10 @@
  <tileset firstgid="9708" source="goblin.tsx"/>
  <tileset firstgid="9719" source="Pot.tsx"/>
  <tileset firstgid="9732" source="Assassin like enemy - all animations.tsx"/>
+ <tileset firstgid="9828" source="orc mage - with hand fx-hurt.tsx"/>
+ <tileset firstgid="9835" source="moose1-347x192.tsx"/>
+ <tileset firstgid="9985" source="orc melee - anims-idle to walk transition.tsx"/>
+ <tileset firstgid="9987" source="Skeleton 1 - animations-walk.tsx"/>
  <layer id="2" name="blabla" width="33" height="27">
   <data encoding="csv">
 2147,2102,2149,1909,2100,2100,2103,2100,2103,2102,1815,2053,2055,2148,1909,2103,2150,2101,1815,2102,2055,1861,1863,2055,1863,2103,1862,2101,2055,2054,2149,2053,2056,
@@ -104,7 +108,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="obb">
+ <objectgroup id="4" name="obb" visible="0">
   <object id="1" x="10" y="32" width="1034" height="822"/>
  </objectgroup>
  <objectgroup id="5" name="sad">
@@ -114,11 +118,45 @@
     <property name="wrld" value="topLeftVillage"/>
    </properties>
   </object>
-  <object id="58" gid="9719" x="52.25" y="164.5" width="160" height="128"/>
-  <object id="59" gid="9719" x="788.75" y="667.5" width="160" height="128"/>
-  <object id="60" gid="9692" x="452" y="568" width="256" height="224"/>
-  <object id="61" gid="9708" x="277" y="197" width="160" height="128"/>
-  <object id="63" gid="9732" x="60.6667" y="358.667" width="220" height="96"/>
+  <object id="64" type="orcMage" gid="9834" x="250.333" y="605.667" width="256" height="256"/>
+  <object id="67" name="duck" x="704" y="296">
+   <point/>
+  </object>
+  <object id="68" name="duck" x="456" y="749">
+   <point/>
+  </object>
+  <object id="69" name="duck" x="126" y="469">
+   <point/>
+  </object>
+  <object id="70" name="duck" x="429" y="169">
+   <point/>
+  </object>
+  <object id="75" gid="9835" x="52.5" y="333" width="347" height="192"/>
+  <object id="76" gid="9985" x="477" y="296" width="256" height="256"/>
+  <object id="77" gid="9732" x="99" y="600" width="220" height="96">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="78" gid="9987" x="245" y="427" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
+  <object id="79" gid="9708" x="464" y="424" width="160" height="128"/>
+  <object id="80" gid="9708" x="493" y="461" width="160" height="128"/>
+  <object id="81" gid="9708" x="564" y="464" width="160" height="128"/>
+  <object id="82" gid="9708" x="415" y="481" width="160" height="128"/>
+  <object id="83" gid="9708" x="533" y="494" width="160" height="128"/>
+  <object id="84" gid="9708" x="457" y="519" width="160" height="128"/>
+  <object id="85" gid="9708" x="686" y="554" width="160" height="128"/>
+  <object id="86" gid="9708" x="520" y="536" width="160" height="128"/>
+  <object id="87" gid="9708" x="469" y="568" width="160" height="128"/>
+  <object id="88" gid="9708" x="569" y="538" width="160" height="128"/>
+  <object id="89" gid="9708" x="382" y="642" width="160" height="128"/>
+  <object id="90" gid="9708" x="543" y="640" width="160" height="128"/>
+  <object id="91" gid="9708" x="367" y="427" width="160" height="128"/>
+  <object id="92" gid="9708" x="298" y="459" width="160" height="128"/>
  </objectgroup>
  <objectgroup id="6" name="e"/>
 </map>

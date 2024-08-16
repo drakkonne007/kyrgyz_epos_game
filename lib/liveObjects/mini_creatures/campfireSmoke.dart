@@ -3,7 +3,8 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-class CampfireSmoke extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
+class CampfireSmoke extends SpriteAnimationComponent
+{
   CampfireSmoke(this._startPos);
 
   final Vector2 _startPos;

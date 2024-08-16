@@ -28,15 +28,18 @@ class _MapOverlayState extends State<MapOverlay> {
       Stack(
           children: [
             PhotoView(
-                initialScale: 5.0,
-                maxScale: 15.0,
-                minScale: 1.0,
+                initialScale: 2.0,
+                maxScale: 10.0,
+                minScale: 0.4,
                 basePosition: Alignment((widget._game.playerPosition().x / (widget._game.gameMap.currentGameWorldData!.gameConsts.maxColumn * GameConsts.lengthOfTileSquare.x) * 2 - 1)
                     , (widget._game.playerPosition().y / (widget._game.gameMap.currentGameWorldData!.gameConsts.maxRow * GameConsts.lengthOfTileSquare.y)) * 2 - 1),
                 imageProvider: widget._game.imageForMap!.image),
             // PhotoView(
             //   imageProvider: widget._game.imageForMap?.image ?? const AssetImage('assets/NULL.png'),),
-            FloatingActionButton(onPressed: widget._game.doGameHud),
+            FloatingActionButton(onPressed: (){
+              widget._game.doGameHud();
+              widget._game.imageForMap = null;
+            }),
           ]
       )
       );

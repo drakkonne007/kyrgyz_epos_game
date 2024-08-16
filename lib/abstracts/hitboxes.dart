@@ -104,13 +104,7 @@ abstract class DCollisionEntity extends Component
     _maxCoords.x = -99999;
     _maxCoords.y = -99999;
     if(radius == 0) {
-      Set<double>? check;
-      if(vertices.length == 4 && !isStatic && isLoop){
-        check = {};
-      }
       for (int i = 0; i < vertices.length; i++) {
-        check?.add(vertices[i].x);
-        check?.add(vertices[i].y);
         if (vertices[i].x < _minCoords.x) {
           _minCoords.x = vertices[i].x;
         }
@@ -124,7 +118,7 @@ abstract class DCollisionEntity extends Component
           _maxCoords.y = vertices[i].y;
         }
       }
-      if(check != null && check.length == 4){
+      if(vertices.length == 4 && isSolid){
         _isTrueRect = true;
       }
       width = _maxCoords.x - _minCoords.x;

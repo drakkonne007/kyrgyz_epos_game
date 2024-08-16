@@ -69,6 +69,7 @@ class Ogr extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    dopPriority = (15 * zoomScale).toInt();
     shiftAroundAnchorsForHit = 60;
     distPlayerLength = 70 * 70;
     maxLoots = 3;
@@ -204,11 +205,11 @@ class Ogr extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt() + (15 * zoomScale).toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
+    // int pos = position.y.toInt() + (15 * zoomScale).toInt();
+    // if(pos <= 0){
+    //   pos = 1;
+    // }
+    // priority = pos;
     if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
       return;
     }

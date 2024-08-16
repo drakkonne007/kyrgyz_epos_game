@@ -123,6 +123,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int column=0;
   int row=0;
   int id=-1;
+  int dopPriority = 0;
   int variantOfHit = 0;
   SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
   List<String> loots = [];
@@ -146,6 +147,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double magicScalePoison = 1;
   double magicScaleElectro = 1;
   double magicScaleFreeze = 1;
+  TimerComponent? priorityTimer;
+  bool isHigh = false;
 
 
   @override
@@ -159,6 +162,12 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _hitBar = HitBar(position: Vector2(width * anchor.x, height * anchor.y));
     _hitBar?.opacity = 0;
     add(_hitBar!);
+    if(!isHigh) {
+      priorityTimer = TimerComponent(period: 0.6, repeat: true, onTick: () {
+        priority = position.y.toInt() + dopPriority;
+      });
+      add(priorityTimer!);
+    }
   }
 
   @override

@@ -335,15 +335,21 @@ class PlayerData
 
   void loadGame(SavedGame svg)
   {
+    armorDress.value = NullItem();
+    helmetDress.value = NullItem();
+    glovesDress.value  = NullItem();
+    swordDress.value = NullItem();
+    ringDress.value = NullItem();
+    bootsDress.value = NullItem();
     for(final cur in svg.currentInventar){
       Item it = itemFromName(cur);
       switch(it.dressType){
-        case DressType.armor: armorDress.value = it; break;
+        case DressType.armor:  armorDress.value = it; break;
         case DressType.helmet: helmetDress.value = it; break;
         case DressType.gloves: glovesDress.value = it; break;
-        case DressType.sword: swordDress.value = it; break;
-        case DressType.ring: ringDress.value = it; break;
-        case DressType.boots: bootsDress.value = it; break;
+        case DressType.sword:  swordDress.value = it; break;
+        case DressType.ring:   ringDress.value = it; break;
+        case DressType.boots:  bootsDress.value = it; break;
         case DressType.none: break;
       }
     }

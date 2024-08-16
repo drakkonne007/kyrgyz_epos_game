@@ -71,6 +71,7 @@ class GrassGolem extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    dopPriority = 29;
     shiftAroundAnchorsForHit = 65;
     distPlayerLength = 75 * 75;
     maxLoots = 1;
@@ -78,7 +79,8 @@ class GrassGolem extends KyrgyzEnemy
     health = 20;
     maxSpeed = 47;
     Image? spriteImage;
-    if(spriteVariant == GolemVariant.Water){
+    int randVar = math.Random().nextInt(2);
+    if(randVar == 0){
       spriteImage = await Flame.images.load(
           'tiles/sprites/players/Stone-224x192.png');
     }else{
@@ -139,11 +141,11 @@ class GrassGolem extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt() + 29;
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
+    // int pos = position.y.toInt() + 29;
+    // if(pos <= 0){
+    //   pos = 1;
+    // }
+    // priority = pos;
     if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
       return;
     }

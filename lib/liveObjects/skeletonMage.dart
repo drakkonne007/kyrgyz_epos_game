@@ -18,13 +18,14 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class SkeletonMage extends KyrgyzEnemy
 {
-  SkeletonMage(this._startPos,int id,{this.isHigh = false}){this.id = id;}
+  SkeletonMage(this._startPos,int id,{this.isHigh = false}){this.id = id; super.isHigh = isHigh;}
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield, animAttackStart, animAttackEnd, animAttackLong, animBlock, animThrow;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
   bool isHigh;
   bool _withShieldNow = false;
   final double dist = 352 * 352;
+  bool _castMagic = false;
 
   final List<Vector2> hitBoxPoints = [
     Vector2(113-115,103-110),
@@ -39,6 +40,7 @@ class SkeletonMage extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    dopPriority = 38;
     maxLoots = 2;
     chanceOfLoot = 0.12;
     health = 9;
@@ -197,7 +199,8 @@ class SkeletonMage extends KyrgyzEnemy
       speed.x = 0;
       speed.y = 0;
       groundBody?.clearForces();
-      if (isNearPlayer(dist, isDistanceWeapon: true)) {
+      if (!_castMagic && isNearPlayer(dist, isDistanceWeapon: true)) {
+        _castMagic = true;
         animation = _withShieldNow ? _animAttackStartShield : animAttackStart;
         animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
         animationTicker?.onComplete = chooseHit;
@@ -210,11 +213,13 @@ class SkeletonMage extends KyrgyzEnemy
         }
         return;
       }
+      _castMagic = false;
       animation = _withShieldNow ? _animIdleShield : animIdle;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }else{
       animation = _withShieldNow ? _animIdleShield : animIdle;
+      _castMagic = false;
       animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
       animationTicker?.onComplete = selectBehaviour;
     }
@@ -294,13 +299,6 @@ class SkeletonMage extends KyrgyzEnemy
     super.update(dt);
     if (!isRefresh) {
       return;
-    }
-    if(!isHigh) {
-      int pos = position.y.toInt() + 38;
-      if (pos <= 0) {
-        pos = 1;
-      }
-      priority = pos;
     }
     position = groundBody!.position / PhysicVals.physicScale;
     if (animation == _animMoveShield || animation == animMove

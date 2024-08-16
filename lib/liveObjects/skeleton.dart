@@ -73,6 +73,7 @@ class Skeleton extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    dopPriority = 39;
     distPlayerLength = 65 * 65;
     shiftAroundAnchorsForHit = 50;
     maxLoots = 2;
@@ -354,16 +355,11 @@ class Skeleton extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt() + 39;
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
-    // if(hitBox.getMaxVector().y > gameRef.gameMap.orthoPlayer!.hitBox!.getMaxVector().y && parent != gameRef.gameMap.enemyOnPlayer){
-    //   parent = gameRef.gameMap.enemyOnPlayer;
-    // }else if(parent != gameRef.gameMap.enemyComponent){
-    //   parent = gameRef.gameMap.enemyComponent;
+    // int pos = position.y.toInt() + 39;
+    // if(pos <= 0){
+    //   pos = 1;
     // }
+    // priority = pos;
     if (animation == _animMoveShield || animation == animMove
         || animation == _animIdleShield || animation == animIdle) {
       groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);

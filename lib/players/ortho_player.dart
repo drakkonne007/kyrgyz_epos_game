@@ -141,10 +141,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   void setGroundBody({Vector2? targetPos})
   {
     targetPos ??= position;
-    if(groundRigidBody != null){
-      print('destroy again');
-      game.world.destroyBody(groundRigidBody!);
-    }
+    groundRigidBody?.destroy();
     Vector2 tPos = -Vector2(11,-10);
     Vector2 tSize = Vector2(20,16);
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)), friction: 0.1, density: 0.1);

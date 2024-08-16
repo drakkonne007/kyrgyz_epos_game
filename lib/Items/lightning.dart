@@ -6,6 +6,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 
 final List<Vector2> _weaponPoints160 = [
@@ -31,7 +32,7 @@ Vector2(-3.14863,-29.0244)
 
 class LightningTrap extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  late DefaultPlayerWeapon _weapon;
+  late DefaultEnemyWeapon _weapon;
   final double srcHeight;
   LightningTrap({required super.position, required this.srcHeight,});
   late SpriteAnimation _runAnim, _fadeAnim;
@@ -40,35 +41,36 @@ class LightningTrap extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     anchor = Anchor.center;
     priority = GamePriority.foregroundTile - 1;
-    String source = 'images/tiles/mountainLand/Props/Animated props/lightning-4Tiles.png';
-    String source2 = 'images/tiles/mountainLand/Props/Animated props/lightning-4Tiles-fading out.png';
+    String source = 'tiles/map/mountainLand/Props/Animated props/lightning-4Tiles.png';
+    String source2 = 'tiles/map/mountainLand/Props/Animated props/lightning-4Tiles-fading out.png';
     switch(srcHeight){
       case 46:
-        source = 'images/tiles/mountainLand/Props/Animated props/lightning-1Tile.png';
-        source2 = 'images/tiles/mountainLand/Props/Animated props/lightning-1Tile-fading out.png';
+        source = 'tiles/map/mountainLand/Props/Animated props/lightning-1Tile.png';
+        source2 = 'tiles/map/mountainLand/Props/Animated props/lightning-1Tile-fading out.png';
         break;
       case 96:
-        source = 'images/tiles/mountainLand/Props/Animated props/lightning-2Tiles.png';
-        source2 = 'images/tiles/mountainLand/Props/Animated props/lightning-2Tiles-fading out.png';
+        source = 'tiles/map/mountainLand/Props/Animated props/lightning-2Tiles.png';
+        source2 = 'tiles/map/mountainLand/Props/Animated props/lightning-2Tiles-fading out.png';
         break;
     }
     final imgRun = await Flame.images.load(source);
     final imgFade = await Flame.images.load(source2);
     var spriteSheet = SpriteSheet(
       image: imgRun,
-      srcSize: imgRun.size,
+      srcSize: Vector2(imgRun.width / 20,imgRun.height * 1.0),
     );
     _runAnim = spriteSheet.createAnimation(row: 0, stepTime: 0.1,from: 0, loop: false);
+
     spriteSheet = SpriteSheet(
       image: imgFade,
-      srcSize: imgFade.size,
+      srcSize: Vector2(imgRun.width / 10,imgRun.height * 1.0),
     );
     _fadeAnim = spriteSheet.createAnimation(row: 1, stepTime: 0.1,from: 0, loop: false);
     animation = _runAnim;
     animationTicker?.onComplete = changeToFade;
-    _weapon = DefaultPlayerWeapon(srcHeight == 96 ? _weaponPoints96 : srcHeight == 160 ? _weaponPoints160 : _weaponPoints46 , collisionType: DCollisionType.active, isStatic: false, game: gameRef);
-    _weapon.permanentDamage = 10;
-    _weapon.coolDown = 1;
+    _weapon = DefaultEnemyWeapon(srcHeight == 96 ? _weaponPoints96 : srcHeight == 160 ? _weaponPoints160 : _weaponPoints46 , collisionType: DCollisionType.active, isStatic: false, game: gameRef);
+    _weapon.damage = 10;
+    _weapon.coolDown = 0.75;
     add(_weapon);
   }
 

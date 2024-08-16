@@ -18,17 +18,15 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   final List<SpriteAnimation> _idles = [];
   late SpriteAnimation _idle1, _idle2, _idle3, _idle4, _idle5, _idle6, _walkForward, _walkBack, _wolkSide;
   final Vector2 _speed = Vector2.all(0);
-  final double _velocity = 70;
+  final double _velocity = 50;
   late Ground _groundHitBox;
-  bool _isMove = false;
 
   @override onLoad() async
   {
-    TimerComponent timer = TimerComponent(onTick: _checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
+    TimerComponent timer = TimerComponent(onTick: _checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 2);
     add(timer);
     anchor = const Anchor(0.5,0.5);
     size = Vector2.all(70);
-    position = _startPos;
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(5);
     rand++;
     String start = 'tiles/map/grassLand2/Characters/small animals/frogs/frog$rand';
@@ -88,18 +86,18 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     chooseMove();
 
     BodyDef bf = BodyDef(type: BodyType.dynamic,position: _startPos * PhysicVals.physicScale,userData: BodyUserData(isQuadOptimizaion: false
-    ,onBeginMyContact: _obstacle), linearDamping: 6, angularDamping: 6);
+    ), linearDamping: 6, angularDamping: 6);
     _groundHitBox = Ground(bf, gameRef.world.physicsWorld,isOnlyForStatic: true);
     _groundHitBox.createFixture(FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2.all(-7), Vector2.all(15), scale: PhysicVals.physicScale))));
-    position = _groundHitBox.position;
+    position = _groundHitBox.position / PhysicVals.physicScale;
   }
 
   void regulMove(int index)
   {
     if(index == 2){
-      _isMove = true;
+      _groundHitBox.applyLinearImpulse(_speed);
     }else if(index == 7){
-      _isMove = false;
+      _groundHitBox.clearForces();
     }
   }
 
@@ -109,27 +107,18 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     int row =    position.y ~/ GameConsts.lengthOfTileSquare.y;
     int diffCol = (column - gameRef.gameMap.column()).abs();
     int diffRow = (row - gameRef.gameMap.row()).abs();
-    if(diffCol > 1 || diffRow > 1){
+    if(diffCol > 2 || diffRow > 2){
       gameRef.gameMap.loadedLivesObjs.remove(_id);
-      gameRef.world.destroyBody(_groundHitBox);
+      _groundHitBox.destroy();
       removeFromParent();
     }
   }
 
-  void _obstacle(Object other, Contact contact)
-  {
-
-
-  }
-
   void chooseMove()
   {
-    _speed.setValues(0,0);
-    animation = null;
-    var box = gameRef.gameMap.orthoPlayer?.hitBox ?? gameRef.gameMap.frontPlayer!.hitBox;
-    if(position.distanceToSquared((box!.getMinVector() + box.getMaxVector()) / 2)  < 1000){
-      Vector2 vec = (box.getMinVector() + box.getMaxVector()) / 2;
-      double angle = math.atan2(vec.y - position.y, vec.x - position.x);
+    var box = gameRef.playerPosition() + Vector2(0, 20);
+    if(position.distanceToSquared(box)  < 2000){
+      double angle = math.atan2(box.y - position.y, box.x - position.x);
       double cos = math.cos(angle);
       double sin = math.sin(angle);
       if(sin.abs() > cos.abs()){
@@ -163,15 +152,13 @@ class Frog extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         flipHorizontally();
       }
     }
+    animationTicker?.isLastFrame ?? false ? animationTicker?.reset() : null;
     animationTicker?.onComplete = chooseMove;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    position = _groundHitBox.position;
-    if(_isMove) {
-      _groundHitBox.applyLinearImpulse(_speed * dt * 150);
-    }
+    position = _groundHitBox.position / PhysicVals.physicScale;
   }
 }

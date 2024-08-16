@@ -41,7 +41,7 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
     }
     _loadedColumnRow = LoadedColumnRow(_startPos.x ~/ GameConsts.lengthOfTileSquare.x,_startPos.y ~/ GameConsts.lengthOfTileSquare.y);
     add(TimerComponent(period: 1.2,onTick: spawnArrow,repeat: true));
-    add(TimerComponent(period: 1,repeat: true,onTick: checkInRemoveItself));
+    add(TimerComponent(period: 2,repeat: true,onTick: checkInRemoveItself));
   }
 
   void spawnArrow()
@@ -89,27 +89,27 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
         angle = -math.pi/2;
         // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.x = -PhysicVals.maxSpeed - 40;
+        _speed.x = -PhysicVals.maxSpeed;
         break;
       case ArrowDirection.right:
         position.x += size.x/2;
         angle = math.pi/2;
         // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - Vector2(size.y,size.x)/2, Vector2(size.y,size.x)), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.x = PhysicVals.maxSpeed + 40;
+        _speed.x = PhysicVals.maxSpeed;
         break;
       case ArrowDirection.down:
         position.y += size.y/2;
         flipVertically();
         // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.y = PhysicVals.maxSpeed + 40;
+        _speed.y = PhysicVals.maxSpeed;
         break;
       default:
         position.y -= size.y/2;
         // _grBox = GroundHitBox(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isQuadOptimizaion: false,isLoop: true, obstacleBehavoiurStart: obstacleBehavoiurStart, game: game);
         _weapon = DefaultEnemyWeapon(getPointsForActivs(Vector2.zero() - size/2, size), collisionType: DCollisionType.active, isStatic: false,isLoop: true, game: game,onObstacle: startCollisionPlayer);
-        _speed.y = -PhysicVals.maxSpeed - 40;
+        _speed.y = -PhysicVals.maxSpeed;
         break;
     }
     BodyDef bd = BodyDef(type: BodyType.dynamic, position: _startPos * PhysicVals.physicScale, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false,
@@ -123,12 +123,7 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
     FixtureDef fx = FixtureDef(PolygonShape()..set(newPoints), isSensor: true);
     _grBox = Ground(bd, gameRef.world.physicsWorld);
     _grBox.createFixture(fx);
-    _grBox.applyLinearImpulse(_speed * 2);
-    // rotatedX = x * cos(angle) - y * sin(angle)
-    // rotatedY = x * sin(angle) + y * cos(angle)
-    // ss.
-    // _grBox.isOnlyForStatic = true;
-    // add(_grBox);
+    _grBox.applyLinearImpulse(_speed / 4);
     add(_weapon);
     _weapon.damage = 5;
   }
@@ -145,8 +140,8 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
 
   void startFadeout()
   {
+    _weapon.collisionType = DCollisionType.inactive;
     _grBox.linearVelocity = Vector2.zero();
-    // _grBox.collisionType = DCollisionType.inactive;
     add(OpacityEffect.by(-1,EffectController(duration: 0.5),onComplete: (){
       _grBox.destroy();
       removeFromParent();
@@ -156,11 +151,6 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
   @override
   update(double dt)
   {
-    position += _grBox.position / PhysicVals.physicScale;
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
+    position = _grBox.position / PhysicVals.physicScale;
   }
 }

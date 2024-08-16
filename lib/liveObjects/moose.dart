@@ -97,6 +97,7 @@ class Moose extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    dopPriority = 26;
     shiftAroundAnchorsForHit = 100;
     distPlayerLength = 10000;
     maxLoots = 2;
@@ -104,36 +105,24 @@ class Moose extends KyrgyzEnemy
     health = 20;
     maxSpeed = 50;
     Image? spriteImage;
-    switch(_mooseVariant)
-    {
-      case MooseVariant.Wool: spriteImage = await Flame.images.load('tiles/sprites/players/moose1-347x192.png'); break;
-      case MooseVariant.WoolWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose2-347x192.png'); break;
-      case MooseVariant.Blue: spriteImage = await Flame.images.load('tiles/sprites/players/moose3-347x192.png'); break;
-      case MooseVariant.BlueWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose4-347x192.png'); break;
-      case MooseVariant.Purple: spriteImage = await Flame.images.load('tiles/sprites/players/moose5-347x192.png'); break;
-      case MooseVariant.PurpleWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose6-347x192.png'); break;
-    }
+    int randMy = math.Random().nextInt(5);
+    // switch(_mooseVariant){
+    //   case MooseVariant.Wool: spriteImage = await Flame.images.load('tiles/sprites/players/moose1-347x192.png'); break;
+    //   case MooseVariant.WoolWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose2-347x192.png'); break;
+    //   case MooseVariant.Blue: spriteImage = await Flame.images.load('tiles/sprites/players/moose3-347x192.png'); break;
+    //   case MooseVariant.BlueWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose4-347x192.png'); break;
+    //   case MooseVariant.PurpleWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose6-347x192.png'); break;
+    //   case MooseVariant.Purple: spriteImage = await Flame.images.load('tiles/sprites/players/moose5-347x192.png'); break;
+    // }
 
-    if(_mooseVariant == MooseVariant.Purple){
-      final spriteSheet = SpriteSheet(image: spriteImage,
-          srcSize: _spriteSheetSize);
-      animIdle =
-          spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
-      animMove =
-          spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 8, to: 16, loop: false);
-      animAttack = spriteSheet.createAnimation(
-          row: 0, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 16,to: 46, loop: false);
-      animHurt = spriteSheet.createAnimation(row: 0,
-          stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125,
-          from: 46,
-          to: 52,
-          loop: false);
-      animDeath = spriteSheet.createAnimation(row: 0,
-          stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125,
-          from: 52,
-          to: 67,
-          loop: false);
-    }else {
+    switch(randMy){
+      case 0: spriteImage = await Flame.images.load('tiles/sprites/players/moose1-347x192.png'); break;
+      case 1: spriteImage = await Flame.images.load('tiles/sprites/players/moose2-347x192.png'); break;
+      case 2: spriteImage = await Flame.images.load('tiles/sprites/players/moose3-347x192.png'); break;
+      case 3: spriteImage = await Flame.images.load('tiles/sprites/players/moose4-347x192.png'); break;
+      case 4: spriteImage = await Flame.images.load('tiles/sprites/players/moose6-347x192.png'); break;
+      default: spriteImage = await Flame.images.load('tiles/sprites/players/moose1-347x192.png'); break;
+    }
       final spriteSheet = SpriteSheet(image: spriteImage,
           srcSize: _spriteSheetSize);
       animIdle =
@@ -152,7 +141,6 @@ class Moose extends KyrgyzEnemy
           from: 0,
           to: 15,
           loop: false);
-    }
     position = _startPos;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -212,11 +200,11 @@ class Moose extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt() + 26;
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
+    // int pos = position.y.toInt() + 26;
+    // if(pos <= 0){
+    //   pos = 1;
+    // }
+    // priority = pos;
     if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
       return;
     }

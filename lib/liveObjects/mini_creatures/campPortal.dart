@@ -107,8 +107,8 @@ class CampPortalDown extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   @override
   void onRemove()
   {
-    gameRef.world.destroyBody(firstGround);
-    gameRef.world.destroyBody(secGround);
+    firstGround.destroy();
+    secGround.destroy();
   }
 
 

@@ -93,6 +93,19 @@ class _LootInvantarState extends State<LootInInventar>
                     minFontSize: 10,
                     maxLines: 1,)))])
     ));
+    if(temp.description != null){
+      myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight * 2),child:
+      Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+          children:[
+            Expanded(
+                child: SizedBox(
+                    child:AutoSizeText(temp.description!,
+                      textAlign: TextAlign.center,
+                      style: defaultInventarTextStyle,
+                      minFontSize: 10,
+                      maxLines: 2,)))])
+      ));
+    }
     myList.add(const Spacer());
     if(temp.dressType == DressType.none){
       double secs = temp.secsOfPermDamage == 0 ? 1 : temp.secsOfPermDamage;
@@ -146,13 +159,17 @@ class _LootInvantarState extends State<LootInInventar>
               maxLines: 1,)))
           ])));
       myList.add(const Spacer());
-      myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
-      ElevatedButton(onPressed: (){
-        setState(() {
-          temp.getEffectFromInventar(
-              widget.game);
-        });},
-          child: const Text('Использовать'))));
+      if(temp.enabled) {
+        myList.add(Container(constraints: BoxConstraints.expand(
+            width: rowWidth, height: rowHeight), child:
+        ElevatedButton(onPressed: () {
+          setState(() {
+            temp.getEffectFromInventar(
+                widget.game);
+          });
+        },
+            child: const Text('Использовать'))));
+      }
     }else{
       if(temp.hp != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
@@ -292,14 +309,16 @@ class _LootInvantarState extends State<LootInInventar>
           isEquip = temp == widget.game.playerData.bootsDress.value;
       }
       myList.add(const Spacer());
-      myList.add(Container(constraints: BoxConstraints.expand(
-          width: rowWidth, height: rowHeight),
-          child: ElevatedButton(onPressed: () {
-            setState(() {
-              temp.getEffectFromInventar(
-                  widget.game);
-            });
-          }, child: Text(isEquip ? 'Снять' :  'Надеть'))));
+      if(temp.enabled) {
+        myList.add(Container(constraints: BoxConstraints.expand(
+            width: rowWidth, height: rowHeight),
+            child: ElevatedButton(onPressed: () {
+              setState(() {
+                temp.getEffectFromInventar(
+                    widget.game);
+              });
+            }, child: Text(isEquip ? 'Снять' : 'Надеть'))));
+      }
     }
     myList.add(const SizedBox(height: 20,));
     return myList;
@@ -417,9 +436,6 @@ class _LootInvantarState extends State<LootInInventar>
         buttonsList.add(
             ElevatedButton(
                 onPressed: (){
-                  if(!item.enabled){
-                    return;
-                  }
                   setState(() {
                     widget.game.currentItemInInventar.value = item;
                     // item.getEffectFromInventar(widget.game);

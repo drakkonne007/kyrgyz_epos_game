@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1467">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1472">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -121,6 +121,7 @@
  <tileset firstgid="50455" source="NPC Merchant-interaction-rest.tsx"/>
  <tileset firstgid="50459" source="wind cartoonish fx-288X64- 48frames.tsx"/>
  <tileset firstgid="50511" source="treasure chest lvl 3-opening animation-cartoon style.tsx"/>
+ <tileset firstgid="50524" source="Male Skin1.tsx"/>
  <layer id="13" name="ground" width="110" height="99">
   <data encoding="csv">
 46647,46591,46647,46647,46645,46591,46701,46647,46701,46591,46646,46647,46591,46701,46701,46645,46647,46701,46701,46591,46647,46645,46701,46647,46701,46591,46701,46591,46647,46647,46646,46645,46591,46591,46646,46647,46645,46645,46647,46646,46647,46591,46645,46591,46645,46591,46701,46591,46646,46701,46647,46645,46591,46646,46646,46645,46591,46701,46646,46591,46591,46646,46647,46701,46647,46647,46647,46647,46591,46647,46646,46647,46646,46591,46591,46645,46645,46591,46646,46591,46646,46591,46645,46646,46645,46646,46646,46645,46645,46701,46701,46646,46591,46646,46591,46645,46591,46646,46701,46647,46646,46701,46591,46591,46646,46701,46645,46701,46645,46592,
@@ -2375,6 +2376,15 @@
     <property name="neededItems" value="keyForChestOfGlory"/>
     <property name="oneUse" value="true"/>
    </properties>
+  </object>
+  <object id="1467" name="frog" x="1169.33" y="1536">
+   <point/>
+  </object>
+  <object id="1468" name="frog" x="2414.67" y="405.333">
+   <point/>
+  </object>
+  <object id="1469" name="frog" x="2024" y="1765.33">
+   <point/>
   </object>
  </objectgroup>
 </map>

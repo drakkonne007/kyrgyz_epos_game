@@ -54,6 +54,7 @@ class PrisonAssassin extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    dopPriority = (30 * zoomScale).toInt();
     shiftAroundAnchorsForHit = 20;
     distPlayerLength = 60*60;
     armor = 0;
@@ -127,11 +128,11 @@ class PrisonAssassin extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    int pos = position.y.toInt() + (30 * zoomScale).toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
+    // int pos = position.y.toInt() + (30 * zoomScale).toInt();
+    // if(pos <= 0){
+    //   pos = 1;
+    // }
+    // priority = pos;
     if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null || animation == animAttack2){
       return;
     }
