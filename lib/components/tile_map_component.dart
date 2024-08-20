@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' as forge2d;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
@@ -47,6 +48,8 @@ class LoadedColumnRow
 class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
 {
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
+  ValueNotifier<int> checkPriority = ValueNotifier(0);
+  ValueNotifier<int> checkRemoveItself = ValueNotifier(0);
   static int countId = 0;
   OrthoPlayer? orthoPlayer;
   FrontPlayer? frontPlayer;
@@ -74,13 +77,20 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     await add(backgroundTile);
     await add(container);
     await add(effectComponent);
-    // gameRef.camera = CameraComponent.withFixedResolution(width: 600, height: 350, world: this);
-    // await add(playerLayout);
-    // await add(enemyComponent);
-    // await add(enemyOnPlayer);
-    // await add(priorityGroundPlus1);
-    // await add(priorityHighMinus1);
-    // await add(priorityHigh);
+    add(TimerComponent(
+      period: 0.6,
+      repeat: true,
+      onTick: (){
+        checkPriority.notifyListeners();
+      }
+    ));
+    add(TimerComponent(
+        period: 3,
+        repeat: true,
+        onTick: (){
+          checkRemoveItself.notifyListeners();
+        }
+    ));
   }
 
   int column()
@@ -154,6 +164,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     }
     for(int i=0;i<currentGameWorldData!.gameConsts.maxColumn;i++){
       for(int j=0;j<currentGameWorldData!.gameConsts.maxRow;j++){
+        final myGround = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld);
         if (KyrgyzGame.cachedGround.containsKey('$i-$j.objXml')) {
           var objects = KyrgyzGame.cachedGround['$i-$j.objXml']!;
           for(final obj in objects){
@@ -171,16 +182,28 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
               for( int k = 0; k < temp.length - 1; k++) {
                 final shape = forge2d.EdgeShape()..set(temp[k] * PhysicVals.physicScale, temp[k + 1] * PhysicVals.physicScale);
                 final fixtureDef = forge2d.FixtureDef(shape);
-                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld
-                ,isPlayer: obj.getAttribute('player') != null, isEnemy: obj.getAttribute('enemy') != null);
-                tt.createFixture(fixtureDef);
+                final fix = myGround.createFixture(fixtureDef);
+                if(obj.getAttribute('player') != null){
+                  fix.filterData.categoryBits = 0x0004;
+                  fix.filterData.maskBits = 0xFFFB;
+                }
+                if(obj.getAttribute('enemy') != null){
+                  fix.filterData.categoryBits = 0x0002;
+                  fix.filterData.maskBits = 0xFFFD;
+                }
               }
               if(obj.getAttribute('lp')! == '1'){
                 final shape = forge2d.EdgeShape()..set(temp.last * PhysicVals.physicScale, temp.first * PhysicVals.physicScale);
                 final fixtureDef = forge2d.FixtureDef(shape);
-                var tt = Ground(forge2d.BodyDef(userData: BodyUserData(isQuadOptimizaion: true, loadedColumnRow: LoadedColumnRow(i, j))),gameRef.world.physicsWorld
-                    ,isPlayer: obj.getAttribute('player') != null, isEnemy: obj.getAttribute('enemy') != null);
-                tt.createFixture(fixtureDef);
+                final fix = myGround.createFixture(fixtureDef);
+                if(obj.getAttribute('player') != null){
+                  fix.filterData.categoryBits = 0x0004;
+                  fix.filterData.maskBits = 0xFFFB;
+                }
+                if(obj.getAttribute('enemy') != null){
+                  fix.filterData.categoryBits = 0x0002;
+                  fix.filterData.maskBits = 0xFFFD;
+                }
               }
             }
           }

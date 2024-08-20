@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1472">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1488">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -121,7 +121,7 @@
  <tileset firstgid="50455" source="NPC Merchant-interaction-rest.tsx"/>
  <tileset firstgid="50459" source="wind cartoonish fx-288X64- 48frames.tsx"/>
  <tileset firstgid="50511" source="treasure chest lvl 3-opening animation-cartoon style.tsx"/>
- <tileset firstgid="50524" source="Male Skin1.tsx"/>
+ <tileset firstgid="50524" source="Human.tsx"/>
  <layer id="13" name="ground" width="110" height="99">
   <data encoding="csv">
 46647,46591,46647,46647,46645,46591,46701,46647,46701,46591,46646,46647,46591,46701,46701,46645,46647,46701,46701,46591,46647,46645,46701,46647,46701,46591,46701,46591,46647,46647,46646,46645,46591,46591,46646,46647,46645,46645,46647,46646,46647,46591,46645,46591,46645,46591,46701,46591,46646,46701,46647,46645,46591,46646,46646,46645,46591,46701,46646,46591,46591,46646,46647,46701,46647,46647,46647,46647,46591,46647,46646,46647,46646,46591,46591,46645,46645,46591,46646,46591,46646,46591,46645,46646,46645,46646,46646,46645,46645,46701,46701,46646,46591,46646,46591,46645,46591,46646,46701,46647,46646,46701,46591,46591,46646,46701,46645,46701,46645,46592,
@@ -2297,13 +2297,7 @@
   <object id="1413" name="frog" x="402.667" y="2640">
    <point/>
   </object>
-  <object id="1419" name="strMerchant" x="2200" y="1991.33">
-   <point/>
-  </object>
   <object id="1420" name="strMerchant" x="2700" y="1800">
-   <point/>
-  </object>
-  <object id="1422" name="strMerchant" x="2794" y="696">
    <point/>
   </object>
   <object id="1423" name="strMerchant" x="2098" y="854">
@@ -2322,23 +2316,6 @@
   <object id="1432" gid="2147534007" x="1405.33" y="2154" width="64" height="96"/>
   <object id="1433" gid="50359" x="1796" y="1803.33" width="64" height="96"/>
   <object id="1434" gid="2147534007" x="1052" y="1461.33" width="64" height="96"/>
-  <object id="1438" gid="50455" x="2581.92" y="2672.25" width="110" height="110">
-   <properties>
-    <property name="endShow" value="99999"/>
-    <property name="endTrigger" value="99999"/>
-    <property name="quest" value="chestOfGlory"/>
-    <property name="startShow" value="0"/>
-    <property name="startTrigger" value="0"/>
-   </properties>
-  </object>
-  <object id="1439" gid="50455" x="601" y="2379.5" width="110" height="110"/>
-  <object id="1440" gid="50455" x="1056.5" y="2027" width="110" height="110"/>
-  <object id="1441" gid="50455" x="853.5" y="1472.5" width="110" height="110"/>
-  <object id="1442" gid="50455" x="2424.33" y="732.333" width="110" height="110"/>
-  <object id="1443" gid="50455" x="833.667" y="2577.67" width="110" height="110"/>
-  <object id="1444" gid="2147534103" x="899.667" y="405.167" width="110" height="110"/>
-  <object id="1445" gid="50455" x="837.5" y="396.25" width="110" height="110"/>
-  <object id="1446" gid="50455" x="865.667" y="436.25" width="110" height="110"/>
   <object id="1454" name="dialog" x="1328" y="2259.5">
    <properties>
     <property name="text" value="Эй! Не ходи по грядкам!"/>
@@ -2385,6 +2362,70 @@
   </object>
   <object id="1469" name="frog" x="2024" y="1765.33">
    <point/>
+  </object>
+  <object id="1474" gid="50544" x="933.25" y="376.75" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1475" gid="50544" x="862.5" y="378.25" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1476" gid="2147534192" x="887.5" y="430" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+    <property name="tar" value="1064,544;933,899;1446,925"/>
+   </properties>
+  </object>
+  <object id="1478" gid="2147534192" x="412" y="1090" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1479" gid="2147534192" x="862" y="1448" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+    <property name="tar" value="618,1545;635,1672"/>
+   </properties>
+  </object>
+  <object id="1480" gid="2147534192" x="1114" y="2017" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+    <property name="tar" value="902,2404"/>
+   </properties>
+  </object>
+  <object id="1481" gid="2147534192" x="605" y="2318" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+    <property name="tar" value="1241,2201;1617,2222;1785,3037"/>
+   </properties>
+  </object>
+  <object id="1482" gid="2147534192" x="776" y="2591" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1483" gid="2147534192" x="2032" y="507" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1485" gid="2147534192" x="2570" y="2618.33" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1486" gid="2147534192" x="2176" y="2013" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1487" gid="2147534192" x="2724" y="760" width="80" height="64">
+   <properties>
+    <property name="citizien" value="1"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

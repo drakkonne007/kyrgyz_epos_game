@@ -10,6 +10,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/loot_list.dart';
+import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/weapon/builderMagicBalls.dart';
 import 'package:game_flame/weapon/darkBall.dart';
@@ -36,6 +37,8 @@ enum AnimationState
   move,
   death,
   hurt,
+  slide,
+  shield,
 }
 
 final List<Vector2> _hitboxPoint = [
@@ -74,8 +77,8 @@ final List<Vector2> _attack2ind2 = [
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>  implements MainPlayer
 {
   OrthoPlayer({required this.startPos});
-  final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
-  late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong;
+  final Vector2 sprSize = Vector2(144,96);
+  late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong, _animShield, _animSlide;
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerHitbox? hitBox;
@@ -96,17 +99,32 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     opacity = 0;
     Image? spriteImg;
-    spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
-    final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
+    spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96New.png');
+    final spriteSheet = SpriteSheet(image: spriteImg, srcSize: sprSize);
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
     _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11,loop: false); // 11
     _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
+    List<Sprite> sprites = [];
+    List<double> times = [0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,];
+    sprites.add(spriteSheet.getSprite(7,0));
+    sprites.add(spriteSheet.getSprite(7,1));
+    sprites.add(spriteSheet.getSprite(7,2));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,2));
+    sprites.add(spriteSheet.getSprite(7,1));
+    sprites.add(spriteSheet.getSprite(7,0));
+    _animShield = SpriteAnimation.variableSpriteList(sprites, stepTimes: times, loop: false);
+    _animSlide = spriteSheet.createAnimation(row: 8, stepTime: 0.08, from: 0,to: 6,loop: false);
     animation = animIdle;
     _animState = AnimationState.idle;
-    anchor = const Anchor(0.5, 0.5);
+    anchor = Anchor.center;
     Vector2 tPos = -Vector2(15,20);
     Vector2 tSize = Vector2(22,45);
 
@@ -138,7 +156,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
 
-  void setGroundBody({Vector2? targetPos})
+  void setGroundBody({Vector2? targetPos, bool isEnemy = false, double? myDumping})
   {
     targetPos ??= position;
     groundRigidBody?.destroy();
@@ -147,12 +165,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)), friction: 0.1, density: 0.1);
     groundRigidBody = Ground(
         BodyDef(type: BodyType.dynamic, position: targetPos * PhysicVals.physicScale, fixedRotation: true,
-            userData: BodyUserData(isQuadOptimizaion: false)),
-        gameRef.world.physicsWorld,isPlayer: true
+            userData: BodyUserData(isQuadOptimizaion: false)), isEnemy: isEnemy,
+        gameRef.world.physicsWorld,isPlayer: !isEnemy
     );
     groundRigidBody?.createFixture(fix);
-    groundRigidBody?.linearDamping = dumping;
-    groundRigidBody?.angularDamping = dumping;
+    groundRigidBody?.linearDamping = myDumping ?? dumping;
+    groundRigidBody?.angularDamping = myDumping ?? dumping;
     var massData = groundRigidBody!.getMassData();
     massData.mass = 70;
     groundRigidBody!.setMassData(massData);
@@ -164,10 +182,37 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
-      hurt -= gameRef.playerData.armor.value;
-      hurt = math.max(hurt, 0);
+      if(_animState == AnimationState.shield){
+        if(gameRef.playerData.energy.value > hurt * 2){
+          gameRef.playerData.addEnergy(-hurt*2);
+          gameRef.gameMap.container.add(ShieldLock(position: position - Vector2(0,17)));
+          return;
+        }else{
+          var temp = hurt - (gameRef.playerData.energy.value / 2);
+          gameRef.playerData.addEnergy(-hurt*2);
+          hurt = temp;
+        }
+        gameRef.playerData.addHealth(-hurt);
+        if(gameRef.playerData.health.value <1){
+          animation = animDeath;
+          animationTicker?.onComplete = gameRef.startDeathMenu;
+          _animState = AnimationState.death;
+        }else{
+          final temp = ColorEffect(
+            const Color(0xFFFFFFFF),
+            EffectController(duration: 0.07, reverseDuration: 0.07),
+            opacityFrom: 0.0,
+            opacityTo: 0.9,
+          );
+          add(temp);
+        }
+        return;
+      }else {
+        hurt -= gameRef.playerData.armor.value;
+        hurt = math.max(hurt, 0);
+      }
     }
-    gameRef.playerData.health.value -= hurt;
+    gameRef.playerData.addHealth(-hurt);
     if(gameRef.playerData.health.value <1){
       animation = animDeath;
       animationTicker?.onComplete = gameRef.startDeathMenu;
@@ -223,7 +268,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void startHit(bool isLong)
   {
-    if(animation != animIdle && animation != animMove){
+    if(_animState != AnimationState.idle && _animState != AnimationState.move && _animState != AnimationState.shield){
       return;
     }
     _weapon?.energyCost = _isLongAttack ? SpriteAnimationTicker(_animLong).totalDuration() * 4.5 : SpriteAnimationTicker(_animShort).totalDuration() * 3;
@@ -315,6 +360,51 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       } else if (_velocity.x < 0 && !isFlippedHorizontally) {
         flipHorizontally();
       }
+    }
+  }
+
+  void doDash()
+  {
+    if(gameRef.playerData.isLockMove){
+      return;
+    }
+    if(gameRef.playerData.energy.value < 10){
+      return;
+    }
+    gameRef.playerData.addEnergy(-10);
+    if(_animState == AnimationState.move || _animState == AnimationState.idle){
+      _animState = AnimationState.slide;
+      groundRigidBody?.clearForces();
+      groundRigidBody?.linearVelocity = Vector2.zero();
+      setGroundBody(targetPos: position, isEnemy: true, myDumping: 0);
+      hitBox!.collisionType = DCollisionType.inactive;
+      animation = _animSlide;
+      animationTicker?.onFrame = (frame){
+        if(frame == 4){
+          groundRigidBody?.linearDamping = dumping;
+          groundRigidBody?.angularDamping = dumping;
+        }
+      };
+      animationTicker?.onComplete = (){
+        hitBox!.collisionType = DCollisionType.passive;
+        setGroundBody(targetPos: position);
+        chooseStaticAnimation();
+      };
+      isFlippedHorizontally ? groundRigidBody?.applyLinearImpulse(Vector2(-3000,0)) : groundRigidBody?.applyLinearImpulse(Vector2(3000,0));
+    }
+  }
+
+  void doShield()
+  {
+    if(gameRef.playerData.isLockMove){
+      return;
+    }
+    if(_animState == AnimationState.move || _animState == AnimationState.idle){
+      _animState = AnimationState.shield;
+      animation = _animShield;
+      animationTicker?.onComplete = (){
+        chooseStaticAnimation();
+      };
     }
   }
 
@@ -410,9 +500,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameRef.playerData.energy.value > 1) {
       _isMinusEnergy = false;
     }
-    if(_animState != AnimationState.move){
+    if(_animState != AnimationState.move && _animState != AnimationState.shield && _animState != AnimationState.slide){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
-      gameRef.playerData.addEnergy(dt * 1.5);
+      gameRef.playerData.addEnergy(dt * 2.5);
+      return;
+    }
+    if(_animState != AnimationState.move){
       return;
     }
     bool isReallyRun = false;

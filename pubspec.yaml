@@ -92,25 +92,11 @@ flutter:
   - assets/grass2Rules/
   - assets/images/
   - assets/locale/
-  - assets/tiles/Citizens/
-  - assets/tiles/Citizens/Back layers\
-  - assets/tiles/Citizens/Character effects\
-  - assets/tiles/Citizens/FClothing\
-  - assets/tiles/Citizens/FEars\
-  - assets/tiles/Citizens/FGloves\
-  - assets/tiles/Citizens/FHairs\
-  - assets/tiles/Citizens/FHat\
-  - assets/tiles/Citizens/FWeapon\
-  - assets/tiles/Citizens/Masks\
-  - assets/tiles/Citizens/MClothing\
-  - assets/tiles/Citizens/MEars\
-  - assets/tiles/Citizens/MGloves\
-  - assets/tiles/Citizens/MHairs\
-  - assets/tiles/Citizens/MHat\
-  - assets/tiles/Citizens/MWeapon\
-  - assets/tiles/Citizens/Pet companion\
-  - assets/tiles/Citizens/Skins\
-  - assets/tiles/Citizens/Special skin\
+  - assets/tiles/sprites/humanNPC/Female/NoWeapon/
+  - assets/tiles/sprites/humanNPC/Female/Weapon/
+  - assets/tiles/sprites/humanNPC/Male/NoWeapon/
+  - assets/tiles/sprites/humanNPC/Male/Weapon/
+  - assets/tiles/sprites/humanNPC/Rpg/
   - assets/metaData/
 #  - assets/mockups/
   - assets/mountainRules/

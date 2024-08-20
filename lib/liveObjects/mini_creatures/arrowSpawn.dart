@@ -41,7 +41,7 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
     }
     _loadedColumnRow = LoadedColumnRow(_startPos.x ~/ GameConsts.lengthOfTileSquare.x,_startPos.y ~/ GameConsts.lengthOfTileSquare.y);
     add(TimerComponent(period: 1.2,onTick: spawnArrow,repeat: true));
-    add(TimerComponent(period: 2,repeat: true,onTick: checkInRemoveItself));
+    gameRef.gameMap.checkRemoveItself.addListener(checkInRemoveItself);
   }
 
   void spawnArrow()
@@ -55,6 +55,7 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
     int diffRow = (_loadedColumnRow.row - gameRef.gameMap.row()).abs();
     if(diffCol > 2 || diffRow > 2){
       gameRef.gameMap.loadedLivesObjs.remove(_id);
+      gameRef.gameMap.checkRemoveItself.removeListener(checkInRemoveItself);
       removeFromParent();
     }
   }

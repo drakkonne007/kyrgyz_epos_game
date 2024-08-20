@@ -53,8 +53,24 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }else{
       _speed = Vector2(0,0);
     }
-    TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
-    add(timer);
+    gameRef.gameMap.checkRemoveItself.addListener(checkIsNeedSelfRemove);
+    gameRef.gameMap.checkPriority.addListener(checkPrior);
+  }
+
+  void checkPrior()
+  {
+    int pos = position.y.toInt();
+    if(pos <= 0){
+      pos = 1;
+    }
+    priority = pos;
+  }
+
+  @override
+  void onRemove()
+  {
+    gameRef.gameMap.checkRemoveItself.removeListener(checkIsNeedSelfRemove);
+    gameRef.gameMap.checkPriority.removeListener(checkPrior);
   }
 
   void checkIsNeedSelfRemove()
@@ -99,11 +115,6 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         _speed *= -1;
       }
     }
-    int pos = position.y.toInt();
-    if(pos <= 0){
-      pos = 1;
-    }
-    priority = pos;
     super.update(dt);
   }
 }

@@ -298,7 +298,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         composition.add(await Flame.images.load('nullDarkQuarter.png'), Vector2(cols * GameConsts.lengthOfTileSquare.x / 4, rows * GameConsts.lengthOfTileSquare.y / 4));
       }
     }
-    composition.add(await Flame.images.load('images/inventar/warrior.png'), playerPosition() / 4);
+    var player = await Flame.images.load('images/inventar/warrior.png');
+    // player.resize(player.size / 2);
+    composition.add(player, playerPosition() / 4 - Vector2(player.width / 2, player.height / 2));
     final newImg = composition.compose();
     // newImg = await newImg.resize(Vector2(newImg.width / 4, newImg.height / 4));
     var bytes = await newImg.toByteData(format: ImageByteFormat.png);

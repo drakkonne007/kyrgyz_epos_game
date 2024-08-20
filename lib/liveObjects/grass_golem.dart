@@ -91,8 +91,8 @@ class GrassGolem extends KyrgyzEnemy
         srcSize: _spriteSheetSize);
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 12,loop: false);
+    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 12,loop: false);
     animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
@@ -112,10 +112,6 @@ class GrassGolem extends KyrgyzEnemy
     var massData = groundBody!.getMassData();
     massData.mass = 2000;
     groundBody!.setMassData(massData);
-    int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(rand == 0){
-      flipHorizontally();
-    }
     super.onLoad();
   }
 
@@ -141,11 +137,6 @@ class GrassGolem extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    // int pos = position.y.toInt() + 29;
-    // if(pos <= 0){
-    //   pos = 1;
-    // }
-    // priority = pos;
     if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
       return;
     }

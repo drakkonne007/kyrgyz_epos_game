@@ -51,17 +51,24 @@ class ForwardMagicBall extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     add(_weapon);
     _ground.linearVelocity = (target) * _speed * PhysicVals.physicScale;
     add(OpacityEffect.to(1,EffectController(duration: 0.5)));
+    gameRef.gameMap.checkPriority.addListener(checkPrior);
+  }
+
+  void checkPrior()
+  {
+    priority = position.y.toInt() + 9;
   }
 
   void perfectRemove()
   {
+    gameRef.gameMap.checkPriority.removeListener(checkPrior);
     add(OpacityEffect.to(0.0,EffectController(duration: 0.5), onComplete: removeFromParent));
   }
 
   @override
   void update(double dt)
   {
-    priority = position.y.toInt() + 9;
+
     position = _ground.position / PhysicVals.physicScale;
     super.update(dt);
   }

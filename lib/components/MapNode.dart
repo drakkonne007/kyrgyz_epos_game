@@ -21,7 +21,9 @@ import 'package:game_flame/Obstacles/fireCandelubr.dart';
 import 'package:game_flame/Obstacles/lightConus.dart';
 import 'package:game_flame/Obstacles/horizontalDoor.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/liveObjects/Citizien.dart';
 import 'package:game_flame/liveObjects/goblin.dart';
+import 'package:game_flame/liveObjects/humanWarrior.dart';
 import 'package:game_flame/liveObjects/mini_creatures/BigFlicker.dart';
 import 'package:game_flame/liveObjects/mini_creatures/WoodStairway.dart';
 import 'package:game_flame/liveObjects/mini_creatures/arrowSpawn.dart';
@@ -485,10 +487,7 @@ class MapNode {
         var targetPos = obj.getAttribute('tar')!.split(',');
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
-        Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!),
-            double.parse(obj.getAttribute('h')!));
-        var temp = Teleport(kyrGame: myGame,
-            size: telSize, position: position, targetPos: target);
+        var temp = Teleport(kyrGame: myGame,position: position, targetPos: target);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -502,12 +501,7 @@ class MapNode {
         var world = obj.getAttribute('wrld')!;
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
-        Vector2 telSize = Vector2(double.parse(obj.getAttribute('w')!),
-            double.parse(obj.getAttribute('h')!));
-        var temp = Portal(size: telSize,
-            position: position,
-            targetPos: target,
-            toWorld: world);
+        var temp = Portal(position: position, targetPos: target, toWorld: world);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -585,9 +579,30 @@ class MapNode {
           var source = targetPos[i].split(',');
           target.add(Vector2(double.parse(source[0]), double.parse(source[1])));
         }
-        Bird bird = Bird(position, target,id);
+        positionObject = Bird(position, target,id);
         myGame.gameMap.loadedLivesObjs.add(id);
-        myGame.gameMap.container.add(bird);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'human':
+        if(obj.getAttribute('citizien') != '1'){
+          positionObject = HumanWarrior(position, id);
+          myGame.gameMap.loadedLivesObjs.add(id);
+          myGame.gameMap.container.add(positionObject);
+        }else {
+          List<Vector2>? target;
+          if(obj.getAttribute('tar') != null){
+            var targetPos = obj.getAttribute('tar')?.split(';');
+            target = [];
+            for (int i = 0; i < targetPos!.length; i++) {
+              var source = targetPos[i].split(',');
+              target.add(
+                  Vector2(double.parse(source[0]), double.parse(source[1])));
+            }
+          }
+          positionObject = Citizien(id, position: position,endPos: target);
+          myGame.gameMap.loadedLivesObjs.add(id);
+          myGame.gameMap.container.add(positionObject);
+        }
         break;
       case 'vertBRW':
         String dir = obj.getAttribute('dir')!;

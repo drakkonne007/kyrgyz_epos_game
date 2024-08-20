@@ -147,7 +147,6 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double magicScalePoison = 1;
   double magicScaleElectro = 1;
   double magicScaleFreeze = 1;
-  TimerComponent? priorityTimer;
   bool isHigh = false;
 
 
@@ -156,18 +155,20 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   Future<void> onLoad() async
   {
     setChance();
-    add(TimerComponent(onTick: checkIsNeedSelfRemove ,repeat: true,period: 2));
+    gameRef.gameMap.checkRemoveItself.addListener(checkIsNeedSelfRemove);
     _maxHp = health;
     animationTicker?.currentIndex = math.Random().nextInt(animation?.frames.length ?? 0);
     _hitBar = HitBar(position: Vector2(width * anchor.x, height * anchor.y));
     _hitBar?.opacity = 0;
     add(_hitBar!);
     if(!isHigh) {
-      priorityTimer = TimerComponent(period: 0.6, repeat: true, onTick: () {
-        priority = position.y.toInt() + dopPriority;
-      });
-      add(priorityTimer!);
+      gameRef.gameMap.checkPriority.addListener(checkPriority);
     }
+  }
+
+  void checkPriority()
+  {
+    priority = position.y.toInt() + dopPriority;
   }
 
   @override
@@ -284,6 +285,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   }
 
   void selectBehaviour() {
+    weapon?.collisionType = DCollisionType.inactive;
     if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }
@@ -340,6 +342,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     groundBody?.destroy();
     gameRef.gameMap.loadedLivesObjs.remove(id);
+    gameRef.gameMap.checkPriority.removeListener(checkPriority);
+    gameRef.gameMap.checkRemoveItself.removeListener(checkIsNeedSelfRemove);
   }
 
   void _createSpecEffect()
@@ -438,7 +442,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       case MagicDamage.copyOfPlayer:
         magicAnim = LightningEffect(position: Vector2(width * anchor.x, height * anchor.y));
         break;
-      }
+    }
     add(magicAnim);
     if(health < 1){
       weapon?.collisionType = DCollisionType.inactive;

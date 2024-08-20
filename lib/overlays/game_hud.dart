@@ -49,6 +49,44 @@ class GameHud extends StatelessWidget
                           padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
                         ),
                         onLongPress: (){
+                          _game.gameMap.orthoPlayer?.doShield();
+                        },
+                        onPressed: (){
+                          _game.gameMap.orthoPlayer?.doShield();
+                        },
+                        child: Image.asset('assets/images/inventar/shieldYark.png',width: 40,height: 40,
+                          fit: BoxFit.cover,),
+                      ),
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          elevation: WidgetStateProperty.all<double>(0),
+                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
+                        ),
+                        onLongPress: (){
+                          _game.gameMap.orthoPlayer?.doDash();
+                        },
+                        onPressed: (){
+                          _game.gameMap.orthoPlayer?.doDash();
+                        },
+                        child: Image.asset('assets/images/inventar/magicSword.png',width: 40,height: 40,
+                          fit: BoxFit.cover,),
+                      ),
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
+                          elevation: WidgetStateProperty.all<double>(0),
+                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
+                        ),
+                        onLongPress: (){
                           _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
                           _game.gameMap.orthoPlayer?.startMagic() : _game.gameMap.frontPlayer?.startMagic();
                         },
@@ -56,7 +94,7 @@ class GameHud extends StatelessWidget
                           _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
                           _game.gameMap.orthoPlayer?.startMagic() : _game.gameMap.frontPlayer?.startMagic();
                         },
-                        child: Image.asset('assets/images/inventar/UI-9-sliced object-209.png',width: 40,height: 40,
+                        child: Image.asset('assets/images/inventar/gif/red.gif',width: 40,height: 40,
                           fit: BoxFit.cover,),
                       ),
                       TextButton(

@@ -168,11 +168,6 @@ class Goblin extends KyrgyzEnemy
     if(!isRefresh){
       return;
     }
-    // int pos = position.y.toInt() + 30;
-    // if(pos <= 0){
-    //   pos = 1;
-    // }
-    // priority = pos;
     if(animation == animHurt || animation == animAttack || animation == animDeath || animation == null){
       return;
     }
