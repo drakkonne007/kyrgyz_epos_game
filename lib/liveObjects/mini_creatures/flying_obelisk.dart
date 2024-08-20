@@ -44,13 +44,12 @@ class FlyingObelisk extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       gameRef.world.physicsWorld,
     );
     ground.createFixture(fix);
-    gameRef.gameMap.checkPriority.addListener(checkP);
+    add(TimerComponent(period: 0.6, repeat: true, onTick: checkP));
   }
 
   @override
   void onRemove() {
     ground.destroy();
-    gameRef.gameMap.checkPriority.removeListener(checkP);
   }
 
   void checkP()

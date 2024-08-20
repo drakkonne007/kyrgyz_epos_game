@@ -54,7 +54,7 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       _speed = Vector2(0,0);
     }
     gameRef.gameMap.checkRemoveItself.addListener(checkIsNeedSelfRemove);
-    gameRef.gameMap.checkPriority.addListener(checkPrior);
+    add(TimerComponent(period: 0.6, repeat: true, onTick: checkPrior));
   }
 
   void checkPrior()
@@ -70,7 +70,6 @@ class SpinBlade extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void onRemove()
   {
     gameRef.gameMap.checkRemoveItself.removeListener(checkIsNeedSelfRemove);
-    gameRef.gameMap.checkPriority.removeListener(checkPrior);
   }
 
   void checkIsNeedSelfRemove()

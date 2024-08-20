@@ -48,7 +48,6 @@ class LoadedColumnRow
 class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
 {
   ValueNotifier<ObjectHitbox?> currentObject = ValueNotifier(null);
-  ValueNotifier<int> checkPriority = ValueNotifier(0);
   ValueNotifier<int> checkRemoveItself = ValueNotifier(0);
   static int countId = 0;
   OrthoPlayer? orthoPlayer;
@@ -77,13 +76,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     await add(backgroundTile);
     await add(container);
     await add(effectComponent);
-    add(TimerComponent(
-      period: 0.6,
-      repeat: true,
-      onTick: (){
-        checkPriority.notifyListeners();
-      }
-    ));
     add(TimerComponent(
         period: 3,
         repeat: true,

@@ -82,7 +82,7 @@ class Duck extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     ), linearDamping: 1.5, angularDamping: 1.5);
     _groundHitBox = Ground(bf, gameRef.world.physicsWorld,isOnlyForStatic: true);
     _groundHitBox.createFixture(FixtureDef(PolygonShape()..set(_groundPoints), restitution: 0.7));
-    gameRef.gameMap.checkPriority.addListener(checkPriority);
+    add(TimerComponent(period: 0.6, repeat: true, onTick: checkPriority));
     position = _groundHitBox.position / PhysicVals.physicScale;
     chooseMove();
   }
@@ -97,7 +97,6 @@ class Duck extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     _groundHitBox.destroy();
     gameRef.gameMap.loadedLivesObjs.remove(_id);
-    gameRef.gameMap.checkPriority.removeListener(checkPriority);
   }
 
   void _checkIsNeedSelfRemove()

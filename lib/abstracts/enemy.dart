@@ -162,7 +162,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _hitBar?.opacity = 0;
     add(_hitBar!);
     if(!isHigh) {
-      gameRef.gameMap.checkPriority.addListener(checkPriority);
+      add(TimerComponent(period: 0.6, repeat: true, onTick: checkPriority));
     }
   }
 
@@ -342,7 +342,6 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     groundBody?.destroy();
     gameRef.gameMap.loadedLivesObjs.remove(id);
-    gameRef.gameMap.checkPriority.removeListener(checkPriority);
     gameRef.gameMap.checkRemoveItself.removeListener(checkIsNeedSelfRemove);
   }
 

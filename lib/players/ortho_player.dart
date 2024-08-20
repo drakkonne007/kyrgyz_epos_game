@@ -183,15 +183,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
       if(_animState == AnimationState.shield){
-        if(gameRef.playerData.energy.value > hurt * 2){
-          gameRef.playerData.addEnergy(-hurt*2);
+        if(gameRef.playerData.energy.value > hurt * 1.5){
+          gameRef.playerData.addEnergy(-hurt*1.5);
           gameRef.gameMap.container.add(ShieldLock(position: position - Vector2(0,17)));
           return;
         }else{
           var temp = hurt - (gameRef.playerData.energy.value / 2);
-          gameRef.playerData.addEnergy(-hurt*2);
+          gameRef.playerData.addEnergy(-hurt*1.5);
           hurt = temp;
         }
+        hurt -= gameRef.playerData.armor.value;
+        hurt = math.max(hurt, 0);
         gameRef.playerData.addHealth(-hurt);
         if(gameRef.playerData.health.value <1){
           animation = animDeath;
@@ -207,7 +209,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
           add(temp);
         }
         return;
-      }else {
+      }else{
         hurt -= gameRef.playerData.armor.value;
         hurt = math.max(hurt, 0);
       }
@@ -372,7 +374,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     gameRef.playerData.addEnergy(-10);
-    if(_animState == AnimationState.move || _animState == AnimationState.idle){
+    if(_animState == AnimationState.move || _animState == AnimationState.idle || _animState == AnimationState.shield){
       _animState = AnimationState.slide;
       groundRigidBody?.clearForces();
       groundRigidBody?.linearVelocity = Vector2.zero();

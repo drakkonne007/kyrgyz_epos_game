@@ -48,6 +48,7 @@ class HumanWarrior extends KyrgyzEnemy
   Future<void> onLoad() async
   {
     dopPriority = 31;
+    // reverseHorizontal = true;
     shiftAroundAnchorsForHit = 65;
     distPlayerLength = 75 * 75;
     maxLoots = 1;
@@ -90,6 +91,7 @@ class HumanWarrior extends KyrgyzEnemy
     massData.mass = 800;
     groundBody!.setMassData(massData);
     size *= 1.2;
+    scale = Vector2(-1,1);
     super.onLoad();
   }
 

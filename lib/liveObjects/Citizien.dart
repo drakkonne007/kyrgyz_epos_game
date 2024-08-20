@@ -45,7 +45,6 @@ class Citizien extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void onRemove()
   {
     _ground?.destroy();
-    gameRef.gameMap.checkPriority.removeListener(checkPriority);
     gameRef.gameMap.checkRemoveItself.removeListener(_checkIsNeedSelfRemove);
   }
 
@@ -85,7 +84,7 @@ class Citizien extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     if(quest != null){
       add(NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width / 2,height / 2 - 40)));
     }
-    gameRef.gameMap.checkPriority.addListener(checkPriority);
+    add(TimerComponent(period: 0.6, repeat: true, onTick: checkPriority));
     gameRef.gameMap.checkRemoveItself.addListener(_checkIsNeedSelfRemove);
     size *= 1.2;
   }
