@@ -77,7 +77,7 @@ class PlayerStats extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     double newWidth = min((size.width / 3 - 25) / 3, (size.height - 65) / 6);
-    double newStrokeHeight = (size.height - newWidth * 2 - 25 - 40) / 6;
+    double newStrokeHeight = (size.height - newWidth * 2 - 25 - 40) / 7;
     return
       ValueListenableBuilder(
           valueListenable: game.currentItemInInventar, builder: (context, value, __)
@@ -508,6 +508,36 @@ class PlayerStats extends StatelessWidget
                                                         + (metaDataForNewItem != null ? (metaDataForNewItem.health != value || metaDataForNewItem.maxHealth != game.playerData.maxHealth.value
                                                             ? ' (' + getSignedDiff(metaDataForNewItem.health, game.playerData.health.value, withBrace: false) + ' / ' + getSignedDiff(metaDataForNewItem.maxHealth, game.playerData.maxHealth.value, withBrace: false) + ')' : '') : ''),
                                                       style: (metaDataForNewItem != null) ? metaDataForNewItem.health > value ? defaultInventarTextStyleGood : metaDataForNewItem.health < value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
+                                                      minFontSize: 10,
+                                                      maxLines: 1,))))),
+                                  ]
+                              ),
+                            ),
+                            SizedBox(
+                              height: newStrokeHeight,
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/inventar/manaInInventar.png',
+                                      width: size.width / 17,
+                                      height: newStrokeHeight,
+                                      fit: BoxFit.contain,
+                                      alignment: Alignment.centerLeft,),
+                                    const SizedBox(width: 3,),
+                                    ValueListenableBuilder(
+                                        valueListenable: game.playerData.mana,
+                                        builder: (context, value, __) =>
+                                            Expanded(child: Align(
+                                                alignment: Alignment.centerRight,
+                                                child: SizedBox(
+                                                    child: AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxMana.value.toInt().toString()}'
+                                                        + (metaDataForNewItem != null ? (metaDataForNewItem.mana != value || metaDataForNewItem.maxMana != game.playerData.maxMana.value
+                                                            ? ' (' + getSignedDiff(metaDataForNewItem.mana, game.playerData.mana.value, withBrace: false) +
+                                                            ' / ' + getSignedDiff(metaDataForNewItem.maxMana, game.playerData.maxMana.value, withBrace: false) + ')' : '') : ''),
+                                                      style: (metaDataForNewItem != null) ? metaDataForNewItem.mana > value ? defaultInventarTextStyleGood : metaDataForNewItem.mana < value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
                                                       minFontSize: 10,
                                                       maxLines: 1,))))),
                                   ]

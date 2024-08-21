@@ -37,9 +37,10 @@ class CircleMagicBall extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     add(TimerComponent(period: 5.5,onTick: perfectRemove));
     _weapon = DefaultPlayerWeapon([Vector2.zero()], collisionType: DCollisionType.active, isStatic: false, game: gameRef, radius: 9);
     _weapon.permanentDamage = damage;
-    _weapon.coolDown = 1;
+    _weapon.coolDown = 1.5;
     _weapon.secsOfPermDamage = secs;
     _weapon.magicDamage = magicDamage;
+    _weapon.isMainPlayer = true;
     add(_weapon);
     add(OpacityEffect.to(1,EffectController(duration: 0.5)));
     position = gameRef.gameMap.orthoPlayer!.position + Vector2(math.cos(angle), math.sin(angle)) * _radius;

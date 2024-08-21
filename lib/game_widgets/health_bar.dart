@@ -58,6 +58,30 @@ class HealthBar extends StatelessWidget
                   ),
                   const SizedBox(height: 15,),
                   ValueListenableBuilder(
+                      valueListenable: game.playerData.mana,
+                      builder: (_,val,__) =>
+                          ShakeWidget(
+                              shakeConstant: ShakeDefaultConstant2(),
+                              autoPlay: isHurt(val),
+                              child: SizedBox(
+                                width: 42,
+                                height: 42,
+                                child: GestureDetector(
+                                  onTap: game.doInventoryHud,
+                                  child: Stack(
+                                      fit: StackFit.passthrough,
+                                      children:[
+                                        CustomPaint(
+                                          painter: ArcGradientPainter(color: const Color.fromARGB(255, 81, 183, 228), currentProc: val / game.playerData.maxMana.value),
+                                        ),
+                                        Container(alignment: Alignment.center, width: 42,height: 42,
+                                            child: Image.asset('assets/images/inventar/manaForGui.png', width: 32, height: 32, alignment: Alignment.center,)),
+                                      ]
+                                  ),
+                                ),))
+                  ),
+                  const SizedBox(height: 15,),
+                  ValueListenableBuilder(
                       valueListenable: game.playerData.energy,
                       builder: (_,val,__) =>
                           ShakeWidget(

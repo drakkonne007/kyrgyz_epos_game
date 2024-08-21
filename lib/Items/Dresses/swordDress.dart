@@ -487,6 +487,7 @@ class Sword18 extends Item {
     damage = 1.6;
     dressType = DressType.sword;
     magicDamage = MagicDamage.fire;
+    manaCost = 10;
     permanentDamage = 0.2;
     secsOfPermDamage = 3;
   }
@@ -508,6 +509,7 @@ class Sword19 extends Item {
     cost = 100;
     damage = 1.6;
     magicDamage = MagicDamage.fire;
+    manaCost = 10;
     permanentDamage = 0.2;
     secsOfPermDamage = 3;
     dressType = DressType.sword;
@@ -591,6 +593,7 @@ class Sword23 extends Item {
     dressType = DressType.sword;
     attackSpeed = -0.01;
     magicDamage = MagicDamage.ice;
+    manaCost = 10;
     permanentDamage = 0.4;
     secsOfPermDamage = 3;
   }
@@ -613,6 +616,7 @@ class Sword24 extends Item {
     damage = 1.7;
     dressType = DressType.sword;
     magicDamage = MagicDamage.fire;
+    manaCost = 10;
     permanentDamage = 0.6;
     secsOfPermDamage = 5;
   }
@@ -635,6 +639,7 @@ class Sword25 extends Item {
     damage = 1.7;
     dressType = DressType.sword;
     magicDamage = MagicDamage.fire;
+    manaCost = 10;
     permanentDamage = 0.6;
     secsOfPermDamage = 3;
   }
@@ -657,6 +662,7 @@ class Sword26 extends Item {
     damage = 1.7;
     dressType = DressType.sword;
     magicDamage = MagicDamage.ice;
+    manaCost = 10;
     permanentDamage = 0.6;
     secsOfPermDamage = 3;
   }
@@ -679,6 +685,7 @@ class Sword27 extends Item {
     damage = 1.7;
     dressType = DressType.sword;
     magicDamage = MagicDamage.ice;
+    manaCost = 10;
     permanentDamage = 0.6;
     secsOfPermDamage = 5;
   }
@@ -701,6 +708,7 @@ class Sword28 extends Item {
     damage = 2;
     dressType = DressType.sword;
     magicDamage = MagicDamage.ice;
+    manaCost = 10;
     permanentDamage = 0.5;
     secsOfPermDamage = 5;
   }
@@ -723,6 +731,7 @@ class Sword29 extends Item {
     damage = 2;
     dressType = DressType.sword;
     magicDamage = MagicDamage.fire;
+    manaCost = 10;
     permanentDamage = 0.5;
     secsOfPermDamage = 5;
   }
@@ -783,6 +792,7 @@ class Sword32 extends Item {
     damage = 2.3;
     dressType = DressType.sword;
     magicDamage = MagicDamage.lightning;
+    manaCost = 10;
     permanentDamage = 0.5;
     secsOfPermDamage = 5;
   }
@@ -805,6 +815,7 @@ class Sword33 extends Item {
     damage = 2.3;
     dressType = DressType.sword;
     magicDamage = MagicDamage.fire;
+    manaCost = 10;
     permanentDamage = 0.5;
     secsOfPermDamage = 5;
   }
@@ -827,6 +838,7 @@ class Sword34 extends Item {
     damage = 2.3;
     dressType = DressType.sword;
     magicDamage = MagicDamage.ice;
+    manaCost = 10;
     permanentDamage = 0.5;
     secsOfPermDamage = 5;
   }
@@ -849,6 +861,7 @@ class Sword35 extends Item {
     damage = 2.3;
     dressType = DressType.sword;
     magicDamage = MagicDamage.poison;
+    manaCost = 10;
     permanentDamage = 0.5;
     secsOfPermDamage = 5;
   }
@@ -933,6 +946,7 @@ class Sword39 extends Item {
     permanentDamage = 1;
     secsOfPermDamage = 5;
     magicDamage = MagicDamage.ice;
+    manaCost = 10;
   }
 
   @override
@@ -955,6 +969,7 @@ class Sword40 extends Item {
     permanentDamage = 1;
     secsOfPermDamage = 5;
     magicDamage = MagicDamage.fire;
+    manaCost = 10;
   }
 
   @override
@@ -977,6 +992,7 @@ class Sword41 extends Item {
     permanentDamage = 1;
     secsOfPermDamage = 5;
     magicDamage = MagicDamage.poison;
+    manaCost = 10;
   }
 
   @override

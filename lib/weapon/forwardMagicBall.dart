@@ -48,6 +48,7 @@ class ForwardMagicBall extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     _weapon.secsOfPermDamage = secs;
     _weapon.magicDamage = magicDamage;
     _weapon.coolDown = 20;
+    _weapon.isMainPlayer = true;
     add(_weapon);
     _ground.linearVelocity = (target) * _speed * PhysicVals.physicScale;
     add(OpacityEffect.to(1,EffectController(duration: 0.5)));

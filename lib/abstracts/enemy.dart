@@ -384,11 +384,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     return true;
   }
 
-  void doHurt({required double hurt, bool inArmor=true, bool isPlayer = false})
+  void doHurt({required double hurt, bool inArmor=true})
   {
-    if(isPlayer){
-      wasSeen = true;
-    }
     if(animation == animDeath){
       return;
     }

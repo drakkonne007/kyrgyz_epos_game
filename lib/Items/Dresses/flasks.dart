@@ -330,3 +330,167 @@ class EnergyFull extends Item
     }
   }
 }
+
+class ManaSmall extends Item
+{
+  ManaSmall()
+  {
+    id = 'manaSmall';
+    cost = 10;
+    enabled = true;
+    source = 'images/inventar/flask/manaSmall.png';
+    mana = 10;
+  }
+
+  @override
+  void getEffect(KyrgyzGame game)
+  {
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr++;
+      game.playerData.flaskInventar[id] = curr;
+    }else{
+      game.playerData.flaskInventar[id] = 1;
+    }
+  }
+
+  @override
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
+  {
+    game.playerData.addMana(mana);
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr--;
+      if(curr == 0){
+        game.playerData.flaskInventar.remove(id);
+      }else{
+        game.playerData.flaskInventar[id] = curr;
+      }
+    }
+  }
+}
+
+class ManaMedium extends Item
+{
+  ManaMedium()
+  {
+    id = 'manaMedium';
+    cost = 25;
+    enabled = true;
+    source = 'images/inventar/flask/manaMedium.png';
+    secsOfPermDamage = 10;
+    mana = 1.5;
+  }
+
+  @override
+  void getEffect(KyrgyzGame game)
+  {
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr++;
+      game.playerData.flaskInventar[id] = curr;
+    }else{
+      game.playerData.flaskInventar[id] = 1;
+    }
+  }
+
+  @override
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
+  {
+    var timer = TempEffect(parentId: 'manaMedium' ,period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addMana(mana * dt);
+    });
+    game.gameMap.effectComponent.add(timer);
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr--;
+      if(curr == 0){
+        game.playerData.flaskInventar.remove(id);
+      }else{
+        game.playerData.flaskInventar[id] = curr;
+      }
+    }
+  }
+}
+
+class ManaBig extends Item
+{
+  ManaBig()
+  {
+    id = 'manaBig';
+    cost = 50;
+    enabled = true;
+    source = 'images/inventar/flask/manaBig.png';
+    mana = 2;
+    secsOfPermDamage = 15;
+  }
+
+  @override
+  void getEffect(KyrgyzGame game)
+  {
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr++;
+      game.playerData.flaskInventar[id] = curr;
+    }else{
+      game.playerData.flaskInventar[id] = 1;
+    }
+  }
+
+  @override
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
+  {
+    var timer = TempEffect(parentId: id,period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addMana(mana * dt);
+    });
+    game.gameMap.effectComponent.add(timer);
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr--;
+      if(curr == 0){
+        game.playerData.flaskInventar.remove(id);
+      }else{
+        game.playerData.flaskInventar[id] = curr;
+      }
+    }
+  }
+}
+
+class ManaFull extends Item
+{
+  ManaFull()
+  {
+    id = 'manaFull';
+    cost = 90;
+    enabled = true;
+    source = 'images/inventar/flask/manaFull.png';
+    mana = 9999999;
+  }
+
+  @override
+  void getEffect(KyrgyzGame game)
+  {
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr++;
+      game.playerData.flaskInventar[id] = curr;
+    }else{
+      game.playerData.flaskInventar[id] = 1;
+    }
+  }
+
+  @override
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
+  {
+    game.playerData.addMana(0, full: true);
+    if(game.playerData.flaskInventar.containsKey(id)){
+      int curr = game.playerData.flaskInventar[id]!;
+      curr--;
+      if(curr == 0){
+        game.playerData.flaskInventar.remove(id);
+      }else{
+        game.playerData.flaskInventar[id] = curr;
+      }
+    }
+  }
+}

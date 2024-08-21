@@ -107,6 +107,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         y: gameMap.orthoPlayer?.y ?? gameMap.frontPlayer!.y,
         world: gameMap.currentGameWorldData!.nameForGame,
         health: playerData.health.value,
+        mana: playerData.mana.value,
         energy: playerData.energy.value,
         level: playerData.playerLevel.value,
         gold: playerData.money.value,
@@ -156,6 +157,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       databaseFactory = databaseFactoryFfi;
     }
     await dbHandler.openDb();
+    await dbHandler.dropAllTables();
     await dbHandler.createTable(); //TODO разобраться почему автоматом не создаётся
     maxPolygonVertices = 20;
     await Flame.device.fullScreen();
@@ -189,8 +191,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         x: 1750,
         y: 3000,
         world: 'topLeftVillage',
-        health: 30,
-        energy: 15,
+        health: 100,
+        mana: 100,
+        energy: 100,
         level: 1,
         gold: 100,
         helmetDress: Helmet1(),
@@ -211,7 +214,11 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
           'energySmall': 10,
           'energyMedium': 10,
           'energyBig': 10,
-          'energyFull': 10},
+          'energyFull': 10,
+          'manaSmall': 10,
+          'manaMedium': 10,
+          'manaBig': 10,
+          'manaFull': 10},
         itemInventar: {},
         swordInventar: {'sword1': 1, 'sword36': 1, 'sword19': 1,'sword48': 1},
         ringInventar: {'ring1' : 1, 'ring2' : 1, 'ring3' : 1, 'ring4' : 1, 'ring5' : 1},

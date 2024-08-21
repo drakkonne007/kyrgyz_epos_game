@@ -366,6 +366,7 @@ class PotSplash extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         _weapons,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = 4;
+    _weapon.inArmor = false;
   }
 
   void animChange(int index)

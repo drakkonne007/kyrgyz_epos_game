@@ -88,6 +88,10 @@ Item itemFromName(String id)
     case 'energyMedium': return EnergyMedium();
     case 'energyBig': return EnergyBig();
     case 'energyFull': return EnergyFull();
+    case 'manaSmall': return ManaSmall();
+    case 'manaMedium': return ManaMedium();
+    case 'manaBig': return ManaBig();
+    case 'manaFull': return ManaFull();
     case 'gold': return Gold();
     default: return NullItem();
   }
@@ -162,6 +166,8 @@ abstract class Item
 
   bool isStaticObject = false;
   double hp = 0;
+  double mana = 0;
+  double manaCost = 0;
   double energy = 0;
   double armor = 0;
   bool inArmor = true;

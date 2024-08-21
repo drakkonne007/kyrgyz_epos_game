@@ -71,6 +71,7 @@ class Ring1 extends Item
     hp = 0;
     cost = 100;
     armor = 0.01;
+    manaCost = 10;
     permanentDamage = 2;
     secsOfPermDamage = 3;
     dressType = DressType.ring;
@@ -98,6 +99,7 @@ class Ring2 extends Item
     source = 'images/inventar/ring/2.png';
     hp = 0;
     cost = 100;
+    manaCost = 10;
     armor = 0.01;
     dressType = DressType.ring;
     magicDamage = MagicDamage.ice;
@@ -126,6 +128,7 @@ class Ring3 extends Item
     source = 'images/inventar/ring/3.png';
     hp = 0;
     cost = 100;
+    manaCost = 10;
     armor = 0.01;
     dressType = DressType.ring;
     magicDamage = MagicDamage.lightning;
@@ -154,6 +157,7 @@ class Ring4 extends Item
     source = 'images/inventar/ring/4.png';
     hp = 0;
     cost = 100;
+    manaCost = 10;
     armor = 0.01;
     dressType = DressType.ring;
     magicDamage = MagicDamage.poison;
@@ -182,6 +186,7 @@ class Ring5 extends Item
     source = 'images/inventar/ring/5.png';
     hp = 0;
     cost = 100;
+    manaCost = 10;
     armor = 0.01;
     dressType = DressType.ring;
     magicDamage = MagicDamage.copyOfPlayer;

@@ -14,8 +14,10 @@ import 'package:game_flame/kyrgyz_game.dart';
 class MetaDataForNewItem
 {
   double health = 0;
+  double mana = 0;
   double energy = 0;
   double maxHealth = 0;
+  double maxMana = 0;
   double maxEnergy = 0;
   double armor = 0;
   double chanceOfLoot = 0;
@@ -100,7 +102,6 @@ class PlayerData
     }
   }
 
-
   MetaDataForNewItem? calcNewChoice(Item? newItem)
   {
     if(newItem == null){
@@ -124,11 +125,15 @@ class PlayerData
     }
     MetaDataForNewItem answer = MetaDataForNewItem();
     double procentOfHealth = health.value / maxHealth.value;
+    double procentOfMana = mana.value / maxMana.value;
     double procentOfEnergy = energy.value / maxEnergy.value;
     answer.maxHealth =
         armor.hp + helmet.hp + gloves.hp +
             sword.hp + ring.hp + boots.hp +
             _beginHealth + (_beginHealth * playerLevel.value) / 100;
+    answer.maxMana = armor.mana + helmet.mana + gloves.mana +
+        sword.mana + ring.mana + boots.mana +
+        _beginMana + (_beginMana * playerLevel.value) / 100;
     answer.maxEnergy = armor.energy + helmet.energy +
         gloves.energy + sword.energy +
         ring.energy + boots.energy + _beginEnergy +
@@ -157,6 +162,7 @@ class PlayerData
     answer.secsOfPermanentDamage = sword.secsOfPermDamage;
     answer.magicDamage = sword.magicDamage ?? MagicDamage.none;
     answer.health = procentOfHealth * answer.maxHealth;
+    answer.mana = procentOfMana * answer.maxMana;
     answer.energy = procentOfEnergy * answer.maxEnergy;
     return answer;
   }
@@ -165,9 +171,11 @@ class PlayerData
   void _recalcAfterChangeDress()
   {
     double procentOfHealth = health.value / maxHealth.value;
+    double procentOfMana = mana.value / maxMana.value;
     double procentOfEnergy = energy.value / maxEnergy.value;
     maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / 100;
-    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy+ (_beginEnergy * playerLevel.value) / 100;
+    maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / 100;
+    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / 100;
     armor.value = armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
     chanceOfLoot.value = armorDress.value.chanceOfLoot + helmetDress.value.chanceOfLoot + glovesDress.value.chanceOfLoot + swordDress.value.chanceOfLoot + ringDress.value.chanceOfLoot + bootsDress.value.chanceOfLoot + extraChanceOfLoot.value;
     hurtMiss.value = armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;
@@ -177,6 +185,7 @@ class PlayerData
     secsOfPermanentDamage.value = swordDress.value.secsOfPermDamage;
     magicDamage.value = swordDress.value.magicDamage ?? MagicDamage.none;
     health.value = procentOfHealth * maxHealth.value;
+    mana.value = procentOfMana * maxMana.value;
     energy.value = procentOfEnergy * maxEnergy.value;
     statChangeTrigger.notifyListeners();
   }
@@ -198,6 +207,23 @@ class PlayerData
     energy.value = math.max(0, energy.value);
   }
 
+  void addMana(double val, {bool extra = false, bool full = false})
+  {
+    if(full){
+      mana.value = math.max(maxMana.value, mana.value);
+      return;
+    }
+    if(extra){
+      mana.value += val;
+    }else if(mana.value < maxMana.value && val > 0) {
+      mana.value += val;
+      mana.value = math.min(mana.value, maxMana.value);
+    }else if(val < 0){
+      mana.value += val;
+    }
+    mana.value = math.max(0, mana.value);
+  }
+
   void addHealth(double val, {bool extra = false, bool full = false})
   {
     if(full){
@@ -217,10 +243,10 @@ class PlayerData
 
 
   final ValueNotifier<int> statChangeTrigger = ValueNotifier<int>(0);
-
   final ValueNotifier<double> playerLevel = ValueNotifier<double>(1);
   final ValueNotifier<double> playerMagicLevel = ValueNotifier<double>(1);
   final ValueNotifier<double> health = ValueNotifier<double>(0);
+  final ValueNotifier<double> mana = ValueNotifier<double>(0);
   final ValueNotifier<double> energy = ValueNotifier<double>(0);
   final ValueNotifier<double> armor = ValueNotifier<double>(0);
   final ValueNotifier<double> chanceOfLoot = ValueNotifier<double>(0);
@@ -238,7 +264,9 @@ class PlayerData
   final ValueNotifier<double> extraAttackSpeed = ValueNotifier<double>(0);
   final double _beginEnergy = 100;
   final double _beginHealth = 100;
+  final double _beginMana = 100;
   final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
+  final ValueNotifier<double> maxMana = ValueNotifier<double>(0);
   final ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
   final ValueNotifier<Item> helmetDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> armorDress = ValueNotifier<Item>(NullItem());
@@ -362,8 +390,9 @@ class PlayerData
     bootsInventar = svg.bootsInventar;
     flaskInventar = svg.flaskInventar;
     itemInventar = svg.itemInventar;
-    energy.value = svg.energy;
     health.value = svg.health;
+    mana.value = svg.mana;
+    energy.value = svg.energy;
     playerLevel.value = svg.level;
     playerBigMap =  getWorldFromName(svg.world);
     startLocation = Vector2(svg.x, svg.y);

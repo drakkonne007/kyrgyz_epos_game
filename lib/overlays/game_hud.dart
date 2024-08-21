@@ -16,150 +16,123 @@ class GameHud extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Stack(
-            fit: StackFit.passthrough,
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: HealthBar(_game),
+              Expanded(
+                  child:
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:
+                      [
+                        HealthBar(_game),
+                        OrthoJoystick(120, _game),
+                      ]
+                  )
               ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: OrthoJoystick(120, _game),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: PauseButton(_game),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children:[
-                      TextButton(
-                        style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          elevation: WidgetStateProperty.all<double>(0),
-                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
-                        ),
-                        onLongPress: (){
-                          _game.gameMap.orthoPlayer?.doShield();
-                        },
-                        onPressed: (){
-                          _game.gameMap.orthoPlayer?.doShield();
-                        },
-                        child: Image.asset('assets/images/inventar/shieldYark.png',width: 40,height: 40,
-                          fit: BoxFit.cover,),
-                      ),
-                      TextButton(
-                        style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          elevation: WidgetStateProperty.all<double>(0),
-                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
-                        ),
-                        onLongPress: (){
-                          _game.gameMap.orthoPlayer?.doDash();
-                        },
-                        onPressed: (){
-                          _game.gameMap.orthoPlayer?.doDash();
-                        },
-                        child: Image.asset('assets/images/inventar/magicSword.png',width: 40,height: 40,
-                          fit: BoxFit.cover,),
-                      ),
-                      TextButton(
-                        style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          elevation: WidgetStateProperty.all<double>(0),
-                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
-                        ),
-                        onLongPress: (){
-                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startMagic() : _game.gameMap.frontPlayer?.startMagic();
-                        },
-                        onPressed: (){
-                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startMagic() : _game.gameMap.frontPlayer?.startMagic();
-                        },
-                        child: Image.asset('assets/images/inventar/gif/red.gif',width: 40,height: 40,
-                          fit: BoxFit.cover,),
-                      ),
-                      TextButton(
-                        style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          elevation: WidgetStateProperty.all<double>(0),
-                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
-                        ),
-                        onLongPress: (){
-                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
-                        },
-                        onPressed: (){
-                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
-                        },
-                        child: Image.asset('assets/images/inventar/UI-9-sliced object-209.png',width: 40,height: 40,
-                        fit: BoxFit.cover,),
-                      ),
-                      TextButton(
-                        onLongPress: (){
-                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
-                        },
-                        onPressed: (){
-                          _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                          _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
-                        },
-                        style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                          elevation: WidgetStateProperty.all<double>(0),
-                          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
-                        ),
-                        child: Image.asset('assets/images/inventar/UI-9-sliced object-223.png',width: 40,height: 40,
-                        fit: BoxFit.cover,),
-                      ),
-                      ValueListenableBuilder(valueListenable: _game.gameMap.currentObject, builder: (_,val,__) {
-                        return val == null ? const SizedBox(width: 40,height: 44,) : ElevatedButton(
-                          onPressed: (){
-                            _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
-                            _game.gameMap.orthoPlayer?.makeAction() : _game.gameMap.frontPlayer?.makeAction();
-                          },
-                          style: ButtonStyle(
-                            foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                            backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                            overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                            shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                            surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-                            elevation: WidgetStateProperty.all<double>(0),
-                            padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(10)),
+              Expanded(
+                  child:
+                  Stack(
+                      fit: StackFit.passthrough,
+                      children:
+                      [
+                        Positioned.fill(
+                          child:
+                          GestureDetector(
+                              onHorizontalDragUpdate: (details) {
+                                int sensitivity = 8;
+                                if (details.delta.dx > sensitivity) {
+                                  _game.gameMap.orthoPlayer?.doDash(false);
+                                } else if(details.delta.dx < -sensitivity){
+                                  _game.gameMap.orthoPlayer?.doDash(true);
+                                }
+                              },
+                              onVerticalDragUpdate: (details) {
+                                int sensitivity = 8;
+                                if (details.delta.dy > sensitivity) {
+                                  _game.gameMap.orthoPlayer?.startMagic();
+                                } else if(details.delta.dy < -sensitivity){
+                                  _game.gameMap.orthoPlayer?.doShield();
+                                }
+                              }
                           ),
-                          child: Image.asset('assets/images/inventar/UI-9-sliced object-89.png',width: 40,height: 40
-                            ,fit: BoxFit.cover,),
-                        );
-                      }),
-                    ]
-                ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: PauseButton(_game),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children:
+                              [
+                                  TextButton(
+                                    onLongPress: (){
+                                      _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                                      _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
+                                    },
+                                    onPressed: (){
+                                      _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                                      _game.gameMap.orthoPlayer?.startHit(false) : _game.gameMap.frontPlayer?.startHit(false);
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child:Image.asset('assets/images/inventar/UI-9-sliced object-209.png'
+                                      ,width: 50,height: 50,
+                                      fit: BoxFit.cover,),
+                                  ),
+                                ),
+                                const SizedBox(height: 15,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children:
+                                    [
+                                      ValueListenableBuilder(valueListenable: _game.gameMap.currentObject, builder: (_,val,__) {
+                                        return val == null ? Container() :
+                                          TextButton(
+                                                onPressed: (){
+                                                  _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                                                  _game.gameMap.orthoPlayer?.makeAction() : _game.gameMap.frontPlayer?.makeAction();
+                                                },
+                                                child: Image.asset('assets/images/inventar/UI-9-sliced object-89.png'
+                                                  ,width: 40,height: 40
+                                                  ,fit: BoxFit.cover,),
+                                          );
+                                      }),
+
+                                        TextButton(
+                                          onLongPress: (){
+                                            _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                                            _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
+                                          },
+                                          onPressed: (){
+                                            _game.gameMap.currentGameWorldData!.orientation == OrientatinType.orthogonal ?
+                                            _game.gameMap.orthoPlayer?.startHit(true) : _game.gameMap.frontPlayer?.startHit(true);
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(50),
+                                            clipBehavior: Clip.hardEdge,
+                                            child:Image.asset('assets/images/inventar/UI-9-sliced object-223.png'
+                                            ,width: 50,height: 50,
+                                            fit: BoxFit.cover,),
+                                        ),
+                                      ),
+                                    ]
+                                ),
+                                const SizedBox(height: 15,),
+                              ]
+                          ),
+                        ),
+                      ]
+                  )
               ),
             ])
     );

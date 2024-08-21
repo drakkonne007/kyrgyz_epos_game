@@ -139,6 +139,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon = DefaultPlayerWeapon(getPointsForActivs(tPos,tSize),collisionType: DCollisionType.inactive,isSolid: false,
         isStatic: false, isLoop: true,
         onStartWeaponHit: null, onEndWeaponHit: null, game: gameRef);
+    _weapon?.isMainPlayer = true;
     add(_weapon!);
     gameRef.playerData.statChangeTrigger.addListener(setNewEnergyCostForWeapon);
     position = startPos;
@@ -260,7 +261,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.ringDress.value == NullItem()){
       return;
     }
-    if(!_canMagicSpell){
+    if(!_canMagicSpell || game.playerData.mana.value < gameRef.playerData.ringDress.value.manaCost){
       return;
     }
     if(animation != animIdle && animation != animMove){
@@ -269,8 +270,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
+    game.playerData.addMana(-gameRef.playerData.ringDress.value.manaCost);
     _canMagicSpell = false;
-    add(TimerComponent(period: 2, removeOnFinish: true, onTick: (){
+    add(TimerComponent(period: 1, removeOnFinish: true, onTick: (){
       _canMagicSpell = true;
     }));
     createPlayerMagicSpells(gameRef);
@@ -373,7 +375,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
   }
 
-  void doDash()
+  void doDash(bool left)
   {
     if(gameRef.playerData.isLockMove){
       return;
@@ -381,8 +383,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.energy.value < 10){
       return;
     }
-    gameRef.playerData.addEnergy(-10);
     if(_animState == AnimationState.move || _animState == AnimationState.idle || _animState == AnimationState.shield || _animState == AnimationState.hurt){
+      gameRef.playerData.addEnergy(-10);
       _animState = AnimationState.slide;
       groundRigidBody?.clearForces();
       groundRigidBody?.linearVelocity = Vector2.zero();
@@ -400,7 +402,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         setGroundBody(targetPos: position);
         chooseStaticAnimation();
       };
-      isFlippedHorizontally ? groundRigidBody?.applyLinearImpulse(Vector2(-3000,0)) : groundRigidBody?.applyLinearImpulse(Vector2(3000,0));
+      if(left && !isFlippedHorizontally){
+        flipHorizontally();
+      }else if(!left && isFlippedHorizontally){
+        flipHorizontally();
+      }
+      left ? groundRigidBody?.applyLinearImpulse(Vector2(-3000,0)) : groundRigidBody?.applyLinearImpulse(Vector2(3000,0));
     }
   }
 
@@ -498,6 +505,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameHide) {
       return;
     }
+    game.playerData.addMana(dt * 2);
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
@@ -531,10 +539,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
         isReallyRun = true;
       }
-      gameRef.playerData.addEnergy(dt * -3);
+      gameRef.playerData.addEnergy(dt * -4);
     }else{
       if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.addEnergy(dt * 2);
+        gameRef.playerData.addEnergy(dt * 3);
       }
     }
     groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * (isReallyRun ? PhysicVals.runCoef : 1));

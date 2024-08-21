@@ -55,7 +55,6 @@ void createPlayerMagicSpells(KyrgyzGame gameRef) {
   } else {
     Vector2 pos = gameRef.playerPosition() +
         (gameRef.isPlayerFlipped() ? Vector2(-22, 2) : Vector2(22, 2));
-    
     Vector2 norm = gameRef.gameMap.orthoPlayer?.groundRigidBody?.linearVelocity ?? gameRef.gameMap.frontPlayer?.groundRigidBody?.linearVelocity ?? Vector2(0, 0);
     double vecAngle = norm.angleToSigned(Vector2(1,0));
     gameRef.gameMap.container.add(ForwardMagicBall(

@@ -120,6 +120,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   double currentCoolDown = 0;
   double latencyBefore = 0;
   final Map<EnemyHitbox,int> _myHitboxes= {};
+  bool isMainPlayer = false;
 
   set coolDown(double val)
   {
@@ -185,17 +186,27 @@ abstract class PlayerWeapon extends DCollisionEntity
       hit();
       if (other.parent is KyrgyzEnemy) {
         var temp = other.parent as KyrgyzEnemy;
-        bool isPlayer = parent is MainPlayer;
+        if(isMainPlayer){
+          temp.wasSeen = true;
+          temp.wasHit = true;
+        }
         if(damage != null){
           if((damage! == 0 && magicDamage == null) || damage! > 0){
-            temp.doHurt(hurt: damage!, inArmor: inArmor, isPlayer: isPlayer);
+            temp.doHurt(hurt: damage!, inArmor: inArmor);
           }
         }
         // temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);
-        if (temp.magicDamages.contains(magicDamage)) {
-          return;
-        }
+        // if (temp.magicDamages.contains(magicDamage)) {
+        //   return;
+        // }
         if (magicDamage != null && magicDamage != MagicDamage.none) {
+          bool isSword = parent is MainPlayer;
+          if(isSword){
+            if(game.playerData.mana.value < game.playerData.swordDress.value.manaCost){
+              return;
+            }
+            game.playerData.addMana(-game.playerData.swordDress.value.manaCost);
+          }
           double damage = permanentDamage;
           if(magicDamage == MagicDamage.poison){
             damage *= temp.magicScalePoison;
@@ -206,7 +217,7 @@ abstract class PlayerWeapon extends DCollisionEntity
           }
           MagicDamage magic = magicDamage!;
           temp.doMagicHurt(hurt: damage, magicDamage: magic);
-          temp.magicDamages.add(magicDamage!);
+          // temp.magicDamages.add(magicDamage!);
           if(secsOfPermDamage.toInt() > 0) {
             temp.add(CountTimer(
                 onEndCount: (){temp.magicDamages.remove(magicDamage!);},

@@ -26,6 +26,7 @@ class SavedGame
   double y = 0;
   String world = '';
   double health = 0;
+  double mana = 0;
   double energy = 0;
   double level = 0;
   int gold = 0;
@@ -63,7 +64,7 @@ class DbHandler
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'kyrgyzGame.db');
-    _database = await openDatabase(path, version: 18,
+    _database = await openDatabase(path, version: 20,
         onUpgrade: (Database db, int oldVersion, int newVersion) async{
           print('UPGRADE TABLES!!!');
           await dropAllTables();
@@ -85,6 +86,7 @@ class DbHandler
 
   Future dropAllTables()async
   {
+    print('drop tables');
     for(final wrld in fullMaps()){
       await _database?.execute('DROP TABLE IF EXISTS ${wrld.nameForGame}');
     }
@@ -98,6 +100,7 @@ class DbHandler
 
   Future createTable() async
   {
+    print('create tables');
     for(final wrld in fullMaps()){
       await _database?.execute('CREATE TABLE IF NOT EXISTS ${wrld.nameForGame} '
           '(id INTEGER PRIMARY KEY NOT NULL'
@@ -121,6 +124,7 @@ class DbHandler
         ',y double NOT NULL DEFAULT 0'
         ',world TEXT NOT NULL'
         ',health double NOT NULL DEFAULT 0'
+        ',mana double NOT NULL DEFAULT 0'
         ',energy double NOT NULL DEFAULT 0'
         ',level double NOT NULL DEFAULT 1'
         ',gold INTEGER NOT NULL DEFAULT 0'
@@ -209,6 +213,7 @@ class DbHandler
       required double y,
       required String world,
       required double health,
+      required double mana,
       required double energy,
       required double level,
       required int gold,
@@ -228,8 +233,9 @@ class DbHandler
       required Map<String, int> ringInventar,
       required List<TempEffect> tempEffects})async
   {
+    print('save games');
     await _database?.rawDelete('DELETE FROM player_data WHERE save_id = ?', [saveId]);
-    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,energy,level,gold) VALUES(?,?,?,?,?,?,?,?)', [saveId, x, y, world, health, energy, level, gold]);
+    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold) VALUES(?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level, gold]);
     await _database?.execute('DELETE FROM current_inventar WHERE save_id = ?', [saveId]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, helmetDress.id]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, armorDress.id]);
@@ -271,6 +277,7 @@ class DbHandler
 
   Future<SavedGame> loadGame(int saveId) async
   {
+    print('load games');
     SavedGame svGame = SavedGame();
     var res = await _database?.rawQuery('SELECT * FROM player_data where save_id = ? ORDER BY id DESC LIMIT 1', [saveId]);
     if(res == null) return svGame;
@@ -279,6 +286,7 @@ class DbHandler
     svGame.y = res[0]['y']! as double;
     svGame.world = res[0]['world']!.toString();
     svGame.health = res[0]['health']! as double;
+    svGame.mana = res[0]['mana']! as double;
     svGame.energy = res[0]['energy']! as double;
     svGame.level = res[0]['level']! as double;
     svGame.gold = res[0]['gold']! as int;

@@ -115,7 +115,7 @@ class _LootInvantarState extends State<LootInInventar>
         Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-55.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
               ,Expanded(
                 child: SizedBox(
                     child:AutoSizeText(temp.hp * secs > widget.game.playerData.maxHealth.value
@@ -126,13 +126,30 @@ class _LootInvantarState extends State<LootInInventar>
                 maxLines: 1,)))
             ])));
       }
+      if(temp.mana != 0) {
+        myList.add(Container(constraints: BoxConstraints.expand(
+            width: rowWidth, height: rowHeight), child:
+        Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/inventar/UI-9-sliced object-56Mana.png',
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
+              ,Expanded(
+                  child: SizedBox(
+                      child:AutoSizeText(temp.mana * secs > widget.game.playerData.maxMana.value
+                          ? 'Full'
+                          : (temp.hp * secs).toStringAsFixed(1),style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
+            ])));
+      }
       if(temp.energy != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
         Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-56.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
               ,
             Expanded(
                 child: SizedBox(
@@ -182,13 +199,33 @@ class _LootInvantarState extends State<LootInInventar>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/healthInInventar.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight,)
               ,
               Expanded(
                 child: SizedBox(
                   child:AutoSizeText(
                     textAlign: TextAlign.center,
                     temp.hp.toStringAsFixed(2), style: defaultInventarTextStyle,
+                    minFontSize: 10,
+                    maxLines: 1,),),
+              ),
+            ])));
+      }
+      if(temp.mana != 0) {
+        myList.add(Container(constraints: BoxConstraints.expand(
+            width: rowWidth, height: rowHeight), child:
+        Row(mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/inventar/manaInInventar.png',
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight,)
+              ,
+              Expanded(
+                child: SizedBox(
+                  child:AutoSizeText(
+                    textAlign: TextAlign.center,
+                    temp.mana.toStringAsFixed(2), style: defaultInventarTextStyle,
                     minFontSize: 10,
                     maxLines: 1,),),
               ),
@@ -202,7 +239,7 @@ class _LootInvantarState extends State<LootInInventar>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/staminaInInventar.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight,)
               ,Expanded(
                 child: SizedBox(
                     child:AutoSizeText(
@@ -263,6 +300,23 @@ class _LootInvantarState extends State<LootInInventar>
                 minFontSize: 10,
                       textAlign: TextAlign.center,
                 maxLines: 1,)])))
+            ])));
+        myList.add(Container(constraints: BoxConstraints.expand(
+            width: rowWidth, height: rowHeight), child:
+        Row(mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/inventar/UI-9-sliced object-56Mana.png',
+                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
+              ,Expanded(
+                  child: SizedBox(
+                      child:AutoSizeText(
+                        temp.manaCost.toStringAsFixed(2), style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
             ])));
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:

@@ -327,6 +327,7 @@ class ToxicRain extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         collisionType: DCollisionType.inactive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     _weapon.damage = 5;
     _weapon.coolDown = 1;
+    _weapon.inArmor = false;
     add(_weapon);
     add(OpacityEffect.to(1,EffectController(duration: 0.5)));
   }
@@ -408,6 +409,7 @@ class BigSpikes extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         collisionType: DCollisionType.inactive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     _weapon.damage = 5;
     _weapon.coolDown = 0.7;
+    _weapon.inArmor = false;
     add(_weapon);
   }
 
@@ -448,6 +450,7 @@ class SmallSpikes extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         collisionType: DCollisionType.inactive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     _weapon.damage = 5;
     _weapon.coolDown = 0.7;
+    _weapon.inArmor = false;
     add(_weapon);
   }
 

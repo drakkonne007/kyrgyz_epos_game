@@ -328,6 +328,7 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       , isStatic: false, onObstacle: destroy, game: gameRef,isSolid: true,);
     add(_weapon);
     _weapon.damage = 2;
+    _weapon.inArmor = false;
 
     Image imgLoop   = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-loop.png');
     Image imgDestr1 = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-destroy.png');
