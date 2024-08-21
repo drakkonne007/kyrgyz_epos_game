@@ -24,15 +24,15 @@ class GameHud extends StatelessWidget
                 child: HealthBar(_game),
               ),
               Align(
-                alignment: Alignment.topRight,
-                child: PauseButton(_game),
-              ),
-              Align(
                 alignment: Alignment.bottomLeft,
                 child: OrthoJoystick(120, _game),
               ),
               Align(
-                alignment: Alignment.bottomRight,
+                alignment: Alignment.topRight,
+                child: PauseButton(_game),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,

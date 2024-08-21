@@ -93,6 +93,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   double dumping = 8;
   AnimationState _animState = AnimationState.idle;
   bool _canMagicSpell = true;
+  bool _enableShieldLock = true;
 
   @override
   Future<void> onLoad() async
@@ -185,7 +186,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(_animState == AnimationState.shield){
         if(gameRef.playerData.energy.value > hurt * 1.5){
           gameRef.playerData.addEnergy(-hurt*1.5);
-          gameRef.gameMap.container.add(ShieldLock(position: position - Vector2(0,17)));
+          if(_enableShieldLock) {
+            _enableShieldLock = false;
+            gameRef.gameMap.container.add(
+                ShieldLock(position: position - Vector2(0, 17)));
+            add(TimerComponent(period: 0.5,repeat: false,removeOnFinish: true, onTick: (){
+              _enableShieldLock = true;
+            }));
+          }
           return;
         }else{
           var temp = hurt - (gameRef.playerData.energy.value / 2);
@@ -374,7 +382,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     gameRef.playerData.addEnergy(-10);
-    if(_animState == AnimationState.move || _animState == AnimationState.idle || _animState == AnimationState.shield){
+    if(_animState == AnimationState.move || _animState == AnimationState.idle || _animState == AnimationState.shield || _animState == AnimationState.hurt){
       _animState = AnimationState.slide;
       groundRigidBody?.clearForces();
       groundRigidBody?.linearVelocity = Vector2.zero();
@@ -382,7 +390,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       hitBox!.collisionType = DCollisionType.inactive;
       animation = _animSlide;
       animationTicker?.onFrame = (frame){
-        if(frame == 4){
+        if(frame == 5){
           groundRigidBody?.linearDamping = dumping;
           groundRigidBody?.angularDamping = dumping;
         }
@@ -504,7 +512,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if(_animState != AnimationState.move && _animState != AnimationState.shield && _animState != AnimationState.slide){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
-      gameRef.playerData.addEnergy(dt * 2.5);
+      gameRef.playerData.addEnergy(dt * 4);
       return;
     }
     if(_animState != AnimationState.move){
@@ -526,7 +534,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       gameRef.playerData.addEnergy(dt * -3);
     }else{
       if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.addEnergy(dt);
+        gameRef.playerData.addEnergy(dt * 2);
       }
     }
     groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * (isReallyRun ? PhysicVals.runCoef : 1));

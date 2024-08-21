@@ -35,6 +35,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
   @override
   Widget build(BuildContext context)
   {
+    widget.game.currentItemInInventar.value = null;
     return LayoutBuilder(builder: (context,constraints){
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,

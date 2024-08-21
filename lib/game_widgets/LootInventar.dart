@@ -166,6 +166,9 @@ class _LootInvantarState extends State<LootInInventar>
           setState(() {
             temp.getEffectFromInventar(
                 widget.game);
+            if(!widget.game.playerData.itemInventar.containsKey(temp.id) && !widget.game.playerData.flaskInventar.containsKey(temp.id)){
+              widget.game.currentItemInInventar.value = null;
+            }
           });
         },
             child: const Text('Использовать'))));
