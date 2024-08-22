@@ -166,7 +166,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       databaseFactory = databaseFactoryFfi;
     }
     await dbHandler.openDb();
-    await dbHandler.dropAllTables();
+    // await dbHandler.dropAllTables();
     await dbHandler.createTable(); //TODO разобраться почему автоматом не создаётся
     maxPolygonVertices = 20;
     await Flame.device.fullScreen();
@@ -194,17 +194,17 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     WidgetsBinding.instance.addObserver(this);
     await setQuestState('chestOfGlory', 0, false);
     await setQuestState('templeDungeon', 0, false);
-    if(!await dbHandler.checkSaved(0) || true) {
+    if(!await dbHandler.checkSaved(0)) {
       await dbHandler.saveGame(
         saveId: 0,
         x: 1750,
         y: 3000,
         world: 'topLeftVillage',
-        health: 100,
-        mana: 100,
-        energy: 100,
-        level: 1,
-        gold: 100,
+        health: 150,
+        mana: 150,
+        energy: 150,
+        level: 0,
+        gold: 2000,
         helmetDress: Helmet1(),
         armorDress: Armor10(),
         glovesDress: NullItem(),
@@ -240,25 +240,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       quests[name]!.isDone = state.isDone;
       quests[name]!.currentState = state.currentState;
     }
-
     await loadGame(0);
-
-    // playerData.setStartValues(
-    //   helmet: StartHelmet(),
-    //   armor: ArmorStart(),
-    //   sword: SwordStart(),
-    //   weaponInventar: {'swordStart': 1, 'sword36' : 1, 'sword19' : 1},
-    //   armorInventar: {'armorStart': 1, 'startHelmet': 1},
-    //   flaskInventar: {
-    //     'hpSmall':10,
-    //     'hpMedium':10,
-    //     'hpBig':10,
-    //     'hpFull':10,
-    //     'energySmall':10,
-    //     'energyMedium':10,
-    //     'energyBig':10,
-    //     'energyFull':10},
-    // );
     add(gameMap);
     await gameMap.loaded;
     //TODO добавить сохранённые бутылочки в gameMap;
