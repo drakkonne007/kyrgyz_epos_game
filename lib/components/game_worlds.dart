@@ -76,6 +76,7 @@ abstract class GameWorldData
   int _currentText = 0;
   List<String> mapSmallDialogs = [];
   bool isDungeon = false;
+  int level = 1;
 
   GameWorldData()
   {

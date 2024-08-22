@@ -3,6 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -12,7 +13,7 @@ import 'dart:math' as math;
 
 class OrcWarrior extends KyrgyzEnemy
 {
-  OrcWarrior(this._startPos,int id){this.id = id;}
+  OrcWarrior(this._startPos, {required super.level, required super.id});
   final Vector2 _startPos;
   late SpriteAnimation _animIdleToMove, _animAttack1FromIdle, _animAttack1FromMove, _animPrepareToAttack2, _postAttack2;
   int _variantOfHit = 0;
@@ -116,26 +117,28 @@ class OrcWarrior extends KyrgyzEnemy
     shiftAroundAnchorsForHit = 80;
     maxLoots = 2;
     chanceOfLoot = 0.09;
-    health = 18;
-    maxSpeed = 60;
+    health = OrcInfo.health(level);
+    maxSpeed = OrcInfo.speed;
+    armor = OrcInfo.armor(level);
     anchor = const Anchor(0.5,0.5);
 
     final img = gameRef.gameMap.currentGameWorldData!.isDungeon ?await Flame.images.load('tiles/map/grassLand2/Characters/orc warrior/orc2/orc melee - anims color2-all anims-with fx.png')
         : await Flame.images.load('tiles/map/grassLand2/Characters/orc warrior/orc1/orc melee - all animations with fx.png');
     final spriteSheet = SpriteSheet(image: img, srcSize: Vector2(256,256));
 
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 9,loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 7, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 6,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 8, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 12,loop: false);
+    int seed = DateTime.now().microsecond;
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 9,loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 7, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 6,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 8, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 12,loop: false);
 
-    _animIdleToMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 2,loop: false);
-    _animAttack1FromIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 15,loop: false);
-    _animAttack1FromMove = spriteSheet.createAnimation(row: 3, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 2, to: 15,loop: false);
+    _animIdleToMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 2,loop: false);
+    _animAttack1FromIdle = spriteSheet.createAnimation(row: 3, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 15,loop: false);
+    _animAttack1FromMove = spriteSheet.createAnimation(row: 3, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 2, to: 15,loop: false);
 
-    _animPrepareToAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.045 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 11,loop: false);
-    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 4,loop: false);
-    _postAttack2 = spriteSheet.createAnimation(row: 6, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 5,loop: false);
+    _animPrepareToAttack2 = spriteSheet.createAnimation(row: 4, stepTime: 0.045 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 11,loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 4,loop: false);
+    _postAttack2 = spriteSheet.createAnimation(row: 6, stepTime: 0.05 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 5,loop: false);
 
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -152,7 +155,7 @@ class OrcWarrior extends KyrgyzEnemy
     groundBody!.setMassData(massData);
     weapon = DefaultEnemyWeapon(_attack1,collisionType: DCollisionType.inactive,isStatic: false,isLoop:true,game: gameRef
         ,isSolid: false,onStartWeaponHit: null,onEndWeaponHit: null);
-    weapon!.damage = 3;
+    weapon!.damage = OrcInfo.damage(level);
     add(weapon!);
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){

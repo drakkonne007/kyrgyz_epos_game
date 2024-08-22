@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
@@ -47,7 +48,7 @@ final List<Vector2> weaponPoints = [ //вторая колонка
 
 class PrisonAssassin extends KyrgyzEnemy
 {
-  PrisonAssassin(this._startPos,int id){this.id = id;}
+  PrisonAssassin(this._startPos, {required super.id, required super.level});
   final Vector2 _spriteSheetSize = Vector2(220,96);
   final Vector2 _startPos;
 
@@ -57,22 +58,23 @@ class PrisonAssassin extends KyrgyzEnemy
     dopPriority = (30 * zoomScale).toInt();
     shiftAroundAnchorsForHit = 20;
     distPlayerLength = 60*60;
-    armor = 0;
+    armor = AssasinUndeadInfo.armor(level);
     chanceOfLoot = 0.02;
-    health = 13;
+    health = AssasinUndeadInfo.health(level);
     maxLoots = 3;
-    maxSpeed = 70;
+    maxSpeed = AssasinUndeadInfo.speed;
     Image spriteImage = await Flame.images.load(
         'tiles/map/prisonSet/Characters/Assassin like enemy/Assassin like enemy - all animations.png');
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
-    animIdle2 = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 10, loop: false);
-    animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 6, loop: false);
-    animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 9, loop: false);
-    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 11, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
+    int seed = DateTime.now().microsecond;
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
+    animIdle2 = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 10, loop: false);
+    animMove = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 6, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 9, loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 5, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 11, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 7,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -91,7 +93,7 @@ class PrisonAssassin extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(
         weaponPoints,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
-    weapon?.damage = 3;
+    weapon?.damage = AssasinUndeadInfo.damage(level);
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();

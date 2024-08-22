@@ -3,6 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -33,6 +34,7 @@ Vector2(-3.14863,-29.0244)
 class LightningTrap extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   late DefaultEnemyWeapon _weapon;
+  late DefaultPlayerWeapon _playerWeapon;
   final double srcHeight;
   LightningTrap({required super.position, required this.srcHeight,});
   late SpriteAnimation _runAnim, _fadeAnim;
@@ -69,9 +71,13 @@ class LightningTrap extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animation = _runAnim;
     animationTicker?.onComplete = changeToFade;
     _weapon = DefaultEnemyWeapon(srcHeight == 96 ? _weaponPoints96 : srcHeight == 160 ? _weaponPoints160 : _weaponPoints46 , collisionType: DCollisionType.active, isStatic: false, game: gameRef);
-    _weapon.damage = 10;
+    _weapon.damage = ElectroTrapInfo.damage(gameRef.playerData.playerLevel.value);
     _weapon.coolDown = 0.75;
+    _playerWeapon = DefaultPlayerWeapon(srcHeight == 96 ? _weaponPoints96 : srcHeight == 160 ? _weaponPoints160 : _weaponPoints46 , collisionType: DCollisionType.active, isStatic: false, game: gameRef);
+    _playerWeapon.damage = ElectroTrapInfo.damage(gameRef.playerData.playerLevel.value) / 10;
+    _playerWeapon.coolDown = 0.75;
     add(_weapon);
+    add(_playerWeapon);
   }
 
   void changeToFade()
@@ -79,9 +85,11 @@ class LightningTrap extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animation = _fadeAnim;
     animationTicker?.onComplete = (){
       _weapon.collisionType = DCollisionType.inactive;
+      _playerWeapon.collisionType = DCollisionType.inactive;
       add(TimerComponent(period: 2.5,onTick: (){
         animation = _runAnim;
         _weapon.collisionType = DCollisionType.active;
+        _playerWeapon.collisionType = DCollisionType.active;
         animationTicker?.onComplete = (){
           changeToFade();
         };

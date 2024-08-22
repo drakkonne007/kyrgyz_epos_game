@@ -43,7 +43,7 @@ class CircleMagicBall extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     _weapon.isMainPlayer = true;
     add(_weapon);
     add(OpacityEffect.to(1,EffectController(duration: 0.5)));
-    position = gameRef.gameMap.orthoPlayer!.position + Vector2(math.cos(angle), math.sin(angle)) * _radius;
+    position = gameRef.playerPosition() + Vector2(math.cos(angle), math.sin(angle)) * _radius;
   }
 
   void perfectRemove()
@@ -56,6 +56,6 @@ class CircleMagicBall extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
   {
     super.update(dt);
     angle += _speed * dt;
-    position = gameRef.gameMap.orthoPlayer!.position + Vector2(math.cos(angle), math.sin(angle)) * _radius;
+    position = gameRef.playerPosition() + Vector2(math.cos(angle), math.sin(angle)) * _radius;
   }
 }

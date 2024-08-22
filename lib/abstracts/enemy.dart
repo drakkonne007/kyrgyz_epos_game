@@ -115,14 +115,16 @@ class HitText extends TextComponent with HasGameRef<KyrgyzGame>
 
 class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
+  KyrgyzEnemy({required this.id, required this.level, this.isHigh = false});
   bool isRefresh = true;
+  int level;
   int isFreeze = 0;
   double health = 0;
   double armor = 0;
   int maxLoots = 0;
   int column=0;
   int row=0;
-  int id=-1;
+  int id;
   int dopPriority = 0;
   int variantOfHit = 0;
   SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
@@ -448,6 +450,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void death(SpriteAnimation? anim)
   {
+    gameRef.playerData.addLevel(health + (level * 50));
     speed.x = 0;
     speed.y = 0;
     groundBody?.clearForces();

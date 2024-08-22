@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -18,11 +19,10 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class SkeletonMage extends KyrgyzEnemy
 {
-  SkeletonMage(this._startPos,int id,{this.isHigh = false}){this.id = id; super.isHigh = isHigh;}
+  SkeletonMage(this._startPos, {required super.id, required super.level, super.isHigh});
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield, animAttackStart, animAttackEnd, animAttackLong, animBlock, animThrow;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
-  bool isHigh;
   bool _withShieldNow = false;
   final double dist = 352 * 352;
   bool _castMagic = false;
@@ -43,9 +43,10 @@ class SkeletonMage extends KyrgyzEnemy
     dopPriority = 38;
     maxLoots = 2;
     chanceOfLoot = 0.12;
-    health = 9;
+    health = SkeletMageInfo.health(level);
     anchor = const Anchor(115/220,0.5);
-    maxSpeed = 55;
+    maxSpeed = SkeletMageInfo.speed;
+    armor = SkeletMageInfo.armor(level);
     Image? spriteImage;
     Image? spriteImageWithShield;
     if(isHigh){
@@ -76,23 +77,24 @@ class SkeletonMage extends KyrgyzEnemy
     final spriteSheetWithShield = SpriteSheet(image: spriteImageWithShield,
         srcSize: _spriteSheetSize);
 
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 6,loop: false);
-    animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
+    int seed = DateTime.now().microsecond;
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animAttackStart = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 6,loop: false);
+    animAttackLong = spriteSheet.createAnimation(row: 3, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animAttackEnd = spriteSheet.createAnimation(row: 4, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 6, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 7, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
 
-    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    _animAttackStartShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 6,loop: false);
-    _animAttackLongShield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    _animAttackEndShield = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
-    _animBlock = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    _animHurtShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    _animThrowShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
+    _animIdleShield = spriteSheetWithShield.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animMoveShield = spriteSheetWithShield.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animAttackStartShield = spriteSheetWithShield.createAnimation(row: 2, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 6,loop: false);
+    _animAttackLongShield = spriteSheetWithShield.createAnimation(row: 3, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animAttackEndShield = spriteSheetWithShield.createAnimation(row: 4, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 7, loop: false);
+    _animBlock = spriteSheetWithShield.createAnimation(row: 5, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animHurtShield = spriteSheetWithShield.createAnimation(row: 6, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animThrowShield = spriteSheetWithShield.createAnimation(row: 7, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    _animDeathShield = spriteSheetWithShield.createAnimation(row: 8, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
 
     animation = _withShieldNow ? _animIdleShield : animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -327,7 +329,7 @@ class MageSphere extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _weapon = DefaultEnemyWeapon([Vector2.zero()], collisionType: DCollisionType.active, radius: 10
       , isStatic: false, onObstacle: destroy, game: gameRef,isSolid: true,);
     add(_weapon);
-    _weapon.damage = 2;
+    _weapon.damage = SkeletBubbleInfo.damage(gameRef.playerData.playerLevel.value);
     _weapon.inArmor = false;
 
     Image imgLoop   = await Flame.images.load('tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton -projectile-loop.png');

@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -123,13 +124,14 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
     _defWeapon = DefaultEnemyWeapon(_isBigRoll ? _groundPoints : _groundSmallPoints,collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
     _defWeapon.coolDown = 0.5;
-    _defWeapon.damage = 5;
+    _defWeapon.damage = _isBigRoll ? BarrelWithMetalInfo.damage(gameRef.playerData.playerLevel.value) : BarrelInfo.damage(gameRef.playerData.playerLevel.value);
     add(_defWeapon);
 
     var temp = DefaultPlayerWeapon(_isBigRoll ? _groundPoints : _groundSmallPoints,collisionType: DCollisionType.active,isSolid: false,isStatic: false, isLoop: true
         , game: gameRef,onStartWeaponHit: () {}, onEndWeaponHit: () {});
     temp.coolDown = 0.5;
-    temp.damage = 2;
+    temp.damage = _isBigRoll ? BarrelWithMetalInfo.damage(gameRef.playerData.playerLevel.value) / 10 : BarrelInfo.damage(gameRef.playerData.playerLevel.value) / 10;
+
     add(temp);
     _player = gameRef.gameMap.orthoPlayer?? gameRef.gameMap.frontPlayer!;
   }

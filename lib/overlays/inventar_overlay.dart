@@ -1,6 +1,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/game_widgets/LootInventar.dart';
 import 'package:game_flame/game_widgets/bigWindowInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -31,11 +32,49 @@ class InventoryOverlay extends StatefulWidget
 }
 
 class InventoryOverlayState extends State<InventoryOverlay> //Делает верхние вкладки с инвентарями
-    {
+{
   @override
   Widget build(BuildContext context)
   {
-    widget.game.currentItemInInventar.value = null;
+    if(widget.game.currentItemInInventar.value != null){
+      switch(widget.game.currentItemInInventar.value!.dressType){
+        case DressType.none:
+          if(!widget.game.playerData.flaskInventar.containsKey(widget.game.currentItemInInventar.value!.id) && !widget.game.playerData.itemInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+        case DressType.helmet:
+          if(!widget.game.playerData.helmetInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+        case DressType.armor:
+          if(!widget.game.playerData.bodyArmorInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+        case DressType.gloves:
+          if(!widget.game.playerData.glovesInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+        case DressType.sword:
+          if(!widget.game.playerData.swordInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+        case DressType.ring:
+          if(!widget.game.playerData.ringInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+        case DressType.boots:
+          if(!widget.game.playerData.bootsInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+      }
+    }
     return LayoutBuilder(builder: (context,constraints){
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,7 +85,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: getUpTabs((constraints.maxWidth)/11,(constraints.maxHeight * 0.75)/6)
+                  children: getUpTabs((constraints.maxWidth)/11,(constraints.maxHeight * 0.70)/6)
               );
             }),
             Stack(

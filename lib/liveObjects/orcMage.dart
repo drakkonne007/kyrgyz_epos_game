@@ -4,6 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -48,9 +49,8 @@ final List<Vector2> _attack1ind12 = [ //7 - 10
 
 class OrcMage extends KyrgyzEnemy
 {
-  OrcMage(this._startPos,int id,{this.isHigh = false}){this.id = id; super.isHigh = isHigh;}
+  OrcMage(this._startPos, {required super.level, required super.id, super.isHigh});
   final Vector2 _startPos;
-  bool isHigh;
   final double dist = 350 * 350;
   final Vector2 srcSize = Vector2(256,256);
   bool _castMagic = false;
@@ -62,9 +62,10 @@ class OrcMage extends KyrgyzEnemy
     dopPriority = 38;
     maxLoots = 2;
     chanceOfLoot = 0.12;
-    health = 15;
+    health = OrcMageInfo.health(level);
     anchor = const Anchor(0.484375, 0.5);
-    maxSpeed = 35;
+    maxSpeed = OrcMageInfo.speed;
+    armor = OrcMageInfo.armor(level);
     if(isHigh){
       priority = GamePriority.high + 1;
     }
@@ -73,12 +74,13 @@ class OrcMage extends KyrgyzEnemy
     : await Flame.images.load('tiles/map/grassLand2/Characters/orc mage/orc1/orc mage - with hand fx- all anims.png');
 
     SpriteSheet spriteSheet = SpriteSheet(image: sprImg, srcSize: srcSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
-    animAttack2 = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
-    animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 16, loop: false);
-    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 7, loop: false);
-    animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 17, loop: false);
+    int seed = DateTime.now().microsecond;
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 2, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 3, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 16, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 7, loop: false);
+    animDeath = spriteSheet.createAnimation(row: 5, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 17, loop: false);
 
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -96,7 +98,7 @@ class OrcMage extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(
         _attack1ind12,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
-    weapon?.damage = 2;
+    weapon?.damage = OrcMageInfo.damage(level);
     super.onLoad();
   }
 
@@ -325,7 +327,7 @@ class ToxicRain extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     position = target! - speed;
     _weapon = DefaultEnemyWeapon(isBig ? _hitboxBigPoints : _hitboxPoints,
         collisionType: DCollisionType.inactive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    _weapon.damage = 5;
+    _weapon.damage = isBig ? OrcAcidRainInfo.damage(gameRef.playerData.playerLevel.value) : OrcAcidInfo.damage(gameRef.playerData.playerLevel.value);
     _weapon.coolDown = 1;
     _weapon.inArmor = false;
     add(_weapon);
@@ -407,7 +409,7 @@ class BigSpikes extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animationTicker?.onFrame = doFrame;
     _weapon = DefaultEnemyWeapon(_hitboxPoints,
         collisionType: DCollisionType.inactive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    _weapon.damage = 5;
+    _weapon.damage = ManySpikesInfo.damage(gameRef.playerData.playerLevel.value);
     _weapon.coolDown = 0.7;
     _weapon.inArmor = false;
     add(_weapon);
@@ -448,7 +450,7 @@ class SmallSpikes extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     animationTicker?.onFrame = doFrame;
     _weapon = DefaultEnemyWeapon(_hitboxPoints,
         collisionType: DCollisionType.inactive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
-    _weapon.damage = 5;
+    _weapon.damage = SpkikeInfo.damage(gameRef.playerData.playerLevel.value);
     _weapon.coolDown = 0.7;
     _weapon.inArmor = false;
     add(_weapon);

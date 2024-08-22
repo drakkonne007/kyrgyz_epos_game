@@ -32,29 +32,45 @@ class HealthBar extends StatelessWidget
             padding: const EdgeInsets.only(left: 10, top: 10),
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ValueListenableBuilder(
-                    valueListenable: game.playerData.health,
-                    builder: (_,val,__) =>
-                          ShakeWidget(
-                            shakeConstant: ShakeDefaultConstant2(),
-                            autoPlay: isHurt(val),
-                            child: SizedBox(
-                              width: 42,
-                              height: 42,
-                              child: GestureDetector(
-                                onTap: game.doInventoryHud,
-                                child: Stack(
-                                  fit: StackFit.passthrough,
-                                  children:[
-                                    CustomPaint(
-                                      painter: ArcGradientPainter(color: Colors.red, currentProc: val / game.playerData.maxHealth.value),
-                                    ),
-                                    Container(alignment: Alignment.center, width: 42,height: 42,
-                                        child: Image.asset('assets/images/inventar/heartForGui.png', width: 32, height: 32, alignment: Alignment.center,)),
-                                  ]
-                              ),
-                            ),))
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children:
+                      [
+                        ValueListenableBuilder(
+                            valueListenable: game.playerData.health,
+                            builder: (_,val,__) =>
+                                ShakeWidget(
+                                    shakeConstant: ShakeDefaultConstant2(),
+                                    autoPlay: isHurt(val),
+                                    child: SizedBox(
+                                      width: 42,
+                                      height: 42,
+                                      child: GestureDetector(
+                                        onTap: game.doInventoryHud,
+                                        child: Stack(
+                                            fit: StackFit.passthrough,
+                                            children:[
+                                              CustomPaint(
+                                                painter: ArcGradientPainter(color: Colors.red, currentProc: val / game.playerData.maxHealth.value),
+                                              ),
+                                              Container(alignment: Alignment.center, width: 42,height: 42,
+                                                  child: Image.asset('assets/images/inventar/heartForGui.png', width: 32, height: 32, alignment: Alignment.center,)),
+                                            ]
+                                        ),
+                                      ),))
+                        ),
+                        Container(
+                          width: 42,
+                          height: 42,
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                              onTap: game.doMapHud,
+                              child: Image.asset('assets/images/inventar/UI-9-sliced object-53Hud.png', width: 42, height: 42, alignment: Alignment.center,)),
+                        )
+                      ]
                   ),
                   const SizedBox(height: 15,),
                   ValueListenableBuilder(
@@ -105,14 +121,7 @@ class HealthBar extends StatelessWidget
                             )),
                           ),
                   ),
-                  Container(
-                    width: 60,
-                    height: 60,
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: game.doMapHud,
-                      child: Image.asset('assets/images/inventar/UI-9-sliced object-53.png', width: 60, height: 60, alignment: Alignment.center,)),
-                    )
+
                 ]
             )
       );

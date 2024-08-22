@@ -4,6 +4,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -61,7 +62,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class Ogr extends KyrgyzEnemy
 {
-  Ogr(this._startPos,int id){this.id = id;}
+  Ogr(this._startPos, {required super.level, required super.id});
   final Vector2 _startPos;
   final srcSize = Vector2(256,224);
 
@@ -74,73 +75,73 @@ class Ogr extends KyrgyzEnemy
     distPlayerLength = 70 * 70;
     maxLoots = 3;
     chanceOfLoot = 0.02;
-    health = 40;
-    maxSpeed = 40;
-
+    health = OgrInfo.health(level);
+    maxSpeed = OgrInfo.speed;
+    armor = OgrInfo.armor(level);
+    int seed = DateTime.now().microsecond;
     if(gameRef.gameMap.currentGameWorldData!.isDungeon) {
       SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-atk1.png'
       ), srcSize: srcSize);
       animAttack = spriteSheet.createAnimation(
-          row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+          row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-death.png'
       ), srcSize: srcSize);
-      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-idle.png'
       ), srcSize: srcSize);
-      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-walk.png'
       ), srcSize: srcSize);
-      animMove = spriteSheet.createAnimation(row: 0,stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125,from: 0,loop: false);
+      animMove = spriteSheet.createAnimation(row: 0,stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0,loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/variation1/enemy 1 var1-hurt.png'
       ), srcSize: srcSize);
-      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
       ), srcSize: srcSize);
-      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     }else{
       SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk1.png'
       ), srcSize: srcSize);
-      animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-death.png'
       ), srcSize: srcSize);
-      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-idle.png'
       ), srcSize: srcSize);
-      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-walk.png'
       ), srcSize: srcSize);
-      animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-hurt.png'
       ), srcSize: srcSize);
-      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
       spriteSheet = SpriteSheet(image: await Flame.images.load(
           'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
       ), srcSize: srcSize);
-      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
     }
-
     anchor = const Anchor(0.44922,0.5);
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -151,7 +152,7 @@ class Ogr extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(
         _attack1ind7,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
-    weapon?.damage = 4;
+    weapon?.damage = OgrInfo.damage(level);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_ground));

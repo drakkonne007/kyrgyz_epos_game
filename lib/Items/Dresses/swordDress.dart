@@ -1127,9 +1127,9 @@ class Sword48 extends Item {
   Sword48() {
     id = 'sword48';
     source = 'images/inventar/weapon/48.png';
-    cost = 12;
-    damage = 3;
-    attackSpeed = -0.02;
+    cost = 1000;
+    damage = 15;
+    attackSpeed = -0.005;
     dressType = DressType.sword;
   }
 

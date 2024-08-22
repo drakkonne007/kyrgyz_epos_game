@@ -115,10 +115,10 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       onTick: (){
         int rand = Random().nextInt(4);
         if(rand == 0){
-          gameRef.gameMap.container.add(Skeleton(position + pointSpawn,-1));
+          gameRef.gameMap.container.add(Skeleton(position + pointSpawn,id:-1, level: gameRef.gameMap.currentGameWorldData!.level));
         }else {
           for (final myItem in myItems) {
-            gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
+            gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.playerPosition()));
           }
         }
       }

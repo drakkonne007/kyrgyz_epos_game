@@ -5,7 +5,7 @@ import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/gearSwitch.dart';
 import 'package:game_flame/Items/hBridge.dart';
 import 'package:game_flame/Items/hWChest.dart';
-import 'package:game_flame/Items/lightning.dart';
+import 'package:game_flame/liveObjects/lightning.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/Items/mapDialog.dart';
@@ -26,7 +26,7 @@ import 'package:game_flame/liveObjects/goblin.dart';
 import 'package:game_flame/liveObjects/humanWarrior.dart';
 import 'package:game_flame/liveObjects/mini_creatures/BigFlicker.dart';
 import 'package:game_flame/liveObjects/mini_creatures/WoodStairway.dart';
-import 'package:game_flame/liveObjects/mini_creatures/arrowSpawn.dart';
+import 'package:game_flame/liveObjects/arrowSpawn.dart';
 import 'package:game_flame/liveObjects/mini_creatures/bigFlyingObelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/bird.dart';
 import 'package:game_flame/liveObjects/mini_creatures/campPortal.dart';
@@ -40,7 +40,7 @@ import 'package:game_flame/liveObjects/mini_creatures/groundFire.dart';
 import 'package:game_flame/liveObjects/mini_creatures/stand_obelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/nature_particals.dart';
 import 'package:game_flame/liveObjects/mini_creatures/nature_particle_lower.dart';
-import 'package:game_flame/liveObjects/mini_creatures/verticalBigRollingWood.dart';
+import 'package:game_flame/liveObjects/verticalBigRollingWood.dart';
 import 'package:game_flame/liveObjects/mini_creatures/windblow.dart';
 import 'package:game_flame/liveObjects/moose.dart';
 import 'package:game_flame/liveObjects/ogr.dart';
@@ -205,11 +205,12 @@ class MapNode {
   {
     double posX = double.parse(obj.getAttribute('x')!);
     double posY = double.parse(obj.getAttribute('y')!);
-    // posX += double.parse(obj.getAttribute('w')!) / 2.0;
-    // posY -= double.parse(obj.getAttribute('h')!) / 2.0;
+    int level = myGame.gameMap.currentGameWorldData!.level;
+    if(obj.getAttribute('level') != null){
+      level = int.parse(obj.getAttribute('level')!);
+    }
     Vector2 position = Vector2(posX,posY);
     int id = int.parse(obj.getAttribute('id') ?? '-1');
-    // print(id);
     if (myGame.gameMap.loadedLivesObjs.contains(id)) {
       return;
     }
@@ -234,28 +235,28 @@ class MapNode {
     switch (name) {
       case 'ggolem':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = GrassGolem(position, GolemVariant.Grass,id);
+        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'sceletM':
         myGame.gameMap.loadedLivesObjs.add(id);
         var isHigh = obj.getAttribute('high');
         if(isHigh!=null){
-          positionObject = SkeletonMage(position,id,isHigh: true);
+          positionObject = SkeletonMage(position,id:id, level: level,isHigh: true);
           myGame.gameMap.container.add(positionObject);
         }else{
-          positionObject = SkeletonMage(position,id);
+          positionObject = SkeletonMage(position,id:id, level: level);
           myGame.gameMap.container.add(positionObject);
         }
         break;
       case 'enemy':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = GrassGolem(position, GolemVariant.Grass,id);
+        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'wgolem':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = GrassGolem(position, GolemVariant.Water,id);
+        positionObject = GrassGolem(position, GolemVariant.Water,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'windb':
@@ -265,37 +266,37 @@ class MapNode {
         break;
       case 'moose':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Moose(position, MooseVariant.PurpleWithGreenHair,id);
+        positionObject = Moose(position, MooseVariant.PurpleWithGreenHair,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'scelet':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Skeleton(position,id);
+        positionObject = Skeleton(position,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'orc':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = OrcWarrior(position,id);
+        positionObject = OrcWarrior(position,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'orcMage':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = OrcMage(position,id);
+        positionObject = OrcMage(position,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'ogr':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Ogr(position,id);
+        positionObject = Ogr(position,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'goblin':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Goblin(position,id);
+        positionObject = Goblin(position,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;//Pot
       case 'pot':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Pot(position,id);
+        positionObject = Pot(position,id: id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'gold':
@@ -493,7 +494,7 @@ class MapNode {
         break;
       case 'assassin':
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = PrisonAssassin(position,id);
+        positionObject = PrisonAssassin(position,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'portal':
@@ -585,7 +586,7 @@ class MapNode {
         break;
       case 'human':
         if(obj.getAttribute('citizien') != '1'){
-          positionObject = HumanWarrior(position, id);
+          positionObject = HumanWarrior(position, id:id, level: level);
           myGame.gameMap.loadedLivesObjs.add(id);
           myGame.gameMap.container.add(positionObject);
         }else {

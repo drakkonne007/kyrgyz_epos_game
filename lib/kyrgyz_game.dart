@@ -19,6 +19,7 @@ import 'package:game_flame/Items/Dresses/armorDress.dart';
 import 'package:game_flame/Items/Dresses/helmetDress.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/Dresses/swordDress.dart';
+import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/abstracts/quest.dart';
@@ -103,13 +104,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   {
     await dbHandler.saveGame(
         saveId: 0,
-        x: gameMap.orthoPlayer?.x ?? gameMap.frontPlayer!.x,
-        y: gameMap.orthoPlayer?.y ?? gameMap.frontPlayer!.y,
+        x: playerPosition().x,
+        y: playerPosition().y,
         world: gameMap.currentGameWorldData!.nameForGame,
         health: playerData.health.value,
         mana: playerData.mana.value,
         energy: playerData.energy.value,
-        level: playerData.playerLevel.value,
+        level: playerData.experience.value,
         gold: playerData.money.value,
         helmetDress: playerData.helmetDress.value,
         armorDress: playerData.armorDress.value,
@@ -125,6 +126,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         itemInventar: playerData.itemInventar,
         swordInventar: playerData.swordInventar,
         ringInventar: playerData.ringInventar,
+        currentFlask1: playerData.currentFlask1.value,
+        currentFlask2: playerData.currentFlask2.value,
         tempEffects:  gameMap.effectComponent.children.toList(growable: false).cast());
   }
 
@@ -138,6 +141,12 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   Vector2 playerPosition()
   {
     return gameMap.orthoPlayer?.position ?? gameMap.frontPlayer!.position;
+  }
+
+  MainPlayer gamePlayer()
+  {
+    var temp = gameMap.orthoPlayer == null ? gameMap.frontPlayer! : gameMap.orthoPlayer!;
+    return temp as MainPlayer;
   }
 
   bool isPlayerFlipped()

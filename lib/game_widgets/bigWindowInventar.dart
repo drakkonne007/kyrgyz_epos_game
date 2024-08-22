@@ -76,8 +76,8 @@ class PlayerStats extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    double newWidth = min((size.width / 3 - 25) / 3, (size.height - 65) / 6);
-    double newStrokeHeight = (size.height - newWidth * 2 - 25 - 40) / 7;
+    double newWidth = min((size.width / 3 - 25) / 3, (size.height - 61) / 6);
+    double newStrokeHeight = (size.height - newWidth * 2 - 25 - 40) / 6.5;
     return
       ValueListenableBuilder(
           valueListenable: game.currentItemInInventar, builder: (context, value, __)
@@ -108,21 +108,7 @@ class PlayerStats extends StatelessWidget
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/inventar/gold.png', height: 25,),
-                                ValueListenableBuilder(
-                                    valueListenable: game.playerData.money,
-                                    builder: (context, value, __) =>
-                                        SizedBox(height: 25, child: AutoSizeText(
-                                          value.toString(),
-                                          style: defaultTextStyle,
-                                          minFontSize: 15,))),
-                              ],
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   ValueListenableBuilder(
@@ -304,7 +290,7 @@ class PlayerStats extends StatelessWidget
                             ),
                             SizedBox(
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   ValueListenableBuilder(

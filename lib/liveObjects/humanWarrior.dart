@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -41,20 +42,20 @@ final List<Vector2> _attack = [ //4-5
 
 class HumanWarrior extends KyrgyzEnemy
 {
-  HumanWarrior(this._startPos,int id){this.id = id;}
+  HumanWarrior(this._startPos, {required super.level, required super.id});
   final Vector2 _startPos;
 
   @override
   Future<void> onLoad() async
   {
     dopPriority = 31;
-    // reverseHorizontal = true;
     shiftAroundAnchorsForHit = 65;
     distPlayerLength = 75 * 75;
     maxLoots = 1;
     chanceOfLoot = 0.02;
-    health = 20;
-    maxSpeed = 47;
+    health = HumanInfo.health(level);
+    maxSpeed = HumanInfo.speed;
+    armor = HumanInfo.armor(level);
     Image? spriteImage;
     bool isMale = math.Random().nextBool();
     if(isMale){
@@ -67,11 +68,12 @@ class HumanWarrior extends KyrgyzEnemy
     SpriteSheet spriteSheet = SpriteSheet(
         image: spriteImage,
         srcSize:  Vector2(80,64));
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125,from: 0, to: 5, loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125,from: 0, to: 8, loop: false);
-    animAttack = spriteSheet.createAnimation(row: 5, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to:6,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 5,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 10,loop: false);
+    int seed = DateTime.now().microsecond;
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 5, loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 8, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 5, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to:6,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 5,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 10,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -82,7 +84,7 @@ class HumanWarrior extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(
         _attack,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
-    weapon?.damage = 3;
+    weapon?.damage = HumanInfo.damage(level);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38), scale: PhysicVals.physicScale)));

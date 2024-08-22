@@ -78,13 +78,14 @@ final hitStateStyle = TextStyle
 );
 
 final defaultNoneButtonStyle = ButtonStyle(
+  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
   minimumSize: WidgetStateProperty.all<Size>(Size.zero),
   foregroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
   backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
   overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
   shadowColor: WidgetStateProperty.all<Color>(Colors.transparent),
   surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-  elevation: WidgetStateProperty.all<double>(0),
   shape: WidgetStateProperty.all<RoundedRectangleBorder>(const RoundedRectangleBorder()),
+  elevation: WidgetStateProperty.all<double>(0),
   padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
 );

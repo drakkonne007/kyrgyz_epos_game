@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -62,7 +63,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class GrassGolem extends KyrgyzEnemy
 {
-  GrassGolem(this._startPos,this.spriteVariant,int id){this.id = id;}
+  GrassGolem(this._startPos,this.spriteVariant,{required super.level,required super.id});
   final Vector2 _spriteSheetSize = Vector2(224,192);
   final Vector2 _startPos;
   final GolemVariant spriteVariant;
@@ -76,8 +77,9 @@ class GrassGolem extends KyrgyzEnemy
     distPlayerLength = 75 * 75;
     maxLoots = 1;
     chanceOfLoot = 0.02;
-    health = 20;
-    maxSpeed = 47;
+    health = GollemInfo.health(level);
+    maxSpeed = GollemInfo.speed;
+    armor = GollemInfo.armor(level);
     Image? spriteImage;
     int randVar = math.Random().nextInt(2);
     if(randVar == 0){
@@ -89,11 +91,12 @@ class GrassGolem extends KyrgyzEnemy
     }
     final spriteSheet = SpriteSheet(image: spriteImage,
         srcSize: _spriteSheetSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
-    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 12,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
+    int seed = DateTime.now().microsecond;
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8,loop: false);
+    animAttack = spriteSheet.createAnimation(row: 2, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 3, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 12,loop: false);
+    animDeath = spriteSheet.createAnimation(row: 4, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 13,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -104,7 +107,7 @@ class GrassGolem extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(
         _ind1,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
-    weapon?.damage = 3;
+    weapon?.damage = GollemInfo.damage(level);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38), scale: PhysicVals.physicScale)));

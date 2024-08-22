@@ -3,7 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -53,7 +53,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class Goblin extends KyrgyzEnemy
 {
-  Goblin(this._startPos,int id){this.id = id;}
+  Goblin(this._startPos,{required super.id, required super.level});
   final Vector2 _startPos;
   final srcSize = Vector2(160,128);
 
@@ -65,35 +65,37 @@ class Goblin extends KyrgyzEnemy
     distPlayerLength = 55 * 55;
     maxLoots = 3;
     chanceOfLoot = 0.02;
-    health = 30;
-    maxSpeed = 40;
+    health = GoblinInfo.health(level);
+    maxSpeed = GoblinInfo.speed;
+    armor = GoblinInfo.armor(level);
     dopPriority = 30;
 
 
+    int seed = DateTime.now().microsecond;
     SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-atk1-no combo.png'
     ), srcSize: srcSize);
-    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-death.png'
     ), srcSize: srcSize);
-    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-idle.png'
     ), srcSize: srcSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-walk.png'
     ), srcSize: srcSize);
-    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-hurt.png'
     ), srcSize: srcSize);
-    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Enemy 2/enemy 2-atk1.png'
@@ -112,7 +114,6 @@ class Goblin extends KyrgyzEnemy
       times.add(0.05);
     }
     animAttack2 = SpriteAnimation.variableSpriteList(temp,stepTimes: times,loop: false);
-
     anchor = const Anchor(0.5,0.5);
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -123,7 +124,7 @@ class Goblin extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(
         _attack1ind2,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
-    weapon?.damage = 4;
+    weapon?.damage = GoblinInfo.damage(level);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
     FixtureDef fx = FixtureDef(PolygonShape()..set(_ground));

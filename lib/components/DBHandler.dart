@@ -30,6 +30,8 @@ class SavedGame
   double energy = 0;
   double level = 0;
   int gold = 0;
+  String? currentFlask1;
+  String? currentFlask2;
   List<String> currentInventar = [];
   Map<String,int> helmetInventar = {};
   Map<String,int> bodyArmorInventar = {};
@@ -126,6 +128,8 @@ class DbHandler
         ',health double NOT NULL DEFAULT 0'
         ',mana double NOT NULL DEFAULT 0'
         ',energy double NOT NULL DEFAULT 0'
+        ',current_flask1 TEXT'
+        ',current_flask2 TEXT'
         ',level double NOT NULL DEFAULT 1'
         ',gold INTEGER NOT NULL DEFAULT 0'
         ');');
@@ -209,33 +213,35 @@ class DbHandler
 
   Future saveGame(
       {required int saveId,
-      required double x,
-      required double y,
-      required String world,
-      required double health,
-      required double mana,
-      required double energy,
-      required double level,
-      required int gold,
-      required Item helmetDress,
-      required Item armorDress,
-      required Item glovesDress,
-      required Item swordDress,
-      required Item ringDress,
-      required Item bootsDress,
-      required Map<String, int> helmetInventar,
-      required Map<String, int> bodyArmorInventar,
-      required Map<String, int> glovesInventar,
-      required Map<String, int> bootsInventar,
-      required Map<String, int> flaskInventar,
-      required Map<String, int> itemInventar,
-      required Map<String, int> swordInventar,
-      required Map<String, int> ringInventar,
-      required List<TempEffect> tempEffects})async
+        required double x,
+        required double y,
+        required String world,
+        required double health,
+        required double mana,
+        required double energy,
+        required double level,
+        required int gold,
+        required Item helmetDress,
+        required Item armorDress,
+        required Item glovesDress,
+        required Item swordDress,
+        required Item ringDress,
+        required Item bootsDress,
+        required Map<String, int> helmetInventar,
+        required Map<String, int> bodyArmorInventar,
+        required Map<String, int> glovesInventar,
+        required Map<String, int> bootsInventar,
+        required Map<String, int> flaskInventar,
+        required Map<String, int> itemInventar,
+        required Map<String, int> swordInventar,
+        required Map<String, int> ringInventar,
+        String? currentFlask1,
+        String? currentFlask2,
+        required List<TempEffect> tempEffects})async
   {
     print('save games');
     await _database?.rawDelete('DELETE FROM player_data WHERE save_id = ?', [saveId]);
-    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold) VALUES(?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level, gold]);
+    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold,current_flask1,current_flask2) VALUES(?,?,?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level, gold,currentFlask1,currentFlask2]);
     await _database?.execute('DELETE FROM current_inventar WHERE save_id = ?', [saveId]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, helmetDress.id]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, armorDress.id]);
@@ -290,6 +296,8 @@ class DbHandler
     svGame.energy = res[0]['energy']! as double;
     svGame.level = res[0]['level']! as double;
     svGame.gold = res[0]['gold']! as int;
+    svGame.currentFlask1 = res[0]['current_flask1']?.toString();
+    svGame.currentFlask2 = res[0]['current_flask2']?.toString();
 
     res = await _database?.rawQuery('SELECT * FROM current_inventar where save_id = ?', [saveId]);
     if(res == null) return svGame;

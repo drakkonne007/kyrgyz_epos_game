@@ -5,6 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
@@ -126,7 +127,7 @@ class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>
     _grBox.createFixture(fx);
     _grBox.applyLinearImpulse(_speed / 4);
     add(_weapon);
-    _weapon.damage = 5;
+    _weapon.damage = ArrowInfo.damage(gameRef.playerData.playerLevel.value);
   }
 
   void obstacleBehavoiurStart(Set<Vector2> intersectionPoints, DCollisionEntity other)

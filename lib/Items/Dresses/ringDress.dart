@@ -72,7 +72,7 @@ class Ring1 extends Item
     cost = 100;
     armor = 0.01;
     manaCost = 10;
-    permanentDamage = 2;
+    permanentDamage = 3;
     secsOfPermDamage = 3;
     dressType = DressType.ring;
     magicDamage = MagicDamage.fire;
@@ -133,8 +133,8 @@ class Ring3 extends Item
     dressType = DressType.ring;
     magicDamage = MagicDamage.lightning;
     magicSpellVariant = MagicSpellVariant.circle;
-    permanentDamage = 2;
-    secsOfPermDamage = 1;
+    permanentDamage = 4;
+    secsOfPermDamage = 3;
   }
 
   @override
@@ -162,8 +162,8 @@ class Ring4 extends Item
     dressType = DressType.ring;
     magicDamage = MagicDamage.poison;
     magicSpellVariant = MagicSpellVariant.forward;
-    permanentDamage = 1;
-    secsOfPermDamage = 8;
+    permanentDamage = 2;
+    secsOfPermDamage = 5;
   }
 
   @override

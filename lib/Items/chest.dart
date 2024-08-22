@@ -89,7 +89,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     remove(_objectHitbox!);
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     for (final myItem in myItems) {
-      gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position));
+      gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.playerPosition()));
     }
     add(OpacityEffect.by(-1,EffectController(duration: animationTicker!.totalDuration() + 0.3),onComplete: (){
       if(isStatic) {

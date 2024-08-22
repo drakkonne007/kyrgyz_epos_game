@@ -117,7 +117,6 @@ abstract class PlayerWeapon extends DCollisionEntity
   bool inArmor = true;
   double energyCost = 0;
   double _coolDown = 1;
-  double currentCoolDown = 0;
   double latencyBefore = 0;
   final Map<EnemyHitbox,int> _myHitboxes= {};
   bool isMainPlayer = false;
@@ -125,7 +124,6 @@ abstract class PlayerWeapon extends DCollisionEntity
   set coolDown(double val)
   {
     _coolDown = val;
-    currentCoolDown = _coolDown;
   }
   double get coolDown => _coolDown;
 
@@ -136,7 +134,6 @@ abstract class PlayerWeapon extends DCollisionEntity
   {
     TimerComponent timer = TimerComponent(period: 60, repeat: true,onTick: cleanHash);
     add(timer);
-    currentCoolDown = coolDown;
   }
 
   void cleanHash()
@@ -171,8 +168,8 @@ abstract class PlayerWeapon extends DCollisionEntity
   Vector2 randomVector2() => (Vector2.random() - Vector2.random()) * 100;
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other) {
-
+  void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
+  {
     if (other is EnemyHitbox) {
       if (_myHitboxes.containsKey(other)) {
         if (DateTime.now().millisecondsSinceEpoch - _myHitboxes[other]! < coolDown * 1000) {
@@ -191,8 +188,9 @@ abstract class PlayerWeapon extends DCollisionEntity
           temp.wasHit = true;
         }
         if(damage != null){
+          double tempDamage = damage! + (damage! * game.playerData.playerLevel.value) / 4;
           if((damage! == 0 && magicDamage == null) || damage! > 0){
-            temp.doHurt(hurt: damage!, inArmor: inArmor);
+            temp.doHurt(hurt: tempDamage, inArmor: inArmor);
           }
         }
         // temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);
@@ -202,12 +200,15 @@ abstract class PlayerWeapon extends DCollisionEntity
         if (magicDamage != null && magicDamage != MagicDamage.none) {
           bool isSword = parent is MainPlayer;
           if(isSword){
-            if(game.playerData.mana.value < game.playerData.swordDress.value.manaCost){
-              return;
+            if(!game.gamePlayer().wasMagicSwordHit){
+              if(game.playerData.mana.value < game.playerData.swordDress.value.manaCost){
+                return;
+              }
+              game.playerData.addMana(-game.playerData.swordDress.value.manaCost);
+              game.gamePlayer().wasMagicSwordHit = true;
             }
-            game.playerData.addMana(-game.playerData.swordDress.value.manaCost);
           }
-          double damage = permanentDamage;
+          double damage = permanentDamage + (permanentDamage * game.playerData.playerLevel.value) / 4;
           if(magicDamage == MagicDamage.poison){
             damage *= temp.magicScalePoison;
           }else if(magicDamage == MagicDamage.fire){
@@ -230,16 +231,5 @@ abstract class PlayerWeapon extends DCollisionEntity
         }
       }
     }
-  }
-
-  @mustCallSuper
-  @override
-  void update(double dt)
-  {
-    // doDebug();
-    if(currentCoolDown < coolDown){
-      currentCoolDown += dt;
-    }
-    super.update(dt);
   }
 }

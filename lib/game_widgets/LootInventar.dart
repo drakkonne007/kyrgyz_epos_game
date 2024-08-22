@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
@@ -69,22 +68,36 @@ class _LootInvantarState extends State<LootInInventar>
 
   List<Widget> infoAboutChoosen()
   {
-    if(widget.game.currentItemInInventar.value == null){
-      return [];
-    }
     List<Widget> myList = [];
-    Item temp = widget.game.currentItemInInventar.value!;
-    double rowHeight = (widget.mySize.height - widget.mySize.height * 0.25 - 20) / 8 - 2;
+    double rowHeight = (widget.mySize.height - widget.mySize.height * 0.25 - 20) / 8.5 - 2;
     //min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 10 - getDoubleForTable() * 3)
     double rowWidth = -30 + min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 50 - getDoubleForTable() * 3);//-30 + widget.mySize.width * 0.62 - 10 - 40 - getDoubleForTable() * 3;
-    // rowWidth = min(rowWidth, widget.mySize.width * 0.25 - 30);
     myList.add(const SizedBox(height: 20));
+    myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
+    Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+        children:[
+          Expanded(
+            child: Image.asset('assets/images/inventar/gold.png', height: rowHeight,alignment: Alignment.centerRight,),),
+          Expanded(
+              child: SizedBox(
+                  child:AutoSizeText(widget.game.playerData.money.value.toString(),
+                    textAlign: TextAlign.left,
+                    style: defaultInventarTextStyleGood,
+                    minFontSize: 10,
+                    maxLines: 1,)))])
+    ));
+    if(widget.game.currentItemInInventar.value == null){
+      myList.add(const Spacer());
+      return myList;
+    }
+    Item temp = widget.game.currentItemInInventar.value!;
+    // rowWidth = min(rowWidth, widget.mySize.width * 0.25 - 30);
     myList.add(Image.asset('assets/' +  widget.game.currentItemInInventar.value!.source, height: widget.mySize.height * 0.25, width: rowWidth,fit: BoxFit.contain, alignment: Alignment.center,));
     myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
     Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
         children:[
-      Expanded(
-      child: Image.asset('assets/images/inventar/gold.png', height: rowHeight,alignment: Alignment.centerRight,),),
+          Expanded(
+            child: Image.asset('assets/images/inventar/gold.png', height: rowHeight,alignment: Alignment.centerRight,),),
           Expanded(
               child: SizedBox(
                   child:AutoSizeText(temp.cost.toString(),
@@ -115,15 +128,15 @@ class _LootInvantarState extends State<LootInInventar>
         Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-55.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
+                  fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
               ,Expanded(
-                child: SizedBox(
-                    child:AutoSizeText(temp.hp * secs > widget.game.playerData.maxHealth.value
-                  ? 'Full'
-                  : (temp.hp * secs).toStringAsFixed(1),style: defaultInventarTextStyle,
-                minFontSize: 10,
-                      textAlign: TextAlign.center,
-                maxLines: 1,)))
+                  child: SizedBox(
+                      child:AutoSizeText(temp.hp * secs > widget.game.playerData.maxHealth.value
+                          ? 'Full'
+                          : (temp.hp * secs).toStringAsFixed(1),style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
             ])));
       }
       if(temp.mana != 0) {
@@ -132,7 +145,7 @@ class _LootInvantarState extends State<LootInInventar>
         Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-56Mana.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
+                  fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
               ,Expanded(
                   child: SizedBox(
                       child:AutoSizeText(temp.mana * secs > widget.game.playerData.maxMana.value
@@ -149,17 +162,17 @@ class _LootInvantarState extends State<LootInInventar>
         Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-56.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
+                  fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
               ,
-            Expanded(
-                child: SizedBox(
-                    child:AutoSizeText(
-                temp.energy * secs > widget.game.playerData.maxEnergy.value
-                    ? 'Full'
-                    : (temp.energy * secs).toStringAsFixed(1),style: defaultInventarTextStyle,
-                minFontSize: 10,
-                      textAlign: TextAlign.center,
-                maxLines: 1,)))
+              Expanded(
+                  child: SizedBox(
+                      child:AutoSizeText(
+                        temp.energy * secs > widget.game.playerData.maxEnergy.value
+                            ? 'Full'
+                            : (temp.energy * secs).toStringAsFixed(1),style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
             ])));
       }
       myList.add(Container(constraints: BoxConstraints.expand(
@@ -169,14 +182,67 @@ class _LootInvantarState extends State<LootInInventar>
             Image.asset('assets/images/inventar/clock.png',
               fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
             ,Expanded(
-              child: SizedBox(
-                  child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
-              minFontSize: 10,
-                    textAlign: TextAlign.center,
-              maxLines: 1,)))
+                child: SizedBox(
+                    child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
+                      minFontSize: 10,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,)))
           ])));
       myList.add(const Spacer());
       if(temp.enabled) {
+        if(widget.game.playerData.flaskInventar.containsKey(temp.id)){
+          bool activeInventar = widget.game.playerData.currentFlask1.value == temp.id || widget.game.playerData.currentFlask2.value == temp.id;
+          if(activeInventar){
+            myList.add(Container(constraints: BoxConstraints.expand(
+                width: rowWidth, height: rowHeight), child:ElevatedButton(
+                style: ButtonStyle(maximumSize: WidgetStateProperty.all<Size>(Size(rowWidth,rowHeight))
+                  ,minimumSize: WidgetStateProperty.all<Size>(Size(rowWidth,rowHeight))
+                  ,padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),),
+                onPressed: () {
+                  setState(() {
+                    if(widget.game.playerData.currentFlask1.value == temp.id){
+                      widget.game.playerData.currentFlask1.value = null;
+                    }else{
+                      widget.game.playerData.currentFlask2.value = null;
+                    }
+                  });
+                },
+                child: const AutoSizeText('Убрать из кармана'))));
+          }else{
+            myList.add(Container(constraints: BoxConstraints.expand(
+                width: rowWidth, height: rowHeight), child:
+            Row(mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:
+                [
+                  ElevatedButton(
+                      style: ButtonStyle(maximumSize: WidgetStateProperty.all<Size>(Size(rowWidth/2,rowHeight))
+                        ,minimumSize: WidgetStateProperty.all<Size>(Size(rowWidth/2,rowHeight))
+                        ,padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),),
+                      onPressed: () {
+                        setState(() {
+                          widget.game.playerData.currentFlask1.value = temp.id;
+                        });
+                      },
+                      child: const AutoSizeText('В карман 1', minFontSize: 8,)),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        maximumSize: WidgetStateProperty.all<Size>(Size(rowWidth/2,rowHeight))
+                        ,minimumSize: WidgetStateProperty.all<Size>(Size(rowWidth/2,rowHeight)),
+                        padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          widget.game.playerData.currentFlask2.value = temp.id;
+                        });
+                      },
+                      child: const AutoSizeText('В карман 2', minFontSize: 8,))
+                ]
+            )));
+          }
+        }
+
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
         ElevatedButton(onPressed: () {
@@ -188,7 +254,7 @@ class _LootInvantarState extends State<LootInInventar>
             }
           });
         },
-            child: const Text('Использовать'))));
+            child: const AutoSizeText('Использовать'))));
       }
     }else{
       if(temp.hp != 0) {
@@ -241,12 +307,12 @@ class _LootInvantarState extends State<LootInInventar>
               Image.asset('assets/images/inventar/staminaInInventar.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight,)
               ,Expanded(
-                child: SizedBox(
-                    child:AutoSizeText(
-                temp.energy.toStringAsFixed(2), style: defaultInventarTextStyle,
-                minFontSize: 10,
-                      textAlign: TextAlign.center,
-                maxLines: 1,)))
+                  child: SizedBox(
+                      child:AutoSizeText(
+                        temp.energy.toStringAsFixed(2), style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
             ])));
       }
       if(temp.armor != 0) {
@@ -255,11 +321,11 @@ class _LootInvantarState extends State<LootInInventar>
             children: [
               Image.asset('assets/images/inventar/UI-9-sliced object-66Less.png',height: rowHeight,fit: BoxFit.contain, alignment: Alignment.centerLeft,)
               ,Expanded(
-                child: SizedBox(
-                    child:AutoSizeText(temp.armor.toStringAsFixed(2),style: defaultInventarTextStyle,
-                minFontSize: 10,
-                      textAlign: TextAlign.center,
-                maxLines: 1,)))])));
+                  child: SizedBox(
+                      child:AutoSizeText(temp.armor.toStringAsFixed(2),style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))])));
       }
       if(temp.damage != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
@@ -272,12 +338,12 @@ class _LootInvantarState extends State<LootInInventar>
                 'assets/images/inventar/UI-9-sliced object-65Less.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
               ,Expanded(
-                child: SizedBox(
-                    child:AutoSizeText(
-                temp.damage.toStringAsFixed(2), style: defaultInventarTextStyle,
-                minFontSize: 10,
-                      textAlign: TextAlign.center,
-                maxLines: 1,)))
+                  child: SizedBox(
+                      child:AutoSizeText(
+                        temp.damage.toStringAsFixed(2), style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
             ])));
       }
 
@@ -289,17 +355,17 @@ class _LootInvantarState extends State<LootInInventar>
               Image.asset('assets/${getMagicStateString(temp.magicDamage)}', fit: BoxFit.contain,height: rowHeight,
                 alignment: Alignment.centerLeft,)
               ,Expanded(
-                child: SizedBox(
-                    child: Stack(
-                      fit: StackFit.passthrough,
-                        children:[
-                          Image.asset(temp.magicSpellVariant == MagicSpellVariant.circle ? 'assets/images/inventar/aroundSpell.png'
-                              : 'assets/images/inventar/forwardSpell.png',height: rowHeight,
-                            fit: BoxFit.contain, alignment: Alignment.centerLeft,),
-                          AutoSizeText((temp.permanentDamage * temp.secsOfPermDamage).toStringAsFixed(1),style: defaultInventarTextStyle,
-                minFontSize: 10,
-                      textAlign: TextAlign.center,
-                maxLines: 1,)])))
+                  child: SizedBox(
+                      child: Stack(
+                          fit: StackFit.passthrough,
+                          children:[
+                            Image.asset(temp.magicSpellVariant == MagicSpellVariant.circle ? 'assets/images/inventar/aroundSpell.png'
+                                : 'assets/images/inventar/forwardSpell.png',height: rowHeight,
+                              fit: BoxFit.contain, alignment: Alignment.centerLeft,),
+                            AutoSizeText((temp.permanentDamage * temp.secsOfPermDamage).toStringAsFixed(1),style: defaultInventarTextStyle,
+                              minFontSize: 10,
+                              textAlign: TextAlign.center,
+                              maxLines: 1,)])))
             ])));
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight), child:
@@ -308,8 +374,8 @@ class _LootInvantarState extends State<LootInInventar>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/inventar/UI-9-sliced object-56Mana.png',
-                fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
+                  'assets/images/inventar/UI-9-sliced object-56Mana.png',
+                  fit: BoxFit.contain, alignment: Alignment.centerLeft,width: rowHeight)
               ,Expanded(
                   child: SizedBox(
                       child:AutoSizeText(
@@ -325,28 +391,12 @@ class _LootInvantarState extends State<LootInInventar>
               Image.asset('assets/images/inventar/clock.png',
                 fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
               ,Expanded(
-                child: SizedBox(
-                    child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
-                minFontSize: 10,
-                      textAlign: TextAlign.center,
-                maxLines: 1,)))
+                  child: SizedBox(
+                      child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
             ])));
-
-        // myList.add(Container(constraints: BoxConstraints.expand(
-        //     width: rowWidth, height: rowHeight), child:
-
-        // Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-        //     children: [
-        //       Image.asset('assets/images/inventar/clock.png',height: rowHeight,
-        //         fit: BoxFit.contain, alignment: Alignment.centerLeft,)
-        //       ,Expanded(
-        //           child: SizedBox(
-        //               child:AutoSizeText(temp.magicSpellVariant.name,style: defaultInventarTextStyle,
-        //                 minFontSize: 10,
-        //                 textAlign: TextAlign.center,
-        //                 maxLines: 1,)))
-        //     ])));
-
       }
       bool isEquip = false;
       switch(temp.dressType){
@@ -369,12 +419,16 @@ class _LootInvantarState extends State<LootInInventar>
       if(temp.enabled) {
         myList.add(Container(constraints: BoxConstraints.expand(
             width: rowWidth, height: rowHeight),
-            child: ElevatedButton(onPressed: () {
-              setState(() {
-                temp.getEffectFromInventar(
-                    widget.game);
-              });
-            }, child: Text(isEquip ? 'Снять' : 'Надеть'))));
+            child: ElevatedButton(
+                style: ButtonStyle(maximumSize: WidgetStateProperty.all<Size>(Size(rowWidth,rowHeight))
+                  ,minimumSize: WidgetStateProperty.all<Size>(Size(rowWidth,rowHeight))
+                  ,padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),),
+                onPressed: () {
+                  setState(() {
+                    temp.getEffectFromInventar(
+                        widget.game);
+                  });
+                }, child: AutoSizeText(isEquip ? 'Снять' : 'Надеть'))));
       }
     }
     myList.add(const SizedBox(height: 20,));
@@ -429,6 +483,8 @@ class _LootInvantarState extends State<LootInInventar>
                         }
                       },
                       style: defaultNoneButtonStyle.copyWith(
+                        maximumSize: WidgetStateProperty.all<Size>(const Size(20,60)),
+                        minimumSize: WidgetStateProperty.all<Size>(const Size(20,60)),
                         foregroundBuilder: ((context, state, child)
                         {
                           if(state.contains(WidgetState.focused)
@@ -455,6 +511,7 @@ class _LootInvantarState extends State<LootInInventar>
                         }
                       },
                       style: defaultNoneButtonStyle.copyWith(
+                        maximumSize: WidgetStateProperty.all<Size>(const Size(20,60)),
                         foregroundBuilder: ((context, state, child)
                         {
                           if(state.contains(WidgetState.focused)
@@ -527,14 +584,14 @@ class _LootInvantarState extends State<LootInInventar>
                               width: minSize,
                               height:minSize,
                               child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
                                     alignment: Alignment.center,
                                     height: minSize/4,
                                     margin: EdgeInsets.only(bottom: minSize / 20),
                                     child: AutoSizeText('x${hash[list[i]]!.toString()}',style: defaultInventarTextStyleGood.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
-                              )
-                          )),
+                                  )
+                              )),
 
                         ]
                     );
@@ -567,6 +624,7 @@ class _LootInvantarState extends State<LootInInventar>
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 5,),
           Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,

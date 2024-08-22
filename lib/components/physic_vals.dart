@@ -1,6 +1,7 @@
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
@@ -10,6 +11,19 @@ import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
 
 import 'package:game_flame/kyrgyz_game.dart';
+
+int getLevel(double experience)
+{
+  double startExp = 3000;
+  int count = 1;
+  while(experience > 0){
+    experience -= startExp;
+    startExp = startExp + startExp * 1.1;
+    count++;
+  }
+  return count;
+}
+
 
 class MetaDataForNewItem
 {
@@ -130,14 +144,14 @@ class PlayerData
     answer.maxHealth =
         armor.hp + helmet.hp + gloves.hp +
             sword.hp + ring.hp + boots.hp +
-            _beginHealth + (_beginHealth * playerLevel.value) / 100;
+            _beginHealth + (_beginHealth * playerLevel.value) / 4;
     answer.maxMana = armor.mana + helmet.mana + gloves.mana +
         sword.mana + ring.mana + boots.mana +
-        _beginMana + (_beginMana * playerLevel.value) / 100;
+        _beginMana + (_beginMana * playerLevel.value) / 4;
     answer.maxEnergy = armor.energy + helmet.energy +
         gloves.energy + sword.energy +
         ring.energy + boots.energy + _beginEnergy +
-        (_beginEnergy * playerLevel.value) / 100;
+        (_beginEnergy * playerLevel.value) / 4;
     answer.armor = armor.armor + helmet.armor +
         gloves.armor + sword.armor +
         ring.armor + boots.armor + extraArmor.value;
@@ -173,9 +187,9 @@ class PlayerData
     double procentOfHealth = health.value / maxHealth.value;
     double procentOfMana = mana.value / maxMana.value;
     double procentOfEnergy = energy.value / maxEnergy.value;
-    maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / 100;
-    maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / 100;
-    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / 100;
+    maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / 4;
+    maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / 4;
+    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / 4;
     armor.value = armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
     chanceOfLoot.value = armorDress.value.chanceOfLoot + helmetDress.value.chanceOfLoot + glovesDress.value.chanceOfLoot + swordDress.value.chanceOfLoot + ringDress.value.chanceOfLoot + bootsDress.value.chanceOfLoot + extraChanceOfLoot.value;
     hurtMiss.value = armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;
@@ -188,6 +202,19 @@ class PlayerData
     mana.value = procentOfMana * maxMana.value;
     energy.value = procentOfEnergy * maxEnergy.value;
     statChangeTrigger.notifyListeners();
+  }
+
+  void addLevel(double level)
+  {
+    experience.value += level;
+    int tempLevel = getLevel(experience.value);
+    if(playerLevel.value != tempLevel){
+      health.value = maxHealth.value;
+      mana.value = maxMana.value;
+      energy.value = maxEnergy.value;
+      playerLevel.value = tempLevel;
+      _recalcAfterChangeDress();
+    }
   }
 
   void addEnergy(double val, {bool extra = false, bool full = false})
@@ -243,7 +270,8 @@ class PlayerData
 
 
   final ValueNotifier<int> statChangeTrigger = ValueNotifier<int>(0);
-  final ValueNotifier<double> playerLevel = ValueNotifier<double>(1);
+  final ValueNotifier<int> playerLevel = ValueNotifier<int>(1);
+  final ValueNotifier<double> experience = ValueNotifier<double>(0);
   final ValueNotifier<double> playerMagicLevel = ValueNotifier<double>(1);
   final ValueNotifier<double> health = ValueNotifier<double>(0);
   final ValueNotifier<double> mana = ValueNotifier<double>(0);
@@ -320,6 +348,9 @@ class PlayerData
   Set<String> killedBosses = {};
   ValueNotifier<int> money = ValueNotifier<int>(0);
 
+  ValueNotifier<String?> currentFlask1 = ValueNotifier<String?>(null);
+  ValueNotifier<String?> currentFlask2 = ValueNotifier<String?>(null);
+
   Map<String,int> helmetInventar = {};
   Map<String,int> bodyArmorInventar = {};
   Map<String,int> glovesInventar = {};
@@ -369,6 +400,10 @@ class PlayerData
     swordDress.value = NullItem();
     ringDress.value = NullItem();
     bootsDress.value = NullItem();
+
+    currentFlask1.value = svg.currentFlask1;
+    currentFlask2.value = svg.currentFlask2;
+
     for(final cur in svg.currentInventar){
       Item it = itemFromName(cur);
       switch(it.dressType){
@@ -393,7 +428,8 @@ class PlayerData
     health.value = svg.health;
     mana.value = svg.mana;
     energy.value = svg.energy;
-    playerLevel.value = svg.level;
+    experience.value = svg.level;
+    playerLevel.value = getLevel(experience.value);
     playerBigMap =  getWorldFromName(svg.world);
     startLocation = Vector2(svg.x, svg.y);
 
@@ -418,7 +454,7 @@ class PlayerData
 class PhysicVals
 {
   static const double physicScale = 0.1;
-  static double maxSpeed = 80;
+  static double maxSpeed = 60;
   static double startSpeed = 200;
   static const double runCoef = 1.3;
   static double runMinimum = 1;

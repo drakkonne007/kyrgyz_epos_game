@@ -8,6 +8,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
@@ -88,7 +89,7 @@ final List<Vector2> hitBoxPoint = [
 class Moose extends KyrgyzEnemy
 {
 
-  Moose(this._startPos, this._mooseVariant,int id){this.id = id;}
+  Moose(this._startPos, this._mooseVariant,{required super.id, required super.level});
   final Vector2 _startPos;
   final MooseVariant _mooseVariant;
   final Vector2 _spriteSheetSize = Vector2(347,192);
@@ -102,8 +103,9 @@ class Moose extends KyrgyzEnemy
     distPlayerLength = 10000;
     maxLoots = 2;
     chanceOfLoot = 0.08;
-    health = 20;
-    maxSpeed = 50;
+    health = MooseInfo.health(level);
+    maxSpeed = MooseInfo.speed;
+    armor = MooseInfo.armor(level);
     Image? spriteImage;
     int randMy = math.Random().nextInt(5);
     // switch(_mooseVariant){
@@ -123,24 +125,25 @@ class Moose extends KyrgyzEnemy
       case 4: spriteImage = await Flame.images.load('tiles/sprites/players/moose6-347x192.png'); break;
       default: spriteImage = await Flame.images.load('tiles/sprites/players/moose1-347x192.png'); break;
     }
-      final spriteSheet = SpriteSheet(image: spriteImage,
-          srcSize: _spriteSheetSize);
-      animIdle =
-          spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
-      animMove =
-          spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
-      animAttack = spriteSheet.createAnimation(
-          row: 2, stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
-      animHurt = spriteSheet.createAnimation(row: 3,
-          stepTime: 0.06 + math.Random().nextDouble() / 40 - 0.0125,
-          from: 0,
-          to: 6,
-          loop: false);
-      animDeath = spriteSheet.createAnimation(row: 4,
-          stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125,
-          from: 0,
-          to: 15,
-          loop: false);
+    int seed = DateTime.now().microsecond;
+    final spriteSheet = SpriteSheet(image: spriteImage,
+        srcSize: _spriteSheetSize);
+    animIdle =
+        spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
+    animMove =
+        spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
+    animAttack = spriteSheet.createAnimation(
+        row: 2, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 3,
+        stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125,
+        from: 0,
+        to: 6,
+        loop: false);
+    animDeath = spriteSheet.createAnimation(row: 4,
+        stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125,
+        from: 0,
+        to: 15,
+        loop: false);
     position = _startPos;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;
@@ -163,7 +166,7 @@ class Moose extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(ind1, collisionType: DCollisionType.inactive, isSolid: false, isStatic: false
         , onStartWeaponHit: null, onEndWeaponHit: null, isLoop: true, game: game);
     add(weapon!);
-    weapon!.damage = 3;
+    weapon!.damage = MooseInfo.damage(level);
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();

@@ -6,6 +6,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
+import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
@@ -51,9 +52,8 @@ final List<Vector2> _attack1ind12 = [ //17 всё
 
 class Pot extends KyrgyzEnemy
 {
-  Pot(this._startPos,int id,{this.isHigh = false}){this.id = id; super.isHigh = isHigh;}
+  Pot(this._startPos,{required super.id, required super.level, super.isHigh});
   final Vector2 _startPos;
-  bool isHigh;
   final double dist = 350 * 350;
   final Vector2 srcSize = Vector2(160,128);
   late SpriteAnimation animRevealing;
@@ -68,9 +68,10 @@ class Pot extends KyrgyzEnemy
     dopPriority = 30;
     maxLoots = 2;
     chanceOfLoot = 0.12;
-    health = 15;
+    health = PotInfo.health(level);
+    armor = PotInfo.armor(level);
     anchor = Anchor.center;
-    maxSpeed = 35;
+    maxSpeed = PotInfo.speed;
     if(isHigh){
       priority = GamePriority.high + 1;
     }
@@ -78,40 +79,41 @@ class Pot extends KyrgyzEnemy
     SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-atk1.png'
     ), srcSize: srcSize);
-    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    int seed = DateTime.now().microsecond;
+    animAttack = spriteSheet.createAnimation(row: 0, stepTime: 0.05 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-death.png'
     ), srcSize: srcSize);
-    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animDeath = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-idle.png'
     ), srcSize: srcSize);
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-walk.png'
     ), srcSize: srcSize);
-    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animMove = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-hurt.png'
     ), srcSize: srcSize);
-    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-atk2.png'
     ), srcSize: srcSize);
-    animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.05 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.05 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Pot Creature/Pot Creature-revealing itself.png'
     ), srcSize: srcSize);
-    animRevealing = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0, loop: false);
+    animRevealing = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     wakeUp = isHigh;
-    animation = isHigh ? animIdle : spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random().nextDouble() / 40 - 0.0125, from: 0,to: 1, loop: false);
+    animation = isHigh ? animIdle : spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0,to: 1, loop: false);
     position = _startPos;
     hitBox = EnemyHitbox(_hitBoxPoints,
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
@@ -128,7 +130,7 @@ class Pot extends KyrgyzEnemy
     weapon = DefaultEnemyWeapon(
         _attack1ind12,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
-    weapon?.damage = 2;
+    weapon?.damage = PotInfo.damage(level);
     super.onLoad();
   }
 
@@ -365,7 +367,7 @@ class PotSplash extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _weapon = DefaultEnemyWeapon(
         _weapons,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
-    _weapon.damage = 4;
+    _weapon.damage = PotBubbleInfo.damage(gameRef.playerData.playerLevel.value);
     _weapon.inArmor = false;
   }
 

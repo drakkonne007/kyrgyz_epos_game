@@ -9,6 +9,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/players/ortho_player.dart';
 import 'package:game_flame/weapon/fireBall.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -44,21 +45,13 @@ final List<Vector2> _attack2ind2 = [
   Vector2(20,2),
 ];
 
-class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>,ContactCallbacks implements MainPlayer
+class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>,ContactCallbacks, MainPlayer
 {
   FrontPlayer({required this.startPos});
-  final double _spriteSheetWidth = 144, _spriteSheetHeight = 96;
-  late SpriteAnimation animMove, animIdle, animHurt, animDeath, _animShort,_animLong;
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
-  PlayerHitbox? hitBox;
   Vector2 startPos;
   PlayerWeapon? _weapon;
-  bool gameHide = false;
-  bool _isLongAttack = false;
-  bool _isMinusEnergy = false;
-  bool _isRun = false;
-  Ground? groundRigidBody;
   double dumping = 8;
   bool _onGround = false;
   int _groundCount = 0;
@@ -68,16 +61,32 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     Image? spriteImg;
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
-    final spriteSheet = SpriteSheet(image: spriteImg, srcSize: Vector2(_spriteSheetWidth,_spriteSheetHeight));
+    spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96New.png');
+    final spriteSheet = SpriteSheet(image: spriteImg, srcSize: sprSize);
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
-    _animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.06, from: 0,to: 11,loop: false);
-    _animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false);
+    animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11,loop: false); // 11
+    animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
+    List<Sprite> sprites = [];
+    List<double> times = [0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,];
+    sprites.add(spriteSheet.getSprite(7,0));
+    sprites.add(spriteSheet.getSprite(7,1));
+    sprites.add(spriteSheet.getSprite(7,2));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,3));
+    sprites.add(spriteSheet.getSprite(7,2));
+    sprites.add(spriteSheet.getSprite(7,1));
+    sprites.add(spriteSheet.getSprite(7,0));
+    animShield = SpriteAnimation.variableSpriteList(sprites, stepTimes: times, loop: false);
+    animSlide = spriteSheet.createAnimation(row: 8, stepTime: 0.08, from: 0,to: 6,loop: false);
     animation = animIdle;
-    size = Vector2(_spriteSheetWidth, _spriteSheetHeight);
-    anchor = const Anchor(0.5, 0.5);
+    animState = AnimationState.idle;
+    anchor = Anchor.center;
     Vector2 tPos = -Vector2(15,20);
     Vector2 tSize = Vector2(22,45);
     hitBox = PlayerHitbox(getPointsForActivs(tPos,tSize),
@@ -104,8 +113,8 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon?.permanentDamage = gameRef.playerData.permanentDamage.value;
     _weapon?.secsOfPermDamage = gameRef.playerData.secsOfPermanentDamage.value;
     _weapon?.damage = gameRef.playerData.damage.value;
-    _animShort.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
-    _animLong.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
+    animShort!.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
+    animLong!.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
 
   void setGroundBody()
@@ -197,18 +206,19 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     // }
   }
 
+  @override
   void startHit(bool isLong)
   {
     if(animation != animIdle && animation != animMove){
       return;
     }
-    _weapon?.energyCost = _isLongAttack ? SpriteAnimationTicker(_animLong).totalDuration() * 2.6 : SpriteAnimationTicker(_animShort).totalDuration() * 2.6;
+    _weapon?.energyCost = isLongAttack ? SpriteAnimationTicker(animLong!).totalDuration() * 2.6 : SpriteAnimationTicker(animShort!).totalDuration() * 2.6;
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
     game.playerData.energy.value -= _weapon!.energyCost;
-    _isLongAttack = isLong;
-    animation = _isLongAttack ? _animLong : _animShort;
+    isLongAttack = isLong;
+    animation = isLongAttack ? animLong : animShort;
     _velocity.x = 0;
     _speed.x = 0;
     _speed.y = 0;
@@ -222,7 +232,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void onFrameWeapon(int index)
   {
-    if(_isLongAttack){
+    if(isLongAttack){
       if(index == 6){
         _weapon?.collisionType = DCollisionType.active;
         _weapon?.changeVertices(_attack2ind1,isLoop: true);
@@ -266,9 +276,9 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
-      _isRun = true;
+      isRun = true;
     } else {
-      _isRun = false;
+      isRun = false;
     }
     // angle += math.pi/2;
     PlayerDirectionMove dir = PlayerDirectionMove.NoMove;
@@ -355,9 +365,6 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       position=Vector2(0,0);
     }
     Vector2 velo = Vector2.zero();
-    if(keysPressed.contains(LogicalKeyboardKey.keyE)){
-      gameRef.gameMap.add(GrassGolem(position,GolemVariant.Water,-1));
-    }
     if(keysPressed.contains(LogicalKeyboardKey.arrowUp) || keysPressed.contains(const LogicalKeyboardKey(0x00000057)) || keysPressed.contains(const LogicalKeyboardKey(0x00000077))) {
       velo.y = -PhysicVals.startSpeed;
     }
@@ -398,7 +405,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     priority = pos;
     super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
-      _isMinusEnergy = false;
+      isMinusEnergy = false;
     }
     if(animation != animMove){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);
@@ -406,9 +413,9 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     bool isReallyRun = false;
-    if(_isRun && !_isMinusEnergy){
+    if(isRun && !isMinusEnergy){
       if(gameRef.playerData.energy.value <= 0){
-        _isMinusEnergy = true;
+        isMinusEnergy = true;
         animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
       }else{
         animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
