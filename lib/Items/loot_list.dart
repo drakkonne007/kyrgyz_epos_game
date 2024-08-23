@@ -12,10 +12,10 @@ class NullItem extends Item
 
 class Gold extends Item
 {
-  Gold()
+  Gold(int newCost)
   {
     id = 'gold';
-    cost = 10;
+    cost = newCost;
     enabled = true;
     source = 'images/inventar/item/61.png';
   }

@@ -9,6 +9,7 @@ import 'package:game_flame/Items/Dresses/swordDress.dart';
 import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'dart:math' as math;
 
 enum DressType
 {
@@ -58,6 +59,26 @@ enum InventarType
   item,
 }
 
+Item itemFromLevel(int level)
+{
+  int rand = math.Random().nextInt(20);
+  switch(rand){
+    case 0:return HpSmall();
+    case 1:return HpMedium();
+    case 2:return HpBig();
+    case 3:return HpFull();
+    case 4:return EnergySmall();
+    case 5:return EnergyMedium();
+    case 6:return EnergyBig();
+    case 7:return EnergyFull();
+    case 8:return ManaSmall();
+    case 9:return ManaMedium();
+    case 10:return ManaBig();
+    case 11:return ManaFull();
+    default: return Gold(level * 5);
+  }
+}
+
 Item itemFromName(String id)
 {
   if(id.startsWith('sword')){
@@ -78,6 +99,9 @@ Item itemFromName(String id)
   if(id.startsWith('gloves')){
     return getGloves(int.parse(id.split('gloves')[1]));
   }
+  if(id.startsWith('gold')){
+    return Gold(int.parse(id.split('gold')[1]));
+  }
   switch(id){
     case 'keyForChestOfGlory': return KeyForChestOfGlory();
     case 'hpSmall':   return HpSmall();
@@ -92,7 +116,6 @@ Item itemFromName(String id)
     case 'manaMedium': return ManaMedium();
     case 'manaBig': return ManaBig();
     case 'manaFull': return ManaFull();
-    case 'gold': return Gold();
     default: return NullItem();
   }
 }

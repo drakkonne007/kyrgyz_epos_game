@@ -78,7 +78,7 @@ class Skeleton extends KyrgyzEnemy
     distPlayerLength = 65 * 65;
     shiftAroundAnchorsForHit = 50;
     maxLoots = 2;
-    chanceOfLoot = 0.07;
+    chanceOfLoot = 0.3;
     health = SkeletInfo.health(level);
     maxSpeed = SkeletInfo.speed;
     armor = SkeletInfo.armor(level);

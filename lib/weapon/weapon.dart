@@ -208,7 +208,7 @@ abstract class PlayerWeapon extends DCollisionEntity
               game.gamePlayer().wasMagicSwordHit = true;
             }
           }
-          double damage = permanentDamage + (permanentDamage * game.playerData.playerLevel.value) / 4;
+          double damage = permanentDamage;
           if(magicDamage == MagicDamage.poison){
             damage *= temp.magicScalePoison;
           }else if(magicDamage == MagicDamage.fire){

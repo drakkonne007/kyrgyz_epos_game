@@ -77,7 +77,7 @@ class PlayerStats extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     double newWidth = min((size.width / 3 - 25) / 3, (size.height - 61) / 6);
-    double newStrokeHeight = (size.height - newWidth * 2 - 25 - 40) / 6.5;
+    double newStrokeHeight = (size.height - newWidth * 2 - 25 - 40) / 6.8;
     return
       ValueListenableBuilder(
           valueListenable: game.currentItemInInventar, builder: (context, value, __)

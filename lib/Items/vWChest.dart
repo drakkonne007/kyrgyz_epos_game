@@ -38,7 +38,7 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
   bool isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
-  List<String> myItems;
+  List<Item> myItems;
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
@@ -115,7 +115,7 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
         removeOnFinish: true,
         onTick: (){
           for (final myItem in myItems) {
-            gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.playerPosition()));
+            gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.playerPosition()));
           }
         }
     );

@@ -23,18 +23,18 @@ List<GameWorldData> fullMaps()
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
-  // list.add(TestMap());
-  // list.add(TopLeftVillage());
+  list.add(TestMap());
+  list.add(TopLeftVillage());
   list.add(BigTopLeft());
-  // list.addAll(getVillages());
-  // list.add(TopLeftTempleDungeon());
-  // list.add(TampleDungeon());
-  // list.add(TampleDungeon2Floor());
-  // list.add(CaveUnderRiver());
-  // list.add(CaveUnderRiver2());
-  // list.add(CaveUnderRiver3());
-  // list.add(CaveUnderRiver4());
-  // list.add(UnderTampleRoom());
+  list.addAll(getVillages());
+  list.add(TopLeftTempleDungeon());
+  list.add(TampleDungeon());
+  list.add(TampleDungeon2Floor());
+  list.add(CaveUnderRiver());
+  list.add(CaveUnderRiver2());
+  list.add(CaveUnderRiver3());
+  list.add(CaveUnderRiver4());
+  list.add(UnderTampleRoom());
   return list;
 }
 

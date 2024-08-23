@@ -67,7 +67,7 @@ class Pot extends KyrgyzEnemy
   {
     dopPriority = 30;
     maxLoots = 2;
-    chanceOfLoot = 0.12;
+    chanceOfLoot = 0.3;
     health = PotInfo.health(level);
     armor = PotInfo.armor(level);
     anchor = Anchor.center;

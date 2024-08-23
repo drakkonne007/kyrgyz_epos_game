@@ -74,7 +74,7 @@ class Ogr extends KyrgyzEnemy
     shiftAroundAnchorsForHit = 60;
     distPlayerLength = 70 * 70;
     maxLoots = 3;
-    chanceOfLoot = 0.02;
+    chanceOfLoot = 0.3;
     health = OgrInfo.health(level);
     maxSpeed = OgrInfo.speed;
     armor = OgrInfo.armor(level);

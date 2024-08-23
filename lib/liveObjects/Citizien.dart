@@ -12,17 +12,17 @@ import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/liveObjects/mini_creatures/npcDialogAttention.dart';
 
 final List<Vector2> _grPoints = [
-  Vector2(-5.4813,14.0557) * PhysicVals.physicScale
-  ,Vector2(-6.58885,31.3151) * PhysicVals.physicScale
-  ,Vector2(7.25555,31.2228) * PhysicVals.physicScale
-  ,Vector2(4.94815,14.0557) * PhysicVals.physicScale
+  Vector2(-5.4813,14.0557) * PhysicVals.physicScale * 1.2
+  ,Vector2(-6.58885,31.3151) * PhysicVals.physicScale * 1.2
+  ,Vector2(7.25555,31.2228) * PhysicVals.physicScale * 1.2
+  ,Vector2(4.94815,14.0557) * PhysicVals.physicScale * 1.2
   ,];
 
 final List<Vector2> _objPoints = [
-  Vector2(-25.6811,8.52515)
-  ,Vector2(24.5701,8.25498)
-  ,Vector2(24.8402,-18.7321)
-  ,Vector2(-27.3021,-18.4619)
+  Vector2(-25.6811,8.52515) * 1.2
+  ,Vector2(24.5701,8.25498) * 1.2
+  ,Vector2(24.8402,-18.7321) * 1.2
+  ,Vector2(-27.3021,-18.4619) * 1.2
   ,];
 
 class Citizien extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>

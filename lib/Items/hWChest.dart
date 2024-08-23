@@ -40,7 +40,7 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
   bool isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
-  List<String> myItems;
+  List<Item> myItems;
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
@@ -117,7 +117,7 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
     removeOnFinish: true,
       onTick: (){
         for (final myItem in myItems) {
-          gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.playerPosition()));
+          gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.playerPosition()));
         }
       }
     );

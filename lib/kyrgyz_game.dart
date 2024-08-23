@@ -167,7 +167,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     }
     await dbHandler.openDb();
     // await dbHandler.dropAllTables();
-    await dbHandler.createTable(); //TODO разобраться почему автоматом не создаётся
+    await dbHandler.createTable(); //TODO создаёт, но если удалишь кэш с телефона
     maxPolygonVertices = 20;
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
@@ -200,9 +200,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         x: 1750,
         y: 3000,
         world: 'topLeftVillage',
-        health: 150,
-        mana: 150,
-        energy: 150,
+        health: 100,
+        mana: 50,
+        energy: 50,
         level: 0,
         gold: 2000,
         helmetDress: Helmet1(),
@@ -229,7 +229,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
           'manaBig': 10,
           'manaFull': 10},
         itemInventar: {},
-        swordInventar: {'sword1': 1, 'sword36': 1, 'sword19': 1,'sword48': 1},
+        swordInventar: {'sword1': 1, 'sword2': 1, 'sword3': 1,'sword4': 1,'sword5': 1,'sword6': 1,'sword7': 1,'sword8': 1,'sword9': 1},
         ringInventar: {'ring1' : 1, 'ring2' : 1, 'ring3' : 1, 'ring4' : 1, 'ring5' : 1},
         tempEffects: [],
       );

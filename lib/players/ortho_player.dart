@@ -174,8 +174,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
       if(animState == AnimationState.shield){
-        if(gameRef.playerData.energy.value > hurt * 1.5){
-          gameRef.playerData.addEnergy(-hurt*1.5);
+        if(gameRef.playerData.energy.value > hurt / 2){
+          gameRef.playerData.addEnergy(-hurt / 2);
           if(enableShieldLock) {
             enableShieldLock = false;
             gameRef.gameMap.container.add(
@@ -186,8 +186,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
           }
           return;
         }else{
-          var temp = hurt - (gameRef.playerData.energy.value / 2);
-          gameRef.playerData.addEnergy(-hurt*1.5);
+          var temp = hurt - (gameRef.playerData.energy.value * 2);
+          gameRef.playerData.addEnergy(-hurt / 2);
           hurt = temp;
         }
         hurt -= gameRef.playerData.armor.value;

@@ -42,7 +42,7 @@ class SkeletonMage extends KyrgyzEnemy
   {
     dopPriority = 38;
     maxLoots = 2;
-    chanceOfLoot = 0.12;
+    chanceOfLoot = 0.3;
     health = SkeletMageInfo.health(level);
     anchor = const Anchor(115/220,0.5);
     maxSpeed = SkeletMageInfo.speed;

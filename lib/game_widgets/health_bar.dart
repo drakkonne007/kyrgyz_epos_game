@@ -11,20 +11,8 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class HealthBar extends StatelessWidget
 {
-  HealthBar(this.game, {Key? key}) : super(key: key);
+  const HealthBar(this.game, {Key? key}) : super(key: key);
   final KyrgyzGame game;
-  double _firstHp = 0;
-
-  bool isHurt(double val){
-    bool isLower = val < _firstHp;
-    _firstHp = val;
-    if(val > 5 && isLower){
-      Future.delayed(const Duration(milliseconds: 500),(){
-        game.playerData.health.notifyListeners();
-      });
-    }
-    return isLower;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +28,19 @@ class HealthBar extends StatelessWidget
                     children:
                       [
                         ValueListenableBuilder(
-                            valueListenable: game.playerData.health,
-                            builder: (_,val,__) =>
+                            valueListenable: game.playerData.hurtMainPlayerChanger,
+                            builder: (_,val12,__) =>
                                 ShakeWidget(
                                     shakeConstant: ShakeDefaultConstant2(),
-                                    autoPlay: isHurt(val),
+                                    autoPlay: val12 != 0,
                                     child: SizedBox(
                                       width: 42,
                                       height: 42,
                                       child: GestureDetector(
                                         onTap: game.doInventoryHud,
-                                        child: Stack(
+                                        child: ValueListenableBuilder(
+                                          valueListenable: game.playerData.health,
+                                          builder: (_,val,__) => Stack(
                                             fit: StackFit.passthrough,
                                             children:[
                                               CustomPaint(
@@ -61,7 +51,9 @@ class HealthBar extends StatelessWidget
                                             ]
                                         ),
                                       ),))
+                        )
                         ),
+                        const SizedBox(width: 15,),
                         Container(
                           width: 42,
                           height: 42,
@@ -76,13 +68,10 @@ class HealthBar extends StatelessWidget
                   ValueListenableBuilder(
                       valueListenable: game.playerData.mana,
                       builder: (_,val,__) =>
-                          ShakeWidget(
-                              shakeConstant: ShakeDefaultConstant2(),
-                              autoPlay: isHurt(val),
-                              child: SizedBox(
-                                width: 42,
-                                height: 42,
-                                child: GestureDetector(
+                          SizedBox(
+                            width: 42,
+                            height: 42,
+                            child:GestureDetector(
                                   onTap: game.doInventoryHud,
                                   child: Stack(
                                       fit: StackFit.passthrough,
@@ -94,16 +83,13 @@ class HealthBar extends StatelessWidget
                                             child: Image.asset('assets/images/inventar/manaForGui.png', width: 32, height: 32, alignment: Alignment.center,)),
                                       ]
                                   ),
-                                ),))
+                                ),)
                   ),
                   const SizedBox(height: 15,),
                   ValueListenableBuilder(
                       valueListenable: game.playerData.energy,
                       builder: (_,val,__) =>
-                          ShakeWidget(
-                            shakeConstant: ShakeDefaultConstant2(),
-                            autoPlay: false,
-                            child: SizedBox(
+                          SizedBox(
                                 width: 42,
                                 height: 42,
                                 child: GestureDetector(
@@ -119,7 +105,6 @@ class HealthBar extends StatelessWidget
                                 )
                               // child:
                             )),
-                          ),
                   ),
 
                 ]

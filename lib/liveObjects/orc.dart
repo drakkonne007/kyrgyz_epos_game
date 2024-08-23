@@ -116,7 +116,7 @@ class OrcWarrior extends KyrgyzEnemy
     distPlayerLength = 93 * 93;
     shiftAroundAnchorsForHit = 80;
     maxLoots = 2;
-    chanceOfLoot = 0.09;
+    chanceOfLoot = 0.3;
     health = OrcInfo.health(level);
     maxSpeed = OrcInfo.speed;
     armor = OrcInfo.armor(level);

@@ -102,7 +102,7 @@ class Moose extends KyrgyzEnemy
     shiftAroundAnchorsForHit = 100;
     distPlayerLength = 10000;
     maxLoots = 2;
-    chanceOfLoot = 0.08;
+    chanceOfLoot = 0.3;
     health = MooseInfo.health(level);
     maxSpeed = MooseInfo.speed;
     armor = MooseInfo.armor(level);

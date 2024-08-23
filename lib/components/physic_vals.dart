@@ -14,7 +14,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 int getLevel(double experience)
 {
-  double startExp = 3000;
+  double startExp = 6000;
   int count = 1;
   while(experience > 0){
     experience -= startExp;
@@ -86,6 +86,7 @@ class GameConsts
 
 class PlayerData
 {
+  final _statScale = 3;
 
   PlayerData(this._game)
   {
@@ -144,14 +145,14 @@ class PlayerData
     answer.maxHealth =
         armor.hp + helmet.hp + gloves.hp +
             sword.hp + ring.hp + boots.hp +
-            _beginHealth + (_beginHealth * playerLevel.value) / 4;
+            _beginHealth + (_beginHealth * playerLevel.value) / _statScale;
     answer.maxMana = armor.mana + helmet.mana + gloves.mana +
         sword.mana + ring.mana + boots.mana +
-        _beginMana + (_beginMana * playerLevel.value) / 4;
+        _beginMana + (_beginMana * playerLevel.value) / _statScale;
     answer.maxEnergy = armor.energy + helmet.energy +
         gloves.energy + sword.energy +
         ring.energy + boots.energy + _beginEnergy +
-        (_beginEnergy * playerLevel.value) / 4;
+        (_beginEnergy * playerLevel.value) / _statScale;
     answer.armor = armor.armor + helmet.armor +
         gloves.armor + sword.armor +
         ring.armor + boots.armor + extraArmor.value;
@@ -187,9 +188,9 @@ class PlayerData
     double procentOfHealth = health.value / maxHealth.value;
     double procentOfMana = mana.value / maxMana.value;
     double procentOfEnergy = energy.value / maxEnergy.value;
-    maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / 4;
-    maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / 4;
-    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / 4;
+    maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / _statScale;
+    maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / _statScale;
+    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / _statScale;
     armor.value = armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
     chanceOfLoot.value = armorDress.value.chanceOfLoot + helmetDress.value.chanceOfLoot + glovesDress.value.chanceOfLoot + swordDress.value.chanceOfLoot + ringDress.value.chanceOfLoot + bootsDress.value.chanceOfLoot + extraChanceOfLoot.value;
     hurtMiss.value = armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;
@@ -265,10 +266,17 @@ class PlayerData
     }else if(val < 0){
       health.value += val;
     }
+    if(val < 0){
+      hurtMainPlayerChanger.value++;
+      _game.gameMap.add(TimerComponent(period: 1, removeOnFinish: true, onTick: (){
+        hurtMainPlayerChanger.value--;
+      }));
+    }
     health.value = math.max(0, health.value);
   }
 
 
+  final ValueNotifier<int> hurtMainPlayerChanger = ValueNotifier<int>(0);
   final ValueNotifier<int> statChangeTrigger = ValueNotifier<int>(0);
   final ValueNotifier<int> playerLevel = ValueNotifier<int>(1);
   final ValueNotifier<double> experience = ValueNotifier<double>(0);
@@ -290,9 +298,9 @@ class PlayerData
   final ValueNotifier<double> extraDamage = ValueNotifier<double>(0);
   final ValueNotifier<double> extraChanceOfLoot = ValueNotifier<double>(0);
   final ValueNotifier<double> extraAttackSpeed = ValueNotifier<double>(0);
-  final double _beginEnergy = 100;
+  final double _beginEnergy = 50;
   final double _beginHealth = 100;
-  final double _beginMana = 100;
+  final double _beginMana = 50;
   final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
   final ValueNotifier<double> maxMana = ValueNotifier<double>(0);
   final ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);

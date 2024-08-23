@@ -4,11 +4,9 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
-import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/RenderText.dart';
-import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
@@ -31,7 +29,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   final String _noNeededKilledBoss = 'Сначала победите хозяина';
 
   Set<String>? neededItems;
-  List<String> myItems;
+  List<Item> myItems;
   final int _level;
   final Vector2 _spriteSheetSize = Vector2(64,64);
   late Image _spriteImg;
@@ -89,7 +87,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     remove(_objectHitbox!);
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     for (final myItem in myItems) {
-      gameRef.gameMap.container.add(LootOnMap(itemFromName(myItem), position: gameRef.playerPosition()));
+      gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.playerPosition()));
     }
     add(OpacityEffect.by(-1,EffectController(duration: animationTicker!.totalDuration() + 0.3),onComplete: (){
       if(isStatic) {

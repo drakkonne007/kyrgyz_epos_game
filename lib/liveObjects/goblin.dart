@@ -64,7 +64,7 @@ class Goblin extends KyrgyzEnemy
     shiftAroundAnchorsForHit = 45;
     distPlayerLength = 55 * 55;
     maxLoots = 3;
-    chanceOfLoot = 0.02;
+    chanceOfLoot = 0.3;
     health = GoblinInfo.health(level);
     maxSpeed = GoblinInfo.speed;
     armor = GoblinInfo.armor(level);

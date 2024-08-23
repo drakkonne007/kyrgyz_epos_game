@@ -113,7 +113,7 @@ class Sword1 extends Item
     id = 'sword1';
     source = 'images/inventar/weapon/1.png';
     cost = 50;
-    damage = 1;
+    damage = 15;
     dressType = DressType.sword;
   }
 
@@ -136,8 +136,8 @@ class Sword2 extends Item
     id = 'sword2';
     source = 'images/inventar/weapon/2.png';
     cost = 50;
-    attackSpeed = -0.002;
-    damage = 1;
+    attackSpeed = -0.001;
+    damage = 30;
     dressType = DressType.sword;
   }
 
@@ -160,7 +160,7 @@ class Sword3 extends Item
     id = 'sword3';
     source = 'images/inventar/weapon/3.png';
     cost = 50;
-    damage = 1.2;
+    damage = 35;
     dressType = DressType.sword;
   }
 
@@ -183,8 +183,8 @@ class Sword4 extends Item
     id = 'sword4';
     source = 'images/inventar/weapon/4.png';
     cost = 50;
-    damage = 0.8;
-    attackSpeed = - 0.005;
+    damage = 40;
+    attackSpeed = - 0.001;
     dressType = DressType.sword;
   }
 
@@ -205,8 +205,8 @@ class Sword5 extends Item {
     id = 'sword5';
     source = 'images/inventar/weapon/5.png';
     cost = 50;
-    damage = 1.2;
-    attackSpeed = -0.004;
+    damage = 45;
+    attackSpeed = -0.001;
     dressType = DressType.sword;
   }
 
@@ -227,7 +227,7 @@ class Sword6 extends Item {
     id = 'sword6';
     source = 'images/inventar/weapon/6.png';
     cost = 75;
-    damage = 1.5;
+    damage = 50;
     dressType = DressType.sword;
   }
 
@@ -248,7 +248,7 @@ class Sword7 extends Item {
     id = 'sword7';
     source = 'images/inventar/weapon/7.png';
     cost = 75;
-    damage = 1.7;
+    damage = 55;
     attackSpeed = 0.003;
     dressType = DressType.sword;
   }
@@ -270,7 +270,7 @@ class Sword8 extends Item {
     id = 'sword8';
     source = 'images/inventar/weapon/8.png';
     cost = 75;
-    damage = 1.5;
+    damage = 55;
     dressType = DressType.sword;
   }
 
@@ -291,7 +291,7 @@ class Sword9 extends Item {
     id = 'sword9';
     source = 'images/inventar/weapon/9.png';
     cost = 75;
-    damage = 1.5;
+    damage = 60;
     dressType = DressType.sword;
   }
 

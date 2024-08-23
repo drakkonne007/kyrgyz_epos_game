@@ -359,6 +359,24 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
             )
         )
     );
+
+    temp.add(
+        ElevatedButton(
+            onPressed: (){
+              setState(() {
+                // widget.game.currentStateInventar.value = InventarOverlayType.map;
+                widget.game.doGameHud();
+              });
+            },
+
+            child:
+
+                  Text(widget.game.playerData.experience.value.toString())
+
+        )
+    );
+
+
     return temp;
   }
 }

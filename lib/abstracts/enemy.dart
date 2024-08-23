@@ -128,7 +128,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int dopPriority = 0;
   int variantOfHit = 0;
   SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
-  List<String> loots = [];
+  List<Item> loots = [];
   Set<MagicDamage> magicDamages = {};
   Ground? groundBody;
   late BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isQuadOptimizaion: false, onBeginMyContact: onBeginMyContact,onEndMyContact: onEndMyContact),linearDamping: 6,
@@ -139,7 +139,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   DefaultEnemyWeapon? weapon;
   bool wasHit = false;
   bool wasSeen = false;
-  double chanceOfLoot = 0.01; // 0 - never
+  double chanceOfLoot = 0.1; // 0 - never
   double distPlayerLength = 0;
   int shiftAroundAnchorsForHit = 0;
   double _maxHp = 0;
@@ -150,6 +150,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double magicScaleElectro = 1;
   double magicScaleFreeze = 1;
   bool isHigh = false;
+  bool isReverseBody = false;
 
 
   @override
@@ -264,10 +265,18 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       double angle = math.atan2(posY,posX);
       speed.x = math.cos(angle) * (isSee ? maxSpeed : maxSpeed / 2);
       speed.y = math.sin(angle) * (isSee ? maxSpeed : maxSpeed / 2);
-      if(speed.x < 0 && !isFlippedHorizontally){
-        flipHorizontally();
-      }else if(speed.x > 0 && isFlippedHorizontally){
-        flipHorizontally();
+      if(isReverseBody){
+        if (speed.x < 0 && isFlippedHorizontally) {
+          flipHorizontally();
+        } else if (speed.x > 0 && !isFlippedHorizontally) {
+          flipHorizontally();
+        }
+      }else{
+        if (speed.x < 0 && !isFlippedHorizontally) {
+          flipHorizontally();
+        } else if (speed.x > 0 && isFlippedHorizontally) {
+          flipHorizontally();
+        }
       }
       animation = animMove;
     }else{
@@ -295,13 +304,18 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       if (isNearPlayer(distPlayerLength)) {
         weapon?.currentCoolDown = weapon?.coolDown ?? 0;
         var pl = gameRef.gameMap.orthoPlayer!;
-        if (pl.position.x > position.x) {
-          if (isFlippedHorizontally) {
+        if(isReverseBody){
+          if (pl.position.x > position.x && !isFlippedHorizontally) {
             flipHorizontally();
           }
-        }
-        if (pl.position.x < position.x) {
-          if (!isFlippedHorizontally) {
+          if (pl.position.x < position.x && isFlippedHorizontally) {
+            flipHorizontally();
+          }
+        }else{
+          if (pl.position.x > position.x && isFlippedHorizontally) {
+            flipHorizontally();
+          }
+          if (pl.position.x < position.x && !isFlippedHorizontally) {
             flipHorizontally();
           }
         }
@@ -317,13 +331,24 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool isSee()
   {
     var tempW = gameRef.world as UpWorld;
-    if((gameRef.gameMap.orthoPlayer!.position.x > position.x && !isFlippedHorizontally)
-        || (gameRef.gameMap.orthoPlayer!.position.x < position.x && isFlippedHorizontally)
-    ){
-      wasSeen = !tempW.myRayCast(position * PhysicVals.physicScale, gameRef.gameMap.orthoPlayer!.position * PhysicVals.physicScale, true);
+    if(isReverseBody){
+      if((gameRef.gameMap.orthoPlayer!.position.x > position.x && isFlippedHorizontally)
+          || (gameRef.gameMap.orthoPlayer!.position.x < position.x && !isFlippedHorizontally)
+      ){
+        wasSeen = !tempW.myRayCast(position * PhysicVals.physicScale, gameRef.gameMap.orthoPlayer!.position * PhysicVals.physicScale, true);
+      }else{
+        wasSeen = false;
+      }
     }else{
-      wasSeen = false;
+      if((gameRef.gameMap.orthoPlayer!.position.x > position.x && !isFlippedHorizontally)
+          || (gameRef.gameMap.orthoPlayer!.position.x < position.x && isFlippedHorizontally)
+      ){
+        wasSeen = !tempW.myRayCast(position * PhysicVals.physicScale, gameRef.gameMap.orthoPlayer!.position * PhysicVals.physicScale, true);
+      }else{
+        wasSeen = false;
+      }
     }
+
     return wasSeen;
   }
 
@@ -333,8 +358,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
       if(chance <= chanceOfLoot){
-        var item = 'gold';
-        loots.add(item);
+        loots.add(itemFromLevel(level));
       }
     }
   }
@@ -450,7 +474,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void death(SpriteAnimation? anim)
   {
-    gameRef.playerData.addLevel(health + (level * 50));
+    gameRef.playerData.addLevel(_maxHp);
     speed.x = 0;
     speed.y = 0;
     groundBody?.clearForces();
@@ -461,7 +485,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         var temp = Chest(0, myItems: loots, position: positionOfAnchor(anchor));
         gameRef.gameMap.container.add(temp);
       }else{
-        var temp = LootOnMap(itemFromName(loots.first), position: positionOfAnchor(anchor));
+        var temp = LootOnMap(loots.first, position: positionOfAnchor(anchor));
         gameRef.gameMap.container.add(temp);
       }
     }

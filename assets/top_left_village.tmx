@@ -2350,6 +2350,7 @@
   <object id="1465" gid="50459" x="730" y="2467" width="288" height="64"/>
   <object id="1466" gid="50511" x="719" y="365.75" width="64" height="64">
    <properties>
+    <property name="items" value="helmet40,gold4000,armor20,gloves12,boots15"/>
     <property name="neededItems" value="keyForChestOfGlory"/>
     <property name="oneUse" value="true"/>
    </properties>

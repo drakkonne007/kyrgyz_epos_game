@@ -76,7 +76,7 @@ class GrassGolem extends KyrgyzEnemy
     shiftAroundAnchorsForHit = 65;
     distPlayerLength = 75 * 75;
     maxLoots = 1;
-    chanceOfLoot = 0.02;
+    chanceOfLoot = 0.4;
     health = GollemInfo.health(level);
     maxSpeed = GollemInfo.speed;
     armor = GollemInfo.armor(level);

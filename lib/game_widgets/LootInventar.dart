@@ -225,7 +225,7 @@ class _LootInvantarState extends State<LootInInventar>
                           widget.game.playerData.currentFlask1.value = temp.id;
                         });
                       },
-                      child: const AutoSizeText('В карман 1', minFontSize: 8,)),
+                      child: AutoSizeText(widget.game.playerData.currentFlask1.value == null ? 'В карман 1' : 'Заменить 1', minFontSize: 8,)),
                   ElevatedButton(
                       style: ButtonStyle(
                         maximumSize: WidgetStateProperty.all<Size>(Size(rowWidth/2,rowHeight))
@@ -237,7 +237,7 @@ class _LootInvantarState extends State<LootInInventar>
                           widget.game.playerData.currentFlask2.value = temp.id;
                         });
                       },
-                      child: const AutoSizeText('В карман 2', minFontSize: 8,))
+                      child: AutoSizeText(widget.game.playerData.currentFlask2.value == null ? 'В карман 2' : 'Заменить 2', minFontSize: 8,))
                 ]
             )));
           }
@@ -580,6 +580,30 @@ class _LootInvantarState extends State<LootInInventar>
                             width: minSize,
                             height:minSize,
                             centerSlice: const Rect.fromLTWH(17, 17, 24, 26),) : const SizedBox(width: 0,height: 0,)),
+                          item.id == widget.game.playerData.currentFlask1.value ? SizedBox(
+                              width: minSize,
+                              height:minSize,
+                              child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Container(
+                                    alignment: Alignment.topLeft,
+                                    height: minSize/4,
+                                    margin: EdgeInsets.only(top: minSize / 20, left: minSize / 10),
+                                    child: AutoSizeText('2',style: defaultInventarTextStyle.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
+                                  )
+                              )) : Container(),
+                          item.id == widget.game.playerData.currentFlask2.value ? SizedBox(
+                              width: minSize,
+                              height:minSize,
+                              child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Container(
+                                    alignment: Alignment.topLeft,
+                                    height: minSize/4,
+                                    margin: EdgeInsets.only(top: minSize / 20, left: minSize / 10),
+                                    child: AutoSizeText('1',style: defaultInventarTextStyle.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
+                                  )
+                              )) : Container(),
                           SizedBox(
                               width: minSize,
                               height:minSize,

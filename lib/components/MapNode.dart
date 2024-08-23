@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/gearSwitch.dart';
 import 'package:game_flame/Items/hBridge.dart';
@@ -300,7 +301,7 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'gold':
-        positionObject = LootOnMap(Gold()..isStaticObject = true, position: position);
+        positionObject = LootOnMap(Gold(myGame.gameMap.currentGameWorldData!.level)..isStaticObject = true, position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -413,7 +414,12 @@ class MapNode {
         var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = Chest(1, myItems: items ?? ['gold'], position: position,id: id, isStatic: true,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
+        positionObject = Chest(1, myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,id: id, isStatic: true,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -421,7 +427,12 @@ class MapNode {
         var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = HorizontalWoodChest(myItems: items ?? ['gold'], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
+        positionObject = HorizontalWoodChest(myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -429,7 +440,7 @@ class MapNode {
         var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = VerticalWoodChest(myItems: items ?? ['gold'], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        positionObject = VerticalWoodChest(myItems: [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -437,7 +448,12 @@ class MapNode {
         var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = StoneChest(myItems: items ?? ['gold'], position: position,id,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
+        positionObject = StoneChest(myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,id,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;

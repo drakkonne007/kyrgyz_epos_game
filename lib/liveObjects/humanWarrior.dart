@@ -15,29 +15,29 @@ import 'package:game_flame/Items/Dresses/item.dart';
 import 'dart:math' as math;
 
 final List<Vector2> _grPoints = [
-  Vector2(-5.4813,14.0557) * PhysicVals.physicScale
-  ,Vector2(-6.58885,31.3151) * PhysicVals.physicScale
-  ,Vector2(7.25555,31.2228) * PhysicVals.physicScale
-  ,Vector2(4.94815,14.0557) * PhysicVals.physicScale
+  Vector2(-5.4813,14.0557) * PhysicVals.physicScale * 1.2
+  ,Vector2(-6.58885,31.3151) * PhysicVals.physicScale * 1.2
+  ,Vector2(7.25555,31.2228) * PhysicVals.physicScale * 1.2
+  ,Vector2(4.94815,14.0557) * PhysicVals.physicScale * 1.2
   ,];
 
 final List<Vector2> _hitBox = [
-  Vector2(-4.92848,31.173)
-  ,Vector2(-3.71149,-12.0856)
-  ,Vector2(3.03729,-10.7579)
-  ,Vector2(5.25,30.8411)
+  Vector2(-4.92848,31.173) * 1.2
+  ,Vector2(-3.71149,-12.0856) * 1.2
+  ,Vector2(3.03729,-10.7579) * 1.2
+  ,Vector2(5.25,30.8411) * 1.2
   ,];
 
 final List<Vector2> _attack = [ //4-5
-  Vector2(12.7893,-31.5024)
-  ,Vector2(-19.2604,-25.3173)
-  ,Vector2(-37.0659,-10.1359)
-  ,Vector2(-35.5665,12.73)
-  ,Vector2(-7.45263,13.1049)
-  ,Vector2(-19.6353,-0.0149048)
-  ,Vector2(-33.1299,1.29707)
-  ,Vector2(-21.1347,-4.32569)
-  ,Vector2(-20.5724,-13.1347)
+  Vector2(12.7893,-31.5024) * 1.2
+  ,Vector2(-19.2604,-25.3173) * 1.2
+  ,Vector2(-37.0659,-10.1359) * 1.2
+  ,Vector2(-35.5665,12.73) * 1.2
+  ,Vector2(-7.45263,13.1049) * 1.2
+  ,Vector2(-19.6353,-0.0149048) * 1.2
+  ,Vector2(-33.1299,1.29707) * 1.2
+  ,Vector2(-21.1347,-4.32569) * 1.2
+  ,Vector2(-20.5724,-13.1347) * 1.2
   ,];
 
 class HumanWarrior extends KyrgyzEnemy
@@ -49,10 +49,11 @@ class HumanWarrior extends KyrgyzEnemy
   Future<void> onLoad() async
   {
     dopPriority = 31;
+    isReverseBody = true;
     shiftAroundAnchorsForHit = 65;
     distPlayerLength = 75 * 75;
     maxLoots = 1;
-    chanceOfLoot = 0.02;
+    chanceOfLoot = 0.3;
     health = HumanInfo.health(level);
     maxSpeed = HumanInfo.speed;
     armor = HumanInfo.armor(level);

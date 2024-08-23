@@ -59,7 +59,7 @@ class PrisonAssassin extends KyrgyzEnemy
     shiftAroundAnchorsForHit = 20;
     distPlayerLength = 60*60;
     armor = AssasinUndeadInfo.armor(level);
-    chanceOfLoot = 0.02;
+    chanceOfLoot = 0.3;
     health = AssasinUndeadInfo.health(level);
     maxLoots = 3;
     maxSpeed = AssasinUndeadInfo.speed;
