@@ -7,6 +7,8 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
+ValueNotifier<int> _myNumber = ValueNotifier(1);
+
 class BuyOverlay extends StatefulWidget
 {
   static const id = 'BuyOverlay';
@@ -175,7 +177,7 @@ class _BuyOverlayState extends State<BuyOverlay> {
                     height: 60,
                     child:
                     Stack(
-                      fit: StackFit.passthrough,
+                        fit: StackFit.passthrough,
                         children:
                         [
                           Positioned.fill(
@@ -292,10 +294,20 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                       growable: false)[index]);
                                               int count = playerList[curItem.id]!;
                                               return ElevatedButton(
-                                                  onPressed: () {
+                                                  onPressed: () async{
+                                                    int? isGo = 1;
+                                                    if(count > 5) {
+                                                      isGo = await askForCount(
+                                                          context,
+                                                          curItem.source,
+                                                          count);
+                                                      if (isGo == null || isGo == 0) {
+                                                        return;
+                                                      }
+                                                    }
                                                     setState(() {
-                                                      _money += (curItem.cost / 10).ceil();
-                                                      count--;
+                                                      _money += ((curItem.cost / 10).ceil() * isGo!);
+                                                      count -= isGo;
                                                       if(count == 0){
                                                         playerList.remove(curItem.id);
                                                       }else{
@@ -303,9 +315,9 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                       }
                                                       PlaceInOrder newOrder = PlaceInOrder(curItem, true);
                                                       if(_dealList.containsKey(newOrder)){
-                                                        _dealList.update(newOrder, (value) => value+1);
+                                                        _dealList.update(newOrder, (value) => value+isGo!);
                                                       }else {
-                                                        _dealList.putIfAbsent(newOrder, () => 1);
+                                                        _dealList.putIfAbsent(newOrder, () => isGo!);
                                                       }
                                                     });
                                                   },
@@ -389,20 +401,34 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                             var orderPlace = _dealList.keys.toList(growable: false)[index];
                                             int count = _dealList[orderPlace]!;
                                             return ElevatedButton(
-                                                onPressed: () {
+                                                onPressed: () async{
+                                                  int? isGo = 1;
+                                                  if(count > 5) {
+                                                    isGo = await askForCount(
+                                                        context,
+                                                        orderPlace.item.source,
+                                                        count);
+                                                    if (isGo == null || isGo == 0) {
+                                                      return;
+                                                    }
+                                                  }
                                                   setState(() {
-                                                    count--;
+                                                    count -= isGo!;
                                                     if(count == 0){
                                                       _dealList.remove(orderPlace);
                                                     }else{
                                                       _dealList[orderPlace] = count;
                                                     }
                                                     if(orderPlace.isPlayer){
-                                                      _money -= (orderPlace.item.cost / 10).ceil();
+                                                      _money -= ((orderPlace.item.cost / 10).ceil() * isGo);
                                                     }else{
-                                                      _money += orderPlace.item.cost;
+                                                      _money += orderPlace.item.cost * isGo;
                                                     }
-                                                    returnItemToOwner(orderPlace.item,orderPlace.isPlayer);
+                                                    for(int i = 0;i < isGo; i++) {
+                                                      returnItemToOwner(
+                                                          orderPlace.item,
+                                                          orderPlace.isPlayer);
+                                                    }
                                                   });
                                                 },
                                                 child: null,
@@ -490,10 +516,20 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                       growable: false)[index]);
                                               int count = shopList[curItem.id]!;
                                               return ElevatedButton(
-                                                  onPressed: () {
+                                                  onPressed: () async{
+                                                    int? isGo = 1;
+                                                    if(count > 5) {
+                                                      isGo = await askForCount(
+                                                          context,
+                                                          curItem.source,
+                                                          count);
+                                                      if (isGo == null || isGo == 0) {
+                                                        return;
+                                                      }
+                                                    }
                                                     setState(() {
-                                                      _money -= curItem.cost;
-                                                      count--;
+                                                      _money -= curItem.cost * isGo!;
+                                                      count -= isGo;
                                                       if(count == 0){
                                                         shopList.remove(curItem.id);
                                                       }else{
@@ -501,9 +537,9 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                       }
                                                       PlaceInOrder newOrder = PlaceInOrder(curItem, false);
                                                       if(_dealList.containsKey(newOrder)){
-                                                        _dealList.update(newOrder, (value) => value+1);
+                                                        _dealList.update(newOrder, (value) => value+isGo!);
                                                       }else {
-                                                        _dealList.putIfAbsent(newOrder, () => 1);
+                                                        _dealList.putIfAbsent(newOrder, () => isGo!);
                                                       }
                                                     });
                                                   },
@@ -1128,4 +1164,47 @@ class _BuyOverlayState extends State<BuyOverlay> {
     }
     return myList;
   }
+
+
+}
+
+Future<int?> askForCount(BuildContext context, String source, int max)
+async {
+  _myNumber.value = 1;
+  return await showDialog<int>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFFdfc08e),
+        content: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children:
+            [
+              Image.asset('assets/$source', width: 64, height: 64,),
+              ValueListenableBuilder(valueListenable: _myNumber, builder: (context, number, _) => Slider(
+                label: number.toString(),
+                value: number.toDouble(),
+                min: 1.0,
+                max: max.toDouble(),
+                onChanged: (myVal) {
+                    _myNumber.value = myVal.toInt();
+                  },
+                divisions: max - 1,)
+              )
+            ]),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 0),
+            child: const Text('Отмена'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, _myNumber.value),
+            child: const Text('Ок'),
+          ),
+        ],
+      );
+    },
+  );
 }
