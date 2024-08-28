@@ -38,37 +38,42 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
   {
     if(widget.game.currentItemInInventar.value != null){
       switch(widget.game.currentItemInInventar.value!.dressType){
-        case DressType.none:
-          if(!widget.game.playerData.flaskInventar.containsKey(widget.game.currentItemInInventar.value!.id) && !widget.game.playerData.itemInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+        case InventarType.flask:
+          if(!widget.game.playerData.flaskInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
             widget.game.currentItemInInventar.value = null;
           }
           break;
-        case DressType.helmet:
+        case InventarType.item:
+          if(!widget.game.playerData.itemInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
+            widget.game.currentItemInInventar.value = null;
+          }
+          break;
+        case InventarType.helmet:
           if(!widget.game.playerData.helmetInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
             widget.game.currentItemInInventar.value = null;
           }
           break;
-        case DressType.armor:
+        case InventarType.bodyArmor:
           if(!widget.game.playerData.bodyArmorInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
             widget.game.currentItemInInventar.value = null;
           }
           break;
-        case DressType.gloves:
+        case InventarType.gloves:
           if(!widget.game.playerData.glovesInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
             widget.game.currentItemInInventar.value = null;
           }
           break;
-        case DressType.sword:
+        case InventarType.sword:
           if(!widget.game.playerData.swordInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
             widget.game.currentItemInInventar.value = null;
           }
           break;
-        case DressType.ring:
+        case InventarType.ring:
           if(!widget.game.playerData.ringInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
             widget.game.currentItemInInventar.value = null;
           }
           break;
-        case DressType.boots:
+        case InventarType.boots:
           if(!widget.game.playerData.bootsInventar.containsKey(widget.game.currentItemInInventar.value!.id)){
             widget.game.currentItemInInventar.value = null;
           }

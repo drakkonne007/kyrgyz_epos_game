@@ -11,17 +11,6 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
 
-enum DressType
-{
-  none,
-  helmet,
-  armor,
-  gloves,
-  sword,
-  ring,
-  boots,
-}
-
 String getMagicStateString(MagicDamage? magDamage)
 {
   switch(magDamage)
@@ -199,7 +188,7 @@ abstract class Item
   double damage = 0;
   bool enabled = true;
   double attackSpeed = 0; //Отнимается/прибавляется к скорости атаки
-  DressType dressType = DressType.none;
+  InventarType dressType = InventarType.item;
   String source = '';
   int cost = 0;
   int? countOfUses;

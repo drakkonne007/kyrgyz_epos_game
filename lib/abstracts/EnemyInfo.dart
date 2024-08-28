@@ -1,79 +1,82 @@
+const damageDel = 20;
+const armorDel = 20;
+const healthDel = 20;
 
 class GoblinInfo
 {
   static const double _damage = 15;
-  static const double _health = 50;
+  static const double _health = 80;
   static const double _armor = 5;
   static const double speed = 70;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_armor * level)    / armorDel;
 }
 
 class GollemInfo
 {
   static const double _damage = 40;
-  static const double _health = 50;
+  static const double _health = 80;
   static const double speed = 50;
   static const double _armor = 50;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_armor * level)    / armorDel;
 }
 
 class HumanInfo
 {
   static const double _damage = 20;
-  static const double _health = 100;
+  static const double _health = 130;
   static const double _armor = 5;
   static const double speed = 60;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_armor * level) / armorDel;
 }
 
 class MooseInfo
 {
   static const double _damage = 60;
-  static const double _health = 200;
+  static const double _health = 230;
   static const double _armor = 20;
   static const double speed = 50;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class OgrInfo
 {
   static const double _damage = 30;
-  static const double _health = 180;
+  static const double _health = 230;
   static const double _armor = 30;
   static const double speed = 50;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class OrcInfo
 {
   static const double _damage = 30;
-  static const double _health = 120;
+  static const double _health = 150;
   static const double _armor = 15;
   static const double speed = 60;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class OrcMageInfo
 {
   static const double _damage = 30;
-  static const double _health = 100;
+  static const double _health = 130;
   static const double _armor = 15;
   static const double speed = 60;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class ManySpikesInfo
@@ -85,102 +88,102 @@ class ManySpikesInfo
 class SpkikeInfo
 {
   static const double _damage = 30;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 
 }
 
 class OrcAcidInfo
 {
   static const double _damage = 30;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class OrcAcidRainInfo
 {
   static const double _damage = 50;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class PotInfo
 {
   static const double _damage = 10;
-  static const double _health = 50;
+  static const double _health = 80;
   static const double _armor = 5;
   static const double speed = 40;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class PotBubbleInfo
 {
   static const double _damage = 30;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class AssasinUndeadInfo
 {
   static const double _damage = 40;
-  static const double _health = 100;
+  static const double _health = 130;
   static const double _armor = 5;
   static const double speed = 68;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class SkeletInfo
 {
   static const double _damage = 25;
-  static const double _health = 50;
+  static const double _health = 80;
   static const double _armor = 20;
   static const double speed = 60;
-  static damage(int level) => _damage + (_damage * level) / 5;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class SkeletMageInfo
 {
-  static const double _health = 30;
+  static const double _health = 60;
   static const double _armor = 20;
   static const double speed = 60;
-  static health(int level) => _health + (_health * level) / 5;
-  static armor(int level) => _armor + (_armor * level) / 10;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
 class SkeletBubbleInfo
 {
   static const double _damage = 15;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class SpinBladeInfo
 {
   static const double _damage = 60;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class ArrowInfo
 {
   static const double _damage = 15;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class BarrelInfo
 {
   static const double _damage = 40;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class BarrelWithMetalInfo
 {
   static const double _damage = 50;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }
 
 class ElectroTrapInfo
 {
   static const double _damage = 30;
-  static damage(int level) => _damage + (_damage * level) / 5;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
 }

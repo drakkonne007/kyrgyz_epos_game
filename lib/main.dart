@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/overlays/PrettySplash.dart';
+import 'package:game_flame/overlays/buy_overlay.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/dialog_overlay.dart';
 import 'package:game_flame/overlays/game_hud.dart';
@@ -44,6 +45,7 @@ void main()
                     InventoryOverlay.id: (context, KyrgyzGame game) => InventoryOverlay(game),
                     SplashScreenGame.id: (context, KyrgyzGame game) => SplashScreenGame(game),
                     MapOverlay.id: (context, KyrgyzGame game) => MapOverlay(game),
+                    BuyOverlay.id: (context, KyrgyzGame game) => BuyOverlay(game),
                   },
                 )
             ),

@@ -11,6 +11,7 @@ class HpSmall extends Item
     cost = 10;
     source = 'images/inventar/flask/hpSmall.png';
     hp = 10;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -51,6 +52,7 @@ class HpMedium extends Item
     source = 'images/inventar/flask/hpMedium.png';
     hp = 2;
     secsOfPermDamage = 10;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -94,6 +96,7 @@ class HpBig extends Item
     source = 'images/inventar/flask/hpBig.png';
     hp = 2.5;
     secsOfPermDamage = 15;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -136,6 +139,7 @@ class HpFull extends Item
     enabled = true;
     source = 'images/inventar/flask/hpFull.png';
     hp = 99999999;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -176,6 +180,7 @@ class EnergySmall extends Item
     enabled = true;
     source = 'images/inventar/flask/energySmall.png';
     energy = 5;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -216,6 +221,7 @@ class EnergyMedium extends Item
     source = 'images/inventar/flask/energyMedium.png';
     secsOfPermDamage = 10;
     energy = 1.5;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -259,6 +265,7 @@ class EnergyBig extends Item
     source = 'images/inventar/flask/energyBig.png';
     energy = 2;
     secsOfPermDamage = 15;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -301,6 +308,7 @@ class EnergyFull extends Item
     enabled = true;
     source = 'images/inventar/flask/energyFull.png';
     energy = 9999999;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -340,6 +348,7 @@ class ManaSmall extends Item
     enabled = true;
     source = 'images/inventar/flask/manaSmall.png';
     mana = 10;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -380,6 +389,7 @@ class ManaMedium extends Item
     source = 'images/inventar/flask/manaMedium.png';
     secsOfPermDamage = 10;
     mana = 1.5;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -423,6 +433,7 @@ class ManaBig extends Item
     source = 'images/inventar/flask/manaBig.png';
     mana = 2;
     secsOfPermDamage = 15;
+    dressType = InventarType.flask;
   }
 
   @override
@@ -465,6 +476,7 @@ class ManaFull extends Item
     enabled = true;
     source = 'images/inventar/flask/manaFull.png';
     mana = 9999999;
+    dressType = InventarType.flask;
   }
 
   @override

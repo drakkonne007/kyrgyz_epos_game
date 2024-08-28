@@ -2416,6 +2416,7 @@
   <object id="1485" gid="2147534192" x="2570" y="2618.33" width="80" height="64">
    <properties>
     <property name="citizien" value="1"/>
+    <property name="quest" value="chestOfGlory"/>
    </properties>
   </object>
   <object id="1486" gid="2147534192" x="2176" y="2013" width="80" height="64">

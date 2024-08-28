@@ -115,7 +115,12 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
         removeOnFinish: true,
         onTick: (){
           for (final myItem in myItems) {
-            gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.playerPosition()));
+            if(isFlippedHorizontally){
+              gameRef.gameMap.container.add(LootOnMap(myItem, position: position + Vector2(15,0)));
+            }else{
+              gameRef.gameMap.container.add(LootOnMap(myItem, position: position - Vector2(15,0)));
+            }
+
           }
         }
     );

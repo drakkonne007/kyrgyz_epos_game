@@ -52,12 +52,8 @@ class SkeletonMage extends KyrgyzEnemy
     if(isHigh){
       priority = GamePriority.high + 1;
     }
-
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     _withShieldNow = rand == 0 ? false : true;
-    if(_withShieldNow){
-      health++;
-    }
     if (rand == 0) {
       spriteImage = await Flame.images.load(
           'tiles/map/prisonSet/Characters/Mage Skeleton/Mage Skeleton no shield/Mage Skeleton - all animations.png');

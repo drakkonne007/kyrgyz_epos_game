@@ -35,7 +35,8 @@ class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
     final spriteSheet = SpriteSheet(image: await Flame.images.load(
         'tiles/map/loot/trans.png'),
         srcSize: Vector2.all(32));
-    sprite = spriteSheet.getSprite(6, 2);
+    int version = math.Random().nextInt(3);
+    sprite = spriteSheet.getSprite(6, version);
     add(OpacityEffect.by(-1,EffectController(duration: 0.5),onComplete: (){
       removeFromParent();
     }));
@@ -151,6 +152,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double magicScaleFreeze = 1;
   bool isHigh = false;
   bool isReverseBody = false;
+  int _attacksCount = 0;
 
 
   @override
@@ -300,7 +302,11 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }
-    if (wasSeen) {
+    bool isReallyWantHit = true;
+    if(_attacksCount > 2){
+      isReallyWantHit = math.Random().nextBool();
+    }
+    if (wasSeen && isReallyWantHit) {
       if (isNearPlayer(distPlayerLength)) {
         weapon?.currentCoolDown = weapon?.coolDown ?? 0;
         var pl = gameRef.gameMap.orthoPlayer!;
@@ -319,11 +325,14 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
             flipHorizontally();
           }
         }
+        _attacksCount++;
         chooseHit();
         return;
       }
+      _attacksCount = 0;
       moveIdleRandom(true);
     } else {
+      _attacksCount = 0;
       moveIdleRandom(isSee());
     }
   }

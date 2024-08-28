@@ -25,6 +25,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/gen/strings.g.dart';
 import 'package:game_flame/overlays/PrettySplash.dart';
+import 'package:game_flame/overlays/buy_overlay.dart';
 import 'package:game_flame/overlays/death_menu.dart';
 import 'package:game_flame/overlays/dialog_overlay.dart';
 import 'package:game_flame/overlays/game_hud.dart';
@@ -93,6 +94,16 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   late FragmentShader iceShader;
   late FragmentShader poisonShader;
   late FragmentShader lightningShader;
+  Map<String, int> currentShopItems = {'helmet1': 1,'helmet5': 1,'helmet10': 1,'helmet45': 1,
+    'armor10': 1, 'armor50': 1, 'armor25': 1,'armor30': 1,
+    'gloves10': 1, 'gloves50': 1, 'gloves25': 1,'gloves30': 1,
+    'boots1': 1,'boots4': 1,'boots2': 1,'boots3': 1,'boots20': 1,'boots30': 1,'hpSmall': 10,'hpMedium': 10,
+    'hpBig': 10,'hpFull': 10,'energySmall': 10,
+    'energyMedium': 10,'energyBig': 10,'energyFull': 10,'manaSmall': 10,'manaMedium': 10,'manaBig': 10,'manaFull': 10,
+    'sword1': 1, 'sword2': 1, 'sword3': 1,'sword4': 1,'sword5': 1,'sword6': 1,'sword7': 1,'sword8': 1,'sword9': 1,
+    'ring1' : 1, 'ring2' : 1, 'ring3' : 1, 'ring4' : 1, 'ring5' : 1};
+
+
   ValueNotifier<Item?> currentItemInInventar = ValueNotifier<Item?>(null);
   Map<String, Set<LoadedColumnRow>> clearMap = {};
   Image? imageForMap;
@@ -268,6 +279,12 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     FlameAudio.bgm.stop();
     resumeEngine();
     _showOverlay(overlayName: GameHud.id,isHideOther: true);
+  }
+
+  void doBuyMenu()
+  {
+    pauseEngine();
+    _showOverlay(overlayName: BuyOverlay.id,isHideOther: true);
   }
 
   void doMapHud() async

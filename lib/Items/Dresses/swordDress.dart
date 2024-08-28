@@ -114,7 +114,7 @@ class Sword1 extends Item
     source = 'images/inventar/weapon/1.png';
     cost = 50;
     damage = 15;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -138,7 +138,7 @@ class Sword2 extends Item
     cost = 50;
     attackSpeed = -0.001;
     damage = 30;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -161,7 +161,7 @@ class Sword3 extends Item
     source = 'images/inventar/weapon/3.png';
     cost = 50;
     damage = 35;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -185,7 +185,7 @@ class Sword4 extends Item
     cost = 50;
     damage = 40;
     attackSpeed = - 0.001;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -207,7 +207,7 @@ class Sword5 extends Item {
     cost = 50;
     damage = 45;
     attackSpeed = -0.001;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -228,7 +228,7 @@ class Sword6 extends Item {
     source = 'images/inventar/weapon/6.png';
     cost = 75;
     damage = 50;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -250,7 +250,7 @@ class Sword7 extends Item {
     cost = 75;
     damage = 55;
     attackSpeed = 0.003;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -271,7 +271,7 @@ class Sword8 extends Item {
     source = 'images/inventar/weapon/8.png';
     cost = 75;
     damage = 55;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -292,7 +292,7 @@ class Sword9 extends Item {
     source = 'images/inventar/weapon/9.png';
     cost = 75;
     damage = 60;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -314,7 +314,7 @@ class Sword10 extends Item {
     cost = 75;
     damage = 1.8;
     attackSpeed = 0.006;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -336,7 +336,7 @@ class Sword11 extends Item {
     cost = 75;
     damage = 1.5;
     attackSpeed = -0.005;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -358,7 +358,7 @@ class Sword12 extends Item {
     cost = 80;
     damage = 1.4;
     attackSpeed = -0.008;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -379,7 +379,7 @@ class Sword13 extends Item {
     source = 'images/inventar/weapon/13.png';
     cost = 80;
     damage = 1.5;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -401,7 +401,7 @@ class Sword14 extends Item {
     cost = 80;
     damage = 1.6;
     attackSpeed = -0.009;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -423,7 +423,7 @@ class Sword15 extends Item {
     cost = 80;
     damage = 1.75;
     attackSpeed = -0.009;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -445,7 +445,7 @@ class Sword16 extends Item {
     cost = 80;
     damage = 1.5;
     attackSpeed = -0.011;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -466,7 +466,7 @@ class Sword17 extends Item {
     source = 'images/inventar/weapon/17.png';
     cost = 85;
     damage = 1.6;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -485,7 +485,7 @@ class Sword18 extends Item {
     source = 'images/inventar/weapon/18.png';
     cost = 100;
     damage = 1.6;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.fire;
     manaCost = 10;
     permanentDamage = 0.2;
@@ -512,7 +512,7 @@ class Sword19 extends Item {
     manaCost = 10;
     permanentDamage = 0.2;
     secsOfPermDamage = 3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -531,7 +531,7 @@ class Sword20 extends Item {
     source = 'images/inventar/weapon/20.png';
     cost = 12;
     damage = 1.8;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -550,7 +550,7 @@ class Sword21 extends Item {
     source = 'images/inventar/weapon/21.png';
     cost = 12;
     damage = 1.8;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     attackSpeed = -0.008;
   }
 
@@ -570,7 +570,7 @@ class Sword22 extends Item {
     source = 'images/inventar/weapon/22.png';
     cost = 12;
     damage = 1.7;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     attackSpeed = -0.01;
   }
 
@@ -590,7 +590,7 @@ class Sword23 extends Item {
     source = 'images/inventar/weapon/23.png';
     cost = 12;
     damage = 1.7;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     attackSpeed = -0.01;
     magicDamage = MagicDamage.ice;
     manaCost = 10;
@@ -614,7 +614,7 @@ class Sword24 extends Item {
     source = 'images/inventar/weapon/24.png';
     cost = 12;
     damage = 1.7;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.fire;
     manaCost = 10;
     permanentDamage = 0.6;
@@ -637,7 +637,7 @@ class Sword25 extends Item {
     source = 'images/inventar/weapon/25.png';
     cost = 12;
     damage = 1.7;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.fire;
     manaCost = 10;
     permanentDamage = 0.6;
@@ -660,7 +660,7 @@ class Sword26 extends Item {
     source = 'images/inventar/weapon/26.png';
     cost = 12;
     damage = 1.7;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.ice;
     manaCost = 10;
     permanentDamage = 0.6;
@@ -683,7 +683,7 @@ class Sword27 extends Item {
     source = 'images/inventar/weapon/27.png';
     cost = 12;
     damage = 1.7;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.ice;
     manaCost = 10;
     permanentDamage = 0.6;
@@ -706,7 +706,7 @@ class Sword28 extends Item {
     source = 'images/inventar/weapon/28.png';
     cost = 12;
     damage = 2;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.ice;
     manaCost = 10;
     permanentDamage = 0.5;
@@ -729,7 +729,7 @@ class Sword29 extends Item {
     source = 'images/inventar/weapon/29.png';
     cost = 12;
     damage = 2;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.fire;
     manaCost = 10;
     permanentDamage = 0.5;
@@ -752,7 +752,7 @@ class Sword30 extends Item {
     source = 'images/inventar/weapon/30.png';
     cost = 12;
     damage = 2.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -771,7 +771,7 @@ class Sword31 extends Item {
     source = 'images/inventar/weapon/31.png';
     cost = 12;
     damage = 2.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -790,7 +790,7 @@ class Sword32 extends Item {
     source = 'images/inventar/weapon/32.png';
     cost = 12;
     damage = 2.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.lightning;
     manaCost = 10;
     permanentDamage = 0.5;
@@ -813,7 +813,7 @@ class Sword33 extends Item {
     source = 'images/inventar/weapon/33.png';
     cost = 12;
     damage = 2.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.fire;
     manaCost = 10;
     permanentDamage = 0.5;
@@ -836,7 +836,7 @@ class Sword34 extends Item {
     source = 'images/inventar/weapon/34.png';
     cost = 12;
     damage = 2.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.ice;
     manaCost = 10;
     permanentDamage = 0.5;
@@ -859,7 +859,7 @@ class Sword35 extends Item {
     source = 'images/inventar/weapon/35.png';
     cost = 12;
     damage = 2.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     magicDamage = MagicDamage.poison;
     manaCost = 10;
     permanentDamage = 0.5;
@@ -883,7 +883,7 @@ class Sword36 extends Item {
     cost = 12;
     damage = 2.7;
     attackSpeed = -0.01;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -903,7 +903,7 @@ class Sword37 extends Item {
     cost = 12;
     damage = 3;
     attackSpeed = 0.015;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -923,7 +923,7 @@ class Sword38 extends Item {
     cost = 12;
     damage = 3;
     attackSpeed = 0.015;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -942,7 +942,7 @@ class Sword39 extends Item {
     source = 'images/inventar/weapon/39.png';
     cost = 12;
     damage = 3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     permanentDamage = 1;
     secsOfPermDamage = 5;
     magicDamage = MagicDamage.ice;
@@ -965,7 +965,7 @@ class Sword40 extends Item {
     source = 'images/inventar/weapon/40.png';
     cost = 12;
     damage = 3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     permanentDamage = 1;
     secsOfPermDamage = 5;
     magicDamage = MagicDamage.fire;
@@ -988,7 +988,7 @@ class Sword41 extends Item {
     source = 'images/inventar/weapon/41.png';
     cost = 12;
     damage = 3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     permanentDamage = 1;
     secsOfPermDamage = 5;
     magicDamage = MagicDamage.poison;
@@ -1011,7 +1011,7 @@ class Sword42 extends Item {
     source = 'images/inventar/weapon/42.png';
     cost = 12;
     damage = 3.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     attackSpeed = -0.015;
   }
 
@@ -1031,7 +1031,7 @@ class Sword43 extends Item {
     source = 'images/inventar/weapon/43.png';
     cost = 12;
     damage = 3.3;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
     attackSpeed = -0.015;
   }
 
@@ -1051,7 +1051,7 @@ class Sword44 extends Item {
     source = 'images/inventar/weapon/44.png';
     cost = 12;
     damage = 3.5;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -1070,7 +1070,7 @@ class Sword45 extends Item {
     source = 'images/inventar/weapon/45.png';
     cost = 12;
     damage = 3.5;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -1090,7 +1090,7 @@ class Sword46 extends Item {
     cost = 12;
     damage = 3;
     attackSpeed = -0.02;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -1110,7 +1110,7 @@ class Sword47 extends Item {
     cost = 12;
     damage = 3;
     attackSpeed = -0.02;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -1130,7 +1130,7 @@ class Sword48 extends Item {
     cost = 1000;
     damage = 15;
     attackSpeed = -0.005;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override
@@ -1150,7 +1150,7 @@ class Sword49 extends Item {
     cost = 12;
     damage = 3.2;
     attackSpeed = -0.02;
-    dressType = DressType.sword;
+    dressType = InventarType.sword;
   }
 
   @override

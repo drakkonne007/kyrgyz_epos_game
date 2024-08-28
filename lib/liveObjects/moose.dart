@@ -1,21 +1,14 @@
 import 'dart:ui';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
-import 'package:game_flame/Items/chest.dart';
-import 'package:game_flame/Items/loot_on_map.dart';
 import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
-import 'package:game_flame/abstracts/utils.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'dart:math' as math;
 
@@ -108,14 +101,6 @@ class Moose extends KyrgyzEnemy
     armor = MooseInfo.armor(level);
     Image? spriteImage;
     int randMy = math.Random().nextInt(5);
-    // switch(_mooseVariant){
-    //   case MooseVariant.Wool: spriteImage = await Flame.images.load('tiles/sprites/players/moose1-347x192.png'); break;
-    //   case MooseVariant.WoolWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose2-347x192.png'); break;
-    //   case MooseVariant.Blue: spriteImage = await Flame.images.load('tiles/sprites/players/moose3-347x192.png'); break;
-    //   case MooseVariant.BlueWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose4-347x192.png'); break;
-    //   case MooseVariant.PurpleWithGreenHair: spriteImage = await Flame.images.load('tiles/sprites/players/moose6-347x192.png'); break;
-    //   case MooseVariant.Purple: spriteImage = await Flame.images.load('tiles/sprites/players/moose5-347x192.png'); break;
-    // }
 
     switch(randMy){
       case 0: spriteImage = await Flame.images.load('tiles/sprites/players/moose1-347x192.png'); break;
@@ -186,7 +171,7 @@ class Moose extends KyrgyzEnemy
     }else if(index == 9){
       weapon?.changeVertices(ind3,isLoop: true);
     }else if(index == 10){
-      weapon?.changeVertices(rad,radius: 55);
+      weapon?.changeVertices(rad,radius: 55, isSolid: true);
     }else if(index == 12){
       weapon?.collisionType = DCollisionType.inactive;
     }

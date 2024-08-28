@@ -115,7 +115,7 @@ class Gloves1 extends Item
   {
     id = 'gloves1';
     source = 'images/inventar/gloves/1.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 10;
     armor = 1;
   }
@@ -139,7 +139,7 @@ class Gloves2 extends Item
   {
     id = 'gloves2';
     source = 'images/inventar/gloves/2.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 20;
     armor = 2;
   }
@@ -163,7 +163,7 @@ class Gloves3 extends Item
   {
     id = 'gloves1';
     source = 'images/inventar/gloves/3.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 30;
     armor = 3;
   }
@@ -187,7 +187,7 @@ class Gloves4 extends Item
   {
     id = 'gloves4';
     source = 'images/inventar/gloves/4.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 40;
     armor = 4;
   }
@@ -211,7 +211,7 @@ class Gloves5 extends Item
   {
     id = 'gloves5';
     source = 'images/inventar/gloves/5.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 50;
     armor = 5;
   }
@@ -235,7 +235,7 @@ class Gloves6 extends Item
   {
     id = 'gloves6';
     source = 'images/inventar/gloves/6.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 60;
     armor = 6;
   }
@@ -259,7 +259,7 @@ class Gloves7 extends Item
   {
     id = 'gloves7';
     source = 'images/inventar/gloves/7.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 70;
     armor = 7;
   }
@@ -283,7 +283,7 @@ class Gloves8 extends Item
   {
     id = 'gloves8';
     source = 'images/inventar/gloves/8.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 80;
     armor = 8;
   }
@@ -307,7 +307,7 @@ class Gloves9 extends Item
   {
     id = 'gloves9';
     source = 'images/inventar/gloves/9.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 90;
     armor = 9;
   }
@@ -331,7 +331,7 @@ class Gloves10 extends Item
   {
     id = 'gloves10';
     source = 'images/inventar/gloves/10.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 100;
     armor = 10;
   }
@@ -355,7 +355,7 @@ class Gloves11 extends Item
   {
     id = 'gloves11';
     source = 'images/inventar/gloves/11.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 110;
     armor = 11;
   }
@@ -379,7 +379,7 @@ class Gloves12 extends Item
   {
     id = 'gloves12';
     source = 'images/inventar/gloves/12.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 120;
     armor = 12;
   }
@@ -403,7 +403,7 @@ class Gloves13 extends Item
   {
     id = 'gloves31';
     source = 'images/inventar/gloves/13.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 130;
     armor = 13;
   }
@@ -427,7 +427,7 @@ class Gloves14 extends Item
   {
     id = 'gloves14';
     source = 'images/inventar/gloves/14.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 140;
     armor = 14;
   }
@@ -451,7 +451,7 @@ class Gloves15 extends Item
   {
     id = 'gloves15';
     source = 'images/inventar/gloves/15.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 150;
     armor = 15;
   }
@@ -475,7 +475,7 @@ class Gloves16 extends Item
   {
     id = 'gloves16';
     source = 'images/inventar/gloves/16.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 160;
     armor = 16;
   }
@@ -499,7 +499,7 @@ class Gloves17 extends Item
   {
     id = 'gloves17';
     source = 'images/inventar/gloves/17.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 170;
     armor = 17;
   }
@@ -523,7 +523,7 @@ class Gloves18 extends Item
   {
     id = 'gloves18';
     source = 'images/inventar/gloves/18.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 180;
     armor = 18;
   }
@@ -547,7 +547,7 @@ class Gloves19 extends Item
   {
     id = 'gloves19';
     source = 'images/inventar/gloves/19.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 190;
     armor = 19;
   }
@@ -571,7 +571,7 @@ class Gloves20 extends Item
   {
     id = 'gloves20';
     source = 'images/inventar/gloves/20.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 200;
     armor = 20;
   }
@@ -595,7 +595,7 @@ class Gloves21 extends Item
   {
     id = 'gloves21';
     source = 'images/inventar/gloves/21.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 210;
     armor = 21;
   }
@@ -619,7 +619,7 @@ class Gloves22 extends Item
   {
     id = 'gloves22';
     source = 'images/inventar/gloves/22.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 220;
     armor = 22;
   }
@@ -643,7 +643,7 @@ class Gloves23 extends Item
   {
     id = 'gloves23';
     source = 'images/inventar/gloves/23.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 230;
     armor = 23;
   }
@@ -667,7 +667,7 @@ class Gloves24 extends Item
   {
     id = 'gloves24';
     source = 'images/inventar/gloves/24.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 240;
     armor = 24;
   }
@@ -691,7 +691,7 @@ class Gloves25 extends Item
   {
     id = 'gloves25';
     source = 'images/inventar/gloves/25.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 250;
     armor = 25;
   }
@@ -715,7 +715,7 @@ class Gloves26 extends Item
   {
     id = 'gloves26';
     source = 'images/inventar/gloves/26.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 260;
     armor = 26;
   }
@@ -739,7 +739,7 @@ class Gloves27 extends Item
   {
     id = 'gloves27';
     source = 'images/inventar/gloves/27.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 270;
     armor = 27;
   }
@@ -763,7 +763,7 @@ class Gloves28 extends Item
   {
     id = 'gloves28';
     source = 'images/inventar/gloves/28.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 280;
     armor = 28;
   }
@@ -787,7 +787,7 @@ class Gloves29 extends Item
   {
     id = 'gloves29';
     source = 'images/inventar/gloves/29.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 290;
     armor = 29;
   }
@@ -811,7 +811,7 @@ class Gloves30 extends Item
   {
     id = 'gloves30';
     source = 'images/inventar/gloves/30.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 300;
     armor = 30;
   }
@@ -835,7 +835,7 @@ class Gloves31 extends Item
   {
     id = 'gloves31';
     source = 'images/inventar/gloves/31.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 310;
     armor = 31;
   }
@@ -859,7 +859,7 @@ class Gloves32 extends Item
   {
     id = 'gloves32';
     source = 'images/inventar/gloves/32.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 320;
     armor = 32;
   }
@@ -883,7 +883,7 @@ class Gloves33 extends Item
   {
     id = 'gloves33';
     source = 'images/inventar/gloves/33.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 330;
     armor = 33;
   }
@@ -907,7 +907,7 @@ class Gloves34 extends Item
   {
     id = 'gloves34';
     source = 'images/inventar/gloves/34.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 340;
     armor = 34;
   }
@@ -931,7 +931,7 @@ class Gloves35 extends Item
   {
     id = 'gloves35';
     source = 'images/inventar/gloves/35.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 350;
     armor = 35;
   }
@@ -955,7 +955,7 @@ class Gloves36 extends Item
   {
     id = 'gloves36';
     source = 'images/inventar/gloves/36.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 360;
     armor = 36;
   }
@@ -979,7 +979,7 @@ class Gloves37 extends Item
   {
     id = 'gloves37';
     source = 'images/inventar/gloves/37.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 370;
     armor = 37;
   }
@@ -1003,7 +1003,7 @@ class Gloves38 extends Item
   {
     id = 'gloves38';
     source = 'images/inventar/gloves/38.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 380;
     armor = 38;
   }
@@ -1027,7 +1027,7 @@ class Gloves39 extends Item
   {
     id = 'gloves39';
     source = 'images/inventar/gloves/39.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 390;
     armor = 39;
   }
@@ -1051,7 +1051,7 @@ class Gloves40 extends Item
   {
     id = 'gloves40';
     source = 'images/inventar/gloves/40.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 400;
     armor = 40;
   }
@@ -1075,7 +1075,7 @@ class Gloves41 extends Item
   {
     id = 'gloves41';
     source = 'images/inventar/gloves/41.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 410;
     armor = 41;
   }
@@ -1099,7 +1099,7 @@ class Gloves42 extends Item
   {
     id = 'gloves42';
     source = 'images/inventar/gloves/42.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 420;
     armor = 42;
   }
@@ -1123,7 +1123,7 @@ class Gloves43 extends Item
   {
     id = 'gloves1';
     source = 'images/inventar/gloves/1.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 430;
     armor = 43;
   }
@@ -1147,7 +1147,7 @@ class Gloves44 extends Item
   {
     id = 'gloves44';
     source = 'images/inventar/gloves/44.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 440;
     armor = 44;
   }
@@ -1171,7 +1171,7 @@ class Gloves45 extends Item
   {
     id = 'gloves45';
     source = 'images/inventar/gloves/45.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 450;
     armor = 45;
   }
@@ -1195,7 +1195,7 @@ class Gloves46 extends Item
   {
     id = 'gloves46';
     source = 'images/inventar/gloves/46.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 460;
     armor = 46;
   }
@@ -1219,7 +1219,7 @@ class Gloves47 extends Item
   {
     id = 'gloves74';
     source = 'images/inventar/gloves/74.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 470;
     armor = 47;
   }
@@ -1243,7 +1243,7 @@ class Gloves48 extends Item
   {
     id = 'gloves48';
     source = 'images/inventar/gloves/48.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 480;
     armor = 48;
   }
@@ -1267,7 +1267,7 @@ class Gloves49 extends Item
   {
     id = 'gloves49';
     source = 'images/inventar/gloves/49.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 490;
     armor = 49;
   }
@@ -1291,7 +1291,7 @@ class Gloves50 extends Item
   {
     id = 'gloves50';
     source = 'images/inventar/gloves/50.png';
-    dressType = DressType.gloves;
+    dressType = InventarType.gloves;
     cost = 500;
     armor = 50;
   }

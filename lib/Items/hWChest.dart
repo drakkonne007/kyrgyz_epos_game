@@ -117,7 +117,7 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
     removeOnFinish: true,
       onTick: (){
         for (final myItem in myItems) {
-          gameRef.gameMap.container.add(LootOnMap(myItem, position: gameRef.playerPosition()));
+          gameRef.gameMap.container.add(LootOnMap(myItem, position: position + Vector2(0,24)));
         }
       }
     );

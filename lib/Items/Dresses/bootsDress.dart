@@ -65,7 +65,7 @@ class Boots1 extends Item
   {
     id = 'boots1';
     source = 'images/inventar/boots/1.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 10;
     armor = 1;
   }
@@ -89,7 +89,7 @@ class Boots2 extends Item
   {
     id = 'boots2';
     source = 'images/inventar/boots/2.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 20;
     armor = 2;
   }
@@ -113,7 +113,7 @@ class Boots3 extends Item
   {
     id = 'boots3';
     source = 'images/inventar/boots/3.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 30;
     armor = 3;
   }
@@ -137,7 +137,7 @@ class Boots4 extends Item
   {
     id = 'boots4';
     source = 'images/inventar/boots/4.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 40;
     armor = 4;
   }
@@ -161,7 +161,7 @@ class Boots5 extends Item
   {
     id = 'boots5';
     source = 'images/inventar/boots/5.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 50;
     armor = 5;
   }
@@ -185,7 +185,7 @@ class Boots6 extends Item
   {
     id = 'boots6';
     source = 'images/inventar/boots/6.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 60;
     armor = 6;
   }
@@ -209,7 +209,7 @@ class Boots7 extends Item
   {
     id = 'boots7';
     source = 'images/inventar/boots/7.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 70;
     armor = 7;
   }
@@ -233,7 +233,7 @@ class Boots8 extends Item
   {
     id = 'boots8';
     source = 'images/inventar/boots/8.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 80;
     armor = 8;
   }
@@ -257,7 +257,7 @@ class Boots9 extends Item
   {
     id = 'boots9';
     source = 'images/inventar/boots/9.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 90;
     armor = 9;
   }
@@ -281,7 +281,7 @@ class Boots10 extends Item
   {
     id = 'boots10';
     source = 'images/inventar/boots/10.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 100;
     armor = 10;
   }
@@ -305,7 +305,7 @@ class Boots11 extends Item
   {
     id = 'boots11';
     source = 'images/inventar/boots/11.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 110;
     armor = 11;
   }
@@ -329,7 +329,7 @@ class Boots12 extends Item
   {
     id = 'boots12';
     source = 'images/inventar/boots/12.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 120;
     armor = 12;
   }
@@ -353,7 +353,7 @@ class Boots13 extends Item
   {
     id = 'boots31';
     source = 'images/inventar/boots/13.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 130;
     armor = 13;
   }
@@ -377,7 +377,7 @@ class Boots14 extends Item
   {
     id = 'boots14';
     source = 'images/inventar/boots/14.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 140;
     armor = 14;
   }
@@ -401,7 +401,7 @@ class Boots15 extends Item
   {
     id = 'boots15';
     source = 'images/inventar/boots/15.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 150;
     armor = 15;
   }
@@ -425,7 +425,7 @@ class Boots16 extends Item
   {
     id = 'boots16';
     source = 'images/inventar/boots/16.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 160;
     armor = 16;
   }
@@ -449,7 +449,7 @@ class Boots17 extends Item
   {
     id = 'boots17';
     source = 'images/inventar/boots/17.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 170;
     armor = 17;
   }
@@ -473,7 +473,7 @@ class Boots18 extends Item
   {
     id = 'boots18';
     source = 'images/inventar/boots/18.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 180;
     armor = 18;
   }
@@ -497,7 +497,7 @@ class Boots19 extends Item
   {
     id = 'boots19';
     source = 'images/inventar/boots/19.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 190;
     armor = 19;
   }
@@ -521,7 +521,7 @@ class Boots20 extends Item
   {
     id = 'boots20';
     source = 'images/inventar/boots/20.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 200;
     armor = 20;
   }
@@ -545,7 +545,7 @@ class Boots21 extends Item
   {
     id = 'boots21';
     source = 'images/inventar/boots/21.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 210;
     armor = 21;
   }
@@ -569,7 +569,7 @@ class Boots22 extends Item
   {
     id = 'boots22';
     source = 'images/inventar/boots/22.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 220;
     armor = 22;
   }
@@ -593,7 +593,7 @@ class Boots23 extends Item
   {
     id = 'boots23';
     source = 'images/inventar/boots/23.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 230;
     armor = 23;
   }
@@ -617,7 +617,7 @@ class Boots24 extends Item
   {
     id = 'boots24';
     source = 'images/inventar/boots/24.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 240;
     armor = 24;
   }
@@ -641,7 +641,7 @@ class Boots25 extends Item
   {
     id = 'boots25';
     source = 'images/inventar/boots/25.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 250;
     armor = 25;
   }
@@ -665,7 +665,7 @@ class Boots26 extends Item
   {
     id = 'boots26';
     source = 'images/inventar/boots/26.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 260;
     armor = 26;
   }
@@ -689,7 +689,7 @@ class Boots27 extends Item
   {
     id = 'boots27';
     source = 'images/inventar/boots/27.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 270;
     armor = 27;
   }
@@ -713,7 +713,7 @@ class Boots28 extends Item
   {
     id = 'boots28';
     source = 'images/inventar/boots/28.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 280;
     armor = 28;
   }
@@ -737,7 +737,7 @@ class Boots29 extends Item
   {
     id = 'boots29';
     source = 'images/inventar/boots/29.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 290;
     armor = 29;
   }
@@ -761,7 +761,7 @@ class Boots30 extends Item
   {
     id = 'boots30';
     source = 'images/inventar/boots/30.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 300;
     armor = 30;
   }
@@ -785,7 +785,7 @@ class Boots31 extends Item
   {
     id = 'boots31';
     source = 'images/inventar/boots/31.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 310;
     armor = 31;
   }
@@ -809,7 +809,7 @@ class Boots32 extends Item
   {
     id = 'boots32';
     source = 'images/inventar/boots/32.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 320;
     armor = 32;
   }
@@ -833,7 +833,7 @@ class Boots33 extends Item
   {
     id = 'boots33';
     source = 'images/inventar/boots/33.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 330;
     armor = 33;
   }
@@ -857,7 +857,7 @@ class Boots34 extends Item
   {
     id = 'boots34';
     source = 'images/inventar/boots/34.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 340;
     armor = 34;
   }
@@ -881,7 +881,7 @@ class Boots35 extends Item
   {
     id = 'boots35';
     source = 'images/inventar/boots/35.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 350;
     armor = 35;
   }
@@ -905,7 +905,7 @@ class Boots36 extends Item
   {
     id = 'boots36';
     source = 'images/inventar/boots/36.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 360;
     armor = 36;
   }
@@ -929,7 +929,7 @@ class Boots37 extends Item
   {
     id = 'boots37';
     source = 'images/inventar/boots/37.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 370;
     armor = 37;
   }
@@ -953,7 +953,7 @@ class Boots38 extends Item
   {
     id = 'boots38';
     source = 'images/inventar/boots/38.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 380;
     armor = 38;
   }
@@ -977,7 +977,7 @@ class Boots39 extends Item
   {
     id = 'boots39';
     source = 'images/inventar/boots/39.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 390;
     armor = 39;
   }
@@ -1001,7 +1001,7 @@ class Boots40 extends Item
   {
     id = 'boots40';
     source = 'images/inventar/boots/40.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 400;
     armor = 40;
   }
@@ -1025,7 +1025,7 @@ class Boots41 extends Item
   {
     id = 'boots41';
     source = 'images/inventar/boots/41.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 410;
     armor = 41;
   }
@@ -1049,7 +1049,7 @@ class Boots42 extends Item
   {
     id = 'boots42';
     source = 'images/inventar/boots/42.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 420;
     armor = 42;
   }
@@ -1073,7 +1073,7 @@ class Boots43 extends Item
   {
     id = 'boots1';
     source = 'images/inventar/boots/1.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 430;
     armor = 43;
   }
@@ -1097,7 +1097,7 @@ class Boots44 extends Item
   {
     id = 'boots44';
     source = 'images/inventar/boots/44.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 440;
     armor = 44;
   }
@@ -1121,7 +1121,7 @@ class Boots45 extends Item
   {
     id = 'boots45';
     source = 'images/inventar/boots/45.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 450;
     armor = 45;
   }
@@ -1145,7 +1145,7 @@ class Boots46 extends Item
   {
     id = 'boots46';
     source = 'images/inventar/boots/46.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 460;
     armor = 46;
   }
@@ -1169,7 +1169,7 @@ class Boots47 extends Item
   {
     id = 'boots74';
     source = 'images/inventar/boots/74.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 470;
     armor = 47;
   }
@@ -1193,7 +1193,7 @@ class Boots48 extends Item
   {
     id = 'boots48';
     source = 'images/inventar/boots/48.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 480;
     armor = 48;
   }
@@ -1217,7 +1217,7 @@ class Boots49 extends Item
   {
     id = 'boots49';
     source = 'images/inventar/boots/49.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 490;
     armor = 49;
   }
@@ -1241,7 +1241,7 @@ class Boots50 extends Item
   {
     id = 'boots50';
     source = 'images/inventar/boots/50.png';
-    dressType = DressType.boots;
+    dressType = InventarType.boots;
     cost = 500;
     armor = 50;
   }

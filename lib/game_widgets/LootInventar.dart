@@ -70,22 +70,19 @@ class _LootInvantarState extends State<LootInInventar>
   {
     List<Widget> myList = [];
     double rowHeight = (widget.mySize.height - widget.mySize.height * 0.25 - 20) / 8.5 - 2;
-    //min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 10 - getDoubleForTable() * 3)
     double rowWidth = -30 + min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 50 - getDoubleForTable() * 3);//-30 + widget.mySize.width * 0.62 - 10 - 40 - getDoubleForTable() * 3;
     myList.add(const SizedBox(height: 20));
     myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
     Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
         children:[
-          Expanded(
-            child: Image.asset('assets/images/inventar/gold.png', height: rowHeight,alignment: Alignment.centerRight,),),
-          Expanded(
-              child: SizedBox(
-                  child:AutoSizeText(widget.game.playerData.money.value.toString(),
+         Image.asset('assets/images/inventar/gold.png', height: rowHeight, width: rowHeight,alignment: Alignment.centerRight,fit: BoxFit.contain,),
+         AutoSizeText(widget.game.playerData.money.value.toString(),
                     textAlign: TextAlign.left,
-                    style: defaultInventarTextStyleGood,
+                    style: defaultInventarTextStyleGold,
                     minFontSize: 10,
-                    maxLines: 1,)))])
+                    maxLines: 1,)])
     ));
+    myList.add(const SizedBox(height: 5));
     if(widget.game.currentItemInInventar.value == null){
       myList.add(const Spacer());
       return myList;
@@ -120,7 +117,7 @@ class _LootInvantarState extends State<LootInInventar>
       ));
     }
     myList.add(const Spacer());
-    if(temp.dressType == DressType.none){
+    if(temp.dressType == InventarType.flask || temp.dressType == InventarType.item){
       double secs = temp.secsOfPermDamage == 0 ? 1 : temp.secsOfPermDamage;
       if(temp.hp != 0) {
         myList.add(Container(constraints: BoxConstraints.expand(
@@ -247,8 +244,7 @@ class _LootInvantarState extends State<LootInInventar>
             width: rowWidth, height: rowHeight), child:
         ElevatedButton(onPressed: () {
           setState(() {
-            temp.getEffectFromInventar(
-                widget.game);
+            temp.getEffectFromInventar(widget.game);
             if(!widget.game.playerData.itemInventar.containsKey(temp.id) && !widget.game.playerData.flaskInventar.containsKey(temp.id)){
               widget.game.currentItemInInventar.value = null;
             }
@@ -400,20 +396,19 @@ class _LootInvantarState extends State<LootInInventar>
       }
       bool isEquip = false;
       switch(temp.dressType){
-        case DressType.none:
-          break;
-        case DressType.helmet:
+        case InventarType.helmet:
           isEquip = temp == widget.game.playerData.helmetDress.value;
-        case DressType.armor:
+        case InventarType.bodyArmor:
           isEquip = temp == widget.game.playerData.armorDress.value;
-        case DressType.gloves:
+        case InventarType.gloves:
           isEquip = temp == widget.game.playerData.glovesDress.value;
-        case DressType.sword:
+        case InventarType.sword:
           isEquip = temp == widget.game.playerData.swordDress.value;
-        case DressType.ring:
+        case InventarType.ring:
           isEquip = temp == widget.game.playerData.ringDress.value;
-        case DressType.boots:
+        case InventarType.boots:
           isEquip = temp == widget.game.playerData.bootsDress.value;
+        default: break;
       }
       myList.add(const Spacer());
       if(temp.enabled) {
@@ -552,7 +547,6 @@ class _LootInvantarState extends State<LootInInventar>
                 onPressed: (){
                   setState(() {
                     widget.game.currentItemInInventar.value = item;
-                    // item.getEffectFromInventar(widget.game);
                   });
                 },
                 style: defaultNoneButtonStyle.copyWith(
@@ -589,7 +583,7 @@ class _LootInvantarState extends State<LootInInventar>
                                     alignment: Alignment.topLeft,
                                     height: minSize/4,
                                     margin: EdgeInsets.only(top: minSize / 20, left: minSize / 10),
-                                    child: AutoSizeText('2',style: defaultInventarTextStyle.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
+                                    child: AutoSizeText('1',style: defaultInventarTextStyle.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
                                   )
                               )) : Container(),
                           item.id == widget.game.playerData.currentFlask2.value ? SizedBox(
@@ -601,7 +595,7 @@ class _LootInvantarState extends State<LootInInventar>
                                     alignment: Alignment.topLeft,
                                     height: minSize/4,
                                     margin: EdgeInsets.only(top: minSize / 20, left: minSize / 10),
-                                    child: AutoSizeText('1',style: defaultInventarTextStyle.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
+                                    child: AutoSizeText('2',style: defaultInventarTextStyle.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
                                   )
                               )) : Container(),
                           SizedBox(

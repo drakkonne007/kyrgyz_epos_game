@@ -87,9 +87,6 @@ class Skeleton extends KyrgyzEnemy
     Image? spriteImageWithShield;
     int rand = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     _withShieldNow = rand == 0 ? false : true;
-    if(_withShieldNow){
-      health = 11;
-    }
     if (rand == 0) {
       spriteImage = await Flame.images.load(
           'tiles/map/prisonSet/Characters/Skeleton 1/no shield/Skeleton 1 - all animations.png');
@@ -192,35 +189,6 @@ class Skeleton extends KyrgyzEnemy
       }else if(index == 7){
         weapon!.collisionType = DCollisionType.inactive;
       }
-    }
-  }
-
-  @override
-  void selectBehaviour()
-  {
-    if(gameRef.gameMap.orthoPlayer == null){
-      return;
-    }
-    if(wasSeen) {
-      if (isNearPlayer(distPlayerLength)) {
-        weapon!.currentCoolDown = weapon!.coolDown;
-        var pl = gameRef.gameMap.orthoPlayer!;
-        if (pl.position.x > position.x) {
-          if (isFlippedHorizontally) {
-            flipHorizontally();
-          }
-        }
-        if (pl.position.x < position.x) {
-          if (!isFlippedHorizontally) {
-            flipHorizontally();
-          }
-        }
-        chooseHit();
-        return;
-      }
-      moveIdleRandom(true);
-    }else{
-      moveIdleRandom(isSee());
     }
   }
 

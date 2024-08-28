@@ -8,7 +8,8 @@ class DeathMenu extends StatelessWidget
   const DeathMenu(this._game, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Align(
         alignment: Alignment.center,
         child: Column(

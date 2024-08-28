@@ -188,9 +188,8 @@ abstract class PlayerWeapon extends DCollisionEntity
           temp.wasHit = true;
         }
         if(damage != null){
-          double tempDamage = damage! + (damage! * game.playerData.playerLevel.value) / 4;
           if((damage! == 0 && magicDamage == null) || damage! > 0){
-            temp.doHurt(hurt: tempDamage, inArmor: inArmor);
+            temp.doHurt(hurt: damage!, inArmor: inArmor);
           }
         }
         // temp.doHurt(hurt: damage ?? 0, inArmor: inArmor, isPlayer: isPlayer);

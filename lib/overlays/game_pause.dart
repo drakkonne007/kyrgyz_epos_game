@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -40,13 +42,13 @@ class GamePause extends StatelessWidget
           ),
           ElevatedButton(
             onPressed: (){
-
+              _game.doBuyMenu();
             },
             child: const Text('Настройки'),
           ),
           ElevatedButton(
             onPressed: (){
-
+              exit(0);
             },
             child: const Text('Exit'),),
         ],

@@ -18,7 +18,7 @@ int getLevel(double experience)
   int count = 1;
   while(experience > 0){
     experience -= startExp;
-    startExp = startExp + startExp * 1.1;
+    startExp = startExp + startExp * 1.2;
     count++;
   }
   return count;
@@ -86,7 +86,7 @@ class GameConsts
 
 class PlayerData
 {
-  final _statScale = 3;
+  final _statScale = 19;
 
   PlayerData(this._game)
   {
@@ -107,13 +107,13 @@ class PlayerData
   void setDress(Item item)
   {
     switch(item.dressType){
-      case DressType.helmet: helmetDress.value == item ?  helmetDress.value = NullItem() : helmetDress.value = item; break;
-      case DressType.armor:  armorDress.value == item ?  armorDress.value = NullItem() : armorDress.value = item; break;
-      case DressType.gloves: glovesDress.value == item ?  glovesDress.value = NullItem() : glovesDress.value = item; break;
-      case DressType.sword:  swordDress.value = item; break;
-      case DressType.ring:   ringDress.value == item ?  ringDress.value = NullItem() : ringDress.value = item; break;
-      case DressType.boots:  bootsDress.value == item ?  bootsDress.value = NullItem() : bootsDress.value = item; break;
-      case DressType.none: throw 'DressType none';
+      case InventarType.helmet: helmetDress.value == item ?  helmetDress.value = NullItem() : helmetDress.value = item; break;
+      case InventarType.bodyArmor:  armorDress.value == item ?  armorDress.value = NullItem() : armorDress.value = item; break;
+      case InventarType.gloves: glovesDress.value == item ?  glovesDress.value = NullItem() : glovesDress.value = item; break;
+      case InventarType.sword:  swordDress.value = item; break;
+      case InventarType.ring:   ringDress.value == item ?  ringDress.value = NullItem() : ringDress.value = item; break;
+      case InventarType.boots:  bootsDress.value == item ?  bootsDress.value = NullItem() : bootsDress.value = item; break;
+      default: throw 'DressType wrong: ${item.dressType}';
     }
   }
 
@@ -130,13 +130,13 @@ class PlayerData
     ring = ringDress.value;
     boots = bootsDress.value;
     switch(newItem.dressType){
-      case DressType.helmet:  helmet = newItem; break;
-      case DressType.armor: armor = newItem; break;
-      case DressType.gloves: gloves = newItem; break;
-      case DressType.sword: sword = newItem; break;
-      case DressType.ring: ring = newItem; break;
-      case DressType.boots: boots = newItem; break;
-      case DressType.none: return null;
+      case InventarType.helmet:  helmet = newItem; break;
+      case InventarType.bodyArmor: armor = newItem; break;
+      case InventarType.gloves: gloves = newItem; break;
+      case InventarType.sword: sword = newItem; break;
+      case InventarType.ring: ring = newItem; break;
+      case InventarType.boots: boots = newItem; break;
+      default: return null;
     }
     MetaDataForNewItem answer = MetaDataForNewItem();
     double procentOfHealth = health.value / maxHealth.value;
@@ -294,13 +294,15 @@ class PlayerData
   final ValueNotifier<double> secsOfPermanentDamage = ValueNotifier<double>(0);
 
   final ValueNotifier<double> extraArmor = ValueNotifier<double>(0);
-  final ValueNotifier<double> extraHurtMiss = ValueNotifier<double>(0);
+  final ValueNotifier<double> shieldBlock = ValueNotifier<double>(20);
+  final ValueNotifier<double> shieldBlockEnergy = ValueNotifier<double>(5);
+  final ValueNotifier<double> extraHurtMiss = ValueNotifier<double>(0.3);
   final ValueNotifier<double> extraDamage = ValueNotifier<double>(0);
   final ValueNotifier<double> extraChanceOfLoot = ValueNotifier<double>(0);
   final ValueNotifier<double> extraAttackSpeed = ValueNotifier<double>(0);
-  final double _beginEnergy = 50;
+  final double _beginEnergy = 40;
   final double _beginHealth = 100;
-  final double _beginMana = 50;
+  final double _beginMana = 40;
   final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
   final ValueNotifier<double> maxMana = ValueNotifier<double>(0);
   final ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
@@ -415,13 +417,13 @@ class PlayerData
     for(final cur in svg.currentInventar){
       Item it = itemFromName(cur);
       switch(it.dressType){
-        case DressType.armor:  armorDress.value = it; break;
-        case DressType.helmet: helmetDress.value = it; break;
-        case DressType.gloves: glovesDress.value = it; break;
-        case DressType.sword:  swordDress.value = it; break;
-        case DressType.ring:   ringDress.value = it; break;
-        case DressType.boots:  bootsDress.value = it; break;
-        case DressType.none: break;
+        case InventarType.bodyArmor:  armorDress.value = it; break;
+        case InventarType.helmet: helmetDress.value = it; break;
+        case InventarType.gloves: glovesDress.value = it; break;
+        case InventarType.sword:  swordDress.value = it; break;
+        case InventarType.ring:   ringDress.value = it; break;
+        case InventarType.boots:  bootsDress.value = it; break;
+        default: break;
       }
     }
     money.value = svg.gold;
@@ -433,11 +435,11 @@ class PlayerData
     bootsInventar = svg.bootsInventar;
     flaskInventar = svg.flaskInventar;
     itemInventar = svg.itemInventar;
-    health.value = svg.health;
+    playerLevel.value = getLevel(experience.value);
+    experience.value = svg.level;
     mana.value = svg.mana;
     energy.value = svg.energy;
-    experience.value = svg.level;
-    playerLevel.value = getLevel(experience.value);
+    health.value = svg.health;
     playerBigMap =  getWorldFromName(svg.world);
     startLocation = Vector2(svg.x, svg.y);
 

@@ -115,7 +115,7 @@ class Helmet1 extends Item
   {
     id = 'helmet1';
     source = 'images/inventar/helmet/1.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 10;
     armor = 1;
   }
@@ -139,7 +139,7 @@ class Helmet2 extends Item
   {
     id = 'helmet2';
     source = 'images/inventar/helmet/2.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 20;
     armor = 2;
   }
@@ -163,7 +163,7 @@ class Helmet3 extends Item
   {
     id = 'helmet1';
     source = 'images/inventar/helmet/3.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 30;
     armor = 3;
   }
@@ -187,7 +187,7 @@ class Helmet4 extends Item
   {
     id = 'helmet4';
     source = 'images/inventar/helmet/4.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 40;
     armor = 4;
   }
@@ -211,7 +211,7 @@ class Helmet5 extends Item
   {
     id = 'helmet5';
     source = 'images/inventar/helmet/5.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 50;
     armor = 5;
   }
@@ -235,7 +235,7 @@ class Helmet6 extends Item
   {
     id = 'helmet6';
     source = 'images/inventar/helmet/6.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 60;
     armor = 6;
   }
@@ -259,7 +259,7 @@ class Helmet7 extends Item
   {
     id = 'helmet7';
     source = 'images/inventar/helmet/7.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 70;
     armor = 7;
   }
@@ -283,7 +283,7 @@ class Helmet8 extends Item
   {
     id = 'helmet8';
     source = 'images/inventar/helmet/8.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 80;
     armor = 8;
   }
@@ -307,7 +307,7 @@ class Helmet9 extends Item
   {
     id = 'helmet9';
     source = 'images/inventar/helmet/9.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 90;
     armor = 9;
   }
@@ -331,7 +331,7 @@ class Helmet10 extends Item
   {
     id = 'helmet10';
     source = 'images/inventar/helmet/10.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 100;
     armor = 10;
   }
@@ -355,7 +355,7 @@ class Helmet11 extends Item
   {
     id = 'helmet11';
     source = 'images/inventar/helmet/11.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 110;
     armor = 11;
   }
@@ -379,7 +379,7 @@ class Helmet12 extends Item
   {
     id = 'helmet12';
     source = 'images/inventar/helmet/12.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 120;
     armor = 12;
   }
@@ -403,7 +403,7 @@ class Helmet13 extends Item
   {
     id = 'helmet31';
     source = 'images/inventar/helmet/13.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 130;
     armor = 13;
   }
@@ -427,7 +427,7 @@ class Helmet14 extends Item
   {
     id = 'helmet14';
     source = 'images/inventar/helmet/14.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 140;
     armor = 14;
   }
@@ -451,7 +451,7 @@ class Helmet15 extends Item
   {
     id = 'helmet15';
     source = 'images/inventar/helmet/15.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 150;
     armor = 15;
   }
@@ -475,7 +475,7 @@ class Helmet16 extends Item
   {
     id = 'helmet16';
     source = 'images/inventar/helmet/16.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 160;
     armor = 16;
   }
@@ -499,7 +499,7 @@ class Helmet17 extends Item
   {
     id = 'helmet17';
     source = 'images/inventar/helmet/17.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 170;
     armor = 17;
   }
@@ -523,7 +523,7 @@ class Helmet18 extends Item
   {
     id = 'helmet18';
     source = 'images/inventar/helmet/18.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 180;
     armor = 18;
   }
@@ -547,7 +547,7 @@ class Helmet19 extends Item
   {
     id = 'helmet19';
     source = 'images/inventar/helmet/19.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 190;
     armor = 19;
   }
@@ -571,7 +571,7 @@ class Helmet20 extends Item
   {
     id = 'helmet20';
     source = 'images/inventar/helmet/20.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 200;
     armor = 20;
   }
@@ -595,7 +595,7 @@ class Helmet21 extends Item
   {
     id = 'helmet21';
     source = 'images/inventar/helmet/21.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 210;
     armor = 21;
   }
@@ -619,7 +619,7 @@ class Helmet22 extends Item
   {
     id = 'helmet22';
     source = 'images/inventar/helmet/22.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 220;
     armor = 22;
   }
@@ -643,7 +643,7 @@ class Helmet23 extends Item
   {
     id = 'helmet23';
     source = 'images/inventar/helmet/23.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 230;
     armor = 23;
   }
@@ -667,7 +667,7 @@ class Helmet24 extends Item
   {
     id = 'helmet24';
     source = 'images/inventar/helmet/24.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 240;
     armor = 24;
   }
@@ -691,7 +691,7 @@ class Helmet25 extends Item
   {
     id = 'helmet25';
     source = 'images/inventar/helmet/25.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 250;
     armor = 25;
   }
@@ -715,7 +715,7 @@ class Helmet26 extends Item
   {
     id = 'helmet26';
     source = 'images/inventar/helmet/26.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 260;
     armor = 26;
   }
@@ -739,7 +739,7 @@ class Helmet27 extends Item
   {
     id = 'helmet27';
     source = 'images/inventar/helmet/27.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 270;
     armor = 27;
   }
@@ -763,7 +763,7 @@ class Helmet28 extends Item
   {
     id = 'helmet28';
     source = 'images/inventar/helmet/28.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 280;
     armor = 28;
   }
@@ -787,7 +787,7 @@ class Helmet29 extends Item
   {
     id = 'helmet29';
     source = 'images/inventar/helmet/29.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 290;
     armor = 29;
   }
@@ -811,7 +811,7 @@ class Helmet30 extends Item
   {
     id = 'helmet30';
     source = 'images/inventar/helmet/30.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 300;
     armor = 30;
   }
@@ -835,7 +835,7 @@ class Helmet31 extends Item
   {
     id = 'helmet31';
     source = 'images/inventar/helmet/31.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 310;
     armor = 31;
   }
@@ -859,7 +859,7 @@ class Helmet32 extends Item
   {
     id = 'helmet32';
     source = 'images/inventar/helmet/32.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 320;
     armor = 32;
   }
@@ -883,7 +883,7 @@ class Helmet33 extends Item
   {
     id = 'helmet33';
     source = 'images/inventar/helmet/33.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 330;
     armor = 33;
   }
@@ -907,7 +907,7 @@ class Helmet34 extends Item
   {
     id = 'helmet34';
     source = 'images/inventar/helmet/34.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 340;
     armor = 34;
   }
@@ -931,7 +931,7 @@ class Helmet35 extends Item
   {
     id = 'helmet35';
     source = 'images/inventar/helmet/35.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 350;
     armor = 35;
   }
@@ -955,7 +955,7 @@ class Helmet36 extends Item
   {
     id = 'helmet36';
     source = 'images/inventar/helmet/36.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 360;
     armor = 36;
   }
@@ -979,7 +979,7 @@ class Helmet37 extends Item
   {
     id = 'helmet37';
     source = 'images/inventar/helmet/37.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 370;
     armor = 37;
   }
@@ -1003,7 +1003,7 @@ class Helmet38 extends Item
   {
     id = 'helmet38';
     source = 'images/inventar/helmet/38.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 380;
     armor = 38;
   }
@@ -1027,7 +1027,7 @@ class Helmet39 extends Item
   {
     id = 'helmet39';
     source = 'images/inventar/helmet/39.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 390;
     armor = 39;
   }
@@ -1051,7 +1051,7 @@ class Helmet40 extends Item
   {
     id = 'helmet40';
     source = 'images/inventar/helmet/40.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 400;
     armor = 40;
   }
@@ -1075,7 +1075,7 @@ class Helmet41 extends Item
   {
     id = 'helmet41';
     source = 'images/inventar/helmet/41.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 410;
     armor = 41;
   }
@@ -1099,7 +1099,7 @@ class Helmet42 extends Item
   {
     id = 'helmet42';
     source = 'images/inventar/helmet/42.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 420;
     armor = 42;
   }
@@ -1123,7 +1123,7 @@ class Helmet43 extends Item
   {
     id = 'helmet1';
     source = 'images/inventar/helmet/1.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 430;
     armor = 43;
   }
@@ -1147,7 +1147,7 @@ class Helmet44 extends Item
   {
     id = 'helmet44';
     source = 'images/inventar/helmet/44.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 440;
     armor = 44;
   }
@@ -1171,7 +1171,7 @@ class Helmet45 extends Item
   {
     id = 'helmet45';
     source = 'images/inventar/helmet/45.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 450;
     armor = 45;
   }
@@ -1195,7 +1195,7 @@ class Helmet46 extends Item
   {
     id = 'helmet46';
     source = 'images/inventar/helmet/46.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 460;
     armor = 46;
   }
@@ -1219,7 +1219,7 @@ class Helmet47 extends Item
   {
     id = 'helmet74';
     source = 'images/inventar/helmet/74.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 470;
     armor = 47;
   }
@@ -1243,7 +1243,7 @@ class Helmet48 extends Item
   {
     id = 'helmet48';
     source = 'images/inventar/helmet/48.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 480;
     armor = 48;
   }
@@ -1267,7 +1267,7 @@ class Helmet49 extends Item
   {
     id = 'helmet49';
     source = 'images/inventar/helmet/49.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 490;
     armor = 49;
   }
@@ -1291,7 +1291,7 @@ class Helmet50 extends Item
   {
     id = 'helmet50';
     source = 'images/inventar/helmet/50.png';
-    dressType = DressType.helmet;
+    dressType = InventarType.helmet;
     cost = 500;
     armor = 50;
   }

@@ -477,6 +477,43 @@ class WorldPhy implements World
         }
       }
     }
+    for(final body in activeBody) {
+      if(body.bodyType != BodyType.static) {
+        continue;
+      }
+      for (final fixture in body.fixtures) {
+        if (minVector.x - 20 * PhysicVals.physicScale >
+            fixture.proxies[0].aabb.upperBound.x ||
+            maxVector.x + 20 * PhysicVals.physicScale <
+                fixture.proxies[0].aabb.lowerBound.x) {
+          continue;
+        }
+        if (minVector.y - 20 * PhysicVals.physicScale >
+            fixture.proxies[0].aabb.upperBound.y ||
+            maxVector.y + 20 * PhysicVals.physicScale <
+                fixture.proxies[0].aabb.lowerBound.y) {
+          continue;
+        }
+        List<Vector2> vertices;
+        bool isLoop = false;
+        switch(fixture.shape.shapeType) {
+          case ShapeType.circle: vertices = [Vector2.zero()]; break;
+          case ShapeType.edge: var temp = fixture.shape as EdgeShape ; vertices = [temp.vertex1, temp.vertex2]; break;
+          case ShapeType.polygon: var temp = fixture.shape as PolygonShape ; vertices = temp.vertices; isLoop = true; break;
+          case ShapeType.chain: var temp = fixture.shape as ChainShape ; vertices = temp.vertices; break;
+        }
+        for(int k = 0; k < vertices.length - 1; k++) {
+          if(f_pointOfIntersect(p1,p2,vertices[k],vertices[k+1]) != Vector2.zero()){
+            return true;
+          }
+        }
+        if(isLoop){
+          if(f_pointOfIntersect(p1,p2,vertices[0],vertices[vertices.length - 1]) != Vector2.zero()){
+            return true;
+          }
+        }
+      }
+    }
     return false;
   }
 

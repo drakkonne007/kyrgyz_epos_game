@@ -171,11 +171,28 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
-    _weapon?.collisionType = DCollisionType.inactive;
     if(inArmor){
       if(animState == AnimationState.shield){
-        if(gameRef.playerData.energy.value > hurt / 2){
-          gameRef.playerData.addEnergy(-hurt / 2);
+        // if(gameRef.playerData.energy.value > hurt / 2){
+        //   gameRef.playerData.addEnergy(-hurt / 2);
+        //   if(enableShieldLock) {
+        //     enableShieldLock = false;
+        //     gameRef.gameMap.container.add(
+        //         ShieldLock(position: position - Vector2(0, 17)));
+        //     add(TimerComponent(period: 0.5,repeat: false,removeOnFinish: true, onTick: (){
+        //       enableShieldLock = true;
+        //     }));
+        //   }
+        //   return;
+        // }else{
+        //   var temp = hurt - (gameRef.playerData.energy.value * 2);
+        //   gameRef.playerData.addEnergy(-hurt / 2);
+        //   hurt = temp;
+        // }
+        hurt -= gameRef.playerData.armor.value;
+        hurt -= gameRef.playerData.shieldBlock.value;
+        hurt = math.max(hurt, 0);
+        if(hurt == 0){
           if(enableShieldLock) {
             enableShieldLock = false;
             gameRef.gameMap.container.add(
@@ -185,31 +202,24 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
             }));
           }
           return;
-        }else{
-          var temp = hurt - (gameRef.playerData.energy.value * 2);
-          gameRef.playerData.addEnergy(-hurt / 2);
-          hurt = temp;
         }
-        hurt -= gameRef.playerData.armor.value;
-        hurt = math.max(hurt, 0);
         gameRef.playerData.addHealth(-hurt);
-        if(gameRef.playerData.health.value <1){
+        if(gameRef.playerData.health.value < 1){
           animation = animDeath;
           animationTicker?.onComplete = gameRef.startDeathMenu;
           animState = AnimationState.death;
         }else{
-          final temp = ColorEffect(
+          add(ColorEffect(
             const Color(0xFFFFFFFF),
             EffectController(duration: 0.07, reverseDuration: 0.07),
             opacityFrom: 0.0,
             opacityTo: 0.9,
-          );
-          add(temp);
+          ));
         }
         return;
       }else{
         hurt -= gameRef.playerData.armor.value;
-        hurt = math.max(hurt, 0);
+        hurt = math.max(hurt, 1);
       }
     }
     gameRef.playerData.addHealth(-hurt);
@@ -221,6 +231,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(animState == AnimationState.hurt){
         return;
       }
+      double hurtMiss = math.Random().nextDouble();
+      if(hurtMiss < gameRef.playerData.hurtMiss.value){
+        add(ColorEffect(
+          const Color(0xFFFFFFFF),
+          EffectController(duration: 0.07, reverseDuration: 0.07),
+          opacityFrom: 0.0,
+          opacityTo: 0.9,
+        ));
+        return;
+      }
+      _weapon?.collisionType = DCollisionType.inactive;
       _velocity.x = 0;
       _velocity.y = 0;
       groundRigidBody?.linearVelocity = Vector2.zero();
@@ -414,7 +435,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.isLockMove){
       return;
     }
+    if(gameRef.playerData.energy.value < gameRef.playerData.shieldBlockEnergy.value){
+      return;
+    }
     if(animState == AnimationState.move || animState == AnimationState.idle){
+      gameRef.playerData.addEnergy(-gameRef.playerData.shieldBlockEnergy.value);
       animState = AnimationState.shield;
       animation = animShield;
       animationTicker?.onComplete = (){
@@ -507,7 +532,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameHide) {
       return;
     }
-    game.playerData.addMana(dt * 2);
+    game.playerData.addMana(dt * 1.5);
+    game.playerData.addHealth(dt / 3);
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }

@@ -11,6 +11,7 @@ class KeyForChestOfGlory extends Item
   KeyForChestOfGlory()
   {
     id = 'keyForChestOfGlory';
+    dressType = InventarType.item;
     enabled = false;
     source = 'images/inventar/gloves/6.png';
     description = 'Ключ от сундука в деревне с садом';

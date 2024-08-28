@@ -70,10 +70,10 @@ class HumanWarrior extends KyrgyzEnemy
         image: spriteImage,
         srcSize:  Vector2(80,64));
     int seed = DateTime.now().microsecond;
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 5, loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 8, loop: false);
-    animAttack = spriteSheet.createAnimation(row: 5, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to:6,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 5,loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 5, loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 8, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 5, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to:6,loop: false);
+    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 4,loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 10,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
