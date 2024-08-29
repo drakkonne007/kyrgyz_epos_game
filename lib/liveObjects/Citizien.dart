@@ -36,7 +36,7 @@ class Citizien extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int? startTrigger;
   int? endTrigger;
   final int _id;
-  final double _velocity = 30;
+  final double _velocity = 3;
   int _nextPosition = 1;
   bool forward = true;
   bool _moveToAim = false;
@@ -82,11 +82,18 @@ class Citizien extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     add(ObjectHitbox(_objPoints,collisionType: DCollisionType.active,
         isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
     if(quest != null){
-      add(NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width / 2,height / 2 - 40)));
+      final questDialog = NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width / 2,height / 2 - 25));
+      if(isFlippedHorizontally){
+        questDialog.flipHorizontally();
+      }
+      add(questDialog);
     }
     add(TimerComponent(period: 0.6, repeat: true, onTick: checkPriority));
     gameRef.gameMap.checkRemoveItself.addListener(_checkIsNeedSelfRemove);
     size *= 1.2;
+    final massa = _ground?.getMassData();
+    massa?.mass = 99999;
+    _ground?.setMassData(massa!);
   }
 
   void checkPriority()
@@ -125,7 +132,7 @@ class Citizien extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         }else if(speed.x < 0 && isFlippedHorizontally){
           flipHorizontally();
         }
-        _ground?.applyLinearImpulse(speed * _velocity * 0.15);
+        _ground?.linearVelocity = speed * _velocity * 0.15;
         animation = _animMove;
         add(TimerComponent(period: position.distanceTo(endPos![_nextPosition]) / (_velocity * 1.5), removeOnFinish: true, onTick: (){
           if(forward){
@@ -150,7 +157,7 @@ class Citizien extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         }else if(speed.x < 0 && isFlippedHorizontally){
           flipHorizontally();
         }
-        _ground?.applyLinearImpulse(speed * _velocity);
+        _ground?.linearVelocity = speed * _velocity;
         animation = _animMove;
       }
     }else{

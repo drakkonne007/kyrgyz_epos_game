@@ -88,6 +88,21 @@ class PlayerData
 {
   final _statScale = 19;
 
+  Map<String,int> getInventarMap(InventarType type)
+  {
+    switch(type){
+      case InventarType.sword: return swordInventar;
+      case InventarType.bodyArmor: return bodyArmorInventar;
+      case InventarType.flask: return flaskInventar;
+      case InventarType.item: return itemInventar;
+      case InventarType.helmet: return helmetInventar;
+      case InventarType.gloves: return glovesInventar;
+      case InventarType.boots: return bootsInventar;
+      case InventarType.ring: return ringInventar;
+      default: return {};
+    }
+  }
+
   PlayerData(this._game)
   {
     playerLevel.addListener(_recalcAfterChangeDress);

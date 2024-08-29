@@ -616,7 +616,13 @@ class MapNode {
                   Vector2(double.parse(source[0]), double.parse(source[1])));
             }
           }
-          positionObject = Citizien(id, position: position,endPos: target);
+          int? startTrigger;
+          int? endTrigger;
+          if(quest != null){
+            startTrigger = int.parse(obj.getAttribute('startTrigger') ?? '0');
+            endTrigger = int.parse(obj.getAttribute('endTrigger') ?? '99999999');
+          }
+          positionObject = Citizien(id, position: position,endPos: target, startTrigger: startTrigger, endTrigger: endTrigger, quest: quest);
           myGame.gameMap.loadedLivesObjs.add(id);
           myGame.gameMap.container.add(positionObject);
         }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
@@ -111,14 +112,14 @@ class _BuyOverlayState extends State<BuyOverlay> {
     flasks = {};
     items = {};
 
-    playerHelmets = widget.game.playerData.helmetInventar;
-    playerArmors = widget.game.playerData.bodyArmorInventar;
-    playerGloves = widget.game.playerData.glovesInventar;
-    playerSwords = widget.game.playerData.swordInventar;
-    playerRings = widget.game.playerData.ringInventar;
-    playerBoots = widget.game.playerData.bootsInventar;
-    playerFlasks = widget.game.playerData.flaskInventar;
-    playerItems = widget.game.playerData.itemInventar;
+    playerHelmets = Map<String,int>.from(widget.game.playerData.helmetInventar);
+    playerArmors  = Map<String,int>.from(widget.game.playerData.bodyArmorInventar);
+    playerGloves  = Map<String,int>.from(widget.game.playerData.glovesInventar);
+    playerSwords  = Map<String,int>.from(widget.game.playerData.swordInventar);
+    playerRings   = Map<String,int>.from(widget.game.playerData.ringInventar);
+    playerBoots   = Map<String,int>.from(widget.game.playerData.bootsInventar);
+    playerFlasks  = Map<String,int>.from(widget.game.playerData.flaskInventar);
+    playerItems   = Map<String,int>.from(widget.game.playerData.itemInventar);
 
     _myInventarPage = 0;
     _shopInventarPage = 0;
@@ -279,10 +280,10 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                             },
                                           ),
                                         ],
-                                        expandedHeight: 70.0,
+                                        expandedHeight: 40.0,
                                         flexibleSpace: FlexibleSpaceBar(
                                           centerTitle: true,
-                                          title: Text(getName(false)),
+                                          title: AutoSizeText(getName(false)),
                                         ),
                                       ),
                                       SliverList(
@@ -295,6 +296,9 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                               int count = playerList[curItem.id]!;
                                               return ElevatedButton(
                                                   onPressed: () async{
+                                                    if(!curItem.enabled){
+                                                      return;
+                                                    }
                                                     int? isGo = 1;
                                                     if(count > 5) {
                                                       isGo = await askForCount(
@@ -380,18 +384,61 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                     slivers: <Widget>[
                                       SliverAppBar(
                                         pinned: true,
-                                        expandedHeight: 70,
+                                        expandedHeight: 40,
                                         backgroundColor: const Color(0xFFdfc08e),
                                         shadowColor: const Color(0xFF739461),
                                         actions: [
                                           IconButton(
                                             icon: const Icon(Icons.cancel),
                                             onPressed: widget.game.doGameHud,
+                                          ),//askForChange
+                                          IconButton(
+                                            icon: const Icon(Icons.check),
+                                            onPressed: ()async{
+                                              bool? answer = await askForChange(context);
+                                              if(answer != null && answer){
+                                                widget.game.playerData.money.value += _money;
+                                                _money = 0;
+                                                for(var item in _dealList.keys){
+                                                  if(item.isPlayer){
+                                                    widget.game.playerData.getInventarMap(item.item.dressType).update(item.item.id, (value) => value - _dealList[item]!);
+                                                    if(widget.game.playerData.getInventarMap(item.item.dressType)[item.item.id] == 0){
+                                                      widget.game.playerData.getInventarMap(item.item.dressType).remove(item.item.id);
+                                                    }
+                                                  }else{
+                                                    if(widget.game.playerData.getInventarMap(item.item.dressType).containsKey(item.item.id)){
+                                                      widget.game.playerData.getInventarMap(item.item.dressType).update(item.item.id, (value) => value + _dealList[item]!);
+                                                    }else{
+                                                      widget.game.playerData.getInventarMap(item.item.dressType).putIfAbsent(item.item.id, () => _dealList[item]!);
+                                                    }
+                                                  }
+                                                }
+                                                if(!widget.game.playerData.helmetInventar.containsKey(widget.game.playerData.helmetDress.value.id)){
+                                                  widget.game.playerData.helmetDress.value = NullItem();
+                                                }
+                                                if(!widget.game.playerData.bodyArmorInventar.containsKey(widget.game.playerData.armorDress.value.id)){
+                                                  widget.game.playerData.armorDress.value = NullItem();
+                                                }
+                                                if(!widget.game.playerData.glovesInventar.containsKey(widget.game.playerData.glovesDress.value.id)){
+                                                  widget.game.playerData.glovesDress.value = NullItem();
+                                                }
+                                                if(!widget.game.playerData.ringInventar.containsKey(widget.game.playerData.ringDress.value.id)){
+                                                  widget.game.playerData.ringDress.value = NullItem();
+                                                }
+                                                if(!widget.game.playerData.bootsInventar.containsKey(widget.game.playerData.bootsDress.value.id)){
+                                                  widget.game.playerData.bootsDress.value = NullItem();
+                                                }
+                                                if(!widget.game.playerData.swordInventar.containsKey(widget.game.playerData.swordDress.value.id)){
+                                                  widget.game.playerData.swordDress.value = NullItem();
+                                                }
+                                                widget.game.doGameHud();
+                                              }
+                                            },
                                           ),
                                         ],
                                         flexibleSpace: const FlexibleSpaceBar(
                                           centerTitle: true,
-                                          title: Text('Обмен'),
+                                          title: AutoSizeText('Обмен'),
                                         ),
                                       ),
                                       SliverList(
@@ -471,7 +518,7 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                           backgroundColor: const Color(0xFFdfc08e),
                                           shadowColor: const Color(0xFF739461),
                                           pinned: true,
-                                          expandedHeight: 70,
+                                          expandedHeight: 40,
                                           actions: [
                                             IconButton(
                                               icon: const Icon(Icons.arrow_circle_left),
@@ -504,7 +551,7 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                           ],
                                           flexibleSpace: FlexibleSpaceBar(
                                             centerTitle: true,
-                                            title: Text(getName(true)),
+                                            title: AutoSizeText(getName(true)),
                                           ),
                                         ),
                                         SliverList(
@@ -526,6 +573,10 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                       if (isGo == null || isGo == 0) {
                                                         return;
                                                       }
+                                                    }
+                                                    if((widget.game.playerData.money.value + _money) - curItem.cost * isGo < 0){
+                                                      await fewMoney(context);
+                                                      return;
                                                     }
                                                     setState(() {
                                                       _money -= curItem.cost * isGo!;
@@ -746,6 +797,148 @@ class _BuyOverlayState extends State<BuyOverlay> {
     }
   }
 
+  void minusItemFromOwner(Item item, bool toPlayer) //TODO доделать запись в БД магазинных данных
+  {
+    switch(item.dressType){
+      case InventarType.helmet:
+        {
+          if (toPlayer) {
+            if(playerHelmets.containsKey(item.id)){
+              playerHelmets.update(item.id, (value) => value + 1);
+            }else{
+              playerHelmets[item.id] = 1;
+            }
+          }else{
+            // if(helmets.containsKey(item.id)){
+            //   helmets.update(item.id, (value) => value + 1);
+            // }else{
+            //   helmets[item.id] = 1;
+            // }
+          }
+        }
+        break;
+      case InventarType.bodyArmor:
+        {
+          if (toPlayer) {
+            if(playerArmors.containsKey(item.id)){
+              playerArmors.update(item.id, (value) => value + 1);
+            }else{
+              playerArmors[item.id] = 1;
+            }
+          }else{
+            // if(armors.containsKey(item.id)){
+            //   armors.update(item.id, (value) => value + 1);
+            // }else{
+            //   armors[item.id] = 1;
+            // }
+          }
+        }
+        break;
+      case InventarType.gloves:
+        {
+          if (toPlayer) {
+            if(playerGloves.containsKey(item.id)){
+              playerGloves.update(item.id, (value) => value + 1);
+            }else{
+              playerGloves[item.id] = 1;
+            }
+          }else{
+            // if(gloves.containsKey(item.id)){
+            //   gloves.update(item.id, (value) => value + 1);
+            // }else{
+            //   gloves[item.id] = 1;
+            // }
+          }
+        }
+        break;
+      case InventarType.boots:
+        {
+          if (toPlayer) {
+            if(playerBoots.containsKey(item.id)){
+              playerBoots.update(item.id, (value) => value + 1);
+            }else{
+              playerBoots[item.id] = 1;
+            }
+          }else{
+            // if(boots.containsKey(item.id)){
+            //   boots.update(item.id, (value) => value + 1);
+            // }else{
+            //   boots[item.id] = 1;
+            // }
+          }
+        }
+        break;
+      case InventarType.sword:
+        {
+          if (toPlayer) {
+            if(playerSwords.containsKey(item.id)){
+              playerSwords.update(item.id, (value) => value + 1);
+            }else{
+              playerSwords[item.id] = 1;
+            }
+          }else{
+            // if(swords.containsKey(item.id)){
+            //   swords.update(item.id, (value) => value + 1);
+            // }else{
+            //   swords[item.id] = 1;
+            // }
+          }
+        }
+        break;
+      case InventarType.ring:
+        {
+          if (toPlayer) {
+            if(playerRings.containsKey(item.id)){
+              playerRings.update(item.id, (value) => value + 1);
+            }else{
+              playerRings[item.id] = 1;
+            }
+          }else{
+            // if(rings.containsKey(item.id)){
+            //   rings.update(item.id, (value) => value + 1);
+            // }else{
+            //   rings[item.id] = 1;
+            // }
+          }
+        }
+        break;
+      case InventarType.flask:
+        {
+          if (toPlayer) {
+            if(playerFlasks.containsKey(item.id)){
+              playerFlasks.update(item.id, (value) => value + 1);
+            }else{
+              playerFlasks[item.id] = 1;
+            }
+          }else{
+            // if(flasks.containsKey(item.id)){
+            //   flasks.update(item.id, (value) => value + 1);
+            // }else{
+            //   flasks[item.id] = 1;
+            // }
+          }
+        }
+        break;
+      case InventarType.item:
+        {
+          if (toPlayer) {
+            if(playerItems.containsKey(item.id)){
+              playerItems.update(item.id, (value) => value + 1);
+            }else{
+              playerItems[item.id] = 1;
+            }
+          }else{
+            // if(items.containsKey(item.id)){
+            //   items.update(item.id, (value) => value + 1);
+            // }else{
+            //   items[item.id] = 1;
+            // }
+          }
+        }
+        break;
+    }
+  }
+
   String getName(bool shopPage) {
     // _shopInventarPage = _shopInventarPage < 0 ? 7 : _shopInventarPage > 7 ? 0 : _shopInventarPage;
     int val;
@@ -784,21 +977,21 @@ class _BuyOverlayState extends State<BuyOverlay> {
     if (!shop) {
       switch (val) {
         case 0:
-          return widget.game.playerData.helmetInventar;
+          return playerHelmets;
         case 1:
-          return widget.game.playerData.bodyArmorInventar;
+          return playerArmors;
         case 2:
-          return widget.game.playerData.glovesInventar;
+          return playerGloves;
         case 3:
-          return widget.game.playerData.swordInventar;
+          return playerSwords;
         case 4:
-          return widget.game.playerData.ringInventar;
+          return playerRings;
         case 5:
-          return widget.game.playerData.bootsInventar;
+          return playerBoots;
         case 6:
-          return widget.game.playerData.flaskInventar;
+          return playerFlasks;
         default:
-          return widget.game.playerData.itemInventar;
+          return playerItems;
       }
     }
     switch (val) {
@@ -831,10 +1024,10 @@ class _BuyOverlayState extends State<BuyOverlay> {
         children:
         [
           Image.asset('assets/${myItem.source}',
-            width: 64, fit: BoxFit.contain, height: 64,),
+            width: 58, fit: BoxFit.contain, height: 58,),
           const Spacer(),
           Image.asset('assets/images/inventar/gold.png',
-            width: 40, fit: BoxFit.fitWidth,),
+            width: 30, fit: BoxFit.fitWidth,),
           AutoSizeText(isShop ? myItem.cost.toString() : (myItem.cost / 10).ceil().toString(), textAlign: TextAlign.left,
               style: isOrder ? defaultInventarTextStyle : defaultInventarTextStyleGold,
               minFontSize: 10,
@@ -926,37 +1119,35 @@ class _BuyOverlayState extends State<BuyOverlay> {
               Expanded(
                   child:Container(
                       margin: const EdgeInsets.only(left: 10),
-                      child: AutoSizeText(
-                        myItem.energy * secs >
-                            widget.game.playerData.maxEnergy.value
-                            ? 'Full'
-                            : (myItem.energy * secs).toStringAsFixed(1),
+                      child: AutoSizeText((myItem.energy * secs).toStringAsFixed(1),
                         style: defaultInventarTextStyle,
                         minFontSize: 10,
                         textAlign: TextAlign.left,
                         maxLines: 1,)))
             ])));
       }
-      myList.add(Container(constraints: const BoxConstraints.expand(
-          width: double.infinity, height: rowHeight), child:
-      Row(mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-                child:Image.asset('assets/images/inventar/clock.png',
-                  fit: BoxFit.contain,
-                  alignment: Alignment.centerRight,
-                  height: rowHeight,))
-            , Expanded(
-                child:Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    child: AutoSizeText(myItem.secsOfPermDamage.toString(),
-                      style: defaultInventarTextStyle,
-                      minFontSize: 10,
-                      textAlign: TextAlign.left,
-                      maxLines: 1,)))
-          ])));
+      if(myItem.secsOfPermDamage != 0) {
+        myList.add(Container(constraints: const BoxConstraints.expand(
+            width: double.infinity, height: rowHeight), child:
+        Row(mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: Image.asset('assets/images/inventar/clock.png',
+                    fit: BoxFit.contain,
+                    alignment: Alignment.centerRight,
+                    height: rowHeight,))
+              , Expanded(
+                  child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: AutoSizeText(myItem.secsOfPermDamage.toString(),
+                        style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.left,
+                        maxLines: 1,)))
+            ])));
+      }
     } else {
       if (myItem.hp != 0) {
         myList.add(Container(constraints: const BoxConstraints.expand(
@@ -969,7 +1160,8 @@ class _BuyOverlayState extends State<BuyOverlay> {
                   child:Image.asset('assets/images/inventar/healthInInventar.png',
                     fit: BoxFit.contain,
                     alignment: Alignment.centerRight,
-                    width: rowHeight,))
+                    width: rowHeight / 1.5,
+                    height: rowHeight / 1.5,))
               ,
               Expanded(
                   child:Container(
@@ -991,9 +1183,10 @@ class _BuyOverlayState extends State<BuyOverlay> {
             children: [
               Expanded(
                   child:Image.asset('assets/images/inventar/manaInInventar.png',
-                    fit: BoxFit.contain,
-                    alignment: Alignment.centerRight,
-                    width: rowHeight,))
+                      fit: BoxFit.contain,
+                      alignment: Alignment.centerRight,
+                      width: rowHeight / 1.5,
+                      height: rowHeight / 1.5))
               ,
               Expanded(
                   child:Container(
@@ -1017,7 +1210,8 @@ class _BuyOverlayState extends State<BuyOverlay> {
                   child:Image.asset('assets/images/inventar/staminaInInventar.png',
                     fit: BoxFit.contain,
                     alignment: Alignment.centerRight,
-                    width: rowHeight,))
+                    width: rowHeight / 1.5,
+                    height: rowHeight / 1.5,))
               , Expanded(
                   child:Container(
                       margin: const EdgeInsets.only(left: 10),
@@ -1127,7 +1321,8 @@ class _BuyOverlayState extends State<BuyOverlay> {
                       'assets/images/inventar/UI-9-sliced object-56Mana.png',
                       fit: BoxFit.contain,
                       alignment: Alignment.centerRight,
-                      width: rowHeight))
+                      width: rowHeight/1.5,
+                  height: rowHeight/1.5,))
               , Expanded(
                   child:Container(
                       margin: const EdgeInsets.only(left: 10),
@@ -1201,6 +1396,48 @@ async {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, _myNumber.value),
+            child: const Text('Ок'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<bool?> askForChange(BuildContext context)
+async {
+  return await showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFFdfc08e),
+        content: const Text('Совершить сделку?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Нет'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Да'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<bool?> fewMoney(BuildContext context)
+async {
+  return await showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFFdfc08e),
+        content: const Text('Недостаточно денег!'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
             child: const Text('Ок'),
           ),
         ],

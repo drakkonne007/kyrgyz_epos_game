@@ -98,14 +98,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11,loop: false); // 11
     animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
     List<Sprite> sprites = [];
-    List<double> times = [0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,0.09,];
+    List<double> times = [0.09,0.09,0.09,0.9,0.09,0.09,0.09];
     sprites.add(spriteSheet.getSprite(7,0));
     sprites.add(spriteSheet.getSprite(7,1));
     sprites.add(spriteSheet.getSprite(7,2));
-    sprites.add(spriteSheet.getSprite(7,3));
-    sprites.add(spriteSheet.getSprite(7,3));
-    sprites.add(spriteSheet.getSprite(7,3));
-    sprites.add(spriteSheet.getSprite(7,3));
     sprites.add(spriteSheet.getSprite(7,3));
     sprites.add(spriteSheet.getSprite(7,2));
     sprites.add(spriteSheet.getSprite(7,1));
@@ -171,6 +167,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0})
   {
+    if(animation == animSlide){
+      return;
+    }
     if(inArmor){
       if(animState == AnimationState.shield){
         // if(gameRef.playerData.energy.value > hurt / 2){
@@ -351,10 +350,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setIdleAnimation()
   {
-    if(animation == animMove || animation == animHurt){
       animation = animIdle;
       animState = AnimationState.idle;
-    }
   }
 
   void movePlayer(double angle, bool isRunRun)
@@ -406,7 +403,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       groundRigidBody?.clearForces();
       groundRigidBody?.linearVelocity = Vector2.zero();
       setGroundBody(targetPos: position, isEnemy: true, myDumping: 0);
-      hitBox!.collisionType = DCollisionType.inactive;
       animation = animSlide;
       animationTicker?.onFrame = (frame){
         if(frame == 5){
@@ -416,7 +412,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
       };
       animationTicker?.onComplete = (){
-        hitBox!.collisionType = DCollisionType.passive;
         setGroundBody(targetPos: position);
         chooseStaticAnimation();
       };

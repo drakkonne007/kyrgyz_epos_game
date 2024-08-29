@@ -2352,7 +2352,6 @@
    <properties>
     <property name="items" value="helmet40,gold4000,armor20,gloves12,boots15"/>
     <property name="neededItems" value="keyForChestOfGlory"/>
-    <property name="oneUse" value="true"/>
    </properties>
   </object>
   <object id="1467" name="frog" x="1169.33" y="1536">

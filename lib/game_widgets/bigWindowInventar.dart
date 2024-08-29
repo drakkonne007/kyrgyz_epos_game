@@ -491,9 +491,9 @@ class PlayerStats extends StatelessWidget
                                                 alignment: Alignment.centerRight,
                                                 child: SizedBox(
                                                     child: AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxHealth.value.toInt().toString()}'
-                                                        + (metaDataForNewItem != null ? (metaDataForNewItem.health != value || metaDataForNewItem.maxHealth != game.playerData.maxHealth.value
+                                                        + (metaDataForNewItem != null ? (metaDataForNewItem.maxHealth != game.playerData.maxHealth.value
                                                             ? ' (' + getSignedDiff(metaDataForNewItem.health, game.playerData.health.value, withBrace: false) + ' / ' + getSignedDiff(metaDataForNewItem.maxHealth, game.playerData.maxHealth.value, withBrace: false) + ')' : '') : ''),
-                                                      style: (metaDataForNewItem != null) ? metaDataForNewItem.health > value ? defaultInventarTextStyleGood : metaDataForNewItem.health < value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
+                                                      style: (metaDataForNewItem != null) ? metaDataForNewItem.maxHealth > game.playerData.maxHealth.value ? defaultInventarTextStyleGood : metaDataForNewItem.maxHealth < game.playerData.maxHealth.value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
                                                       minFontSize: 10,
                                                       maxLines: 1,))))),
                                   ]
@@ -520,10 +520,10 @@ class PlayerStats extends StatelessWidget
                                                 alignment: Alignment.centerRight,
                                                 child: SizedBox(
                                                     child: AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxMana.value.toInt().toString()}'
-                                                        + (metaDataForNewItem != null ? (metaDataForNewItem.mana != value || metaDataForNewItem.maxMana != game.playerData.maxMana.value
+                                                        + (metaDataForNewItem != null ? (metaDataForNewItem.maxMana != game.playerData.maxMana.value
                                                             ? ' (' + getSignedDiff(metaDataForNewItem.mana, game.playerData.mana.value, withBrace: false) +
                                                             ' / ' + getSignedDiff(metaDataForNewItem.maxMana, game.playerData.maxMana.value, withBrace: false) + ')' : '') : ''),
-                                                      style: (metaDataForNewItem != null) ? metaDataForNewItem.mana > value ? defaultInventarTextStyleGood : metaDataForNewItem.mana < value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
+                                                      style: (metaDataForNewItem != null) ? metaDataForNewItem.maxMana > game.playerData.maxMana.value ? defaultInventarTextStyleGood : metaDataForNewItem.maxMana < game.playerData.maxMana.value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
                                                       minFontSize: 10,
                                                       maxLines: 1,))))),
                                   ]
@@ -550,9 +550,9 @@ class PlayerStats extends StatelessWidget
                                                 alignment: Alignment.centerRight,
                                                 child: SizedBox(
                                                     child: AutoSizeText('${value.toInt().toString()} / ${game.playerData.maxEnergy.value.toInt().toString()}'
-                                                        + (metaDataForNewItem != null ? (metaDataForNewItem.energy != value || metaDataForNewItem.maxEnergy != game.playerData.maxEnergy.value
+                                                        + (metaDataForNewItem != null ? (metaDataForNewItem.maxEnergy != game.playerData.maxEnergy.value
                                                             ? ' (' + getSignedDiff(metaDataForNewItem.energy, game.playerData.energy.value, withBrace: false) + ' / ' + getSignedDiff(metaDataForNewItem.maxEnergy, game.playerData.maxEnergy.value, withBrace: false) + ')' : '') : ''),
-                                                      style: (metaDataForNewItem != null) ? metaDataForNewItem.energy > value ? defaultInventarTextStyleGood : metaDataForNewItem.energy < value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
+                                                      style: (metaDataForNewItem != null) ? metaDataForNewItem.maxEnergy > game.playerData.maxEnergy.value ? defaultInventarTextStyleGood : metaDataForNewItem.maxEnergy < game.playerData.maxEnergy.value ? defaultInventarTextStyleBad : defaultInventarTextStyle : defaultInventarTextStyle,
                                                       minFontSize: 10,
                                                       maxLines: 1,))))),
                                   ]

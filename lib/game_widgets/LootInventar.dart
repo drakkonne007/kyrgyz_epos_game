@@ -172,19 +172,26 @@ class _LootInvantarState extends State<LootInInventar>
                         maxLines: 1,)))
             ])));
       }
-      myList.add(Container(constraints: BoxConstraints.expand(
-          width: rowWidth, height: rowHeight), child:
-      Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/inventar/clock.png',
-              fit: BoxFit.contain, alignment: Alignment.centerLeft,height: rowHeight,)
-            ,Expanded(
-                child: SizedBox(
-                    child:AutoSizeText(temp.secsOfPermDamage.toString(),style: defaultInventarTextStyle,
-                      minFontSize: 10,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,)))
-          ])));
+      if(temp.secsOfPermDamage != 0) {
+        myList.add(Container(constraints: BoxConstraints.expand(
+            width: rowWidth, height: rowHeight), child:
+        Row(mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/inventar/clock.png',
+                fit: BoxFit.contain,
+                alignment: Alignment.centerLeft,
+                height: rowHeight,)
+              , Expanded(
+                  child: SizedBox(
+                      child: AutoSizeText(temp.secsOfPermDamage.toString(),
+                        style: defaultInventarTextStyle,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,)))
+            ])));
+      }
       myList.add(const Spacer());
       if(temp.enabled) {
         if(widget.game.playerData.flaskInventar.containsKey(temp.id)){

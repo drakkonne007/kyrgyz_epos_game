@@ -166,12 +166,12 @@ class GameHud extends StatelessWidget
                                       _game.gamePlayer().startHit(false);
                                     },
                                     style: defaultNoneButtonStyle.copyWith(
-                                        maximumSize: WidgetStateProperty.all<Size>(const Size(50,50)),
+                                        maximumSize: WidgetStateProperty.all<Size>(const Size(100,100)),
                                         backgroundBuilder: ((context, state, child){
                                           return ClipRRect(
                                             borderRadius: BorderRadius.circular(20),
                                             child:Image.asset('assets/images/inventar/UI-9-sliced object-209.png'
-                                              ,width: 50,height: 50,
+                                              ,width: 100,height: 100,
                                               fit: BoxFit.cover,),
                                           );
                                         })
@@ -191,10 +191,10 @@ class GameHud extends StatelessWidget
                                               _game.gamePlayer().makeAction();
                                             },
                                             style: defaultNoneButtonStyle.copyWith(
-                                                maximumSize: WidgetStateProperty.all<Size>(const Size(40,40)),
+                                                maximumSize: WidgetStateProperty.all<Size>(const Size(80,80)),
                                                 backgroundBuilder: ((context, state, child){
                                                   return Image.asset('assets/images/inventar/UI-9-sliced object-89.png'
-                                                    ,width: 40,height: 40
+                                                    ,width: 80,height: 80
                                                     ,fit: BoxFit.cover,);
                                                 })
                                             ),
@@ -210,13 +210,13 @@ class GameHud extends StatelessWidget
                                             _game.gamePlayer().startHit(true);
                                           },
                                           style: defaultNoneButtonStyle.copyWith(
-                                              maximumSize: WidgetStateProperty.all<Size>(const Size(50,50)),
+                                              maximumSize: WidgetStateProperty.all<Size>(const Size(100,100)),
                                               backgroundBuilder: ((context, state, child){
                                                 return ClipRRect(
                                                   borderRadius: BorderRadius.circular(20),
                                                   clipBehavior: Clip.hardEdge,
                                                   child:Image.asset('assets/images/inventar/UI-9-sliced object-223.png'
-                                                    ,width: 50,height: 50,
+                                                    ,width: 100,height: 100,
                                                     fit: BoxFit.cover,),
                                                 );
                                               })
