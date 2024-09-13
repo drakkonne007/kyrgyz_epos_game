@@ -22,18 +22,18 @@
  <tile id="86" type="high"/>
  <tile id="87" type="high"/>
  <tile id="88" type="high"/>
- <tile id="144" type="high" probability="0"/>
- <tile id="145" type="high" probability="0"/>
- <tile id="146" type="high" probability="0"/>
- <tile id="147" type="high" probability="0"/>
- <tile id="148" type="high" probability="0"/>
- <tile id="149" type="high" probability="0"/>
- <tile id="151" type="high" probability="0"/>
- <tile id="152" type="high" probability="0"/>
- <tile id="153" type="high" probability="0"/>
- <tile id="154" type="high" probability="0"/>
- <tile id="155" type="high" probability="0"/>
- <tile id="156" type="high" probability="0"/>
+ <tile id="144" probability="0"/>
+ <tile id="145" probability="0"/>
+ <tile id="146" probability="0"/>
+ <tile id="147" probability="0"/>
+ <tile id="148" probability="0"/>
+ <tile id="149" probability="0"/>
+ <tile id="151" probability="0"/>
+ <tile id="152" probability="0"/>
+ <tile id="153" probability="0"/>
+ <tile id="154" probability="0"/>
+ <tile id="155" probability="0"/>
+ <tile id="156" probability="0"/>
  <tile id="192" probability="0"/>
  <tile id="193" probability="0"/>
  <tile id="194" probability="0"/>

@@ -15,35 +15,35 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-
+const double myScale = 0.5;
 
 final List<Vector2> _groundPhyWithHorns = [
-  Vector2(-37.252,-29.5332) * PhysicVals.physicScale
-  ,Vector2(-48.83,-18.8128) * PhysicVals.physicScale
-  ,Vector2(-50.3309,-7.44913) * PhysicVals.physicScale
-  ,Vector2(-37.6808,0.484002) * PhysicVals.physicScale
-  ,Vector2(-26.1027,27.2851) * PhysicVals.physicScale
-  ,Vector2(25.7843,28.1427) * PhysicVals.physicScale
-  ,Vector2(33.2886,1.12723) * PhysicVals.physicScale
-  ,Vector2(50.6557,-8.09235) * PhysicVals.physicScale
-  ,Vector2(49.5836,-17.7408) * PhysicVals.physicScale
-  ,Vector2(36.7191,-29.9621) * PhysicVals.physicScale
-  ,Vector2(28.3572,-22.8866) * PhysicVals.physicScale
-  ,Vector2(-28.2468,-22.6722) * PhysicVals.physicScale
+  Vector2(-37.252,-29.5332) * PhysicVals.physicScale * myScale
+  ,Vector2(-48.83,-18.8128) * PhysicVals.physicScale * myScale
+  ,Vector2(-50.3309,-7.44913) * PhysicVals.physicScale * myScale
+  ,Vector2(-37.6808,0.484002) * PhysicVals.physicScale * myScale
+  ,Vector2(-26.1027,27.2851) * PhysicVals.physicScale * myScale
+  ,Vector2(25.7843,28.1427) * PhysicVals.physicScale * myScale
+  ,Vector2(33.2886,1.12723) * PhysicVals.physicScale * myScale
+  ,Vector2(50.6557,-8.09235) * PhysicVals.physicScale * myScale
+  ,Vector2(49.5836,-17.7408) * PhysicVals.physicScale * myScale
+  ,Vector2(36.7191,-29.9621) * PhysicVals.physicScale * myScale
+  ,Vector2(28.3572,-22.8866) * PhysicVals.physicScale * myScale
+  ,Vector2(-28.2468,-22.6722) * PhysicVals.physicScale * myScale
   ,];
 
 final List<Vector2> _groundPhyNoHorns = [
-  Vector2(-28.9005,-22.7831)
-  ,Vector2(-25.8418,27.4937)
-  ,Vector2(25.3909,26.9202)
-  ,Vector2(29.0231,-22.592)
+  Vector2(-28.9005,-22.7831) * myScale
+  ,Vector2(-25.8418,27.4937) * myScale
+  ,Vector2(25.3909,26.9202) * myScale
+  ,Vector2(29.0231,-22.592) * myScale
   ,];
 
 final List<Vector2> _objPoints = [
-  Vector2(-56.9092,-40.1559)
-  ,Vector2(-57.5661,50.837)
-  ,Vector2(57.7354,51.1655)
-  ,Vector2(56.4215,-42.7839)
+  Vector2(-56.9092,-40.1559) * myScale
+  ,Vector2(-57.5661,50.837) * myScale
+  ,Vector2(57.7354,51.1655) * myScale
+  ,Vector2(56.4215,-42.7839) * myScale
   ,];
 
 
@@ -79,7 +79,7 @@ class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       var res = await gameRef.dbHandler.getItemStateFromDb(_id, gameRef.gameMap.currentGameWorldData!.nameForGame);
       isOpened = res.opened;
     }
-    priority = position.y.toInt() + 27;
+    priority = position.y.toInt() + (27 * myScale).toInt();
     FixtureDef fix = FixtureDef(PolygonShape()..set(withHorns ? _groundPhyWithHorns : _groundPhyNoHorns));
     _ground = Ground(
         BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,

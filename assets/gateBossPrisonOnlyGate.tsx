@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.10.2" name="gateBossPrisonOnlyGate" tilewidth="96" tileheight="118" tilecount="18" columns="18">
- <image source="tiles/map/prisonSet/Props/Prison Gate-just the gate.png" width="1728" height="118"/>
+ <image source="tiles/map/prisonSet/Props/Prison Gate-with wall.png" width="1728" height="118"/>
  <tile id="0" type="gateBossPrison">
   <animation>
    <frame tileid="0" duration="100"/>

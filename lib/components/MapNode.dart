@@ -4,6 +4,7 @@ import 'package:flame/flame.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/Items/chest.dart';
 import 'package:game_flame/Items/cupOfBuff.dart';
+import 'package:game_flame/Items/gateBossPrison.dart';
 import 'package:game_flame/Items/gearSwitch.dart';
 import 'package:game_flame/Items/grass2Chest.dart';
 import 'package:game_flame/Items/hBridge.dart';
@@ -418,6 +419,11 @@ class MapNode {
         break;
       case 'prisonGateCircle':
         positionObject = PrisonGate(id, position: position, circle: true);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'gateBossPrison':
+        positionObject = GateBossPrison(id, position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;

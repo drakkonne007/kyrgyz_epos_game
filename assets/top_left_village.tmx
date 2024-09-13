@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1488">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1489">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -122,6 +122,7 @@
  <tileset firstgid="50459" source="wind cartoonish fx-288X64- 48frames.tsx"/>
  <tileset firstgid="50511" source="treasure chest lvl 3-opening animation-cartoon style.tsx"/>
  <tileset firstgid="50524" source="Human.tsx"/>
+ <tileset firstgid="50594" source="chestsGrass2NoHorns.tsx"/>
  <layer id="13" name="ground" width="110" height="99">
   <data encoding="csv">
 46647,46591,46647,46647,46645,46591,46701,46647,46701,46591,46646,46647,46591,46701,46701,46645,46647,46701,46701,46591,46647,46645,46701,46647,46701,46591,46701,46591,46647,46647,46646,46645,46591,46591,46646,46647,46645,46645,46647,46646,46647,46591,46645,46591,46645,46591,46701,46591,46646,46701,46647,46645,46591,46646,46646,46645,46591,46701,46646,46591,46591,46646,46647,46701,46647,46647,46647,46647,46591,46647,46646,46647,46646,46591,46591,46645,46645,46591,46646,46591,46646,46591,46645,46646,46645,46646,46646,46645,46645,46701,46701,46646,46591,46646,46591,46645,46591,46646,46701,46647,46646,46701,46591,46591,46646,46701,46645,46701,46645,46592,
@@ -2167,7 +2168,6 @@
   <object id="1326" x="353.636" y="792.909" width="29.6364" height="32.3636"/>
   <object id="1327" x="321.818" y="824.909" width="28.1818" height="36.7273"/>
   <object id="1328" x="962" y="1368" width="29.4545" height="37.4545"/>
-  <object id="1329" x="321.25" y="2104.5" width="62" height="69.75"/>
   <object id="1330" x="625.375" y="2093.88" width="30.125" height="38.125"/>
   <object id="1331" x="2821.64" y="513.273" width="51.8182" height="29.8182"/>
   <object id="1332" x="2177.82" y="951.636" width="29.6364" height="38.7273"/>
@@ -2348,12 +2348,6 @@
   </object>
   <object id="1464" gid="50459" x="789" y="2667" width="288" height="64"/>
   <object id="1465" gid="50459" x="730" y="2467" width="288" height="64"/>
-  <object id="1466" gid="50511" x="719" y="365.75" width="64" height="64">
-   <properties>
-    <property name="items" value="helmet40,gold4000,armor20,gloves12,boots15"/>
-    <property name="neededItems" value="keyForChestOfGlory"/>
-   </properties>
-  </object>
   <object id="1467" name="frog" x="1169.33" y="1536">
    <point/>
   </object>
@@ -2426,6 +2420,12 @@
   <object id="1487" gid="2147534192" x="2724" y="760" width="80" height="64">
    <properties>
     <property name="citizien" value="1"/>
+   </properties>
+  </object>
+  <object id="1488" gid="50594" x="678.333" y="384" width="102.667" height="102.667">
+   <properties>
+    <property name="items" value="helmet40,gold4000,armor20,gloves12,boots15"/>
+    <property name="neededItems" value="keyForChestOfGlory"/>
    </properties>
   </object>
  </objectgroup>
