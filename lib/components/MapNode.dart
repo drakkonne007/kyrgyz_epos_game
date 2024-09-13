@@ -3,9 +3,12 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/cupOfBuff.dart';
 import 'package:game_flame/Items/gearSwitch.dart';
+import 'package:game_flame/Items/grass2Chest.dart';
 import 'package:game_flame/Items/hBridge.dart';
 import 'package:game_flame/Items/hWChest.dart';
+import 'package:game_flame/Items/shrineExperience.dart';
 import 'package:game_flame/liveObjects/lightning.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
@@ -438,9 +441,14 @@ class MapNode {
         break;
       case 'vWChest':
         var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = VerticalWoodChest(myItems: [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        positionObject = VerticalWoodChest(myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -453,7 +461,53 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = StoneChest(myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,id,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = StoneChest(id, myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;//chestGrass2Horns
+      case 'chestGrass2Horns':
+        var items = obj.getAttribute('items')?.split(',');
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
+        var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
+        positionObject = ChestGrass2(id,withHorns: true,myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'chestGrass2':
+        var items = obj.getAttribute('items')?.split(',');
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
+        var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
+        positionObject = ChestGrass2(id,withHorns: false,myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'cupOfSilver':
+        positionObject = CupOfBuff(id,blood: false, position: position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'cupOfBlood':
+        positionObject = CupOfBuff(id,blood: true, position: position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'shrineExperience':
+        positionObject = ShrineExperience(id,onGrass: true, position: position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'shrineExperienceNoGrass':
+        positionObject = ShrineExperience(id,onGrass: false, position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
