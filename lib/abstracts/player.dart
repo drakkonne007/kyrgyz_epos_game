@@ -9,7 +9,7 @@ mixin class MainPlayer
 {
 
   void doHurt({required double hurt, bool inArmor=true, double permanentDamage = 0, double secsOfPermDamage=0}){}
-  SpriteAnimation? animMove, animIdle, animHurt, animDeath, animShort,animLong, animShield, animSlide;
+  SpriteAnimation? animMove, animIdle, animHurt, animDeath, animShort,animLong,animCombo, animShield, animSlide;
   final Vector2 maxSpeeds = Vector2.all(0);
   final Vector2 sprSize = Vector2(144,96);
   PlayerHitbox? hitBox;
@@ -22,6 +22,7 @@ mixin class MainPlayer
   bool canMagicSpell = true;
   bool enableShieldLock = true;
   bool wasMagicSwordHit = false;
+  bool makeComboHit = false;
   void startHit(bool isLong){}
   void doDash(bool left){}
   void doShield(){}

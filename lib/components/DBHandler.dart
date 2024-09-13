@@ -167,7 +167,6 @@ class DbHandler
     for(final wrld in fullMaps()){
       final res = await _database?.rawQuery('SELECT COUNT(*) as count FROM ${wrld.nameForGame}');
       if(res![0]['count'] as int != 0){
-        print('full objects');
         continue;
       }
       await _database?.execute('DELETE FROM ${wrld.nameForGame}');

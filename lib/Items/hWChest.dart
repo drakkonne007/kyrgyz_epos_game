@@ -32,12 +32,10 @@ final List<Vector2> _objPoints = [
 
 class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  HorizontalWoodChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false,
-    required super.position,
-    super.anchor = Anchor.center,
-    super.priority
-  ,required this.dbId});
-  bool isOpened;
+  HorizontalWoodChest({this.nedeedKilledBosses, this.neededItems, required this.myItems
+    , this.isOpened, required super.position
+    , super.anchor = Anchor.center,required this.dbId});
+  bool? isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
   List<Item> myItems;
@@ -58,7 +56,7 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
   @override
   Future onLoad() async
   {
-    priority = position.y.toInt();
+    priority = position.y.toInt() + 23;
     int rand = Random().nextInt(2);
     switch(rand){
       case 0: _spriteImg = await Flame.images.load(
@@ -66,31 +64,35 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
       case 1: _spriteImg = await Flame.images.load(
           'tiles/map/prisonSet/Props/wooden chest anim-opening-color scheme2.png'); break;
     }
-
     _spriteSheet = SpriteSheet(image: _spriteImg,
         srcSize: Vector2(_spriteImg.width.toDouble() / 11, _spriteImg.height.toDouble()));
-    var res = await gameRef.dbHandler.getItemStateFromDb(dbId, gameRef.gameMap.currentGameWorldData!.nameForGame);
-    isOpened = res.opened;
-    animation = isOpened ? _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 10, loop: false) : _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
-    if(!isOpened) {
-      _objectHitbox = ObjectHitbox(_objPoints,
-          collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
-          autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
-      // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
-      add(_objectHitbox!);
-    }
     FixtureDef fix = FixtureDef(PolygonShape()..set(_groundPhy));
     _ground = Ground(
-      BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,
-          userData: BodyUserData(isQuadOptimizaion: false)),
-      gameRef.world.physicsWorld
+        BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,
+            userData: BodyUserData(isQuadOptimizaion: false)),
+        gameRef.world.physicsWorld
     );
     _ground.createFixture(fix);
+    if(isOpened == null) {
+      var res = await gameRef.dbHandler.getItemStateFromDb(
+          dbId, gameRef.gameMap.currentGameWorldData!.nameForGame);
+      isOpened = res.opened;
+    }
+    if(isOpened!){
+      animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 10, loop: false);
+      return;
+    }
+    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
+    _objectHitbox = ObjectHitbox(_objPoints,
+        collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
+        autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
+    // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
+    add(_objectHitbox!);
   }
 
   void checkIsIOpen()
   {
-    if(isOpened){
+    if(isOpened!){
       return;
     }
     if(nedeedKilledBosses != null){
@@ -111,17 +113,17 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
       }
     }
     _objectHitbox?.removeFromParent();
+    gameRef.dbHandler.changeItemState(id: dbId, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
     isOpened = true;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-    removeOnFinish: true,
-      onTick: (){
-        for (final myItem in myItems) {
-          gameRef.gameMap.container.add(LootOnMap(myItem, position: position + Vector2(0,24)));
+        removeOnFinish: true,
+        onTick: (){
+          for (int i = 0; i<myItems.length;i++) {
+            gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,24) + Vector2(i * 15,0)));
+          }
         }
-      }
     );
     gameRef.gameMap.add(timer);
-    gameRef.dbHandler.changeItemState(id: dbId, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
   }
 }

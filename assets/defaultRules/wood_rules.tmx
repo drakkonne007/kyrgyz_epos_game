@@ -4,12 +4,8 @@
   <property name="MatchInOrder" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="../Ancient Ruins-Tileset - wall 8.tsx"/>
- <tileset firstgid="241" name="Atlas-Props" tilewidth="32" tileheight="32" tilecount="2500" columns="50">
-  <image source="../tiles/map/ancientLand/Props/Atlas-Props.png" width="1600" height="1600"/>
- </tileset>
- <tileset firstgid="2741" name="BottomWood" tilewidth="32" tileheight="32" tilecount="738" columns="41">
-  <image source="../tiles/map/ancientLand/Props/BottomWood.png" width="1312" height="576"/>
- </tileset>
+ <tileset firstgid="241" source="../Atlas-PropsAncient.tsx"/>
+ <tileset firstgid="2741" source="../BottomWood.tsx"/>
  <tileset firstgid="3479" source="../Animated Tree2.tsx"/>
  <tileset firstgid="3671" source=":/automap-tiles.tsx"/>
  <layer id="1" name="input_ground" width="60" height="40" opacity="0.83">

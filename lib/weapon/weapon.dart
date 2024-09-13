@@ -125,6 +125,7 @@ abstract class PlayerWeapon extends DCollisionEntity
   {
     _coolDown = val;
   }
+
   double get coolDown => _coolDown;
 
   void hit();

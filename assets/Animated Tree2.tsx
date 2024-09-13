@@ -117,4 +117,9 @@
  <tile id="125" type="high"/>
  <tile id="126" type="high"/>
  <tile id="127" type="high"/>
+ <tile id="129">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="16.5" y="-7.25" width="30.875" height="33.375"/>
+  </objectgroup>
+ </tile>
 </tileset>

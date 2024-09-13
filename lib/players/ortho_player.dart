@@ -49,22 +49,24 @@ final List<Vector2> _hitboxPoint = [
   ,];
 
 final List<Vector2> _attack1ind1 = [
-  Vector2(336,242) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(361,224) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(381,227) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(402,234) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(409,246) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(401,262) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(377,272) - Vector2(144*2 + 77,96*2 + 48),
-  Vector2(343,272) - Vector2(144*2 + 77,96*2 + 48),
-];
-
-final List<Vector2> _attack2ind1 = [
-  Vector2(0, -1),
-  Vector2(19,-1),
-  Vector2(19,2),
-  Vector2(0,2),
-];
+  Vector2(-14.8301,30.8012)
+  ,Vector2(7.03378,31.9642)
+  ,Vector2(21.9198,26.8471)
+  ,Vector2(34.4799,13.3566)
+  ,Vector2(32.8517,-1.29683)
+  ,Vector2(21.6872,-13.1591)
+  ,Vector2(4.94043,-17.1132)
+  ,Vector2(-10.6434,-13.6243)
+  ,Vector2(-25.2968,1.26171)
+  ,Vector2(-9.24782,-11.531)
+  ,Vector2(5.17302,-10.8332)
+  ,Vector2(28.8976,2.88987)
+  ,Vector2(8.89453,2.65728)
+  ,Vector2(23.3154,18.9389)
+  ,Vector2(0.986327,13.124)
+  ,Vector2(9.82491,27.0797)
+  ,Vector2(-6.45669,21.4974)
+  ,];
 
 final List<Vector2> _attack2ind2 = [
   Vector2(20, -1),
@@ -72,6 +74,23 @@ final List<Vector2> _attack2ind2 = [
   Vector2(69,2),
   Vector2(20,2),
 ];
+
+final List<Vector2> _attackCombo = [
+  Vector2(-36.0233,17.943)
+  ,Vector2(-14.6649,27.0966)
+  ,Vector2(10.9181,26.8619)
+  ,Vector2(27.3476,23.3413)
+  ,Vector2(47.063,19.3512)
+  ,Vector2(55.2778,12.5447)
+  ,Vector2(55.0431,5.03411)
+  ,Vector2(38.6136,0.809383)
+  ,Vector2(15.3776,-1.06827)
+  ,Vector2(45.6548,9.96296)
+  ,Vector2(8.33636,7.14647)
+  ,Vector2(27.1129,18.4124)
+  ,Vector2(0.825739,15.1265)
+  ,Vector2(2.23398,23.1065)
+  ,];
 
 
 class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameRef<KyrgyzGame>, MainPlayer
@@ -95,8 +114,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
+    animCombo = spriteSheet.createAnimation(row: 2, stepTime: 0.07, from: 5,loop: false);
     animShort = spriteSheet.createAnimation(row: 3, stepTime: 0.07, from: 0,to: 11,loop: false); // 11
-    animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.06, from: 0,to: 16,loop: false); // 16
+    animLong = spriteSheet.createAnimation(row: 4, stepTime: 0.07, from: 0,to: 16,loop: false); // 16
     List<Sprite> sprites = [];
     List<double> times = [0.09,0.09,0.09,0.9,0.09,0.09,0.09];
     sprites.add(spriteSheet.getSprite(7,0));
@@ -113,7 +133,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     anchor = Anchor.center;
     Vector2 tPos = -Vector2(15,20);
     Vector2 tSize = Vector2(22,45);
-
     hitBox = PlayerHitbox(_hitboxPoint,
         collisionType: DCollisionType.passive,isSolid: true,
         isStatic: false, isLoop: true, game: gameRef);
@@ -141,6 +160,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     _weapon?.damage = gameRef.playerData.damage.value;
     animShort?.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
     animLong?.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
+    animCombo?.stepTime = 0.06 + gameRef.playerData.attackSpeed.value;
   }
 
   void setGroundBody({Vector2? targetPos, bool isEnemy = false, double? myDumping})
@@ -291,16 +311,24 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void startHit(bool isLong)
   {
+    if(animation == animShort && animationTicker!.currentIndex > 1 && animationTicker!.currentIndex < 5 && !makeComboHit){
+      if(game.playerData.energy.value < _weapon!.energyCost){
+        return;
+      }
+      makeComboHit = true;
+      return;
+    }
     if(animation != animIdle && animation != animMove && animation != animShield){
       return;
     }
     _weapon?.energyCost = isLongAttack ? SpriteAnimationTicker(animLong!).totalDuration() * 4.5 : SpriteAnimationTicker(animShort!).totalDuration() * 3;
+    makeComboHit = false;
     if(game.playerData.energy.value < _weapon!.energyCost){
       return;
     }
     wasMagicSwordHit = false;
     FlameAudio.play('playerHit.mp3',volume: 2);
-    game.playerData.energy.value -= _weapon!.energyCost;
+    game.playerData.addEnergy(-_weapon!.energyCost);
     isLongAttack = isLong;
     animation = isLongAttack ? animLong : animShort;
     animState = AnimationState.attack;
@@ -311,9 +339,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     groundRigidBody?.linearVelocity = Vector2.zero();
     _weapon?.cleanHashes();
     animationTicker?.onFrame = onFrameWeapon;
-    animationTicker?.onComplete = (){
-      chooseStaticAnimation();
-    };
+    animationTicker?.onComplete = chooseStaticAnimation;
   }
 
   void chooseStaticAnimation()
@@ -491,13 +517,27 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void onFrameWeapon(int index)
   {
-    if(isLongAttack){
-      if(index == 6){
-        _weapon?.changeVertices(_attack2ind1,isLoop: true);
+    if(animation == animCombo){
+      if(index == 2) {
+        _weapon?.changeVertices(_attackCombo, isLoop: true);
         _weapon?.collisionType = DCollisionType.active;
-      }
-      else if(index == 7){
+        game.playerData.addEnergy(-_weapon!.energyCost);
+      }else if(index == 4){
+        _weapon?.collisionType = DCollisionType.inactive;
+        _weapon?.cleanHashes();
+      }else if(index == 8){
         _weapon?.changeVertices(_attack2ind2,isLoop: true);
+        _weapon?.collisionType = DCollisionType.active;
+      }else if(index == 12){
+        _weapon?.collisionType = DCollisionType.inactive;
+        animState = AnimationState.idle;
+      }
+      return;
+    }
+    if(isLongAttack){
+      if(index == 7){
+        _weapon?.changeVertices(_attack2ind2,isLoop: true);
+        _weapon?.collisionType = DCollisionType.active;
       }else if(index == 11){
         _weapon?.collisionType = DCollisionType.inactive;
         animState = AnimationState.idle;
@@ -508,7 +548,14 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         _weapon?.collisionType = DCollisionType.active;
       }else if(index == 5){
         _weapon?.collisionType = DCollisionType.inactive;
-        animState = AnimationState.idle;
+        if(makeComboHit){
+          _weapon?.cleanHashes();
+          animation = animCombo;
+          animationTicker?.onComplete = chooseStaticAnimation;
+          animationTicker?.onFrame = onFrameWeapon;
+        }else {
+          animState = AnimationState.idle;
+        }
       }
     }
   }
@@ -536,7 +583,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameRef.playerData.energy.value > 1) {
       isMinusEnergy = false;
     }
-    if(animState != AnimationState.move && animState != AnimationState.shield && animState != AnimationState.slide && animation != animLong && animation != animShort){
+    if(animState != AnimationState.move && animState != AnimationState.shield && animState != AnimationState.slide && animation != animLong && animation != animShort && animation != animCombo){
       gameRef.playerData.addEnergy(dt * 4);
       return;
     }

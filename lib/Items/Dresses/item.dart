@@ -92,6 +92,8 @@ Item itemFromName(String id)
     return Gold(int.parse(id.split('gold')[1]));
   }
   switch(id){
+    case 'BloodShrine': return BloodShrine();
+    case 'SilverShrine': return SilverShrine();
     case 'keyForChestOfGlory': return KeyForChestOfGlory();
     case 'hpSmall':   return HpSmall();
     case 'hpMedium':   return HpMedium();
@@ -127,14 +129,8 @@ abstract class Item
   }
 
   String id = '';
-  void getEffect(KyrgyzGame game)
-  {
-    throw 'Not override catch item';
-  }
-  void getEffectFromInventar(KyrgyzGame game, {double? duration})
-  {
-    throw 'Not override catch item from inventar';
-  }
+  void getEffect(KyrgyzGame game) {}
+  void getEffectFromInventar(KyrgyzGame game, {double? duration}) {}
 
   void minusInInventar(KyrgyzGame game, InventarType type)
   {

@@ -35,11 +35,10 @@ final Vector2 pointSpawn = Vector2(16.8564,47.6186);
 
 class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  StoneChest(this._id, {this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened = false
+  StoneChest(this._id, {this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened
     ,required super.position,
-    super.anchor = Anchor.center,
-    super.priority});
-  bool isOpened;
+    super.anchor = Anchor.center});
+  bool? isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
   List<Item> myItems;
@@ -60,22 +59,12 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @override
   Future onLoad() async
   {
-    var res = await gameRef.dbHandler.getItemStateFromDb(_id, gameRef.gameMap.currentGameWorldData!.nameForGame);
-    isOpened = res.opened;
-    priority = position.y.toInt();
-     _spriteImg = await Flame.images.load(
-          'tiles/map/prisonSet/Props/stone chest-openning animation-with dust FX.png');
-    _spriteSheet = SpriteSheet(image: _spriteImg,
-        srcSize: Vector2(_spriteImg.width.toDouble() / 16, _spriteImg.height.toDouble()));
-    animation = isOpened ? _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 15, loop: false) : _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
-
-    // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
-    if(!isOpened) {
-      _objectHitbox = ObjectHitbox(_objPoints,
-          collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
-          autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
-      add(_objectHitbox!);
+    if(isOpened == null) {
+      var res = await gameRef.dbHandler.getItemStateFromDb(
+          _id, gameRef.gameMap.currentGameWorldData!.nameForGame);
+      isOpened = res.opened;
     }
+    priority = position.y.toInt() + 40;
     FixtureDef fix = FixtureDef(PolygonShape()..set(_groundPhy));
     _ground = Ground(
         BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,
@@ -83,11 +72,24 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         gameRef.world.physicsWorld
     );
     _ground.createFixture(fix);
+    _spriteImg = await Flame.images.load(
+        'tiles/map/prisonSet/Props/stone chest-openning animation-with dust FX.png');
+    _spriteSheet = SpriteSheet(image: _spriteImg,
+        srcSize: Vector2(_spriteImg.width.toDouble() / 16, _spriteImg.height.toDouble()));
+    if(isOpened!){
+      animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 15, loop: false);
+      return;
+    }
+    animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
+    _objectHitbox = ObjectHitbox(_objPoints,
+        collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
+        autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
+    add(_objectHitbox!);
   }
 
   void checkIsIOpen()
   {
-    if(isOpened){
+    if(isOpened!){
       return;
     }
     if(nedeedKilledBosses != null){
@@ -108,22 +110,22 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
     }
     _objectHitbox?.removeFromParent();
+    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
     isOpened = true;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-    removeOnFinish: true,
-      onTick: (){
-        int rand = Random().nextInt(4);
-        if(rand == 0){
-          gameRef.gameMap.container.add(Skeleton(position + pointSpawn,id:-1, level: gameRef.gameMap.currentGameWorldData!.level));
-        }else {
-          for (final myItem in myItems) {
-            gameRef.gameMap.container.add(LootOnMap(myItem, position: position + Vector2(10,45)));
+        removeOnFinish: true,
+        onTick: (){
+          int rand = Random().nextInt(4);
+          if(rand == 0){
+            gameRef.gameMap.container.add(Skeleton(position + pointSpawn,id:-1, level: gameRef.gameMap.currentGameWorldData!.level));
+          }else {
+            for (int i = 0; i<myItems.length;i++) {
+              gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,45) + Vector2(i * 15,0)));
+            }
           }
         }
-      }
     );
     gameRef.gameMap.add(timer);
-    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
   }
 }

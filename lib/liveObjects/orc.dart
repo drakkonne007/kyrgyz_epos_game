@@ -254,7 +254,7 @@ class OrcWarrior extends KyrgyzEnemy
           weapon!.changeVertices(_attack210Fra,isLoop: true);
         }
       }else if(animation == animAttack2){
-        weapon?.coolDown = 0.2;
+        weapon?.coolDown = 1;
         if(index == 0){
           weapon!.changeVertices(_attack2,isLoop: true);
         }
@@ -278,11 +278,6 @@ class OrcWarrior extends KyrgyzEnemy
       return;
     }
     position = groundBody!.position / PhysicVals.physicScale;
-    // int pos = position.y.toInt() + 25;
-    // if(pos <= 0){
-    //   pos = 1;
-    // }
-    // priority = pos;
     if (animation == animMove || animation == animIdle) {
       groundBody?.applyLinearImpulse(speed * dt * groundBody!.mass);
     }

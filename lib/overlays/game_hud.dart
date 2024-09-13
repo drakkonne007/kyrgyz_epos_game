@@ -80,7 +80,7 @@ class GameHud extends StatelessWidget
                                       value = null;
                                       _game.playerData.currentFlask1.value = null;
                                     }
-                                    return value == null ? const SizedBox(width: 40,height: 40,) : ElevatedButton(
+                                    return value == null ? const SizedBox(width: 50,height: 50,) : ElevatedButton(
                                         onLongPress: (){
                                           itemFromName(value!).getEffectFromInventar(_game);
                                           _game.playerData.currentFlask1.notifyListeners();
@@ -90,7 +90,7 @@ class GameHud extends StatelessWidget
                                           _game.playerData.currentFlask1.notifyListeners();
                                         },
                                         style: defaultNoneButtonStyle.copyWith(
-                                            maximumSize: WidgetStateProperty.all<Size>(const Size(40,40)),
+                                            maximumSize: WidgetStateProperty.all<Size>(const Size(50,50)),
                                             backgroundBuilder: ((context, state, child){
                                               return Stack(
                                                   alignment: Alignment.bottomLeft,
@@ -98,10 +98,11 @@ class GameHud extends StatelessWidget
                                                   children:
                                                   [
                                                     Image.asset('assets/${itemFromName(value!).source}'
-                                                      ,width: 40,height: 40,
+                                                      ,width: 50,height: 50,
                                                       fit: BoxFit.contain,),
                                                     SizedBox(width: 20,height: 20,
-                                                        child: AutoSizeText(_game.playerData.flaskInventar[value]!.toString(),style: defaultInventarTextStyleGood.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)]))),
+                                                        child: AutoSizeText(_game.playerData.flaskInventar[value]!.toString()
+                                                            ,style: defaultInventarTextStyleGold.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 3)]))),
                                                   ]
                                               );
                                             })
@@ -117,7 +118,7 @@ class GameHud extends StatelessWidget
                                       _game.playerData.currentFlask2.value = null;
                                       value = null;
                                     }
-                                    return value == null ? const SizedBox(width: 40,height: 40,) : ElevatedButton(
+                                    return value == null ? const SizedBox(width: 50,height: 50,) : ElevatedButton(
                                         onLongPress: (){
                                           itemFromName(value!).getEffectFromInventar(_game);
                                           _game.playerData.currentFlask2.notifyListeners();
@@ -127,7 +128,7 @@ class GameHud extends StatelessWidget
                                           _game.playerData.currentFlask2.notifyListeners();
                                         },
                                         style: defaultNoneButtonStyle.copyWith(
-                                            maximumSize: WidgetStateProperty.all<Size>(const Size(40,40)),
+                                            maximumSize: WidgetStateProperty.all<Size>(const Size(50,50)),
                                             backgroundBuilder: ((context, state, child){
                                               return Stack(
                                                   alignment: Alignment.bottomLeft,
@@ -135,10 +136,11 @@ class GameHud extends StatelessWidget
                                                   children:
                                                   [
                                                     Image.asset('assets/${itemFromName(value!).source}'
-                                                      ,width: 40,height: 40,
+                                                      ,width: 50,height: 50,
                                                       fit: BoxFit.contain,),
                                                     SizedBox(width: 20,height: 20,
-                                                        child: AutoSizeText(_game.playerData.flaskInventar[value]!.toString(),style: defaultInventarTextStyleGood.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)]))),
+                                                        child: AutoSizeText(_game.playerData.flaskInventar[value]!.toString()
+                                                            ,style: defaultInventarTextStyleGold.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 3)]))),
                                                   ]
                                               );
                                             })
@@ -158,27 +160,35 @@ class GameHud extends StatelessWidget
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children:
                               [
-                                ElevatedButton(
-                                    onLongPress: (){
-                                      _game.gamePlayer().startHit(false);
-                                    },
-                                    onPressed: (){
-                                      _game.gamePlayer().startHit(false);
-                                    },
-                                    style: defaultNoneButtonStyle.copyWith(
-                                        maximumSize: WidgetStateProperty.all<Size>(const Size(100,100)),
-                                        backgroundBuilder: ((context, state, child){
-                                          return ClipRRect(
-                                            borderRadius: BorderRadius.circular(20),
-                                            child:Image.asset('assets/images/inventar/UI-9-sliced object-209.png'
-                                              ,width: 100,height: 100,
-                                              fit: BoxFit.cover,),
-                                          );
-                                        })
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ElevatedButton(
+                                        onLongPress: (){
+                                          _game.gamePlayer().startHit(false);
+                                        },
+                                        onPressed: (){
+                                          _game.gamePlayer().startHit(false);
+                                        },
+                                        style: defaultNoneButtonStyle.copyWith(
+                                            maximumSize: WidgetStateProperty.all<Size>(const Size(80,80)),
+                                            backgroundBuilder: ((context, state, child){
+                                              return ClipRRect(
+                                                borderRadius: BorderRadius.circular(80),
+                                                child:Image.asset('assets/images/inventar/UI-9-sliced object-209.png'
+                                                  ,opacity: const AlwaysStoppedAnimation(.5)
+                                                  ,width: 80,height: 80,
+                                                  fit: BoxFit.contain,),
+                                              );
+                                            })
+                                        ),
+                                        child: null
                                     ),
-                                    child: null
+                                    const SizedBox(width: 5,)
+                                  ],
                                 ),
-                                const SizedBox(height: 15,),
+                                const SizedBox(height: 10,),
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     mainAxisSize: MainAxisSize.min,
@@ -195,13 +205,12 @@ class GameHud extends StatelessWidget
                                                 backgroundBuilder: ((context, state, child){
                                                   return Image.asset('assets/images/inventar/UI-9-sliced object-89.png'
                                                     ,width: 80,height: 80
-                                                    ,fit: BoxFit.cover,);
+                                                    ,fit: BoxFit.contain,);
                                                 })
                                             ),
                                             child: null
                                         );
                                       }),
-
                                       ElevatedButton(
                                           onLongPress: (){
                                             _game.gamePlayer().startHit(true);
@@ -210,22 +219,24 @@ class GameHud extends StatelessWidget
                                             _game.gamePlayer().startHit(true);
                                           },
                                           style: defaultNoneButtonStyle.copyWith(
-                                              maximumSize: WidgetStateProperty.all<Size>(const Size(100,100)),
+                                              maximumSize: WidgetStateProperty.all<Size>(const Size(80,80)),
                                               backgroundBuilder: ((context, state, child){
                                                 return ClipRRect(
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius: BorderRadius.circular(80),
                                                   clipBehavior: Clip.hardEdge,
                                                   child:Image.asset('assets/images/inventar/UI-9-sliced object-223.png'
-                                                    ,width: 100,height: 100,
-                                                    fit: BoxFit.cover,),
+                                                    ,opacity: const AlwaysStoppedAnimation(.5)
+                                                    ,width: 80,height: 80,
+                                                    fit: BoxFit.contain,),
                                                 );
                                               })
                                           ),
                                           child: null
                                       ),
+                                      const SizedBox(width: 5,)
                                     ]
                                 ),
-                                const SizedBox(height: 15,),
+                                const SizedBox(height: 5,),
                               ]
                           ),
                         ),

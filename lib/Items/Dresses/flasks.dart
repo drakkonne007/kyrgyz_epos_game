@@ -3,6 +3,46 @@ import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
+class BloodShrine extends Item
+{
+  BloodShrine()
+  {
+    id = 'BloodShrine';
+    secsOfPermDamage = 20;
+  }
+
+  @override
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
+  {
+    game.playerData.addHealth(game.playerData.maxHealth.value);
+    var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addHealth(game.playerData.maxHealth.value * 0.5 * dt);
+    });
+    game.gameMap.effectComponent.add(timer);
+  }
+}
+
+class SilverShrine extends Item
+{
+  SilverShrine()
+  {
+    id = 'SilverShrine';
+    secsOfPermDamage = 20;
+  }
+
+  @override
+  void getEffectFromInventar(KyrgyzGame game, {double? duration})
+  {
+    game.playerData.addEnergy(game.playerData.maxEnergy.value);
+    game.playerData.addMana(game.playerData.maxMana.value);
+    var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
+      game.playerData.addEnergy(game.playerData.maxEnergy.value * 0.5 * dt);
+      game.playerData.addMana(game.playerData.maxMana.value * 0.5 * dt);
+    });
+    game.gameMap.effectComponent.add(timer);
+  }
+}
+
 class HpSmall extends Item
 {
   HpSmall()

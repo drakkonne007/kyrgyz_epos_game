@@ -12,16 +12,9 @@ import 'package:game_flame/kyrgyz_game.dart';
 class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   Chest(this._level,{this.nedeedKilledBosses, this.neededItems, required this.myItems
-    ,Sprite? sprite,
-    bool? autoResize,
-    required super.position,
-    Vector2? size,
-    super.scale,
-    super.angle,
-    super.nativeAngle,
+    ,required super.position,
     super.anchor = Anchor.center,
-    super.priority,
-  this.isStatic = false,
+    this.isStatic = false,
     this.id
   });
   Set<String>? nedeedKilledBosses;
@@ -86,8 +79,8 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     remove(_objectHitbox!);
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    for (final myItem in myItems) {
-      gameRef.gameMap.container.add(LootOnMap(myItem, position: position + Vector2(0,20)));
+    for (int i = 0; i<myItems.length;i++) {
+      gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,20) + Vector2(i * 15,0)));
     }
     add(OpacityEffect.by(-1,EffectController(duration: animationTicker!.totalDuration() + 0.3),onComplete: (){
       if(isStatic) {

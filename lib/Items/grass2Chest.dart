@@ -12,28 +12,47 @@ import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-final List<Vector2> _groundPhy = [
-  Vector2(-19.7296,-17.6581) * PhysicVals.physicScale
-  ,Vector2(-17.9958,43.0723) * PhysicVals.physicScale
-  ,Vector2(11.4409,43.3681) * PhysicVals.physicScale
-  ,Vector2(13.0669,-17.7537) * PhysicVals.physicScale
+
+
+final List<Vector2> _groundPhyWithHorns = [
+  Vector2(-37.252,-29.5332) * PhysicVals.physicScale
+  ,Vector2(-48.83,-18.8128) * PhysicVals.physicScale
+  ,Vector2(-50.3309,-7.44913) * PhysicVals.physicScale
+  ,Vector2(-37.6808,0.484002) * PhysicVals.physicScale
+  ,Vector2(-26.1027,27.2851) * PhysicVals.physicScale
+  ,Vector2(25.7843,28.1427) * PhysicVals.physicScale
+  ,Vector2(33.2886,1.12723) * PhysicVals.physicScale
+  ,Vector2(50.6557,-8.09235) * PhysicVals.physicScale
+  ,Vector2(49.5836,-17.7408) * PhysicVals.physicScale
+  ,Vector2(36.7191,-29.9621) * PhysicVals.physicScale
+  ,Vector2(28.3572,-22.8866) * PhysicVals.physicScale
+  ,Vector2(-28.2468,-22.6722) * PhysicVals.physicScale
+  ,];
+
+final List<Vector2> _groundPhyNoHorns = [
+  Vector2(-28.9005,-22.7831)
+  ,Vector2(-25.8418,27.4937)
+  ,Vector2(25.3909,26.9202)
+  ,Vector2(29.0231,-22.592)
   ,];
 
 final List<Vector2> _objPoints = [
-  Vector2(13.0233,-17.9948)
-  ,Vector2(31.61,-17.9948)
-  ,Vector2(30.7178,43.4157)
-  ,Vector2(11.0903,43.4157)
+  Vector2(-56.9092,-40.1559)
+  ,Vector2(-57.5661,50.837)
+  ,Vector2(57.7354,51.1655)
+  ,Vector2(56.4215,-42.7839)
   ,];
 
-class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
+
+class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  VerticalWoodChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened,
-    required super.position,
-    super.anchor = Anchor.center
-    ,required this.dbId});
+  ChestGrass2(this._id, {this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened
+    ,required super.position,
+    required this.withHorns,
+    super.anchor = Anchor.center});
   bool? isOpened;
   Set<String>? nedeedKilledBosses;
   Set<String>? neededItems;
@@ -42,9 +61,10 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
   late SpriteSheet _spriteSheet;
   ObjectHitbox? _objectHitbox;
   late Ground _ground;
-  int dbId;
+  int _id;
   final String _noNeededItem = 'Нет нужного предмета...';
   final String _noNeededKilledBoss = 'Сначала победите хозяина';
+  bool withHorns;
 
   @override
   void onRemove()
@@ -55,37 +75,30 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
   @override
   Future onLoad() async
   {
-    priority = position.y.toInt() + 43;
-    int rand = Random().nextInt(2);
-    switch(rand){
-      case 0: _spriteImg = await Flame.images.load(
-          'tiles/map/prisonSet/Props/wooden chest anim - vertical-opening-color scheme1.png'); break;
-      case 1: _spriteImg = await Flame.images.load(
-          'tiles/map/prisonSet/Props/wooden chest anim - vertical-opening-color scheme2.png'); break;
+    if(isOpened == null){
+      var res = await gameRef.dbHandler.getItemStateFromDb(_id, gameRef.gameMap.currentGameWorldData!.nameForGame);
+      isOpened = res.opened;
     }
-    FixtureDef fix = FixtureDef(PolygonShape()..set(_groundPhy));
+    priority = position.y.toInt() + 27;
+    FixtureDef fix = FixtureDef(PolygonShape()..set(withHorns ? _groundPhyWithHorns : _groundPhyNoHorns));
     _ground = Ground(
         BodyDef(type: BodyType.static, position: position * PhysicVals.physicScale, fixedRotation: true,
             userData: BodyUserData(isQuadOptimizaion: false)),
         gameRef.world.physicsWorld
     );
     _ground.createFixture(fix);
+    _spriteImg = await Flame.images.load(
+        'tiles/map/grassLand2/Props/Animated props/chests-opening.png');
     _spriteSheet = SpriteSheet(image: _spriteImg,
-        srcSize: Vector2(_spriteImg.width.toDouble() / 11, _spriteImg.height.toDouble()));
-    if(isOpened == null) {
-      var res = await gameRef.dbHandler.getItemStateFromDb(
-          dbId, gameRef.gameMap.currentGameWorldData!.nameForGame);
-      isOpened = res.opened;
-    }
+        srcSize: Vector2(_spriteImg.width.toDouble() / 8, _spriteImg.height.toDouble()));
     if(isOpened!){
-      animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 10, loop: false);
+      animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 15, loop: false);
       return;
     }
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     _objectHitbox = ObjectHitbox(_objPoints,
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);
-    // var asd = ObjectHitbox(obstacleBehavoiur: checkIsIOpen);
     add(_objectHitbox!);
   }
 
@@ -112,21 +125,17 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
       }
     }
     _objectHitbox?.removeFromParent();
-    gameRef.dbHandler.changeItemState(id: dbId, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
     isOpened = true;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
     TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
         removeOnFinish: true,
         onTick: (){
-          for (int i=0;i<myItems.length;i++) {
-            if(isFlippedHorizontally){
-              gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(50,0) + Vector2(0,i * 15)));
-            }else{
-              gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position - Vector2(50,0) + Vector2(0,i * 15)));
-            }
+          for (int i = 0; i<myItems.length;i++) {
+            gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,45) + Vector2(i * 15,0)));
           }
         }
     );
     gameRef.gameMap.add(timer);
+    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
   }
 }

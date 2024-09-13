@@ -106,10 +106,10 @@ class Ogr extends KyrgyzEnemy
       ), srcSize: srcSize);
       animHurt = spriteSheet.createAnimation(row: 0, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
-      spriteSheet = SpriteSheet(image: await Flame.images.load(
-          'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
-      ), srcSize: srcSize);
-      animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
+      // spriteSheet = SpriteSheet(image: await Flame.images.load(
+      //     'tiles/map/mountainLand/Characters/Enemy 1/enemy 1-atk2.png'
+      // ), srcSize: srcSize);
+      // animAttack2 = spriteSheet.createAnimation(row: 0, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
 
     }else{
       SpriteSheet spriteSheet = SpriteSheet(image: await Flame.images.load(

@@ -457,6 +457,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         if(isFreeze < 0){
           isFreeze = 0;
         }
+        weapon?.collisionType = DCollisionType.inactive;
         isFreeze++;
         magicAnim = ColorEffect(opacityTo: 0.5, BasicPalette.blue.color, EffectController(duration: 0.51 * magicScaleFreeze,reverseDuration: 0.51 * magicScaleFreeze), onComplete: (){isFreeze--;});
         break;

@@ -60,14 +60,13 @@ class ArrowSpawn extends Component with HasGameRef<KyrgyzGame>
       removeFromParent();
     }
   }
-
 }
 
 final List<Vector2> _groundP = [
-  Vector2(-1.0222,-21.9047) * PhysicVals.physicScale
-  ,Vector2(-3.05331,-11.5183) * PhysicVals.physicScale
-  ,Vector2(2.97964,-11.4713) * PhysicVals.physicScale
-  ,Vector2(1.31221,-21.7142) * PhysicVals.physicScale
+  Vector2(0,-19) * PhysicVals.physicScale
+  ,Vector2(-1,-13) * PhysicVals.physicScale
+  ,Vector2(1,-13) * PhysicVals.physicScale
+  ,Vector2(0,-19) * PhysicVals.physicScale
   ,];
 
 class Arrow extends SpriteComponent with HasGameRef<KyrgyzGame>

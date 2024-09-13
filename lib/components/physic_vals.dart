@@ -14,11 +14,11 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 int getLevel(double experience)
 {
-  double startExp = 6000;
+  double startExp = 9000;
   int count = 1;
   while(experience > 0){
     experience -= startExp;
-    startExp = startExp + startExp * 1.2;
+    startExp = startExp + startExp * 1.1;
     count++;
   }
   return count;
@@ -86,7 +86,7 @@ class GameConsts
 
 class PlayerData
 {
-  final _statScale = 19;
+  final _statScale = 39;
 
   Map<String,int> getInventarMap(InventarType type)
   {
@@ -203,9 +203,12 @@ class PlayerData
     double procentOfHealth = health.value / maxHealth.value;
     double procentOfMana = mana.value / maxMana.value;
     double procentOfEnergy = energy.value / maxEnergy.value;
-    maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / _statScale;
-    maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / _statScale;
-    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / _statScale;
+    maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp
+        + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / _statScale;
+    maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana
+        + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / _statScale;
+    maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy
+        + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / _statScale;
     armor.value = armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
     chanceOfLoot.value = armorDress.value.chanceOfLoot + helmetDress.value.chanceOfLoot + glovesDress.value.chanceOfLoot + swordDress.value.chanceOfLoot + ringDress.value.chanceOfLoot + bootsDress.value.chanceOfLoot + extraChanceOfLoot.value;
     hurtMiss.value = armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;

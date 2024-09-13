@@ -1,6 +1,6 @@
-const damageDel = 20;
-const armorDel = 20;
-const healthDel = 20;
+const damageDel = 40;
+const armorDel = 40;
+const healthDel = 40;
 
 class GoblinInfo
 {
