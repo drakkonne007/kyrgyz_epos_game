@@ -8,6 +8,7 @@ import 'package:game_flame/Items/gearSwitch.dart';
 import 'package:game_flame/Items/grass2Chest.dart';
 import 'package:game_flame/Items/hBridge.dart';
 import 'package:game_flame/Items/hWChest.dart';
+import 'package:game_flame/Items/prisonGate.dart';
 import 'package:game_flame/Items/shrineExperience.dart';
 import 'package:game_flame/liveObjects/lightning.dart';
 import 'package:game_flame/Items/loot_list.dart';
@@ -409,10 +410,22 @@ class MapNode {
         positionObject = HorizontalWoodBridge(position,id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
+        break;
       case 'verticalSteelGate':
         positionObject = VerticalSteelGate(position, id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
+        break;
+      case 'prisonGateCircle':
+        positionObject = PrisonGate(id, position: position, circle: true);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'prisonGateRect':
+        positionObject = PrisonGate(id, position: position, circle: false);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'chest':
         var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();

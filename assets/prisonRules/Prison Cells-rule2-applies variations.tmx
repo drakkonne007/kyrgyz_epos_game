@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="30">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="30">
  <properties>
   <property name="MatchInOrder" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="../Tileset - wall 2.tsx"/>
  <tileset firstgid="241" source="../Tileset-Terrain-old prison.tsx"/>
  <tileset firstgid="4726" source=":/automap-tiles.tsx"/>
- <layer id="1" name="input_prison cells" width="60" height="60" opacity="0.58">
+ <layer id="1" name="input_prison cells" width="60" height="60" visible="0" opacity="0.58">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -149,17 +149,17 @@
   </object>
   <object id="4" x="60.0606" y="1705.67" width="1135.61" height="195">
    <properties>
-    <property name="Probability" type="float" value="0.25"/>
+    <property name="Probability" type="float" value="0"/>
    </properties>
   </object>
   <object id="5" x="764.242" y="674.424" width="282.667" height="386">
    <properties>
-    <property name="Probability" type="float" value="0.2"/>
+    <property name="Probability" type="float" value="0"/>
    </properties>
   </object>
   <object id="8" x="515" y="677.091" width="215" height="387">
    <properties>
-    <property name="Probability" type="float" value="0.15"/>
+    <property name="Probability" type="float" value="0"/>
    </properties>
   </object>
   <object id="9" x="62" y="941.091" width="440" height="111">
@@ -169,7 +169,7 @@
   </object>
   <object id="10" x="1075.63" y="666.667" width="130" height="270.667">
    <properties>
-    <property name="Probability" type="float" value="0.05"/>
+    <property name="Probability" type="float" value="0"/>
    </properties>
   </object>
   <object id="12" x="60.9697" y="1082.3" width="371.667" height="242.667">
