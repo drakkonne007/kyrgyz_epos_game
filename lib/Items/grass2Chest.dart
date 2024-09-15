@@ -15,7 +15,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-const double myScale = 0.5;
+const double myScale = 0.7;
 
 final List<Vector2> _groundPhyWithHorns = [
   Vector2(-37.252,-29.5332) * PhysicVals.physicScale * myScale
@@ -33,10 +33,10 @@ final List<Vector2> _groundPhyWithHorns = [
   ,];
 
 final List<Vector2> _groundPhyNoHorns = [
-  Vector2(-28.9005,-22.7831) * myScale
-  ,Vector2(-25.8418,27.4937) * myScale
-  ,Vector2(25.3909,26.9202) * myScale
-  ,Vector2(29.0231,-22.592) * myScale
+  Vector2(-28.9005,-22.7831) * myScale * PhysicVals.physicScale
+  ,Vector2(-25.8418,27.4937) * myScale * PhysicVals.physicScale
+  ,Vector2(25.3909,26.9202) * myScale * PhysicVals.physicScale
+  ,Vector2(29.0231,-22.592) * myScale * PhysicVals.physicScale
   ,];
 
 final List<Vector2> _objPoints = [
@@ -91,8 +91,9 @@ class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         'tiles/map/grassLand2/Props/Animated props/chests-opening.png');
     _spriteSheet = SpriteSheet(image: _spriteImg,
         srcSize: Vector2(_spriteImg.width.toDouble() / 8, _spriteImg.height.toDouble()));
+    size *= myScale;
     if(isOpened!){
-      animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 15, loop: false);
+      animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 7, loop: false);
       return;
     }
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
@@ -127,15 +128,11 @@ class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _objectHitbox?.removeFromParent();
     isOpened = true;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-        removeOnFinish: true,
-        onTick: (){
-          for (int i = 0; i<myItems.length;i++) {
-            gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,45) + Vector2(i * 15,0)));
-          }
-        }
-    );
-    gameRef.gameMap.add(timer);
-    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
+    animationTicker?.onComplete = (){
+      for (int i = 0; i<myItems.length;i++) {
+        gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,45) + Vector2(i * 15,0)));
+      }
+      gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,opened: true);
+    };
   }
 }

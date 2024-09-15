@@ -91,7 +91,7 @@ class ShrineExperience extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
     }
     _objectHitbox?.removeFromParent();
     isOpened = true;
-    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
+    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,opened: true);
     animation = _animGetBuff;
     gameRef.playerData.addLevel(gameRef.gameMap.currentGameWorldData!.level * 1000);
   }

@@ -153,6 +153,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool isHigh = false;
   bool isReverseBody = false;
   int _attacksCount = 0;
+  bool _isKilled = false;
 
 
   @override
@@ -376,7 +377,19 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void onRemove()
   {
     groundBody?.destroy();
-    gameRef.gameMap.loadedLivesObjs.remove(id);
+    if(_isKilled){
+      gameRef.gameMap.add(TimerComponent(period: 2, repeat: true, onTick: (){
+        int diffCol = (position.x ~/
+            GameConsts.lengthOfTileSquare.x - gameRef.gameMap.column()).abs();
+        int diffRow = (position.y ~/
+            GameConsts.lengthOfTileSquare.y - gameRef.gameMap.row()).abs();
+        if(diffCol > 2 || diffRow > 2){
+          gameRef.gameMap.loadedLivesObjs.remove(id);
+        }
+      }));
+    }else {
+      gameRef.gameMap.loadedLivesObjs.remove(id);
+    }
     gameRef.gameMap.checkRemoveItself.removeListener(checkIsNeedSelfRemove);
   }
 
@@ -484,33 +497,28 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void death(SpriteAnimation? anim)
   {
+    _isKilled = true;
     gameRef.playerData.addLevel(_maxHp);
     speed.x = 0;
     speed.y = 0;
     groundBody?.clearForces();
     groundBody?.setActive(false);
     groundBody?.destroy();
-    if(loots.isNotEmpty) {
-      if(loots.length > 1){
-        var temp = Chest(0, myItems: loots, position: positionOfAnchor(anchor));
-        gameRef.gameMap.container.add(temp);
-      }else{
-        var temp = LootOnMap(loots.first, position: positionOfAnchor(anchor));
-        gameRef.gameMap.container.add(temp);
-      }
+    for(int i=0;i<loots.length;i++){
+      var temp = LootOnMap(loots[i], position: positionOfAnchor(anchor) + Vector2(i * 15, 0));
+      gameRef.gameMap.container.add(temp);
     }
     animation = anim;
     hitBox?.collisionType = DCollisionType.inactive;
     animationTicker?.onComplete = () {
       add(OpacityEffect.by(-1,EffectController(duration: animationTicker?.totalDuration()),onComplete: (){
-
         removeFromParent();
       }));
     };
     if(id > -1) {
       gameRef.dbHandler.changeItemState(id: id,
           worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,
-          usedAsString: '1');
+          used: true);
     }
   }
 

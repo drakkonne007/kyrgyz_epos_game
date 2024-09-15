@@ -69,18 +69,19 @@ class PrisonGate extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
     bool openNow = ans.opened;
+    print(openNow);
     if(openNow && isClosed!){
       animation = toOpen;
-      TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-          removeOnFinish: true,
-          onTick: () {
-            leftF.setSensor(true);
-          }
-      );
-      gameRef.gameMap.add(timer);
+      animationTicker?.onComplete = (){
+        isClosed = false;
+        leftF.setSensor(true);
+      };
     }else if(!openNow && !isClosed!){
       animation = toOpen.reversed();
-      leftF.setSensor(false);
+      animationTicker?.onComplete = () {
+        isClosed = true;
+        leftF.setSensor(false);
+      };
     }
   }
 }

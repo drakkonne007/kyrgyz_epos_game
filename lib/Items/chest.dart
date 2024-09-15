@@ -89,7 +89,7 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       removeFromParent();
     }));
     if(id != null) {
-      gameRef.dbHandler.changeItemState(id: id!, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame, usedAsString: '1', openedAsString: '1');
+      gameRef.dbHandler.changeItemState(id: id!, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame, used: true, opened: true);
     }
   }
 }

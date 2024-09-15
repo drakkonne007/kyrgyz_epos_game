@@ -46,6 +46,7 @@ class SavedGame
 
 class DBItemState
 {
+  DBItemState({required this.opened, required this.quest, required this.used});
   bool opened = false;
   int quest = 0;
   bool used = false;
@@ -53,6 +54,7 @@ class DBItemState
 
 class DBQuestState
 {
+  DBQuestState({required this.currentState, required this.isDone});
   int currentState = 0;
   bool isDone = false;
 }
@@ -61,6 +63,10 @@ class DbHandler
 {
   Database? _database;
   ValueNotifier<int> dbStateChanger = ValueNotifier(0);
+  Map<String,Map<int,DBItemState>> _itemStates = {}; //Мир, айди, состояние предмета
+  Map<String,DBQuestState> _questStates = {}; //Имя квеста, состояние квеста
+  Map<String,Set<LoadedColumnRow>> _mapAnswer = {}; //Мир, открытые карты
+
 
   Future openDb() async
   {
@@ -158,16 +164,19 @@ class DbHandler
         ',is_done INTEGER NOT NULL DEFAULT 0'
         ');');
     print('All tables was created');
-    await fillGameObjects();
+    await fillGameObjects(false);
     await fillQuests();
   }
 
-  Future fillGameObjects() async
+  Future fillGameObjects(bool hardReset) async
   {
     for(final wrld in fullMaps()){
-      final res = await _database?.rawQuery('SELECT COUNT(*) as count FROM ${wrld.nameForGame}');
-      if(res![0]['count'] as int != 0){
-        continue;
+      if(!hardReset) {
+        final res = await _database?.rawQuery(
+            'SELECT COUNT(*) as count FROM ${wrld.nameForGame}');
+        if (res![0]['count'] as int != 0) {
+          continue;
+        }
       }
       await _database?.execute('DELETE FROM ${wrld.nameForGame}');
       try {
@@ -184,20 +193,24 @@ class DbHandler
     print('all game objects was edded');
   }
 
-  Future addClearMap(int saveId, String world, LoadedColumnRow colRow)async
+  void addClearMap(int saveId, String world, LoadedColumnRow colRow)
   {
-    await _database?.rawInsert('INSERT INTO map_info(save_id, world_name, column, row) VALUES(?,?,?,?) ON CONFLICT DO NOTHING', [saveId, world, colRow.column, colRow.row]);
+    _mapAnswer.putIfAbsent(world, () => {});
+    _mapAnswer[world]!.add(colRow);
+    // await _database?.rawInsert('INSERT INTO map_info(save_id, world_name, column, row) VALUES(?,?,?,?) ON CONFLICT DO NOTHING', [saveId, world, colRow.column, colRow.row]);
   }
 
-  Future<Map<String,Set<LoadedColumnRow>>> getClearMap(int saveId)async
+  Future<Set<LoadedColumnRow>> getClearMap(int saveId, String worldName)async
   {
-    final res = await _database?.rawQuery('SELECT * FROM map_info WHERE save_id = ?', [saveId]);
-    Map<String,Set<LoadedColumnRow>> answer = {};
+    final res = await _database?.rawQuery('SELECT * FROM map_info WHERE save_id = ? AND world_name = ?', [saveId, worldName]);
+    Set<LoadedColumnRow> answer = {};
     if(res != null && res.isNotEmpty){
       for(final row in res){
-        answer.putIfAbsent(row['world_name']!.toString(), ()=>{});
-        answer[row['world_name']!.toString()]!.add(LoadedColumnRow(row['column']! as int, row['row']! as int));
+        answer.add(LoadedColumnRow(row['column']! as int, row['row']! as int));
       }
+    }
+    if(_mapAnswer.containsKey(worldName)){
+      answer.addAll(_mapAnswer[worldName]!);
     }
     return answer;
   }
@@ -283,6 +296,26 @@ class DbHandler
     for(final eff in tempEffects){
       await _database?.rawInsert('INSERT INTO effects(save_id,name_id,period) VALUES(?,?,?)', [saveId, eff.parentId, eff.timeBeforeEnd]);
     }
+
+    for(final worldItem in _itemStates.keys){
+      for(final itemId in _itemStates[worldItem]!.keys){
+        await _database?.rawUpdate('UPDATE $worldItem set opened = ?, quest = ?, used = ? where id = ?',
+            [_itemStates[worldItem]![itemId]!.opened ? 1 : 0
+              , _itemStates[worldItem]![itemId]!.quest
+              , _itemStates[worldItem]![itemId]!.used ? 1 : 0, itemId]);
+      }
+    }
+    _itemStates.clear();
+    for(final name in _questStates.keys){
+      await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[_questStates[name]!.isDone ? 1 : 0, _questStates[name]!.currentState, name]);
+    }
+    _questStates.clear();
+    for(final worldsName in _mapAnswer.keys){
+      for(final colRow in _mapAnswer[worldsName]!){
+        await _database?.rawInsert('INSERT INTO map_info(save_id, world_name, column, row) VALUES(?,?,?,?) ON CONFLICT DO NOTHING', [saveId, worldsName, colRow.column, colRow.row]);
+      }
+    }
+    _mapAnswer.clear();
   }
 
   Future<SavedGame> loadGame(int saveId) async
@@ -335,42 +368,61 @@ class DbHandler
     return svGame;
   }
 
-  Future changeItemState({required int id, String? openedAsString, String? quest, String? usedAsString, required String worldName})async
+  Future changeItemState({required int id, bool? opened, int? quest, bool? used, required String worldName})async
   {
-    final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
-    await _database?.rawUpdate('UPDATE $worldName set opened = ?, quest = ?, used = ? where id = ?',
-        [openedAsString ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsString ?? res![0]['used'].toString(), id]);
+    _itemStates.putIfAbsent(worldName, () => {});
+    if(!_itemStates[worldName]!.containsKey(id)){
+      final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
+      opened ??= res![0]['opened'].toString() == '1';
+      quest ??= int.tryParse(['quest'].toString()) ?? 0;
+      used ??= res![0]['used'].toString() == '1';
+    }else{
+      opened ??= _itemStates[worldName]![id]!.opened;
+      quest ??= _itemStates[worldName]![id]!.quest;
+      used ??= _itemStates[worldName]![id]!.used;
+    }
+    _itemStates[worldName]![id] = DBItemState(opened: opened, quest: quest, used: used);
     dbStateChanger.notifyListeners();
+    // await _database?.rawUpdate('UPDATE $worldName set opened = ?, quest = ?, used = ? where id = ?',
+    //     [openedAsString ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsString ?? res![0]['used'].toString(), id]);
+    // dbStateChanger.notifyListeners();
   }
 
   Future<DBItemState> getItemStateFromDb(int id, String worldName)async
   {
-    DBItemState answer = DBItemState();
+    if(_itemStates.containsKey(worldName)){
+      if(_itemStates[worldName]!.containsKey(id)){
+        return _itemStates[worldName]![id]!;
+      }
+    }
     final res = await _database?.rawQuery('SELECT * FROM $worldName where id = ?', [id]);
     if(res == null || res.isEmpty) {
       throw 'ERROR in SELECT * FROM $worldName where id = ?';
     }
-    answer.opened = res[0]['opened'].toString() == '1';
-    answer.quest = int.tryParse(res[0]['quest'].toString()) ?? 0;
-    answer.used = res[0]['used'].toString() == '1';
+    DBItemState answer = DBItemState(opened: res[0]['opened'].toString() == '1'
+        , quest: int.tryParse(res[0]['quest'].toString()) ?? 0
+        , used: res[0]['used'].toString() == '1');
     return answer;
   }
 
   Future<DBQuestState> getQuestState(String name)async
   {
+    if(_questStates.containsKey(name)){
+      return _questStates[name]!;
+    }
     final res = await _database?.rawQuery(
         'SELECT * FROM quests WHERE name = ?',[name]);
     if (res == null || res.isEmpty) {
       throw 'No find this quest!!! $name';
     }
-    DBQuestState answer = DBQuestState();
-    answer.currentState = int.tryParse(res[0]['current_state'].toString()) ?? 0;
-    answer.isDone = res[0]['is_done'].toString() == '1';
+    DBQuestState answer = DBQuestState(isDone: res[0]['is_done'].toString() == '1'
+        , currentState: int.tryParse(res[0]['current_state'].toString()) ?? 0);
     return answer;
   }
 
-  Future setQuestState(String name, int state, bool isDone)async
+  void setQuestState(String name, int state, bool isDone)
   {
-    await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[isDone ? 1 : 0, state, name]);
+    _questStates[name] = DBQuestState(isDone: isDone, currentState: state);
+    // await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[isDone ? 1 : 0, state, name]);
   }
 }

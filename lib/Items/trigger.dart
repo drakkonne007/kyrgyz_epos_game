@@ -38,12 +38,12 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
 
   void trig() async
   {
+    if(dialog != null){
+      createText(text: dialog!, gameRef: gameRef);
+    }
     if(quest != null) {
       if(kyrGame.quests[quest]!.currentState < startTrigger! || kyrGame.quests[quest]!.currentState >= endTrigger!){
         return;
-      }
-      if(dialog != null){
-        createText(text: dialog!, gameRef: gameRef);
       }
       gameRef.setQuestState(quest!, onTrigger!, isEndQuest ?? false);
     }

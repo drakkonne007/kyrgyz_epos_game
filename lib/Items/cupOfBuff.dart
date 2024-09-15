@@ -91,7 +91,7 @@ class CupOfBuff extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     }
     _objectHitbox?.removeFromParent();
     isOpened = true;
-    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
+    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,opened: true);
     animation = _animGetBuff;
     Item item;
     if(blood){

@@ -240,7 +240,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     if(isNeedCopyInternal) {
       isNeedCopyInternal = false;
       await firstCachedIntoInternal();
-      await gameRef.dbHandler.fillGameObjects();
+      await gameRef.dbHandler.fillGameObjects(true);
     }
     loadObjs(currentGameWorldData!);
     loadAnimsHigh(currentGameWorldData!);
@@ -324,8 +324,6 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
         mapNode?.generateMap(LoadedColumnRow(_column + i, _row + j));
       }
     }
-    gameRef.clearMap.putIfAbsent(currentGameWorldData!.nameForGame, () => {});
-    gameRef.clearMap[currentGameWorldData!.nameForGame]!.add(current);
     gameRef.dbHandler.addClearMap(0, currentGameWorldData!.nameForGame, current);
   }
 }

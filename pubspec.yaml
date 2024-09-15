@@ -123,6 +123,7 @@ flutter:
   - assets/metaData/dungeonUnderTemple2Floor/
   - assets/metaData/testMap/
   - assets/metaData/topLeft/
+  - assets/metaData/topLeftLeft/
   - assets/metaData/topLeftTempleDungeon/
   - assets/metaData/topLeftVillage/
   - assets/metaData/yurtaInTopLeftVillage0/

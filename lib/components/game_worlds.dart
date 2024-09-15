@@ -8,6 +8,7 @@ List<GameWorldData> fullMaps()
   list.add(TestMap());
   list.add(TopLeftVillage());
   list.add(BigTopLeft());
+  list.add(BigTopLeftLeft());
   list.addAll(getVillages());
   list.add(TopLeftTempleDungeon());
   list.add(TampleDungeon());
@@ -23,18 +24,19 @@ List<GameWorldData> fullMaps()
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
-  // list.add(TestMap());
+  list.add(TestMap());
   list.add(TopLeftVillage());
-  // list.add(BigTopLeft());
-  // list.addAll(getVillages());
-  // list.add(TopLeftTempleDungeon());
-  // list.add(TampleDungeon());
-  // list.add(TampleDungeon2Floor());
-  // list.add(CaveUnderRiver());
-  // list.add(CaveUnderRiver2());
-  // list.add(CaveUnderRiver3());
-  // list.add(CaveUnderRiver4());
-  // list.add(UnderTampleRoom());
+  list.add(BigTopLeft());
+  list.add(BigTopLeftLeft());
+  list.addAll(getVillages());
+  list.add(TopLeftTempleDungeon());
+  list.add(TampleDungeon());
+  list.add(TampleDungeon2Floor());
+  list.add(CaveUnderRiver());
+  list.add(CaveUnderRiver2());
+  list.add(CaveUnderRiver3());
+  list.add(CaveUnderRiver4());
+  list.add(UnderTampleRoom());
   return list;
 }
 
@@ -51,6 +53,7 @@ GameWorldData getWorldFromName(String name)
     return YurtaInTopLeftVillage(id);
   }
   switch(name){
+    case 'topLeftLeft': return BigTopLeftLeft();
     case 'topLeftVillage': return TopLeftVillage();
     case 'topLeft': return BigTopLeft();
     case 'topLeftTempleDungeon': return TopLeftTempleDungeon();
@@ -127,6 +130,18 @@ class BigTopLeft extends GameWorldData
       'Эта большая равнина хранит в себе много загадок',
       'Здесь нет особых правил, караванам надо передвигаться аккуратно',
       'Реку можно перейти в другом месте, или найти лодку. Но я не знаю где её взять',
+    ];
+  }
+}
+class BigTopLeftLeft extends GameWorldData
+{
+  BigTopLeftLeft()
+  {
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'topLeftLeft';
+    source = 'top_left_bottom-slice-left1.tmx';
+    mapSmallDialogs = [
+      'Тут много рек',
     ];
   }
 }

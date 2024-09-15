@@ -105,7 +105,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
 
   ValueNotifier<Item?> currentItemInInventar = ValueNotifier<Item?>(null);
-  Map<String, Set<LoadedColumnRow>> clearMap = {};
   Image? imageForMap;
   Quest? currentQuest;
   Map<String,Quest> quests = {};
@@ -146,7 +145,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   {
     quests[name]?.isDone = isDone;
     quests[name]?.currentState = state;
-    await dbHandler.setQuestState(name, state, isDone);
+    dbHandler.setQuestState(name, state, isDone);
   }
 
   Vector2 playerPosition()
@@ -205,7 +204,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     WidgetsBinding.instance.addObserver(this);
     await setQuestState('chestOfGlory', 0, false);
     await setQuestState('templeDungeon', 0, false);
-    if(!await dbHandler.checkSaved(0)) {
+    if(!await dbHandler.checkSaved(0) || true) {
       await dbHandler.saveGame(
         saveId: 0,
         x: 1750,
@@ -259,7 +258,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   Future loadGame(int saveId) async
   {
-    clearMap = await dbHandler.getClearMap(saveId);
     playerData.loadGame(await dbHandler.loadGame(saveId));
   }
 
@@ -295,7 +293,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     var img = await Flame.images.load('metaData/${gameMap.currentGameWorldData?.nameForGame}/fullMap.png');
     composition.add(img, Vector2.zero());
     Set<LoadedColumnRow> temp = {};
-    for(final loadCol in clearMap[gameMap.currentGameWorldData?.nameForGame] ?? <LoadedColumnRow>{}){
+    Set<LoadedColumnRow> clearMap = await dbHandler.getClearMap(0, gameMap.currentGameWorldData!.nameForGame);
+    for(final loadCol in clearMap){
       int col = loadCol.column;
       int row = loadCol.row;
       for(int i=-1;i<2;i++) {

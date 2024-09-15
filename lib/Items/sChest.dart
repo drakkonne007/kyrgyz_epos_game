@@ -24,6 +24,13 @@ final List<Vector2> _groundPhy = [
   ,Vector2(49.2697,4.04225) * PhysicVals.physicScale
   ,];
 
+final List<Vector2> _openedPoints = [
+  Vector2(-56.3041,20.4436) * PhysicVals.physicScale
+  ,Vector2(3.08585,-6.89468) * PhysicVals.physicScale
+  ,Vector2(3.40008,14.4731) * PhysicVals.physicScale
+  ,Vector2(-56.6184,42.7541) * PhysicVals.physicScale
+  ,];
+
 final List<Vector2> _objPoints = [
   Vector2(-12.5979,34.0205)
   ,Vector2(-12.5979,48.264)
@@ -49,6 +56,7 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int _id;
   final String _noNeededItem = 'Нет нужного предмета...';
   final String _noNeededKilledBoss = 'Сначала победите хозяина';
+  Fixture? openedF;
 
   @override
   void onRemove()
@@ -72,6 +80,8 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         gameRef.world.physicsWorld
     );
     _ground.createFixture(fix);
+    fix = FixtureDef(PolygonShape()..set(_openedPoints));
+    openedF = _ground.createFixture(fix);
     _spriteImg = await Flame.images.load(
         'tiles/map/prisonSet/Props/stone chest-openning animation-with dust FX.png');
     _spriteSheet = SpriteSheet(image: _spriteImg,
@@ -80,6 +90,7 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 15, loop: false);
       return;
     }
+    openedF!.setSensor(true);
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
     _objectHitbox = ObjectHitbox(_objPoints,
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
@@ -110,22 +121,19 @@ class StoneChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       }
     }
     _objectHitbox?.removeFromParent();
-    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
+    openedF!.setSensor(false);
+    gameRef.dbHandler.changeItemState(id: _id, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,opened: true);
     isOpened = true;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-        removeOnFinish: true,
-        onTick: (){
-          int rand = Random().nextInt(4);
-          if(rand == 0){
-            gameRef.gameMap.container.add(Skeleton(position + pointSpawn,id:-1, level: gameRef.gameMap.currentGameWorldData!.level));
-          }else {
-            for (int i = 0; i<myItems.length;i++) {
-              gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,45) + Vector2(i * 15,0)));
-            }
-          }
+    animationTicker?.onComplete = (){
+      int rand = Random().nextInt(4);
+      if(rand == 0){
+        gameRef.gameMap.container.add(Skeleton(position + pointSpawn,id:-1, level: gameRef.gameMap.currentGameWorldData!.level));
+      }else {
+        for (int i = 0; i<myItems.length;i++) {
+          gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,45) + Vector2(i * 15,0)));
         }
-    );
-    gameRef.gameMap.add(timer);
+      }
+    };
   }
 }

@@ -113,17 +113,13 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
       }
     }
     _objectHitbox?.removeFromParent();
-    gameRef.dbHandler.changeItemState(id: dbId, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,openedAsString: '1');
+    gameRef.dbHandler.changeItemState(id: dbId, worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,opened: true);
     isOpened = true;
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, loop: false);
-    TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-        removeOnFinish: true,
-        onTick: (){
-          for (int i = 0; i<myItems.length;i++) {
-            gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,24) + Vector2(i * 15,0)));
-          }
-        }
-    );
-    gameRef.gameMap.add(timer);
+    animationTicker?.onComplete = (){
+      for (int i = 0; i<myItems.length;i++) {
+        gameRef.gameMap.container.add(LootOnMap(myItems[i], position: position + Vector2(-20,24) + Vector2(i * 15,0)));
+      }
+    };
   }
 }

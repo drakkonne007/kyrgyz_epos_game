@@ -23,7 +23,12 @@ class Windblow extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           'tiles/map/grassLand2/Props/Animated props/$name'),
       srcSize: Vector2(288, 64),
     );
-    animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0);
+    List<double> steps = [];
+    for(int i=0;i<51;i++){
+      steps.add(0.1);
+    }
+    steps.add(4);
+    animation = spriteSheet.createAnimationWithVariableStepTimes(row: 0, stepTimes: steps, from: 0);
     TimerComponent timer = TimerComponent(onTick: checkIsNeedSelfRemove,repeat: true,autoStart: true, period: 1);
     add(timer);
   }

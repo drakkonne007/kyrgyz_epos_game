@@ -92,22 +92,23 @@ class GateBossPrison extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   {
     DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
     bool openNow = ans.opened;
+    print(openNow);
     if(openNow && isClosed!){
       animation = toOpen;
-      TimerComponent timer = TimerComponent(period: animationTicker!.totalDuration(),
-          removeOnFinish: true,
-          onTick: () {
-            closedF.setSensor(true);
-            openedLeftF.setSensor(false);
-            openedRightF.setSensor(false);
-          }
-      );
-      gameRef.gameMap.add(timer);
+      animationTicker?.onComplete = (){
+        closedF.setSensor(true);
+        openedLeftF.setSensor(false);
+        openedRightF.setSensor(false);
+        isClosed = false;
+      };
     }else if(!openNow && !isClosed!){
       animation = toOpen.reversed();
-      closedF.setSensor(false);
-      openedLeftF.setSensor(true);
-      openedRightF.setSensor(true);
+      animationTicker?.onComplete = () {
+        closedF.setSensor(false);
+        openedLeftF.setSensor(true);
+        openedRightF.setSensor(true);
+        isClosed = true;
+      };
     }
   }
 }

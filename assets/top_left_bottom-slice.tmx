@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="41" nextobjectid="2576">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="41" nextobjectid="2578">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -6628,7 +6628,7 @@
    <polyline points="0,0 27.75,43.75 28,300.25 92,364.25 91.3333,544.25 28,637.25 28.25,1276.75 -4,1291.5"/>
   </object>
   <object id="2273" x="-0.75" y="2814.25">
-   <polyline points="0,0 32.5,22.5 31,473.25 96.5,539 96.25,596 64.25,609.25 64.25,691.5 33,707.75 32.75,1441.75 96.75,1441.75 128.75,1473 177.5,1474.75 195,1506.25 267.5,1505.75 290.75,1538 288.5,1619.5 255.75,1634.5 256,1723.5 114,1727.75 33.5,1651.75 32.75,3393.75 64.75,3408.84 64.75,3506.66 49.4773,3522.11"/>
+   <polyline points="8.75,-296.25 6,0.666667 32.5,22.5 31,473.25 96.5,539 96.25,596 64.25,609.25 64.25,691.5 33,707.75 32.75,1441.75 96.75,1441.75 128.75,1473 177.5,1474.75 195,1506.25 267.5,1505.75 290.75,1538 288.5,1619.5 255.75,1634.5 256,1723.5 114,1727.75 33.5,1651.75 32.75,3393.75 64.75,3408.84 64.75,3506.66 49.4773,3522.11"/>
   </object>
   <object id="2274" x="1887.75" y="3839.88">
    <polygon points="0,0 -31.5,27.625 -32.75,146.125 7.58333,190.792 -47.4167,192.125 -64.4167,223.792 -64.4167,467.458 -45.75,479.458 24.25,479.125 32.9167,449.125 62.5833,448.458 65.5833,475.125 213.917,478.458 224.917,459.792 222.25,273.792 160.25,224.125 159.917,125.125 64.25,32.125 32.25,32.125"/>
@@ -6728,12 +6728,6 @@
    <properties>
     <property name="quest" value="templeDungeon"/>
     <property name="startShow" value="1"/>
-   </properties>
-  </object>
-  <object id="2444" name="portal" x="358.084" y="465.023" width="26.833" height="17.7045">
-   <properties>
-    <property name="tar" value="769,1568"/>
-    <property name="wrld" value="underTampleRoom"/>
    </properties>
   </object>
   <object id="2445" name="portal" x="361.084" y="312.057" width="26.833" height="17.7045">
@@ -6856,6 +6850,20 @@
   <object id="2573" gid="67178" x="7584.48" y="7551.88" width="128" height="128"/>
   <object id="2574" gid="67178" x="992" y="6944" width="128" height="128"/>
   <object id="2575" gid="67184" x="1477.33" y="9041.33" width="128" height="128"/>
+  <object id="2576" name="portal" x="49.6667" y="2754.5">
+   <properties>
+    <property name="tar" value="9457,2668"/>
+    <property name="wrld" value="topLeftLeft"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2577" name="portal" x="371" y="488">
+   <properties>
+    <property name="tar" value="769,1568"/>
+    <property name="wrld" value="underTampleRoom"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="32" name="groundObj">
   <object id="1880" name="fly" x="5078.67" y="1280">
