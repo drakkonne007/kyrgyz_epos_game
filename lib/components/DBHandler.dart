@@ -320,6 +320,9 @@ class DbHandler
 
   Future<SavedGame> loadGame(int saveId) async
   {
+    _itemStates.clear();
+    _questStates.clear();
+    _mapAnswer.clear();
     print('load games');
     SavedGame svGame = SavedGame();
     var res = await _database?.rawQuery('SELECT * FROM player_data where save_id = ? ORDER BY id DESC LIMIT 1', [saveId]);
