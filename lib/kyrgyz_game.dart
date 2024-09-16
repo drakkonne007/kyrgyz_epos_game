@@ -204,7 +204,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     WidgetsBinding.instance.addObserver(this);
     await setQuestState('chestOfGlory', 0, false);
     await setQuestState('templeDungeon', 0, false);
-    if(!await dbHandler.checkSaved(0) || true) {
+    if(!await dbHandler.checkSaved(0)) {
       await dbHandler.saveGame(
         saveId: 0,
         x: 1750,

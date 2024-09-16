@@ -246,6 +246,22 @@
  <tile id="864" type="high"/>
  <tile id="865" type="high"/>
  <tile id="866" type="high"/>
+ <tile id="960" type="high"/>
+ <tile id="961" type="high"/>
+ <tile id="962" type="high"/>
+ <tile id="963" type="high"/>
+ <tile id="964" type="high"/>
+ <tile id="965" type="high"/>
+ <tile id="966" type="high"/>
+ <tile id="967" type="high"/>
+ <tile id="1004" type="high"/>
+ <tile id="1005" type="high"/>
+ <tile id="1006" type="high"/>
+ <tile id="1007" type="high"/>
+ <tile id="1008" type="high"/>
+ <tile id="1009" type="high"/>
+ <tile id="1010" type="high"/>
+ <tile id="1011" type="high"/>
  <tile id="1165" type="high"/>
  <tile id="1166" type="high"/>
  <tile id="1167" type="high"/>
@@ -260,6 +276,10 @@
  <tile id="1181" type="high"/>
  <tile id="1182" type="high"/>
  <tile id="1183" type="high"/>
+ <tile id="1184" type="high"/>
+ <tile id="1185" type="high"/>
+ <tile id="1186" type="high"/>
+ <tile id="1187" type="high"/>
  <tile id="1194" type="high"/>
  <tile id="1195" type="high"/>
  <tile id="1196" type="high"/>
@@ -268,12 +288,14 @@
  <tile id="1200" type="high"/>
  <tile id="1201" type="high"/>
  <tile id="1202" type="high"/>
+ <tile id="1208" type="high"/>
  <tile id="1209" type="high"/>
  <tile id="1210" type="high"/>
  <tile id="1211" type="high"/>
  <tile id="1212" type="high"/>
  <tile id="1213" type="high"/>
  <tile id="1214" type="high"/>
+ <tile id="1215" type="high"/>
  <tile id="1216" type="high"/>
  <tile id="1217" type="high"/>
  <tile id="1218" type="high"/>

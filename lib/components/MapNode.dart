@@ -3,6 +3,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/Items/chest.dart';
+import 'package:game_flame/Items/cupOfBloodDungeon.dart';
 import 'package:game_flame/Items/cupOfBuff.dart';
 import 'package:game_flame/Items/gateBossPrison.dart';
 import 'package:game_flame/Items/gearSwitch.dart';
@@ -517,6 +518,11 @@ class MapNode {
         break;
       case 'cupOfBlood':
         positionObject = CupOfBuff(id,blood: true, position: position);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'cupOfBloodDungeon':
+        positionObject = CupOfBloodDungeon(id,position: position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;

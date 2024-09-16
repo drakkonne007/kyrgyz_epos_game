@@ -8,7 +8,7 @@ class BloodShrine extends Item
   BloodShrine()
   {
     id = 'BloodShrine';
-    secsOfPermDamage = 20;
+    secsOfPermDamage = 90;
   }
 
   @override
@@ -27,7 +27,7 @@ class SilverShrine extends Item
   SilverShrine()
   {
     id = 'SilverShrine';
-    secsOfPermDamage = 20;
+    secsOfPermDamage = 90;
   }
 
   @override

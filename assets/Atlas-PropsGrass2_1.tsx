@@ -71,6 +71,8 @@
  <tile id="578" type="high"/>
  <tile id="579" type="high"/>
  <tile id="580" type="high"/>
+ <tile id="622" type="high"/>
+ <tile id="623" type="high"/>
  <tile id="714">
   <objectgroup draworder="index" id="2">
    <object id="1" x="1.45455" y="-6.45455" width="29.0909" height="35.7273"/>
