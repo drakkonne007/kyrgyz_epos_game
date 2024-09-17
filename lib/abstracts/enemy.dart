@@ -358,7 +358,6 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         wasSeen = false;
       }
     }
-
     return wasSeen;
   }
 
@@ -444,7 +443,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       weapon?.collisionType = DCollisionType.inactive;
       death(animDeath);
     }else{
-      if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 0){
+      if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 1){
         return;
       }
       weapon?.collisionType = DCollisionType.inactive;

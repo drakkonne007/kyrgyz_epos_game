@@ -193,6 +193,11 @@ class DbHandler
     print('all game objects was edded');
   }
 
+  void deleteSaves()async
+  {
+      await _database?.execute('DELETE FROM player_data');
+  }
+
   void addClearMap(int saveId, String world, LoadedColumnRow colRow)
   {
     _mapAnswer.putIfAbsent(world, () => {});

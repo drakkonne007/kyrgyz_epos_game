@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="98">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="99">
  <tileset firstgid="1" source="Terrain - Ancient Ruins.tsx"/>
  <tileset firstgid="2210" source="hole1.tsx"/>
  <tileset firstgid="2450" source="Tileset-Terrain-old prison.tsx"/>
@@ -16,6 +16,7 @@
  <tileset firstgid="9985" source="orc melee - anims-idle to walk transition.tsx"/>
  <tileset firstgid="9987" source="Skeleton 1 - animations-walk.tsx"/>
  <tileset firstgid="9995" source="Human.tsx"/>
+ <tileset firstgid="10065" source="bossScelet.tsx"/>
  <layer id="2" name="blabla" width="33" height="27">
   <data encoding="csv">
 2147,2102,2149,1909,2100,2100,2103,2100,2103,2102,1815,2053,2055,2148,1909,2103,2150,2101,1815,2102,2055,1861,1863,2055,1863,2103,1862,2101,2055,2054,2149,2053,2056,
@@ -119,11 +120,7 @@
     <property name="wrld" value="topLeftVillage"/>
    </properties>
   </object>
-  <object id="93" gid="2147493663" x="136" y="577.333" width="80" height="64"/>
-  <object id="94" gid="2147493663" x="270.667" y="341.333" width="80" height="64"/>
-  <object id="95" gid="2147493663" x="192" y="170.667" width="80" height="64"/>
-  <object id="96" gid="2147493663" x="538.667" y="288" width="80" height="64"/>
-  <object id="97" gid="2147493663" x="664" y="198.667" width="80" height="64"/>
+  <object id="98" gid="10065" x="346.5" y="436.5" width="351" height="207"/>
  </objectgroup>
  <objectgroup id="6" name="e"/>
 </map>

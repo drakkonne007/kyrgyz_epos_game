@@ -115,6 +115,23 @@ class PotInfo
   static armor(int level) => _armor + (_health * level) / armorDel;
 }
 
+class SceletBossInfo
+{
+  static const double _damage = 40;
+  static const double _health = 600;
+  static const double _armor = 5;
+  static const double speed = 40;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+  static health(int level) => _health + (_health * level) / healthDel;
+  static armor(int level) => _armor + (_health * level) / armorDel;
+}
+
+class SceletBoomInfo
+{
+  static const double _damage = 40;
+  static damage(int level) => _damage + (_damage * level) / damageDel;
+}
+
 class PotBubbleInfo
 {
   static const double _damage = 30;

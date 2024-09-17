@@ -47,6 +47,7 @@ import 'package:game_flame/liveObjects/mini_creatures/groundFire.dart';
 import 'package:game_flame/liveObjects/mini_creatures/stand_obelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/nature_particals.dart';
 import 'package:game_flame/liveObjects/mini_creatures/nature_particle_lower.dart';
+import 'package:game_flame/liveObjects/sceletBoss.dart';
 import 'package:game_flame/liveObjects/verticalBigRollingWood.dart';
 import 'package:game_flame/liveObjects/mini_creatures/windblow.dart';
 import 'package:game_flame/liveObjects/moose.dart';
@@ -296,6 +297,10 @@ class MapNode {
         positionObject = Ogr(position,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'bossScelet':
+        myGame.gameMap.loadedLivesObjs.add(id);
+        positionObject = BossScelet(position,id:id, level: level);
+        myGame.gameMap.container.add(positionObject);
       case 'goblin':
         myGame.gameMap.loadedLivesObjs.add(id);
         positionObject = Goblin(position,id:id, level: level);
