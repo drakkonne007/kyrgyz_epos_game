@@ -87,16 +87,17 @@ class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         gameRef.world.physicsWorld
     );
     _ground.createFixture(fix);
-    _spriteImg = await Flame.images.load(
-        'tiles/map/grassLand2/Props/Animated props/chests-opening.png');
+    _spriteImg = await Flame.images.load(withHorns ?
+        'tiles/map/grassLand2/Props/Animated props/chests-opening.png' : 'tiles/map/grassLand2/Props/Animated props/chests-opening-no horns.png');
     _spriteSheet = SpriteSheet(image: _spriteImg,
         srcSize: Vector2(_spriteImg.width.toDouble() / 8, _spriteImg.height.toDouble()));
-    size *= myScale;
     if(isOpened!){
       animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 7, loop: false);
+      size *= myScale;
       return;
     }
     animation = _spriteSheet.createAnimation(row: 0, stepTime: 0.08, from: 0, to: 1, loop: false);
+    size *= myScale;
     _objectHitbox = ObjectHitbox(_objPoints,
         collisionType: DCollisionType.active, isSolid: true, isStatic: false, isLoop: true,
         autoTrigger: false, obstacleBehavoiur: checkIsIOpen, game: gameRef);

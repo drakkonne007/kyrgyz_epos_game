@@ -159,7 +159,6 @@ class MyBroadPhase implements BroadPhase,TreeCallback
     }
     var moveEntity = _proxyHash[proxyIdA]!.isMoving ? _proxyHash[proxyIdA] : _proxyHash[proxyIdB];
     var staticEntity = _proxyHash[proxyIdA]!.isMoving ? _proxyHash[proxyIdB] : _proxyHash[proxyIdA];
-
     int minColumn,maxColumn,minRow,maxRow;
     minColumn = (moveEntity!.aabb.lowerBound.x - 20 * PhysicVals.physicScale) ~/ (GameConsts.lengthOfTileSquare.x  * PhysicVals.physicScale);
     maxColumn = (moveEntity.aabb.upperBound.x + 20 * PhysicVals.physicScale) ~/ (GameConsts.lengthOfTileSquare.x * PhysicVals.physicScale);

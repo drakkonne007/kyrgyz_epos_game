@@ -69,6 +69,9 @@ class HitBar extends PositionComponent with HasGameRef<KyrgyzGame>
   @override
   void render(Canvas canvas)
   {
+    if(!isMounted){
+      return;
+    }
     if(opacity > 0) {
       emptyBar.render(canvas, size: size, overridePaint: Paint()
         ..color = BasicPalette.white.color.withOpacity(opacity));
@@ -411,7 +414,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool internalPhysHurt(double hurt,bool inArmor)
   {
     if(inArmor){
-      double dd = math.max(hurt - armor, 0);
+      double dd = math.max(hurt * armor, 0);
       if(dd == 0){
         ShieldLock shieldLock = ShieldLock(position: position);
         gameRef.gameMap.container.add(shieldLock);

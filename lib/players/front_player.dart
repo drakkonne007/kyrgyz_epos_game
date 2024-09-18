@@ -55,6 +55,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   double dumping = 8;
   bool _onGround = false;
   int _groundCount = 0;
+  Fixture? _myFixture;
 
   @override
   Future<void> onLoad() async
@@ -132,23 +133,27 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
                   if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
                     _groundCount++;
                     _onGround = true;
+                    _myFixture?.friction = 0.7;
                   }
                 },
                 onEndMyContact: (Object other, Contact contact){
                   if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
                     _groundCount--;
+                    if(_groundCount <= 0){
+                      _myFixture?.friction = 0;
+                    }
                   }
                 })),
         gameRef.world.physicsWorld,
         isPlayer: true
     );
-    groundRigidBody?.createFixture(fix);
+    _myFixture = groundRigidBody?.createFixture(fix);
     groundRigidBody?.linearDamping = 0;
     groundRigidBody?.angularDamping = 0;
     position = groundRigidBody!.position / PhysicVals.physicScale;
 
-    tPos = Vector2(-8,10);
-    tSize = Vector2(16,17);
+    tPos = Vector2(-7,10);
+    tSize = Vector2(14,17);
     FixtureDef fix2 = FixtureDef(PolygonShape()..set(getPointsForActivs(tPos,tSize, scale: PhysicVals.physicScale)),
         isSensor: true, userData: "feet");
     // fix2.userData = "feet";
@@ -309,6 +314,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         _velocity.x = PhysicVals.startSpeed * PhysicVals.runCoef / 2;
         animation = animMove;
         if (_onGround && _groundCount > 0) {
+          _myFixture?.friction = 0;
           groundRigidBody?.linearVelocity.y = 0;
           groundRigidBody?.applyLinearImpulse(Vector2(0,-PhysicVals.startSpeed * 3));
           _onGround = false;
@@ -406,6 +412,9 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     super.update(dt);
     if (gameRef.playerData.energy.value > 1) {
       isMinusEnergy = false;
+    }
+    if(_onGround){
+      groundRigidBody?.applyLinearImpulse(Vector2((groundRigidBody!.linearVelocity.x.isNegative ? 600 : -600) * dt, 0));
     }
     if(animation != animMove){
       gameRef.playerData.energy.value = max(gameRef.playerData.energy.value,0);

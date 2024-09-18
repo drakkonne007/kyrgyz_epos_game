@@ -205,7 +205,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     WidgetsBinding.instance.addObserver(this);
     await setQuestState('chestOfGlory', 0, false);
     await setQuestState('templeDungeon', 0, false);
-    await saveFirstGame(false);
     for(final name in Quest.allQuests){
       quests[name] = Quest.questFromName(this, name);
       final state = await dbHandler.getQuestState(name);
@@ -222,11 +221,11 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     playerData.loadGame(await dbHandler.loadGame(saveId));
   }
 
-  Future saveFirstGame(bool hard) async
+  Future saveFirstGame(bool hard, int saveId) async
   {
-    if(!await dbHandler.checkSaved(0)) {
+    if(!await dbHandler.checkSaved(saveId) || hard) {
       await dbHandler.saveGame(
-        saveId: 0,
+        saveId: saveId,
         x: 1750,
         y: 3000,
         world: 'topLeftVillage',
@@ -264,6 +263,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         tempEffects: [],
       );
     }
+    await loadGame(saveId);
   }
 
   @override
@@ -401,12 +401,14 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     prefs.remove('${saveId}_secsInGame');
   }
 
+  Future startGame(int saveId) async
+  {
+    await saveFirstGame(isNeedCopyInternal,saveId);
+    await loadNewMap();
+  }
+
   Future loadNewMap() async
   {
-    if(isNeedCopyInternal){
-      await saveFirstGame(true);
-      await loadGame(0);
-    }
     await gameMap.loadNewMap();
   }
 

@@ -173,7 +173,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
             if (temp.length > 1) {
               for( int k = 0; k < temp.length - 1; k++) {
                 final shape = forge2d.EdgeShape()..set(temp[k] * PhysicVals.physicScale, temp[k + 1] * PhysicVals.physicScale);
-                final fixtureDef = forge2d.FixtureDef(shape);
+                final fixtureDef = forge2d.FixtureDef(shape, friction: 0.1);
                 final fix = myGround.createFixture(fixtureDef);
                 if(obj.getAttribute('player') != null){
                   fix.filterData.categoryBits = 0x0004;
@@ -186,7 +186,7 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
               }
               if(obj.getAttribute('lp')! == '1'){
                 final shape = forge2d.EdgeShape()..set(temp.last * PhysicVals.physicScale, temp.first * PhysicVals.physicScale);
-                final fixtureDef = forge2d.FixtureDef(shape);
+                final fixtureDef = forge2d.FixtureDef(shape, friction: 0.1);
                 final fix = myGround.createFixture(fixtureDef);
                 if(obj.getAttribute('player') != null){
                   fix.filterData.categoryBits = 0x0004;

@@ -208,10 +208,20 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         //   gameRef.playerData.addEnergy(-hurt / 2);
         //   hurt = temp;
         // }
-        hurt -= gameRef.playerData.armor.value;
-        hurt -= gameRef.playerData.shieldBlock.value;
-        hurt = math.max(hurt, 0);
-        if(hurt == 0){
+        double tempDamage = hurt / 7;
+        double totalDamage = 0;
+
+        totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.helmetDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.glovesDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.ringDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.bootsDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.extraArmor.value / 100) * tempDamage;
+        totalDamage -= gameRef.playerData.shieldBlock.value;
+
+        hurt = max(0, totalDamage);
+        if(hurt < gameRef.playerData.maxHealth.value / 25){
           if(enableShieldLock) {
             enableShieldLock = false;
             gameRef.gameMap.container.add(
@@ -220,7 +230,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
               enableShieldLock = true;
             }));
           }
-          return;
         }
         gameRef.playerData.addHealth(-hurt);
         if(gameRef.playerData.health.value < 1){
@@ -237,8 +246,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
         return;
       }else{
-        hurt -= gameRef.playerData.armor.value;
-        hurt = math.max(hurt, 1);
+        double tempDamage = hurt / 7;
+        double totalDamage = 0;
+        totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.helmetDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.glovesDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.ringDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.bootsDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.extraArmor.value / 100) * tempDamage;
+        hurt = totalDamage;
       }
     }
     gameRef.playerData.addHealth(-hurt);

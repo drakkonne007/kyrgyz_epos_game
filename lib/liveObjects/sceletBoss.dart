@@ -511,7 +511,7 @@ class BossBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     _weapon = DefaultEnemyWeapon(
         _weapons,collisionType: DCollisionType.active, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
-    _weapon.damage = SceletBoomInfo.damage(gameRef.playerData.playerLevel.value);
+    _weapon.damage = SceletBoomInfo.damage(gameRef.playerData.playerLevel.value) / 2;
     if(!right){
       flipHorizontally();
     }
@@ -549,7 +549,7 @@ class BossCircleBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _weapon = DefaultEnemyWeapon(
         _weapons,collisionType: DCollisionType.active, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
-    _weapon.damage = SceletBoomInfo.damage(gameRef.playerData.playerLevel.value);
+    _weapon.damage = SceletBoomInfo.damage(gameRef.playerData.playerLevel.value) / 2;
   }
 }
 
@@ -597,7 +597,7 @@ class FallingCrystal extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     _weapon = DefaultEnemyWeapon(
         _weaponsInd8,collisionType: DCollisionType.inactive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
-    _weapon.damage = SceletBoomInfo.damage(gameRef.playerData.playerLevel.value);
+    _weapon.damage = SceletBoomInfo.damage(gameRef.playerData.playerLevel.value) / 2;
   }
 
   void changeFrames(int index)

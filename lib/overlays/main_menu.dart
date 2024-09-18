@@ -50,7 +50,7 @@ class MainMenu extends StatelessWidget
                         onPressed: ()async {
                           isNeedCopyInternal = true;
                           _game.overlays.remove(id);
-                          await _game.loadNewMap();
+                          await _game.startGame(0);
                         },
                         style: bStyle,
                         child:
@@ -74,7 +74,7 @@ class MainMenu extends StatelessWidget
                         clipBehavior: Clip.antiAlias,
                         onPressed: () async{
                             _game.overlays.remove(id);
-                            await _game.loadNewMap();
+                            await _game.startGame(0);
                         },
                         style: bStyle,
                         child:
