@@ -89,6 +89,7 @@ Item itemFromName(String id)
     return getGloves(int.parse(id.split('gloves')[1]));
   }
   if(id.startsWith('gold')){
+    id = id.replaceFirst(':', '');
     return Gold(int.parse(id.split('gold')[1]));
   }
   switch(id){

@@ -92,7 +92,6 @@ class GateBossPrison extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
   {
     DBItemState ans = await gameRef.dbHandler.getItemStateFromDb(_id,gameRef.gameMap.currentGameWorldData!.nameForGame);
     bool openNow = ans.opened;
-    print(openNow);
     if(openNow && isClosed!){
       animation = toOpen;
       animationTicker?.onComplete = (){

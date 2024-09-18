@@ -305,7 +305,6 @@ class BossScelet extends KyrgyzEnemy
     if(!wasSeen && !isHigh){
       wasSeen = isNearPlayer(500 * 500, isDistanceWeapon: true);
     }
-    print('select Behaviour');
     if (wasSeen || isHigh) {
       if(!wakeUp){
         animation = animRevealing;
@@ -326,7 +325,6 @@ class BossScelet extends KyrgyzEnemy
         isReallyWantHit = math.Random().nextBool();
       }
       if(isReallyWantHit && isNearPlayer(120 * 120)) {
-        print('hoho');
         weapon?.currentCoolDown = weapon?.coolDown ?? 0;
         var pl = gameRef.gameMap.orthoPlayer!;
         if(isReverseBody){
@@ -442,7 +440,7 @@ class BossScelet extends KyrgyzEnemy
         weapon?.changeVertices(_attack1ind8);
       }else if(index == 9){
         weapon?.changeVertices(_attack1ind9,isLoop: true);
-        gameRef.gameMap.container.add(BossBoom(position: position, right: true));
+        gameRef.gameMap.container.add(BossBoom(position: position + (!isFlippedHorizontally ? Vector2(60,30) : Vector2(-60,30)), right: !isFlippedHorizontally));
       }else if(index == 11){
         weapon?.collisionType = DCollisionType.inactive;
       }
@@ -452,7 +450,7 @@ class BossScelet extends KyrgyzEnemy
         weapon?.changeVertices(_attack2ind4,isLoop: true);
       }else if(index == 5){
         weapon?.changeVertices(_attack2ind5,isLoop: true);
-        gameRef.gameMap.container.add(BossBoom(position: position,right: false));
+        gameRef.gameMap.container.add(BossBoom(position: position + (isFlippedHorizontally ? Vector2(45,30) : Vector2(-45,30)),right: isFlippedHorizontally));
       }else if(index == 7){
         weapon?.collisionType = DCollisionType.inactive;
       }
@@ -514,6 +512,9 @@ class BossBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         _weapons,collisionType: DCollisionType.active, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(_weapon);
     _weapon.damage = SceletBoomInfo.damage(gameRef.playerData.playerLevel.value);
+    if(!right){
+      flipHorizontally();
+    }
   }
 }
 

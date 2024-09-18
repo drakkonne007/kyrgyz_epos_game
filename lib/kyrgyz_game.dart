@@ -24,6 +24,7 @@ import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/gen/strings.g.dart';
+import 'package:game_flame/main.dart';
 import 'package:game_flame/overlays/PrettySplash.dart';
 import 'package:game_flame/overlays/buy_overlay.dart';
 import 'package:game_flame/overlays/death_menu.dart';
@@ -204,7 +205,26 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     WidgetsBinding.instance.addObserver(this);
     await setQuestState('chestOfGlory', 0, false);
     await setQuestState('templeDungeon', 0, false);
-    if(!await dbHandler.checkSaved(0) || true) {
+    await saveFirstGame(false);
+    for(final name in Quest.allQuests){
+      quests[name] = Quest.questFromName(this, name);
+      final state = await dbHandler.getQuestState(name);
+      quests[name]!.isDone = state.isDone;
+      quests[name]!.currentState = state.currentState;
+    }
+    add(gameMap);
+    await gameMap.loaded;
+    //TODO добавить сохранённые бутылочки в gameMap;
+  }
+
+  Future loadGame(int saveId) async
+  {
+    playerData.loadGame(await dbHandler.loadGame(saveId));
+  }
+
+  Future saveFirstGame(bool hard) async
+  {
+    if(!await dbHandler.checkSaved(0)) {
       await dbHandler.saveGame(
         saveId: 0,
         x: 1750,
@@ -244,21 +264,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         tempEffects: [],
       );
     }
-    for(final name in Quest.allQuests){
-      quests[name] = Quest.questFromName(this, name);
-      final state = await dbHandler.getQuestState(name);
-      quests[name]!.isDone = state.isDone;
-      quests[name]!.currentState = state.currentState;
-    }
-    await loadGame(0);
-    add(gameMap);
-    await gameMap.loaded;
-    //TODO добавить сохранённые бутылочки в gameMap;
-  }
-
-  Future loadGame(int saveId) async
-  {
-    playerData.loadGame(await dbHandler.loadGame(saveId));
   }
 
   @override
@@ -398,6 +403,10 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   Future loadNewMap() async
   {
+    if(isNeedCopyInternal){
+      await saveFirstGame(true);
+      await loadGame(0);
+    }
     await gameMap.loadNewMap();
   }
 
