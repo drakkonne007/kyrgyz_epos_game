@@ -48,7 +48,7 @@ final List<Vector2> weaponPoints = [ //вторая колонка
 
 class PrisonAssassin extends KyrgyzEnemy
 {
-  PrisonAssassin(this._startPos, {required super.id, required super.level});
+  PrisonAssassin(this._startPos, {required super.id, required super.level, super.loots});
   final Vector2 _spriteSheetSize = Vector2(220,96);
   final Vector2 _startPos;
 

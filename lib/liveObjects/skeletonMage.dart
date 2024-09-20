@@ -19,7 +19,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class SkeletonMage extends KyrgyzEnemy
 {
-  SkeletonMage(this._startPos, {required super.id, required super.level, super.isHigh});
+  SkeletonMage(this._startPos, {required super.id, required super.level, super.isHigh, super.loots});
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackStartShield, _animAttackEndShield,_animAttackLongShield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield, animAttackStart, animAttackEnd, animAttackLong, animBlock, animThrow;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;

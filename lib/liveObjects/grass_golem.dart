@@ -63,7 +63,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class GrassGolem extends KyrgyzEnemy
 {
-  GrassGolem(this._startPos,this.spriteVariant,{required super.level,required super.id});
+  GrassGolem(this._startPos,this.spriteVariant,{required super.level,required super.id, super.loots});
   final Vector2 _spriteSheetSize = Vector2(224,192);
   final Vector2 _startPos;
   final GolemVariant spriteVariant;

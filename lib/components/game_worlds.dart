@@ -18,18 +18,22 @@ List<GameWorldData> fullMaps()
   list.add(CaveUnderRiver3());
   list.add(CaveUnderRiver4());
   list.add(UnderTampleRoom());
+  list.add(VillageDungeonFirstUnderRoom());
+  list.add(VillageDungeonFirstUnderRoom2());
   return list;
 }
 
 List<GameWorldData> fullMapsForPreCompille()
 {
   List<GameWorldData> list = [];
-  // list.add(TestMap());
+  list.add(TestMap());
   // list.add(TopLeftVillage());
   // list.add(BigTopLeft());
   // list.add(BigTopLeftLeft());
   // list.addAll(getVillages());
-  // list.add(TopLeftTempleDungeon());
+  list.add(TopLeftTempleDungeon());
+  list.add(VillageDungeonFirstUnderRoom());
+  list.add(VillageDungeonFirstUnderRoom2());
   // list.add(TampleDungeon());
   // list.add(TampleDungeon2Floor());
   // list.add(CaveUnderRiver());
@@ -65,6 +69,8 @@ GameWorldData getWorldFromName(String name)
     case 'caveUnderRiver3': return CaveUnderRiver3();
     case 'caveUnderRiver4': return CaveUnderRiver4();
     case 'underTampleRoom': return UnderTampleRoom();
+    case 'villageDungeonFirstUnderRoom': return VillageDungeonFirstUnderRoom();
+    case 'villageDungeonFirstUnderRoom2': return VillageDungeonFirstUnderRoom2();
     default: print('error name of World!'); return BigTopLeft();
   }
 }
@@ -100,7 +106,8 @@ abstract class GameWorldData
   }
 }
 
-class TestMap extends GameWorldData {
+class TestMap extends GameWorldData
+{
   TestMap()
   {
     orientation = OrientatinType.orthogonal;
@@ -146,7 +153,8 @@ class BigTopLeftLeft extends GameWorldData
   }
 }
 
-class TopLeftVillage extends GameWorldData {
+class TopLeftVillage extends GameWorldData
+{
   TopLeftVillage()
   {
     orientation = OrientatinType.orthogonal;
@@ -162,7 +170,8 @@ class TopLeftVillage extends GameWorldData {
   }
 }
 
-class TampleDungeon extends GameWorldData {
+class TampleDungeon extends GameWorldData
+{
   TampleDungeon()
   {
     isDungeon = true;
@@ -176,7 +185,38 @@ class TampleDungeon extends GameWorldData {
   }
 }
 
-class TampleDungeon2Floor extends GameWorldData {
+class VillageDungeonFirstUnderRoom extends GameWorldData
+{
+  VillageDungeonFirstUnderRoom()
+  {
+    isDungeon = true;
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'villageDungeonFirstUnderRoom';
+    source = 'villageDungeonFirstUnderRoom.tmx';
+    gameConsts = GameConsts(Vector2(50,50));
+    mapSmallDialogs = [
+      'Жууууткое место',
+    ];
+  }
+}
+
+class VillageDungeonFirstUnderRoom2 extends GameWorldData
+{
+  VillageDungeonFirstUnderRoom2()
+  {
+    isDungeon = true;
+    orientation = OrientatinType.orthogonal;
+    nameForGame = 'villageDungeonFirstUnderRoom2';
+    source = 'villageDungeonFirstUnderRoom2.tmx';
+    gameConsts = GameConsts(Vector2(50,50));
+    mapSmallDialogs = [
+      'Жууууткое место',
+    ];
+  }
+}
+
+class TampleDungeon2Floor extends GameWorldData
+{
   TampleDungeon2Floor()
   {
     isDungeon = true;
@@ -190,7 +230,8 @@ class TampleDungeon2Floor extends GameWorldData {
   }
 }
 
-class TopLeftTempleDungeon extends GameWorldData {
+class TopLeftTempleDungeon extends GameWorldData
+{
   TopLeftTempleDungeon()
   {
     isDungeon = true;
@@ -207,7 +248,8 @@ class TopLeftTempleDungeon extends GameWorldData {
   }
 }
 
-class UnderTampleRoom extends GameWorldData {
+class UnderTampleRoom extends GameWorldData
+{
   UnderTampleRoom()
   {
     isDungeon = false;
@@ -225,7 +267,8 @@ class UnderTampleRoom extends GameWorldData {
   }
 }
 
-class CaveUnderRiver extends GameWorldData {
+class CaveUnderRiver extends GameWorldData
+{
   CaveUnderRiver()
   {
     isDungeon = true;
@@ -243,7 +286,8 @@ class CaveUnderRiver extends GameWorldData {
   }
 }
 
-class CaveUnderRiver2 extends GameWorldData {
+class CaveUnderRiver2 extends GameWorldData
+{
   CaveUnderRiver2()
   {
     isDungeon = true;
@@ -261,7 +305,8 @@ class CaveUnderRiver2 extends GameWorldData {
   }
 }
 
-class CaveUnderRiver3 extends GameWorldData {
+class CaveUnderRiver3 extends GameWorldData
+{
   CaveUnderRiver3()
   {
     isDungeon = true;
@@ -279,7 +324,8 @@ class CaveUnderRiver3 extends GameWorldData {
   }
 }
 
-class CaveUnderRiver4 extends GameWorldData {
+class CaveUnderRiver4 extends GameWorldData
+{
   CaveUnderRiver4()
   {
     isDungeon = true;
@@ -313,7 +359,8 @@ List<GameWorldData> getVillages({List<int>? numbers})
   return list;
 }
 
-class YurtaInTopLeftVillage extends GameWorldData {
+class YurtaInTopLeftVillage extends GameWorldData
+{
   YurtaInTopLeftVillage(int number)
   {
     orientation = OrientatinType.front;

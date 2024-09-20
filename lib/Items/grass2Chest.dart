@@ -15,7 +15,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/liveObjects/skeleton.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-const double myScale = 0.7;
+const double myScale = 0.8;
 
 final List<Vector2> _groundPhyWithHorns = [
   Vector2(-37.252,-29.5332) * PhysicVals.physicScale * myScale

@@ -49,7 +49,7 @@ final List<Vector2> _attack1ind12 = [ //7 - 10
 
 class OrcMage extends KyrgyzEnemy
 {
-  OrcMage(this._startPos, {required super.level, required super.id, super.isHigh});
+  OrcMage(this._startPos, {required super.level, required super.id, super.isHigh, super.loots});
   final Vector2 _startPos;
   final double dist = 350 * 350;
   final Vector2 srcSize = Vector2(256,256);

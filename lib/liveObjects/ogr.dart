@@ -62,7 +62,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class Ogr extends KyrgyzEnemy
 {
-  Ogr(this._startPos, {required super.level, required super.id});
+  Ogr(this._startPos, {required super.level, required super.id, super.loots});
   final Vector2 _startPos;
   final srcSize = Vector2(256,224);
 

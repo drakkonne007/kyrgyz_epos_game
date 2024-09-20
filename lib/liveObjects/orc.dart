@@ -13,7 +13,7 @@ import 'dart:math' as math;
 
 class OrcWarrior extends KyrgyzEnemy
 {
-  OrcWarrior(this._startPos, {required super.level, required super.id});
+  OrcWarrior(this._startPos, {required super.level, required super.id, super.loots});
   final Vector2 _startPos;
   late SpriteAnimation _animIdleToMove, _animAttack1FromIdle, _animAttack1FromMove, _animPrepareToAttack2, _postAttack2;
   int _variantOfHit = 0;
@@ -174,8 +174,8 @@ class OrcWarrior extends KyrgyzEnemy
     speed.x = 0;
     speed.y = 0;
     groundBody?.clearForces();
-    _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
-    if(_variantOfHit == 0){
+    _variantOfHit = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
+    if(_variantOfHit != 0){
       if(animation == animMove){
         animation = _animAttack1FromMove;
       }else{
@@ -233,9 +233,9 @@ class OrcWarrior extends KyrgyzEnemy
   @override
   void changeVertsInWeapon(int index)
   {
-    if(_variantOfHit == 0){ // атака длинная вперёд просто
-      weapon?.coolDown = 1;
+    if(_variantOfHit != 0){ // атака длинная вперёд просто
       if(index == 7){
+        weapon?.coolDown = 1;
         weapon!.changeVertices(_attack1,isLoop: true);
         weapon!.collisionType = DCollisionType.active;
       }else if(index > 10){
@@ -254,8 +254,8 @@ class OrcWarrior extends KyrgyzEnemy
           weapon!.changeVertices(_attack210Fra,isLoop: true);
         }
       }else if(animation == animAttack2){
-        weapon?.coolDown = 1;
         if(index == 0){
+          weapon?.coolDown = 2;
           weapon!.changeVertices(_attack2,isLoop: true);
         }
       }else if(animation == _postAttack2){

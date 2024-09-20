@@ -52,7 +52,7 @@ final List<Vector2> _attack1ind12 = [ //17 всё
 
 class Pot extends KyrgyzEnemy
 {
-  Pot(this._startPos,{required super.id, required super.level, super.isHigh});
+  Pot(this._startPos,{required super.id, required super.level, super.isHigh, super.loots});
   final Vector2 _startPos;
   final double dist = 350 * 350;
   final Vector2 srcSize = Vector2(160,128);

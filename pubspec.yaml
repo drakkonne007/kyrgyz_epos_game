@@ -98,6 +98,8 @@ flutter:
   - assets/tiles/sprites/humanNPC/Male/Weapon/
   - assets/tiles/sprites/humanNPC/Rpg/
   - assets/metaData/
+  - assets/metaData/villageDungeonFirstUnderRoom/
+  - assets/metaData/villageDungeonFirstUnderRoom2/
 #  - assets/mockups/
   - assets/mountainRules/
   - assets/prisonRules/

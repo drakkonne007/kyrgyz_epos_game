@@ -10,15 +10,14 @@ import 'package:flutter/services.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/players/ortho_player.dart';
-import 'package:game_flame/weapon/fireBall.dart';
 import 'package:game_flame/weapon/player_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/player.dart';
 import 'package:game_flame/weapon/weapon.dart';
-import 'package:game_flame/liveObjects/grass_golem.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
+import 'package:flame/effects.dart';
 
 final List<Vector2> _attack1ind1 = [
   Vector2(336,242) - Vector2(144*2 + 77,96*2 + 48),
@@ -60,6 +59,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   Future<void> onLoad() async
   {
+    opacity = 0;
     Image? spriteImg;
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96.png');
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96New.png');
@@ -106,6 +106,7 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     gameRef.playerData.statChangeTrigger.addListener(setNewEnergyCostForWeapon);
     position = startPos;
     setGroundBody();
+    add(OpacityEffect.to(1, EffectController(duration: 0.7)));
   }
 
   void setNewEnergyCostForWeapon()
@@ -132,16 +133,15 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
                 ,onBeginMyContact: (Object other, Contact contact){
                   if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
                     _groundCount++;
+                    if(!_onGround && _velocity.x == 0){
+                      groundRigidBody?.linearVelocity.x = 0;
+                    }
                     _onGround = true;
-                    _myFixture?.friction = 0.7;
                   }
                 },
                 onEndMyContact: (Object other, Contact contact){
                   if(contact.fixtureA.userData == "feet" || contact.fixtureB.userData == "feet"){
                     _groundCount--;
-                    if(_groundCount <= 0){
-                      _myFixture?.friction = 0;
-                    }
                   }
                 })),
         gameRef.world.physicsWorld,
@@ -280,12 +280,13 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(animation != animIdle  && animation != animMove) {
       return;
     }
-    if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
-      isRun = true;
-    } else {
-      isRun = false;
-    }
+    // if (isRun && gameRef.playerData.energy.value > PhysicVals.runMinimum) {
+    //   isRun = true;
+    // } else {
+    //   isRun = false;
+    // }
     // angle += math.pi/2;
+    isRun = false;
     PlayerDirectionMove dir = PlayerDirectionMove.NoMove;
     if(angle >= PhysicVals.right1 && angle < PhysicVals.right2){
       dir = PlayerDirectionMove.Right;
@@ -361,6 +362,9 @@ class FrontPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   {
     _velocity.x = 0;
     _velocity.y = 0;
+    if(_onGround) {
+      groundRigidBody?.linearVelocity.x /= 2;
+    }
   }
 
   @override

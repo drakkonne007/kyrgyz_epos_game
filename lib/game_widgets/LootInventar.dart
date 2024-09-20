@@ -442,97 +442,133 @@ class _LootInvantarState extends State<LootInInventar>
   {
     return ValueListenableBuilder (
         valueListenable: widget.game.currentStateInventar,
-        builder: (BuildContext context, value, Widget? child) =>
-            SizedBox(
-                width: widget.mySize.width * 0.62 - 10,
-                height: widget.mySize.height,
-                child:
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 50 - getDoubleForTable() * 3),
-                      height: widget.mySize.height - 5,
-                      child:
-                      Stack(
-                          alignment: Alignment.center,
-                          fit: StackFit.passthrough,
-                          children: [
-                            Image.asset('assets/images/inventar/UI-9-sliced object-5.png',
-                              centerSlice: const Rect.fromLTWH(30, 28, 4, 4),
-                              width: min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 10 - getDoubleForTable() * 3),
-                              height: widget.mySize.height - 20,
-                            ),
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: infoAboutChoosen()
-                            ),
-                          ]),
-                    )
+        builder: (BuildContext context, value, Widget? child) {
+          if(widget.game.currentItemInInventar.value == null){
+            switch(widget.game.currentStateInventar.value){
+              case InventarOverlayType.helmet:
+                widget.game.currentItemInInventar.value = widget.game.playerData.helmetDress.value;
+                break;
+              case InventarOverlayType.armor:
+                widget.game.currentItemInInventar.value = widget.game.playerData.armorDress.value;
+                break;
+              case InventarOverlayType.gloves:
+                widget.game.currentItemInInventar.value = widget.game.playerData.glovesDress.value;
+                break;
+              case InventarOverlayType.boots:
+                widget.game.currentItemInInventar.value = widget.game.playerData.bootsDress.value;
+                break;
+              case InventarOverlayType.sword:
+                widget.game.currentItemInInventar.value = widget.game.playerData.swordDress.value;
+                break;
+              case InventarOverlayType.ring:
+                widget.game.currentItemInInventar.value = widget.game.playerData.ringDress.value;
+                break;
+              default: break;
+            }
+          }
+          return SizedBox(
+              width: widget.mySize.width * 0.62 - 10,
+              height: widget.mySize.height,
+              child:
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: min(widget.mySize.width * 0.3,
+                        widget.mySize.width * 0.62 - 50 -
+                            getDoubleForTable() * 3),
+                    height: widget.mySize.height - 5,
+                    child:
+                    Stack(
+                        alignment: Alignment.center,
+                        fit: StackFit.passthrough,
+                        children: [
+                          Image.asset(
+                            'assets/images/inventar/UI-9-sliced object-5.png',
+                            centerSlice: const Rect.fromLTWH(30, 28, 4, 4),
+                            width: min(widget.mySize.width * 0.3,
+                                widget.mySize.width * 0.62 - 10 -
+                                    getDoubleForTable() * 3),
+                            height: widget.mySize.height - 20,
+                          ),
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: infoAboutChoosen()
+                          ),
+                        ]),
+                  )
 
-                    ,
-                    ElevatedButton(
-                      onPressed: (){
-                        if(_curPage > 0){
-                          setState(() {
-                            _curPage--;
-                          });
+                  ,
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_curPage > 0) {
+                        setState(() {
+                          _curPage--;
+                        });
+                      }
+                    },
+                    style: defaultNoneButtonStyle.copyWith(
+                      maximumSize: WidgetStateProperty.all<Size>(
+                          const Size(20, 60)),
+                      minimumSize: WidgetStateProperty.all<Size>(
+                          const Size(20, 60)),
+                      foregroundBuilder: ((context, state, child) {
+                        if (state.contains(WidgetState.focused)
+                            || state.contains(WidgetState.hovered)
+                            || state.contains(WidgetState.pressed)) {
+                          return Image.asset(
+                            'assets/images/inventar/leftActiveButton.png',
+                            width: 20,
+                            fit: BoxFit.fitWidth,);
                         }
-                      },
-                      style: defaultNoneButtonStyle.copyWith(
-                        maximumSize: WidgetStateProperty.all<Size>(const Size(20,60)),
-                        minimumSize: WidgetStateProperty.all<Size>(const Size(20,60)),
-                        foregroundBuilder: ((context, state, child)
-                        {
-                          if(state.contains(WidgetState.focused)
-                              || state.contains(WidgetState.hovered)
-                              || state.contains(WidgetState.pressed)){
-                            return Image.asset('assets/images/inventar/leftActiveButton.png',
+                        return Image.asset(
+                          'assets/images/inventar/leftPassiveButton.png',
+                          width: 20,
+                          fit: BoxFit.fitWidth,);
+                      }),
+                    ),
+                    child: null,
+                  ),
+                  getLootInventar(getCurrentItems(value),
+                      value == InventarOverlayType.ring ||
+                          value == InventarOverlayType.sword),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_curPage * 16 + 16 < getCurrentItems(value).length) {
+                        setState(() {
+                          _curPage++;
+                        });
+                      }
+                    },
+                    style: defaultNoneButtonStyle.copyWith(
+                      maximumSize: WidgetStateProperty.all<Size>(
+                          const Size(20, 60)),
+                      foregroundBuilder: ((context, state, child) {
+                        if (state.contains(WidgetState.focused)
+                            || state.contains(WidgetState.hovered)
+                            || state.contains(WidgetState.pressed)) {
+                          return Image.asset(
+                              'assets/images/inventar/rightActiveButton.png',
                               width: 20,
-                              fit: BoxFit.fitWidth,);
-                          }
-                          return Image.asset('assets/images/inventar/leftPassiveButton.png',
-                            width: 20,
-                            fit: BoxFit.fitWidth,);
-                        }),
-                      ),
-                      child:  null,
-                    ),
-                    getLootInventar(getCurrentItems(value)),
-                    ElevatedButton(
-                      onPressed: (){
-                        if(_curPage * 16 + 16 < getCurrentItems(value).length){
-                          setState(() {
-                            _curPage++;
-                          });
+                              fit: BoxFit.fitWidth);
                         }
-                      },
-                      style: defaultNoneButtonStyle.copyWith(
-                        maximumSize: WidgetStateProperty.all<Size>(const Size(20,60)),
-                        foregroundBuilder: ((context, state, child)
-                        {
-                          if(state.contains(WidgetState.focused)
-                              || state.contains(WidgetState.hovered)
-                              || state.contains(WidgetState.pressed)){
-                            return Image.asset('assets/images/inventar/rightActiveButton.png',
-                                width: 20,
-                                fit: BoxFit.fitWidth);
-                          }
-                          return Image.asset('assets/images/inventar/rightPassiveButton.png',
-                            width: 20,
-                            fit: BoxFit.fitWidth,);
-                        }),
-                      ),
-                      child:  null,
+                        return Image.asset(
+                          'assets/images/inventar/rightPassiveButton.png',
+                          width: 20,
+                          fit: BoxFit.fitWidth,);
+                      }),
                     ),
-                  ],
-                )
-            )
+                    child: null,
+                  ),
+                ],
+              )
+          );
+        }
     );
   }
 
@@ -541,19 +577,27 @@ class _LootInvantarState extends State<LootInInventar>
     return min((widget.mySize.height - 30) / 4, (widget.mySize.width * 0.4 - widget.mySize.width * 0.1) / 3);
   }
 
-  Widget getLootInventar(Map<String,int> hash)
+  Widget getLootInventar(Map<String,int> hash, bool byDamage)
   {
     var list = hash.keys.toList(growable: false);
     double minSize = getDoubleForTable();
     List<Widget> buttonsList = [];
+    List<Item> items = [];
+    for(final item in list){
+      items.add(itemFromName(item));
+    }
+    if(byDamage){
+      items.sort((a,b) => (a.damage - b.damage).toInt());
+    }else{
+      items.sort((a,b) => (a.armor - b.armor).toInt());
+    }
     for(int i = _curPage * 12;i<_curPage * 12 + 12;i++){
       if(i < list.length){
-        Item item = itemFromName(list[i]);
         buttonsList.add(
             ElevatedButton(
                 onPressed: (){
                   setState(() {
-                    widget.game.currentItemInInventar.value = item;
+                    widget.game.currentItemInInventar.value = items[i];
                   });
                 },
                 style: defaultNoneButtonStyle.copyWith(
@@ -569,19 +613,19 @@ class _LootInvantarState extends State<LootInInventar>
                             centerSlice: const Rect.fromLTWH(23, 24, 8, 8),
                             fit: BoxFit.contain,
                           ),
-                          Image.asset('assets/${item.source}',
+                          Image.asset('assets/${items[i].source}',
                             fit: BoxFit.contain,
                             width: minSize / 2,
                             height: minSize / 2,),
-                          checkIfIsEquipNow(item) ? Image.asset(item == widget.game.currentItemInInventar.value ? widget.assetRed : widget.asset,fit: BoxFit.contain,
+                          checkIfIsEquipNow(items[i]) ? Image.asset(items[i] == widget.game.currentItemInInventar.value ? widget.assetRed : widget.asset,fit: BoxFit.contain,
                             width: minSize,
                             height: minSize,
                             centerSlice: const Rect.fromLTWH(17, 17, 24, 26),) : const SizedBox(width: 0,height: 0,),
-                          (item == widget.game.currentItemInInventar.value && !checkIfIsEquipNow(item) ? Image.asset('assets/images/inventar/UI-9-sliced object-13.png',fit: BoxFit.contain,
+                          (items[i] == widget.game.currentItemInInventar.value && !checkIfIsEquipNow(items[i]) ? Image.asset('assets/images/inventar/UI-9-sliced object-13.png',fit: BoxFit.contain,
                             width: minSize,
                             height:minSize,
                             centerSlice: const Rect.fromLTWH(17, 17, 24, 26),) : const SizedBox(width: 0,height: 0,)),
-                          item.id == widget.game.playerData.currentFlask1.value ? SizedBox(
+                          items[i].id == widget.game.playerData.currentFlask1.value ? SizedBox(
                               width: minSize,
                               height:minSize,
                               child: Align(
@@ -593,7 +637,7 @@ class _LootInvantarState extends State<LootInInventar>
                                     child: AutoSizeText('1',style: defaultInventarTextStyle.copyWith(shadows: [const Shadow(color: Colors.black, blurRadius: 7)])),
                                   )
                               )) : Container(),
-                          item.id == widget.game.playerData.currentFlask2.value ? SizedBox(
+                          items[i].id == widget.game.playerData.currentFlask2.value ? SizedBox(
                               width: minSize,
                               height:minSize,
                               child: Align(

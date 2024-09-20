@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
@@ -12,6 +13,7 @@ import 'package:game_flame/Items/hBridge.dart';
 import 'package:game_flame/Items/hWChest.dart';
 import 'package:game_flame/Items/prisonGate.dart';
 import 'package:game_flame/Items/shrineExperience.dart';
+import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/liveObjects/lightning.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/loot_on_map.dart';
@@ -217,6 +219,7 @@ class MapNode {
     if(obj.getAttribute('level') != null){
       level = int.parse(obj.getAttribute('level')!);
     }
+    level = max(myGame.playerData.playerLevel.value, level);
     Vector2 position = Vector2(posX,posY);
     int id = int.parse(obj.getAttribute('id') ?? '-1');
     if (myGame.gameMap.loadedLivesObjs.contains(id)) {
@@ -231,9 +234,20 @@ class MapNode {
         return;
       }
     }
-    if(obj.getAttribute('oneUse') != null){
+    if(obj.getAttribute('oneUse') != null || name == 'bossScelet' || name == 'pot'
+    || name == 'vertBRW' || name == 'vertRW'){
       var dd = await myGame.dbHandler.getItemStateFromDb(id, myGame.gameMap.currentGameWorldData!.nameForGame);
       if(dd.used){
+        return;
+      }
+    }
+    if(name == 'ggolem' || name == 'sceletM'
+        || name == 'wgolem' || name == 'moose' || name == 'orcMage' || name == 'orc'
+        || name == 'ogr'
+        || name == 'assassin'){
+      var dd = await myGame.dbHandler.getItemStateFromDb(id, myGame.gameMap.currentGameWorldData!.nameForGame);
+      bool need = Random().nextBool();
+      if(dd.used && !need){
         return;
       }
     }
@@ -242,18 +256,30 @@ class MapNode {
     PositionComponent? positionObject;
     switch (name) {
       case 'ggolem':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
+        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level, loots: list);
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'sceletM':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
         var isHigh = obj.getAttribute('high');
         if(isHigh!=null){
-          positionObject = SkeletonMage(position,id:id, level: level,isHigh: true);
+          positionObject = SkeletonMage(position,id:id, level: level,isHigh: true,loots: list);
           myGame.gameMap.container.add(positionObject);
         }else{
-          positionObject = SkeletonMage(position,id:id, level: level);
+          positionObject = SkeletonMage(position,id:id, level: level,loots: list);
           myGame.gameMap.container.add(positionObject);
         }
         break;
@@ -263,8 +289,14 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'wgolem':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = GrassGolem(position, GolemVariant.Water,id:id, level: level);
+        positionObject = GrassGolem(position, GolemVariant.Water,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'windb':
@@ -273,42 +305,101 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'moose':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Moose(position, MooseVariant.PurpleWithGreenHair,id:id, level: level);
+        positionObject = Moose(position, id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'scelet':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Skeleton(position,id:id, level: level);
+        positionObject = Skeleton(position,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'orc':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = OrcWarrior(position,id:id, level: level);
+        positionObject = OrcWarrior(position,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'orcMage':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = OrcMage(position,id:id, level: level);
+        positionObject = OrcMage(position,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;
-      case 'ogr':
+      case 'ogr'://'ogr' 'bossScelet' 'pot'
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Ogr(position,id:id, level: level);
+        positionObject = Ogr(position,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'bossScelet':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = BossScelet(position,id:id, level: level);
+        positionObject = BossScelet(position,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
       case 'goblin':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Goblin(position,id:id, level: level);
+        positionObject = Goblin(position,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;//Pot
       case 'pot':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Pot(position,id: id, level: level);
+        positionObject = Pot(position,id: id, level: level,loots: list);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'assassin':
+        var items = obj.getAttribute('items')?.split(',');
+        List<Item>? list;
+        if(items != null){
+          list = [];
+          list = items.map((e) => itemFromName(e)).toList();
+        }
+        myGame.gameMap.loadedLivesObjs.add(id);
+        positionObject = PrisonAssassin(position,id:id, level: level,loots: list);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'gold':
@@ -382,11 +473,6 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
-      case 'lightning160':
-        positionObject = WoodStairway(position);
-        myGame.gameMap.allEls[colRow]!.add(positionObject);
-        myGame.gameMap.container.add(positionObject);
-        break;
       case 'gearSwitch':
         int target = int.parse(obj.getAttribute('tar')!);
         positionObject = GearSwitch(position,target);
@@ -394,8 +480,13 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'blueBigFlicker':
-        positionObject = BigFlicker(position,ColorState.blue);
-        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        positionObject = BigFlicker(position,ColorState.blue,id);
+        myGame.gameMap.loadedLivesObjs.add(id);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'whiteBigFlicker':
+        positionObject = BigFlicker(position,ColorState.yellow,id);
+        myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'candleFire':
@@ -405,11 +496,6 @@ class MapNode {
         break;
       case 'crystalEffect':
         positionObject = CrystalEffect(position: position);
-        myGame.gameMap.allEls[colRow]!.add(positionObject);
-        myGame.gameMap.container.add(positionObject);
-        break;
-      case 'whiteBigFlicker':
-        positionObject = BigFlicker(position,ColorState.yellow);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -447,20 +533,20 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = Chest(1, myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,id: id, isStatic: true,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = Chest(1, myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,id: id, isStatic: true,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'hWChest':
-        var items = obj.getAttribute('items')?.split(',');
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
+        var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = HorizontalWoodChest(myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        positionObject = HorizontalWoodChest(myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -473,7 +559,7 @@ class MapNode {
         }
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = VerticalWoodChest(myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        positionObject = VerticalWoodChest(myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -486,7 +572,7 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = StoneChest(id, myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = StoneChest(id, myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;//chestGrass2Horns
@@ -499,7 +585,7 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = ChestGrass2(id,withHorns: true,myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = ChestGrass2(id,withHorns: true,myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -512,7 +598,7 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = ChestGrass2(id,withHorns: false,myItems: list ?? [itemFromLevel(myGame.gameMap.currentGameWorldData!.level)], position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        positionObject = ChestGrass2(id,withHorns: false,myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -591,11 +677,6 @@ class MapNode {
         var temp = Teleport(kyrGame: myGame,position: position, targetPos: target);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
-        break;
-      case 'assassin':
-        myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = PrisonAssassin(position,id:id, level: level);
-        myGame.gameMap.container.add(positionObject);
         break;
       case 'portal':
         var targetPos = obj.getAttribute('tar')!.split(',');

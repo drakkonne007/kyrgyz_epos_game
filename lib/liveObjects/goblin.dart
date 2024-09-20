@@ -53,7 +53,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class Goblin extends KyrgyzEnemy
 {
-  Goblin(this._startPos,{required super.id, required super.level});
+  Goblin(this._startPos,{required super.id, required super.level, super.loots});
   final Vector2 _startPos;
   final srcSize = Vector2(160,128);
 

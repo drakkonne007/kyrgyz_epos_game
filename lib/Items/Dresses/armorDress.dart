@@ -122,7 +122,7 @@ class Armor1 extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    game.playerData.addToInventar(InventarType.bodyArmor, id);
+    game.playerData.addToInventar(dressType, id);
   }
 
   @override

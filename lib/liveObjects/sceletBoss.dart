@@ -126,7 +126,7 @@ final List<Vector2> _attack3ind7 = [ //loop 9 всё
 
 class BossScelet extends KyrgyzEnemy
 {
-  BossScelet(this._startPos,{required super.id, required super.level, super.isHigh});
+  BossScelet(this._startPos,{required super.id, required super.level, super.isHigh, super.loots});
   final Vector2 _startPos;
   final double dist = 700 * 700;
   final Vector2 srcSize = Vector2(351,207);

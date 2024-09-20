@@ -24,6 +24,7 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
   final Item _item;
   late ObjectHitbox _objectHitbox;
   int id;
+  bool _isDone = false;
 
   @override
   Future<void> onLoad() async
@@ -45,6 +46,10 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
 
   void getItemToPlayer()
   {
+    if(_isDone){
+      return;
+    }
+    _isDone = true;
     remove(_objectHitbox);
     double dur = 0.5;
     add(ScaleEffect.to(Vector2.all(2.3), EffectController(duration: dur)));

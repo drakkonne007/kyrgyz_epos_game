@@ -14,12 +14,15 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 int getLevel(double experience)
 {
-  double startExp = 6000;
-  int count = 1;
+  double startExp = 9000;
+  int count = 0;
   while(experience > 0){
     experience -= startExp;
     startExp = startExp + startExp * 1.1;
     count++;
+  }
+  if(experience == 0){
+    count = 1;
   }
   return count;
 }
@@ -86,7 +89,7 @@ class GameConsts
 
 class PlayerData
 {
-  final _statScale = 39;
+  final _statScale = 30;
 
   Map<String,int> getInventarMap(InventarType type)
   {
@@ -312,7 +315,7 @@ class PlayerData
   final ValueNotifier<double> secsOfPermanentDamage = ValueNotifier<double>(0);
 
   final ValueNotifier<double> extraArmor = ValueNotifier<double>(0);
-  final ValueNotifier<double> shieldBlock = ValueNotifier<double>(20);
+  final ValueNotifier<double> shieldBlock = ValueNotifier<double>(10);
   final ValueNotifier<double> shieldBlockEnergy = ValueNotifier<double>(5);
   final ValueNotifier<double> extraHurtMiss = ValueNotifier<double>(0.3);
   final ValueNotifier<double> extraDamage = ValueNotifier<double>(0);
@@ -333,7 +336,7 @@ class PlayerData
 
   void addToInventar(InventarType type, String itemId)
   {
-    Map<String,int> hash = {};
+    Map<String,int> hash;
     switch(type){
       case InventarType.sword:
         hash = swordInventar;
@@ -361,12 +364,12 @@ class PlayerData
         break;
     }
     if(hash.containsKey(itemId)){
-      int val = hash[itemId]!;
-      hash[itemId] = val + 1;
-      hash[itemId] = val;
+      hash.update(itemId, (val) => val + 1);
     }else{
       hash[itemId] = 1;
     }
+    currentFlask1.notifyListeners();
+    currentFlask2.notifyListeners();
   }
 
   KyrgyzGame _game;
@@ -394,31 +397,6 @@ class PlayerData
   double milisecsInGame = 0;
   GameWorldData playerBigMap = TopLeftVillage();
   Vector2 startLocation = Vector2(1772,3067);
-
-
-  // void setStartValues({Item? helmet, Item? armor, Item? gloves, Item? sword, Item? ring, Item? boots, int gold = 0, double energy = 0, double health = 0
-  // ,double extraArmor = 0, double extraHurtMiss = 0, double extraDamage = 0, double extraChanceOfLoot = 0, double extraAttackSpeed = 0
-  // ,Map<String,int>? weaponInventar, Map<String,int>? armorInventar, Map<String,int>? flaskInventar, Map<String,int>? itemInventar})
-  // {
-  //   helmetDress.value = helmet ?? NullItem();
-  //   armorDress.value = armor ?? NullItem();
-  //   glovesDress.value = gloves ?? NullItem();
-  //   swordDress.value = sword ?? NullItem();
-  //   ringDress.value = ring ?? NullItem();
-  //   bootsDress.value = boots ?? NullItem();
-  //   this.extraArmor.value = extraArmor;
-  //   this.extraHurtMiss.value = extraHurtMiss;
-  //   this.extraDamage.value = extraDamage;
-  //   this.extraChanceOfLoot.value = extraChanceOfLoot;
-  //   this.extraAttackSpeed.value = extraAttackSpeed;
-  //   money.value = gold;
-  //   this.weaponInventar = weaponInventar ?? {};
-  //   this.armorInventar = armorInventar ?? {};
-  //   this.flaskInventar = flaskInventar ?? {};
-  //   this.itemInventar = itemInventar ?? {};
-  //   this.energy.value = energy == 0 ? maxEnergy.value : energy;
-  //   this.health.value = health == 0 ? maxHealth.value : health;
-  // }
 
   void loadGame(SavedGame svg)
   {
@@ -453,8 +431,8 @@ class PlayerData
     bootsInventar = svg.bootsInventar;
     flaskInventar = svg.flaskInventar;
     itemInventar = svg.itemInventar;
-    playerLevel.value = getLevel(experience.value);
     experience.value = svg.level;
+    playerLevel.value = getLevel(experience.value);
     mana.value = svg.mana;
     energy.value = svg.energy;
     health.value = svg.health;

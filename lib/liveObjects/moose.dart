@@ -82,9 +82,8 @@ final List<Vector2> hitBoxPoint = [
 class Moose extends KyrgyzEnemy
 {
 
-  Moose(this._startPos, this._mooseVariant,{required super.id, required super.level});
+  Moose(this._startPos, {required super.id, required super.level, super.loots});
   final Vector2 _startPos;
-  final MooseVariant _mooseVariant;
   final Vector2 _spriteSheetSize = Vector2(347,192);
 
 
@@ -118,7 +117,7 @@ class Moose extends KyrgyzEnemy
     animMove =
         spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
     animAttack = spriteSheet.createAnimation(
-        row: 2, stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
+        row: 2, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
     animHurt = spriteSheet.createAnimation(row: 3,
         stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125,
         from: 0,

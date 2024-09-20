@@ -21,7 +21,7 @@ import 'dart:math' as math;
 
 class Skeleton extends KyrgyzEnemy
 {
-  Skeleton(this._startPos, {required super.id, required super.level});
+  Skeleton(this._startPos, {required super.id, required super.level, super.loots});
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackShield, _animAttack2Shield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;

@@ -119,7 +119,7 @@ class HitText extends TextComponent with HasGameRef<KyrgyzGame>
 
 class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  KyrgyzEnemy({required this.id, required this.level, this.isHigh = false});
+  KyrgyzEnemy({required this.id, required this.level, this.isHigh = false, this.loots});
   bool isRefresh = true;
   int level;
   int isFreeze = 0;
@@ -132,7 +132,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int dopPriority = 0;
   int variantOfHit = 0;
   SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
-  List<Item> loots = [];
+  List<Item>? loots;
   Set<MagicDamage> magicDamages = {};
   Ground? groundBody;
   late BodyDef bodyDef = BodyDef(type: BodyType.dynamic,userData: BodyUserData(isQuadOptimizaion: false, onBeginMyContact: onBeginMyContact,onEndMyContact: onEndMyContact),linearDamping: 6,
@@ -163,6 +163,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @mustCallSuper
   Future<void> onLoad() async
   {
+    maxSpeed += (math.Random().nextInt(10) - 5);
+    // health += (math.Random().nextInt(6) - 3);
     setChance();
     gameRef.gameMap.checkRemoveItself.addListener(checkIsNeedSelfRemove);
     _maxHp = health;
@@ -366,11 +368,15 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void setChance()
   {
+    if(loots != null){
+      return;
+    }
+    loots = [];
     math.Random rand = math.Random(DateTime.now().microsecondsSinceEpoch);
     for(int i=0;i<maxLoots;i++){
       double chance = rand.nextDouble();
       if(chance <= chanceOfLoot){
-        loots.add(itemFromLevel(level));
+        loots!.add(itemFromLevel(level));
       }
     }
   }
@@ -446,7 +452,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       weapon?.collisionType = DCollisionType.inactive;
       death(animDeath);
     }else{
-      if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 1){
+      if((animation == animAttack || animation == animAttack2) && animationTicker!.currentIndex > 2){
         return;
       }
       weapon?.collisionType = DCollisionType.inactive;
@@ -506,8 +512,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     groundBody?.clearForces();
     groundBody?.setActive(false);
     groundBody?.destroy();
-    for(int i=0;i<loots.length;i++){
-      var temp = LootOnMap(loots[i], position: positionOfAnchor(anchor) + Vector2(i * 15, 0));
+    for(int i=0;i<loots!.length;i++){
+      var temp = LootOnMap(loots![i], position: positionOfAnchor(anchor) + Vector2(i * 15, 0));
       gameRef.gameMap.container.add(temp);
     }
     animation = anim;

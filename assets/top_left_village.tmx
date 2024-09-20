@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1491">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1492">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -2390,6 +2390,9 @@
     <property name="wrld" value="topLeft"/>
    </properties>
    <point/>
+  </object>
+  <object id="1491" x="1395.19" y="2163">
+   <polyline points="0,0 11.9375,12.0625 18.9375,12 18.875,9 0,-9.5"/>
   </object>
  </objectgroup>
 </map>

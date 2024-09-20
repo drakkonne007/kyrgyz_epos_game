@@ -208,20 +208,20 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         //   gameRef.playerData.addEnergy(-hurt / 2);
         //   hurt = temp;
         // }
-        double tempDamage = hurt / 7;
+        double tempDamage = hurt / 8;
         double totalDamage = 0;
 
-        totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100 - gameRef.playerData.extraArmor.value / 100
+            - gameRef.playerData.ringDress.value.armor / 100 - gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
         totalDamage += (1 - gameRef.playerData.helmetDress.value.armor / 100) * tempDamage;
         totalDamage += (1 - gameRef.playerData.glovesDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.ringDress.value.armor / 100) * tempDamage;
         totalDamage += (1 - gameRef.playerData.bootsDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.extraArmor.value / 100) * tempDamage;
         totalDamage -= gameRef.playerData.shieldBlock.value;
 
-        hurt = max(0, totalDamage);
-        if(hurt < gameRef.playerData.maxHealth.value / 25){
+        if(totalDamage < gameRef.playerData.maxHealth.value / 4){
+          totalDamage = 0;
+        }
+        if(totalDamage == 0){
           if(enableShieldLock) {
             enableShieldLock = false;
             gameRef.gameMap.container.add(
@@ -230,8 +230,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
               enableShieldLock = true;
             }));
           }
+          return;
         }
-        gameRef.playerData.addHealth(-hurt);
+        gameRef.playerData.addHealth(-totalDamage);
         if(gameRef.playerData.health.value < 1){
           animation = animDeath;
           animationTicker?.onComplete = gameRef.startDeathMenu;
@@ -246,15 +247,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
         return;
       }else{
-        double tempDamage = hurt / 7;
+        double tempDamage = hurt / 8;
         double totalDamage = 0;
-        totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100) * tempDamage;
+        totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100 - gameRef.playerData.extraArmor.value / 100
+            - gameRef.playerData.ringDress.value.armor / 100 - gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
         totalDamage += (1 - gameRef.playerData.helmetDress.value.armor / 100) * tempDamage;
         totalDamage += (1 - gameRef.playerData.glovesDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.ringDress.value.armor / 100) * tempDamage;
         totalDamage += (1 - gameRef.playerData.bootsDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.extraArmor.value / 100) * tempDamage;
         hurt = totalDamage;
       }
     }
@@ -403,12 +402,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     if(animState == AnimationState.move || animState == AnimationState.idle || animState == AnimationState.shield){
-      if(animState == AnimationState.shield){
-        animation = animMove;
+      if(animState == AnimationState.shield && animationTicker!.currentIndex < 3){
+        return;
       }
-      isRun = isRunRun;
+      isRun = false;
       animState = AnimationState.move; // Тут может быть и анимация удара под конец ты тоже можешь бегать
-      if(animation == animIdle){
+      if(animation != animMove){
         animation = animMove;
       }
       if(animation == animMove){
@@ -447,6 +446,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       groundRigidBody?.linearVelocity = Vector2.zero();
       setGroundBody(targetPos: position, isEnemy: true, myDumping: 0);
       animation = animSlide;
+      add(TimerComponent(period: animationTicker!.totalDuration(), repeat: false, removeOnFinish: true, onTick: (){setGroundBody(targetPos: position);}));
       animationTicker?.onFrame = (frame){
         if(frame == 5){
           animState = AnimationState.idle;
@@ -455,7 +455,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
       };
       animationTicker?.onComplete = (){
-        setGroundBody(targetPos: position);
         chooseStaticAnimation();
       };
       if(left && !isFlippedHorizontally){
@@ -476,9 +475,11 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.energy.value < gameRef.playerData.shieldBlockEnergy.value){
       return;
     }
-    if(animState == AnimationState.move || animState == AnimationState.idle){
-      gameRef.playerData.addEnergy(-gameRef.playerData.shieldBlockEnergy.value);
+    if(animState == AnimationState.move || animState == AnimationState.idle || animState == AnimationState.attack){
       animState = AnimationState.shield;
+      groundRigidBody?.clearForces();
+      _weapon?.collisionType = DCollisionType.inactive;
+      gameRef.playerData.addEnergy(-gameRef.playerData.shieldBlockEnergy.value);
       animation = animShield;
       animationTicker?.onComplete = (){
         chooseStaticAnimation();
@@ -591,8 +592,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameHide) {
       return;
     }
-    game.playerData.addMana(dt * 1.5);
-    game.playerData.addHealth(dt / 3);
+    game.playerData.addMana((gameRef.playerData.maxMana.value / 28) * dt);
+    game.playerData.addHealth((gameRef.playerData.maxHealth.value / 240) * dt);
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
@@ -601,7 +602,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       isMinusEnergy = false;
     }
     if(animState != AnimationState.move && animState != AnimationState.shield && animState != AnimationState.slide && animation != animLong && animation != animShort && animation != animCombo){
-      gameRef.playerData.addEnergy(dt * 4);
+      gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 10) * dt );
       return;
     }
     if(animState != AnimationState.move){
@@ -623,16 +624,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       gameRef.playerData.addEnergy(dt * -4);
     }else{
       if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.addEnergy(dt * 3);
+        gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 15) * dt );
       }
     }
     groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * (isReallyRun ? PhysicVals.runCoef : 1));
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();
     if(speed.x.abs() < 6 && speed.y.abs() < 6 && _velocity.x == 0 && _velocity.y == 0){
       setIdleAnimation();
-      if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.addEnergy(dt);
-      }
     }
   }
 }

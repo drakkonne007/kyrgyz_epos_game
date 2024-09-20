@@ -48,6 +48,15 @@ enum InventarType
   item,
 }
 
+List<Item> itemsFromLevel(int level)
+{
+  List<Item> items = [];
+  items.add(itemFromLevel(level));
+  items.add(itemFromLevel(level));
+  items.add(itemFromLevel(level));
+  return items;
+}
+
 Item itemFromLevel(int level)
 {
   int rand = math.Random().nextInt(20);
@@ -64,7 +73,7 @@ Item itemFromLevel(int level)
     case 9:return ManaMedium();
     case 10:return ManaBig();
     case 11:return ManaFull();
-    default: return Gold(level * 5);
+    default: return Gold(20);
   }
 }
 
@@ -133,9 +142,17 @@ abstract class Item
   void getEffect(KyrgyzGame game) {}
   void getEffectFromInventar(KyrgyzGame game, {double? duration}) {}
 
-  void minusInInventar(KyrgyzGame game, InventarType type)
+  void plusToInventar(KyrgyzGame game, {InventarType? type, String? itemId})
+  {
+    type ??= dressType;
+    itemId ??= id;
+    game.playerData.addToInventar(type, itemId);
+  }
+
+  void minusInInventar(KyrgyzGame game, {InventarType? type})
   {
     Map<String,int> hash;
+    type ??= dressType;
     switch(type){
       case InventarType.bodyArmor:
         hash = game.playerData.bodyArmorInventar;
@@ -171,6 +188,8 @@ abstract class Item
         hash[id] = curr;
       }
     }
+    game.playerData.currentFlask1.notifyListeners();
+    game.playerData.currentFlask2.notifyListeners();
   }
 
   bool isStaticObject = false;

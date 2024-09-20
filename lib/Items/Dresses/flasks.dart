@@ -57,28 +57,14 @@ class HpSmall extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addHealth(hp);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -98,13 +84,7 @@ class HpMedium extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
@@ -114,15 +94,7 @@ class HpMedium extends Item
       game.playerData.addHealth(hp * dt);
     });
     game.gameMap.effectComponent.add(timer);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -142,13 +114,7 @@ class HpBig extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
@@ -185,28 +151,14 @@ class HpFull extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addHealth(0,full: true);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -226,28 +178,14 @@ class EnergySmall extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addEnergy(energy);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -267,13 +205,7 @@ class EnergyMedium extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
@@ -283,15 +215,7 @@ class EnergyMedium extends Item
       game.playerData.addEnergy(energy * dt);
     });
     game.gameMap.effectComponent.add(timer);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -311,13 +235,7 @@ class EnergyBig extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
@@ -327,15 +245,7 @@ class EnergyBig extends Item
       game.playerData.addEnergy(energy * dt);
     });
     game.gameMap.effectComponent.add(timer);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -354,28 +264,14 @@ class EnergyFull extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addEnergy(0, full: true);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -394,28 +290,14 @@ class ManaSmall extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addMana(mana);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -435,13 +317,7 @@ class ManaMedium extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
@@ -451,15 +327,7 @@ class ManaMedium extends Item
       game.playerData.addMana(mana * dt);
     });
     game.gameMap.effectComponent.add(timer);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -479,13 +347,7 @@ class ManaBig extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
@@ -495,15 +357,7 @@ class ManaBig extends Item
       game.playerData.addMana(mana * dt);
     });
     game.gameMap.effectComponent.add(timer);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
 
@@ -522,27 +376,13 @@ class ManaFull extends Item
   @override
   void getEffect(KyrgyzGame game)
   {
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr++;
-      game.playerData.flaskInventar[id] = curr;
-    }else{
-      game.playerData.flaskInventar[id] = 1;
-    }
+    plusToInventar(game);
   }
 
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addMana(0, full: true);
-    if(game.playerData.flaskInventar.containsKey(id)){
-      int curr = game.playerData.flaskInventar[id]!;
-      curr--;
-      if(curr == 0){
-        game.playerData.flaskInventar.remove(id);
-      }else{
-        game.playerData.flaskInventar[id] = curr;
-      }
-    }
+    minusInInventar(game);
   }
 }
