@@ -24,6 +24,15 @@ enum StrangeMerchantVariant
   grey,
 }
 
+const double myScale = 1.15;
+
+final List<Vector2> _ground = [
+  Vector2(-3.22803,23.709) * PhysicVals.physicScale * myScale
+  ,Vector2(-3.15018,10.3183) * PhysicVals.physicScale * myScale
+  ,Vector2(16.1573,10.6297) * PhysicVals.physicScale * myScale
+  ,Vector2(16.0016,23.6311) * PhysicVals.physicScale * myScale
+  ,];
+
 class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   StrangeMerchant(this._startPos,this.spriteVariant,{super.priority, this.quest, this.startTrigger, this.endTrigger});
@@ -50,33 +59,24 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
         srcSize:  Vector2(110,110));
     _animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + Random().nextDouble() / 40 - 0.0125,from: 0);
     animation = _animIdle;
-    size *= 1.15;
-    final List<Vector2> points = [
-      (Vector2(38,36) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
-      (Vector2(38,50) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
-      (Vector2(42,66) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
-      (Vector2(52,79) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
-      (Vector2(70,79) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
-      (Vector2(73,75) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
-      (Vector2(73,34) - Vector2(55,55)) * 1.15 * PhysicVals.physicScale,
-    ];
+    size *= myScale;
     BodyDef df = BodyDef(position: _startPos * PhysicVals.physicScale, fixedRotation: true, userData: BodyUserData(isQuadOptimizaion: false));
-    FixtureDef ft = FixtureDef(PolygonShape()..set(points));
+    FixtureDef ft = FixtureDef(PolygonShape()..set(_ground));
     ground = Ground(df,gameRef.world.physicsWorld);
     ground?.createFixture(ft);
     add(ObjectHitbox(getPointsForActivs(Vector2(-30,-30), Vector2(60,60)),collisionType: DCollisionType.active,
         isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false));
     position = _startPos;
-    super.onLoad();
     int rand = Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
     if(rand == 0){
       flipHorizontally();
     }
     position = ground!.position / PhysicVals.physicScale;
-    priority = position.y.toInt();
+    priority = position.y.toInt() + 23;
     if(quest != null){
       add(NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width / 2,height / 2 - 40)));
     }
+    super.onLoad();
   }
 
   void getBuyMenu()async

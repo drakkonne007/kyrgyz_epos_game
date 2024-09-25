@@ -82,7 +82,7 @@ final List<Vector2> hitBoxPoint = [
 class Moose extends KyrgyzEnemy
 {
 
-  Moose(this._startPos, {required super.id, required super.level, super.loots});
+  Moose(this._startPos, {required super.id, required super.level, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
   final Vector2 _spriteSheetSize = Vector2(347,192);
 
@@ -90,7 +90,9 @@ class Moose extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = true;
     dopPriority = 26;
+    highQuest = 70  - 96;
     shiftAroundAnchorsForHit = 100;
     distPlayerLength = 10000;
     maxLoots = 2;
@@ -117,7 +119,7 @@ class Moose extends KyrgyzEnemy
     animMove =
         spriteSheet.createAnimation(row: 1, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 8, loop: false);
     animAttack = spriteSheet.createAnimation(
-        row: 2, stepTime: 0.08 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
+        row: 2, stepTime: 0.07 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, loop: false);
     animHurt = spriteSheet.createAnimation(row: 3,
         stepTime: 0.06 + math.Random(seed++).nextDouble() / 40 - 0.0125,
         from: 0,

@@ -126,7 +126,7 @@ final List<Vector2> _attack3ind7 = [ //loop 9 всё
 
 class BossScelet extends KyrgyzEnemy
 {
-  BossScelet(this._startPos,{required super.id, required super.level, super.isHigh, super.loots});
+  BossScelet(this._startPos,{required super.id, required super.level, super.isHigh, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
   final double dist = 700 * 700;
   final Vector2 srcSize = Vector2(351,207);
@@ -141,7 +141,9 @@ class BossScelet extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = true;
     dopPriority = 52;
+    highQuest = -14.41;
     maxLoots = 10;
     chanceOfLoot = 0.9;
     health = SceletBossInfo.health(level);
@@ -299,6 +301,10 @@ class BossScelet extends KyrgyzEnemy
 
   @override
   void selectBehaviour() {
+    if(citizen){
+      moveIdleRandom(false);
+      return;
+    }
     if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }
@@ -391,10 +397,7 @@ class BossScelet extends KyrgyzEnemy
     }else if(animation == animAttack3Loop){
       loopMagic++;
       if(loopMagic < 11){
-        animation = null;
-        animation = animAttack3Loop;
-        animationTicker?.onFrame = changeVertsInWeapon;
-        animationTicker?.onComplete = changeFromAttack;
+        animationTicker?.reset();
       }else{
         animation = animAttack3End;
         animationTicker?.onComplete = selectBehaviour;
@@ -457,6 +460,9 @@ class BossScelet extends KyrgyzEnemy
     }else if(animation == animAttack3Loop){
       if(index.isOdd){
         gameRef.gameMap.container.add(FallingCrystal());
+      }
+      if(index == 0 || index == 1){
+        gameRef.gameMap.container.add(BossCircleBoom(position: position));
       }
     }
   }

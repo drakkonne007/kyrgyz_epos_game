@@ -14,7 +14,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 int getLevel(double experience)
 {
-  double startExp = 9000;
+  double startExp = 18000;
   int count = 0;
   while(experience > 0){
     experience -= startExp;

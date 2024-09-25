@@ -234,6 +234,12 @@ class MapNode {
         return;
       }
     }
+    int? startTrigger;
+    int? endTrigger;
+    if(quest != null){
+      startTrigger = int.parse(obj.getAttribute('startTrigger') ?? '0');
+      endTrigger = int.parse(obj.getAttribute('endTrigger') ?? '99999999');
+    }
     if(obj.getAttribute('oneUse') != null || name == 'bossScelet' || name == 'pot'
     || name == 'vertBRW' || name == 'vertRW'){
       var dd = await myGame.dbHandler.getItemStateFromDb(id, myGame.gameMap.currentGameWorldData!.nameForGame);
@@ -246,8 +252,8 @@ class MapNode {
         || name == 'ogr'
         || name == 'assassin'){
       var dd = await myGame.dbHandler.getItemStateFromDb(id, myGame.gameMap.currentGameWorldData!.nameForGame);
-      bool need = Random().nextBool();
-      if(dd.used && !need){
+      int need = Random().nextInt(6);
+      if(dd.used && need != 0){
         return;
       }
     }
@@ -262,7 +268,8 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level, loots: list);
+        bool citizen = obj.getAttribute('citizen') == '1';
+        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level, loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.loadedLivesObjs.add(id);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -275,20 +282,23 @@ class MapNode {
         }
         myGame.gameMap.loadedLivesObjs.add(id);
         var isHigh = obj.getAttribute('high');
+        bool citizen = obj.getAttribute('citizen') == '1';
         if(isHigh!=null){
-          positionObject = SkeletonMage(position,id:id, level: level,isHigh: true,loots: list);
+          positionObject = SkeletonMage(position,id:id, level: level,isHigh: true,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
           myGame.gameMap.container.add(positionObject);
         }else{
-          positionObject = SkeletonMage(position,id:id, level: level,loots: list);
+          positionObject = SkeletonMage(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
           myGame.gameMap.container.add(positionObject);
         }
         break;
       case 'enemy':
+        bool citizen = obj.getAttribute('citizen') == '1';
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level);
+        positionObject = GrassGolem(position, GolemVariant.Grass,id:id, level: level, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'wgolem':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -296,7 +306,7 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = GrassGolem(position, GolemVariant.Water,id:id, level: level,loots: list);
+        positionObject = GrassGolem(position, GolemVariant.Water,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'windb':
@@ -305,6 +315,7 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'moose':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -312,10 +323,11 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Moose(position, id:id, level: level,loots: list);
+        positionObject = Moose(position, id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'scelet':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -323,10 +335,11 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Skeleton(position,id:id, level: level,loots: list);
+        positionObject = Skeleton(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'orc':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -334,10 +347,11 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = OrcWarrior(position,id:id, level: level,loots: list);
+        positionObject = OrcWarrior(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'orcMage':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -345,10 +359,11 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = OrcMage(position,id:id, level: level,loots: list);
+        positionObject = OrcMage(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'ogr'://'ogr' 'bossScelet' 'pot'
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -356,10 +371,11 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Ogr(position,id:id, level: level,loots: list);
+        positionObject = Ogr(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'bossScelet':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -367,9 +383,10 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = BossScelet(position,id:id, level: level,loots: list);
+        positionObject = BossScelet(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
       case 'goblin':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -377,10 +394,11 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Goblin(position,id:id, level: level,loots: list);
+        positionObject = Goblin(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;//Pot
       case 'pot':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -388,10 +406,11 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = Pot(position,id: id, level: level,loots: list);
+        positionObject = Pot(position,id: id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'assassin':
+        bool citizen = obj.getAttribute('citizen') == '1';
         var items = obj.getAttribute('items')?.split(',');
         List<Item>? list;
         if(items != null){
@@ -399,7 +418,7 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        positionObject = PrisonAssassin(position,id:id, level: level,loots: list);
+        positionObject = PrisonAssassin(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'gold':
@@ -443,12 +462,7 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'strMerchant':
-        int? startTrigger;
-        int? endTrigger;
-        if(quest != null){
-          startTrigger = int.parse(obj.getAttribute('startTrigger') ?? '0');
-          endTrigger = int.parse(obj.getAttribute('endTrigger') ?? '99999999');
-        }
+
         positionObject = StrangeMerchant(position, StrangeMerchantVariant.black, quest: quest,startTrigger: startTrigger,endTrigger: endTrigger);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
@@ -538,9 +552,9 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'hWChest':
-        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
         var items = obj.getAttribute('items')?.split(',');
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         List<Item>? list;
         if(items != null){
           list = [];
@@ -692,11 +706,11 @@ class MapNode {
             double.parse(obj.getAttribute('h')!));
         bool? removeOnTrigger;
         if(obj.getAttribute('removeOnTrigger') != null){
-          removeOnTrigger = obj.getAttribute('removeOnTrigger') == 'true';
+          removeOnTrigger = obj.getAttribute('removeOnTrigger') == '1';
         }
         bool? autoTrigger;
         if(obj.getAttribute('autoTrigger') != null){
-          autoTrigger = obj.getAttribute('autoTrigger') == 'true';
+          autoTrigger = obj.getAttribute('autoTrigger') == '1';
         }
         String? dialog = obj.getAttribute('dialog');
         int? startTrigger;
@@ -711,14 +725,20 @@ class MapNode {
         if(obj.getAttribute('onTrigger') != null){
           onTrigger = int.parse(obj.getAttribute('onTrigger')!);
         }
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         bool? isEndQuest;
         if(obj.getAttribute('isEndQuest') != null){
-          isEndQuest = obj.getAttribute('isEndQuest') == 'true' || obj.getAttribute('isEndQuest') == '1';
+          isEndQuest = obj.getAttribute('isEndQuest') == '1';
         }
+        var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
+        bool ground = obj.getAttribute('ground') == '1';
         String? quest = obj.getAttribute('quest');
+        String? dialogNegative = obj.getAttribute('dialogNegative');
+        var worldName = obj.getAttribute('world');
         positionObject = Trigger(size: telSize,position: position,kyrGame: myGame,removeOnTrigger: removeOnTrigger
             ,autoTrigger: autoTrigger,dialog: dialog,startTrigger: startTrigger
-            ,endTrigger: endTrigger,onTrigger: onTrigger,quest: quest,isEndQuest: isEndQuest);
+            ,endTrigger: endTrigger,onTrigger: onTrigger,quest: quest,isEndQuest: isEndQuest, needKilledBosses: neededBoss, needItems: neededItems, ground: ground, world: worldName
+        ,dialogNegative: dialogNegative);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -766,31 +786,10 @@ class MapNode {
         myGame.gameMap.container.add(positionObject);
         break;
       case 'human':
-        if(obj.getAttribute('citizien') != '1'){
-          positionObject = HumanWarrior(position, id:id, level: level);
-          myGame.gameMap.loadedLivesObjs.add(id);
-          myGame.gameMap.container.add(positionObject);
-        }else {
-          List<Vector2>? target;
-          if(obj.getAttribute('tar') != null){
-            var targetPos = obj.getAttribute('tar')?.split(';');
-            target = [];
-            for (int i = 0; i < targetPos!.length; i++) {
-              var source = targetPos[i].split(',');
-              target.add(
-                  Vector2(double.parse(source[0]), double.parse(source[1])));
-            }
-          }
-          int? startTrigger;
-          int? endTrigger;
-          if(quest != null){
-            startTrigger = int.parse(obj.getAttribute('startTrigger') ?? '0');
-            endTrigger = int.parse(obj.getAttribute('endTrigger') ?? '99999999');
-          }
-          positionObject = Citizien(id, position: position,endPos: target, startTrigger: startTrigger, endTrigger: endTrigger, quest: quest);
-          myGame.gameMap.loadedLivesObjs.add(id);
-          myGame.gameMap.container.add(positionObject);
-        }
+        bool citizen = obj.getAttribute('citizen') == '1';
+        positionObject = HumanWarrior(position, id:id, level: level, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
+        myGame.gameMap.loadedLivesObjs.add(id);
+        myGame.gameMap.container.add(positionObject);
         break;
       case 'vertBRW':
         String dir = obj.getAttribute('dir')!;

@@ -21,7 +21,7 @@ import 'dart:math' as math;
 
 class Skeleton extends KyrgyzEnemy
 {
-  Skeleton(this._startPos, {required super.id, required super.level, super.loots});
+  Skeleton(this._startPos, {required super.id, required super.level, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   late SpriteAnimation _animMoveShield, _animIdleShield, _animAttackShield, _animAttack2Shield,_animHurtShield,_animBlock, _animThrowShield, _animDeathShield;
   final Vector2 _spriteSheetSize = Vector2(220,220);
   final Vector2 _startPos;
@@ -74,7 +74,9 @@ class Skeleton extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = false;
     dopPriority = 39;
+    highQuest = -10;
     distPlayerLength = 65 * 65;
     shiftAroundAnchorsForHit = 50;
     maxLoots = 2;

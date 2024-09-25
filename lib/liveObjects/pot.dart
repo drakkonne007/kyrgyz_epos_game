@@ -52,7 +52,7 @@ final List<Vector2> _attack1ind12 = [ //17 всё
 
 class Pot extends KyrgyzEnemy
 {
-  Pot(this._startPos,{required super.id, required super.level, super.isHigh, super.loots});
+  Pot(this._startPos,{required super.id, required super.level, super.isHigh, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
   final double dist = 350 * 350;
   final Vector2 srcSize = Vector2(160,128);
@@ -65,7 +65,9 @@ class Pot extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = false;
     dopPriority = 30;
+    highQuest = -8;
     maxLoots = 2;
     chanceOfLoot = 0.3;
     health = PotInfo.health(level);
@@ -136,6 +138,10 @@ class Pot extends KyrgyzEnemy
 
   @override
   void selectBehaviour() {
+    if(citizen){
+      moveIdleRandom(false);
+      return;
+    }
     if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }

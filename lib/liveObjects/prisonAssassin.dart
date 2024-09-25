@@ -48,14 +48,16 @@ final List<Vector2> weaponPoints = [ //вторая колонка
 
 class PrisonAssassin extends KyrgyzEnemy
 {
-  PrisonAssassin(this._startPos, {required super.id, required super.level, super.loots});
+  PrisonAssassin(this._startPos, {required super.id, required super.level, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _spriteSheetSize = Vector2(220,96);
   final Vector2 _startPos;
 
   @override
   Future<void> onLoad() async
   {
+    beast = false;
     dopPriority = (30 * zoomScale).toInt();
+    highQuest = (35 - 48)  * zoomScale;
     shiftAroundAnchorsForHit = 20;
     distPlayerLength = 60*60;
     armor = AssasinUndeadInfo.armor(level);

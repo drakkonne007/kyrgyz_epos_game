@@ -63,7 +63,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class GrassGolem extends KyrgyzEnemy
 {
-  GrassGolem(this._startPos,this.spriteVariant,{required super.level,required super.id, super.loots});
+  GrassGolem(this._startPos,this.spriteVariant,{required super.level,required super.id, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _spriteSheetSize = Vector2(224,192);
   final Vector2 _startPos;
   final GolemVariant spriteVariant;
@@ -72,7 +72,9 @@ class GrassGolem extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = true;
     dopPriority = 29;
+    highQuest = 56 - 96;
     shiftAroundAnchorsForHit = 65;
     distPlayerLength = 75 * 75;
     maxLoots = 1;

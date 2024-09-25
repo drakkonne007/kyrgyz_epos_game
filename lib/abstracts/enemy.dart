@@ -15,13 +15,52 @@ import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/abstracts/utils.dart';
+import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
+import 'package:game_flame/liveObjects/mini_creatures/npcDialogAttention.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/weapon/magicEffects/fireEffect.dart';
 import 'package:game_flame/weapon/magicEffects/lightningEffect.dart';
 import 'package:game_flame/weapon/magicEffects/poisonEffect.dart';
+
+
+final List<String> _humanLanguage =
+    [
+      'Ай, больно',
+      'Ауч!',
+      'Перестань',
+      'Будешь так делать - я тебя побью',
+      'Хватит',
+      'У тебя плохое настроение?',
+      'Ну хвааааатит',
+      'Уфффф, тяжёлый день',
+      'Хорош уже',
+      'Не бей меня',
+      'Заканчивай',
+      'Я же сильнее',
+      'Мне больно',
+    ];
+
+final List<String> _beastLanguage =
+[
+  'Ааррррр',
+  'Вучл',
+  'Уууууууу',
+  'Аргх аргх кну',
+  'Хныыыыы',
+  'Ммммрррраааау',
+  'Хввввссссс',
+  'Уррррррва',
+  'Зиииииииибо',
+  'Ввввврррврврв',
+  'Хыыыыыыыы',
+  'Арзрзрзвы',
+  'Брбрбрбрбрбрб',
+];
+
+
 
 class ShieldLock extends SpriteComponent with HasGameRef<KyrgyzGame>
 {
@@ -119,9 +158,18 @@ class HitText extends TextComponent with HasGameRef<KyrgyzGame>
 
 class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  KyrgyzEnemy({required this.id, required this.level, this.isHigh = false, this.loots});
+  KyrgyzEnemy({required this.id, required this.level, this.isHigh = false, this.loots
+    ,this.beast = false
+    ,required this.citizen
+    ,required this.quest
+    ,required this.startTrigger
+    ,required this.endTrigger});
   bool isRefresh = true;
+  String? quest;
+  int? startTrigger;
+  int? endTrigger;
   int level;
+  bool citizen;
   int isFreeze = 0;
   double health = 0;
   double armor = 0;
@@ -129,7 +177,9 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int column=0;
   int row=0;
   int id;
+  int _countOfDamages = 0;
   int dopPriority = 0;
+  double highQuest = 0;
   int variantOfHit = 0;
   SpriteAnimation? animMove, animIdle,animIdle2, animAttack,animAttack2, animHurt, animDeath;
   List<Item>? loots;
@@ -157,6 +207,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   bool isReverseBody = false;
   int _attacksCount = 0;
   bool _isKilled = false;
+  bool beast = false;
+  ObjectHitbox? _dialog = null;
 
 
   @override
@@ -174,6 +226,48 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     add(_hitBar!);
     if(!isHigh) {
       add(TimerComponent(period: 0.6, repeat: true, onTick: checkPriority));
+    }
+    if(quest != null){
+      citizen = true;
+    }
+    if(citizen){
+      _dialog = ObjectHitbox(getPointsForActivs(Vector2(-30,dopPriority.toDouble() - 30), Vector2.all(60)), collisionType: DCollisionType.active,
+          isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false);
+      add(_dialog!);
+      if(quest != null){
+        final questDialog = NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width * anchor.x, height * anchor.y + highQuest - 25), buy: quest == 'buy');
+        if(isFlippedHorizontally){
+          questDialog.flipHorizontally();
+        }
+        add(questDialog);
+      }
+    }
+  }
+
+  void createArghText()
+  {
+      if(beast){
+        int rand = math.Random().nextInt(_beastLanguage.length);
+        createText(text: _beastLanguage[rand], gameRef: gameRef, position: position);
+      }else{
+        int rand = math.Random().nextInt(_humanLanguage.length);
+        createText(text: _humanLanguage[rand], gameRef: gameRef, position: position);
+      }
+  }
+
+  void getBuyMenu()async
+  {
+    if(quest != null) {
+      if(quest == 'buy'){
+        gameRef.doBuyMenu();
+        return;
+      }
+      var answer = gameRef.quests[quest]!;
+      if(answer.currentState >= startTrigger! && answer.currentState <= endTrigger!) {
+        gameRef.doDialogHud(quest!);
+      }
+    }else{
+      createSmallMapDialog(gameRef: gameRef);
     }
   }
 
@@ -305,6 +399,10 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void selectBehaviour() {
     weapon?.collisionType = DCollisionType.inactive;
+    if(citizen){
+      moveIdleRandom(false);
+      return;
+    }
     if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }
@@ -345,6 +443,9 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   bool isSee()
   {
+    if(citizen){
+      return false;
+    }
     var tempW = gameRef.world as UpWorld;
     if(isReverseBody){
       if((gameRef.gameMap.orthoPlayer!.position.x > position.x && isFlippedHorizontally)
@@ -419,6 +520,14 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   bool internalPhysHurt(double hurt,bool inArmor)
   {
+    if(citizen){
+      _countOfDamages++;
+      if(_countOfDamages > 5 && quest == null){
+        citizen = false;
+        _dialog?.collisionType = DCollisionType.inactive;
+      }
+      createArghText();
+    }
     if(inArmor){
       double dd = math.max(hurt * armor, 0);
       if(dd == 0){
@@ -427,12 +536,16 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
         gameRef.gameMap.orthoPlayer!.endHit();
         return false;
       }
-      health -= dd;
+      if(!citizen) {
+        health -= dd;
+      }
       if(health > 1) {
         _createSpecEffect();
       }
     }else{
-      health -= hurt;
+      if(!citizen) {
+        health -= hurt;
+      }
       if(health > 1) {
         _createSpecEffect();
       }

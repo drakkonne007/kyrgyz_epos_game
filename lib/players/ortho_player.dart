@@ -218,9 +218,10 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         totalDamage += (1 - gameRef.playerData.bootsDress.value.armor / 100) * tempDamage;
         totalDamage -= gameRef.playerData.shieldBlock.value;
 
-        if(totalDamage < gameRef.playerData.maxHealth.value / 4){
-          totalDamage = 0;
-        }
+        // if(totalDamage < gameRef.playerData.maxHealth.value / 4){
+        //   totalDamage = 0;
+        // }
+        totalDamage = math.max(0, totalDamage);
         if(totalDamage == 0){
           if(enableShieldLock) {
             enableShieldLock = false;

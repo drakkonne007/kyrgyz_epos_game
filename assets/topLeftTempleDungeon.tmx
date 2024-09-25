@@ -6916,20 +6916,77 @@
   <object id="1617" gid="50800" x="7167.5" y="8329.75" width="64" height="64"/>
   <object id="1618" gid="50800" x="8863.45" y="8299.45" width="64" height="64"/>
   <object id="1619" gid="50800" x="7903.88" y="7818.75" width="64" height="64"/>
-  <object id="1620" gid="50823" x="818.727" y="7205.64" width="256" height="256"/>
-  <object id="1621" gid="50823" x="977" y="7045.67" width="256" height="256"/>
-  <object id="1622" gid="50823" x="548.667" y="7613" width="256" height="256"/>
-  <object id="1623" gid="50823" x="637.667" y="7611.33" width="256" height="256"/>
-  <object id="1624" gid="50823" x="784" y="8105" width="256" height="256"/>
-  <object id="1625" gid="50823" x="890" y="8083" width="256" height="256"/>
-  <object id="1626" type="orcMage" gid="50822" x="672.667" y="6966" width="256" height="256"/>
-  <object id="1628" gid="50823" x="1304.67" y="7750" width="256" height="256"/>
-  <object id="1629" gid="50823" x="1399.33" y="7730" width="256" height="256"/>
-  <object id="1630" gid="50823" x="2273" y="7420" width="256" height="256"/>
-  <object id="1631" gid="50823" x="1250.5" y="7527.5" width="256" height="256"/>
-  <object id="1632" gid="50823" x="1798.5" y="7261.5" width="256" height="256"/>
-  <object id="1633" gid="50823" x="2060.67" y="7211.33" width="256" height="256"/>
-  <object id="1634" gid="50823" x="1218" y="7176" width="256" height="256"/>
+  <object id="1620" gid="50823" x="818.727" y="7205.64" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+    <property name="quest" value="buy"/>
+   </properties>
+  </object>
+  <object id="1621" gid="50823" x="977" y="7045.67" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1622" gid="50823" x="548.667" y="7613" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1623" gid="50823" x="637.667" y="7611.33" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1624" gid="50823" x="784" y="8105" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1625" gid="50823" x="890" y="8083" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1626" type="orcMage" gid="50822" x="672.667" y="6966" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1628" gid="50823" x="1304.67" y="7750" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1629" gid="50823" x="1399.33" y="7730" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1630" gid="50823" x="2273" y="7420" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1631" gid="50823" x="1250.5" y="7527.5" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1632" gid="50823" x="1798.5" y="7261.5" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1633" gid="50823" x="2060.67" y="7211.33" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="1634" gid="50823" x="1218" y="7176" width="256" height="256">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
   <object id="1677" gid="50825" x="4245.33" y="7817.33" width="220" height="96"/>
   <object id="1678" gid="50825" x="2511.33" y="5051.67" width="220" height="96">
    <properties>

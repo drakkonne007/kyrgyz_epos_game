@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1477">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1478">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -125,6 +125,7 @@
  <tileset firstgid="50892" source="Tileset - wall 2.tsx"/>
  <tileset firstgid="51132" source="Atlas-PropsGrass2_2Dark.tsx"/>
  <tileset firstgid="54652" source="Tileset-Terrain-old prison.tsx"/>
+ <tileset firstgid="59137" source="bossScelet.tsx"/>
  <layer id="13" name="ground" width="60" height="50">
   <data encoding="csv">
 50861,50865,50864,50833,50865,50848,50832,50849,50832,50846,50864,50828,50867,50865,50848,50849,50837,50832,50833,50871,50865,50864,50863,50849,50865,50851,50832,50849,50845,50865,50849,50793,50867,50849,50833,50851,50867,50558,50865,50867,50844,50864,50833,50849,50865,50865,50829,50844,50865,50846,50833,50558,50850,50867,50845,50861,50848,50860,50834,50558,
@@ -942,15 +943,18 @@
     <property name="wrld" value="dungeonUnderTemple"/>
    </properties>
   </object>
-  <object id="1472" name="trigger" x="1751.63" y="116.833" width="25" height="160.333">
+  <object id="1472" name="trigger" x="1793.13" y="107.333" width="24.5" height="176.5">
    <properties>
-    <property name="autoTrigger" value="true"/>
+    <property name="autoTrigger" value="1"/>
     <property name="dialog" value="Наверху упало что-то тяжёлое"/>
+    <property name="dialogNegative" value="Убейте босса скелета, чтобы пройти дальше"/>
     <property name="endShow" value="1"/>
-    <property name="isEndQuest" value="false"/>
+    <property name="ground" value="1"/>
+    <property name="isEndQuest" value="0"/>
+    <property name="neededBoss" value="1477"/>
     <property name="onTrigger" value="1"/>
     <property name="quest" value="templeDungeon"/>
-    <property name="removeOnTrigger" value="true"/>
+    <property name="removeOnTrigger" value="1"/>
     <property name="startTrigger" value="0"/>
    </properties>
   </object>
@@ -962,6 +966,12 @@
   </object>
   <object id="1474" x="643.333" y="1398">
    <polygon points="0,0 -0.606061,158.364 -580.833,160 -582.424,-1281.82 1245,-1281.67 1246,-1126 -60.5833,-1120 -64.9697,-0.727273"/>
+  </object>
+  <object id="1477" gid="59137" x="155.167" y="553.833" width="351" height="207">
+   <properties>
+    <property name="items" value="gold3000"/>
+    <property name="level" value="15"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

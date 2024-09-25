@@ -16,7 +16,7 @@ class GoblinInfo
 class GollemInfo
 {
   static const double _damage = 28;
-  static const double _health = 80;
+  static const double _health = 100;
   static const double speed = 50;
   static const double _armor = 0.06;
   static damage(int level) => _damage + (_damage * level) / damageDel;

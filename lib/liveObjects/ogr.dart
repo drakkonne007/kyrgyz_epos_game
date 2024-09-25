@@ -62,7 +62,7 @@ final List<Vector2> _hitBoxPoint = [
 
 class Ogr extends KyrgyzEnemy
 {
-  Ogr(this._startPos, {required super.level, required super.id, super.loots});
+  Ogr(this._startPos, {required super.level, required super.id, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
   final srcSize = Vector2(256,224);
 
@@ -70,7 +70,9 @@ class Ogr extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = true;
     dopPriority = (15 * zoomScale).toInt();
+    highQuest = -30;
     shiftAroundAnchorsForHit = 60;
     distPlayerLength = 70 * 70;
     maxLoots = 3;

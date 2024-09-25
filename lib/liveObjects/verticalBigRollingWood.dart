@@ -60,7 +60,7 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
   final bool _isBigRoll;
   final String _direct;
   final Vector2 _speed = Vector2.all(0);
-  final double _maxSpeed = 160;
+  final double _maxSpeed = 200;
   bool _isDeleted = false;
   bool _isStarted = false;
   late SpriteAnimationComponent _player;
@@ -142,6 +142,9 @@ class VerticaBigRollingWood extends SpriteAnimationComponent with HasGameRef<Kyr
     animation?.loop = false;
     add(OpacityEffect.by(-1,EffectController(duration: 0.7),onComplete: (){
       gameRef.gameMap.loadedLivesObjs.remove(_id);
+      gameRef.dbHandler.changeItemState(id: _id,
+          worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,
+          used: true);
       removeFromParent();
       _ground.destroy();
     }));

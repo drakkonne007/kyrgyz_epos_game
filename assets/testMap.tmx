@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="99">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="33" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="103">
  <tileset firstgid="1" source="Terrain - Ancient Ruins.tsx"/>
  <tileset firstgid="2210" source="hole1.tsx"/>
  <tileset firstgid="2450" source="Tileset-Terrain-old prison.tsx"/>
@@ -18,6 +18,7 @@
  <tileset firstgid="9995" source="Human.tsx"/>
  <tileset firstgid="10065" source="bossScelet.tsx"/>
  <tileset firstgid="10073" source="Tileset-Terrain-new grass.tsx"/>
+ <tileset firstgid="14033" source="Stone-224x192.tsx"/>
  <layer id="2" name="blabla" width="33" height="27">
   <data encoding="csv">
 10377,10318,10320,10322,10429,10374,10319,10320,10487,10432,10266,10428,10267,10209,10210,10267,10263,10428,10267,10263,10267,10318,10376,10212,10208,10212,10264,10266,10210,10210,10208,10374,10376,
@@ -113,6 +114,26 @@
  </layer>
  <objectgroup id="4" name="obb">
   <object id="1" x="10" y="32" width="1034" height="822"/>
+  <object id="99" gid="9708" x="120" y="241" width="160" height="128">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="100" gid="9987" x="780" y="291" width="220" height="220">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="101" gid="9692" x="57" y="827" width="256" height="224">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
+  <object id="102" gid="14033" x="806.667" y="846.667" width="224" height="192">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="sad">
   <object id="27" name="portal" x="672" y="706.242" width="130.667" height="15.5152">
@@ -121,7 +142,6 @@
     <property name="wrld" value="topLeftVillage"/>
    </properties>
   </object>
-  <object id="98" gid="10065" x="346.5" y="436.5" width="351" height="207"/>
  </objectgroup>
  <objectgroup id="6" name="e"/>
 </map>

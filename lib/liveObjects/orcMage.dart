@@ -49,7 +49,7 @@ final List<Vector2> _attack1ind12 = [ //7 - 10
 
 class OrcMage extends KyrgyzEnemy
 {
-  OrcMage(this._startPos, {required super.level, required super.id, super.isHigh, super.loots});
+  OrcMage(this._startPos, {required super.level, required super.id, super.isHigh, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
   final double dist = 350 * 350;
   final Vector2 srcSize = Vector2(256,256);
@@ -59,7 +59,9 @@ class OrcMage extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = false;
     dopPriority = 38;
+    highQuest = -18;
     maxLoots = 2;
     chanceOfLoot = 0.12;
     health = OrcMageInfo.health(level);
@@ -104,6 +106,10 @@ class OrcMage extends KyrgyzEnemy
 
   @override
   void selectBehaviour() {
+    if(citizen){
+      moveIdleRandom(false);
+      return;
+    }
     if (gameRef.gameMap.orthoPlayer == null) {
       return;
     }

@@ -31,6 +31,7 @@ class Quest
     }
 
     static const List<String> allQuests = [
+      'buy',
       'chestOfGlory',
       'templeDungeon'
     ];

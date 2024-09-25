@@ -42,13 +42,15 @@ final List<Vector2> _attack = [ //4-5
 
 class HumanWarrior extends KyrgyzEnemy
 {
-  HumanWarrior(this._startPos, {required super.level, required super.id});
+  HumanWarrior(this._startPos, {required super.level, required super.id,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
 
   @override
   Future<void> onLoad() async
   {
-    dopPriority = 31;
+    beast = false;
+    dopPriority = (31 * 1.2).toInt();
+    highQuest = -12 * 1.2;
     isReverseBody = true;
     shiftAroundAnchorsForHit = 65;
     distPlayerLength = 75 * 75;
@@ -88,7 +90,7 @@ class HumanWarrior extends KyrgyzEnemy
     weapon?.damage = HumanInfo.damage(level);
     bodyDef.position = _startPos * PhysicVals.physicScale;
     groundBody = Ground(bodyDef, gameRef.world.physicsWorld, isEnemy: true);
-    FixtureDef fx = FixtureDef(PolygonShape()..set(getPointsForActivs(Vector2(90 - 112,87 - 96), Vector2(41,38), scale: PhysicVals.physicScale)));
+    FixtureDef fx = FixtureDef(PolygonShape()..set(_grPoints));
     groundBody?.createFixture(fx);
     var massData = groundBody!.getMassData();
     massData.mass = 800;

@@ -13,7 +13,7 @@ import 'dart:math' as math;
 
 class OrcWarrior extends KyrgyzEnemy
 {
-  OrcWarrior(this._startPos, {required super.level, required super.id, super.loots});
+  OrcWarrior(this._startPos, {required super.level, required super.id, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
   late SpriteAnimation _animIdleToMove, _animAttack1FromIdle, _animAttack1FromMove, _animPrepareToAttack2, _postAttack2;
   int _variantOfHit = 0;
@@ -112,7 +112,9 @@ class OrcWarrior extends KyrgyzEnemy
   @override
   Future<void> onLoad() async
   {
+    beast = false;
     dopPriority = 26;
+    highQuest = -23;
     distPlayerLength = 93 * 93;
     shiftAroundAnchorsForHit = 80;
     maxLoots = 2;
