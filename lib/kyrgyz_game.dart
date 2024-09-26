@@ -224,6 +224,10 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   Future saveFirstGame(bool hard, int saveId) async
   {
     if(!await dbHandler.checkSaved(saveId) || hard) {
+      if(hard){
+        await dbHandler.fillGameObjects(true);
+        await dbHandler.refreshQuests();
+      }
       await dbHandler.saveGame(
         saveId: saveId,
         x: 1750,

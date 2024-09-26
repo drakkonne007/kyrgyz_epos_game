@@ -41,6 +41,15 @@ class GamePause extends StatelessWidget
             child: const Text('Загрузить'),
           ),
           ElevatedButton(
+            onPressed: () async{
+              await _game.saveFirstGame(true, 0);
+              await _game.loadGame(0);
+              await _game.loadNewMap();
+              _game.resumeEngine();
+            },
+            child: const Text('Новая игра'),
+          ),
+          ElevatedButton(
             onPressed: (){
               _game.doBuyMenu();
             },

@@ -347,9 +347,21 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                                   borderRadius: BorderRadius.circular(15),
                                                                   boxShadow: const [BoxShadow(color: Color(0xFF705c4d), spreadRadius: 1, blurRadius: 1)]
                                                               ),
-                                                              child:Column(
-                                                                  children: infoAboutChoosen(curItem,false,count,false)
-                                                              ),
+                                                              child:
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Image.asset('assets/${curItem.source}',fit: BoxFit.contain),
+                                                                  ),
+                                                                  Expanded(
+                                                                      flex: 6,
+                                                                      child: Column(
+                                                                          children: infoAboutChoosen(curItem,false,count,false)
+                                                                      )
+                                                                  )
+                                                                ],
+                                                              )
                                                             ),
                                                             isNowDress(curItem) ?  Positioned.fill(
                                                                 child:  Padding(
@@ -497,8 +509,19 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                           // boxShadow: [BoxShadow(color: orderPlace.isPlayer ? const Color(0xDFFF5c4d) : const Color(0xDF70FF4d), spreadRadius: 1, blurRadius: 1)]
                                                         ),
                                                         child:
-                                                        Column(
-                                                            children: infoAboutChoosen(orderPlace.item,!orderPlace.isPlayer,count,true)
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Image.asset('assets/${orderPlace.item.source}',fit: BoxFit.contain),
+                                                            ),
+                                                            Expanded(
+                                                                flex: 6,
+                                                                child: Column(
+                                                                    children: infoAboutChoosen(orderPlace.item,!orderPlace.isPlayer,count,true)
+                                                                )
+                                                            )
+                                                          ],
                                                         )
                                                     );
                                                   }),
@@ -601,7 +624,7 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                         child) {
                                                       return Container(
                                                           width: _size.width * 0.3,
-                                                          alignment: Alignment.center,
+                                                          alignment: Alignment.centerLeft,
                                                           margin: const EdgeInsets.all(3),
                                                           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
                                                           decoration: BoxDecoration(
@@ -612,9 +635,21 @@ class _BuyOverlayState extends State<BuyOverlay> {
                                                               boxShadow: const [BoxShadow(color: Color(0xFF705c4d), spreadRadius: 1, blurRadius: 1)]
                                                           ),
                                                           child:
-                                                          Column(
-                                                              children: infoAboutChoosen(curItem,true,count,false)
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Image.asset('assets/${curItem.source}',fit: BoxFit.contain),
+                                                              ),
+                                                              Expanded(
+                                                                  flex: 6,
+                                                                  child: Column(
+                                                                      children: infoAboutChoosen(curItem,true,count,false)
+                                                                  )
+                                                              )
+                                                            ],
                                                           )
+
                                                       );
                                                     }),
                                                   ));
@@ -1017,14 +1052,14 @@ class _BuyOverlayState extends State<BuyOverlay> {
   List<Widget> infoAboutChoosen(Item myItem, bool isShop, int count, bool isOrder) {
     List<Widget> myList = [];
     const double rowHeight = 35;
-    myList.add(Row(
+    myList.add(Container(constraints:const BoxConstraints.expand(
+        width: double.infinity, height: rowHeight), child:
+    Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children:
         [
-          Image.asset('assets/${myItem.source}',
-            width: 58, fit: BoxFit.contain, height: 58,),
           const Spacer(),
           Image.asset('assets/images/inventar/gold.png',
             width: 30, fit: BoxFit.fitWidth,),
@@ -1038,7 +1073,7 @@ class _BuyOverlayState extends State<BuyOverlay> {
               minFontSize: 10,
               maxLines: 1),
         ]
-    ));
+    )));
     if (myItem.description != null) {
       myList.add(Container(constraints: const BoxConstraints.expand(
           width: double.infinity, height: rowHeight * 4), child:
@@ -1318,11 +1353,11 @@ class _BuyOverlayState extends State<BuyOverlay> {
             children: [
               Expanded(
                   child:Image.asset(
-                      'assets/images/inventar/UI-9-sliced object-56Mana.png',
-                      fit: BoxFit.contain,
-                      alignment: Alignment.centerRight,
-                      width: rowHeight/1.5,
-                  height: rowHeight/1.5,))
+                    'assets/images/inventar/UI-9-sliced object-56Mana.png',
+                    fit: BoxFit.contain,
+                    alignment: Alignment.centerRight,
+                    width: rowHeight/1.5,
+                    height: rowHeight/1.5,))
               , Expanded(
                   child:Container(
                       margin: const EdgeInsets.only(left: 10),
@@ -1384,8 +1419,8 @@ async {
                 min: 1.0,
                 max: max.toDouble(),
                 onChanged: (myVal) {
-                    _myNumber.value = myVal.toInt();
-                  },
+                  _myNumber.value = myVal.toInt();
+                },
                 divisions: max - 1,)
               )
             ]),

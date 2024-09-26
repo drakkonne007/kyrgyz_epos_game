@@ -111,7 +111,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96New.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: sprSize);
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.12, from: 0,to: 8);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.1, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
     animCombo = spriteSheet.createAnimation(row: 2, stepTime: 0.07, from: 5,loop: false);
@@ -411,13 +411,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(animation != animMove){
         animation = animMove;
       }
-      if(animation == animMove){
-        if (isRun && gameRef.playerData.energy.value > 0 && !isMinusEnergy) {
-          animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
-        }else{
-          animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
-        }
-      }
+      // if(animation == animMove){
+      //   if (isRun && gameRef.playerData.energy.value > 0 && !isMinusEnergy) {
+      //     animation?.frames[0].stepTime == 0.12? animation?.stepTime = 0.1 : null;
+      //   }else{
+      //     animation?.frames[0].stepTime == 0.1? animation?.stepTime = 0.12 : null;
+      //   }
+      // }
       angle += math.pi/2;
       _velocity.x = -cos(angle) * PhysicVals.startSpeed;
       _velocity.y = sin(angle) * PhysicVals.startSpeed;
@@ -610,23 +610,24 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       return;
     }
     bool isReallyRun = false;
-    if(isRun && !isMinusEnergy){
-      if(gameRef.playerData.energy.value <= 0){
-        isMinusEnergy = true;
-        if(animation == animMove) {
-          animation?.frames[0].stepTime == 0.1 ? animation?.stepTime = 0.12 : null;
-        }
-      }else{
-        if(animation == animMove) {
-          animation?.frames[0].stepTime == 0.12 ? animation?.stepTime = 0.1 : null;
-        }
-        isReallyRun = true;
-      }
-      gameRef.playerData.addEnergy(dt * -4);
-    }else{
-      if(!gameRef.playerData.isLockEnergy) {
-        gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 15) * dt );
-      }
+    // if(isRun && !isMinusEnergy){
+    //   if(gameRef.playerData.energy.value <= 0){
+    //     isMinusEnergy = true;
+    //     if(animation == animMove) {
+    //       animation?.frames[0].stepTime == 0.1 ? animation?.stepTime = 0.12 : null;
+    //     }
+    //   }else{
+    //     if(animation == animMove) {
+    //       animation?.frames[0].stepTime == 0.12 ? animation?.stepTime = 0.1 : null;
+    //     }
+    //     isReallyRun = true;
+    //   }
+    //   gameRef.playerData.addEnergy(dt * -4);
+    // }else{
+    //
+    // }
+    if(!gameRef.playerData.isLockEnergy) {
+      gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 15) * dt );
     }
     groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * (isReallyRun ? PhysicVals.runCoef : 1));
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();

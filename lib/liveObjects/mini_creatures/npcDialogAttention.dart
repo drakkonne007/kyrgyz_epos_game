@@ -17,7 +17,7 @@ class NpcDialogAttention extends SpriteAnimationComponent {
     priority = GamePriority.maxPriority;
     var spriteSheet = SpriteSheet(
       image: await Flame.images.load(
-          buy ? 'images/gui/coin-FLIP.png' : _isDone ? 'images/npc-icon-attention-grey.png' : 'images/npc-icon-attention.png'),
+          buy ? 'images/gui/coinFlipNoShadow.png' : _isDone ? 'images/npc-icon-attention-grey.png' : 'images/npc-icon-attention.png'),
       srcSize: buy ? Vector2.all(42) : source,
     );
     animation = spriteSheet.createAnimation(row: 0, stepTime: 0.1, from: 0);

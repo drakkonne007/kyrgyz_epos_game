@@ -193,9 +193,17 @@ class DbHandler
     print('all game objects was edded');
   }
 
+  Future refreshQuests()async
+  {
+    await _database?.execute('DELETE FROM quests');
+    for(final name in Quest.allQuests){
+      await _database?.rawInsert('INSERT INTO quests(name) VALUES(?) ON CONFLICT DO NOTHING', [name]);
+    }
+  }
+
   void deleteSaves()async
   {
-      await _database?.execute('DELETE FROM player_data');
+    await _database?.execute('DELETE FROM player_data');
   }
 
   void addClearMap(int saveId, String world, LoadedColumnRow colRow)
