@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
+import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/game_widgets/LootInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -120,7 +121,7 @@ class PlayerStats extends StatelessWidget
                                               onPressed: () {
                                                 if(game.currentStateInventar.value !=
                                                     InventarOverlayType.helmet){
-                                                  game.currentItemInInventar.value = null;
+                                                  game.currentItemInInventar.value = (game.playerData.helmetDress.value == NullItem() ? null : game.playerData.helmetDress.value);
                                                   game.currentStateInventar.value =
                                                       InventarOverlayType.helmet;
                                                 }
@@ -177,7 +178,7 @@ class PlayerStats extends StatelessWidget
                                               onPressed: () {
                                                 if(game.currentStateInventar.value !=
                                                     InventarOverlayType.armor){
-                                                  game.currentItemInInventar.value = null;
+                                                  game.currentItemInInventar.value = (game.playerData.armorDress.value == NullItem() ? null : game.playerData.armorDress.value);
                                                   game.currentStateInventar.value =
                                                       InventarOverlayType.armor;
                                                 }
@@ -301,7 +302,7 @@ class PlayerStats extends StatelessWidget
                                               onPressed: () {
                                                 if(game.currentStateInventar.value !=
                                                     InventarOverlayType.sword){
-                                                  game.currentItemInInventar.value = null;
+                                                  game.currentItemInInventar.value = (game.playerData.swordDress.value == NullItem() ? null : game.playerData.swordDress.value);
                                                   game.currentStateInventar.value =
                                                       InventarOverlayType.sword;
                                                 }
@@ -359,7 +360,7 @@ class PlayerStats extends StatelessWidget
                                               onPressed: () {
                                                 if(game.currentStateInventar.value !=
                                                     InventarOverlayType.ring){
-                                                  game.currentItemInInventar.value = null;
+                                                  game.currentItemInInventar.value = (game.playerData.ringDress.value == NullItem() ? null : game.playerData.ringDress.value);
                                                   game.currentStateInventar.value =
                                                       InventarOverlayType.ring;
                                                 }
@@ -417,7 +418,7 @@ class PlayerStats extends StatelessWidget
                                               onPressed: () {
                                                 if(game.currentStateInventar.value !=
                                                     InventarOverlayType.boots){
-                                                  game.currentItemInInventar.value = null;
+                                                  game.currentItemInInventar.value = (game.playerData.bootsDress.value == NullItem() ? null : game.playerData.bootsDress.value);
                                                   game.currentStateInventar.value =
                                                       InventarOverlayType.boots;
                                                 }

@@ -139,7 +139,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         ringInventar: playerData.ringInventar,
         currentFlask1: playerData.currentFlask1.value,
         currentFlask2: playerData.currentFlask2.value,
-        tempEffects:  gameMap.effectComponent.children.toList(growable: false).cast());
+        tempEffects:  gameMap.effectComponent.children.toList(growable: false).cast(),
+        currentGameTime: playerData.getGameSeconds());
   }
 
   Future setQuestState(String name, int state, bool isDone)async
@@ -237,37 +238,29 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         mana: 50,
         energy: 50,
         level: 0,
-        gold: 2000,
+        gold: 0,
         helmetDress: Helmet1(),
-        armorDress: Armor10(),
+        armorDress: NullItem(),
         glovesDress: NullItem(),
         swordDress: Sword1(),
         ringDress: Ring1(),
         bootsDress: NullItem(),
-        helmetInventar: {'helmet1': 1,'helmet5': 1,'helmet10': 1,'helmet45': 1},
-        bodyArmorInventar: {'armor10': 1, 'armor50': 1, 'armor25': 1,'armor30': 1},
-        glovesInventar: {'gloves10': 1, 'gloves50': 1, 'gloves25': 1,'gloves30': 1},
-        bootsInventar: {'boots1': 1,'boots4': 1,'boots2': 1,'boots3': 1,'boots20': 1,'boots30': 1},
+        helmetInventar: {'helmet1' : 1},
+        bodyArmorInventar: {},
+        glovesInventar: {},
+        bootsInventar: {},
         flaskInventar: {
-          'hpSmall': 10,
-          'hpMedium': 10,
-          'hpBig': 10,
-          'hpFull': 10,
-          'energySmall': 10,
-          'energyMedium': 10,
-          'energyBig': 10,
-          'energyFull': 10,
-          'manaSmall': 10,
-          'manaMedium': 10,
-          'manaBig': 10,
-          'manaFull': 10},
+          'hpSmall': 3,
+          'hpMedium': 1,
+          'hpBig': 1,
+          'hpFull': 1},
         itemInventar: {},
-        swordInventar: {'sword1': 1, 'sword2': 1, 'sword3': 1,'sword4': 1,'sword5': 1,'sword6': 1,'sword7': 1,'sword8': 1,'sword9': 1},
+        swordInventar: {'sword1': 1, 'sword2': 1,},
         ringInventar: {'ring1' : 1, 'ring2' : 1, 'ring3' : 1, 'ring4' : 1, 'ring5' : 1},
         tempEffects: [],
+        currentGameTime: 0
       );
     }
-    await loadGame(saveId);
   }
 
   @override
@@ -408,6 +401,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   Future startGame(int saveId) async
   {
     await saveFirstGame(isNeedCopyInternal,saveId);
+    await loadGame(0);
     await loadNewMap();
   }
 

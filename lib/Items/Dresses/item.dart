@@ -214,6 +214,11 @@ abstract class Item
   MagicSpellVariant magicSpellVariant = MagicSpellVariant.none;
   String? description;
 
+  @override
+  String toString() {
+    return 'ITEM id: $id, hp: $hp, armor: $armor, attackSpeed: $attackSpeed, description: $description';
+  }
+
 
   @override
   bool operator ==(Object other) {

@@ -324,6 +324,8 @@ class PlayerData
   final double _beginEnergy = 40;
   final double _beginHealth = 100;
   final double _beginMana = 40;
+  int _currentSecsInGame = 0;
+  int _currentSecsSinceEpoch = 0;
   final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
   final ValueNotifier<double> maxMana = ValueNotifier<double>(0);
   final ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
@@ -333,6 +335,20 @@ class PlayerData
   final ValueNotifier<Item> swordDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> ringDress = ValueNotifier<Item>(NullItem());
   final ValueNotifier<Item> bootsDress = ValueNotifier<Item>(NullItem());
+
+  int getGameSeconds()
+  {
+    return DateTime.now().millisecondsSinceEpoch ~/ 1000 - _currentSecsSinceEpoch + _currentSecsInGame;
+  }
+
+  String getStringGameSeconds()
+  {
+    int seconds = getGameSeconds() % 60;
+    int minutes = getGameSeconds() ~/ 60;
+    int hours = minutes ~/ 60;
+    int days = hours ~/ 24;
+    return "$daysд:$hoursч:$minutesм:$secondsс";
+  }
 
   void addToInventar(InventarType type, String itemId)
   {
@@ -400,6 +416,9 @@ class PlayerData
 
   void loadGame(SavedGame svg)
   {
+    _currentSecsInGame = svg.currentGameTime;
+    _currentSecsSinceEpoch = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
     armorDress.value = NullItem();
     helmetDress.value = NullItem();
     glovesDress.value  = NullItem();

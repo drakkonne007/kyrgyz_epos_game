@@ -4,14 +4,12 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/weapon/enemy_weapons_list.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
-import 'package:game_flame/Items/Dresses/item.dart';
 import 'dart:math' as math;
 
 final List<Vector2> _grPoints = [
@@ -72,11 +70,11 @@ class HumanWarrior extends KyrgyzEnemy
         image: spriteImage,
         srcSize:  Vector2(80,64));
     int seed = DateTime.now().microsecond;
-    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 5, loop: false);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 8, loop: false);
-    animAttack = spriteSheet.createAnimation(row: 5, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to:6,loop: false);
-    animHurt = spriteSheet.createAnimation(row: 4, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 4,loop: false);
-    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 10,loop: false);
+    animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.13 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 5, loop: false);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.13 + math.Random(seed++).nextDouble() / 40 - 0.0125,from: 0, to: 8, loop: false);
+    animAttack = spriteSheet.createAnimation(row: 5, stepTime: 0.13 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to:6,loop: false);
+    animHurt = animIdle;
+    animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.13 + math.Random(seed++).nextDouble() / 40 - 0.0125, from: 0, to: 10,loop: false);
     anchor = Anchor.center;
     animation = animIdle;
     animationTicker?.onComplete = selectBehaviour;

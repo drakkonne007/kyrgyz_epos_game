@@ -42,14 +42,16 @@ class SavedGame
   Map<String,int> swordInventar = {};
   Map<String,int> ringInventar = {};
   List<EffectTimerPure> tempEffects   = [];
+  int currentGameTime = 0;
 }
 
 class DBItemState
 {
-  DBItemState({required this.opened, required this.quest, required this.used});
+  DBItemState({required this.opened, required this.quest, required this.used, required this.currentGameTime});
   bool opened = false;
   int quest = 0;
   bool used = false;
+  int currentGameTime = 0;
 }
 
 class DBQuestState
@@ -72,7 +74,7 @@ class DbHandler
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'kyrgyzGame.db');
-    _database = await openDatabase(path, version: 20,
+    _database = await openDatabase(path, version: 22,
         onUpgrade: (Database db, int oldVersion, int newVersion) async{
           print('UPGRADE TABLES!!!');
           await dropAllTables();
@@ -116,6 +118,7 @@ class DbHandler
           ',opened INTEGER NOT NULL DEFAULT 0'
           ',quest INTEGER NOT NULL DEFAULT 0'
           ',used INTEGER NOY NULL DEFAULT 0'
+          ',current_game_time INTEGER NOT NULL DEFAULT 0'
           ');');
     }
     await _database?.execute('CREATE TABLE IF NOT EXISTS map_info '
@@ -138,6 +141,7 @@ class DbHandler
         ',current_flask2 TEXT'
         ',level double NOT NULL DEFAULT 1'
         ',gold INTEGER NOT NULL DEFAULT 0'
+        ',current_game_time INT DEFAULT 0'
         ');');
     await _database?.execute('CREATE TABLE IF NOT EXISTS current_inventar '
         '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
@@ -174,7 +178,7 @@ class DbHandler
       if(!hardReset) {
         final res = await _database?.rawQuery(
             'SELECT COUNT(*) as count FROM ${wrld.nameForGame}');
-        if (res![0]['count'] as int != 0) {
+        if(res != null && res[0]['count'] as int != 0){
           continue;
         }
       }
@@ -267,11 +271,12 @@ class DbHandler
         required Map<String, int> ringInventar,
         String? currentFlask1,
         String? currentFlask2,
-        required List<TempEffect> tempEffects})async
+        required List<TempEffect> tempEffects,
+        required int currentGameTime})async
   {
     print('save games');
     await _database?.rawDelete('DELETE FROM player_data WHERE save_id = ?', [saveId]);
-    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold,current_flask1,current_flask2) VALUES(?,?,?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level, gold,currentFlask1,currentFlask2]);
+    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold,current_flask1,current_flask2,current_game_time) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level, gold,currentFlask1,currentFlask2,currentGameTime]);
     await _database?.execute('DELETE FROM current_inventar WHERE save_id = ?', [saveId]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, helmetDress.id]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, armorDress.id]);
@@ -351,6 +356,7 @@ class DbHandler
     svGame.gold = res[0]['gold']! as int;
     svGame.currentFlask1 = res[0]['current_flask1']?.toString();
     svGame.currentFlask2 = res[0]['current_flask2']?.toString();
+    svGame.currentGameTime = res[0]['current_game_time'] as int; //currentGameTime
 
     res = await _database?.rawQuery('SELECT * FROM current_inventar where save_id = ?', [saveId]);
     if(res == null) return svGame;
@@ -384,7 +390,7 @@ class DbHandler
     return svGame;
   }
 
-  Future changeItemState({required int id, bool? opened, int? quest, bool? used, required String worldName})async
+  Future changeItemState({required int id, bool? opened, int? quest, bool? used, required String worldName, int? gameSecs})async
   {
     _itemStates.putIfAbsent(worldName, () => {});
     if(!_itemStates[worldName]!.containsKey(id)){
@@ -392,12 +398,14 @@ class DbHandler
       opened ??= res![0]['opened'].toString() == '1';
       quest ??= int.tryParse(['quest'].toString()) ?? 0;
       used ??= res![0]['used'].toString() == '1';
+      gameSecs ??= int.tryParse(['current_game_time'].toString()) ?? 0;
     }else{
       opened ??= _itemStates[worldName]![id]!.opened;
       quest ??= _itemStates[worldName]![id]!.quest;
       used ??= _itemStates[worldName]![id]!.used;
+      gameSecs ??= _itemStates[worldName]![id]!.currentGameTime;
     }
-    _itemStates[worldName]![id] = DBItemState(opened: opened, quest: quest, used: used);
+    _itemStates[worldName]![id] = DBItemState(opened: opened, quest: quest, used: used, currentGameTime: gameSecs);
     dbStateChanger.notifyListeners();
     // await _database?.rawUpdate('UPDATE $worldName set opened = ?, quest = ?, used = ? where id = ?',
     //     [openedAsString ?? res![0]['opened'].toString(), quest ?? res![0]['quest'].toString(), usedAsString ?? res![0]['used'].toString(), id]);
@@ -417,7 +425,7 @@ class DbHandler
     }
     DBItemState answer = DBItemState(opened: res[0]['opened'].toString() == '1'
         , quest: int.tryParse(res[0]['quest'].toString()) ?? 0
-        , used: res[0]['used'].toString() == '1');
+        , used: res[0]['used'].toString() == '1', currentGameTime: int.tryParse(res[0]['current_game_time'].toString()) ?? 0);
     return answer;
   }
 

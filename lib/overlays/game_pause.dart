@@ -10,7 +10,6 @@ class GamePause extends StatelessWidget
   static const id = 'GamePause';
   final KyrgyzGame _game;
   GamePause(this._game, {super.key});
-  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +53,10 @@ class GamePause extends StatelessWidget
               _game.doBuyMenu();
             },
             child: const Text('Настройки'),
+          ),
+          ElevatedButton(
+            onPressed: null,
+            child: Text(_game.playerData.getStringGameSeconds()),
           ),
           ElevatedButton(
             onPressed: (){
