@@ -31,15 +31,23 @@ class CountTimer extends TimerComponent
 
 class TempEffect extends Component
 {
-  TempEffect({required this.period, this.autoStart = true, this.onEndEffect, this.onUpdate, required this.parentId});
+  TempEffect({required this.period, this.autoStart = true, this.onEndEffect, this.onUpdate, this.onStartEffect, required this.parentId});
 
   double period;
   double _currTime = 0;
   bool autoStart = true;
+  bool _started = false;
   String parentId;
   Function()? onEndEffect;
   Function(double dt)? onUpdate;
+  Function()? onStartEffect;
   get timeBeforeEnd => period - _currTime;
+
+  @override
+  onRemove()
+  {
+    onEndEffect?.call();
+  }
 
   void start()
   {
@@ -52,9 +60,12 @@ class TempEffect extends Component
     if(!autoStart){
       return;
     }
+    if(!_started){
+      _started = true;
+      onStartEffect?.call();
+    }
     _currTime += dt;
     if(_currTime >= period){
-      onEndEffect?.call();
       removeFromParent();
       return;
     }

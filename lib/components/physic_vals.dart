@@ -5,11 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
-import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/DBHandler.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
-
 import 'package:game_flame/kyrgyz_game.dart';
 
 int getLevel(double experience)
@@ -17,14 +15,26 @@ int getLevel(double experience)
   double startExp = 18000;
   int count = 0;
   while(experience > 0){
-    experience -= startExp;
     startExp = startExp + startExp * 1.1;
+    experience -= startExp;
     count++;
   }
   if(experience == 0){
     count = 1;
   }
   return count;
+}
+
+double percentOfLevel(double experience)
+{
+  double startExp = 18000;
+  double percent = 0;
+  while(experience > 0){
+    startExp = startExp + startExp * 1.1;
+    experience -= startExp;
+  }
+  percent = experience / startExp;
+  return percent * -1;
 }
 
 
@@ -287,7 +297,7 @@ class PlayerData
     }else if(val < 0){
       health.value += val;
     }
-    if(val < 0){
+    if(val <= 0){
       hurtMainPlayerChanger.value++;
       _game.gameMap.add(TimerComponent(period: 1, removeOnFinish: true, onTick: (){
         hurtMainPlayerChanger.value--;
@@ -298,6 +308,9 @@ class PlayerData
 
 
   final ValueNotifier<int> hurtMainPlayerChanger = ValueNotifier<int>(0);
+  final ValueNotifier<int> plusHealthMainPlayerChanger = ValueNotifier<int>(0);
+  final ValueNotifier<int> plusManaMainPlayerChanger = ValueNotifier<int>(0);
+  final ValueNotifier<int> plusStaminaMainPlayerChanger = ValueNotifier<int>(0);
   final ValueNotifier<int> statChangeTrigger = ValueNotifier<int>(0);
   final ValueNotifier<int> playerLevel = ValueNotifier<int>(1);
   final ValueNotifier<double> experience = ValueNotifier<double>(0);
@@ -315,7 +328,7 @@ class PlayerData
   final ValueNotifier<double> secsOfPermanentDamage = ValueNotifier<double>(0);
 
   final ValueNotifier<double> extraArmor = ValueNotifier<double>(0);
-  final ValueNotifier<double> shieldBlock = ValueNotifier<double>(10);
+  final ValueNotifier<double> shieldBlock = ValueNotifier<double>(5);
   final ValueNotifier<double> shieldBlockEnergy = ValueNotifier<double>(5);
   final ValueNotifier<double> extraHurtMiss = ValueNotifier<double>(0.3);
   final ValueNotifier<double> extraDamage = ValueNotifier<double>(0);
@@ -323,9 +336,11 @@ class PlayerData
   final ValueNotifier<double> extraAttackSpeed = ValueNotifier<double>(0);
   final double _beginEnergy = 40;
   final double _beginHealth = 100;
-  final double _beginMana = 40;
+  final double _beginMana = 10;
   int _currentSecsInGame = 0;
   int _currentSecsSinceEpoch = 0;
+  // TimerComponent? shrineStaminaBuff;
+  // TimerComponent? shrineBloodBuff;
   final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
   final ValueNotifier<double> maxMana = ValueNotifier<double>(0);
   final ValueNotifier<double> maxEnergy = ValueNotifier<double>(0);
@@ -346,6 +361,7 @@ class PlayerData
     int seconds = getGameSeconds() % 60;
     int minutes = getGameSeconds() ~/ 60;
     int hours = minutes ~/ 60;
+    minutes -= hours * 60;
     int days = hours ~/ 24;
     return "$daysд:$hoursч:$minutesм:$secondsс";
   }

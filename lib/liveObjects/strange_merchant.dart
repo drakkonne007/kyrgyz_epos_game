@@ -74,7 +74,11 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
     position = ground!.position / PhysicVals.physicScale;
     priority = position.y.toInt() + 23;
     if(quest != null){
-      add(NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width / 2,height / 2 - 40)));
+      final questDialog = NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width * anchor.x, height * anchor.y - 40), buy: quest == 'buy');
+      if(isFlippedHorizontally){
+        questDialog.flipHorizontally();
+      }
+      add(questDialog);
     }
     super.onLoad();
   }
@@ -82,6 +86,10 @@ class StrangeMerchant extends SpriteAnimationComponent with HasGameRef<KyrgyzGam
   void getBuyMenu()async
   {
     if(quest != null) {
+      if(quest == 'buy'){
+        gameRef.doBuyMenu();
+        return;
+      }
       var answer = gameRef.quests[quest]!;
       if(answer.currentState >= startTrigger! && answer.currentState <= endTrigger!) {
         gameRef.doDialogHud(quest!);

@@ -220,7 +220,19 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     gameRef.camera.follow(frontPlayer ?? orthoPlayer!, snap: true);
     gameRef.doGameHud();
     _isLoad = true;
+    // await addShrineBuff(false);
+    // await addShrineBuff(true);
   }
+
+  // Future addShrineBuff(bool blood)async
+  // {
+  //   return;
+  //   if(blood && gameRef.playerData.shrineBloodBuff != null){
+  //     await container.add(gameRef.playerData.shrineBloodBuff!);
+  //   }else if(!blood && gameRef.playerData.shrineStaminaBuff != null){
+  //     await container.add(gameRef.playerData.shrineStaminaBuff!);
+  //   }
+  // }
 
   void setCameraBounds()
   {

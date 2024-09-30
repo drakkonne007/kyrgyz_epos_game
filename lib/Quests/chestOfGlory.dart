@@ -20,7 +20,7 @@ class KeyForChestOfGlory extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration}) async{
     minusInInventar(game);
-    game.setQuestState('chestOfGlory',4,true);
+    game.setQuestState('chestOfGlory',4,true, '');
     createText(text: success, gameRef: game);
   }
 }
@@ -55,6 +55,7 @@ class ChestOfGlory extends Quest
             kyrgyzGame.playerData.addToInventar(InventarType.item, 'keyForChestOfGlory');
             createText(text: 'Получен ключ', gameRef: kyrgyzGame);
           }
+          desc = 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты';
         },
        image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );

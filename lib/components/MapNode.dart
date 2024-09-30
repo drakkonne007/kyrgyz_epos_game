@@ -426,6 +426,10 @@ class MapNode {
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
+      case 'item':
+        String? name = obj.getAttribute('name');
+        name ??= 'gold100';
+        positionObject = LootOnMap(itemFromName(name), position: position);
       case 'fly':
         positionObject = Fly(position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);

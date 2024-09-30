@@ -1,4 +1,8 @@
+import 'dart:ffi';
 
+import 'package:flame/effects.dart';
+import 'package:flame/palette.dart';
+import 'package:flutter/animation.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/kyrgyz_game.dart';
@@ -15,9 +19,15 @@ class BloodShrine extends Item
   void getEffectFromInventar(KyrgyzGame game, {double? duration})
   {
     game.playerData.addHealth(game.playerData.maxHealth.value);
-    var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
-      game.playerData.addHealth(game.playerData.maxHealth.value * 0.5 * dt);
-    });
+    var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage,
+        onStartEffect: (){
+          game.playerData.plusHealthMainPlayerChanger.value++;
+        },
+        onUpdate: (dt){
+          game.playerData.addHealth(game.playerData.maxHealth.value * 0.5 * dt);
+        }, onEndEffect: (){
+          game.playerData.plusHealthMainPlayerChanger.value--;
+        });
     game.gameMap.effectComponent.add(timer);
   }
 }
@@ -38,7 +48,15 @@ class SilverShrine extends Item
     var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
       game.playerData.addEnergy(game.playerData.maxEnergy.value * 0.5 * dt);
       game.playerData.addMana(game.playerData.maxMana.value * 0.5 * dt);
-    });
+    },
+        onStartEffect: (){
+          game.playerData.plusManaMainPlayerChanger.value++;
+          game.playerData.plusStaminaMainPlayerChanger.value++;
+        },
+        onEndEffect: (){
+          game.playerData.plusManaMainPlayerChanger.value--;
+          game.playerData.plusStaminaMainPlayerChanger.value--;
+        });
     game.gameMap.effectComponent.add(timer);
   }
 }
@@ -48,7 +66,7 @@ class HpSmall extends Item
   HpSmall()
   {
     id = 'hpSmall';
-    cost = 10;
+    cost = 100;
     source = 'images/inventar/flask/hpSmall.png';
     hp = 10;
     dressType = InventarType.flask;
@@ -73,7 +91,7 @@ class HpMedium extends Item
   HpMedium()
   {
     id = 'hpMedium';
-    cost = 25;
+    cost = 250;
     enabled = true;
     source = 'images/inventar/flask/hpMedium.png';
     hp = 2;
@@ -92,7 +110,13 @@ class HpMedium extends Item
   {
     var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
       game.playerData.addHealth(hp * dt);
-    });
+    },
+        onStartEffect: (){
+          game.playerData.plusHealthMainPlayerChanger.value++;
+        },
+        onEndEffect: (){
+          game.playerData.plusHealthMainPlayerChanger.value--;
+        });
     game.gameMap.effectComponent.add(timer);
     minusInInventar(game);
   }
@@ -103,7 +127,7 @@ class HpBig extends Item
   HpBig()
   {
     id = 'hpBig';
-    cost = 50;
+    cost = 500;
     enabled = true;
     source = 'images/inventar/flask/hpBig.png';
     hp = 2.5;
@@ -122,7 +146,13 @@ class HpBig extends Item
   {
     var timer = TempEffect(parentId: id, period: duration ?? secsOfPermDamage, onUpdate: (dt){
       game.playerData.addHealth(hp * dt);
-    });
+    },
+        onStartEffect: (){
+          game.playerData.plusHealthMainPlayerChanger.value++;
+        },
+        onEndEffect: (){
+          game.playerData.plusHealthMainPlayerChanger.value--;
+        });
     game.gameMap.effectComponent.add(timer);
     if(game.playerData.flaskInventar.containsKey(id)){
       int curr = game.playerData.flaskInventar[id]!;
@@ -141,7 +171,7 @@ class HpFull extends Item
   HpFull()
   {
     id = 'hpFull';
-    cost = 90;
+    cost = 900;
     enabled = true;
     source = 'images/inventar/flask/hpFull.png';
     hp = 99999999;
@@ -168,7 +198,7 @@ class EnergySmall extends Item
   EnergySmall()
   {
     id = 'energySmall';
-    cost = 10;
+    cost = 100;
     enabled = true;
     source = 'images/inventar/flask/energySmall.png';
     energy = 5;
@@ -194,7 +224,7 @@ class EnergyMedium extends Item
   EnergyMedium()
   {
     id = 'energyMedium';
-    cost = 25;
+    cost = 250;
     enabled = true;
     source = 'images/inventar/flask/energyMedium.png';
     secsOfPermDamage = 10;
@@ -224,7 +254,7 @@ class EnergyBig extends Item
   EnergyBig()
   {
     id = 'energyBig';
-    cost = 50;
+    cost = 500;
     enabled = true;
     source = 'images/inventar/flask/energyBig.png';
     energy = 2;
@@ -254,7 +284,7 @@ class EnergyFull extends Item
   EnergyFull()
   {
     id = 'energyFull';
-    cost = 90;
+    cost = 900;
     enabled = true;
     source = 'images/inventar/flask/energyFull.png';
     energy = 9999999;
@@ -280,7 +310,7 @@ class ManaSmall extends Item
   ManaSmall()
   {
     id = 'manaSmall';
-    cost = 10;
+    cost = 100;
     enabled = true;
     source = 'images/inventar/flask/manaSmall.png';
     mana = 10;
@@ -306,7 +336,7 @@ class ManaMedium extends Item
   ManaMedium()
   {
     id = 'manaMedium';
-    cost = 25;
+    cost = 250;
     enabled = true;
     source = 'images/inventar/flask/manaMedium.png';
     secsOfPermDamage = 10;
@@ -336,7 +366,7 @@ class ManaBig extends Item
   ManaBig()
   {
     id = 'manaBig';
-    cost = 50;
+    cost = 500;
     enabled = true;
     source = 'images/inventar/flask/manaBig.png';
     mana = 2;
@@ -366,7 +396,7 @@ class ManaFull extends Item
   ManaFull()
   {
     id = 'manaFull';
-    cost = 90;
+    cost = 900;
     enabled = true;
     source = 'images/inventar/flask/manaFull.png';
     mana = 9999999;

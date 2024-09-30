@@ -146,7 +146,7 @@ class _DialogOverlayState extends State<DialogOverlay>
           // borderRadius: BorderRadius.zero,
         ),
         child: TextButton(onPressed: () {
-          quest.changeState(answer.answerNumbers[i]);
+          quest.changeState(answer.answerNumbers[i], answer.desc);
           answer.onAnswer?.call(answer.answerNumbers[i]);
           if(answer.isEnd){
             game.doGameHud();

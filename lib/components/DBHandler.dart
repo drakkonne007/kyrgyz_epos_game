@@ -10,6 +10,7 @@ import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/components/CountTimer.dart';
 import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/components/tile_map_component.dart';
+import 'package:game_flame/kyrgyz_game.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -56,9 +57,10 @@ class DBItemState
 
 class DBQuestState
 {
-  DBQuestState({required this.currentState, required this.isDone});
+  DBQuestState({required this.currentState, required this.isDone, required this.desc});
   int currentState = 0;
   bool isDone = false;
+  String desc = '';
 }
 
 class DbHandler
@@ -74,11 +76,11 @@ class DbHandler
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'kyrgyzGame.db');
-    _database = await openDatabase(path, version: 22,
+    _database = await openDatabase(path, version: gameVersion,
         onUpgrade: (Database db, int oldVersion, int newVersion) async{
           print('UPGRADE TABLES!!!');
-          await dropAllTables();
-          await createTable();
+          // await dropAllTables();
+          // await createTable();
         },
         onCreate: (Database db, int v) async{
           print('CREATE TABLES!!!');
@@ -325,7 +327,7 @@ class DbHandler
     }
     _itemStates.clear();
     for(final name in _questStates.keys){
-      await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[_questStates[name]!.isDone ? 1 : 0, _questStates[name]!.currentState, name]);
+      await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ?, description = ? where name = ?',[_questStates[name]!.isDone ? 1 : 0, _questStates[name]!.currentState,_questStates[name]!.desc, name]);
     }
     _questStates.clear();
     for(final worldsName in _mapAnswer.keys){
@@ -440,13 +442,13 @@ class DbHandler
       throw 'No find this quest!!! $name';
     }
     DBQuestState answer = DBQuestState(isDone: res[0]['is_done'].toString() == '1'
-        , currentState: int.tryParse(res[0]['current_state'].toString()) ?? 0);
+        , currentState: int.tryParse(res[0]['current_state'].toString()) ?? 0, desc: res[0]['description'].toString());
     return answer;
   }
 
-  void setQuestState(String name, int state, bool isDone)
+  void setQuestState(String name, int state, bool isDone, String? desc)
   {
-    _questStates[name] = DBQuestState(isDone: isDone, currentState: state);
+    _questStates[name] = DBQuestState(isDone: isDone, currentState: state,desc: desc ?? _questStates[name]!.desc);
     // await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[isDone ? 1 : 0, state, name]);
   }
 }

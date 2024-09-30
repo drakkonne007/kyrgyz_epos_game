@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
+import 'package:flame/particles.dart';
 import 'package:flame_tiled_utils/flame_tiled_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
@@ -43,6 +44,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 const double aspect = 750.0 / 430.0;
+const int gameVersion = 25;
 
 enum InventarOverlayType
 {
@@ -84,7 +86,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   static Map<String,Iterable<XmlElement>> cachedAnims = {};
   static Map<String,ext.Image> cachedImgs = {};
   static Set<String> cachedMapPngs = {};
-  Database? database;
   late FragmentProgram _telepShaderProgramm;
   late FragmentProgram _fireShaderProgramm;
   late FragmentProgram _iceShaderProgramm;
@@ -109,6 +110,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   Image? imageForMap;
   Quest? currentQuest;
   Map<String,Quest> quests = {};
+  Map<String,String> tempQuestForInventarOverlay = {};
   ValueNotifier<InventarOverlayType> currentStateInventar = ValueNotifier<InventarOverlayType>(InventarOverlayType.helmet);
 
   Future saveGame() async
@@ -143,11 +145,18 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         currentGameTime: playerData.getGameSeconds());
   }
 
-  Future setQuestState(String name, int state, bool isDone)async
+  Future setQuestState(String name, int state, bool isDone, String? desc)async
   {
     quests[name]?.isDone = isDone;
     quests[name]?.currentState = state;
-    dbHandler.setQuestState(name, state, isDone);
+    quests[name]?.desc = desc ?? quests[name]!.desc;
+    dbHandler.setQuestState(name, state, isDone, desc);
+  }
+
+  PositionComponent playerPositionComponent()
+  {
+    var temp = gameMap.orthoPlayer == null ? gameMap.frontPlayer! : gameMap.orthoPlayer!;
+    return temp as PositionComponent;
   }
 
   Vector2 playerPosition()
@@ -178,7 +187,12 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       databaseFactory = databaseFactoryFfi;
     }
     await dbHandler.openDb();
-    // await dbHandler.dropAllTables();
+    prefs = await SharedPreferences.getInstance();
+    prefs.remove('locale');
+    if((prefs.getInt('gameVersion') ?? 0) != gameVersion) {
+      await dbHandler.dropAllTables();
+      prefs.setInt('gameVersion', gameVersion);
+    }
     await dbHandler.createTable(); //TODO создаёт, но если удалишь кэш с телефона
     maxPolygonVertices = 20;
     await Flame.device.fullScreen();
@@ -194,8 +208,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     iceShader = _iceShaderProgramm.fragmentShader();
     poisonShader = _poisonShaderProgramm.fragmentShader();
     lightningShader = _lightningShaderProgramm.fragmentShader();
-    prefs = await SharedPreferences.getInstance();
-    prefs.remove('locale');
+
     var loc = prefs.getString('locale');
     if(loc == null){
       overlays.add(LanguageChooser.id);
@@ -204,17 +217,29 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       overlays.add(SplashScreenGame.id);
     }
     WidgetsBinding.instance.addObserver(this);
-    await setQuestState('chestOfGlory', 0, false);
-    await setQuestState('templeDungeon', 0, false);
+    await setQuestState('chestOfGlory', 0, false,'');
+    await setQuestState('templeDungeon', 0, false,'');
     for(final name in Quest.allQuests){
       quests[name] = Quest.questFromName(this, name);
       final state = await dbHandler.getQuestState(name);
       quests[name]!.isDone = state.isDone;
       quests[name]!.currentState = state.currentState;
+      quests[name]!.desc = state.desc;
     }
     add(gameMap);
     await gameMap.loaded;
     //TODO добавить сохранённые бутылочки в gameMap;
+  }
+
+  Map<String, String> getCurrentQuests()
+  {
+    Map<String, String> temp = {};
+    for(final name in quests.keys){
+      if(!quests[name]!.isDone && quests[name]!.currentState > 0){
+        temp[name] = quests[name]!.desc;
+      }
+    }
+    return temp;
   }
 
   Future loadGame(int saveId) async
@@ -234,9 +259,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         x: 1750,
         y: 3000,
         world: 'topLeftVillage',
-        health: 100,
-        mana: 50,
-        energy: 50,
+        health: 80,
+        mana: 10,
+        energy: 40,
         level: 0,
         gold: 0,
         helmetDress: Helmet1(),
@@ -336,6 +361,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   void doInventoryHud()
   {
     pauseEngine();
+    tempQuestForInventarOverlay = getCurrentQuests();
+
+    tempQuestForInventarOverlay = {'Первый квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты',
+      'Второй квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты',
+      'Третий квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты',
+      'Четвёртый квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты. Рядом ещё лежит что-то интересное'};
+
     _showOverlay(overlayName: InventoryOverlay.id,isHideOther: true);
   }
 

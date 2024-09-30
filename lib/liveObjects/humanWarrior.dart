@@ -59,12 +59,24 @@ class HumanWarrior extends KyrgyzEnemy
     armor = HumanInfo.armor(level);
     Image? spriteImage;
     bool isMale = math.Random().nextBool();
-    if(isMale){
-      int type = math.Random().nextInt(450) + 1;
-      spriteImage = await Flame.images.load('tiles/sprites/humanNPC/Male/Weapon/$type.png');
-    }else{
-      int type = math.Random().nextInt(420) + 1;
-      spriteImage = await Flame.images.load('tiles/sprites/humanNPC/Female/Weapon/$type.png');
+    if(citizen){
+      if (isMale) {
+        int type = math.Random().nextInt(120) + 1;
+        spriteImage = await Flame.images.load('tiles/sprites/humanNPC/Male/NoWeapon/$type.png');
+      }else{
+        int type = math.Random().nextInt(420) + 1;
+        spriteImage = await Flame.images.load('tiles/sprites/humanNPC/Female/NoWeapon/$type.png');
+      }
+    }else {
+      if (isMale) {
+        int type = math.Random().nextInt(450) + 1;
+        spriteImage =
+        await Flame.images.load('tiles/sprites/humanNPC/Male/Weapon/$type.png');
+      } else {
+        int type = math.Random().nextInt(420) + 1;
+        spriteImage = await Flame.images.load(
+            'tiles/sprites/humanNPC/Female/Weapon/$type.png');
+      }
     }
     SpriteSheet spriteSheet = SpriteSheet(
         image: spriteImage,

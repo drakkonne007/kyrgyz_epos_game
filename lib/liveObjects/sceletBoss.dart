@@ -419,6 +419,7 @@ class BossScelet extends KyrgyzEnemy
   @override
   void chooseHit()
   {
+
   }
 
   @override
@@ -550,7 +551,7 @@ class BossCircleBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     final spriteSheetLoop = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Boss/boss anims-atk3-fx-loop.png'),
         srcSize: Vector2(351, 207));
-    animation = spriteSheetLoop.createAnimation(row: 0, stepTime: 0.1, loop: false);
+    animation = spriteSheetLoop.createAnimation(row: 0, stepTime: 0.07, loop: false);
     animationTicker?.onComplete = removeFromParent;
     _weapon = DefaultEnemyWeapon(
         _weapons,collisionType: DCollisionType.active, isSolid: false, isStatic: false, isLoop: true, game: gameRef);

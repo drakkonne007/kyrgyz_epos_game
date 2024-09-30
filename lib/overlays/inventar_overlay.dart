@@ -2,7 +2,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
-import 'package:game_flame/game_widgets/LootInventar.dart';
+import 'package:game_flame/components/physic_vals.dart';
+import 'dart:math' as math;
 import 'package:game_flame/game_widgets/bigWindowInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
@@ -32,7 +33,7 @@ class InventoryOverlay extends StatefulWidget
 }
 
 class InventoryOverlayState extends State<InventoryOverlay> //Делает верхние вкладки с инвентарями
-{
+    {
   @override
   Widget build(BuildContext context)
   {
@@ -364,24 +365,131 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
             )
         )
     );
-
+    temp.add(
+        Container(
+          constraints: BoxConstraints.loose(Size(width,height - 5)),
+            alignment: Alignment.bottomCenter,
+            child:
+            Stack(
+                fit: StackFit.loose,
+                alignment: Alignment.bottomCenter,
+                children:
+                [
+                   Image.asset('assets/images/inventar/UI-9-sliced object-35.png',
+                    fit: BoxFit.fill,
+                    centerSlice: const Rect.fromLTWH(8, 8, 34 , 38),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  ValueListenableBuilder(valueListenable: widget.game.playerData.experience, builder: (_,val,__) =>
+                      CustomPaint(
+                          size: Size(width - 30,height - 20),
+                          painter: ExperienceCircle(0.6)),
+                  ),
+                  Container(width: width,
+                    height: height,
+                  alignment: Alignment.center,
+                  child:AutoSizeText(widget.game.playerData.playerLevel.value.toString(), textAlign: TextAlign.center,style: defaultInventarTextStyleGold,
+                      minFontSize: 10,
+                      maxLines: 1))
+                  // AutoSizeText(widget.game.playerData.playerLevel.value.toString())
+                ]
+            )
+        )
+    );
     temp.add(
         ElevatedButton(
             onPressed: (){
               setState(() {
-                // widget.game.currentStateInventar.value = InventarOverlayType.map;
                 widget.game.doGameHud();
               });
             },
-
+            style: defaultNoneButtonStyle.copyWith(
+                maximumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                minimumSize: WidgetStateProperty.all<Size>(Size(width,height - 5)),
+                alignment: Alignment.bottomCenter
+            ),
             child:
-
-                  Text(widget.game.playerData.experience.value.toString())
-
+            Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.bottomCenter,
+                children:
+                [
+                  Image.asset('assets/images/inventar/UI-9-sliced object-35.png',
+                    fit: BoxFit.fill,
+                    centerSlice: const Rect.fromLTWH(8, 8, 34 , 38),
+                    isAntiAlias: true,
+                    filterQuality: FilterQuality.high,
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Image.asset(
+                    'assets/images/inventar/UI-9-sliced object-114Close.png',
+                    width: width,
+                    height: height - 10,
+                    alignment: Alignment.center,
+                  )
+                ]
+            )
         )
     );
-
-
     return temp;
+  }
+}
+
+class ExperienceCircle extends CustomPainter
+{
+  ExperienceCircle(this.currentProc);
+  double time = 0;
+  final double currentProc;
+
+  @override
+  void paint(Canvas canvas, Size size)
+  {
+    Paint paint = Paint()..color = const Color(0xFF54463C);
+
+    // Рисуем весь овал
+    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height - 5);
+    canvas.drawOval(rect, paint);
+
+    // Обрезаем область рисования, чтобы заполнить только левую половину
+    Path clipPath = Path();
+    clipPath.addRect(Rect.fromLTWH(0, 0, size.width * currentProc, size.height));
+    canvas.clipPath(clipPath);
+
+    paint = Paint()..color = const Color(0xFFe74747);
+    // Заполняем обрезанную область
+    canvas.drawOval(rect, paint);
+
+
+
+    // final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    // _gradient = LinearGradient(
+    //   // transform: const GradientRotation(-math.pi/2),
+    //     stops: [0.0,currentProc,currentProc,1],
+    //   begin: Alignment.centerLeft,
+    //   end: Alignment.centerRight,
+    //     colors: [_color,_color, Colors.black.withAlpha(80), Colors.black.withAlpha(80)],);
+    // final paint = Paint()
+    //   ..shader = _gradient.createShader(rect)
+    //   ..strokeCap = StrokeCap.butt
+    //   ..strokeWidth = size.height/2 - 2.5// StrokeCap.round is not recommended.
+    //   ..style = PaintingStyle.stroke;
+    // // canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+    // //     startAngle, sweepAngle, false, paint);
+    // canvas.drawOval(Rect.fromPoints(const Offset(0, 0), Offset(size.width,size.height - 5)), paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate)
+  {
+    if(oldDelegate is ExperienceCircle){
+      return oldDelegate.currentProc != currentProc;
+    }
+    return false;
   }
 }

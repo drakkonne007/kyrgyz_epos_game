@@ -5,6 +5,7 @@ import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
+import 'package:game_flame/overlays/quest_container.dart';
 
 class LootInInventar extends StatefulWidget
 {
@@ -443,57 +444,11 @@ class _LootInvantarState extends State<LootInInventar>
     return ValueListenableBuilder (
         valueListenable: widget.game.currentStateInventar,
         builder: (BuildContext context, value, Widget? child) {
-          // if(widget.game.currentItemInInventar.value == null) {
-          //   switch (widget.game.currentStateInventar.value) {
-          //     case InventarOverlayType.helmet:
-          //       widget.game.currentItemInInventar.value =
-          //           widget.game.playerData.helmetDress.value;
-          //       break;
-          //     case InventarOverlayType.armor:
-          //       widget.game.currentItemInInventar.value =
-          //           widget.game.playerData.armorDress.value;
-          //       break;
-          //     case InventarOverlayType.gloves:
-          //       widget.game.currentItemInInventar.value =
-          //           widget.game.playerData.glovesDress.value;
-          //       break;
-          //     case InventarOverlayType.boots:
-          //       widget.game.currentItemInInventar.value =
-          //           widget.game.playerData.bootsDress.value;
-          //       break;
-          //     case InventarOverlayType.sword:
-          //       widget.game.currentItemInInventar.value =
-          //           widget.game.playerData.swordDress.value;
-          //       break;
-          //     case InventarOverlayType.ring:
-          //       widget.game.currentItemInInventar.value =
-          //           widget.game.playerData.ringDress.value;
-          //       break;
-          //     default:
-          //       break;
-          //   }
-          // }
-          //else{
-          //   if(widget.game.currentItemInInventar.value!.dressType != InventarType.sword && widget.game.currentStateInventar.value == InventarOverlayType.sword){
-          //     widget.game.currentItemInInventar.value = widget.game.playerData.swordDress.value;
-          //   }else if(widget.game.currentItemInInventar.value!.dressType != InventarType.ring && widget.game.currentStateInventar.value == InventarOverlayType.ring){
-          //     widget.game.currentItemInInventar.value = widget.game.playerData.ringDress.value;
-          //   }else if(widget.game.currentItemInInventar.value!.dressType != InventarType.boots && widget.game.currentStateInventar.value == InventarOverlayType.boots){
-          //     widget.game.currentItemInInventar.value = widget.game.playerData.bootsDress.value;
-          //   }else if(widget.game.currentItemInInventar.value!.dressType != InventarType.gloves && widget.game.currentStateInventar.value == InventarOverlayType.gloves){
-          //     widget.game.currentItemInInventar.value = widget.game.playerData.glovesDress.value;
-          //   }else if(widget.game.currentItemInInventar.value!.dressType != InventarType.bodyArmor && widget.game.currentStateInventar.value == InventarOverlayType.armor){
-          //     widget.game.currentItemInInventar.value = widget.game.playerData.armorDress.value;
-          //   }else if(widget.game.currentItemInInventar.value!.dressType != InventarType.helmet && widget.game.currentStateInventar.value == InventarOverlayType.helmet){
-          //     widget.game.currentItemInInventar.value = widget.game.playerData.helmetDress.value;
-          //   }else{
-          //     widget.game.currentItemInInventar.value = null;
-          //   }
-          // }
           return SizedBox(
               width: widget.mySize.width * 0.62 - 10,
               height: widget.mySize.height,
               child:
+                  value == InventarOverlayType.quests ? QuestContainer(game: widget.game) :
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

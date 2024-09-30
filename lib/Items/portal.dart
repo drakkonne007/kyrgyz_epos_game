@@ -49,27 +49,4 @@ class Portal extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
     gameRef.playerData.startLocation = targetPos;
     await gameRef.loadNewMap();
   }
-
-
-  // @override
-  // void render(Canvas canvas) async
-  // {
-  //   var shader = gameRef.telepShader;
-  //   shader.setFloat(0,gameRef.gameMap.shaderTime);
-  //   shader.setFloat(1, 1); //scalse
-  //   shader.setFloat(2, 0); //offsetX
-  //   shader.setFloat(3, 0);
-  //   shader.setFloat(4,math.max(size.x,30)); //size
-  //   shader.setFloat(5,math.max(size.y,30));
-  //   final paint = Paint()..shader = shader;
-  //   canvas.drawRect(
-  //     Rect.fromLTWH(
-  //       0,
-  //       0,
-  //       math.max(size.x,30),
-  //       math.max(size.y,30),
-  //     ),
-  //     paint,
-  //   );
-  // }
 }

@@ -54,7 +54,7 @@ class Pot extends KyrgyzEnemy
 {
   Pot(this._startPos,{required super.id, required super.level, super.isHigh, super.loots,required super.citizen,required super.quest,required super.startTrigger,required super.endTrigger});
   final Vector2 _startPos;
-  final double dist = 350 * 350;
+  final double dist = 500 * 500;
   final Vector2 srcSize = Vector2(160,128);
   late SpriteAnimation animRevealing;
   bool wakeUp = false;
@@ -150,7 +150,7 @@ class Pot extends KyrgyzEnemy
     }
     if (wasSeen || isHigh) {
       if(!wakeUp){
-        if(isNearPlayer(200 * 200, isDistanceWeapon: true)){
+        if(isNearPlayer(400 * 400, isDistanceWeapon: true)){
           wakeUp = true;
           animation = animRevealing;
           animationTicker?.onComplete = selectBehaviour;
@@ -292,7 +292,6 @@ class PotBubble extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   double gravity = 250;
   Vector2 speed = Vector2.zero();
   double secTime = 2.1;
-  EnemyHitbox? hitBox;
   late TimerComponent timer;
 
   @override
@@ -310,20 +309,6 @@ class PotBubble extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
       removeFromParent();
     });
     add(timer);
-    hitBox = EnemyHitbox(_hitboxPoints,
-        collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef, onStartColl: perfectDelete);
-    add(hitBox!);
-  }
-
-  void perfectDelete(DCollisionEntity other)
-  {
-    hitBox?.collisionType = DCollisionType.inactive;
-    timer.removeFromParent();
-    speed.setZero();
-    add(ScaleEffect.to(Vector2.all(0.01),EffectController(duration: 0.5),onComplete: (){
-      removeFromParent();
-    }));
-    add(OpacityEffect.to(0,EffectController(duration: 0.5)));
   }
 
   @override
