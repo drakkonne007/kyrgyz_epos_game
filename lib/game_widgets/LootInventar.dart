@@ -6,6 +6,7 @@ import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 import 'package:game_flame/overlays/quest_container.dart';
+import 'package:game_flame/overlays/spell_container.dart';
 
 class LootInInventar extends StatefulWidget
 {
@@ -59,10 +60,8 @@ class _LootInvantarState extends State<LootInInventar>
         temp = widget.game.playerData.itemInventar;
         break;
       case InventarOverlayType.quests:
-      // TODO: Handle this case.
-      // TODO: Handle this case.
       case InventarOverlayType.map:
-      // TODO: Handle this case.
+      case InventarOverlayType.spells:
     }
     return temp;
   }
@@ -448,8 +447,8 @@ class _LootInvantarState extends State<LootInInventar>
               width: widget.mySize.width * 0.62 - 10,
               height: widget.mySize.height,
               child:
-                  value == InventarOverlayType.quests ? QuestContainer(game: widget.game) :
-              Row(
+                  value == InventarOverlayType.quests ? QuestContainer(game: widget.game) : value == InventarOverlayType.spells ? SpellContainer(game: widget.game) :
+                  Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,

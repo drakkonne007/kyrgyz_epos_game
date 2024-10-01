@@ -120,7 +120,22 @@ class HealthBar extends StatelessWidget
                         )
                     ),
               ),
-
+              const SizedBox(height: 15,),
+              ValueListenableBuilder(
+                valueListenable: game.playerData.experience,
+                builder: (_,val,__) =>
+                game.playerData.getFreeSpellPoints() == 0 ? Container() :
+                SizedBox(
+                    width: 42,
+                    height: 42,
+                    child: GestureDetector(
+                      onTap: game.doInventoryHud,
+                      child:
+                      Container(alignment: Alignment.center, width: 42,height: 42,
+                          child: Image.asset('assets/images/inventar/UI-9-sliced object-127NonBorder.png', width: 42, height: 42, alignment: Alignment.center,)),
+                    )
+                ),
+              )
             ]
         )
     );

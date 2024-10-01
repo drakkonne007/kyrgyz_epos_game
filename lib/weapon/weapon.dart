@@ -128,7 +128,6 @@ abstract class PlayerWeapon extends DCollisionEntity
 
   double get coolDown => _coolDown;
 
-  void hit();
 
   @override
   void onLoad()
@@ -181,8 +180,10 @@ abstract class PlayerWeapon extends DCollisionEntity
       } else {
         _myHitboxes[other] = DateTime.now().millisecondsSinceEpoch;
       }
-      hit();
       if (other.parent is KyrgyzEnemy) {
+        if(game.playerData.spellVampirism){
+          game.playerData.addHealth((damage ?? 1) * 0.05);
+        }
         var temp = other.parent as KyrgyzEnemy;
         if(isMainPlayer){
           temp.wasSeen = true;

@@ -3,7 +3,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/components/physic_vals.dart';
-import 'dart:math' as math;
 import 'package:game_flame/game_widgets/bigWindowInventar.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
@@ -129,12 +128,6 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
   {
     String source = '';
     switch(type){
-    // case 0: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-3.png' : source = 'UI-9-sliced object-18.png'; break;
-    // case 1: index == widget.game.currentStateInventar ? source = 'shieldYark.png' : source = 'shield.png'; break;
-    // case 2: index == widget.game.currentStateInventar ? source = 'manaBright.png' : source = 'manaDark.png'; break;
-    // case 3: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-4.png' : source = 'UI-9-sliced object-19.png'; break;
-    // case 4: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-1.png' : source = 'UI-9-sliced object-16.png'; break;
-    // case 5: index == widget.game.currentStateInventar ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png'; break;
       case InventarOverlayType.helmet:
       case InventarOverlayType.armor:
       case InventarOverlayType.gloves:
@@ -154,6 +147,9 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
         break;
       case InventarOverlayType.map:
         widget.game.currentStateInventar.value == type ? source = 'UI-9-sliced object-2.png' : source = 'UI-9-sliced object-17.png';
+        break;
+      case InventarOverlayType.spells:
+        widget.game.currentStateInventar.value == type ? source = 'UI-9-sliced object-133.png' : source = 'UI-9-sliced object-133Grey.png';
         break;
     }
     return 'assets/images/inventar/$source';
@@ -331,8 +327,8 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
         ElevatedButton(
             onPressed: (){
               setState(() {
-                // widget.game.currentStateInventar.value = InventarOverlayType.map;
-                widget.game.doGameHud();
+                widget.game.currentStateInventar.value = InventarOverlayType.spells;
+                // widget.game.doGameHud();
               });
             },
             style: defaultNoneButtonStyle.copyWith(
@@ -346,21 +342,29 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                 alignment: Alignment.bottomCenter,
                 children:
                 [
-                  Image.asset(widget.game.currentStateInventar.value == InventarOverlayType.map ? 'assets/images/inventar/UI-9-sliced object-34.png' : 'assets/images/inventar/UI-9-sliced object-35.png',
+                  Image.asset(widget.game.currentStateInventar.value == InventarOverlayType.spells ? 'assets/images/inventar/UI-9-sliced object-34.png' : 'assets/images/inventar/UI-9-sliced object-35.png',
                     fit: BoxFit.fill,
-                    centerSlice: widget.game.currentStateInventar.value == InventarOverlayType.map ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
+                    centerSlice: widget.game.currentStateInventar.value == InventarOverlayType.spells ? const Rect.fromLTWH(10,13,32,37) : const Rect.fromLTWH(8, 8, 34 , 38),
                     isAntiAlias: true,
                     filterQuality: FilterQuality.high,
                     width: width,
-                    height: widget.game.currentStateInventar.value == InventarOverlayType.map ? height - 5: height - 10,
+                    height: widget.game.currentStateInventar.value == InventarOverlayType.spells ? height - 5: height - 10,
                     alignment: Alignment.bottomCenter,
                   ),
                   Image.asset(
-                    getImage(InventarOverlayType.map),
+                    getImage(InventarOverlayType.spells),
                     width: width,
                     height: height - 10,
                     alignment: Alignment.center,
-                  )
+                  ),
+                  widget.game.playerData.getFreeSpellPoints() == 0 ? Container() :
+                  Container(width: width,
+                      padding: const EdgeInsets.only(left: 10),
+                      height: height,
+                      alignment: Alignment.centerLeft,
+                      child:AutoSizeText(widget.game.playerData.getFreeSpellPoints().toString(), textAlign: TextAlign.center,style: defaultInventarTextStyleGood,
+                          minFontSize: 10,
+                          maxLines: 1))
                 ]
             )
         )
@@ -387,7 +391,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                   ValueListenableBuilder(valueListenable: widget.game.playerData.experience, builder: (_,val,__) =>
                       CustomPaint(
                           size: Size(width - 30,height - 20),
-                          painter: ExperienceCircle(0.6)),
+                          painter: ExperienceCircle(percentOfLevel(widget.game.playerData.experience.value))),
                   ),
                   Container(width: width,
                     height: height,

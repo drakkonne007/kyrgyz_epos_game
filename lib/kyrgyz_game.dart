@@ -44,7 +44,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 const double aspect = 750.0 / 430.0;
-const int gameVersion = 25;
+const int gameVersion = 26;
 
 enum InventarOverlayType
 {
@@ -57,7 +57,8 @@ enum InventarOverlayType
   flask,
   item,
   quests,
-  map
+  map,
+  spells
 }
 
 enum PlayerState
@@ -142,14 +143,18 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         currentFlask1: playerData.currentFlask1.value,
         currentFlask2: playerData.currentFlask2.value,
         tempEffects:  gameMap.effectComponent.children.toList(growable: false).cast(),
-        currentGameTime: playerData.getGameSeconds());
+        currentGameTime: playerData.getGameSeconds(),
+        levelHeart: playerData.levelHealthSpells,
+        levelStamina: playerData.levelStaminaSpells,
+        levelMana: playerData.levelManaSpells
+    );
   }
 
   Future setQuestState(String name, int state, bool isDone, String? desc)async
   {
     quests[name]?.isDone = isDone;
     quests[name]?.currentState = state;
-    quests[name]?.desc = desc ?? quests[name]!.desc;
+    quests[name]?.desc = desc ?? quests[name]?.desc ?? '';
     dbHandler.setQuestState(name, state, isDone, desc);
   }
 
@@ -182,7 +187,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     // FlameAudio.bgm.play('background.mp3');
     playerData = PlayerData(this);
     if (Platform.isWindows || Platform.isLinux) {
-      // Initialize FFI
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
     }
@@ -235,8 +239,10 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   {
     Map<String, String> temp = {};
     for(final name in quests.keys){
-      if(!quests[name]!.isDone && quests[name]!.currentState > 0){
-        temp[name] = quests[name]!.desc;
+      if(!quests[name]!.isDone && quests[name]!.currentState > 0 && quests[name]!.needInventar){
+        String questName = quests[name]!.name;
+        questName == '' ? questName = quests[name]!.id : questName = questName;
+        temp[questName] = quests[name]!.desc;
       }
     }
     return temp;
@@ -255,35 +261,38 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         await dbHandler.refreshQuests();
       }
       await dbHandler.saveGame(
-        saveId: saveId,
-        x: 1750,
-        y: 3000,
-        world: 'topLeftVillage',
-        health: 80,
-        mana: 10,
-        energy: 40,
-        level: 0,
-        gold: 0,
-        helmetDress: Helmet1(),
-        armorDress: NullItem(),
-        glovesDress: NullItem(),
-        swordDress: Sword1(),
-        ringDress: Ring1(),
-        bootsDress: NullItem(),
-        helmetInventar: {'helmet1' : 1},
-        bodyArmorInventar: {},
-        glovesInventar: {},
-        bootsInventar: {},
-        flaskInventar: {
-          'hpSmall': 3,
-          'hpMedium': 1,
-          'hpBig': 1,
-          'hpFull': 1},
-        itemInventar: {},
-        swordInventar: {'sword1': 1, 'sword2': 1,},
-        ringInventar: {'ring1' : 1, 'ring2' : 1, 'ring3' : 1, 'ring4' : 1, 'ring5' : 1},
-        tempEffects: [],
-        currentGameTime: 0
+          saveId: saveId,
+          x: 1750,
+          y: 3000,
+          world: 'topLeftVillage',
+          health: 80,
+          mana: 10,
+          energy: 40,
+          level: 0,
+          gold: 0,
+          helmetDress: Helmet1(),
+          armorDress: NullItem(),
+          glovesDress: NullItem(),
+          swordDress: Sword1(),
+          ringDress: Ring1(),
+          bootsDress: NullItem(),
+          helmetInventar: {'helmet1' : 1},
+          bodyArmorInventar: {},
+          glovesInventar: {},
+          bootsInventar: {},
+          flaskInventar: {
+            'hpSmall': 3,
+            'hpMedium': 1,
+            'hpBig': 1,
+            'hpFull': 1},
+          itemInventar: {},
+          swordInventar: {'sword1': 1, 'sword2': 1,},
+          ringInventar: {'ring1' : 1, 'ring2' : 1, 'ring3' : 1, 'ring4' : 1, 'ring5' : 1},
+          tempEffects: [],
+          currentGameTime: 0,
+          levelHeart: 0,
+          levelStamina: 0,
+          levelMana: 0
       );
     }
   }
@@ -362,12 +371,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   {
     pauseEngine();
     tempQuestForInventarOverlay = getCurrentQuests();
-
-    tempQuestForInventarOverlay = {'Первый квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты',
-      'Второй квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты',
-      'Третий квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты',
-      'Четвёртый квест': 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты. Рядом ещё лежит что-то интересное'};
-
     _showOverlay(overlayName: InventoryOverlay.id,isHideOther: true);
   }
 

@@ -90,6 +90,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   final Vector2 _speed = Vector2.all(0);
   final Vector2 _velocity = Vector2.all(0);
   PlayerWeapon? _weapon;
+  PlayerWeapon? _weaponOfDash;
   Vector2 startPos;
   double dumping = 8;
 
@@ -102,7 +103,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96New.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: sprSize);
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.1, from: 0,to: 8);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
     animCombo = spriteSheet.createAnimation(row: 2, stepTime: 0.07, from: 5,loop: false);
@@ -135,6 +136,12 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         isStatic: false, isLoop: true, game: gameRef);
     _weapon?.isMainPlayer = true;
     add(_weapon!);
+    _weaponOfDash = DefaultPlayerWeapon(_hitboxPoint,collisionType: DCollisionType.inactive,isSolid: true,
+        isStatic: false, isLoop: true, game: gameRef);
+    _weaponOfDash?.isMainPlayer = true;
+    _weaponOfDash?.damage = 30;
+    _weaponOfDash?.inArmor = false;
+    add(_weaponOfDash!);
     gameRef.playerData.statChangeTrigger.addListener(setNewEnergyCostForWeapon);
     position = startPos;
     setGroundBody();
@@ -183,36 +190,24 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     if(inArmor){
       if(animState == AnimationState.shield){
-        // if(gameRef.playerData.energy.value > hurt / 2){
-        //   gameRef.playerData.addEnergy(-hurt / 2);
-        //   if(enableShieldLock) {
-        //     enableShieldLock = false;
-        //     gameRef.gameMap.container.add(
-        //         ShieldLock(position: position - Vector2(0, 17)));
-        //     add(TimerComponent(period: 0.5,repeat: false,removeOnFinish: true, onTick: (){
-        //       enableShieldLock = true;
-        //     }));
-        //   }
-        //   return;
-        // }else{
-        //   var temp = hurt - (gameRef.playerData.energy.value * 2);
-        //   gameRef.playerData.addEnergy(-hurt / 2);
-        //   hurt = temp;
-        // }
-        double tempDamage = hurt / 8;
         double totalDamage = 0;
-
-        totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100 - gameRef.playerData.extraArmor.value / 100
-            - gameRef.playerData.ringDress.value.armor / 100 - gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.helmetDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.glovesDress.value.armor / 100) * tempDamage;
-        totalDamage += (1 - gameRef.playerData.bootsDress.value.armor / 100) * tempDamage;
-        totalDamage -= gameRef.playerData.shieldBlock.value;
-
-        // if(totalDamage < gameRef.playerData.maxHealth.value / 4){
-        //   totalDamage = 0;
-        // }
-        totalDamage = math.max(0, totalDamage);
+        if(!gameRef.playerData.spellAllPhysDamage){
+          double tempDamage = hurt / 8;
+          totalDamage += (1 - gameRef.playerData.armorDress.value.armor / 100 -
+              gameRef.playerData.extraArmor.value / 100
+              - gameRef.playerData.ringDress.value.armor / 100 -
+              gameRef.playerData.swordDress.value.armor / 100) * tempDamage;
+          totalDamage +=
+              (1 - gameRef.playerData.helmetDress.value.armor / 100) *
+                  tempDamage;
+          totalDamage +=
+              (1 - gameRef.playerData.glovesDress.value.armor / 100) *
+                  tempDamage;
+          totalDamage += (1 - gameRef.playerData.bootsDress.value.armor / 100) *
+              tempDamage;
+          totalDamage -= gameRef.playerData.shieldBlock.value;
+          totalDamage = math.max(0, totalDamage);
+        }
         if(totalDamage == 0){
           if(enableShieldLock) {
             enableShieldLock = false;
@@ -249,6 +244,13 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         hurt = totalDamage;
       }
     }
+    if(!inArmor && gameRef.playerData.spellReducePartOfMagicDamage && animState == AnimationState.shield){
+      hurt *= 0.75;
+    }
+    double hurtMiss = math.Random().nextDouble();
+    if(hurtMiss < gameRef.playerData.hurtMiss.value){
+      hurt /= 2;
+    }
     gameRef.playerData.addHealth(-hurt);
     if(gameRef.playerData.health.value <1){
       animation = animDeath;
@@ -258,7 +260,6 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       if(animState == AnimationState.hurt){
         return;
       }
-      double hurtMiss = math.Random().nextDouble();
       if(hurtMiss < gameRef.playerData.hurtMiss.value){
         add(ColorEffect(
           const Color(0xFFFFFFFF),
@@ -384,8 +385,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
 
   void setIdleAnimation()
   {
-      animation = animIdle;
-      animState = AnimationState.idle;
+    animation = animIdle;
+    animState = AnimationState.idle;
   }
 
   void movePlayer(double angle, bool isRunRun)
@@ -438,9 +439,15 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       groundRigidBody?.linearVelocity = Vector2.zero();
       setGroundBody(targetPos: position, isEnemy: true, myDumping: 0);
       animation = animSlide;
-      add(TimerComponent(period: animationTicker!.totalDuration(), repeat: false, removeOnFinish: true, onTick: (){setGroundBody(targetPos: position);}));
+      if(gameRef.playerData.spellHitWithDash) {
+        _weaponOfDash?.collisionType = DCollisionType.active;
+      }
+      add(TimerComponent(period: animationTicker!.totalDuration(), repeat: false, removeOnFinish: true, onTick: (){
+        setGroundBody(targetPos: position);
+      }));
       animationTicker?.onFrame = (frame){
         if(frame == 5){
+          _weaponOfDash?.collisionType = DCollisionType.inactive;
           animState = AnimationState.idle;
           groundRigidBody?.linearDamping = dumping;
           groundRigidBody?.angularDamping = dumping;
@@ -464,14 +471,17 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if(gameRef.playerData.isLockMove){
       return;
     }
-    if(gameRef.playerData.energy.value < gameRef.playerData.shieldBlockEnergy.value){
+    if(gameRef.playerData.energy.value < gameRef.playerData.shieldBlockEnergy.value && !gameRef.playerData.spellNonEnergyBlock){
       return;
     }
     if(animState == AnimationState.move || animState == AnimationState.idle || animState == AnimationState.attack){
       animState = AnimationState.shield;
       groundRigidBody?.clearForces();
       _weapon?.collisionType = DCollisionType.inactive;
-      gameRef.playerData.addEnergy(-gameRef.playerData.shieldBlockEnergy.value);
+      if(!gameRef.playerData.spellNonEnergyBlock) {
+        gameRef.playerData.addEnergy(
+            -gameRef.playerData.shieldBlockEnergy.value);
+      }
       animation = animShield;
       animationTicker?.onComplete = (){
         chooseStaticAnimation();
@@ -584,8 +594,8 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     if (gameHide) {
       return;
     }
-    game.playerData.addMana((gameRef.playerData.maxMana.value / 28) * dt);
-    game.playerData.addHealth((gameRef.playerData.maxHealth.value / 240) * dt);
+    game.playerData.addMana((gameRef.playerData.maxMana.value / 28) * dt + (gameRef.playerData.maxMana.value / 28) * dt * gameRef.playerData.spellRegenMana);
+    game.playerData.addHealth((gameRef.playerData.maxHealth.value / 240) * dt + (gameRef.playerData.maxHealth.value / 240) * dt * gameRef.playerData.spellRegenHp);
     if(groundRigidBody != null){
       position = groundRigidBody!.position / PhysicVals.physicScale;
     }
@@ -594,31 +604,15 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       isMinusEnergy = false;
     }
     if(animState != AnimationState.move && animState != AnimationState.shield && animState != AnimationState.slide && animation != animLong && animation != animShort && animation != animCombo){
-      gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 10) * dt );
+      gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 10) * dt + (gameRef.playerData.maxEnergy.value / 10) * dt * gameRef.playerData.spellRegenStamina);
       return;
     }
     if(animState != AnimationState.move){
       return;
     }
     bool isReallyRun = false;
-    // if(isRun && !isMinusEnergy){
-    //   if(gameRef.playerData.energy.value <= 0){
-    //     isMinusEnergy = true;
-    //     if(animation == animMove) {
-    //       animation?.frames[0].stepTime == 0.1 ? animation?.stepTime = 0.12 : null;
-    //     }
-    //   }else{
-    //     if(animation == animMove) {
-    //       animation?.frames[0].stepTime == 0.12 ? animation?.stepTime = 0.1 : null;
-    //     }
-    //     isReallyRun = true;
-    //   }
-    //   gameRef.playerData.addEnergy(dt * -4);
-    // }else{
-    //
-    // }
     if(!gameRef.playerData.isLockEnergy) {
-      gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 15) * dt );
+      gameRef.playerData.addEnergy((gameRef.playerData.maxEnergy.value / 15) * dt + (gameRef.playerData.maxEnergy.value / 15) * dt * gameRef.playerData.spellRegenStamina);
     }
     groundRigidBody?.applyLinearImpulse(_velocity * dt * groundRigidBody!.mass * (isReallyRun ? PhysicVals.runCoef : 1));
     Vector2 speed = groundRigidBody?.linearVelocity ?? Vector2.zero();

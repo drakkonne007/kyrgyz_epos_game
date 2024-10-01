@@ -10,9 +10,12 @@ import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
+double levelCount = 9000;
+
 int getLevel(double experience)
 {
-  double startExp = 18000;
+  // double startExp = 18000;
+  double startExp = levelCount;
   int count = 0;
   while(experience > 0){
     startExp = startExp + startExp * 1.1;
@@ -27,14 +30,21 @@ int getLevel(double experience)
 
 double percentOfLevel(double experience)
 {
-  double startExp = 18000;
+  if(experience == 0){
+    return 0;
+  }
+  double startExp = levelCount;
   double percent = 0;
   while(experience > 0){
     startExp = startExp + startExp * 1.1;
     experience -= startExp;
   }
+  experience += startExp;
   percent = experience / startExp;
-  return percent * -1;
+  if(experience == 0){
+    percent = 0;
+  }
+  return percent;
 }
 
 
@@ -116,6 +126,14 @@ class PlayerData
     }
   }
 
+  int getFreeSpellPoints()
+  {
+    return playerLevel.value
+        - levelHealthSpells
+        - levelStaminaSpells
+        - levelManaSpells - 1;
+  }
+
   PlayerData(this._game)
   {
     playerLevel.addListener(_recalcAfterChangeDress);
@@ -173,10 +191,10 @@ class PlayerData
     answer.maxHealth =
         armor.hp + helmet.hp + gloves.hp +
             sword.hp + ring.hp + boots.hp +
-            _beginHealth + (_beginHealth * playerLevel.value) / _statScale;
+            _beginHealth + (_beginHealth * playerLevel.value) / _statScale + spellBonusHp;
     answer.maxMana = armor.mana + helmet.mana + gloves.mana +
         sword.mana + ring.mana + boots.mana +
-        _beginMana + (_beginMana * playerLevel.value) / _statScale;
+        _beginMana + (_beginMana * playerLevel.value) / _statScale + spellBonusMana;
     answer.maxEnergy = armor.energy + helmet.energy +
         gloves.energy + sword.energy +
         ring.energy + boots.energy + _beginEnergy +
@@ -192,7 +210,7 @@ class PlayerData
     answer.hurtMiss = armor.hurtMiss + helmet.hurtMiss +
         gloves.hurtMiss + sword.hurtMiss +
         ring.hurtMiss + boots.hurtMiss +
-        extraHurtMiss.value;
+        extraHurtMiss.value + spellHurtMiss;
     answer.damage = armor.damage + helmet.damage +
         gloves.damage + sword.damage +
         ring.damage + boots.damage + extraDamage.value;
@@ -217,14 +235,14 @@ class PlayerData
     double procentOfMana = mana.value / maxMana.value;
     double procentOfEnergy = energy.value / maxEnergy.value;
     maxHealth.value = armorDress.value.hp + helmetDress.value.hp + glovesDress.value.hp + swordDress.value.hp
-        + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / _statScale;
+        + ringDress.value.hp + bootsDress.value.hp + _beginHealth + (_beginHealth * playerLevel.value) / _statScale + spellBonusHp;
     maxMana.value = armorDress.value.mana + helmetDress.value.mana + glovesDress.value.mana + swordDress.value.mana
-        + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / _statScale;
+        + ringDress.value.mana + bootsDress.value.mana + _beginMana + (_beginMana * playerLevel.value) / _statScale + spellBonusMana;
     maxEnergy.value = armorDress.value.energy + helmetDress.value.energy + glovesDress.value.energy + swordDress.value.energy
         + ringDress.value.energy + bootsDress.value.energy + _beginEnergy + (_beginEnergy * playerLevel.value) / _statScale;
     armor.value = armorDress.value.armor + helmetDress.value.armor + glovesDress.value.armor + swordDress.value.armor + ringDress.value.armor + bootsDress.value.armor + extraArmor.value;
     chanceOfLoot.value = armorDress.value.chanceOfLoot + helmetDress.value.chanceOfLoot + glovesDress.value.chanceOfLoot + swordDress.value.chanceOfLoot + ringDress.value.chanceOfLoot + bootsDress.value.chanceOfLoot + extraChanceOfLoot.value;
-    hurtMiss.value = armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value;
+    hurtMiss.value = armorDress.value.hurtMiss + helmetDress.value.hurtMiss + glovesDress.value.hurtMiss + swordDress.value.hurtMiss + ringDress.value.hurtMiss + bootsDress.value.hurtMiss + extraHurtMiss.value + spellHurtMiss;
     damage.value = armorDress.value.damage + helmetDress.value.damage + glovesDress.value.damage + swordDress.value.damage + ringDress.value.damage + bootsDress.value.damage + extraDamage.value;
     attackSpeed.value = armorDress.value.attackSpeed + helmetDress.value.attackSpeed + glovesDress.value.attackSpeed + swordDress.value.attackSpeed + ringDress.value.attackSpeed + bootsDress.value.attackSpeed + extraAttackSpeed.value;
     permanentDamage.value = swordDress.value.permanentDamage;
@@ -247,6 +265,37 @@ class PlayerData
       playerLevel.value = tempLevel;
       _recalcAfterChangeDress();
     }
+  }
+
+  void recalcSpells()
+  {
+    spellVampirism = levelHealthSpells > 4;
+    spellBonusHp = levelHealthSpells > 0 ? 10 : 0;
+    spellRegenHp = levelHealthSpells > 1 ? 0.1 : 0;
+    spellHurtMiss = levelHealthSpells > 2 ? 0.05 : 0;
+    spellHurtMiss = levelHealthSpells > 3 ? 0.1 : spellHurtMiss;
+    spellHurtMiss = levelHealthSpells > 5 ? 0.15 : spellHurtMiss;
+    spellBonusHp = levelHealthSpells > 6 ? 20 : spellBonusHp;
+    spellBonusHp = levelHealthSpells > 7 ? 30 : spellBonusHp;
+    shieldBlock.value = levelStaminaSpells > 0 ? 10 : 5;
+    shieldBlock.value = levelStaminaSpells > 2 ? 15 : shieldBlock.value;
+    shieldBlock.value = levelStaminaSpells > 5 ? 9999999999 : shieldBlock.value;
+    spellRegenStamina = levelStaminaSpells > 1 ? 0.1 : 0;
+    spellNonEnergyBlock = levelStaminaSpells > 3;
+    spellAllPhysDamage = levelStaminaSpells > 5;
+    spellReducePartOfMagicDamage = levelStaminaSpells > 7;
+    spellBonusStamina = levelStaminaSpells > 4 ? 10 : 0;
+    spellBonusStamina = levelStaminaSpells > 6 ? 20 : spellBonusStamina;
+
+    spellBonusMana = levelManaSpells > 0 ? 10 : 0;
+    spellBonusMana = levelManaSpells > 2 ? 20 : spellBonusMana;
+    spellBonusMana = levelManaSpells > 5 ? 30 : spellBonusMana;
+    spellRegenMana = levelManaSpells > 1 ? 0.2 : 0;
+    spellHitWithDash = levelManaSpells > 4;
+    playerMagicLevel.value = levelManaSpells > 3 ? 2 : 1;
+    playerMagicLevel.value = levelManaSpells > 6 ? 3 : playerMagicLevel.value;
+
+    _recalcAfterChangeDress();
   }
 
   void addEnergy(double val, {bool extra = false, bool full = false})
@@ -327,10 +376,11 @@ class PlayerData
   final ValueNotifier<double> permanentDamage = ValueNotifier<double>(0);
   final ValueNotifier<double> secsOfPermanentDamage = ValueNotifier<double>(0);
 
+
   final ValueNotifier<double> extraArmor = ValueNotifier<double>(0);
   final ValueNotifier<double> shieldBlock = ValueNotifier<double>(5);
   final ValueNotifier<double> shieldBlockEnergy = ValueNotifier<double>(5);
-  final ValueNotifier<double> extraHurtMiss = ValueNotifier<double>(0.3);
+  final ValueNotifier<double> extraHurtMiss = ValueNotifier<double>(0);
   final ValueNotifier<double> extraDamage = ValueNotifier<double>(0);
   final ValueNotifier<double> extraChanceOfLoot = ValueNotifier<double>(0);
   final ValueNotifier<double> extraAttackSpeed = ValueNotifier<double>(0);
@@ -339,6 +389,23 @@ class PlayerData
   final double _beginMana = 10;
   int _currentSecsInGame = 0;
   int _currentSecsSinceEpoch = 0;
+  int levelHealthSpells = 0;
+  int levelManaSpells = 0;
+  int levelStaminaSpells = 0;
+
+
+  double spellHurtMiss = 0;
+  double spellBonusHp = 0;
+  double spellBonusStamina = 0;
+  double spellBonusMana = 0;
+  double spellRegenHp = 0;
+  double spellRegenStamina = 0;
+  double spellRegenMana = 0;
+  bool   spellNonEnergyBlock = false;
+  bool   spellAllPhysDamage = false;
+  bool   spellReducePartOfMagicDamage = false;
+  bool   spellHitWithDash = false;
+  bool   spellVampirism = false;
   // TimerComponent? shrineStaminaBuff;
   // TimerComponent? shrineBloodBuff;
   final ValueNotifier<double> maxHealth = ValueNotifier<double>(0);
@@ -432,6 +499,10 @@ class PlayerData
 
   void loadGame(SavedGame svg)
   {
+    levelManaSpells = svg.levelMana;
+    levelHealthSpells = svg.levelHeart;
+    levelStaminaSpells = svg.levelStamina;
+
     _currentSecsInGame = svg.currentGameTime;
     _currentSecsSinceEpoch = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
@@ -444,6 +515,7 @@ class PlayerData
 
     currentFlask1.value = svg.currentFlask1;
     currentFlask2.value = svg.currentFlask2;
+
 
     for(final cur in svg.currentInventar){
       Item it = itemFromName(cur);
@@ -481,6 +553,8 @@ class PlayerData
       it.getEffect(_game);
       it.getEffectFromInventar(_game, duration: cur.dur);
     }
+
+    recalcSpells();
   }
 
 

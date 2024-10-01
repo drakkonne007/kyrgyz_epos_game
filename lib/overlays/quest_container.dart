@@ -11,15 +11,15 @@ class QuestContainer extends StatelessWidget
   @override
   Widget build(BuildContext context){
     List<String> temp = game.tempQuestForInventarOverlay.keys.toList(growable: false);
-    print(temp.length);
     return  CustomScrollView(
         slivers: <Widget>[SliverList(
             delegate: SliverChildBuilderDelegate(
+                addRepaintBoundaries: false,
                 childCount: temp.length, (BuildContext context, int index)
                 {
                   return Container(
                       alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.all(3),
+                      margin: const EdgeInsets.only(left: 3, right: 3, bottom: 3, top: 6),
                       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 5),
                       decoration: BoxDecoration(
                           border: Border.all(

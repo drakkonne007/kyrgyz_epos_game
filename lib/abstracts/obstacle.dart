@@ -54,15 +54,15 @@ class Ground extends Body
     }
     if(other is Ground) {
       return true;
-      if (isOnlyForStatic && other.bodyType != BodyType.static) {
-        return false;
-      }
-      if (other.isEnemy && isEnemy) {
-        return false;
-      }
-      if (other.isPlayer && isPlayer) {
-        return false;
-      }
+      // if (isOnlyForStatic && other.bodyType != BodyType.static) {
+      //   return false;
+      // }
+      // if (other.isEnemy && isEnemy) {
+      //   return false;
+      // }
+      // if (other.isPlayer && isPlayer) {
+      //   return false;
+      // }
     }
     return false;
   }

@@ -29,6 +29,7 @@ class Quest
   bool isDone = false;
   String name = '';
   String desc = '';
+  bool needInventar = false;
 
   static Quest questFromName(KyrgyzGame game, String name)
   {

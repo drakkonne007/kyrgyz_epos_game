@@ -30,6 +30,8 @@ class ChestOfGlory extends Quest
 {
   ChestOfGlory(super.kyrgyzGame,{super.currentState, super.isDone})
   {
+    name = 'Сундук старика';
+    needInventar = true;
     id = 'chestOfGlory';
     dialogs[0] = AnswerForDialog(
         text: "Путник, ты можешь взять сундук возле верхней стены, хочешь?",

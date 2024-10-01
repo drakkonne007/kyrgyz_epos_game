@@ -31,6 +31,9 @@ class SavedGame
   double energy = 0;
   double level = 0;
   int gold = 0;
+  int levelStamina = 0;
+  int levelMana = 0;
+  int levelHeart = 0;
   String? currentFlask1;
   String? currentFlask2;
   List<String> currentInventar = [];
@@ -84,15 +87,15 @@ class DbHandler
         },
         onCreate: (Database db, int v) async{
           print('CREATE TABLES!!!');
-          await dropAllTables();
-          await createTable();
+          // await dropAllTables();
+          // await createTable();
         });
-    try{
-      await _database?.rawQuery('SELECT id FROM player_data LIMIT 1');
-    }catch(e){
-      await dropAllTables();
-      await createTable();
-    }
+    // try{
+    //   await _database?.rawQuery('SELECT id FROM player_data LIMIT 1');
+    // }catch(e){
+    //   await dropAllTables();
+    //   await createTable();
+    // }
     // await _database?.execute('DELETE FROM travel_shop');
   }
 
@@ -144,6 +147,9 @@ class DbHandler
         ',level double NOT NULL DEFAULT 1'
         ',gold INTEGER NOT NULL DEFAULT 0'
         ',current_game_time INT DEFAULT 0'
+        ',level_heart INT DEFAULT 0'
+        ',level_stamina INT DEFAULT 0'
+        ',level_mana INT DEFAULT 0'
         ');');
     await _database?.execute('CREATE TABLE IF NOT EXISTS current_inventar '
         '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
@@ -168,6 +174,7 @@ class DbHandler
         '(name TEXT PRIMARY KEY NOT NULL'
         ',current_state INTEGER NOT NULL DEFAULT 0'
         ',is_done INTEGER NOT NULL DEFAULT 0'
+        ',description TEXT'
         ');');
     print('All tables was created');
     await fillGameObjects(false);
@@ -274,11 +281,15 @@ class DbHandler
         String? currentFlask1,
         String? currentFlask2,
         required List<TempEffect> tempEffects,
-        required int currentGameTime})async
+        required int currentGameTime,
+      required int levelHeart,
+      required int levelStamina,
+      required int levelMana})async
   {
     print('save games');
     await _database?.rawDelete('DELETE FROM player_data WHERE save_id = ?', [saveId]);
-    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold,current_flask1,current_flask2,current_game_time) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level, gold,currentFlask1,currentFlask2,currentGameTime]);
+    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold,current_flask1,current_flask2,current_game_time, level_heart, level_stamina, level_mana) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level
+      , gold,currentFlask1,currentFlask2,currentGameTime, levelHeart, levelStamina, levelMana]);
     await _database?.execute('DELETE FROM current_inventar WHERE save_id = ?', [saveId]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, helmetDress.id]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, armorDress.id]);
@@ -359,6 +370,9 @@ class DbHandler
     svGame.currentFlask1 = res[0]['current_flask1']?.toString();
     svGame.currentFlask2 = res[0]['current_flask2']?.toString();
     svGame.currentGameTime = res[0]['current_game_time'] as int; //currentGameTime
+    svGame.levelHeart = res[0]['level_heart'] as int;
+    svGame.levelStamina = res[0]['level_stamina'] as int;
+    svGame.levelMana = res[0]['level_mana'] as int;
 
     res = await _database?.rawQuery('SELECT * FROM current_inventar where save_id = ?', [saveId]);
     if(res == null) return svGame;
@@ -448,7 +462,7 @@ class DbHandler
 
   void setQuestState(String name, int state, bool isDone, String? desc)
   {
-    _questStates[name] = DBQuestState(isDone: isDone, currentState: state,desc: desc ?? _questStates[name]!.desc);
+    _questStates[name] = DBQuestState(isDone: isDone, currentState: state,desc: desc ?? _questStates[name]?.desc ?? '');
     // await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[isDone ? 1 : 0, state, name]);
   }
 }
