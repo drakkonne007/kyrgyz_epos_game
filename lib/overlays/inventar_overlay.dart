@@ -157,7 +157,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
 
   List<Widget> getUpTabs(double width, double height) //
   {
-    List<Widget> temp = [SizedBox(width: width,)];
+    List<Widget> temp = [SizedBox(width: width/2,)];
 
     temp.add(
         ElevatedButton(
@@ -359,47 +359,12 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                   ),
                   widget.game.playerData.getFreeSpellPoints() == 0 ? Container() :
                   Container(width: width,
-                      padding: const EdgeInsets.only(left: 10),
                       height: height,
-                      alignment: Alignment.centerLeft,
-                      child:AutoSizeText(widget.game.playerData.getFreeSpellPoints().toString(), textAlign: TextAlign.center,style: defaultInventarTextStyleGood,
+                      alignment: Alignment.center,
+                      child:AutoSizeText(widget.game.playerData.getFreeSpellPoints().toString()
+                          , textAlign: TextAlign.center,style: defaultInventarTextStyle.copyWith(shadows: const [Shadow(color: Colors.yellow, blurRadius: 2)]),
                           minFontSize: 10,
                           maxLines: 1))
-                ]
-            )
-        )
-    );
-    temp.add(
-        Container(
-          constraints: BoxConstraints.loose(Size(width,height - 5)),
-            alignment: Alignment.bottomCenter,
-            child:
-            Stack(
-                fit: StackFit.loose,
-                alignment: Alignment.bottomCenter,
-                children:
-                [
-                   Image.asset('assets/images/inventar/UI-9-sliced object-35.png',
-                    fit: BoxFit.fill,
-                    centerSlice: const Rect.fromLTWH(8, 8, 34 , 38),
-                    isAntiAlias: true,
-                    filterQuality: FilterQuality.high,
-                    width: width,
-                    height: height - 10,
-                    alignment: Alignment.bottomCenter,
-                  ),
-                  ValueListenableBuilder(valueListenable: widget.game.playerData.experience, builder: (_,val,__) =>
-                      CustomPaint(
-                          size: Size(width - 30,height - 20),
-                          painter: ExperienceCircle(percentOfLevel(widget.game.playerData.experience.value))),
-                  ),
-                  Container(width: width,
-                    height: height,
-                  alignment: Alignment.center,
-                  child:AutoSizeText(widget.game.playerData.playerLevel.value.toString(), textAlign: TextAlign.center,style: defaultInventarTextStyleGold,
-                      minFontSize: 10,
-                      maxLines: 1))
-                  // AutoSizeText(widget.game.playerData.playerLevel.value.toString())
                 ]
             )
         )
@@ -441,6 +406,61 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
             )
         )
     );
+    temp.add(const Spacer());
+    temp.add(
+        Container(
+            constraints: BoxConstraints(minWidth: width, minHeight: height-10, maxWidth: double.infinity, maxHeight: height - 10),
+            decoration: const BoxDecoration(image: DecorationImage(
+              image: AssetImage('assets/images/inventar/UI-9-sliced object-121Small.png',),
+              centerSlice: Rect.fromLTWH(15,13,2,6),
+            )),
+            alignment: Alignment.center,
+            child:
+            Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+                children:[
+                  const SizedBox(width: 7),
+                  Image.asset('assets/images/inventar/gold.png'),
+                  AutoSizeText(widget.game.playerData.money.value.toString(),
+                    textAlign: TextAlign.left,
+                    style: defaultInventarTextStyleGold,
+                    minFontSize: 10,
+                    maxLines: 1,),
+                  const SizedBox(width: 7),])
+        )
+    );
+    temp.add(
+        Container(
+            constraints: BoxConstraints.loose(Size(width,height-10)),
+            decoration: const BoxDecoration(image: DecorationImage(
+              image: AssetImage('assets/images/inventar/UI-9-sliced object-121Small.png',),
+              centerSlice: Rect.fromLTWH(15,13,2,6),
+            )),
+            alignment: Alignment.center,
+            child:
+            Stack(
+                fit: StackFit.passthrough,
+                alignment: Alignment.center,
+                children:
+                [
+                  ValueListenableBuilder(valueListenable: widget.game.playerData.experience, builder: (_,val,__) =>
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(top:11, bottom: 10, left: 10, right: 10),
+                    child:CustomPaint(
+                          size: Size(width,height-10),
+                          painter: ExperienceCircle(percentOfLevel(widget.game.playerData.experience.value))),
+                  )),
+                  AutoSizeText(widget.game.playerData.playerLevel.value.toString(), textAlign: TextAlign.center,style: defaultInventarTextStyle.copyWith(shadows: const [Shadow(color: Colors.yellow, offset: Offset(0, 0), blurRadius: 10)]),
+                          minFontSize: 10,
+                          maxLines: 1)
+                  // AutoSizeText(widget.game.playerData.playerLevel.value.toString())
+                ]
+            )
+        )
+    );
+    temp.add(const SizedBox(width: 50,));
+
+
     return temp;
   }
 }
@@ -457,17 +477,17 @@ class ExperienceCircle extends CustomPainter
     Paint paint = Paint()..color = const Color(0xFF54463C);
 
     // Рисуем весь овал
-    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height - 5);
-    canvas.drawOval(rect, paint);
+    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height - 4);
+    // canvas.drawRect(rect, paint);
 
     // Обрезаем область рисования, чтобы заполнить только левую половину
     Path clipPath = Path();
-    clipPath.addRect(Rect.fromLTWH(0, 0, size.width * currentProc, size.height));
+    clipPath.addRect(Rect.fromLTWH(0, 2, size.width * currentProc, size.height));
     canvas.clipPath(clipPath);
 
     paint = Paint()..color = const Color(0xFFe74747);
     // Заполняем обрезанную область
-    canvas.drawOval(rect, paint);
+    canvas.drawRect(rect, paint);
 
 
 

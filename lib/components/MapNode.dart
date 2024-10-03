@@ -227,6 +227,7 @@ class MapNode {
     }
     var quest = obj.getAttribute('quest');
     if(quest != null){
+      print(quest);
       var dbQuest = myGame.quests[quest]!;
       int startShow = int.parse(obj.getAttribute('startShow') ?? '0');
       int endShow = int.parse(obj.getAttribute('endShow') ?? '999999999999');

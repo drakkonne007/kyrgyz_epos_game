@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/overlays/game_styles.dart';
 
+const double imgSize = 60;
+
 class SpellContainer extends StatefulWidget
 {
   const SpellContainer({super.key, required this.game});
@@ -32,17 +34,18 @@ class _SpellContainerState extends State<SpellContainer>
         children:
         [
           Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:
-              [
-                AutoSizeText(widget.game.playerData.getFreeSpellPoints().toString(), style: defaultInventarTextStyleGood, minFontSize: 35, maxLines: 1, textAlign: TextAlign.center,),
-                Image.asset('assets/images/inventar/UI-9-sliced object-113.png', width: 60,),
-              ]
-          ),
-          Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children:
               [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children:
+                    [
+                      AutoSizeText(widget.game.playerData.getFreeSpellPoints().toString(), style: defaultInventarTextStyleGood, minFontSize: 15, maxLines: 1, textAlign: TextAlign.center,),
+                      Image.asset('assets/images/inventar/UI-9-sliced object-113.png', width: imgSize,),
+                    ]
+                ),
                 ElevatedButton(
                     onPressed: () {
                       if(_currentStatus == 0){
@@ -56,14 +59,14 @@ class _SpellContainerState extends State<SpellContainer>
                         .copyWith(
                       maximumSize: WidgetStateProperty
                           .all<Size>(
-                          const Size(70, 70)),
+                          const Size(imgSize, imgSize)),
                       backgroundBuilder: ((context,
                           state, child) {
                         return
                           Image.asset(
                             _currentStatus == 0 ? 'assets/images/inventar/UI-9-sliced object-64.png' : 'assets/images/inventar/UI-9-sliced object-49NoShadow.png',
                             fit: BoxFit.fill,
-                            width: 70,);
+                            width: imgSize,);
                       }),
                     ),
                     child: null
@@ -81,14 +84,14 @@ class _SpellContainerState extends State<SpellContainer>
                         .copyWith(
                       maximumSize: WidgetStateProperty
                           .all<Size>(
-                          const Size(70, 70)),
+                          const Size(imgSize, imgSize)),
                       backgroundBuilder: ((context,
                           state, child) {
                         return
                           Image.asset(
                             _currentStatus == 1 ? 'assets/images/inventar/UI-9-sliced object-66.png' : 'assets/images/inventar/UI-9-sliced object-51RawNoShadow.png',
                             fit: BoxFit.fill,
-                            width: 70,);
+                            width: imgSize,);
                       }),
                     ),
                     child: null
@@ -106,14 +109,14 @@ class _SpellContainerState extends State<SpellContainer>
                         .copyWith(
                       maximumSize: WidgetStateProperty
                           .all<Size>(
-                          const Size(70, 70)),
+                          const Size(imgSize, imgSize)),
                       backgroundBuilder: ((context,
                           state, child) {
                         return
                           Image.asset(
                             _currentStatus == 2 ? 'assets/images/inventar/UI-9-sliced object-52ManaGreen.png' : 'assets/images/inventar/UI-9-sliced object-52ManaNoShadow.png',
                             fit: BoxFit.fill,
-                            width: 70,);
+                            width: imgSize,);
                       }),
                     ),
                     child: null
@@ -184,12 +187,15 @@ class _SpellContainerState extends State<SpellContainer>
                               },
                               style: defaultNoneButtonStyle
                                   .copyWith(
+                                maximumSize: WidgetStateProperty
+                                    .all<Size>(
+                                    const Size(imgSize, imgSize)),
                                 backgroundBuilder: ((context,
                                     state, child) {
                                   return
                                     Image.asset(
                                       index < levelSpell ? 'assets/images/inventar/activePageBall.png' : 'assets/images/inventar/passivePageBall.png',
-                                      fit: BoxFit.fill,);
+                                      fit: BoxFit.contain,);
                                 }),
                               ),
                               child: null
@@ -199,13 +205,13 @@ class _SpellContainerState extends State<SpellContainer>
                           flex:10,
                           child:Container(
                               alignment: Alignment.center,
-                              constraints: const BoxConstraints(minHeight: 80),
+                              constraints: const BoxConstraints(minHeight: 64),
                               decoration: const BoxDecoration(image: DecorationImage(
-                                image: AssetImage('assets/images/inventar/UI-9-sliced object-121.png',),
-                                centerSlice: Rect.fromLTWH(30,26,4,12),
+                                image: AssetImage('assets/images/inventar/UI-9-sliced object-121Small.png',),
+                                centerSlice: Rect.fromLTWH(15,13,2,6),
                               )),
-                              child: Container(margin: const EdgeInsets.all(15),
-                                  child: AutoSizeText(temp[index], style: defaultInventarTextStyleGood, maxLines: 2, minFontSize: 10,textAlign: TextAlign.center,))
+                              child: Container(margin: const EdgeInsets.all(10),
+                                  child: AutoSizeText(temp[index], style: defaultInventarTextStyleGood, maxLines: 2, minFontSize: 10, maxFontSize: 18,textAlign: TextAlign.center,))
                           ))
                     ]
                 );

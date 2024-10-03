@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1492">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1495">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -2315,9 +2315,11 @@
     <property name="citizen" value="1"/>
    </properties>
   </object>
-  <object id="1475" gid="50544" x="862.5" y="378.25" width="80" height="64">
+  <object id="1475" gid="50544" x="399.5" y="487.75" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
+    <property name="quest" value="startGameOlder"/>
+    <property name="startTrigger" value="1"/>
    </properties>
   </object>
   <object id="1476" gid="2147534192" x="887.5" y="430" width="80" height="64">
@@ -2359,7 +2361,7 @@
     <property name="citizen" value="1"/>
    </properties>
   </object>
-  <object id="1485" gid="2147534192" x="2570" y="2618.33" width="80" height="64">
+  <object id="1485" gid="2147534192" x="2572.18" y="988.269" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
     <property name="quest" value="chestOfGlory"/>
@@ -2378,7 +2380,7 @@
   </object>
   <object id="1488" gid="50594" x="677.424" y="385.818" width="102.667" height="102.667">
    <properties>
-    <property name="items" value="helmet40,gold4000,armor20,gloves12,boots15"/>
+    <property name="items" value="helmet40,gold500,armor20,gloves12,boots15"/>
     <property name="neededItems" value="keyForChestOfGlory"/>
    </properties>
   </object>
@@ -2394,6 +2396,35 @@
   </object>
   <object id="1491" x="1395.19" y="2163">
    <polyline points="0,0 11.9375,12.0625 18.9375,12 18.875,9 0,-9.5"/>
+  </object>
+  <object id="1492" gid="50544" x="1671" y="3046.67" width="80" height="64">
+   <properties>
+    <property name="citizen" value="1"/>
+    <property name="endTrigger" value="6"/>
+    <property name="quest" value="startGame"/>
+    <property name="startTrigger" value="0"/>
+   </properties>
+  </object>
+  <object id="1493" name="trigger" x="1586.08" y="2906.75" width="352.5" height="20.8333">
+   <properties>
+    <property name="autoTrigger" value="1"/>
+    <property name="dialog" value="Таааак, куда ж сначала пойти"/>
+    <property name="dialogNegative" value="Надо спросить у охранника что делать"/>
+    <property name="endShow" value="6"/>
+    <property name="ground" value="1"/>
+    <property name="isEndQuest" value="0"/>
+    <property name="quest" value="startGame"/>
+    <property name="removeOnTrigger" value="0"/>
+    <property name="startTrigger" value="0"/>
+   </properties>
+  </object>
+  <object id="1494" gid="2147534192" x="2552.67" y="2647.33" width="80" height="64">
+   <properties>
+    <property name="citizen" value="1"/>
+    <property name="endTrigger" value="9999999"/>
+    <property name="quest" value="startGameKuznec"/>
+    <property name="startTrigger" value="1"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

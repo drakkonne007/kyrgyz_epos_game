@@ -60,10 +60,11 @@ class DBItemState
 
 class DBQuestState
 {
-  DBQuestState({required this.currentState, required this.isDone, required this.desc});
+  DBQuestState({required this.currentState, required this.isDone, required this.desc, required this.needInventar});
   int currentState = 0;
   bool isDone = false;
   String desc = '';
+  bool needInventar = false;
 }
 
 class DbHandler
@@ -87,8 +88,8 @@ class DbHandler
         },
         onCreate: (Database db, int v) async{
           print('CREATE TABLES!!!');
-          // await dropAllTables();
-          // await createTable();
+          await dropAllTables();
+          await createTable();
         });
     // try{
     //   await _database?.rawQuery('SELECT id FROM player_data LIMIT 1');
@@ -175,10 +176,10 @@ class DbHandler
         ',current_state INTEGER NOT NULL DEFAULT 0'
         ',is_done INTEGER NOT NULL DEFAULT 0'
         ',description TEXT'
+        ',need_inventar INTEGER NOT NULL DEFAULT 0'
         ');');
     print('All tables was created');
     await fillGameObjects(false);
-    await fillQuests();
   }
 
   Future fillGameObjects(bool hardReset) async
@@ -208,10 +209,7 @@ class DbHandler
 
   Future refreshQuests()async
   {
-    await _database?.execute('DELETE FROM quests');
-    for(final name in Quest.allQuests){
-      await _database?.rawInsert('INSERT INTO quests(name) VALUES(?) ON CONFLICT DO NOTHING', [name]);
-    }
+    return await _database?.execute('DELETE FROM quests');
   }
 
   void deleteSaves()async
@@ -239,13 +237,6 @@ class DbHandler
       answer.addAll(_mapAnswer[worldName]!);
     }
     return answer;
-  }
-
-  Future fillQuests() async
-  {
-    for(final name in Quest.allQuests){
-      await _database?.rawInsert('INSERT INTO quests(name) VALUES(?) ON CONFLICT DO NOTHING', [name]);
-    }
   }
 
   Future<bool> checkSaved(int saveId)async
@@ -338,7 +329,7 @@ class DbHandler
     }
     _itemStates.clear();
     for(final name in _questStates.keys){
-      await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ?, description = ? where name = ?',[_questStates[name]!.isDone ? 1 : 0, _questStates[name]!.currentState,_questStates[name]!.desc, name]);
+      await _database?.rawUpdate('INSERT OR REPLACE INTO quests(is_done, current_state, description, need_inventar, name) VALUES(?,?,?,?,?)',[_questStates[name]!.isDone ? 1 : 0, _questStates[name]!.currentState,_questStates[name]!.desc,_questStates[name]!.needInventar ? 1 : 0, name]);
     }
     _questStates.clear();
     for(final worldsName in _mapAnswer.keys){
@@ -346,6 +337,13 @@ class DbHandler
         await _database?.rawInsert('INSERT INTO map_info(save_id, world_name, column, row) VALUES(?,?,?,?) ON CONFLICT DO NOTHING', [saveId, worldsName, colRow.column, colRow.row]);
       }
     }
+    _mapAnswer.clear();
+  }
+
+  void nullateInternalDB()
+  {
+    _itemStates.clear();
+    _questStates.clear();
     _mapAnswer.clear();
   }
 
@@ -445,7 +443,7 @@ class DbHandler
     return answer;
   }
 
-  Future<DBQuestState> getQuestState(String name)async
+  Future<DBQuestState?> getQuestState(String name)async
   {
     if(_questStates.containsKey(name)){
       return _questStates[name]!;
@@ -453,16 +451,16 @@ class DbHandler
     final res = await _database?.rawQuery(
         'SELECT * FROM quests WHERE name = ?',[name]);
     if (res == null || res.isEmpty) {
-      throw 'No find this quest!!! $name';
+      return null;
     }
     DBQuestState answer = DBQuestState(isDone: res[0]['is_done'].toString() == '1'
-        , currentState: int.tryParse(res[0]['current_state'].toString()) ?? 0, desc: res[0]['description'].toString());
+        , currentState: int.tryParse(res[0]['current_state'].toString()) ?? 0, desc: res[0]['description'].toString(), needInventar: res[0]['need_inventar'].toString() == '1');
     return answer;
   }
 
-  void setQuestState(String name, int state, bool isDone, String? desc)
+  void setQuestState(String name, int state, bool isDone, String? desc, bool? needInventar)
   {
-    _questStates[name] = DBQuestState(isDone: isDone, currentState: state,desc: desc ?? _questStates[name]?.desc ?? '');
+    _questStates[name] = DBQuestState(isDone: isDone, currentState: state,desc: desc ?? _questStates[name]?.desc ?? '', needInventar: needInventar ?? _questStates[name]?.needInventar ?? false);
     // await _database?.rawUpdate('UPDATE quests set is_done = ?, current_state = ? where name = ?',[isDone ? 1 : 0, state, name]);
   }
 }

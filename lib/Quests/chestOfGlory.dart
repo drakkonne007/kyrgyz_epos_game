@@ -20,7 +20,7 @@ class KeyForChestOfGlory extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration}) async{
     minusInInventar(game);
-    game.setQuestState('chestOfGlory',4,true, '');
+    game.setQuestState('chestOfGlory',14,true, '', false);
     createText(text: success, gameRef: game);
   }
 }
@@ -34,34 +34,59 @@ class ChestOfGlory extends Quest
     needInventar = true;
     id = 'chestOfGlory';
     dialogs[0] = AnswerForDialog(
-        text: "Путник, ты можешь взять сундук возле верхней стены, хочешь?",
-        answers: ["Да", "Нет"],
-        answerNumbers: [2, 1],
+        text: "Привет, я видел здесь тебя много раз, и ты всегда был радостным, что случилось?",
+        answers: ["На меня напали по пути сюда и отобрали все мои вещи"],
+        answerNumbers: [1],
         isEnd: false,
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );
     dialogs[1] = AnswerForDialog(
-        text: "Ну, смотри сам...",
+        text: "Какой ужас. Давно у нас такого не было. Спасибо, что рассказал. Я могу тебе немного помочь.",
         answers: ["..."],
-        answerNumbers: [0],
-        isEnd: true,
+        answerNumbers: [2],
+        isEnd: false,
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );
     dialogs[2] = AnswerForDialog(
+        text: "Я давно уже живу в деревне и занимаюсь промыслом, но у меня остались прошлые ненужные пожитки. Зелья и прочее",
+        answers: ["..."],
+        answerNumbers: [10],
+        isEnd: false,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png'
+    );
+
+    dialogs[10] = AnswerForDialog(
+      text: "Ты можешь взять сундук возле верхней стены, хочешь?",
+      answers: ["Да", "Нет"],
+      answerNumbers: [12, 11],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+      onAnswer: (answer){
+        desc = 'Можно взять зелья из сундука ремесленника';
+      },
+    );
+    dialogs[11] = AnswerForDialog(
+        text: "Ну, смотри сам...",
+        answers: ["..."],
+        answerNumbers: [10],
+        isEnd: true,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png'
+    );
+    dialogs[12] = AnswerForDialog(
         text: "Хорошо, вот тебе ключ от него. Мне то добро уже не надо. Я уже давно живу в деревне и занимаюсь промыслом",
         answers: ["Спасибо!"],
-        answerNumbers: [3],
+        answerNumbers: [13],
         isEnd: true,
         onAnswer: (answer){
-          if(answer == 3){
+          if(answer == 13){
             kyrgyzGame.playerData.addToInventar(InventarType.item, 'keyForChestOfGlory');
             createText(text: 'Получен ключ', gameRef: kyrgyzGame);
           }
           desc = 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты';
         },
-       image: 'assets/tiles/sprites/dialogIcons/azura.png'
+        image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );
-    dialogs[3] = AnswerForDialog(text: 'Доброй дороги', answers: ['Спасибо'], answerNumbers: [3],isEnd: true,image: 'assets/tiles/sprites/dialogIcons/azura.png');
-    dialogs[4] = AnswerForDialog(text: 'Молодец, что забрал мои вещи', answers: ['...'], answerNumbers: [4],isEnd: true,image: 'assets/tiles/sprites/dialogIcons/azura.png');
+    dialogs[13] = AnswerForDialog(text: 'Доброй дороги', answers: ['Спасибо'], answerNumbers: [13],isEnd: true,image: 'assets/tiles/sprites/dialogIcons/azura.png');
+    dialogs[14] = AnswerForDialog(text: 'Молодец, что забрал мои вещи', answers: ['...'], answerNumbers: [14],isEnd: true,image: 'assets/tiles/sprites/dialogIcons/azura.png');
   }
 }

@@ -1,4 +1,6 @@
 import 'package:game_flame/Quests/chestOfGlory.dart';
+import 'package:game_flame/Quests/startGame.dart';
+import 'package:game_flame/Quests/startGameOrc.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class AnswerForDialog
@@ -19,7 +21,12 @@ class Quest
   static const List<String> allQuests = [
     'buy',
     'chestOfGlory',
-    'templeDungeon'
+    'templeDungeon',
+    'startGame',
+    'startGameOrc',
+    'startGameKuznec',
+    'startGameOlder',
+    'startGameValanor'
   ];
 
   Map<int, AnswerForDialog> dialogs = {};
@@ -36,11 +43,14 @@ class Quest
     switch(name){
       case 'chestOfGlory': return ChestOfGlory(game);
       case 'templeDungeon': return Quest(game);
+      case 'startGame': return StartGame(game);
+      case 'startGameOrc' : return StartGameOrc(game);
+      case 'startGameKuznec' : return StartGameKuznec(game);
+      case 'startGameOlder' : return StartGameOlder(game);
+      case 'startGameValanor' : return StartGameTorgovecValanor(game);
       default: return ChestOfGlory(game);
     }
   }
-
-
 
   Quest(this.kyrgyzGame, {this.currentState = 0, this.isDone = false});
 
@@ -49,9 +59,14 @@ class Quest
     return dialogs[currentState]!;
   }
 
-  void changeState(int newState, String? desc)
+  void changeState(int newState)
   {
-    kyrgyzGame.setQuestState(id, newState, isDone, desc);
+    print('changeState');
+    print(newState);
+    print(isDone);
+    print(desc);
+    print(needInventar);
+    kyrgyzGame.setQuestState(id, newState, isDone, desc, needInventar);
   }
 }
 

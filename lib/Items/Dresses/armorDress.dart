@@ -115,7 +115,7 @@ class Armor1 extends Item
     id = 'armor1';
     source = 'images/inventar/armor/1.png';
     dressType = InventarType.bodyArmor;
-    cost = 10;
+    cost = 150;
     armor = 1;
   }
 
@@ -139,7 +139,7 @@ class Armor2 extends Item
     id = 'armor2';
     source = 'images/inventar/armor/2.png';
     dressType = InventarType.bodyArmor;
-    cost = 20;
+    cost = 250;
     armor = 2;
   }
 
@@ -163,7 +163,7 @@ class Armor3 extends Item
     id = 'armor1';
     source = 'images/inventar/armor/3.png';
     dressType = InventarType.bodyArmor;
-    cost = 30;
+    cost = 400;
     armor = 3;
   }
 
@@ -187,7 +187,7 @@ class Armor4 extends Item
     id = 'armor4';
     source = 'images/inventar/armor/4.png';
     dressType = InventarType.bodyArmor;
-    cost = 40;
+    cost = 600;
     armor = 4;
   }
 
@@ -211,7 +211,7 @@ class Armor5 extends Item
     id = 'armor5';
     source = 'images/inventar/armor/5.png';
     dressType = InventarType.bodyArmor;
-    cost = 50;
+    cost = 750;
     armor = 5;
   }
 
@@ -235,7 +235,7 @@ class Armor6 extends Item
     id = 'armor6';
     source = 'images/inventar/armor/6.png';
     dressType = InventarType.bodyArmor;
-    cost = 60;
+    cost = 900;
     armor = 6;
   }
 
@@ -259,7 +259,7 @@ class Armor7 extends Item
     id = 'armor7';
     source = 'images/inventar/armor/7.png';
     dressType = InventarType.bodyArmor;
-    cost = 70;
+    cost = 1200;
     armor = 7;
   }
 
@@ -283,7 +283,7 @@ class Armor8 extends Item
     id = 'armor8';
     source = 'images/inventar/armor/8.png';
     dressType = InventarType.bodyArmor;
-    cost = 80;
+    cost = 1400;
     armor = 8;
   }
 
@@ -307,7 +307,7 @@ class Armor9 extends Item
     id = 'armor9';
     source = 'images/inventar/armor/9.png';
     dressType = InventarType.bodyArmor;
-    cost = 90;
+    cost = 1700;
     armor = 9;
   }
 
@@ -331,7 +331,7 @@ class Armor10 extends Item
     id = 'armor10';
     source = 'images/inventar/armor/10.png';
     dressType = InventarType.bodyArmor;
-    cost = 100;
+    cost = 1900;
     armor = 10;
   }
 
@@ -355,7 +355,7 @@ class Armor11 extends Item
     id = 'armor11';
     source = 'images/inventar/armor/11.png';
     dressType = InventarType.bodyArmor;
-    cost = 110;
+    cost = 2300;
     armor = 11;
   }
 
@@ -379,7 +379,7 @@ class Armor12 extends Item
     id = 'armor12';
     source = 'images/inventar/armor/12.png';
     dressType = InventarType.bodyArmor;
-    cost = 120;
+    cost = 2600;
     armor = 12;
   }
 
@@ -403,7 +403,7 @@ class Armor13 extends Item
     id = 'armor31';
     source = 'images/inventar/armor/13.png';
     dressType = InventarType.bodyArmor;
-    cost = 130;
+    cost = 3000;
     armor = 13;
   }
 
@@ -427,7 +427,7 @@ class Armor14 extends Item
     id = 'armor14';
     source = 'images/inventar/armor/14.png';
     dressType = InventarType.bodyArmor;
-    cost = 140;
+    cost = 3500;
     armor = 14;
   }
 
@@ -451,7 +451,7 @@ class Armor15 extends Item
     id = 'armor15';
     source = 'images/inventar/armor/15.png';
     dressType = InventarType.bodyArmor;
-    cost = 150;
+    cost = 4000;
     armor = 15;
   }
 
@@ -475,7 +475,7 @@ class Armor16 extends Item
     id = 'armor16';
     source = 'images/inventar/armor/16.png';
     dressType = InventarType.bodyArmor;
-    cost = 160;
+    cost = 4500;
     armor = 16;
   }
 
@@ -499,7 +499,7 @@ class Armor17 extends Item
     id = 'armor17';
     source = 'images/inventar/armor/17.png';
     dressType = InventarType.bodyArmor;
-    cost = 170;
+    cost = 5000;
     armor = 17;
   }
 
@@ -523,7 +523,7 @@ class Armor18 extends Item
     id = 'armor18';
     source = 'images/inventar/armor/18.png';
     dressType = InventarType.bodyArmor;
-    cost = 180;
+    cost = 5500;
     armor = 18;
   }
 
@@ -547,7 +547,7 @@ class Armor19 extends Item
     id = 'armor19';
     source = 'images/inventar/armor/19.png';
     dressType = InventarType.bodyArmor;
-    cost = 190;
+    cost = 6000;
     armor = 19;
   }
 
@@ -571,7 +571,7 @@ class Armor20 extends Item
     id = 'armor20';
     source = 'images/inventar/armor/20.png';
     dressType = InventarType.bodyArmor;
-    cost = 200;
+    cost = 6500;
     armor = 20;
   }
 
@@ -595,7 +595,7 @@ class Armor21 extends Item
     id = 'armor21';
     source = 'images/inventar/armor/21.png';
     dressType = InventarType.bodyArmor;
-    cost = 210;
+    cost = 6900;
     armor = 21;
   }
 
@@ -619,7 +619,7 @@ class Armor22 extends Item
     id = 'armor22';
     source = 'images/inventar/armor/22.png';
     dressType = InventarType.bodyArmor;
-    cost = 220;
+    cost = 7200;
     armor = 22;
   }
 
@@ -643,7 +643,7 @@ class Armor23 extends Item
     id = 'armor23';
     source = 'images/inventar/armor/23.png';
     dressType = InventarType.bodyArmor;
-    cost = 230;
+    cost = 7600;
     armor = 23;
   }
 
@@ -667,7 +667,7 @@ class Armor24 extends Item
     id = 'armor24';
     source = 'images/inventar/armor/24.png';
     dressType = InventarType.bodyArmor;
-    cost = 240;
+    cost = 8000;
     armor = 24;
   }
 
@@ -691,7 +691,7 @@ class Armor25 extends Item
     id = 'armor25';
     source = 'images/inventar/armor/25.png';
     dressType = InventarType.bodyArmor;
-    cost = 250;
+    cost = 8400;
     armor = 25;
   }
 
@@ -715,7 +715,7 @@ class Armor26 extends Item
     id = 'armor26';
     source = 'images/inventar/armor/26.png';
     dressType = InventarType.bodyArmor;
-    cost = 260;
+    cost = 8900;
     armor = 26;
   }
 
@@ -739,7 +739,7 @@ class Armor27 extends Item
     id = 'armor27';
     source = 'images/inventar/armor/27.png';
     dressType = InventarType.bodyArmor;
-    cost = 270;
+    cost = 9300;
     armor = 27;
   }
 
@@ -763,7 +763,7 @@ class Armor28 extends Item
     id = 'armor28';
     source = 'images/inventar/armor/28.png';
     dressType = InventarType.bodyArmor;
-    cost = 280;
+    cost = 9700;
     armor = 28;
   }
 
@@ -787,7 +787,7 @@ class Armor29 extends Item
     id = 'armor29';
     source = 'images/inventar/armor/29.png';
     dressType = InventarType.bodyArmor;
-    cost = 290;
+    cost = 10200;
     armor = 29;
   }
 
@@ -811,7 +811,7 @@ class Armor30 extends Item
     id = 'armor30';
     source = 'images/inventar/armor/30.png';
     dressType = InventarType.bodyArmor;
-    cost = 300;
+    cost = 10700;
     armor = 30;
   }
 

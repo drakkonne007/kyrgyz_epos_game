@@ -6782,7 +6782,7 @@
   <object id="1954" gid="50749" x="5608.18" y="483.788" width="128" height="128"/>
   <object id="1955" gid="50749" x="5128.05" y="355.864" width="128" height="128"/>
   <object id="1956" gid="50749" x="5768.26" y="771.83" width="128" height="128"/>
-  <object id="1957" gid="57862" x="5312.67" y="288" width="351" height="207">
+  <object id="1957" gid="57862" x="5315.13" y="337.375" width="351" height="207">
    <properties>
     <property name="items" value="gold3000"/>
     <property name="level" value="15"/>

@@ -6844,8 +6844,7 @@
   </object>
   <object id="2557" gid="67156" x="127" y="5511.67" width="295" height="311"/>
   <object id="2558" gid="67156" x="6285.5" y="7629.5" width="295" height="311"/>
-  <object id="2565" gid="67184" x="3273" y="1376" width="128" height="128"/>
-  <object id="2566" gid="67178" x="3336" y="1376" width="128" height="128"/>
+  <object id="2565" gid="67184" x="2905.33" y="265.333" width="128" height="128"/>
   <object id="2567" gid="67178" x="3496" y="5134" width="128" height="128"/>
   <object id="2568" gid="67178" x="1008" y="2508" width="128" height="128"/>
   <object id="2569" gid="67184" x="6405.33" y="2020" width="128" height="128"/>
@@ -7290,73 +7289,129 @@
   <object id="2401" gid="66980" x="8340.33" y="944" width="110" height="110"/>
  </objectgroup>
  <objectgroup id="31" name="persons">
-  <object id="2295" gid="66584" x="2044" y="1298" width="347" height="192"/>
+  <object id="2295" gid="66584" x="2044" y="1298" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
   <object id="2297" gid="66584" x="4111" y="543.333" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
   <object id="2298" gid="66584" x="4682.5" y="1210.67" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
-  <object id="2299" gid="66584" x="4784.83" y="1017.33" width="347" height="192"/>
-  <object id="2300" gid="66584" x="3414.14" y="1726.73" width="347" height="192"/>
-  <object id="2301" gid="66584" x="2651.83" y="1544" width="347" height="192"/>
+  <object id="2299" gid="66584" x="4784.83" y="1017.33" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2300" gid="66584" x="3414.14" y="1726.73" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2301" gid="66584" x="2651.83" y="1544" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
   <object id="2302" gid="66584" x="3085.17" y="1478.67" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
   <object id="2303" gid="66584" x="2706.5" y="1629.33" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
   <object id="2304" gid="66584" x="2206.5" y="1693.33" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
-  <object id="2305" gid="66584" x="2447.83" y="1736" width="347" height="192"/>
-  <object id="2306" gid="66584" x="4138.5" y="1902.67" width="347" height="192">
+  <object id="2305" gid="66584" x="2447.83" y="1736" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
-  <object id="2307" gid="66584" x="3803.83" y="1809.33" width="347" height="192"/>
-  <object id="2308" gid="66584" x="4354.5" y="1388" width="347" height="192"/>
+  <object id="2306" gid="66584" x="4137.5" y="1903.67" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2307" gid="66584" x="3803.83" y="1809.33" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2308" gid="66584" x="4354.5" y="1388" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
   <object id="2309" gid="66584" x="3955.83" y="1241.33" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
   <object id="2310" gid="66584" x="3442.5" y="922.667" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
   <object id="2311" gid="66584" x="2965.17" y="780" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
-  <object id="2312" gid="66584" x="3030.5" y="434.667" width="347" height="192"/>
-  <object id="2313" gid="66584" x="3729.17" y="704" width="347" height="192"/>
-  <object id="2314" gid="66584" x="4449.17" y="600" width="347" height="192"/>
+  <object id="2312" gid="66584" x="3030.5" y="434.667" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2313" gid="66584" x="3729.17" y="704" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2314" gid="66584" x="4449.17" y="600" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
   <object id="2315" gid="66584" x="2256.8" y="994.909" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
-  <object id="2316" gid="66584" x="4681.05" y="1455.52" width="347" height="192"/>
-  <object id="2317" gid="66584" x="3838.62" y="976.727" width="347" height="192"/>
-  <object id="2318" gid="66584" x="2592.5" y="784" width="347" height="192"/>
-  <object id="2319" gid="66584" x="2821.17" y="1008" width="347" height="192"/>
+  <object id="2316" gid="66584" x="4681.05" y="1455.52" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2317" gid="66584" x="3838.62" y="976.727" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2318" gid="66584" x="2592.5" y="784" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
+  <object id="2319" gid="66584" x="2821.17" y="1008" width="347" height="192">
+   <properties>
+    <property name="oneUse" value="1"/>
+   </properties>
+  </object>
   <object id="2320" gid="66584" x="2745.83" y="508" width="347" height="192">
    <properties>
-    <property name="oneUse" value="true"/>
+    <property name="oneUse" value="1"/>
    </properties>
   </object>
   <object id="2327" gid="66584" x="56" y="1184" width="347" height="192"/>

@@ -44,7 +44,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 const double aspect = 750.0 / 430.0;
-const int gameVersion = 26;
+const int gameVersion = 27;
 
 enum InventarOverlayType
 {
@@ -150,12 +150,13 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     );
   }
 
-  Future setQuestState(String name, int state, bool isDone, String? desc)async
+  Future setQuestState(String name, int state, bool isDone, String? desc, bool needInventar)async
   {
     quests[name]?.isDone = isDone;
     quests[name]?.currentState = state;
     quests[name]?.desc = desc ?? quests[name]?.desc ?? '';
-    dbHandler.setQuestState(name, state, isDone, desc);
+    quests[name]?.needInventar = needInventar;
+    dbHandler.setQuestState(name, state, isDone, desc,needInventar);
   }
 
   PositionComponent playerPositionComponent()
@@ -221,15 +222,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
       overlays.add(SplashScreenGame.id);
     }
     WidgetsBinding.instance.addObserver(this);
-    await setQuestState('chestOfGlory', 0, false,'');
-    await setQuestState('templeDungeon', 0, false,'');
-    for(final name in Quest.allQuests){
-      quests[name] = Quest.questFromName(this, name);
-      final state = await dbHandler.getQuestState(name);
-      quests[name]!.isDone = state.isDone;
-      quests[name]!.currentState = state.currentState;
-      quests[name]!.desc = state.desc;
-    }
+    await setQuestState('chestOfGlory', 0, false,'',true);
+    await setQuestState('templeDungeon', 0, false,'',false);
     add(gameMap);
     await gameMap.loaded;
     //TODO добавить сохранённые бутылочки в gameMap;
@@ -237,6 +231,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   Map<String, String> getCurrentQuests()
   {
+    print('getCurrentQuests');
     Map<String, String> temp = {};
     for(final name in quests.keys){
       if(!quests[name]!.isDone && quests[name]!.currentState > 0 && quests[name]!.needInventar){
@@ -250,7 +245,17 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
 
   Future loadGame(int saveId) async
   {
-    playerData.loadGame(await dbHandler.loadGame(saveId));
+    var tempLoad = await dbHandler.loadGame(saveId);
+    print('Hohoho');
+    for(final name in Quest.allQuests){
+      quests[name] = Quest.questFromName(this, name);
+      final state = await dbHandler.getQuestState(name);
+      quests[name]!.isDone = state?.isDone ?? quests[name]!.isDone;
+      quests[name]!.currentState = state?.currentState ?? quests[name]!.currentState;
+      quests[name]!.desc = state?.desc ?? quests[name]!.desc;
+      quests[name]!.needInventar = state?.needInventar ?? quests[name]!.needInventar;
+    }
+    playerData.loadGame(tempLoad);
   }
 
   Future saveFirstGame(bool hard, int saveId) async
@@ -258,8 +263,9 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     if(!await dbHandler.checkSaved(saveId) || hard) {
       if(hard){
         await dbHandler.fillGameObjects(true);
-        await dbHandler.refreshQuests();
       }
+      dbHandler.nullateInternalDB();
+      await dbHandler.refreshQuests();
       await dbHandler.saveGame(
           saveId: saveId,
           x: 1750,

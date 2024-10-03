@@ -48,5 +48,6 @@ class Portal extends SpriteAnimationComponent with HasGameRef<KyrgyzGame> {
     gameRef.playerData.playerBigMap = getWorldFromName(toWorld);
     gameRef.playerData.startLocation = targetPos;
     await gameRef.loadNewMap();
+    await gameRef.saveGame();
   }
 }

@@ -91,7 +91,9 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
       if(kyrGame.quests[quest]!.currentState < startTrigger! || kyrGame.quests[quest]!.currentState >= endTrigger!){
         return;
       }
-      gameRef.setQuestState(quest!, onTrigger!, isEndQuest ?? false, null);
+      if(onTrigger != null && isEndQuest != null) {
+        gameRef.setQuestState(quest!, onTrigger ?? kyrGame.quests[quest]!.currentState, isEndQuest ?? false, null, kyrGame.quests[quest]!.needInventar);
+      }
     }
     if(removeOnTrigger ?? true){
       removeFromParent();

@@ -72,17 +72,6 @@ class _LootInvantarState extends State<LootInInventar>
     double rowHeight = (widget.mySize.height - widget.mySize.height * 0.25 - 20) / 8.5 - 2;
     double rowWidth = -30 + min(widget.mySize.width * 0.3, widget.mySize.width * 0.62 - 50 - getDoubleForTable() * 3);//-30 + widget.mySize.width * 0.62 - 10 - 40 - getDoubleForTable() * 3;
     myList.add(const SizedBox(height: 20));
-    myList.add(Container(constraints: BoxConstraints.expand(width: rowWidth, height: rowHeight),child:
-    Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-        children:[
-         Image.asset('assets/images/inventar/gold.png', height: rowHeight, width: rowHeight,alignment: Alignment.centerRight,fit: BoxFit.contain,),
-         AutoSizeText(widget.game.playerData.money.value.toString(),
-                    textAlign: TextAlign.left,
-                    style: defaultInventarTextStyleGold,
-                    minFontSize: 10,
-                    maxLines: 1,)])
-    ));
-    myList.add(const SizedBox(height: 5));
     if(widget.game.currentItemInInventar.value == null){
       myList.add(const Spacer());
       return myList;

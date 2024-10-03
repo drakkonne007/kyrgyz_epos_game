@@ -215,6 +215,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   @mustCallSuper
   Future<void> onLoad() async
   {
+    checkPriority();
     maxSpeed += (math.Random().nextInt(10) - 5);
     // health += (math.Random().nextInt(6) - 3);
     setChance();
@@ -235,11 +236,24 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false);
       add(_dialog!);
       if(quest != null){
-        final questDialog = NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width * anchor.x, height * anchor.y + highQuest - 25), buy: quest == 'buy');
-        if(isFlippedHorizontally){
-          questDialog.flipHorizontally();
+        if(quest == 'buy'){
+          final questDialog = NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width * anchor.x, height * anchor.y + highQuest - 25), buy: true);
+          if(isFlippedHorizontally){
+            questDialog.flipHorizontally();
+          }
+          add(questDialog);
+        }else{
+          var questAzyr = gameRef.quests[quest]!;
+          if(questAzyr.currentState >= startTrigger! && questAzyr.currentState < endTrigger!){
+            final questDialog = NpcDialogAttention(gameRef.quests[quest]!.isDone, position: Vector2(width * anchor.x, height * anchor.y + highQuest - 25));
+            if(isFlippedHorizontally){
+              questDialog.flipHorizontally();
+            }
+            add(questDialog);
+          }else{
+            quest = null;
+          }
         }
-        add(questDialog);
       }
     }
   }

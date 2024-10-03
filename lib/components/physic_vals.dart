@@ -10,15 +10,17 @@ import 'package:game_flame/components/game_worlds.dart';
 import 'dart:math' as math;
 import 'package:game_flame/kyrgyz_game.dart';
 
-double levelCount = 9000;
+double levelCount = 18000;
 
 int getLevel(double experience)
 {
-  // double startExp = 18000;
-  double startExp = levelCount;
+  double startExp = 0;
   int count = 0;
   while(experience > 0){
     startExp = startExp + startExp * 1.1;
+    if(startExp == 0){
+      startExp = levelCount;
+    }
     experience -= startExp;
     count++;
   }
@@ -33,10 +35,13 @@ double percentOfLevel(double experience)
   if(experience == 0){
     return 0;
   }
-  double startExp = levelCount;
+  double startExp = 0;
   double percent = 0;
   while(experience > 0){
     startExp = startExp + startExp * 1.1;
+    if(startExp == 0){
+      startExp = levelCount;
+    }
     experience -= startExp;
   }
   experience += startExp;
@@ -392,7 +397,7 @@ class PlayerData
   int levelHealthSpells = 0;
   int levelManaSpells = 0;
   int levelStaminaSpells = 0;
-
+  String playerName = '';
 
   double spellHurtMiss = 0;
   double spellBonusHp = 0;
