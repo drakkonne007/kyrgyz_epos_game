@@ -29,15 +29,17 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
   bool? removeOnTrigger;
   int? onTrigger;
   int? startTrigger;
-  Ground? _ground;
   int? endTrigger;
+  int startShow;
+  int endShow;
+  Ground? _ground;
   bool? isEndQuest;
   String? quest;
   bool ground;
   Trigger({required super.size, required super.position, required this.kyrGame,this.removeOnTrigger
     , this.dialog, this.autoTrigger, this.onTrigger, this.quest
     , this.isEndQuest,this.startTrigger, this.endTrigger, this.needKilledBosses, this.needItems
-    ,this.world, this.ground = false, this.dialogNegative})
+    ,this.world, this.ground = false, this.dialogNegative,required this.startShow,required this.endShow})
   {
     startTrigger ??= 0;
     endTrigger ??= 99999999;
@@ -67,6 +69,18 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
 
   void trig() async
   {
+    if(quest != null) {
+      if(startShow > gameRef.quests[quest]!.currentState || endShow <= gameRef.quests[quest]!.currentState) {
+        removeFromParent();
+        return;
+      }
+      if(kyrGame.quests[quest]!.currentState < startTrigger! || kyrGame.quests[quest]!.currentState >= endTrigger!){
+        return;
+      }
+      if(onTrigger != null && isEndQuest != null) {
+        gameRef.setQuestState(quest!, onTrigger ?? kyrGame.quests[quest]!.currentState, isEndQuest ?? false, null, kyrGame.quests[quest]!.needInventar);
+      }
+    }
     if(needKilledBosses != null){
       for(final str in needKilledBosses!){
         int cur = int.parse(str);
@@ -80,20 +94,12 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
     if(needItems != null){
       var setItems = gameRef.playerData.itemInventar.keys.toSet();
       if(!setItems.containsAll(needItems!)){
-        createText(text: _noNeededItem,gameRef: gameRef);
+        createText(text: dialogNegative ?? _noNeededItem,gameRef: gameRef);
         return;
       }
     }
     if(dialog != null){
       createText(text: dialog!, gameRef: gameRef);
-    }
-    if(quest != null) {
-      if(kyrGame.quests[quest]!.currentState < startTrigger! || kyrGame.quests[quest]!.currentState >= endTrigger!){
-        return;
-      }
-      if(onTrigger != null && isEndQuest != null) {
-        gameRef.setQuestState(quest!, onTrigger ?? kyrGame.quests[quest]!.currentState, isEndQuest ?? false, null, kyrGame.quests[quest]!.needInventar);
-      }
     }
     if(removeOnTrigger ?? true){
       removeFromParent();

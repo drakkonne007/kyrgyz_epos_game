@@ -1,6 +1,9 @@
 import 'package:game_flame/Quests/chestOfGlory.dart';
+import 'package:game_flame/Quests/mageInDungeon.dart';
 import 'package:game_flame/Quests/startGame.dart';
 import 'package:game_flame/Quests/startGameOrc.dart';
+import 'package:game_flame/Quests/valanorBrother.dart';
+import 'package:game_flame/Quests/sceletFort.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
 class AnswerForDialog
@@ -26,7 +29,11 @@ class Quest
     'startGameOrc',
     'startGameKuznec',
     'startGameOlder',
-    'startGameValanor'
+    'startGameValanor',
+    'valanorBrother',
+    'parlamentusBoss',
+    'sceletFort',
+    'mageInDungeon'
   ];
 
   Map<int, AnswerForDialog> dialogs = {};
@@ -42,13 +49,15 @@ class Quest
   {
     switch(name){
       case 'chestOfGlory': return ChestOfGlory(game);
-      case 'templeDungeon': return Quest(game);
       case 'startGame': return StartGame(game);
       case 'startGameOrc' : return StartGameOrc(game);
       case 'startGameKuznec' : return StartGameKuznec(game);
       case 'startGameOlder' : return StartGameOlder(game);
-      case 'startGameValanor' : return StartGameTorgovecValanor(game);
-      default: return ChestOfGlory(game);
+      case 'startGameValanor' : return StartGameValanor(game);
+      case 'valanorBrother' : return ValanorBrother(game);
+      case 'mageInDungeon'  : return MageInDungeon(game);
+      case 'sceletFort'     : return SceletFort(game);
+      default: return Quest(game);
     }
   }
 
@@ -61,11 +70,6 @@ class Quest
 
   void changeState(int newState)
   {
-    print('changeState');
-    print(newState);
-    print(isDone);
-    print(desc);
-    print(needInventar);
     kyrgyzGame.setQuestState(id, newState, isDone, desc, needInventar);
   }
 }

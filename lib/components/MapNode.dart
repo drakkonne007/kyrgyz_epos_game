@@ -226,14 +226,19 @@ class MapNode {
       return;
     }
     var quest = obj.getAttribute('quest');
+    int startShow;
+    int endShow;
     if(quest != null){
       print(quest);
       var dbQuest = myGame.quests[quest]!;
-      int startShow = int.parse(obj.getAttribute('startShow') ?? '0');
-      int endShow = int.parse(obj.getAttribute('endShow') ?? '999999999999');
+      startShow = int.parse(obj.getAttribute('startShow') ?? '0');
+      endShow = int.parse(obj.getAttribute('endShow') ?? '999999999999');
       if(startShow > dbQuest.currentState || endShow <= dbQuest.currentState){
         return;
       }
+    }else{
+      startShow = 0;
+      endShow = 999999999999;
     }
     int? startTrigger;
     int? endTrigger;
@@ -742,8 +747,9 @@ class MapNode {
         var worldName = obj.getAttribute('world');
         positionObject = Trigger(size: telSize,position: position,kyrGame: myGame,removeOnTrigger: removeOnTrigger
             ,autoTrigger: autoTrigger,dialog: dialog,startTrigger: startTrigger
-            ,endTrigger: endTrigger,onTrigger: onTrigger,quest: quest,isEndQuest: isEndQuest, needKilledBosses: neededBoss, needItems: neededItems, ground: ground, world: worldName
-        ,dialogNegative: dialogNegative);
+            ,endTrigger: endTrigger,onTrigger: onTrigger,quest: quest,isEndQuest: isEndQuest
+            , needKilledBosses: neededBoss, needItems: neededItems, ground: ground, world: worldName
+        ,dialogNegative: dialogNegative, startShow: startShow, endShow: endShow);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -767,7 +773,8 @@ class MapNode {
         String text = obj.getAttribute('text')!;
         String? vectorSource = obj.getAttribute('p');
         Vector2 size = Vector2(double.parse(obj.getAttribute('w')!), double.parse(obj.getAttribute('h')!));
-        MapDialog temp = MapDialog(position,text,size,vectorSource, isLoop);
+        bool big = obj.getAttribute('big') == '1';
+        MapDialog temp = MapDialog(position,text,size,vectorSource, isLoop, big, id);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.backgroundTile.add(temp);
         break;
@@ -831,6 +838,9 @@ class MapNode {
     }
     if(isHorReverse){
       positionObject?.flipHorizontally();
+    }
+    if(positionObject is KyrgyzEnemy){
+      myGame.gameMap.allEnemies[id] = positionObject;
     }
   }
 }

@@ -44,7 +44,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 ValueNotifier<int> isMapCached = ValueNotifier(0);
 const double aspect = 750.0 / 430.0;
-const int gameVersion = 27;
+const int gameVersion = 29;
 
 enum InventarOverlayType
 {
@@ -146,7 +146,11 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
         currentGameTime: playerData.getGameSeconds(),
         levelHeart: playerData.levelHealthSpells,
         levelStamina: playerData.levelStaminaSpells,
-        levelMana: playerData.levelManaSpells
+        levelMana: playerData.levelManaSpells,
+        companion: playerData.companion,
+        canUseDash: playerData.canDash,
+        canUseShrine: playerData.canShrines,
+        canUseRing: playerData.canRings,
     );
   }
 
@@ -223,7 +227,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     }
     WidgetsBinding.instance.addObserver(this);
     await setQuestState('chestOfGlory', 0, false,'',true);
-    await setQuestState('templeDungeon', 0, false,'',false);
+    // await setQuestState('templeDungeon', 0, false,'',false);
     add(gameMap);
     await gameMap.loaded;
     //TODO добавить сохранённые бутылочки в gameMap;
@@ -246,7 +250,6 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   Future loadGame(int saveId) async
   {
     var tempLoad = await dbHandler.loadGame(saveId);
-    print('Hohoho');
     for(final name in Quest.allQuests){
       quests[name] = Quest.questFromName(this, name);
       final state = await dbHandler.getQuestState(name);
@@ -279,8 +282,8 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
           helmetDress: Helmet1(),
           armorDress: NullItem(),
           glovesDress: NullItem(),
-          swordDress: Sword1(),
-          ringDress: Ring1(),
+          swordDress: Sword2(),
+          ringDress: NullItem(),
           bootsDress: NullItem(),
           helmetInventar: {'helmet1' : 1},
           bodyArmorInventar: {},
@@ -298,7 +301,11 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
           currentGameTime: 0,
           levelHeart: 0,
           levelStamina: 0,
-          levelMana: 0
+          levelMana: 0,
+          companion: null,
+        canUseDash: false,
+        canUseShrine: false,
+        canUseRing: false
       );
     }
   }

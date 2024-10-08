@@ -8,7 +8,7 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
 
-  MapDialog(this._targetPos, this._text,this._size, this._vectorSource, this._isLoop);
+  MapDialog(this._targetPos, this._text,this._size, this._vectorSource, this._isLoop, this._bigDialog, this.id);
 
   Vector2 _targetPos;
   String _text;
@@ -19,6 +19,8 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
   Vector2 _size;
   RenderText? _renderText;
   late PositionComponent _player;
+  bool _bigDialog;
+  int id;
 
   @override
   Future<void> onLoad() async
@@ -27,6 +29,7 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
     if(_texts.last == ''){
       _texts.removeLast();
     }
+    _countOfVariants = Random().nextInt(_texts.length);
     anchor = Anchor.center;
     position = _targetPos;
     List<Vector2> temp = [];
@@ -62,21 +65,38 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
     if(gameRef.gameMap.openSmallDialogs.contains(_texts[curs])){
       return;
     }
+    if(_bigDialog){
+      gameRef.playerData.bigDialog.value = _texts[curs];
+      gameRef.gameMap.openSmallDialogs.add(_texts[curs]);
+      addTimers(curs);
+      return;
+    }
     _renderText ??= RenderText(_player.position, Vector2(150,75), _texts[curs]);
     _renderText?.priority = GamePriority.maxPriority;
     gameRef.gameMap.container.add(_renderText!);
     gameRef.gameMap.openSmallDialogs.add(_texts[curs]);
-    _countOfVariants++;
+    _countOfVariants = Random().nextInt(_texts.length);
+    addTimers(curs);
+    gameRef.dbHandler.changeItemState(id: id,
+        worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,
+        used: true);
+  }
+
+  void addTimers(int curs)
+  {
     TimerComponent timer1 = TimerComponent(
-      period: _texts[curs].length * 0.05 + 2,
+      period: _bigDialog ? 4 : _texts[curs].length * 0.05 + 2,
       removeOnFinish: true,
       onTick: () {
         _renderText?.removeFromParent();
         _renderText = null;
+        if(_bigDialog) {
+          gameRef.playerData.bigDialog.value = null;
+        }
       },
     );
     TimerComponent timer2 = TimerComponent(
-      period: _texts[curs].length * 0.05 + 6,
+      period: _bigDialog ? 10 : _texts[curs].length * 0.05 + 30,
       removeOnFinish: true,
       onTick: () {
         gameRef.gameMap.openSmallDialogs.remove(_texts[curs]);

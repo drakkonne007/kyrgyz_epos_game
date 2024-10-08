@@ -90,7 +90,7 @@ class _DialogOverlayState extends State<DialogOverlay>
                             child: SizedBox(
                                 width: constraints.maxWidth - 40,
                                 height: constraints.maxHeight/2 - 40,
-                                child: AutoSizeText(answer.text,
+                                child: AutoSizeText(answer.text + (answer.text.endsWith('.') ? '' : '.'),
                                   maxFontSize: 45,
                                   // overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.start,

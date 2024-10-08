@@ -36,6 +36,7 @@ class SavedGame
   int levelHeart = 0;
   String? currentFlask1;
   String? currentFlask2;
+  String? companion;
   List<String> currentInventar = [];
   Map<String,int> helmetInventar = {};
   Map<String,int> bodyArmorInventar = {};
@@ -46,6 +47,9 @@ class SavedGame
   Map<String,int> swordInventar = {};
   Map<String,int> ringInventar = {};
   List<EffectTimerPure> tempEffects   = [];
+  bool canUseShrine = false;
+  bool canUseRing = false;
+  bool canUseDash = false;
   int currentGameTime = 0;
 }
 
@@ -117,23 +121,6 @@ class DbHandler
   Future createTable() async
   {
     print('create tables');
-    for(final wrld in fullMaps()){
-      await _database?.execute('CREATE TABLE IF NOT EXISTS ${wrld.nameForGame} '
-          '(id INTEGER PRIMARY KEY NOT NULL'
-          ',save_id INT NOT NULL DEFAULT 0'
-          ',opened INTEGER NOT NULL DEFAULT 0'
-          ',quest INTEGER NOT NULL DEFAULT 0'
-          ',used INTEGER NOY NULL DEFAULT 0'
-          ',current_game_time INTEGER NOT NULL DEFAULT 0'
-          ');');
-    }
-    await _database?.execute('CREATE TABLE IF NOT EXISTS map_info '
-        '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
-        ',save_id INT NOT NULL DEFAULT 0'
-        ',world_name TEXT'
-        ',column INT'
-        ',row INT,'
-        ' CONSTRAINT map_world_constraint UNIQUE (save_id, world_name, column, row));');
     await _database?.execute('CREATE TABLE IF NOT EXISTS player_data '
         '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
         ',save_id INT NOT NULL DEFAULT 0'
@@ -151,7 +138,28 @@ class DbHandler
         ',level_heart INT DEFAULT 0'
         ',level_stamina INT DEFAULT 0'
         ',level_mana INT DEFAULT 0'
+        ',companion TEXT'
+        ',can_use_shrine INTEGER NOT NULL DEFAULT 0'
+        ',can_use_ring   INTEGER NOT NULL DEFAULT 0'
+        ',can_use_dash   INTEGER NOT NULL DEFAULT 0'
         ');');
+    for(final wrld in fullMaps()){
+      await _database?.execute('CREATE TABLE IF NOT EXISTS ${wrld.nameForGame} '
+          '(id INTEGER PRIMARY KEY NOT NULL'
+          ',save_id INT NOT NULL DEFAULT 0'
+          ',opened INTEGER NOT NULL DEFAULT 0'
+          ',quest INTEGER NOT NULL DEFAULT 0'
+          ',used INTEGER NOY NULL DEFAULT 0'
+          ',current_game_time INTEGER NOT NULL DEFAULT 0'
+          ');');
+    }
+    await _database?.execute('CREATE TABLE IF NOT EXISTS map_info '
+        '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
+        ',save_id INT NOT NULL DEFAULT 0'
+        ',world_name TEXT'
+        ',column INT'
+        ',row INT,'
+        ' CONSTRAINT map_world_constraint UNIQUE (save_id, world_name, column, row));');
     await _database?.execute('CREATE TABLE IF NOT EXISTS current_inventar '
         '(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL'
         ',save_id INT NOT NULL DEFAULT 0'
@@ -275,12 +283,19 @@ class DbHandler
         required int currentGameTime,
       required int levelHeart,
       required int levelStamina,
-      required int levelMana})async
+      required int levelMana,
+      String? companion,
+  required bool canUseShrine,
+  required bool canUseRing,
+  required bool canUseDash
+      })async
   {
     print('save games');
     await _database?.rawDelete('DELETE FROM player_data WHERE save_id = ?', [saveId]);
-    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold,current_flask1,current_flask2,current_game_time, level_heart, level_stamina, level_mana) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level
-      , gold,currentFlask1,currentFlask2,currentGameTime, levelHeart, levelStamina, levelMana]);
+    await _database?.rawInsert('INSERT INTO player_data(save_id,x,y,world,health,mana,energy,level,gold,current_flask1,current_flask2,current_game_time'
+        ', level_heart, level_stamina, level_mana,companion,can_use_shrine'
+        ', can_use_ring,can_use_dash) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [saveId, x, y, world, health,mana, energy, level
+      , gold,currentFlask1,currentFlask2,currentGameTime, levelHeart, levelStamina, levelMana,companion, canUseShrine ? 1 : 0, canUseDash ? 1 : 0, canUseDash ? 1 : 0]);
     await _database?.execute('DELETE FROM current_inventar WHERE save_id = ?', [saveId]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, helmetDress.id]);
     await _database?.rawInsert('INSERT INTO current_inventar(save_id,name_id) VALUES(?,?)', [saveId, armorDress.id]);
@@ -371,6 +386,10 @@ class DbHandler
     svGame.levelHeart = res[0]['level_heart'] as int;
     svGame.levelStamina = res[0]['level_stamina'] as int;
     svGame.levelMana = res[0]['level_mana'] as int;
+    svGame.companion = res[0]['companion'] == null ? null : res[0]['companion'] as String;
+    svGame.canUseShrine = res[0]['can_use_shrine'] as int == 1;
+    svGame.canUseRing = res[0]['can_use_ring'] as int == 1;
+    svGame.canUseDash = res[0]['can_use_dash'] as int == 1;
 
     res = await _database?.rawQuery('SELECT * FROM current_inventar where save_id = ?', [saveId]);
     if(res == null) return svGame;

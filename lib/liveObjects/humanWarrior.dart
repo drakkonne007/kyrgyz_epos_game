@@ -59,6 +59,9 @@ class HumanWarrior extends KyrgyzEnemy
     armor = HumanInfo.armor(level);
     Image? spriteImage;
     bool isMale = math.Random().nextBool();
+    if(quest != null){
+      citizen = true;
+    }
     if(citizen){
       if (isMale) {
         int type = math.Random().nextInt(120) + 1;
@@ -95,7 +98,7 @@ class HumanWarrior extends KyrgyzEnemy
         collisionType: DCollisionType.passive,isSolid: false,isStatic: false, isLoop: true, game: gameRef);
     add(hitBox!);
     weapon = DefaultEnemyWeapon(
-        _attack,collisionType: DCollisionType.inactive, onStartWeaponHit: null, onEndWeaponHit: null, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
+        _attack,collisionType: DCollisionType.inactive, isSolid: false, isStatic: false, isLoop: true, game: gameRef);
     add(weapon!);
     weapon?.damage = HumanInfo.damage(level);
     bodyDef.position = _startPos * PhysicVals.physicScale;

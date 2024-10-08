@@ -426,6 +426,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
   @override
   void doDash(bool left)
   {
+    if(!gameRef.playerData.canDash){
+      return;
+    }
     if(gameRef.playerData.isLockMove){
       return;
     }

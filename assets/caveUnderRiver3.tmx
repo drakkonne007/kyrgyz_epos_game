@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="30" nextobjectid="1712">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="30" nextobjectid="1718">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -1525,10 +1525,36 @@
     <property name="wrld" value="caveUnderRiver4"/>
    </properties>
   </object>
-  <object id="1711" name="dialog" x="2205.5" y="1454.5" width="18" height="213.5">
+  <object id="1712" name="dialog" x="1028.33" y="370.333" width="122.333" height="124.333">
    <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Ненавижу этих магов"/>
+   </properties>
+  </object>
+  <object id="1713" name="dialog" x="1606.33" y="249.334" width="152.333" height="128.333">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Хорошо, что тут нет босса"/>
+   </properties>
+  </object>
+  <object id="1714" name="dialog" x="3099.67" y="2061.25" width="93" height="73.5">
+   <properties>
+    <property name="oneUse" value="1"/>
     <property name="text" value="Где-то должен быть переключатель"/>
    </properties>
+  </object>
+  <object id="1716" name="dialog" x="147" y="2562.75" width="93" height="73.5">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="И яркий свет, акак звон монет, обрадует меня в ночи..."/>
+   </properties>
+  </object>
+  <object id="1717" name="dialog" x="2112" y="1450.67">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Где-то должен быть переключатель"/>
+   </properties>
+   <polyline points="0,0 -1.33333,232.667"/>
   </object>
  </objectgroup>
  <objectgroup id="29" name="gggroundd" visible="0">

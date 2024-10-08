@@ -24,7 +24,7 @@ void createText(
     return;
   }
   frameSize ??= Vector2(150,75);
-  position ??= gameRef.gameMap.orthoPlayer?.position ?? gameRef.gameMap.frontPlayer!.position;
+  position ??= gameRef.playerPosition();
   RenderText textComponent = RenderText(position, frameSize, text);
   textComponent.priority = GamePriority.maxPriority;
   gameRef.gameMap.container.add(textComponent);

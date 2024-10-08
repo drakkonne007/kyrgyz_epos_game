@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="32" nextobjectid="1677">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="32" nextobjectid="1679">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -909,6 +909,20 @@
     <property name="tar" value="1744,1450"/>
     <property name="wrld" value="dungeonUnderTemple"/>
    </properties>
+  </object>
+  <object id="1677" name="dialog" x="305" y="239">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Авееееее, Мариииииия. Ха-ха-ха"/>
+   </properties>
+   <polyline points="0,0 1050,-2"/>
+  </object>
+  <object id="1678" name="dialog" x="694.167" y="1475.17">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Видимо здесь молились первые люди. От них остались только скелеты"/>
+   </properties>
+   <polyline points="0,0 162.5,2"/>
   </object>
  </objectgroup>
  <objectgroup id="31" name="groundForBack" visible="0">

@@ -357,6 +357,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                     height: height - 10,
                     alignment: Alignment.center,
                   ),
+                  ValueListenableBuilder(valueListenable: widget.game.playerData.statChangeTrigger, builder: (_,val,__) =>
                   widget.game.playerData.getFreeSpellPoints() == 0 ? Container() :
                   Container(width: width,
                       height: height,
@@ -364,7 +365,7 @@ class InventoryOverlayState extends State<InventoryOverlay> //Делает ве�
                       child:AutoSizeText(widget.game.playerData.getFreeSpellPoints().toString()
                           , textAlign: TextAlign.center,style: defaultInventarTextStyle.copyWith(shadows: const [Shadow(color: Colors.yellow, blurRadius: 2)]),
                           minFontSize: 10,
-                          maxLines: 1))
+                          maxLines: 1)))
                 ]
             )
         )

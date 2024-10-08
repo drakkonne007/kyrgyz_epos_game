@@ -398,6 +398,11 @@ class PlayerData
   int levelManaSpells = 0;
   int levelStaminaSpells = 0;
   String playerName = '';
+  String? companion;
+  bool canShrines = false;
+  bool canRings = false;
+  bool canDash = false;
+  final ValueNotifier<String?> bigDialog = ValueNotifier<String?>(null);
 
   double spellHurtMiss = 0;
   double spellBonusHp = 0;
@@ -504,6 +509,9 @@ class PlayerData
 
   void loadGame(SavedGame svg)
   {
+    canShrines = svg.canUseShrine;
+    canRings = svg.canUseRing;
+    canDash = svg.canUseDash;
     levelManaSpells = svg.levelMana;
     levelHealthSpells = svg.levelHeart;
     levelStaminaSpells = svg.levelStamina;
@@ -558,6 +566,7 @@ class PlayerData
       it.getEffect(_game);
       it.getEffectFromInventar(_game, duration: cur.dur);
     }
+    companion = svg.companion;
 
     recalcSpells();
   }

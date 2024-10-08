@@ -7,6 +7,7 @@ import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -38,6 +39,7 @@ class CupOfBuff extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   ObjectHitbox? _objectHitbox;
   late Ground _ground;
   int _id;
+  final String _nonUsed = 'Это творение орков, я не знаю как это использовать';
 
   @override
   void onRemove()
@@ -87,6 +89,10 @@ class CupOfBuff extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void checkIsIOpen()
   {
     if(isOpened!){
+      return;
+    }
+    if(!gameRef.playerData.canShrines){
+      createText(text: _nonUsed, gameRef: gameRef);
       return;
     }
     _objectHitbox?.removeFromParent();

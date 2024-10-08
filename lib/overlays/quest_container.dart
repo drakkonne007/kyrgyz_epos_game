@@ -18,7 +18,7 @@ class QuestContainer extends StatelessWidget
                 childCount: temp.length, (BuildContext context, int index)
                 {
                   return Container(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       margin: const EdgeInsets.only(left: 3, right: 3, bottom: 3, top: 6),
                       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20, top: 5),
                       decoration: BoxDecoration(
@@ -30,6 +30,8 @@ class QuestContainer extends StatelessWidget
                       ),
                       child:
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AutoSizeText(temp[index],style: defaultInventarTextStyleGold,minFontSize: 15,maxLines: 2,),
                           AutoSizeText(game.tempQuestForInventarOverlay[temp[index]]!,style: defaultInventarTextStyle,minFontSize: 15,maxLines: 10,)

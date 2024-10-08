@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="1682">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="32" nextobjectid="1758">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -1614,6 +1614,152 @@
   <object id="1680" gid="75063" x="1886.67" y="1903.67" width="96" height="160"/>
   <object id="1681" x="738.625" y="1804.13">
    <polygon points="0,0 0.5,5.875 9,14.75 17.625,14.875 26.75,5.375 26.125,-0.375 19.625,-11 7.5,-11"/>
+  </object>
+  <object id="1682" name="dialog" x="1876" y="1719" width="120" height="248">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Электричество это больно"/>
+   </properties>
+  </object>
+  <object id="1683" name="dialog" x="3409" y="568.667" width="33.3333" height="248">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Всё глубже и глубже"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="31" name="Копия objects">
+  <object id="1684" gid="75023" x="297.667" y="2723.67" width="87" height="81"/>
+  <object id="1685" gid="75023" x="-12.5" y="2022.5" width="87" height="81"/>
+  <object id="1686" gid="75023" x="400" y="1345.5" width="87" height="81"/>
+  <object id="1687" gid="75023" x="45.5" y="355.5" width="87" height="81"/>
+  <object id="1688" gid="75023" x="1039.5" y="643.5" width="87" height="81"/>
+  <object id="1689" gid="75023" x="3185.5" y="816.5" width="87" height="81"/>
+  <object id="1690" gid="75023" x="1999" y="1512.25" width="87" height="81"/>
+  <object id="1691" gid="75023" x="2113.25" y="1224" width="87" height="81"/>
+  <object id="1692" gid="75023" x="2832.25" y="1253.25" width="87" height="81"/>
+  <object id="1693" gid="75023" x="2940.5" y="1207" width="87" height="81"/>
+  <object id="1694" gid="75023" x="1134.5" y="2281.88" width="87" height="81"/>
+  <object id="1695" gid="75023" x="767" y="1374" width="87" height="81"/>
+  <object id="1696" gid="75031" x="1160" y="2752" width="160" height="128"/>
+  <object id="1697" gid="75031" x="2294" y="2741.5" width="160" height="128"/>
+  <object id="1698" gid="75031" x="1916" y="2368" width="160" height="128"/>
+  <object id="1699" gid="75031" x="940" y="2238.67" width="160" height="128"/>
+  <object id="1700" gid="75031" x="880" y="2016" width="160" height="128"/>
+  <object id="1701" gid="75031" x="138.667" y="2240" width="160" height="128"/>
+  <object id="1702" gid="75031" x="216" y="1777.33" width="160" height="128"/>
+  <object id="1703" gid="75031" x="137.333" y="1210.67" width="160" height="128"/>
+  <object id="1704" gid="75031" x="340" y="508" width="160" height="128"/>
+  <object id="1705" gid="75031" x="508" y="324" width="160" height="128"/>
+  <object id="1706" gid="75031" x="185.333" y="281.333" width="160" height="128"/>
+  <object id="1707" gid="75031" x="922.667" y="764" width="160" height="128"/>
+  <object id="1708" gid="75031" x="2676" y="956" width="160" height="128"/>
+  <object id="1709" gid="75031" x="3273.33" y="724" width="160" height="128"/>
+  <object id="1710" gid="75031" x="1952" y="1384" width="160" height="128"/>
+  <object id="1711" gid="75015" x="2800" y="1513" width="220" height="220"/>
+  <object id="1712" gid="75015" x="1031.33" y="826" width="220" height="220"/>
+  <object id="1713" gid="75042" x="337.333" y="1026" width="220" height="220"/>
+  <object id="1714" gid="75042" x="211.333" y="2016.67" width="220" height="220"/>
+  <object id="1715" gid="75042" x="1375.33" y="938" width="220" height="220"/>
+  <object id="1716" gid="75042" x="2200.67" y="830" width="220" height="220"/>
+  <object id="1717" gid="75042" x="1831.33" y="1558" width="220" height="220"/>
+  <object id="1718" gid="75042" x="2591.33" y="2358" width="220" height="220"/>
+  <object id="1719" gid="75042" x="2343.33" y="2122" width="220" height="220"/>
+  <object id="1720" gid="75050" x="1043.33" y="1707.67" width="160" height="128"/>
+  <object id="1721" gid="75050" x="126.25" y="577" width="160" height="128"/>
+  <object id="1722" x="678" y="166.5">
+   <polygon points="0,0 0,69 22,68.5 20.5,-1"/>
+  </object>
+  <object id="1723" x="2182.18" y="2534" width="20.9091" height="70.1818"/>
+  <object id="1724" x="221.25" y="2593.5">
+   <polygon points="0,0 -13.75,4.5 -14.5,20.25 -9.25,27.25 -9.75,40 -18,46.75 -1,58 19,48.25 9.5,39.75 10,26.75 15,18.5 14,6.25"/>
+  </object>
+  <object id="1725" x="362.125" y="2667.13">
+   <polygon points="1.5,-0.5 -12,6.5 -27.625,28.5 -27.375,36.375 -13.25,36.75 2.75,12.25"/>
+  </object>
+  <object id="1726" x="716" y="2015.67">
+   <polygon points="0,0 4.33333,-17 29,-31 66.6667,-17.3333 69,65 99.3333,77.3333 103.667,98 131,110 133.333,198.333 163.333,203.333 166,290.667 194.333,299 198.333,321 221.333,322 217.667,304 224.333,292.667 235,294 239,305 233.667,324.667 257.333,330.667 263.667,356 288.333,362 294,387.333 315.667,385.333 308.333,356.667 323.667,352 338.333,356.667 339.333,371.333 334.333,385.333 609.333,391.333 619,358.333 848.333,353.667 861,372 883,368.333 886.333,352 1038,354.333 1060.33,371.333 1077.67,352.667 1215.33,361.333 1224,388.667 1247,393 1255.67,418.667 1281,429 1284.67,547.333 1314.33,554.333 1316.67,590 1285.67,590.333 1284.33,621.333 134.5,621.583 126.75,589.833 68.5,589.333 62.75,556.333 37.75,555.583 40,1.42424"/>
+  </object>
+  <object id="1727" x="1140.25" y="1998.25">
+   <polygon points="0,0 23.5,-1.25 29,45.75 40.5,58 39.5,68.5 11.5,74.5 -17.25,68 -18.75,57 -5.5,46"/>
+  </object>
+  <object id="1728" x="497.25" y="1913">
+   <polygon points="0,0 -12,3.25 -15.75,17 -17,54.75 -14.25,64.5 -0.75,69.75 12.75,64.5 14.75,43.75 14.5,15.5 11,3.75"/>
+  </object>
+  <object id="1729" x="197.5" y="966">
+   <polygon points="0,0 0.75,70 21.5,70 21,0"/>
+  </object>
+  <object id="1730" x="280" y="968.75">
+   <polygon points="0,0 0,22.75 5.25,36 44.25,36 48.5,22.5 48,-0.25"/>
+  </object>
+  <object id="1731" x="321.5" y="868.75">
+   <polygon points="0,0 -1,14.75 15.5,25 29.25,14.5 29.25,-1 13.5,-5.5"/>
+  </object>
+  <object id="1732" x="435.375" y="1301.13">
+   <polygon points="0,0 -2.875,16.125 6.5,22.25 23.75,19.875 30,5.375 18.875,-2.75 11.125,-7"/>
+  </object>
+  <object id="1733" x="161.636" y="1828.18">
+   <polygon points="0,0 9.09091,-4.18182 20.1818,-4.18182 28.9091,0.545455 29.6364,15.0909 20.7273,24.9091 8.54545,25.4545 -0.363636,16.7273"/>
+  </object>
+  <object id="1734" x="783.455" y="1000.27">
+   <polygon points="0,0 0.272727,6.54545 -2.36364,9.45455 -2.45455,16.5455 2.72727,19 7.54545,16 7.36364,9.45455 4.54545,5.81818 4.54545,-0.636364"/>
+  </object>
+  <object id="1735" x="400.273" y="149.909">
+   <polygon points="0,0 -10.6364,3.63636 -15,16.1818 -12.4545,35.4545 -2.36364,40.1818 5.54545,40.2727 13.2727,34.5455 15.7273,26.7273 15.0909,15.2727 11.2727,3.90909"/>
+  </object>
+  <object id="1736" x="140.625" y="416.875">
+   <polygon points="0,0 -3,6.25 -6,11.75 -5.875,17.5 -3.25,27.25 4.5,29 11.375,27.125 10.625,21.375 14.375,11.125 8.125,-0.375"/>
+  </object>
+  <object id="1737" x="367.75" y="552.5">
+   <polygon points="0,0 0,7 -2.5,8 -2.75,15.5 2.5,18 7.25,15.5 6.5,7.75 4.25,2.75 4,-1"/>
+  </object>
+  <object id="1738" x="92.5" y="299.5">
+   <polygon points="0,0 -9.5,8.5 -12,25 -7,31 16.5,23.5 21,3 6,10"/>
+  </object>
+  <object id="1739" x="49" y="281.5">
+   <polygon points="0,0 -13,4.5 -17.5,19.5 -11,34.5 9.5,35 15,20 11.5,4"/>
+  </object>
+  <object id="1740" x="3141.75" y="1446" width="20.75" height="71"/>
+  <object id="1741" x="3086.75" y="1604.75">
+   <polygon points="0,0 -1.5,4.875 1.125,9.625 -2.5,13.75 -3,19.625 2.875,23.125 9.25,19.625 8.625,13.375 5.375,9.875 5.25,7.25 8.5,4.75 6.5,0.125"/>
+  </object>
+  <object id="1742" x="2824" y="2371.09">
+   <polygon points="0,0 -4.54545,8 -4.54545,14.1818 3.09091,23.6364 13.0909,23.6364 21.6364,14 20.3636,6.90909 14.1818,-2.18182 2.36364,-2"/>
+  </object>
+  <object id="1743" x="2342.5" y="2108">
+   <polygon points="0,0 -0.25,-9.875 -5,-9.875 -5.25,-39.125 12.375,-38.875 11.625,-43.25 -5.625,-42.75 -1.125,-52.25 -13.75,-51.75 -7.625,-42.5 -22.5,-42.625 -22.125,-38.25 -8.5,-38.375 -8,-10.125 -13.625,-9.5 -13.125,1.125"/>
+  </object>
+  <object id="1744" x="2389.82" y="1766.73">
+   <polygon points="0,0 6.72727,-23.2727 13.8182,-22.3636 21.2727,-5.09091 16.5455,3.27273 7.27273,4.90909"/>
+  </object>
+  <object id="1745" gid="75031" x="1872" y="922.667" width="160" height="128"/>
+  <object id="1746" gid="75031" x="1948" y="758.667" width="160" height="128"/>
+  <object id="1747" gid="75031" x="1214.67" y="1481.33" width="160" height="128"/>
+  <object id="1748" gid="75042" x="152.667" y="2802" width="220" height="220"/>
+  <object id="1749" gid="75042" x="2854" y="1379.33" width="220" height="220"/>
+  <object id="1750" gid="75042" x="3251.33" y="2796.67" width="220" height="220"/>
+  <object id="1751" name="portal" x="1692.67" y="3132.66" width="103.163" height="34.6705">
+   <properties>
+    <property name="tar" value="1408,317"/>
+    <property name="wrld" value="caveUnderRiver"/>
+   </properties>
+  </object>
+  <object id="1752" name="portal" x="3465.08" y="630.665" width="51.8297" height="132.67">
+   <properties>
+    <property name="tar" value="19,765"/>
+    <property name="wrld" value="caveUnderRiver3"/>
+   </properties>
+  </object>
+  <object id="1753" gid="75063" x="1504" y="909.667" width="96" height="160"/>
+  <object id="1754" gid="75063" x="1886.67" y="1903.67" width="96" height="160"/>
+  <object id="1755" x="738.625" y="1804.13">
+   <polygon points="0,0 0.5,5.875 9,14.75 17.625,14.875 26.75,5.375 26.125,-0.375 19.625,-11 7.5,-11"/>
+  </object>
+  <object id="1756" name="dialog" x="1876" y="1719" width="120" height="248">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Электричество это больно"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="30" name="obj2">

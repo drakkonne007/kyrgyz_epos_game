@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="49" nextobjectid="2007">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="49" nextobjectid="2041">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -6189,7 +6189,11 @@
     <property name="oneUse" value="true"/>
    </properties>
   </object>
-  <object id="1636" gid="50702" x="2039.33" y="5498" width="220" height="220"/>
+  <object id="1636" gid="50702" x="2039.33" y="5498" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1637" gid="50702" x="1684.67" y="5472.67" width="220" height="220">
    <properties>
     <property name="oneUse" value="true"/>
@@ -6250,7 +6254,11 @@
     <property name="oneUse" value="true"/>
    </properties>
   </object>
-  <object id="1649" gid="50702" x="-10" y="5290.5" width="220" height="220"/>
+  <object id="1649" gid="50702" x="-10" y="5290.5" width="220" height="220">
+   <properties>
+    <property name="oneUse" value="true"/>
+   </properties>
+  </object>
   <object id="1650" gid="50702" x="-11.5" y="5135" width="220" height="220">
    <properties>
     <property name="oneUse" value="true"/>
@@ -6398,7 +6406,9 @@
   <object id="1731" gid="50985" x="6910.5" y="7401" width="224" height="160"/>
   <object id="1734" gid="51005" x="2126.67" y="4597" width="220" height="220">
    <properties>
-    <property name="high" value="0"/>
+    <property name="endShow" value="20"/>
+    <property name="high" value="1"/>
+    <property name="quest" value="sceletFort"/>
    </properties>
   </object>
   <object id="1744" gid="51020" x="4256" y="5888" width="9" height="44">
@@ -6727,7 +6737,7 @@
   </object>
   <object id="1918" gid="50946" x="7554" y="525.333" width="128" height="160">
    <properties>
-    <property name="items" value="gold2000"/>
+    <property name="items" value="gold300"/>
    </properties>
   </object>
   <object id="1920" gid="50946" x="7926" y="520" width="128" height="160"/>
@@ -6747,12 +6757,16 @@
   <object id="1930" gid="50970" x="8672.67" y="736.333" width="160" height="160"/>
   <object id="1931" gid="51005" x="5040" y="592.667" width="220" height="220">
    <properties>
-    <property name="high" value="0"/>
+    <property name="endShow" value="1"/>
+    <property name="high" value="1"/>
+    <property name="quest" value="parlamentusBoss"/>
    </properties>
   </object>
   <object id="1932" gid="51005" x="5804.67" y="466.5" width="220" height="220">
    <properties>
-    <property name="high" value="0"/>
+    <property name="endShow" value="1"/>
+    <property name="high" value="1"/>
+    <property name="quest" value="parlamentusBoss"/>
    </properties>
   </object>
   <object id="1937" gid="54328" x="3896.92" y="4942.42" width="64" height="99"/>
@@ -6955,6 +6969,7 @@
   <object id="1626" type="orcMage" gid="50822" x="672.667" y="6966" width="256" height="256">
    <properties>
     <property name="citizen" value="1"/>
+    <property name="quest" value="sceletFort"/>
    </properties>
   </object>
   <object id="1628" gid="50823" x="1304.67" y="7750" width="256" height="256">
@@ -7004,15 +7019,23 @@
     <property name="oneUse" value="true"/>
    </properties>
   </object>
-  <object id="1693" gid="50934" x="7026.5" y="7487.25" width="110" height="110"/>
+  <object id="1693" gid="50934" x="7026.5" y="7487.25" width="110" height="110">
+   <properties>
+    <property name="quest" value="mageInDungeon"/>
+   </properties>
+  </object>
   <object id="1732" gid="51005" x="622.667" y="5267.33" width="220" height="220">
    <properties>
-    <property name="high" value="0"/>
+    <property name="endShow" value="20"/>
+    <property name="high" value="1"/>
+    <property name="quest" value="sceletFort"/>
    </properties>
   </object>
   <object id="1733" gid="51005" x="181.333" y="5168" width="220" height="220">
    <properties>
-    <property name="high" value="0"/>
+    <property name="endShow" value="20"/>
+    <property name="high" value="1"/>
+    <property name="quest" value="sceletFort"/>
    </properties>
   </object>
   <object id="1735" gid="50825" x="8865.5" y="8353" width="220" height="96"/>
@@ -7051,13 +7074,192 @@
    </properties>
   </object>
   <object id="1921" gid="50934" x="7727.5" y="556" width="110" height="110"/>
-  <object id="1922" gid="50823" x="7523.5" y="1035.5" width="256" height="256"/>
-  <object id="1923" gid="2147534471" x="7787" y="1025.5" width="256" height="256"/>
-  <object id="1924" type="orcMage" gid="2147534470" x="8266.92" y="319.591" width="256" height="256"/>
   <object id="1948" gid="50749" x="4913.92" y="931.989" width="128" height="128">
    <properties>
     <property name="tar" value="6087,881"/>
    </properties>
+  </object>
+  <object id="2007" name="dialog" x="7804" y="7556">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Пристанище мага"/>
+   </properties>
+   <polyline points="0,0 141.334,-3.33333"/>
+  </object>
+  <object id="2009" name="dialog" x="7030.67" y="7316">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Пристанище мага"/>
+   </properties>
+   <polyline points="0,0 0.666667,81.6667"/>
+  </object>
+  <object id="2010" name="dialog" x="2452.5" y="7250.5">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Деревня орков Подземус"/>
+   </properties>
+   <polyline points="0,0 5.75,100.75"/>
+  </object>
+  <object id="2011" name="dialog" x="1633.25" y="6867">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Деревня орков Подземус"/>
+   </properties>
+   <polyline points="0,0 67,0.25"/>
+  </object>
+  <object id="2012" name="dialog" x="8033" y="1412.25">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Тюрьма &quot;Малыш&quot;"/>
+   </properties>
+   <polyline points="0,0 166.25,-8.5"/>
+  </object>
+  <object id="2013" name="dialog" x="7223.5" y="694.75">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Тюрьма &quot;Малыш&quot;"/>
+   </properties>
+   <polyline points="0,0 -21.75,62"/>
+  </object>
+  <object id="2014" name="dialog" x="6398.5" y="725.75">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Склеп Парламентус"/>
+   </properties>
+   <polyline points="0,0 -3.5,64.75"/>
+  </object>
+  <object id="2015" name="dialog" x="5218.5" y="1245.5">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Склеп Парламентус"/>
+   </properties>
+   <polyline points="0,0 75,1.5"/>
+  </object>
+  <object id="2016" name="dialog" x="8037.25" y="7221.08" width="154.833" height="128.167">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Судя по всему эта светящяяся штука не пускает врагов"/>
+   </properties>
+  </object>
+  <object id="2017" name="dialog" x="7402.16" y="7454.66" width="157.5" height="90.8636">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Ого, тут была вода"/>
+   </properties>
+  </object>
+  <object id="2019" name="dialog" x="7196.25" y="7969.73" width="198.667" height="230.364">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Ужас, река крови"/>
+   </properties>
+  </object>
+  <object id="2020" name="dialog" x="1352.25" y="5436">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Древний форт Библоконт"/>
+   </properties>
+   <polyline points="0,0 67,0.25"/>
+  </object>
+  <object id="2021" name="dialog" x="1965.09" y="5080.91">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Древний форт Библоконт"/>
+   </properties>
+   <polyline points="1.27273,-4.36364 1.36364,56.25"/>
+  </object>
+  <object id="2024" name="dialog" x="4722.92" y="5201.32" width="153.167" height="109.864">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Лишний опыт мне не помешает"/>
+   </properties>
+  </object>
+  <object id="2027" name="dialog" x="5271.54" y="344.693" width="403.917" height="173.614">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Надо его убить, к сожалению"/>
+   </properties>
+  </object>
+  <object id="2029" name="dialog" x="6197.67" y="249.667">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Ну хоть какое-то лечение"/>
+   </properties>
+   <polyline points="0,0 106,2"/>
+  </object>
+  <object id="2030" name="dialog" x="4109.33" y="5363.33">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Ужас ужас ужас ужас ужас"/>
+   </properties>
+   <polyline points="0,0 -416,1.33333"/>
+  </object>
+  <object id="2031" name="dialog" x="4330" y="5120">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Да сколько можно!"/>
+   </properties>
+   <polyline points="2.36364,2.90909 -218.061,3.87878"/>
+  </object>
+  <object id="2032" name="dialog" x="8069.67" y="3446.33">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Суровые ворота"/>
+   </properties>
+   <polyline points="0,0 76.3333,1.66667"/>
+  </object>
+  <object id="2033" name="trigger" x="5188.23" y="1196.55" width="147.47" height="8.33333">
+   <properties>
+    <property name="autoTrigger" value="1"/>
+    <property name="dialog" value="Минус один. Ха!"/>
+    <property name="dialogNegative" value="Магия древнего скелета не пусккает меня"/>
+    <property name="endShow" value="1"/>
+    <property name="ground" value="1"/>
+    <property name="isEndQuest" value="1"/>
+    <property name="neededBoss" value="1957"/>
+    <property name="onTrigger" value="1"/>
+    <property name="quest" value="parlamentusBoss"/>
+    <property name="removeOnTrigger" value="1"/>
+    <property name="startTrigger" value="0"/>
+   </properties>
+  </object>
+  <object id="2034" name="trigger" x="2030.27" y="5072.38" width="8.37909" height="74.1515">
+   <properties>
+    <property name="autoTrigger" value="1"/>
+    <property name="dialog" value="С проклятым фортом покончено"/>
+    <property name="dialogNegative" value="Скелеты будут охранять этот проход своей магией даже после смерти. Мне надо их всех убить"/>
+    <property name="endShow" value="20"/>
+    <property name="ground" value="1"/>
+    <property name="isEndQuest" value="1"/>
+    <property name="neededBoss" value="1636,1637,1635,1646,1645,1647,1666,1648,1649,1638,1639,1640,1641,1643,1642,1644,1650,1651,1652,1654,1655,1656,1657,1660,1659,1658,1661,1663,1665,1662,1664"/>
+    <property name="onTrigger" value="20"/>
+    <property name="quest" value="sceletFort"/>
+    <property name="removeOnTrigger" value="1"/>
+    <property name="startTrigger" value="0"/>
+   </properties>
+  </object>
+  <object id="2035" gid="54306" x="7588.5" y="1050" width="256" height="224"/>
+  <object id="2036" gid="2147537954" x="7713.5" y="1012" width="256" height="224"/>
+  <object id="2037" gid="2147537954" x="8241.21" y="300.106" width="256" height="224"/>
+  <object id="2038" name="dialog" x="8084" y="709.333">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Видимо здесь обменивались опытом с новобранцами какого-то военного ордена"/>
+   </properties>
+   <polyline points="0,0 404.667,-4"/>
+  </object>
+  <object id="2039" name="dialog" x="7632" y="1188">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Вргх! Мы не дать тебе забрать спутника!"/>
+   </properties>
+   <polyline points="-239,35 833.167,-223.5"/>
+  </object>
+  <object id="2040" name="dialog" x="5578.75" y="8599.25">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Удивительно, что ловушки до сих пор работают, хотя судя по всему тут 1000 лет никого не было из живых людей"/>
+   </properties>
+   <polyline points="0,0 -0.5,59.75"/>
   </object>
  </objectgroup>
 </map>

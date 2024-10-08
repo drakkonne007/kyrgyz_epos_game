@@ -208,8 +208,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   int _attacksCount = 0;
   bool _isKilled = false;
   bool beast = false;
-  ObjectHitbox? _dialog = null;
-
+  ObjectHitbox? _dialog;
+  bool _isCompanion = false;
 
   @override
   @mustCallSuper
@@ -255,6 +255,15 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           }
         }
       }
+    }
+  }
+
+  void setCompanion(bool companion)
+  {
+    _isCompanion = companion;
+    gameRef.gameMap.companionEnemy = companion ? this : null;
+    if(!companion){
+      gameRef.playerData.companion = null;
     }
   }
 
@@ -352,6 +361,10 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   void moveIdleRandom(bool isSee)
   {
     int random = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(2);
+    if(_isCompanion){
+      random = 1;
+      isSee = true;
+    }
     if(random != 0 || wasHit){
       int shift = 0;
       if(position.x < gameRef.gameMap.orthoPlayer!.position.x){
@@ -508,10 +521,12 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
             GameConsts.lengthOfTileSquare.y - gameRef.gameMap.row()).abs();
         if(diffCol > 2 || diffRow > 2){
           gameRef.gameMap.loadedLivesObjs.remove(id);
+          gameRef.gameMap.allEnemies.remove(id);
         }
       }));
-    }else {
+    }else{
       gameRef.gameMap.loadedLivesObjs.remove(id);
+      gameRef.gameMap.allEnemies.remove(id);
     }
     gameRef.gameMap.checkRemoveItself.removeListener(checkIsNeedSelfRemove);
   }
@@ -536,7 +551,7 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   {
     if(citizen){
       _countOfDamages++;
-      if(_countOfDamages > 5 && quest == null){
+      if(_countOfDamages > 5 && quest == null && !_isCompanion){
         citizen = false;
         _dialog?.collisionType = DCollisionType.inactive;
       }
@@ -677,7 +692,9 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   bool checkIsNeedSelfRemove()
   {
-
+    if(_isCompanion){
+      return true;
+    }
     int diffCol = (position.x ~/
         GameConsts.lengthOfTileSquare.x - gameRef.gameMap.column()).abs();
     int diffRow = (position.y ~/

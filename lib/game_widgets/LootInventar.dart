@@ -414,7 +414,11 @@ class _LootInvantarState extends State<LootInInventar>
                 style: ButtonStyle(maximumSize: WidgetStateProperty.all<Size>(Size(rowWidth,rowHeight))
                   ,minimumSize: WidgetStateProperty.all<Size>(Size(rowWidth,rowHeight))
                   ,padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),),
-                onPressed: () {
+                onPressed: () async{
+                  if(temp.dressType == InventarType.ring && !widget.game.playerData.canRings){
+                    await cantRingDress(context);
+                    return;
+                  }
                   setState(() {
                     temp.getEffectFromInventar(
                         widget.game);
@@ -436,8 +440,8 @@ class _LootInvantarState extends State<LootInInventar>
               width: widget.mySize.width * 0.62 - 10,
               height: widget.mySize.height,
               child:
-                  value == InventarOverlayType.quests ? QuestContainer(game: widget.game) : value == InventarOverlayType.spells ? SpellContainer(game: widget.game) :
-                  Row(
+              value == InventarOverlayType.quests ? QuestContainer(game: widget.game) : value == InventarOverlayType.spells ? SpellContainer(game: widget.game) :
+              Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -733,3 +737,21 @@ class _LootInvantarState extends State<LootInInventar>
   }
 }
 
+Future<bool?> cantRingDress(BuildContext context) async
+{
+  return await showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFFdfc08e),
+        content: const Text('Не умею одевать магические кольца крови'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Ок'),
+          ),
+        ],
+      );
+    },
+  );
+}

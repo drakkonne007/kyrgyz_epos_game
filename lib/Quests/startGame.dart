@@ -18,11 +18,10 @@ class KeyForChestOfGlory extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration}) async{
     minusInInventar(game);
-    game.setQuestState('chestOfGlory',4,true, '', false);
+    game.setQuestState('chestOfGlory',4,true,'', false);
     createText(text: success, gameRef: game);
   }
 }
-
 
 class StartGame extends Quest //Разговор с охранником
     {
@@ -70,6 +69,8 @@ class StartGame extends Quest //Разговор с охранником
         isEnd: true,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
+          isDone = true;
+          needInventar = false;
           kyrgyzGame.setQuestState('startGameOlder', 1, false, null,true);
           kyrgyzGame.setQuestState('startGameKuznec', 1, false,null,true);
         }
@@ -82,6 +83,7 @@ class StartGame extends Quest //Разговор с охранником
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
           isDone = true;
+          needInventar = false;
           kyrgyzGame.setQuestState('startGameOlder', 1, false, null,true);
           kyrgyzGame.setQuestState('startGameKuznec', 1, false, null,true);
         }
@@ -107,17 +109,17 @@ class StartGameOlder extends Quest //Разговор со старейшино�
     dialogs[1] = AnswerForDialog( //Охранник в деревне
         text: "Приветствую тебя, путник. Выглядишь не очень хорошо",
         answers: ["..."],
-        answerNumbers: [2],
-        isEnd: false,
-        image: 'assets/tiles/sprites/dialogIcons/azura.png'
-    );
-    dialogs[2] = AnswerForDialog( //Охранник в деревне
-        text: "Кто тебе сказал придти ко мне?",
-        answers: ["Часовой"],
         answerNumbers: [3],
         isEnd: false,
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );
+    // dialogs[2] = AnswerForDialog( //Охранник в деревне
+    //     text: "Кто тебе сказал придти ко мне?",
+    //     answers: ["Часовой"],
+    //     answerNumbers: [3],
+    //     isEnd: false,
+    //     image: 'assets/tiles/sprites/dialogIcons/azura.png'
+    // );
     dialogs[3] = AnswerForDialog( //Охранник в деревне
         text: "Кто тебе сказал придти ко мне?",
         answers: ["Часовой. На меня напали бандиты на вашей дороги"],
@@ -214,11 +216,23 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
     );
 
     dialogs[20] = AnswerForDialog(
-      text: "Таааак, мне передали просьбу старейшины помочь тебе. Я вижу у тебя сломанный меч, вот, держи меч получше и пару зелей, тоже пригодятся",
-      answers: ["Спасибо"],
-      answerNumbers: [21],
-      isEnd: false,
-      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        text: "Таааак, мне передали просьбу старейшины помочь тебе. Я вижу у тебя сломанный меч, вот, держи меч получше и пару зелей, тоже пригодятся",
+        answers: ["Спасибо"],
+        answerNumbers: [21],
+        isEnd: false,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        onAnswer: (answer){
+          itemFromName('sword2').getEffect(kyrgyzGame);
+          itemFromName('manaMedium').getEffect(kyrgyzGame);
+          itemFromName('manaMedium').getEffect(kyrgyzGame);
+          itemFromName('manaMedium').getEffect(kyrgyzGame);
+          itemFromName('energyMedium').getEffect(kyrgyzGame);
+          itemFromName('energyMedium').getEffect(kyrgyzGame);
+          itemFromName('energyMedium').getEffect(kyrgyzGame);
+          itemFromName('hpMedium').getEffect(kyrgyzGame);
+          itemFromName('hpMedium').getEffect(kyrgyzGame);
+          itemFromName('hpMedium').getEffect(kyrgyzGame);
+        }
     );
     dialogs[21] = AnswerForDialog(
       text: "Предлагаю тебе работать на меня какое-то время, потому что бандиты бандитами, а вокруг вообще начинают происходить странные вещи.",
@@ -258,20 +272,29 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
     dialogs[26] = AnswerForDialog(
         text: "Вход в старые развалины будет снизу. Осторожно, быки довольно сильны.",
         answers: ["Понял, принесу молот"],
-        answerNumbers: [26],
+        answerNumbers: [27],
         isEnd: true,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (int answer) {
           kyrgyzGame.setQuestState('startGameValanor', 1, false, null,false);
           desc = 'Принести молот кузнецу в деревне';
+          kyrgyzGame.playerData.addLevel(1000);
+          createText(text: 'Квест выполнен. Приключения начинаются. Добавлено 1000 опыта', gameRef: kyrgyzGame);
         }
+    );
+    dialogs[27] = AnswerForDialog(
+      text: "Вход в старые развалины будет снизу. Осторожно, быки довольно сильны.",
+      answers: ["Понял, принесу молот"],
+      answerNumbers: [27],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
     );
   }
 }
 
-class StartGameTorgovecValanor extends Quest //Разговор с кузнецом
+class StartGameValanor extends Quest //Разговор с кузнецом
     {
-  StartGameTorgovecValanor(super.kyrgyzGame, {super.currentState, super.isDone}) {
+  StartGameValanor(super.kyrgyzGame, {super.currentState, super.isDone}) {
     name = 'Странник Валанор';
     id = 'startGameValanor';
     dialogs[1] = AnswerForDialog(
@@ -326,53 +349,79 @@ class StartGameTorgovecValanor extends Quest //Разговор с кузнец�
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );
     dialogs[5] = AnswerForDialog(
-        text: "Я бы придумал пока пойти к вождю племени орков",
+        text: "Я бы предложил сопроводить меня к моему брату. У нас сломалась телега и купил инструменты. Я дам тебе за это денег и зелья",
         answers: [
-          'Почему к нему?'
+          'Похоже, у меня нет особо выбора'
         ],
         answerNumbers: [15],
         isEnd: false,
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );
     dialogs[15] = AnswerForDialog(
-        text: "Он очень любит воинов и даёт им щедрые награды за выполения боевых задач. Так же он поможет тебе с боевыми навыками, расскажет про древние обелиски, которые дадут тебе дополнительный опыт",
+        text: "Ну, надо с чего-то начинать. Брат находится слева возле дороги через горы. Это самый край этого района",
         answers: [
-          '...'
+          'Хорошо, пошли'
         ],
-        answerNumbers: [16],
-        isEnd: false,
-        image: 'assets/tiles/sprites/dialogIcons/azura.png'
-    );
-    dialogs[16] = AnswerForDialog(
-        text: "Научит пользоваться колодцами крови для сильной регенерации. Да и денег тоже даст. Иди сначала к нему",
-        answers: [
-          'Звучит неплохо. Получается лучше идти к нему?'
-        ],
-        answerNumbers: [17],
-        isEnd: false,
-        image: 'assets/tiles/sprites/dialogIcons/azura.png'
-    );
-    dialogs[17] = AnswerForDialog(
-        text: "Да, лучше иди к нему. Кузнец живёт нормально и без своего молота, так что подождёт ещё. А ты хотя бы не умрёшь таким молодым)",
-        answers: [
-          'Ну что ж, ладно, спасибо за советы!'
-        ],
-        answerNumbers: [18],
+        answerNumbers: [15],
         isEnd: true,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
-          needInventar = false;
-          kyrgyzGame.setQuestState('startGameOrc', 1, false, null,true);
+          kyrgyzGame.playerData.companion = 'humanValinor'; //2637
+          kyrgyzGame.gameMap.allEnemies[2637]!.setCompanion(true);
+          needInventar = true;
+          isDone = false;
+          desc = 'Отвести Валанора к его брату';
         }
     );
-    dialogs[18] = AnswerForDialog(
-        text: "Давай, ты много путешествуешь, поэтому мне нравишься. Удачи в пути!",
+    dialogs[16] = AnswerForDialog(
+        text: "Спасибо, что отвёл меня. Удачи в битвах.",
         answers: [
           'Спасибо'
         ],
-        answerNumbers: [18],
+        answerNumbers: [16],
         isEnd: true,
-        image: 'assets/tiles/sprites/dialogIcons/azura.png'
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
     );
   }
 }
+
+// dialogs[15] = AnswerForDialog(
+// text: "Он очень любит воинов и даёт им щедрые награды за выполения боевых задач. Так же он поможет тебе с боевыми навыками, расскажет про древние обелиски, которые дадут тебе дополнительный опыт",
+// answers: [
+// '...'
+// ],
+// answerNumbers: [16],
+// isEnd: false,
+// image: 'assets/tiles/sprites/dialogIcons/azura.png'
+// );
+// dialogs[16] = AnswerForDialog(
+// text: "Научит пользоваться колодцами крови для сильной регенерации. Да и денег тоже даст. Иди сначала к нему",
+// answers: [
+// 'Звучит неплохо. Получается лучше идти к нему?'
+// ],
+// answerNumbers: [17],
+// isEnd: false,
+// image: 'assets/tiles/sprites/dialogIcons/azura.png'
+// );
+// dialogs[17] = AnswerForDialog(
+// text: "Да, лучше иди к нему. Кузнец живёт нормально и без своего молота, так что подождёт ещё. А ты хотя бы не умрёшь таким молодым)",
+// answers: [
+// 'Ну что ж, ладно, спасибо за советы!'
+// ],
+// answerNumbers: [18],
+// isEnd: true,
+// image: 'assets/tiles/sprites/dialogIcons/azura.png',
+// onAnswer: (answer){
+// needInventar = false;
+// kyrgyzGame.setQuestState('startGameOrc', 1, false, null,true);
+// }
+// );
+// dialogs[18] = AnswerForDialog(
+// text: "Давай, ты много путешествуешь, поэтому мне нравишься. Удачи в пути!",
+// answers: [
+// 'Спасибо'
+// ],
+// answerNumbers: [18],
+// isEnd: true,
+// image: 'assets/tiles/sprites/dialogIcons/azura.png'
+// );

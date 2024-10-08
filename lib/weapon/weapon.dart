@@ -80,7 +80,11 @@ abstract class EnemyWeapon extends DCollisionEntity
   void onCollisionStart(Set<Vector2> intersectionPoints, DCollisionEntity other)
   {
     if(other is PlayerHitbox){
-      if(currentCoolDown < _coolDown){
+      bool isPlayer = other.parent is MainPlayer;
+      if(currentCoolDown < _coolDown && isPlayer){
+        return;
+      }
+      if(!isPlayer){
         return;
       }
       onObstacle?.call();

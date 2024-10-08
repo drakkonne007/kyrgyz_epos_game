@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="55" nextobjectid="2865">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="297" height="297" tilewidth="32" tileheight="32" infinite="0" nextlayerid="55" nextobjectid="2878">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -4434,9 +4434,11 @@
     <property name="citizen" value="1"/>
    </properties>
   </object>
-  <object id="2853" type="orcMage" gid="67357" x="3895.83" y="407.167" width="256" height="256">
+  <object id="2853" type="orcMage" gid="67357" x="3762.66" y="426.167" width="256" height="256">
    <properties>
     <property name="citizen" value="1"/>
+    <property name="quest" value="startGameOrc"/>
+    <property name="startTrigger" value="1"/>
    </properties>
   </object>
   <object id="2854" x="8144" y="4879.75" width="42.875" height="66.75"/>
@@ -4450,6 +4452,74 @@
   <object id="2862" gid="67051" x="4928.5" y="211" width="160" height="128"/>
   <object id="2863" gid="67051" x="5096" y="162" width="160" height="128"/>
   <object id="2864" gid="67051" x="5338.5" y="199" width="160" height="128"/>
+  <object id="2865" name="dialog" x="8875.33" y="1057.33">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Копи Орсоков"/>
+   </properties>
+   <polyline points="-74.3333,-49 446.667,-73"/>
+  </object>
+  <object id="2866" name="dialog" x="3579" y="967">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Деревня Незарык"/>
+   </properties>
+   <polyline points="-74.3333,-49 558.667,-276"/>
+  </object>
+  <object id="2867" name="dialog" x="4514.67" y="2696" width="167.333" height="144.667">
+   <properties>
+    <property name="text" value="Справа вверху - копи, вверх - деревня орков, остальное - разрозненные поселения"/>
+   </properties>
+  </object>
+  <object id="2868" name="dialog" x="6460.66" y="713" width="288.667" height="192.334">
+   <properties>
+    <property name="text" value="Никогда не видел таких больших живых существ;Такую голову можно бы есть неделю;Надеюсь я таких драконов не встречу"/>
+   </properties>
+  </object>
+  <object id="2869" name="dialog" x="1516.67" y="640.667" width="437.333" height="405.333">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Приятный прудик;Уточка красивая;Жабки смешные"/>
+   </properties>
+  </object>
+  <object id="2870" name="dialog" x="1810.33" y="6563.17" width="167.333" height="144.667">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Хотел бы я подержать такой меч в руках"/>
+   </properties>
+  </object>
+  <object id="2872" name="dialog" x="601" y="966" width="140" height="146">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Ворота Юносо"/>
+   </properties>
+  </object>
+  <object id="2873" name="dialog" x="4413.94" y="8299.88">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Опять река, никак не переплыть"/>
+   </properties>
+   <polyline points="0,0 1790,-542"/>
+  </object>
+  <object id="2875" name="dialog" x="6271" y="1033">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Хижина драконоборца"/>
+   </properties>
+   <polyline points="0,0 1152,62"/>
+  </object>
+  <object id="2876" name="dialog" x="8653" y="703.5">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Что-то тут прям тяжёлые противники"/>
+   </properties>
+   <polyline points="0,0 766,-4"/>
+  </object>
+  <object id="2877" name="dialog" x="8641" y="1198.75" width="115.5" height="100">
+   <properties>
+    <property name="text" value="Копи Орсоков"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="53" name="objDeep" visible="0">
   <object id="2761" x="475" y="4">

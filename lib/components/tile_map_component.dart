@@ -12,6 +12,7 @@ import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/ForgeOverrides/broadphase.dart';
 import 'package:game_flame/ForgeOverrides/physicWorld.dart';
 import 'package:game_flame/abstracts/collision_custom_processor.dart';
+import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
 import 'package:game_flame/components/MapNode.dart';
@@ -20,6 +21,7 @@ import 'package:game_flame/components/game_worlds.dart';
 import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'package:game_flame/components/physic_vals.dart';
+import 'package:game_flame/liveObjects/humanWarrior.dart';
 import 'package:game_flame/main.dart';
 import 'package:game_flame/players/front_player.dart';
 import 'package:game_flame/players/ortho_player.dart';
@@ -56,6 +58,8 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
   MapNode? mapNode;
   Set<int> loadedLivesObjs = {};
   Map<LoadedColumnRow,List<Component>> allEls = {};
+  Map<int,KyrgyzEnemy> allEnemies = {};
+  KyrgyzEnemy? companionEnemy;
   DCollisionProcessor? collisionProcessor;
   GameWorldData? currentGameWorldData;
   bool _isLoad = false;
@@ -136,9 +140,11 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
     container.removeAll(container.children);
     backgroundTile.removeAll(backgroundTile.children);
 
+    allEnemies.clear();
     allEls.clear();
     loadedLivesObjs.clear();
     currentObject.value = null;
+    companionEnemy = null;
 
     currentGameWorldData = gameRef.playerData.playerBigMap;
     if(currentGameWorldData == null) return;
@@ -213,6 +219,13 @@ class CustomTileMap extends World with HasGameRef<KyrgyzGame>, HasDecorator
         frontPlayer = FrontPlayer(startPos: gameRef.playerData.startLocation);
         await container.add(frontPlayer!);
         await frontPlayer!.loaded;
+      }
+    }
+    if(gameRef.playerData.companion != null){
+      if(gameRef.playerData.companion!.contains('human')){
+        var temp = HumanWarrior(gameRef.playerPosition() + Vector2.all(30), level: 1, id: -1, citizen: true, quest: null, startTrigger: 0, endTrigger: 999999999);
+        temp.setCompanion(true);
+        container.add(temp);
       }
     }
     gameRef.camera.world = this;

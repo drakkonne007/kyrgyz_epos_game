@@ -6,6 +6,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:game_flame/ForgeOverrides/DPhysicWorld.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
 import 'package:game_flame/abstracts/obstacle.dart';
+import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
@@ -38,6 +39,7 @@ class ShrineExperience extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
   ObjectHitbox? _objectHitbox;
   late Ground _ground;
   int _id;
+  final String _nonUsed = 'Это творение орков, я не знаю как это использовать';
 
   @override
   void onRemove()
@@ -87,6 +89,10 @@ class ShrineExperience extends SpriteAnimationComponent with HasGameRef<KyrgyzGa
   void checkIsIOpen()
   {
     if(isOpened!){
+      return;
+    }
+    if(!gameRef.playerData.canShrines){
+      createText(text: _nonUsed, gameRef: gameRef);
       return;
     }
     _objectHitbox?.removeFromParent();

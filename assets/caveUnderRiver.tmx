@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="1693">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="1697">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -1428,6 +1428,13 @@
   <object id="1690" gid="75051" x="2329.33" y="2793.33" width="160" height="128"/>
   <object id="1691" gid="75051" x="180" y="2334.67" width="160" height="128"/>
   <object id="1692" gid="75051" x="-16" y="2106" width="160" height="128"/>
+  <object id="1693" name="dialog" x="1488" y="3087.33">
+   <properties>
+    <property name="big" value="1"/>
+    <property name="text" value="Большая пещера Радок"/>
+   </properties>
+   <polyline points="0,0 52.6667,-111.333 397.333,-120"/>
+  </object>
  </objectgroup>
  <objectgroup id="16" name="objects1234">
   <object id="1608" gid="75021" x="1543" y="3122" width="64" height="99"/>
@@ -1471,6 +1478,7 @@
   <object id="1656" gid="75043" x="3212" y="2432" width="220" height="220"/>
   <object id="1657" name="dialog" x="1318.33" y="314.333" width="179.333" height="63.6667">
    <properties>
+    <property name="oneUse" value="1"/>
     <property name="text" value="Проход довольно маленький, но я могу протиснуться"/>
    </properties>
   </object>
@@ -1493,5 +1501,19 @@
   <object id="1664" gid="75043" x="20.303" y="862.727" width="220" height="220"/>
   <object id="1665" gid="75043" x="2786.97" y="980.909" width="220" height="220"/>
   <object id="1666" gid="75043" x="2662.73" y="1880.91" width="220" height="220"/>
+  <object id="1695" name="dialog" x="357" y="193">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Можно было и не найти такие сундуки в такой тьме"/>
+   </properties>
+   <polyline points="0,0 -124,162"/>
+  </object>
+  <object id="1696" name="dialog" x="1510" y="1111.33">
+   <properties>
+    <property name="oneUse" value="1"/>
+    <property name="text" value="Темно просто ужас"/>
+   </properties>
+   <polyline points="53.75,-13 91.8333,-12.9167"/>
+  </object>
  </objectgroup>
 </map>
