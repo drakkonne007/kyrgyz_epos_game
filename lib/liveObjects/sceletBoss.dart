@@ -315,6 +315,7 @@ class BossScelet extends KyrgyzEnemy
       if(!wakeUp){
         animation = animRevealing;
         animationTicker?.onComplete = (){
+          print(hitBox?.collisionType);
           hitBox?.collisionType = DCollisionType.passive;
           wakeUp = true;
           selectBehaviour();
@@ -434,7 +435,7 @@ class BossScelet extends KyrgyzEnemy
       }else if(index == 9){
         weapon?.collisionType = DCollisionType.inactive;
       }else if(index == 19) {
-        gameRef.gameMap.container.add(BossCircleBoom(position: position));
+        gameRef.gameMap.container.add(BossCircleBoom(true, position: position));
       }
     }else if(animation == animAttack){
       if(index == 7){
@@ -463,7 +464,7 @@ class BossScelet extends KyrgyzEnemy
         gameRef.gameMap.container.add(FallingCrystal());
       }
       if(index == 0 || index == 1){
-        gameRef.gameMap.container.add(BossCircleBoom(position: position));
+        gameRef.gameMap.container.add(BossCircleBoom(false, position: position));
       }
     }
   }
@@ -471,6 +472,7 @@ class BossScelet extends KyrgyzEnemy
   @override
   void update(double dt)
   {
+    // print(hitBox?.collisionType);
     if(isFreeze > 0){
       return;
     }
@@ -527,7 +529,7 @@ class BossBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
 class BossCircleBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  BossCircleBoom({required super.position});
+  BossCircleBoom(this.isLong, {required super.position});
   final List<Vector2> _weapons = [
     Vector2(-50.323,13.1202)
     ,Vector2(-62.8435,36.3726)
@@ -542,6 +544,7 @@ class BossCircleBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     ,];
 
   late DefaultEnemyWeapon _weapon;
+  final bool isLong;
 
   @override
   void onLoad() async
@@ -551,7 +554,7 @@ class BossCircleBoom extends SpriteAnimationComponent with HasGameRef<KyrgyzGame
     final spriteSheetLoop = SpriteSheet(image: await Flame.images.load(
         'tiles/map/mountainLand/Characters/Boss/boss anims-atk3-fx-loop.png'),
         srcSize: Vector2(351, 207));
-    animation = spriteSheetLoop.createAnimation(row: 0, stepTime: 0.07, loop: false);
+    animation = spriteSheetLoop.createAnimation(row: 0, stepTime: isLong ? 0.1 : 0.07, loop: false);
     animationTicker?.onComplete = removeFromParent;
     _weapon = DefaultEnemyWeapon(
         _weapons,collisionType: DCollisionType.active, isSolid: false, isStatic: false, isLoop: true, game: gameRef);

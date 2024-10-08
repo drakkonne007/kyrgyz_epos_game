@@ -4434,7 +4434,7 @@
     <property name="citizen" value="1"/>
    </properties>
   </object>
-  <object id="2853" type="orcMage" gid="67357" x="3762.66" y="426.167" width="256" height="256">
+  <object id="2853" type="orcMage" gid="67357" x="3789.66" y="409.667" width="256" height="256">
    <properties>
     <property name="citizen" value="1"/>
     <property name="quest" value="startGameOrc"/>
@@ -4466,7 +4466,7 @@
    </properties>
    <polyline points="-74.3333,-49 558.667,-276"/>
   </object>
-  <object id="2867" name="dialog" x="4514.67" y="2696" width="167.333" height="144.667">
+  <object id="2867" name="dialog" x="4545.17" y="2729.75" width="96.333" height="79.917">
    <properties>
     <property name="text" value="Справа вверху - копи, вверх - деревня орков, остальное - разрозненные поселения"/>
    </properties>

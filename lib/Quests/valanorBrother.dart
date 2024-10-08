@@ -6,7 +6,7 @@ class ValanorBrother extends Quest //Разговор с кузнецом
   ValanorBrother(super.kyrgyzGame, {super.currentState, super.isDone}) {
     name = 'Брат Валанора';
     id = 'valanorBrother';
-    dialogs[0] = AnswerForDialog(
+    dialogs[1] = AnswerForDialog(
         text: "О, приветсвую вас, я вам очень рад. Валанор, тебе удалось найти инструменты для тележки?",
         answers: [
           "Валанор: да, удалось",

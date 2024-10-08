@@ -943,7 +943,7 @@
     <property name="wrld" value="dungeonUnderTemple"/>
    </properties>
   </object>
-  <object id="1472" name="trigger" x="1809.8" y="107.333" width="7.83333" height="192">
+  <object id="1472" name="trigger" x="1786.8" y="81.333" width="30.8333" height="261.5">
    <properties>
     <property name="autoTrigger" value="1"/>
     <property name="dialog" value="Наверху упало что-то тяжёлое"/>

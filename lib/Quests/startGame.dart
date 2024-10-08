@@ -371,6 +371,7 @@ class StartGameValanor extends Quest //Разговор с кузнецом
           needInventar = true;
           isDone = false;
           desc = 'Отвести Валанора к его брату';
+          kyrgyzGame.setQuestState('valanorBrother', 1, false, null,false);
         }
     );
     dialogs[16] = AnswerForDialog(

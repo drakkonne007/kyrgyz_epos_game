@@ -103,7 +103,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     spriteImg = await Flame.images.load('tiles/sprites/players/warrior-144x96New.png');
     final spriteSheet = SpriteSheet(image: spriteImg, srcSize: sprSize);
     animIdle = spriteSheet.createAnimation(row: 0, stepTime: 0.07, from: 0,to: 16);
-    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.08, from: 0,to: 8);
+    animMove = spriteSheet.createAnimation(row: 1, stepTime: 0.09, from: 0,to: 8);
     animHurt = spriteSheet.createAnimation(row: 5, stepTime: 0.07, from: 0,to: 6, loop: false);
     animDeath = spriteSheet.createAnimation(row: 6, stepTime: 0.1, from: 0,to: 19, loop: false);
     animCombo = spriteSheet.createAnimation(row: 2, stepTime: 0.07, from: 5,loop: false);

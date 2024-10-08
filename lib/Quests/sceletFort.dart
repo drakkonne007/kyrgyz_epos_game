@@ -97,7 +97,7 @@ class SceletFort extends Quest
     dialogs[8] = AnswerForDialog(
         text: "Да ничего, конечно. Ловушки, крысы, скелеты. Сверху был наш форт для обороны. Но его захватили скелеты.",
         answers: ['Ясно', 'Помочь вам освободить форт?'],
-        answerNumbers: [9],
+        answerNumbers: [9,9],
         isEnd: false,
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );

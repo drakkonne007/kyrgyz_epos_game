@@ -255,6 +255,8 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
           }
         }
       }
+    }else{
+      quest == null;
     }
   }
 

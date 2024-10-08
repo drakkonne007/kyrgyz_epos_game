@@ -394,12 +394,6 @@ class EnemyHitbox extends DCollisionEntity
   }
 
   @override
-  Future<void> onLoad() async
-  {
-    collisionType = DCollisionType.passive;
-  }
-
-  @override
   void onCollisionEnd(DCollisionEntity other) {
     // TODO: implement onCollisionEnd
   }

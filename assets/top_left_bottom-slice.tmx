@@ -7700,7 +7700,9 @@
   </object>
   <object id="2643" gid="2147550738" x="188" y="2611" width="80" height="64">
    <properties>
+    <property name="citizen" value="1"/>
     <property name="quest" value="valanorBrother"/>
+    <property name="startTrigger" value="1"/>
    </properties>
   </object>
   <object id="2653" name="trigger" x="7983.08" y="114.25" width="12.833" height="192.5">

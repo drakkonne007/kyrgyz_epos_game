@@ -49,7 +49,7 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
   Future<void> onLoad() async
   {
     anchor = Anchor.center;
-    add(ObjectHitbox(getPointsForActivs(-size/2 - Vector2.all(20),size + Vector2.all(20)), collisionType: DCollisionType.active, isSolid: true, isStatic: false, obstacleBehavoiur: trig, autoTrigger: autoTrigger ?? true, isLoop: true, game: gameRef));
+    add(ObjectHitbox(getPointsForActivs(-size/2 - Vector2.all(20),size + Vector2.all(40)), collisionType: DCollisionType.active, isSolid: true, isStatic: false, obstacleBehavoiur: trig, autoTrigger: autoTrigger ?? true, isLoop: true, game: gameRef));
     if(ground){
       FixtureDef fix = FixtureDef(PolygonShape()..set(getPointsForActivs(-size/2,size, scale: PhysicVals.physicScale)));
       _ground = Ground(
@@ -70,6 +70,8 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
   void trig() async
   {
     if(quest != null) {
+      print('info startShow $startShow, ${gameRef.quests[quest]!.currentState},'
+          '$endShow');
       if(startShow > gameRef.quests[quest]!.currentState || endShow <= gameRef.quests[quest]!.currentState) {
         removeFromParent();
         return;
@@ -77,26 +79,12 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
       if(kyrGame.quests[quest]!.currentState < startTrigger! || kyrGame.quests[quest]!.currentState >= endTrigger!){
         return;
       }
-      if(onTrigger != null && isEndQuest != null) {
+      if(onTrigger != null && isEndQuest != null && await canRemoveOther()) {
         gameRef.setQuestState(quest!, onTrigger ?? kyrGame.quests[quest]!.currentState, isEndQuest ?? false, null, kyrGame.quests[quest]!.needInventar);
       }
     }
-    if(needKilledBosses != null){
-      for(final str in needKilledBosses!){
-        int cur = int.parse(str);
-        var answ = await gameRef.dbHandler.getItemStateFromDb(cur,world ?? gameRef.gameMap.currentGameWorldData!.nameForGame);
-        if(!answ.used){
-          createText(text: dialogNegative ?? _noNeededKilledBoss,gameRef: gameRef);
-          return;
-        }
-      }
-    }
-    if(needItems != null){
-      var setItems = gameRef.playerData.itemInventar.keys.toSet();
-      if(!setItems.containsAll(needItems!)){
-        createText(text: dialogNegative ?? _noNeededItem,gameRef: gameRef);
-        return;
-      }
+    if(!await canRemoveOther()){
+      return;
     }
     if(dialog != null){
       createText(text: dialog!, gameRef: gameRef);
@@ -104,5 +92,27 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
     if(removeOnTrigger ?? true){
       removeFromParent();
     }
+  }
+
+  Future<bool> canRemoveOther() async
+  {
+    if(needKilledBosses != null){
+      for(final str in needKilledBosses!){
+        int cur = int.parse(str);
+        var answ = await gameRef.dbHandler.getItemStateFromDb(cur,world ?? gameRef.gameMap.currentGameWorldData!.nameForGame);
+        if(!answ.used){
+          createText(text: dialogNegative ?? _noNeededKilledBoss,gameRef: gameRef);
+          return false;
+        }
+      }
+    }
+    if(needItems != null){
+      var setItems = gameRef.playerData.itemInventar.keys.toSet();
+      if(!setItems.containsAll(needItems!)){
+        createText(text: dialogNegative ?? _noNeededItem,gameRef: gameRef);
+        return false;
+      }
+    }
+    return true;
   }
 }
