@@ -90,7 +90,7 @@ class _DialogOverlayState extends State<DialogOverlay>
                             child: SizedBox(
                                 width: constraints.maxWidth - 40,
                                 height: constraints.maxHeight/2 - 40,
-                                child: AutoSizeText(answer.text + (answer.text.endsWith('.') ? '' : '.'),
+                                child: AutoSizeText(answer.text + (normalEndsWords(answer.text) ? '' : '.'),
                                   maxFontSize: 45,
                                   // overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.start,
@@ -105,6 +105,11 @@ class _DialogOverlayState extends State<DialogOverlay>
             ]
         );
     });
+  }
+
+  bool normalEndsWords(String text)
+  {
+    return text.endsWith('.') || text.endsWith('!') || text.endsWith('?') || text.endsWith(';');
   }
 
   Widget chooseVariants(Quest quest,Vector2 size, KyrgyzGame game)
@@ -146,8 +151,8 @@ class _DialogOverlayState extends State<DialogOverlay>
           // borderRadius: BorderRadius.zero,
         ),
         child: TextButton(onPressed: () {
-          answer.onAnswer?.call(answer.answerNumbers[i]);
           quest.changeState(answer.answerNumbers[i]);
+          answer.onAnswer?.call(answer.answerNumbers[i]);
           if(answer.isEnd){
             game.doGameHud();
           }else{

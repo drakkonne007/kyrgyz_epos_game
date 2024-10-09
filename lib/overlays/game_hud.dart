@@ -254,15 +254,16 @@ class GameHud extends StatelessWidget
                   alignment: Alignment.topCenter,
                   child:
                   Container(
-                    margin: const EdgeInsets.only(top: 40),
+                      margin: const EdgeInsets.only(top: 40),
+                      padding: const EdgeInsets.all(3),
                       constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width / 3 - 10
-                          , minHeight: 32, maxWidth: MediaQuery.of(context).size.width / 3 - 10, maxHeight: 32),
+                          , minHeight: 32, maxWidth: MediaQuery.of(context).size.width / 3 - 10, maxHeight: 40),
                       decoration: const BoxDecoration(image: DecorationImage(
                         image: AssetImage('assets/images/inventar/UI-9-sliced object-8Small.png',),
                         centerSlice: Rect.fromLTWH(9,8,14,17),
                       )),
                       alignment: Alignment.center,
-                      child: AutoSizeText(val)
+                      child: AutoSizeText(val, minFontSize: 22,)
                   )
 
               ))]

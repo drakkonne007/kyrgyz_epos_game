@@ -1,12 +1,12 @@
 import 'package:game_flame/Items/Dresses/armorDress.dart';
 import 'package:game_flame/Items/Dresses/bootsDress.dart';
+import 'package:game_flame/Items/Dresses/craftItems.dart';
 import 'package:game_flame/Items/Dresses/flasks.dart';
 import 'package:game_flame/Items/Dresses/glovesDress.dart';
 import 'package:game_flame/Items/Dresses/helmetDress.dart';
 import 'package:game_flame/Items/Dresses/ringDress.dart';
 import 'package:game_flame/Items/loot_list.dart';
 import 'package:game_flame/Items/Dresses/swordDress.dart';
-import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 import 'dart:math' as math;
@@ -102,6 +102,8 @@ Item itemFromName(String id)
     return Gold(int.parse(id.split('gold')[1]));
   }
   switch(id){
+    case 'timerThinkAboutMedalion' : return TimerThinkAboutMedalion();
+    case 'dashAmulet'  : return DashAmulet();
     case 'BloodShrine': return BloodShrine();
     case 'SilverShrine': return SilverShrine();
     case 'keyForChestOfGlory': return KeyForChestOfGlory();

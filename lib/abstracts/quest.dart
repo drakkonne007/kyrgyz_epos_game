@@ -70,7 +70,7 @@ class Quest
 
   void changeState(int newState)
   {
-    kyrgyzGame.setQuestState(id, newState, isDone, desc, needInventar);
+    kyrgyzGame.setQuestState(name:id,state: newState,isDone: isDone,desc: desc,needInventar: needInventar);
   }
 }
 

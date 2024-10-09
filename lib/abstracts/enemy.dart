@@ -27,21 +27,21 @@ import 'package:game_flame/weapon/magicEffects/poisonEffect.dart';
 
 
 final List<String> _humanLanguage =
-    [
-      'Ай, больно',
-      'Ауч!',
-      'Перестань',
-      'Будешь так делать - я тебя побью',
-      'Хватит',
-      'У тебя плохое настроение?',
-      'Ну хвааааатит',
-      'Уфффф, тяжёлый день',
-      'Хорош уже',
-      'Не бей меня',
-      'Заканчивай',
-      'Я же сильнее',
-      'Мне больно',
-    ];
+[
+  'Ай, больно',
+  'Ауч!',
+  'Перестань',
+  'Будешь так делать - я тебя побью',
+  'Хватит',
+  'У тебя плохое настроение?',
+  'Ну хвааааатит',
+  'Уфффф, тяжёлый день',
+  'Хорош уже',
+  'Не бей меня',
+  'Заканчивай',
+  'Я же сильнее',
+  'Мне больно',
+];
 
 final List<String> _beastLanguage =
 [
@@ -227,10 +227,12 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     add(_hitBar!);
     if(!isHigh) {
       add(TimerComponent(period: 0.6, repeat: true, onTick: checkPriority));
+    }else{
+      priority = GamePriority.maxPriority;
     }
-    if(quest != null){
-      citizen = true;
-    }
+    // if(quest != null){
+    //   citizen = true;
+    // }
     if(citizen){
       _dialog = ObjectHitbox(getPointsForActivs(Vector2(-30,dopPriority.toDouble() - 30), Vector2.all(60)), collisionType: DCollisionType.active,
           isSolid: true,isStatic: false, isLoop: true, game: gameRef, obstacleBehavoiur: getBuyMenu, autoTrigger: false);
@@ -271,13 +273,13 @@ class KyrgyzEnemy extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 
   void createArghText()
   {
-      if(beast){
-        int rand = math.Random().nextInt(_beastLanguage.length);
-        createText(text: _beastLanguage[rand], gameRef: gameRef, position: position);
-      }else{
-        int rand = math.Random().nextInt(_humanLanguage.length);
-        createText(text: _humanLanguage[rand], gameRef: gameRef, position: position);
-      }
+    if(beast){
+      int rand = math.Random().nextInt(_beastLanguage.length);
+      createText(text: _beastLanguage[rand], gameRef: gameRef, position: position);
+    }else{
+      int rand = math.Random().nextInt(_humanLanguage.length);
+      createText(text: _humanLanguage[rand], gameRef: gameRef, position: position);
+    }
   }
 
   void getBuyMenu()async

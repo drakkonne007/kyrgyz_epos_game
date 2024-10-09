@@ -85,7 +85,7 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
   void addTimers(int curs)
   {
     TimerComponent timer1 = TimerComponent(
-      period: _bigDialog ? 4 : _texts[curs].length * 0.05 + 2,
+      period: _bigDialog ? 4 : _texts[curs].length * 0.07 + 2,
       removeOnFinish: true,
       onTick: () {
         _renderText?.removeFromParent();
@@ -96,7 +96,7 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
       },
     );
     TimerComponent timer2 = TimerComponent(
-      period: _bigDialog ? 10 : _texts[curs].length * 0.05 + 30,
+      period: _bigDialog ? 10 : _texts[curs].length * 0.07 + 30,
       removeOnFinish: true,
       onTick: () {
         gameRef.gameMap.openSmallDialogs.remove(_texts[curs]);

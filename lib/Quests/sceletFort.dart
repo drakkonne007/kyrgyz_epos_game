@@ -1,6 +1,7 @@
 
 
 import 'package:game_flame/abstracts/quest.dart';
+import 'package:game_flame/components/RenderText.dart';
 
 class SceletFort extends Quest
 {
@@ -115,7 +116,8 @@ class SceletFort extends Quest
         isEnd: true,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
-
+          kyrgyzGame.playerData.addLevel(15000);
+          createText(text: 'Получено 15000 опыта', gameRef: kyrgyzGame);
         }
     );
     dialogs[21] = AnswerForDialog(

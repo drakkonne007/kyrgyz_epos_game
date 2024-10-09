@@ -1,5 +1,6 @@
 import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/quest.dart';
+import 'package:game_flame/components/RenderText.dart';
 
 class ValanorBrother extends Quest //Разговор с кузнецом
     {
@@ -16,7 +17,7 @@ class ValanorBrother extends Quest //Разговор с кузнецом
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );
     dialogs[2] = AnswerForDialog(
-        text: "Это очень радует. Тебя соправождал вооин на всякий случай?",
+        text: "Это очень радует. Тебя сопровождал воин на всякий случай?",
         answers: [
           'Валанор: да, на него напали бандиты. Я подумал что лучше пойти вдвоём.'
         ],
@@ -41,7 +42,7 @@ class ValanorBrother extends Quest //Разговор с кузнецом
         }
     );
     dialogs[4] = AnswerForDialog(
-        text: "${kyrgyzGame.playerData.playerName}, здесь слева есть несколько поселений. Советую зайти к вождю орков. Его деревня сверху от дороги.",
+        text: "Здесь слева есть несколько поселений. Советую зайти к вождю орков. Его деревня сверху от дороги.",
         answers: [
           'Почему именно к нему?'
         ],
@@ -75,23 +76,43 @@ class ValanorBrother extends Quest //Разговор с кузнецом
           'Спасибо за информацию'
         ],
         answerNumbers: [10],
-        isEnd: false,
-        image: 'assets/tiles/sprites/dialogIcons/azura.png'
+        isEnd: true,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        onAnswer: (answer){
+          kyrgyzGame.playerData.addLevel(3000);
+          createText(text: 'Получено 3000 опыта', gameRef: kyrgyzGame);
+          isDone = true;
+          kyrgyzGame.setQuestState(name:  'startGameValanor',state:  16,isDone: true,desc: null,needInventar:  false);
+          kyrgyzGame.setQuestState(name:  'startGameOrc',state:  1,isDone: false,desc: 'Узнать что может рассказать нам вождь орков',needInventar:  true);
+          kyrgyzGame.gameMap.companionEnemy?.setCompanion(false);
+        }
     );
     dialogs[10] = AnswerForDialog(
         text: "Всегда пожалуйста",
         answers: [
           '...'
         ],
-        answerNumbers: [10],
+        answerNumbers: [11],
         isEnd: true,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
+          kyrgyzGame.playerData.addLevel(3000);
+          createText(text: 'Получено 3000 опыта', gameRef: kyrgyzGame);
           isDone = true;
-          kyrgyzGame.setQuestState('startGameValanor', 16, true, null, false);
-          kyrgyzGame.setQuestState('startGameOrc', 1, false, 'Узнать что может рассказать нам вождь орков', true);
+          kyrgyzGame.setQuestState(name: 'startGameValanor',state:  16,isDone:  true,desc:  null,needInventar:  false);
+          kyrgyzGame.setQuestState(name: 'startGameOrc',state:  1,isDone:  false
+              ,desc: 'Узнать что может рассказать нам вождь орков',needInventar:  true);
           kyrgyzGame.gameMap.companionEnemy?.setCompanion(false);
         }
+    );
+    dialogs[11] = AnswerForDialog(
+        text: "Доброго пути",
+        answers: [
+          'Спасибо'
+        ],
+        answerNumbers: [11],
+        isEnd: true,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
     );
   }
 }

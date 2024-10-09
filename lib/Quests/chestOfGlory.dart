@@ -5,27 +5,6 @@ import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/components/physic_vals.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-class KeyForChestOfGlory extends Item
-{
-  String success = 'Квест выполнен';
-  KeyForChestOfGlory()
-  {
-    id = 'keyForChestOfGlory';
-    dressType = InventarType.item;
-    enabled = false;
-    source = 'images/inventar/gloves/6.png';
-    description = 'Ключ от сундука в деревне с садом';
-  }
-
-  @override
-  void getEffectFromInventar(KyrgyzGame game, {double? duration}) async{
-    minusInInventar(game);
-    game.setQuestState('chestOfGlory',14,true, '', false);
-    createText(text: success, gameRef: game);
-  }
-}
-
-
 class ChestOfGlory extends Quest
 {
   ChestOfGlory(super.kyrgyzGame,{super.currentState, super.isDone})
@@ -83,6 +62,7 @@ class ChestOfGlory extends Quest
             createText(text: 'Получен ключ', gameRef: kyrgyzGame);
           }
           desc = 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты';
+          changeState(13);
         },
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
     );

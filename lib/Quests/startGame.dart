@@ -18,7 +18,7 @@ class KeyForChestOfGlory extends Item
   @override
   void getEffectFromInventar(KyrgyzGame game, {double? duration}) async{
     minusInInventar(game);
-    game.setQuestState('chestOfGlory',4,true,'', false);
+    game.setQuestState(name: 'chestOfGlory',state: 4,isDone: true,needInventar: false);
     createText(text: success, gameRef: game);
   }
 }
@@ -60,6 +60,7 @@ class StartGame extends Quest //Разговор с охранником
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
           desc = 'Найти помощь и оповестить деревню что опять появились бандиты';
+          changeState(answer);
         }
     );
     dialogs[4] = AnswerForDialog(
@@ -71,8 +72,9 @@ class StartGame extends Quest //Разговор с охранником
         onAnswer: (answer){
           isDone = true;
           needInventar = false;
-          kyrgyzGame.setQuestState('startGameOlder', 1, false, null,true);
-          kyrgyzGame.setQuestState('startGameKuznec', 1, false,null,true);
+          kyrgyzGame.setQuestState(name: 'startGameOlder',state: 1,isDone:  false,needInventar:  true);
+          kyrgyzGame.setQuestState(name: 'startGameKuznec',state: 1,isDone:  false,needInventar:  true);
+          changeState(answer);
         }
     );
     dialogs[5] = AnswerForDialog(
@@ -84,8 +86,9 @@ class StartGame extends Quest //Разговор с охранником
         onAnswer: (answer){
           isDone = true;
           needInventar = false;
-          kyrgyzGame.setQuestState('startGameOlder', 1, false, null,true);
-          kyrgyzGame.setQuestState('startGameKuznec', 1, false, null,true);
+          kyrgyzGame.setQuestState(name: 'startGameOlder',state: 1,isDone: false,needInventar: true);
+          kyrgyzGame.setQuestState(name: 'startGameKuznec',state: 1,isDone: false,needInventar: true);
+          changeState(answer);
         }
     );
     dialogs[6] = AnswerForDialog(
@@ -163,7 +166,8 @@ class StartGameOlder extends Quest //Разговор со старейшино�
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
           isDone = true;
-          kyrgyzGame.setQuestState('startGameKuznec', 20, false, null,true);
+          kyrgyzGame.setQuestState(name: 'startGameKuznec',state: 20,isDone: false, needInventar: true);
+          changeState(answer);
         }
     );
     dialogs[9] = AnswerForDialog( //Охранник в деревне
@@ -205,6 +209,7 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
           desc = 'Видимо надо найти к кузнецу другой подход';
+          changeState(answer);
         }
     );
     dialogs[4] = AnswerForDialog(
@@ -222,6 +227,8 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
         isEnd: false,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
+          kyrgyzGame.playerData.addLevel(2000);
+          createText(text: 'Получено 2000 опыта', gameRef: kyrgyzGame);
           itemFromName('sword2').getEffect(kyrgyzGame);
           itemFromName('manaMedium').getEffect(kyrgyzGame);
           itemFromName('manaMedium').getEffect(kyrgyzGame);
@@ -276,16 +283,151 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
         isEnd: true,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (int answer) {
-          kyrgyzGame.setQuestState('startGameValanor', 1, false, null,false);
+          kyrgyzGame.setQuestState(name: 'startGameValanor',state: 1,isDone: false,needInventar:  false);
           desc = 'Принести молот кузнецу в деревне';
           kyrgyzGame.playerData.addLevel(1000);
           createText(text: 'Квест выполнен. Приключения начинаются. Добавлено 1000 опыта', gameRef: kyrgyzGame);
+          changeState(answer);
         }
     );
     dialogs[27] = AnswerForDialog(
       text: "Вход в старые развалины будет снизу. Осторожно, быки довольно сильны.",
       answers: ["Понял, принесу молот"],
       answerNumbers: [27],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+
+    //Это про получение умения делать дэш
+    dialogs[35] = AnswerForDialog(
+      text: "Привет, воин. Я думал тебя убили давно или ты сбежал в страхе перед быками.",
+      answers: ["Они и вправду оказались сильными противниками. Но я нашёл в битвах этот амулет"],
+      answerNumbers: [36],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[36] = AnswerForDialog(
+        text: "Хммммм, выглядит знакомо. Погуляй немного, я пороюсь в записях. Должно что-то найтись",
+        answers: ["Хорошо"],
+        answerNumbers: [37],
+        isEnd: true,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        onAnswer: (answer){
+          itemFromName('timerThinkAboutMedalion').getEffectFromInventar(kyrgyzGame);
+        }
+    );
+    dialogs[37] = AnswerForDialog(
+      text: "Хммммм, выглядит знакомо. Погуляй немного, я пороюсь в записях. Должно что-то найтись",
+      answers: ["Хорошо"],
+      answerNumbers: [37],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[38] = AnswerForDialog(
+        text: "Таааак, ну я нашёл записи про этот амулет. Это амулет древних людей. Они тоже любили магию.",
+        answers: ["Что он делает?"],
+        answerNumbers: [39],
+        isEnd: false,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        onAnswer: (answer){
+          desc = 'Сделать себе амулет в доспехах';
+          changeState(answer);
+        }
+    );
+    dialogs[39] = AnswerForDialog(
+        text: "Он вставляется в доспехи и позволяет уворачиваться от атак противников. Я бы мог тебе поставить такое за 2000 золота в твой доспех",
+        answers: ["Да это же грабёж чистой воды!", 'Согласен'],
+        answerNumbers: [40,44],
+        isEnd: false,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        onAnswer: (answer){
+            isDone = false;
+            needInventar = true;
+            changeState(answer);
+        }
+    );
+
+    dialogs[44] = AnswerForDialog(
+        text: "Сделать тебе амулет?",
+        answers: ["Да", 'Нет'],
+        answerNumbers: [42,44],
+        isEnd: false,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        onAnswer: (answer) {
+          if (answer == 44) {
+            kyrgyzGame.doGameHud();
+          } else {
+            if (kyrgyzGame.playerData.money.value >= 2000) {
+              kyrgyzGame.playerData.canDash = true;
+              createText(text: 'Теперь я могу уворачиваться от ударов свайпом влево и вправо', gameRef: kyrgyzGame);
+              itemFromName('dashAmulet').getEffectFromInventar(kyrgyzGame);
+              kyrgyzGame.playerData.money.value -= 2000;
+            }else{
+              kyrgyzGame.setQuestState(name: id, state: 45, isDone: false, needInventar: true);
+            }
+          }
+        }
+    );
+
+    dialogs[45] = AnswerForDialog(
+      text: "У тебя недостаточно денег",
+      answers: ["..."],
+      answerNumbers: [44],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+
+    dialogs[40] = AnswerForDialog(
+      text: "Ладно, за 1900. Больше скинуть не могу",
+      answers: ["Ладно, пойдёт"],
+      answerNumbers: [41],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+
+    // onAnswer: (answer){
+    //   if(kyrgyzGame.playerData.money.value >= 1900){
+    //
+    //   }
+    // }
+    dialogs[41] = AnswerForDialog(
+        text: "Сделать тебе амулет?",
+        answers: ["Да", 'Нет'],
+        answerNumbers: [42,41],
+        isEnd: false,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+        onAnswer: (answer) {
+          if (answer == 41) {
+            kyrgyzGame.doGameHud();
+          } else {
+            if (kyrgyzGame.playerData.money.value >= 1900) {
+              kyrgyzGame.playerData.canDash = true;
+              createText(text: 'Теперь я могу уворачиваться от ударов свайпом влево и вправо', gameRef: kyrgyzGame);
+              itemFromName('dashAmulet').getEffectFromInventar(kyrgyzGame);
+              kyrgyzGame.playerData.money.value -= 1900;
+            }else{
+              kyrgyzGame.setQuestState(name: id, state: 43, isDone: false, needInventar: true);
+            }
+          }
+        }
+    );
+    dialogs[42] = AnswerForDialog(
+        text: "Вот теперь другое дело. Сделай свайп вправо и влево, чтобы делать уворот. Это тратит ману",
+        answers: ['Спасибо'],
+        answerNumbers: [42],
+        isEnd: true,
+        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+      onAnswer: (answer){
+          needInventar = true;
+          desc = 'Принести молот из подземелий';
+          isDone = false;
+          changeState(answer);
+      }
+    );
+    dialogs[43] = AnswerForDialog(
+      text: "У тебя недостаточно денег",
+      answers: ["..."],
+      answerNumbers: [41],
       isEnd: true,
       image: 'assets/tiles/sprites/dialogIcons/azura.png',
     );
@@ -371,17 +513,17 @@ class StartGameValanor extends Quest //Разговор с кузнецом
           needInventar = true;
           isDone = false;
           desc = 'Отвести Валанора к его брату';
-          kyrgyzGame.setQuestState('valanorBrother', 1, false, null,false);
+          kyrgyzGame.setQuestState(name: 'valanorBrother',state: 1,isDone: false,needInventar: false);
         }
     );
     dialogs[16] = AnswerForDialog(
-        text: "Спасибо, что отвёл меня. Удачи в битвах.",
-        answers: [
-          'Спасибо'
-        ],
-        answerNumbers: [16],
-        isEnd: true,
-        image: 'assets/tiles/sprites/dialogIcons/azura.png',
+      text: "Спасибо, что отвёл меня. Удачи в битвах.",
+      answers: [
+        'Спасибо'
+      ],
+      answerNumbers: [16],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
     );
   }
 }

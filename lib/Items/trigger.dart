@@ -69,6 +69,7 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
 
   void trig() async
   {
+    bool? isCanRemove;
     if(quest != null) {
       print('info startShow $startShow, ${gameRef.quests[quest]!.currentState},'
           '$endShow');
@@ -79,11 +80,13 @@ class Trigger extends PositionComponent with HasGameRef<KyrgyzGame>
       if(kyrGame.quests[quest]!.currentState < startTrigger! || kyrGame.quests[quest]!.currentState >= endTrigger!){
         return;
       }
-      if(onTrigger != null && isEndQuest != null && await canRemoveOther()) {
-        gameRef.setQuestState(quest!, onTrigger ?? kyrGame.quests[quest]!.currentState, isEndQuest ?? false, null, kyrGame.quests[quest]!.needInventar);
+      isCanRemove = await canRemoveOther();
+      if((onTrigger != null || isEndQuest != null) && isCanRemove) {
+        gameRef.setQuestState(name: quest!,state: onTrigger ?? kyrGame.quests[quest]!.currentState,isDone: isEndQuest ?? false,needInventar: kyrGame.quests[quest]!.needInventar);
       }
     }
-    if(!await canRemoveOther()){
+    isCanRemove ??= await canRemoveOther();
+    if(!isCanRemove){
       return;
     }
     if(dialog != null){

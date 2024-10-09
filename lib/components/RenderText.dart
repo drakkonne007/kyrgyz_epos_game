@@ -17,8 +17,7 @@ void createSmallMapDialog({Vector2? position, Vector2? frameSize, required Kyrgy
   createText(position: position, frameSize: frameSize, text: text, gameRef: gameRef);
 }
 
-void createText(
-    {Vector2? position, Vector2? frameSize,required String text,required KyrgyzGame gameRef})
+void createText({Vector2? position, Vector2? frameSize,required String text,required KyrgyzGame gameRef})
 {
   if(gameRef.gameMap.openSmallDialogs.contains(text)){
     return;
@@ -31,7 +30,7 @@ void createText(
   gameRef.gameMap.openSmallDialogs.add(text);
 
   TimerComponent timer1 = TimerComponent(
-    period: text.length * 0.05 + 2,
+    period: text.length * 0.07 + 2,
     removeOnFinish: true,
     onTick: () {
       textComponent.removeFromParent();
@@ -41,18 +40,26 @@ void createText(
   gameRef.gameMap.add(timer1);
 }
 
-class RenderText extends ScrollTextBoxComponent
+class RenderText extends ScrollTextBoxComponent with HasGameRef<KyrgyzGame>
 {
   final bgPaint = Paint()..color = const Color(0xA5000000);
   final borderPaint = Paint()..color = const Color(0xFFFFFF00)..style = PaintingStyle.stroke;
+  late Vector2 _startDelta;
 
   RenderText(Vector2 position, Vector2 frameSize, String text) : super(
     size: frameSize,
     text: text,
     textRenderer: regular,
     position: position,
-    boxConfig: const TextBoxConfig(timePerChar: 0.05),
+    boxConfig: const TextBoxConfig(timePerChar: 0.07),
   );
+
+  @override
+  void onLoad()
+  {
+    _startDelta = gameRef.playerPosition() - position;
+    super.onLoad();
+  }
 
   @override
   void render(Canvas canvas) {
@@ -60,5 +67,12 @@ class RenderText extends ScrollTextBoxComponent
     canvas.drawRect(rect, bgPaint);
     canvas.drawRect(rect.deflate(2), borderPaint);
     super.render(canvas);
+  }
+
+  @override
+  void update(double dt)
+  {
+    position = gameRef.playerPosition() + _startDelta;
+    super.update(dt);
   }
 }

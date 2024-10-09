@@ -247,7 +247,7 @@ class MapNode {
       endTrigger = int.parse(obj.getAttribute('endTrigger') ?? '99999999');
     }
     if(obj.getAttribute('oneUse') != null || name == 'bossScelet' || name == 'pot'
-    || name == 'vertBRW' || name == 'vertRW'){
+        || name == 'vertBRW' || name == 'vertRW'){
       var dd = await myGame.dbHandler.getItemStateFromDb(id, myGame.gameMap.currentGameWorldData!.nameForGame);
       if(dd.used){
         return;
@@ -287,15 +287,10 @@ class MapNode {
           list = items.map((e) => itemFromName(e)).toList();
         }
         myGame.gameMap.loadedLivesObjs.add(id);
-        var isHigh = obj.getAttribute('high');
+        bool isHigh = obj.getAttribute('high') == '1';
         bool citizen = obj.getAttribute('citizen') == '1';
-        if(isHigh!=null){
-          positionObject = SkeletonMage(position,id:id, level: level,isHigh: true,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
-          myGame.gameMap.container.add(positionObject);
-        }else{
-          positionObject = SkeletonMage(position,id:id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
-          myGame.gameMap.container.add(positionObject);
-        }
+        positionObject = SkeletonMage(position,id:id,isHigh: isHigh, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
+        myGame.gameMap.container.add(positionObject);
         break;
       case 'enemy':
         bool citizen = obj.getAttribute('citizen') == '1';
@@ -749,7 +744,7 @@ class MapNode {
             ,autoTrigger: autoTrigger,dialog: dialog,startTrigger: startTrigger
             ,endTrigger: endTrigger,onTrigger: onTrigger,quest: quest,isEndQuest: isEndQuest
             , needKilledBosses: neededBoss, needItems: neededItems, ground: ground, world: worldName
-        ,dialogNegative: dialogNegative, startShow: startShow, endShow: endShow);
+            ,dialogNegative: dialogNegative, startShow: startShow, endShow: endShow);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;

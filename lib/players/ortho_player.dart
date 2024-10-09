@@ -221,9 +221,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
         }
         gameRef.playerData.addHealth(-totalDamage);
         if(gameRef.playerData.health.value < 1){
-          animation = animDeath;
-          animationTicker?.onComplete = gameRef.startDeathMenu;
-          animState = AnimationState.death;
+          myDeath();
         }else{
           add(ColorEffect(
             const Color(0xFFFFFFFF),
@@ -253,9 +251,7 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
     }
     gameRef.playerData.addHealth(-hurt);
     if(gameRef.playerData.health.value <1){
-      animation = animDeath;
-      animationTicker?.onComplete = gameRef.startDeathMenu;
-      animState = AnimationState.death;
+      myDeath();
     }else{
       if(animState == AnimationState.hurt){
         return;
@@ -280,6 +276,16 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       animState = AnimationState.hurt;
       animationTicker?.onComplete = setIdleAnimation;
     }
+  }
+
+  void myDeath()
+  {
+    hitBox?.collisionType = DCollisionType.inactive;
+    _weapon?.collisionType = DCollisionType.inactive;
+    _weaponOfDash?.collisionType = DCollisionType.inactive;
+    animation = animDeath;
+    animationTicker?.onComplete = gameRef.startDeathMenu;
+    animState = AnimationState.death;
   }
 
   void refreshMoves()
