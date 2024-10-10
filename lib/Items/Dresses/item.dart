@@ -102,10 +102,17 @@ Item itemFromName(String id)
     return Gold(int.parse(id.split('gold')[1]));
   }
   switch(id){
+    case 'sornyakPoison'          :   return SornyakPoison();
+    case 'timerInvisibleFlask'    :   return TimerInvisibleFlask();
+    case 'timerGonecForSornyakPoison'     :   return TimerGonecForSornyakPoison();
+    case 'bullSkin'       : return BullSkin();
+    case 'villageFish'    : return VillageFish();
+    case 'villageApple'   : return VillageApple();
+    case 'keyForBigDungeon' : return KeyForBigDungeon();
     case 'timerThinkAboutMedalion' : return TimerThinkAboutMedalion();
     case 'dashAmulet'  : return DashAmulet();
-    case 'BloodShrine': return BloodShrine();
-    case 'SilverShrine': return SilverShrine();
+    case 'bloodShrine': return BloodShrine();
+    case 'silverShrine': return SilverShrine();
     case 'keyForChestOfGlory': return KeyForChestOfGlory();
     case 'hpSmall':   return HpSmall();
     case 'hpMedium':   return HpMedium();

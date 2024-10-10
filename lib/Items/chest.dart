@@ -17,11 +17,10 @@ class Chest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     this.isStatic = false,
     this.id
   });
-  Set<String>? nedeedKilledBosses;
+  final Set<String>? nedeedKilledBosses;
   final String _noNeededItem = 'Нет нужного предмета...';
-  final String _noNeededKilledBoss = 'Сначала победите хозяина';
-
-  Set<String>? neededItems;
+  final String _noNeededKilledBoss = 'Чья-то живая душа не даёт открыть';
+  final Set<String>? neededItems;
   List<Item> myItems;
   final int _level;
   final Vector2 _spriteSheetSize = Vector2(64,64);

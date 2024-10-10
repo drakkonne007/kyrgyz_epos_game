@@ -165,7 +165,7 @@ class StartGameOrc extends Quest {
         }
     );
     dialogs[19] = AnswerForDialog(
-      text: 'Справа подальше есть одна заброшенная бывшая наша шахта. Пора бы её заново восстановить',
+      text: 'Справа подальше есть одна заброшенная бывшая наша шахта. Называем мы её Радок. Пора бы её заново восстановить',
       answers: ['В чём сложность?'],
       answerNumbers: [20],
       isEnd: false,
@@ -254,6 +254,87 @@ class StartGameOrc extends Quest {
       text: 'Удачи тебе в пути, воин. Мне понадобится твоя помощь, но дальше',
       answers: ['Хорошо, спасибо'],
       answerNumbers: [28],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[29] = AnswerForDialog(
+      text: 'Узнал, что за амулет?',
+      answers: ['Да, оказывается его вставляют в доспех для уклонения'],
+      answerNumbers: [29],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+      onAnswer: (answer){
+        if(!kyrgyzGame.playerData.canDash){
+          if(kyrgyzGame.playerData.money.value < 2000){
+            currentState = 30;
+          }else{
+            currentState = 31;
+          }
+        }else{
+          currentState = 35;
+        }
+        changeState(currentState);
+      }
+    );
+    dialogs[30] = AnswerForDialog(
+      text: 'Почему ещё не поставил себе?',
+      answers: ['Не хватает денег'],
+      answerNumbers: [32],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[32] = AnswerForDialog(
+      text: 'Вот, возьми тогда 200 золотых. Немного помогу тебе. Приходи когда улучшишь доспехи - я дам тебе ключ от шахты. Там много всего интересного',
+      answers: ['Спасибо! Я этого не забуду!'],
+      answerNumbers: [33],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+      onAnswer: (answer){
+        itemFromName('gold200').getEffect(kyrgyzGame);
+      }
+    );
+    dialogs[33] = AnswerForDialog(
+      text: 'Приходи когда сделаешь амулет',
+      answers: ['Хорошо'],
+      answerNumbers: [33],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[31] = AnswerForDialog(
+      text: 'Почему ещё не поставил себе?',
+      answers: ['Пока не хочу'],
+      answerNumbers: [34],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[34] = AnswerForDialog(
+      text: 'Зря, ты станешь намного сильнее. Приходи когда улучшишь доспехи - я дам тебе ключ от шахты. Там много всего интересного',
+      answers: ['Хорошо'],
+      answerNumbers: [33],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[35] = AnswerForDialog(
+      text: 'Ого, я вижу тот синий амулет у тебя в доспехах. Значит ты стал сильнее. Теперь можно отправить тебя в более сложные места.',
+      answers: ['Наверное да'],
+      answerNumbers: [36],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+    );
+    dialogs[36] = AnswerForDialog(
+      text: 'В общем-то у меня сейчас нет особых заданий, но тебе будет интересно осмотреть нашу старую шахту. Мы через месяц сами туда пойдём, но там можно славно подраться. Держи ключ от неё',
+      answers: ['Спасибо за помощь! Я этого не забуду!'],
+      answerNumbers: [37],
+      isEnd: true,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+      onAnswer: (answer){
+        itemFromName('keyForBigDungeon').getEffect(kyrgyzGame);
+      }
+    );
+    dialogs[37] = AnswerForDialog(
+      text: 'Ты мой друг, я твой друг. Аргххххар!',
+      answers: ['Аргххххар!'],
+      answerNumbers: [37],
       isEnd: true,
       image: 'assets/tiles/sprites/dialogIcons/azura.png',
     );

@@ -87,16 +87,16 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
   static Map<String,Iterable<XmlElement>> cachedAnims = {};
   static Map<String,ext.Image> cachedImgs = {};
   static Set<String> cachedMapPngs = {};
-  late FragmentProgram _telepShaderProgramm;
-  late FragmentProgram _fireShaderProgramm;
-  late FragmentProgram _iceShaderProgramm;
-  late FragmentProgram _poisonShaderProgramm;
-  late FragmentProgram _lightningShaderProgramm;
-  late FragmentShader telepShader;
-  late FragmentShader fireShader;
-  late FragmentShader iceShader;
-  late FragmentShader poisonShader;
-  late FragmentShader lightningShader;
+  // late FragmentProgram _telepShaderProgramm;
+  // late FragmentProgram _fireShaderProgramm;
+  // late FragmentProgram _iceShaderProgramm;
+  // late FragmentProgram _poisonShaderProgramm;
+  // late FragmentProgram _lightningShaderProgramm;
+  // late FragmentShader telepShader;
+  // late FragmentShader fireShader;
+  // late FragmentShader iceShader;
+  // late FragmentShader poisonShader;
+  // late FragmentShader lightningShader;
   Map<String, int> currentShopItems = {'helmet1': 1,'helmet5': 1,'helmet10': 1,'helmet45': 1,
     'armor10': 1, 'armor50': 1, 'armor25': 1,'armor30': 1,
     'gloves10': 1, 'gloves50': 1, 'gloves25': 1,'gloves30': 1,
@@ -160,7 +160,7 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     quests[name]?.currentState = state;
     quests[name]?.desc = desc ?? quests[name]?.desc ?? '';
     quests[name]?.needInventar = needInventar;
-    dbHandler.setQuestState(name, state, isDone, desc,needInventar);
+    dbHandler.setQuestState(name, state, isDone, quests[name]?.desc,needInventar);
   }
 
   PositionComponent playerPositionComponent()
@@ -207,16 +207,16 @@ class KyrgyzGame extends Forge2DGame with HasKeyboardHandlerComponents, WidgetsB
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
     Flame.images.prefix = 'assets/';
-    _telepShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
-    _fireShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
-    _iceShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/ice.frag');
-    _poisonShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/poison.frag');
-    _lightningShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/lightning.frag');
-    telepShader = _telepShaderProgramm.fragmentShader();
-    fireShader = _fireShaderProgramm.fragmentShader();
-    iceShader = _iceShaderProgramm.fragmentShader();
-    poisonShader = _poisonShaderProgramm.fragmentShader();
-    lightningShader = _lightningShaderProgramm.fragmentShader();
+    // _telepShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
+    // _fireShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/portalShader.frag');
+    // _iceShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/ice.frag');
+    // _poisonShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/poison.frag');
+    // _lightningShaderProgramm = await FragmentProgram.fromAsset('assets/shaders/lightning.frag');
+    // telepShader = _telepShaderProgramm.fragmentShader();
+    // fireShader = _fireShaderProgramm.fragmentShader();
+    // iceShader = _iceShaderProgramm.fragmentShader();
+    // poisonShader = _poisonShaderProgramm.fragmentShader();
+    // lightningShader = _lightningShaderProgramm.fragmentShader();
 
     var loc = prefs.getString('locale');
     if(loc == null){

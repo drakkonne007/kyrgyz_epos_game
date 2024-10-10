@@ -1431,7 +1431,7 @@
   <object id="1693" name="dialog" x="1488" y="3087.33">
    <properties>
     <property name="big" value="1"/>
-    <property name="text" value="Большая пещера Радок"/>
+    <property name="text" value="Большая шахта Радок"/>
    </properties>
    <polyline points="0,0 52.6667,-111.333 397.333,-120"/>
   </object>
@@ -1490,8 +1490,8 @@
   </object>
   <object id="1659" name="portal" x="1592.52" y="3123.23" width="144.455" height="23.7955">
    <properties>
-    <property name="tar" value="3726,8046"/>
-    <property name="wrld" value="topLeft"/>
+    <property name="tar" value="8887,298"/>
+    <property name="wrld" value="topLeftLeft"/>
    </properties>
   </object>
   <object id="1660" gid="75021" x="2038" y="2515.5" width="64" height="99"/>

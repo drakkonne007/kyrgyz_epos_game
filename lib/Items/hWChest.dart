@@ -33,11 +33,12 @@ final List<Vector2> _objPoints = [
 class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
   HorizontalWoodChest({this.nedeedKilledBosses, this.neededItems, required this.myItems
-    , this.isOpened, required super.position
+    , this.isOpened, required super.position, required this.world
     , super.anchor = Anchor.center,required this.dbId});
   bool? isOpened;
-  Set<String>? nedeedKilledBosses;
-  Set<String>? neededItems;
+  final Set<String>? nedeedKilledBosses;
+  final Set<String>? neededItems;
+  final String? world;
   List<Item> myItems;
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
@@ -90,15 +91,19 @@ class HorizontalWoodChest extends SpriteAnimationComponent with HasGameRef<Kyrgy
     add(_objectHitbox!);
   }
 
-  void checkIsIOpen()
+  void checkIsIOpen()async
   {
     if(isOpened!){
       return;
     }
     if(nedeedKilledBosses != null){
-      if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
-        createText(text: _noNeededKilledBoss,gameRef: gameRef);
-        return;
+      for(final str in nedeedKilledBosses!){
+        int cur = int.parse(str);
+        var answ = await gameRef.dbHandler.getItemStateFromDb(cur,world ?? gameRef.gameMap.currentGameWorldData!.nameForGame);
+        if(!answ.used){
+          createText(text: _noNeededKilledBoss,gameRef: gameRef);
+          return;
+        }
       }
     }
     if(neededItems != null){

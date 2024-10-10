@@ -9,17 +9,9 @@ import 'package:game_flame/kyrgyz_game.dart';
 
 class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
 {
-  LootOnMap(this._item,
-      {bool? autoResize,
-        required super.position,
-        Vector2? size,
-        super.scale,
-        super.angle,
-        super.nativeAngle,
-        super.anchor = Anchor.center,
-        super.children,
-        super.priority,
-      this.id = -1});
+  LootOnMap(this._item,{bool? autoResize,required super.position,
+    Vector2? size,super.scale,super.angle,super.nativeAngle,
+    super.anchor = Anchor.center,super.children,super.priority,this.id = -1});
 
   final Item _item;
   late ObjectHitbox _objectHitbox;
@@ -48,6 +40,11 @@ class LootOnMap extends SpriteComponent with HasGameRef<KyrgyzGame>
   {
     if(_isDone){
       return;
+    }
+    if(id > -1){
+      gameRef.dbHandler.changeItemState(id: id,
+          worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,
+          used: true);
     }
     _isDone = true;
     remove(_objectHitbox);

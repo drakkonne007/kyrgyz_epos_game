@@ -229,10 +229,13 @@ class MapNode {
     int startShow;
     int endShow;
     if(quest != null){
-      print(quest);
       var dbQuest = myGame.quests[quest]!;
+      print(quest);
       startShow = int.parse(obj.getAttribute('startShow') ?? '0');
       endShow = int.parse(obj.getAttribute('endShow') ?? '999999999999');
+      print(dbQuest.currentState);
+      print(startShow);
+      print(name);
       if(startShow > dbQuest.currentState || endShow <= dbQuest.currentState){
         return;
       }
@@ -430,7 +433,10 @@ class MapNode {
       case 'item':
         String? name = obj.getAttribute('name');
         name ??= 'gold100';
-        positionObject = LootOnMap(itemFromName(name), position: position);
+        positionObject = LootOnMap(itemFromName(name), position: position, id: id);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
+        myGame.gameMap.container.add(positionObject);
+        break;
       case 'fly':
         positionObject = Fly(position);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
@@ -565,7 +571,8 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = HorizontalWoodChest(myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        String? worldName = obj.getAttribute('world');
+        positionObject = HorizontalWoodChest(world: worldName,myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -578,7 +585,8 @@ class MapNode {
         }
         var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
         var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
-        positionObject = VerticalWoodChest(myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
+        String? worldName = obj.getAttribute('world');
+        positionObject = VerticalWoodChest(world: worldName, myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss, dbId: id);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -591,7 +599,8 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = StoneChest(id, myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        String? worldName = obj.getAttribute('world');
+        positionObject = StoneChest(world: worldName, id, myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;//chestGrass2Horns
@@ -604,7 +613,8 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = ChestGrass2(id,withHorns: true,myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        String? worldName = obj.getAttribute('world');
+        positionObject = ChestGrass2(id,world: worldName, withHorns: true,myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -617,7 +627,8 @@ class MapNode {
           list = [];
           list = items.map((e) => itemFromName(e)).toList();
         }
-        positionObject = ChestGrass2(id,withHorns: false,myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
+        String? worldName = obj.getAttribute('world');
+        positionObject = ChestGrass2(id,world:worldName, withHorns: false,myItems: list ?? itemsFromLevel(myGame.gameMap.currentGameWorldData!.level), position: position,neededItems: neededItems,nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
@@ -702,7 +713,12 @@ class MapNode {
         var world = obj.getAttribute('wrld')!;
         Vector2 target = Vector2(
             double.parse(targetPos[0]), double.parse(targetPos[1]));
-        var temp = Portal(position: position, targetPos: target, toWorld: world);
+        String? antiDialog = obj.getAttribute('antiDialog');
+        String? worldCheck = obj.getAttribute('world');
+        var neededItems = obj.getAttribute('neededItems')?.split(',').toSet();
+        var neededBoss = obj.getAttribute('neededBoss')?.split(',').toSet();
+        var temp = Portal(world: worldCheck, antiDialog: antiDialog, position: position, targetPos: target
+            , toWorld: world, neededItems: neededItems, nedeedKilledBosses: neededBoss);
         myGame.gameMap.allEls[colRow]!.add(temp);
         myGame.gameMap.container.add(temp);
         break;
@@ -739,7 +755,7 @@ class MapNode {
         bool ground = obj.getAttribute('ground') == '1';
         String? quest = obj.getAttribute('quest');
         String? dialogNegative = obj.getAttribute('dialogNegative');
-        var worldName = obj.getAttribute('world');
+        String? worldName = obj.getAttribute('world');
         positionObject = Trigger(size: telSize,position: position,kyrGame: myGame,removeOnTrigger: removeOnTrigger
             ,autoTrigger: autoTrigger,dialog: dialog,startTrigger: startTrigger
             ,endTrigger: endTrigger,onTrigger: onTrigger,quest: quest,isEndQuest: isEndQuest

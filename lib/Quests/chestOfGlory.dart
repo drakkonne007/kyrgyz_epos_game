@@ -58,7 +58,7 @@ class ChestOfGlory extends Quest
         isEnd: true,
         onAnswer: (answer){
           if(answer == 13){
-            kyrgyzGame.playerData.addToInventar(InventarType.item, 'keyForChestOfGlory');
+            itemFromName('keyForChestOfGlory').getEffect(kyrgyzGame);
             createText(text: 'Получен ключ', gameRef: kyrgyzGame);
           }
           desc = 'Я получил ключ от старика в деревне. Надо найти сундук где-то вверху возле юрты';

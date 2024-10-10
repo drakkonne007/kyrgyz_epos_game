@@ -93,7 +93,7 @@ class Ring1 extends Item
 
 class Ring2 extends Item
 {
-  Ring2()
+  ringRing2()
   {
     id = 'ring2';
     source = 'images/inventar/ring/2.png';

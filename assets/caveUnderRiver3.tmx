@@ -1399,8 +1399,16 @@
   </properties>
   <object id="1595" gid="75023" x="1530.33" y="342" width="110" height="180"/>
   <object id="1596" gid="75023" x="1717.67" y="340.5" width="110" height="180"/>
-  <object id="1597" gid="75040" x="452.333" y="157" width="128" height="160"/>
-  <object id="1598" gid="75040" x="798.333" y="190" width="128" height="160"/>
+  <object id="1597" gid="75040" x="452.333" y="157" width="128" height="160">
+   <properties>
+    <property name="items" value="gold100"/>
+   </properties>
+  </object>
+  <object id="1598" gid="75040" x="798.333" y="190" width="128" height="160">
+   <properties>
+    <property name="items" value="gold50"/>
+   </properties>
+  </object>
   <object id="1603" gid="75048" x="2495.33" y="1893.33" width="169" height="120"/>
   <object id="1604" gid="75048" x="2619" y="184" width="169" height="120"/>
   <object id="1605" gid="75048" x="3167.5" y="153.5" width="169" height="120"/>
@@ -1540,13 +1548,13 @@
   <object id="1714" name="dialog" x="3099.67" y="2061.25" width="93" height="73.5">
    <properties>
     <property name="oneUse" value="1"/>
-    <property name="text" value="Где-то должен быть переключатель"/>
+    <property name="text" value="Наконец я тебя нашёл"/>
    </properties>
   </object>
   <object id="1716" name="dialog" x="147" y="2562.75" width="93" height="73.5">
    <properties>
     <property name="oneUse" value="1"/>
-    <property name="text" value="И яркий свет, акак звон монет, обрадует меня в ночи..."/>
+    <property name="text" value="И яркий свет, как звон монет, обрадует меня в ночи..."/>
    </properties>
   </object>
   <object id="1717" name="dialog" x="2112" y="1450.67">

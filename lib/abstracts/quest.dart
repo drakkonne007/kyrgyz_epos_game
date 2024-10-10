@@ -1,5 +1,6 @@
 import 'package:game_flame/Quests/chestOfGlory.dart';
 import 'package:game_flame/Quests/mageInDungeon.dart';
+import 'package:game_flame/Quests/smallVillageQuests.dart';
 import 'package:game_flame/Quests/startGame.dart';
 import 'package:game_flame/Quests/startGameOrc.dart';
 import 'package:game_flame/Quests/valanorBrother.dart';
@@ -34,6 +35,10 @@ class Quest
     'parlamentusBoss',
     'sceletFort',
     'mageInDungeon'
+    ,'giveApple'
+    ,'giveFish'
+    ,'skinTrader'
+    ,'villageGrow'
   ];
 
   Map<int, AnswerForDialog> dialogs = {};
@@ -48,6 +53,10 @@ class Quest
   static Quest questFromName(KyrgyzGame game, String name)
   {
     switch(name){
+      case 'villageGrow'  : return VillageGrow(game);
+      case 'skinTrader'  :   return SkinTrader(game);
+      case 'giveFish'   : return GiveFish(game);
+      case 'giveApple' : return GiveApple(game);
       case 'chestOfGlory': return ChestOfGlory(game);
       case 'startGame': return StartGame(game);
       case 'startGameOrc' : return StartGameOrc(game);

@@ -3,26 +3,6 @@ import 'package:game_flame/abstracts/quest.dart';
 import 'package:game_flame/components/RenderText.dart';
 import 'package:game_flame/kyrgyz_game.dart';
 
-class KeyForChestOfGlory extends Item
-{
-  String success = 'Квест выполнен';
-  KeyForChestOfGlory()
-  {
-    id = 'keyForChestOfGlory';
-    dressType = InventarType.item;
-    enabled = false;
-    source = 'images/inventar/gloves/6.png';
-    description = 'Ключ от сундука в деревне с садом';
-  }
-
-  @override
-  void getEffectFromInventar(KyrgyzGame game, {double? duration}) async{
-    minusInInventar(game);
-    game.setQuestState(name: 'chestOfGlory',state: 4,isDone: true,needInventar: false);
-    createText(text: success, gameRef: game);
-  }
-}
-
 class StartGame extends Quest //Разговор с охранником
     {
   StartGame(super.kyrgyzGame,{super.currentState, super.isDone})
@@ -166,6 +146,7 @@ class StartGameOlder extends Quest //Разговор со старейшино�
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
           isDone = true;
+          needInventar = false;
           kyrgyzGame.setQuestState(name: 'startGameKuznec',state: 20,isDone: false, needInventar: true);
           changeState(answer);
         }
@@ -331,20 +312,21 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
         onAnswer: (answer){
           desc = 'Сделать себе амулет в доспехах';
+          isDone = false;
+          needInventar = true;
           changeState(answer);
+          kyrgyzGame.setQuestState(name: 'giveFish', state: 24, isDone: false, needInventar: false);
         }
     );
     dialogs[39] = AnswerForDialog(
-        text: "Он вставляется в доспехи и позволяет уворачиваться от атак противников. Я бы мог тебе поставить такое за 2000 золота в твой доспех",
-        answers: ["Да это же грабёж чистой воды!", 'Согласен'],
-        answerNumbers: [40,44],
-        isEnd: false,
-        image: 'assets/tiles/sprites/dialogIcons/azura.png',
-        onAnswer: (answer){
-            isDone = false;
-            needInventar = true;
-            changeState(answer);
-        }
+      text: "Он вставляется в доспехи и позволяет уворачиваться от атак противников. Я бы мог тебе поставить такое за 2000 золота в твой доспех",
+      answers: ["Да это же грабёж чистой воды!", 'Согласен'],
+      answerNumbers: [40,44],
+      isEnd: false,
+      image: 'assets/tiles/sprites/dialogIcons/azura.png',
+      onAnswer: (answer){
+        kyrgyzGame.setQuestState(name: 'startGameOrc', state: 29, isDone: true, needInventar: false);
+      }
     );
 
     dialogs[44] = AnswerForDialog(
@@ -358,6 +340,7 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
             kyrgyzGame.doGameHud();
           } else {
             if (kyrgyzGame.playerData.money.value >= 2000) {
+              kyrgyzGame.setQuestState(name: 'startGameOrc', state: 35, isDone: false, needInventar: true, desc: 'Спросить у вождя орков, возможно у него появились ещё задания');
               kyrgyzGame.playerData.canDash = true;
               createText(text: 'Теперь я могу уворачиваться от ударов свайпом влево и вправо', gameRef: kyrgyzGame);
               itemFromName('dashAmulet').getEffectFromInventar(kyrgyzGame);
@@ -402,6 +385,7 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
           } else {
             if (kyrgyzGame.playerData.money.value >= 1900) {
               kyrgyzGame.playerData.canDash = true;
+              kyrgyzGame.setQuestState(name: 'startGameOrc', state: 35, isDone: false, needInventar: true, desc: 'Спросить у вождя орков, возможно у него появились ещё задания');
               createText(text: 'Теперь я могу уворачиваться от ударов свайпом влево и вправо', gameRef: kyrgyzGame);
               itemFromName('dashAmulet').getEffectFromInventar(kyrgyzGame);
               kyrgyzGame.playerData.money.value -= 1900;
@@ -417,12 +401,12 @@ class StartGameKuznec extends Quest //Разговор с кузнецом
         answerNumbers: [42],
         isEnd: true,
         image: 'assets/tiles/sprites/dialogIcons/azura.png',
-      onAnswer: (answer){
+        onAnswer: (answer){
           needInventar = true;
           desc = 'Принести молот из подземелий';
           isDone = false;
           changeState(answer);
-      }
+        }
     );
     dialogs[43] = AnswerForDialog(
       text: "У тебя недостаточно денег",

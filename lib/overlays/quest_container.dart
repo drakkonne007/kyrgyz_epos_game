@@ -33,8 +33,13 @@ class QuestContainer extends StatelessWidget
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          AutoSizeText(temp[index],style: defaultInventarTextStyleGold,minFontSize: 15,maxLines: 2,),
-                          AutoSizeText(game.tempQuestForInventarOverlay[temp[index]]!,style: defaultInventarTextStyle,minFontSize: 15,maxLines: 10,)
+                          AutoSizeText(temp[index],style: defaultInventarTextStyleGold,minFontSize: 15,maxLines: 2
+                            ,textAlign: TextAlign.center,),
+                          Container(
+                              alignment: Alignment.centerLeft,
+                              child: AutoSizeText(game.tempQuestForInventarOverlay[temp[index]]!,style: defaultInventarTextStyle,minFontSize: 15,maxLines: 10
+                            ,textAlign: TextAlign.start)
+                          )
                         ],
                       )
 

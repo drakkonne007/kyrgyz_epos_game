@@ -72,13 +72,6 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
-  shaders:
-    - assets/shaders/portalShader.frag
-#    - assets/shaders/fire.frag
-    - assets/shaders/ice.frag
-    - assets/shaders/lightning.frag
-    - assets/shaders/poison.frag
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -107,6 +100,7 @@ flutter:
   - assets/images/flags/
   - assets/images/gui/
   - assets/images/inventar/
+  - assets/images/inventar/keys/
   - assets/images/inventar/gif/
   - assets/images/inventar/armor/
   - assets/images/inventar/boots/

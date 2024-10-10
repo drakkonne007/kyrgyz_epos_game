@@ -4,6 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:game_flame/Items/Dresses/item.dart';
 import 'package:game_flame/abstracts/EnemyInfo.dart';
 import 'package:game_flame/abstracts/enemy.dart';
 import 'package:game_flame/abstracts/hitboxes.dart';
@@ -158,6 +159,10 @@ class Moose extends KyrgyzEnemy
       flipHorizontally();
     }
     super.onLoad();
+    int addSkin = math.Random(DateTime.now().microsecondsSinceEpoch).nextInt(4);
+    if(addSkin != 0){
+      loots?.add(itemFromName('bullSkin'));
+    }
   }
 
   @override

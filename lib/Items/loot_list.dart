@@ -17,7 +17,7 @@ class Gold extends Item
     id = 'gold';
     cost = newCost;
     enabled = true;
-    source = 'images/inventar/item/61.png';
+    source = 'images/inventar/item/292.png';
   }
 
   @override

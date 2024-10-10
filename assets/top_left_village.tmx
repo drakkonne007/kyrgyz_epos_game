@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1501">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="110" height="99" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="1502">
  <properties>
   <property name="AutomappingRadius" type="int" value="4"/>
  </properties>
@@ -1951,12 +1951,6 @@
     <property name="wrld" value="yurtaInTopLeftVillage0"/>
    </properties>
   </object>
-  <object id="1255" name="portal" x="2371.73" y="2462.33" width="32.1515" height="24.6515">
-   <properties>
-    <property name="tar" value="4787,9467"/>
-    <property name="wrld" value="topLeftTempleDungeon"/>
-   </properties>
-  </object>
   <object id="1258" x="334.182" y="646.909">
    <polygon points="0,0 28.5455,-2.54545 39.2727,3.81818 39.2727,17.4545 20.5455,20.7273 -2.54545,8.18182"/>
   </object>
@@ -2250,9 +2244,6 @@
   <object id="1413" name="frog" x="402.667" y="2640">
    <point/>
   </object>
-  <object id="1420" name="strMerchant" x="2700" y="1800">
-   <point/>
-  </object>
   <object id="1423" name="strMerchant" x="2098" y="854">
    <point/>
   </object>
@@ -2318,6 +2309,7 @@
   <object id="1475" gid="50544" x="399.5" y="487.75" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
+    <property name="endTrigger" value="9"/>
     <property name="quest" value="startGameOlder"/>
     <property name="startTrigger" value="1"/>
    </properties>
@@ -2325,40 +2317,40 @@
   <object id="1476" gid="2147534192" x="887.5" y="430" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
-    <property name="tar" value="1064,544;933,899;1446,925"/>
    </properties>
   </object>
   <object id="1478" gid="2147534192" x="412" y="1090" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
+    <property name="quest" value="skinTrader"/>
    </properties>
   </object>
   <object id="1479" gid="2147534192" x="862" y="1448" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
-    <property name="tar" value="618,1545;635,1672"/>
    </properties>
   </object>
   <object id="1480" gid="2147534192" x="1114" y="2017" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
-    <property name="tar" value="902,2404"/>
+    <property name="quest" value="giveFish"/>
    </properties>
   </object>
   <object id="1481" gid="2147534192" x="605" y="2318" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
-    <property name="tar" value="1241,2201;1617,2222;1785,3037"/>
    </properties>
   </object>
   <object id="1482" gid="2147534192" x="776" y="2591" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
+    <property name="quest" value="giveApple"/>
    </properties>
   </object>
   <object id="1483" gid="2147534192" x="2032" y="507" width="80" height="64">
    <properties>
     <property name="citizen" value="1"/>
+    <property name="quest" value="villageGrow"/>
    </properties>
   </object>
   <object id="1485" gid="2147534192" x="2572.18" y="988.269" width="80" height="64">
@@ -2432,6 +2424,11 @@
     <property name="text" value="Тут где-то живёт старейшина"/>
    </properties>
    <polyline points="0,0 185.667,-6.66667"/>
+  </object>
+  <object id="1501" gid="2147534192" x="2653.33" y="1837.33" width="80" height="64">
+   <properties>
+    <property name="citizen" value="1"/>
+   </properties>
   </object>
  </objectgroup>
 </map>

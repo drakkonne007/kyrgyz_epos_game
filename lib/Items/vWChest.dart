@@ -30,13 +30,14 @@ final List<Vector2> _objPoints = [
 
 class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
 {
-  VerticalWoodChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened,
+  VerticalWoodChest({this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened,required this.world,
     required super.position,
     super.anchor = Anchor.center
     ,required this.dbId});
   bool? isOpened;
-  Set<String>? nedeedKilledBosses;
-  Set<String>? neededItems;
+  final Set<String>? nedeedKilledBosses;
+  final Set<String>? neededItems;
+  final String? world;
   List<Item> myItems;
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
@@ -44,7 +45,7 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
   late Ground _ground;
   int dbId;
   final String _noNeededItem = 'Нет нужного предмета...';
-  final String _noNeededKilledBoss = 'Сначала победите хозяина';
+  final String _noNeededKilledBoss = 'Чья-то живая душа не даёт открыть';
 
   @override
   void onRemove()
@@ -89,15 +90,19 @@ class VerticalWoodChest extends SpriteAnimationComponent with HasGameRef<KyrgyzG
     add(_objectHitbox!);
   }
 
-  void checkIsIOpen()
+  void checkIsIOpen()async
   {
     if(isOpened!){
       return;
     }
     if(nedeedKilledBosses != null){
-      if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
-        createText(text: _noNeededKilledBoss,gameRef: gameRef);
-        return;
+      for(final str in nedeedKilledBosses!){
+        int cur = int.parse(str);
+        var answ = await gameRef.dbHandler.getItemStateFromDb(cur,world ?? gameRef.gameMap.currentGameWorldData!.nameForGame);
+        if(!answ.used){
+          createText(text: _noNeededKilledBoss,gameRef: gameRef);
+          return;
+        }
       }
     }
     if(neededItems != null){

@@ -52,10 +52,12 @@ class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   ChestGrass2(this._id, {this.nedeedKilledBosses, this.neededItems, required this.myItems, this.isOpened
     ,required super.position,
     required this.withHorns,
+    required this.world,
     super.anchor = Anchor.center});
   bool? isOpened;
-  Set<String>? nedeedKilledBosses;
-  Set<String>? neededItems;
+  final Set<String>? nedeedKilledBosses;
+  final Set<String>? neededItems;
+  final String? world;
   List<Item> myItems;
   late Image _spriteImg;
   late SpriteSheet _spriteSheet;
@@ -63,7 +65,7 @@ class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
   late Ground _ground;
   int _id;
   final String _noNeededItem = 'Нет нужного предмета...';
-  final String _noNeededKilledBoss = 'Сначала победите хозяина';
+  final String _noNeededKilledBoss = 'Чья-то живая душа не даёт открыть';
   bool withHorns;
 
   @override
@@ -104,15 +106,19 @@ class ChestGrass2 extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     add(_objectHitbox!);
   }
 
-  void checkIsIOpen()
+  void checkIsIOpen()async
   {
     if(isOpened!){
       return;
     }
     if(nedeedKilledBosses != null){
-      if(!gameRef.playerData.killedBosses.containsAll(nedeedKilledBosses!)){
-        createText(text: _noNeededKilledBoss,gameRef: gameRef);
-        return;
+      for(final str in nedeedKilledBosses!){
+        int cur = int.parse(str);
+        var answ = await gameRef.dbHandler.getItemStateFromDb(cur,world ?? gameRef.gameMap.currentGameWorldData!.nameForGame);
+        if(!answ.used){
+          createText(text: _noNeededKilledBoss,gameRef: gameRef);
+          return;
+        }
       }
     }
     if(neededItems != null){

@@ -43,12 +43,6 @@ class TempEffect extends Component
   Function()? onStartEffect;
   get timeBeforeEnd => period - _currTime;
 
-  @override
-  onRemove()
-  {
-    onEndEffect?.call();
-  }
-
   void start()
   {
     autoStart = true;
@@ -66,6 +60,7 @@ class TempEffect extends Component
     }
     _currTime += dt;
     if(_currTime >= period){
+      onEndEffect?.call();
       removeFromParent();
       return;
     }
