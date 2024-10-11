@@ -177,6 +177,7 @@ class WaterCircles extends SpriteAnimationComponent
   void update(double dt)
   {
     super.update(dt);
+    position -= Vector2(0,10 * dt);
     size += Vector2(30 * dt, 30 * dt);
   }
 

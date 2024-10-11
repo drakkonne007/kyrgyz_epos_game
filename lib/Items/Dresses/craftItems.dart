@@ -84,6 +84,23 @@ class SornyakPoison extends Item
   }
 }
 
+class Brevno extends Item
+{
+  Brevno()
+  {
+    id = 'brevno';
+    dressType = InventarType.item;
+    enabled = false;
+    source = 'images/inventar/item/332.png';
+    description = 'Палено хорошей древесины';
+  }
+
+  @override
+  void getEffect(KyrgyzGame game) {
+    plusToInventar(game);
+  }
+}
+
 class BullSkin extends Item
 {
   BullSkin()

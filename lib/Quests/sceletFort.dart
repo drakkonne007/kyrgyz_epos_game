@@ -10,8 +10,8 @@ class SceletFort extends Quest
     name = 'Вождь в темнице возле форта';
     id = 'sceletFort';
     dialogs[0] = AnswerForDialog(
-        text: "Ааааааргххххх, человееееееек!!!! Ну и мерзость!",
-        answers: ["..."],
+        text: 'Ааааааргххххх, человееееееек!!!! Ну и мерзость!',
+        answers: ['...'],
         answerNumbers: [1],
         isEnd: false,
         image: 'assets/tiles/sprites/dialogIcons/azura.png'
@@ -121,7 +121,7 @@ class SceletFort extends Quest
         }
     );
     dialogs[21] = AnswerForDialog(
-        text: "Если найдёшь кольцо крови - приходи",
+        text: 'Если найдёшь кольцо крови - приходи',
         answers: ['Хорошо'],
         answerNumbers: [21],
         isEnd: true,

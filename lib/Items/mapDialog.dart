@@ -61,22 +61,24 @@ class MapDialog extends PositionComponent with HasGameRef<KyrgyzGame> {
 
   void doDialog()
   {
-    int curs = min(_countOfVariants, _texts.length - 1);
-    if(gameRef.gameMap.openSmallDialogs.contains(_texts[curs])){
+    if(_countOfVariants >= _texts.length){
+      _countOfVariants = 0;
+    }
+    if(gameRef.gameMap.openSmallDialogs.contains(_texts[_countOfVariants])){
       return;
     }
     if(_bigDialog){
-      gameRef.playerData.bigDialog.value = _texts[curs];
-      gameRef.gameMap.openSmallDialogs.add(_texts[curs]);
-      addTimers(curs);
+      gameRef.playerData.bigDialog.value = _texts[_countOfVariants];
+      gameRef.gameMap.openSmallDialogs.add(_texts[_countOfVariants]);
+      addTimers(_countOfVariants);
       return;
     }
-    _renderText ??= RenderText(_player.position, Vector2(150,75), _texts[curs]);
+    _renderText ??= RenderText(_player.position, Vector2(150,75), _texts[_countOfVariants]);
     _renderText?.priority = GamePriority.maxPriority;
     gameRef.gameMap.container.add(_renderText!);
-    gameRef.gameMap.openSmallDialogs.add(_texts[curs]);
-    _countOfVariants = Random().nextInt(_texts.length);
-    addTimers(curs);
+    gameRef.gameMap.openSmallDialogs.add(_texts[_countOfVariants]);
+    addTimers(_countOfVariants);
+    _countOfVariants++;
     gameRef.dbHandler.changeItemState(id: id,
         worldName: gameRef.gameMap.currentGameWorldData!.nameForGame,
         used: true);

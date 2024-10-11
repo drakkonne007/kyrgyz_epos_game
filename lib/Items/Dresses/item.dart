@@ -102,6 +102,7 @@ Item itemFromName(String id)
     return Gold(int.parse(id.split('gold')[1]));
   }
   switch(id){
+    case 'brevno'         :   return Brevno();
     case 'sornyakPoison'          :   return SornyakPoison();
     case 'timerInvisibleFlask'    :   return TimerInvisibleFlask();
     case 'timerGonecForSornyakPoison'     :   return TimerGonecForSornyakPoison();
