@@ -65,7 +65,7 @@ class BigWoodLamp extends SpriteAnimationComponent with HasGameRef<KyrgyzGame>
     final img = await Flame.images.load('tiles/map/grassLand2/Props/Animated props/animated lamp posts-$_version.png');
     final sheet = SpriteSheet(image: img,
         srcSize: Vector2(64,96));
-    animation = sheet.createAnimation(row: 0, stepTime: 0.12, from: 0, loop: true);
+    animation = sheet.createAnimation(row: 0, stepTime: 0.1, from: 0, loop: true);
     final List<Vector2> curVec;
     int plusPrior;
     switch(_version){

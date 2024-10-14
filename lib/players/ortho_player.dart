@@ -421,9 +421,9 @@ class OrthoPlayer extends SpriteAnimationComponent with KeyboardHandler,HasGameR
       _velocity.y = sin(angle) * PhysicVals.startSpeed;
       maxSpeeds.x = -cos(angle) * PhysicVals.maxSpeed;
       maxSpeeds.y = sin(angle) * PhysicVals.maxSpeed;
-      if (_velocity.x > 0 && isFlippedHorizontally) {
+      if (_velocity.x > 1 && isFlippedHorizontally) {
         flipHorizontally();
-      } else if (_velocity.x < 0 && !isFlippedHorizontally) {
+      } else if (_velocity.x < 1 && !isFlippedHorizontally) {
         flipHorizontally();
       }
     }
