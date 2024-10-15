@@ -387,4 +387,56 @@
  <tile id="1789" type="high"/>
  <tile id="1790" type="high"/>
  <tile id="1791" type="high"/>
+ <tile id="2542">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0.843276" y="3.6542" width="28.7651" height="25.5794"/>
+  </objectgroup>
+ </tile>
+ <tile id="2543">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="1.12437" y="2.95146" width="28.7651" height="25.5794"/>
+  </objectgroup>
+ </tile>
+ <tile id="2916">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="12.696" y="4.82542">
+    <polygon points="0,0 -6.51197,10.3536 -6.74621,15.8817 1.26491,24.1739 6.13718,24.2208 14.3825,16.4439 14.1483,10.0256 7.82373,0"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="2917">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="11.15" y="1.12437">
+    <polygon points="0,0 -7.87058,11.1968 -8.10482,16.6313 0.890125,25.8136 8.62016,25.8605 17.5683,16.6781 17.662,10.8689 9.60398,-0.234243"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="2918">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="12.696" y="0.749579">
+    <polygon points="0,0 -6.51197,10.3536 -6.74621,15.8817 -1.96765,23.1901 -0.892612,29.0542 8.62021,29.0944 9.32289,22.8153 14.3825,16.4439 14.1483,10.0256 7.82373,0"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="2960">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="12.4618" y="4.73172">
+    <polygon points="0,0 -6.51197,10.3536 -6.74621,15.8817 1.26491,24.1739 6.13718,24.2208 14.3825,16.4439 14.1483,10.0256 7.82373,0"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="2961">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="11.15" y="0.936974">
+    <polygon points="0,0 -7.87058,11.1968 -8.10482,16.6313 0.890125,25.8136 8.62016,25.8605 17.5683,16.6781 17.662,10.8689 9.60398,-0.234243"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="2962">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="12.7428" y="0.843276">
+    <polygon points="0,0 -6.51197,10.3536 -6.74621,15.8817 -1.96765,23.1901 -0.892612,29.0542 8.62021,29.0944 9.32289,22.8153 14.3825,16.4439 14.1483,10.0256 7.82373,0"/>
+   </object>
+  </objectgroup>
+ </tile>
 </tileset>

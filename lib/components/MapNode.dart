@@ -49,6 +49,7 @@ import 'package:game_flame/liveObjects/mini_creatures/groundFire.dart';
 import 'package:game_flame/liveObjects/mini_creatures/stand_obelisk.dart';
 import 'package:game_flame/liveObjects/mini_creatures/nature_particals.dart';
 import 'package:game_flame/liveObjects/mini_creatures/nature_particle_lower.dart';
+import 'package:game_flame/liveObjects/mini_creatures/training_doll.dart';
 import 'package:game_flame/liveObjects/sceletBoss.dart';
 import 'package:game_flame/liveObjects/verticalBigRollingWood.dart';
 import 'package:game_flame/liveObjects/mini_creatures/windblow.dart';
@@ -411,6 +412,11 @@ class MapNode {
         }
         myGame.gameMap.loadedLivesObjs.add(id);
         positionObject = Pot(position,id: id, level: level,loots: list, quest: quest, startTrigger: startTrigger, endTrigger: endTrigger, citizen: citizen);
+        myGame.gameMap.container.add(positionObject);
+        break;
+      case 'trainingDoll':
+        positionObject = TrainingDoll(position: position, id: id);
+        myGame.gameMap.allEls[colRow]!.add(positionObject);
         myGame.gameMap.container.add(positionObject);
         break;
       case 'assassin':
